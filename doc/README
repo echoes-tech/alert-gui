@@ -1,0 +1,70 @@
+README
+
+The ECHOES project is build using the WT framework.
+
+
+##############################################################################
+#								ENVIRONMENT  								 #
+##############################################################################
+
+# UTF-8
+export LC_ALL=fr_FR.UTF-8
+export LANG=fr_FR.UTF-8
+xterm -u8 -fn -misc-fixed-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1
+
+# Git setup
+git config --global user.name "John Doe"
+git config --global user.email "john.doe@nobody.com"
+git config --global format.headers "Content-Type: text/plain; charset=\"utf-8\""
+
+
+##############################################################################
+#							COMPILATION 									 #
+##############################################################################
+
+# Building the executable
+cd build
+cmake ..
+make
+
+# If the compiler complains about missing headers, edit source/CMakeLists.txt
+# and add a new line:
+# INCLUDE_DIRECTORIES(<- the directory in which the Wt includes can be found ->)
+
+# Note:
+# If the executable refuses to launch as a standalone due to the fact that WRun
+# is unknown or not linked, you may have to edit your LD_LIBRARY_PATH
+# to include the directory containing wthttp.so
+# Or maybe the program was compiled with the wrong connector...
+# In this case, check the WT_CONNECTOR value in the CMakeLists.txt file in the
+# root directory
+# Set it to 'wthttp' and compile the program again
+
+# Running the executable as standalone
+cd source
+./gezal.wt --docroot . --http-address 0.0.0.0 --http-port 1234
+
+# Running the executable as a FCGI script
+# As for the standalone version, check the connector specified in the
+# CMakeLists.txt file and that LD_LIBRARY_PATH includes the wtfcgi.so
+# directory 
+# Once the compilation is successful, copy the executable and the assets to
+# a fcgi-enabled directory. 
+
+# Cleanup
+rm build/* -rf
+
+# Using Code::Blocks
+Make sure you are compiling the standalone version!
+
+cd build
+cmake -G "CodeBlocks - Unix Makefiles" ..
+codeblocks GEZAL.cbp
+In Project > Set Program Arguments, select gezal.wt and use the following args:
+--docroot /usr/share/Wt --http-address 0.0.0.0 --http-port 8080
+
+
+Errors
+
+undefined reference to > `Wt::WObject::setRequestTooLarge(int)
+> Delete /usr/local/include/Wt and /usr/lib/Wt and reinstall Wt

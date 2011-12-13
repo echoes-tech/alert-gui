@@ -1,8 +1,5 @@
 #include "EchoesHome.h"
 
-
-
-
 #include <Wt/WEnvironment>
 #include <Wt/WStackedWidget>
 #include <Wt/WMenuItem>
@@ -12,10 +9,11 @@
 #include <Wt/WViewWidget>
 #include <Wt/WWidget>
 
+
 static const std::string SRC_INTERNAL_PATH = "src";
 
 /**
-Class EchoesHome : étend la classe WApplication
+Class EchoesHome : étend la classe WApplication.
 @param env : variables d'environnement
 */
 EchoesHome::EchoesHome(const WEnvironment& env)
@@ -29,14 +27,14 @@ EchoesHome::EchoesHome(const WEnvironment& env)
     root()->clear();
 
     // homePage_ = initHome();
-    homePage_ = initTab();
+    homePage_ = initTabs();
 
     // ajout du widget principal à la racine du site
     root()->addWidget(homePage_);
 }
 
 /**
-Initialisation de l'application
+Initialisation de l'application.
 @return WTemplate
 */
 WWidget *EchoesHome::initHome()
@@ -46,84 +44,51 @@ WWidget *EchoesHome::initHome()
     return result;
 }
 
-WWidget *EchoesHome::firstTab()
-{
-    return example("home.examples.hello", "firstTab");
-}
-
 /**
-Initialisation de l'appli, test des tabs
+Initialisation de l'appli, test des tabs.
 @return WTabWidget
 */
-WWidget *EchoesHome::initTab()
+WWidget *EchoesHome::initTabs()
 {
+    // on créée un contenair qui va être utilisé par le WTabWidget
     WContainerWidget *result = new WContainerWidget();
     tabList = new WTabWidget(AlignTop | AlignJustify, result);
 
+    // on créée une animation pour animer les transitions entre les tabs
     WAnimation animation(WAnimation::SlideInFromRight, WAnimation::EaseIn);
     tabList->contentsStack()->setTransitionAnimation(animation, true);
 
-    WContainerWidget *test = new WContainerWidget();
-
-    WText *w = new WText(tr("home.examples.hello"), test);
-    w->setInternalPathEncoding(true);
-    test->addWidget(linkSourceBrowser("hello"));
-
-
-    WContainerWidget *test2 = new WContainerWidget();
-
-    WText *w2 = new WText(tr("home.examples.chart"), test2);
-    w2->setInternalPathEncoding(true);
-    test->addWidget(linkSourceBrowser("charts"));
-
-    tabList->addTab(test,tr("hello-world"))->setPathComponent("");
-
-    tabList->addTab(test2,tr("charts"));
-
-    //tabList->addTab(wrapView(&EchoesHome::firstTab()),tr("hello-world"))->setPathComponent("");
-
-    //tabList->setInternalPathEnabled("/examples");
+    // on créée les différents tabs
+    tabList->addTab(createTab("home.examples.hello","hello"),tr("hello-world"))->setPathComponent("");
+    tabList->addTab(createTab("home.examples.chart","charts"),tr("charts"));
 
     return result;
 }
 
-WWidget *EchoesHome::linkSourceBrowser(const std::string& example)
-{
-    /*
-     * Instead of using a WAnchor, which will not progress properly because
-     * it is wrapped with wrapView() (-- should we not fix that?), we use
-     * a WText which contains an anchor, and enable internal path encoding.
-     */
-    std::string path = "#/" + SRC_INTERNAL_PATH + "/" + example;
-    WText *a = new WText(tr("source-browser-link").arg(path));
-    a->setInternalPathEncoding(true);
-    return a;
-}
-
 /**
-Méthode qui créé un conteneur qui sera utilisé pour afficher le contenu d'un tab
-@return WWidget
+Création d'un onglet.
+@param textKey la clé qui permet de retrouver le texte de l'onglet dans le template
+@param sourceDir
+@return le container qui contient le texte
 */
-WWidget *EchoesHome::example(const char *textKey, const std::string& sourceDir)
+WWidget *EchoesHome::createTab(const char *textKey, const char *sourceDir)
 {
     WContainerWidget *result = new WContainerWidget();
+
+    // texte contenu dans l'onglet
     WText *w = new WText(tr(textKey), result);
     w->setInternalPathEncoding(true);
-    result->addWidget(linkSourceBrowser(sourceDir));
     return result;
-}
 
-WWidget *EchoesHome::wrapView(WWidget *(EchoesHome::*createWidget)())
-{
-    return makeStaticModel(boost::bind(createWidget, this));
 }
 
 /**
-TBC
+Méthode utilisée pour transformer une chaîne classique en objet WString. A utiliser en entrée des méthodes WT qui demandent une WString.
+@param key chaîne passée en entrée
+@return objet WString
 */
 WString EchoesHome::tr(const char *key)
 {
-    // Sert à fabriquer un objet WString à partir d'une chaîne "normale". A utiliser en entrée des fonctions WT qui demandent une WString.
     return WString::tr(key);
 }
 

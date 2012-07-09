@@ -9,6 +9,8 @@
 #include <Wt/WViewWidget>
 #include <Wt/WWidget>
 
+#include <Wt/Auth/AuthModel>
+#include <Wt/Auth/AuthWidget>
 
 static const std::string SRC_INTERNAL_PATH = "src";
 
@@ -27,10 +29,15 @@ EchoesHome::EchoesHome(const WEnvironment& env)
     root()->clear();
 
     // homePage_ = initHome();
-    homePage_ = initTabs();
+    //homePage_ = initTabs();
+    authWidget_ = authWidget();
+    
+    WText *title = new WText("<h1>ECHOES Alert</h1>");
+    root()->addWidget(title);
+
 
     // ajout du widget principal à la racine du site
-    root()->addWidget(homePage_);
+    root()->addWidget(authWidget_);
 }
 
 /**
@@ -43,6 +50,30 @@ WWidget *EchoesHome::initHome()
     WTemplate *result = new WTemplate(tr("template"), root());
     return result;
 }
+
+/**
+Initialisation de l'application.
+@return WTemplate
+*/
+WWidget *EchoesHome::authWidget()
+{
+    pgc = new PostgresConnector("echoes","echoes","127.0.0.1","5432","toto");
+    session_ = pgc->getSession();
+    session_->login().changed().connect(this, &EchoesHome::onAuthEvent);
+
+    Wt::Auth::AuthModel *authModel = new Wt::Auth::AuthModel(Session::auth(),
+                            session_->users(), this);
+    authModel->addPasswordAuth(&Session::passwordAuth());
+    authModel->addOAuth(Session::oAuth());
+
+    Wt::Auth::AuthWidget *authWidget = new Wt::Auth::AuthWidget(session_->login());
+    authWidget->setModel(authModel);
+    authWidget->setRegistrationEnabled(true);
+
+
+    return authWidget;
+}
+
 
 /**
 Initialisation de l'appli, test des tabs.
@@ -100,4 +131,34 @@ WApplication *createEchoesHomeApplication(const WEnvironment& env)
 {
     // On instancie la classe EchoesHome qui permet d'afficher le site.
     return new EchoesHome(env);
+}
+
+void EchoesHome::handleInternalPath(const std::string &internalPath)
+{
+  if (session_->login().loggedIn()) {
+    if (internalPath == "/play")
+      doNothing();
+//    else if (internalPath == "/highscores")
+//      showHighScores();
+    else
+      WApplication::instance()->setInternalPath("/play",  true);
+  }
+}
+
+void EchoesHome::doNothing()
+{
+    
+}
+
+void EchoesHome::onAuthEvent()
+{
+    if (session_->login().loggedIn())
+    {
+        doNothing();
+        handleInternalPath(WApplication::instance()->internalPath());
+    }
+    else
+    {
+        doNothing();
+    }
 }

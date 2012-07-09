@@ -35,7 +35,10 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/src/EchoesHome.o \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/src/PostgresConnector.o \
+	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/src/Session.o \
+	${OBJECTDIR}/src/User.o
 
 
 # C Compiler Flags
@@ -67,10 +70,25 @@ ${OBJECTDIR}/src/EchoesHome.o: src/EchoesHome.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EchoesHome.o src/EchoesHome.cpp
 
+${OBJECTDIR}/src/PostgresConnector.o: src/PostgresConnector.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/PostgresConnector.o src/PostgresConnector.cpp
+
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/src/Session.o: src/Session.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Session.o src/Session.cpp
+
+${OBJECTDIR}/src/User.o: src/User.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/User.o src/User.cpp
 
 # Subprojects
 .build-subprojects:

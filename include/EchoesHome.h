@@ -1,37 +1,84 @@
 #ifndef ECHOESHOME_H_
 #define ECHOESHOME_H_
 
-#include "Session.h"
-#include "PostgresConnector.h"
-#include "User.h"
 #include <Wt/WApplication>
+#include <Wt/WContainerWidget>
+#include <Wt/WServer>
 
-using namespace Wt;
+#include <Wt/Auth/AuthModel>
+#include <Wt/Auth/AuthWidget>
+#include <Wt/Auth/PasswordService>
 
-class EchoesHome : public WApplication
+#include <tools/Session.h>
+
+class EchoesHome : public Wt::WApplication
 {
 public:
-    EchoesHome(const WEnvironment& env);
+  EchoesHome(const Wt::WEnvironment& env)
+    : Wt::WApplication(env),
+      session_()
+  {
+    session_.login().changed().connect(this, &EchoesHome::authEvent);
+    
+    useStyleSheet("css/style.css");
 
-protected:
-    WString tr(const char *key);
-    WTabWidget *tabList;
-    Session *session_;
-    PostgresConnector *pgc;
-    void handleInternalPath(const std::string &internalPath);
+    Wt::Auth::AuthWidget *authWidget
+      = new Wt::Auth::AuthWidget(Session::auth(), session_.users(),
+				 session_.login());
+
+    authWidget->model()->addPasswordAuth(&Session::passwordAuth());
+    authWidget->model()->addOAuth(Session::oAuth());
+    authWidget->setRegistrationEnabled(true);
+
+    authWidget->processEnvironment();
+
+    root()->addWidget(authWidget);
+  }
+
+  void authEvent() {
+    if (session_.login().loggedIn())
+      Wt::log("notice") << "User " << session_.login().user().id()
+			<< " logged in.";
+    else
+      Wt::log("notice") << "User logged out.";
+  }
+
 private:
-
-    WWidget *homePage_;
-    WWidget *authWidget_;
-    WWidget *initHome();
-    WWidget *authWidget();
-    WWidget *initTabs();
-    WWidget *createTab(const char *textKey, const char *sourceDir);
-    void doNothing();
-    void onAuthEvent();
-
+  Session session_;
 };
 
-WApplication *createEchoesHomeApplication(const WEnvironment& env);
+//using namespace Wt;
+//
+//class EchoesHome : public WApplication {
+//public:
+//    EchoesHome(const WEnvironment& env);
+//protected:
+//    WString tr(const char *key);
+//    WTabWidget *tabList;
+//    //    PostgresConnector *pgc;
+//    void handleInternalPath(const std::string &internalPath);
+//
+//    void authEvent();
+//private:
+//    Session session_;
+//
+//    //    WWidget *homePage_;
+//    Wt::Auth::AuthWidget *authWidget;
+//
+//    Wt::Auth::AuthModel *authModel;
+//    //    Wt::Auth::AuthWidget *authWidget;
+//
+//    WWidget *initHome();
+//    void *initAuthWidget();
+//    WWidget *initTabs();
+//    WWidget *createTab(const char *textKey, const char *sourceDir);
+//
+//};
+
+Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
+{
+    // On instancie la classe EchoesHome qui permet d'afficher le site.
+    return new EchoesHome(env);
+}
 
 #endif // ECHOESHOME_H_

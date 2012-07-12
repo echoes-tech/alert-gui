@@ -35,9 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/src/EchoesHome.o \
-	${OBJECTDIR}/src/PostgresConnector.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/src/Session.o \
 	${OBJECTDIR}/src/User.o
 
 
@@ -55,7 +53,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-lwt -lwthttp -lboost_system -lboost_signals -lwtdbopostgres
+LDLIBSOPTIONS=-L../dbo/dist/SharedObject/GNU-Linux-x86 -lwt -lwthttp -lboost_system -lboost_signals -lwtdbopostgres -ldbo -lwtdbo
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -68,27 +66,17 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui: ${OBJECTFILES}
 ${OBJECTDIR}/src/EchoesHome.o: src/EchoesHome.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EchoesHome.o src/EchoesHome.cpp
-
-${OBJECTDIR}/src/PostgresConnector.o: src/PostgresConnector.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/PostgresConnector.o src/PostgresConnector.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EchoesHome.o src/EchoesHome.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
-
-${OBJECTDIR}/src/Session.o: src/Session.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Session.o src/Session.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
 ${OBJECTDIR}/src/User.o: src/User.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/User.o src/User.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/User.o src/User.cpp
 
 # Subprojects
 .build-subprojects:

@@ -13,16 +13,19 @@ int main(int argc, char **argv)
     try
     {
         // On passe le premier paramètre d'entrée au serveur
-        WServer server(argv[0]);
+        Wt::WServer server(argv[0]);
         // On définit la configuration du serveur en lui passant les paramètres d'entrée et son fichier de configuration
         server.setServerConfiguration(argc, argv, WTHTTP_CONFIGURATION);
         // On fixe le point d'entrée du programme (type de point d'entée, méthode à appeler, uri, chemin favicon)
-        server.addEntryPoint(Application, createEchoesHomeApplication,"", "/favicon.ico");
+        server.addEntryPoint(Wt::Application, createEchoesHomeApplication,"", "/favicon.ico");
+        
+        Session::configureAuth();
+        
         // démarrage du serveur en arrière plan
         if (server.start())
         {
             // méthode qui bloque le thread courant en attendant le signal d'exctinction
-            WServer::waitForShutdown();
+            Wt::WServer::waitForShutdown();
             server.stop();
         }
     }

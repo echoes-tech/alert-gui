@@ -6,8 +6,6 @@
                    projectFiles="true">
       <logicalFolder name="include" displayName="include" projectFiles="true">
         <itemPath>include/EchoesHome.h</itemPath>
-        <itemPath>include/PostgresConnector.h</itemPath>
-        <itemPath>include/Session.h</itemPath>
         <itemPath>include/User.h</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -20,8 +18,6 @@
                    projectFiles="true">
       <logicalFolder name="src" displayName="src" projectFiles="true">
         <itemPath>src/EchoesHome.cpp</itemPath>
-        <itemPath>src/PostgresConnector.cpp</itemPath>
-        <itemPath>src/Session.cpp</itemPath>
         <itemPath>src/User.cpp</itemPath>
       </logicalFolder>
       <itemPath>main.cpp</itemPath>
@@ -53,15 +49,21 @@
         <ccTool>
           <incDir>
             <pElem>include</pElem>
+            <pElem>../dbo/include</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
+          <linkerAddLib>
+            <pElem>../dbo/dist/SharedObject/GNU-Linux-x86</pElem>
+          </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>wt</linkerLibLibItem>
             <linkerLibLibItem>wthttp</linkerLibLibItem>
             <linkerLibLibItem>boost_system</linkerLibLibItem>
             <linkerLibLibItem>boost_signals</linkerLibLibItem>
             <linkerLibLibItem>wtdbopostgres</linkerLibLibItem>
+            <linkerLibLibItem>dbo</linkerLibLibItem>
+            <linkerLibLibItem>wtdbo</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

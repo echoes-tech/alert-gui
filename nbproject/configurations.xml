@@ -5,9 +5,39 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="include" displayName="include" projectFiles="true">
+        <logicalFolder name="rapidxml" displayName="rapidxml" projectFiles="true">
+          <itemPath>include/rapidxml/license.txt</itemPath>
+          <itemPath>include/rapidxml/manual.html</itemPath>
+          <itemPath>include/rapidxml/rapidxml.hpp</itemPath>
+          <itemPath>include/rapidxml/rapidxml_iterators.hpp</itemPath>
+          <itemPath>include/rapidxml/rapidxml_print.hpp</itemPath>
+          <itemPath>include/rapidxml/rapidxml_utils.hpp</itemPath>
+          <itemPath>include/rapidxml/rapidxml_xhtml.hpp</itemPath>
+        </logicalFolder>
+        <itemPath>include/DomElement.cpp</itemPath>
+        <itemPath>include/DomElement.h</itemPath>
         <itemPath>include/EchoesHome.h</itemPath>
-        <itemPath>include/User.h</itemPath>
+        <itemPath>include/EscapeOStream.cpp</itemPath>
+        <itemPath>include/EscapeOStream.h</itemPath>
+        <itemPath>include/FormBaseModel</itemPath>
+        <itemPath>include/FormBaseModel.C</itemPath>
+        <itemPath>include/Login.cpp</itemPath>
+        <itemPath>include/Login.h</itemPath>
+        <itemPath>include/RegistrationModel.cpp</itemPath>
+        <itemPath>include/RegistrationModel.h</itemPath>
+        <itemPath>include/RegistrationWidget.cpp</itemPath>
+        <itemPath>include/RegistrationWidget.h</itemPath>
+        <itemPath>include/UpdatePasswordWidget.C</itemPath>
+        <itemPath>include/UpdatePasswordWidget.h</itemPath>
+        <itemPath>include/WFormModel</itemPath>
+        <itemPath>include/WFormModel.C</itemPath>
+        <itemPath>include/WTemplateFormView</itemPath>
+        <itemPath>include/WTemplateFormView.C</itemPath>
+        <itemPath>include/WebUtils.cpp</itemPath>
+        <itemPath>include/WebUtils.h</itemPath>
       </logicalFolder>
+      <itemPath>include/AuthWidget.cpp</itemPath>
+      <itemPath>include/AuthWidget.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -18,7 +48,6 @@
                    projectFiles="true">
       <logicalFolder name="src" displayName="src" projectFiles="true">
         <itemPath>src/EchoesHome.cpp</itemPath>
-        <itemPath>src/User.cpp</itemPath>
       </logicalFolder>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -51,6 +80,7 @@
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>
           </incDir>
+          <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
           <linkerAddLib>
@@ -59,11 +89,11 @@
           <linkerLibItems>
             <linkerLibLibItem>wt</linkerLibLibItem>
             <linkerLibLibItem>wthttp</linkerLibLibItem>
-            <linkerLibLibItem>boost_system</linkerLibLibItem>
-            <linkerLibLibItem>boost_signals</linkerLibLibItem>
             <linkerLibLibItem>wtdbopostgres</linkerLibLibItem>
             <linkerLibLibItem>dbo</linkerLibLibItem>
             <linkerLibLibItem>wtdbo</linkerLibLibItem>
+            <linkerLibLibItem>boost_signals</linkerLibLibItem>
+            <linkerLibLibItem>boost_system</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -74,18 +104,27 @@
         <compilerSet>default</compilerSet>
       </toolsSet>
       <compileType>
-        <cTool>
-          <developmentMode>5</developmentMode>
-        </cTool>
         <ccTool>
-          <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>../dbo/include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
         </ccTool>
-        <fortranCompilerTool>
-          <developmentMode>5</developmentMode>
-        </fortranCompilerTool>
-        <asmTool>
-          <developmentMode>5</developmentMode>
-        </asmTool>
+        <linkerTool>
+          <linkerAddLib>
+            <pElem>../dbo/dist/SharedObject/GNU-Linux-x86</pElem>
+          </linkerAddLib>
+          <linkerLibItems>
+            <linkerLibLibItem>wt</linkerLibLibItem>
+            <linkerLibLibItem>wtdbopostgres</linkerLibLibItem>
+            <linkerLibLibItem>dbo</linkerLibLibItem>
+            <linkerLibLibItem>wtdbo</linkerLibLibItem>
+            <linkerLibLibItem>boost_signals</linkerLibLibItem>
+            <linkerLibLibItem>boost_system</linkerLibLibItem>
+            <linkerLibLibItem>wtfcgi</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
     </conf>
   </confs>

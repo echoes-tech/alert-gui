@@ -6,76 +6,65 @@
 #include <Wt/WServer>
 
 #include <Wt/Auth/AuthModel>
-#include <Wt/Auth/AuthWidget>
+#include "AuthWidget.h"
 #include <Wt/Auth/PasswordService>
 
 #include <tools/Session.h>
 
-class EchoesHome : public Wt::WApplication
+class EchoesHome : public Wt::WApplication 
 {
 public:
-  EchoesHome(const Wt::WEnvironment& env)
+
+    EchoesHome(const Wt::WEnvironment& env)
     : Wt::WApplication(env),
-      session_()
-  {
-    session_.login().changed().connect(this, &EchoesHome::authEvent);
-    
-    useStyleSheet("css/style.css");
+    session_("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto") 
+    {
+        session_.login().changed().connect(this, &EchoesHome::authEvent);
+        
+        try 
+        {
+            session_.createTables();
+            std::cerr << "Created database." << std::endl;
+        } catch (std::exception& e) {
+            std::cerr << e.what() << std::endl;
+            std::cerr << "Using existing database";
+        }
 
-    Wt::Auth::AuthWidget *authWidget
-      = new Wt::Auth::AuthWidget(Session::auth(), session_.users(),
-				 session_.login());
+        useStyleSheet("css/style.css");
 
-    authWidget->model()->addPasswordAuth(&Session::passwordAuth());
-    authWidget->model()->addOAuth(Session::oAuth());
-    authWidget->setRegistrationEnabled(true);
+        Wt::Auth::AuthModel *authModel = new Wt::Auth::AuthModel(Session::auth(),
+                                session_.users(), this);
+        authModel->addPasswordAuth(&Session::passwordAuth());
+        authModel->addOAuth(Session::oAuth());
 
-    authWidget->processEnvironment();
+        Wt::Auth::AuthWidget *authWidget = new Wt::Auth::AuthWidget(session_.login());
+        authWidget->setModel(authModel);
+        authWidget->setRegistrationEnabled(true);
 
-    root()->addWidget(authWidget);
-  }
+        root()->addWidget(authWidget);
+        
+        authWidget->processEnvironment();
+    }
 
-  void authEvent() {
-    if (session_.login().loggedIn())
-      Wt::log("notice") << "User " << session_.login().user().id()
-			<< " logged in.";
-    else
-      Wt::log("notice") << "User logged out.";
-  }
-
+    void authEvent() {
+        if (session_.login().loggedIn()) 
+        {
+            Wt::log("notice") << "User " << session_.login().user().id()
+                    << " logged in.";
+//            setCookie("test", "value",600);
+        }
+        else 
+        {
+            Wt::log("notice") << "User logged out.";
+        }
+    }
+    Session session_;
 private:
-  Session session_;
+
 };
 
-//using namespace Wt;
-//
-//class EchoesHome : public WApplication {
-//public:
-//    EchoesHome(const WEnvironment& env);
-//protected:
-//    WString tr(const char *key);
-//    WTabWidget *tabList;
-//    //    PostgresConnector *pgc;
-//    void handleInternalPath(const std::string &internalPath);
-//
-//    void authEvent();
-//private:
-//    Session session_;
-//
-//    //    WWidget *homePage_;
-//    Wt::Auth::AuthWidget *authWidget;
-//
-//    Wt::Auth::AuthModel *authModel;
-//    //    Wt::Auth::AuthWidget *authWidget;
-//
-//    WWidget *initHome();
-//    void *initAuthWidget();
-//    WWidget *initTabs();
-//    WWidget *createTab(const char *textKey, const char *sourceDir);
-//
-//};
 
-Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
+Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env) 
 {
     // On instancie la classe EchoesHome qui permet d'afficher le site.
     return new EchoesHome(env);

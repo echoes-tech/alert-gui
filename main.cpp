@@ -8,6 +8,23 @@
 #include <EchoesHome.h>
 //---------------------------------------------------------------------------
 
+Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env) 
+{
+    // On instancie la classe EchoesHome qui permet d'afficher le site.
+    Wt::WApplication *app = new Wt::WApplication(env);
+    
+    app->setTitle("ECHOES Alert");    
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form.css");
+//    app->internalPathChanged().connect(this, &AuthWidget::onPathChange);
+    app->messageResourceBundle().use("auth", false);
+  
+
+    new EchoesHome(app->root());
+
+    return app;
+    
+}
+
 /**
 Point d'entrée du programme.
 @param argc : TBC

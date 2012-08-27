@@ -61,6 +61,10 @@
   <message id="Wt.Auth.login-form-info"></message>
   <message id="Wt.Auth.user-name">User name</message>
   <message id="Wt.Auth.user-name-info">Enter your user name</message>
+  <message id="Wt.Auth.first-name">First name</message>
+  <message id="Wt.Auth.first-name-info">Enter your first name</message>
+  <message id="Wt.Auth.last-name">Last name</message>
+  <message id="Wt.Auth.last-name-info">Enter your last name</message>
   <message id="Wt.Auth.test-info">Test Info</message>
   <message id="Wt.Auth.user-name-invalid">Invalid</message>
   <message id="Wt.Auth.email">Email address</message>
@@ -243,6 +247,20 @@
 	  </label>
 	  ${user-name}
 	${</if:user-name>}
+
+	${<if:first-name>}
+	  <label for="${id:first-name}">${first-name-label}
+	    ${first-name-info class="Wt-info"}
+	  </label>
+	  ${first-name}
+	${</if:first-name>}
+
+	${<if:last-name>}
+	  <label for="${id:last-name}">${last-name-label}
+	    ${last-name-info class="Wt-info"}
+	  </label>
+	  ${last-name}
+	${</if:last-name>}
 
         ${<if:choose-password>}
 	  <label for="${id:choose-password}">${tr:Wt.Auth.choose-password}

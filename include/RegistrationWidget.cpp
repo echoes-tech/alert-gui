@@ -116,6 +116,16 @@ WFormWidget *RegistrationWidget::createFormWidget(WFormModel::Field field)
     {
         result = new WLineEdit();
     }
+    else if (field == RegistrationModel::FirstNameField)
+    {
+        result = new WLineEdit();
+        result->changed().connect(boost::bind(&RegistrationWidget::checkFirstName, this));
+    }
+    else if (field == RegistrationModel::LastNameField)
+    {
+        result = new WLineEdit();
+        result->changed().connect(boost::bind(&RegistrationWidget::checkLastName, this));
+    }
     else if (field == RegistrationModel::ChoosePasswordField)
     {
         WLineEdit *p = new WLineEdit();
@@ -137,37 +147,6 @@ WFormWidget *RegistrationWidget::createFormWidget(WFormModel::Field field)
 
     return result;
 }
-
-//void RegistrationWidget::companyClick()
-//{
-//    model_->setValue(model_->OrganizationTypeCompanyField,boost::any(true));
-//    model_->setValue(model_->OrganizationTypeIndividualField,boost::any(false));
-//    model_->setValue(model_->OrganizationTypeAssociationField,boost::any(false));
-//    model_->setRegistrationType(RegistrationModel::Company);
-//    model_->fields_[model_->OrganizationNameField].readOnly = false;
-//    update();
-//}
-//
-//void RegistrationWidget::individualClick()
-//{
-//    model_->setValue(model_->OrganizationTypeCompanyField,boost::any(false));
-//    model_->setValue(model_->OrganizationTypeIndividualField,boost::any(true));
-//    model_->setValue(model_->OrganizationTypeAssociationField,boost::any(false));
-//    model_->setRegistrationType(RegistrationModel::Individual);
-//    model_->fields_[model_->OrganizationNameField].readOnly = true;
-//    update();
-//}
-//
-//void RegistrationWidget::associationClick()
-//{
-//    model_->setValue(model_->OrganizationTypeCompanyField,boost::any(false));
-//    model_->setValue(model_->OrganizationTypeIndividualField,boost::any(false));
-//    model_->setValue(model_->OrganizationTypeAssociationField,boost::any(true));
-//    model_->setRegistrationType(RegistrationModel::Association);
-//    model_->fields_[model_->OrganizationNameField].readOnly = false;
-//    update();
-//
-//}
 
 void RegistrationWidget::update()
 {
@@ -295,6 +274,22 @@ void RegistrationWidget::checkLoginName()
     update();
 }
 
+void RegistrationWidget::checkFirstName()
+{
+    updateModelField(model_, RegistrationModel::FirstNameField);
+    model_->validateField(RegistrationModel::FirstNameField);
+    model_->setValidated(RegistrationModel::FirstNameField, false);
+    update();
+}
+
+void RegistrationWidget::checkLastName()
+{
+    updateModelField(model_, RegistrationModel::LastNameField);
+    model_->validateField(RegistrationModel::LastNameField);
+    model_->setValidated(RegistrationModel::LastNameField, false);
+    update();
+}
+
 void RegistrationWidget::checkOrganization()
 {
     updateModelField(model_, RegistrationModel::OrganizationTypeCompanyField);
@@ -379,10 +374,42 @@ void RegistrationWidget::doRegister()
 
 void RegistrationWidget::registerUserDetails(User& user)
 {
-    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->firstName = model_->valueText(model_->LoginNameField);
-    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->eMail = model_->valueText(model_->EmailField);
-    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->lastName = model_->valueText(model_->TestField);
-            
+    Session *session = static_cast<Session*>(dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().get()->session());
+    
+    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->firstName = model_->valueText(model_->FirstNameField);
+    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->eMail = model_->valueText(model_->LoginNameField);
+    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->lastName = model_->valueText(model_->LastNameField);
+    
+    Organization *org = new Organization();
+    
+    
+    Wt::Dbo::ptr<OrganizationType> type;
+    bool bCompagny = boost::any_cast<bool>(model_->fields_[model_->OrganizationTypeCompanyField].value);
+    if (bCompagny)
+    {
+        type = session->find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Company);
+        org->name = model_->valueText(model_->OrganizationNameField);
+    }
+    bool bIndividual = boost::any_cast<bool>(model_->fields_[model_->OrganizationTypeIndividualField].value);
+    if (bIndividual)
+    {
+        type = session->find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Individual);
+        org->name = model_->valueText(model_->LastNameField);
+    }
+    bool bAssociation = boost::any_cast<bool>(model_->fields_[model_->OrganizationTypeAssociationField].value);
+    if (bAssociation)
+    {
+        type = session->find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Association);
+        org->name = model_->valueText(model_->OrganizationNameField);
+    }
+    
+    org->organizationType = type;
+    
+    Wt::Dbo::ptr<Organization> ptrOrg = session->add<Organization>(org);
+//    Wt::Dbo::collection<Wt::Dbo::ptr<Organization> > colPtrOrg;
+//    colPtrOrg.insert(ptrOrg);
+    
+    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->organizations.insert(ptrOrg);
 }
 
 void RegistrationWidget::close()

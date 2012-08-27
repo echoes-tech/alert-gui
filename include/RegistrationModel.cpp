@@ -349,6 +349,34 @@ bool RegistrationModel::validateField(Field field)
         }
         valid = error.empty();
     }
+    else if (field == FirstNameField)
+    {
+        std::string name = valueText(FirstNameField).toUTF8();
+        if (!name.empty())
+        {
+            if (static_cast<int> (name.length()) < 2)
+                error = WString::tr("Wt.Auth.first-name-invalid");
+        }
+        else
+        {
+            error = WString::tr("Wt.Auth.first-name-invalid");
+        }
+        valid = error.empty();
+    }
+    else if (field == LastNameField)
+    {
+        std::string name = valueText(LastNameField).toUTF8();
+        if (!name.empty())
+        {
+            if (static_cast<int> (name.length()) < 2)
+                error = WString::tr("Wt.Auth.last-name-invalid");
+        }
+        else
+        {
+            error = WString::tr("Wt.Auth.last-name-invalid");
+        }
+        valid = error.empty();
+    }
     else
         return true;
 

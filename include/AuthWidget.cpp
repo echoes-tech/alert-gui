@@ -77,11 +77,7 @@ void AuthWidget::init()
     addFunction("id", WT_TEMPLATE_FUNCTION(id));
     addFunction("tr", WT_TEMPLATE_FUNCTION(tr));
 
-    WApplication *app = WApplication::instance();
-    app->useStyleSheet(WApplication::resourcesUrl() + "form.css");
-    app->internalPathChanged().connect(this, &AuthWidget::onPathChange);
-    // DO NOT ADD .xml !!!!!!
-    app->messageResourceBundle().use("auth", false);
+    
 //    app->builtinLocalizedStrings().useBuiltin(skeletons::Auth_xml1);
 }
 

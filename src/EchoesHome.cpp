@@ -1,90 +1,97 @@
-//#include "EchoesHome.h"
-//
-//#include <Wt/WEnvironment>
-//#include <Wt/WStackedWidget>
-//#include <Wt/WMenuItem>
-//#include <Wt/WTabWidget>
-//#include <Wt/WText>
-//#include <Wt/WTemplate>
-//#include <Wt/WViewWidget>
-//#include <Wt/WWidget>
-//
-//#include <Wt/Auth/AuthModel>
-//#include <Wt/Auth/AuthWidget>
-//
-//
-//
-///**
-//Class EchoesHome : étend la classe WApplication.
-//@param env : variables d'environnement
-//*/
-//EchoesHome::EchoesHome(const WEnvironment& env)
-//    : WApplication(env),
-//    session_()
-//{
-//    this->session_.login().changed().connect(this, &EchoesHome::authEvent);
-//
-//    // Définition des ressources (template)
-//    messageResourceBundle().use(appRoot() + "echoes-home", false);
-//
-//    // Initialisation de la page principale du site
-//    root()->clear();
-//    
-//    Wt::Auth::AuthWidget *authWidget
-//      = new Wt::Auth::AuthWidget(Session::auth(), session_.users(),
-//				 session_.login());
-//
-//    authWidget->model()->addPasswordAuth(&Session::passwordAuth());
-//    authWidget->model()->addOAuth(Session::oAuth());
-//    authWidget->setRegistrationEnabled(true);
-//
-//    authWidget->processEnvironment();
-//
-//    root()->addWidget(authWidget);
-//
-//    // homePage_ = initHome();
-//    //homePage_ = initTabs();
-////    initAuthWidget();
-//    
-////    WText *title = new WText("<h1>ECHOES Alert</h1>");
-////    root()->addWidget(title);
-//
-//
-//    // ajout du widget principal à la racine du site
-////    root()->addWidget(this->authWidget);
-//}
-//
-///**
-//Initialisation de l'application.
-//@return WTemplate
-//*/
-//WWidget *EchoesHome::initHome()
-//{
-//    // on utilise un WTemplate qui permet de se baser sur un fichier XML pour générer les pages web. Fichier XML défini plus haut avec messageResourceBundle.
-//    WTemplate *result = new WTemplate(tr("template"), root());
-//    return result;
-//}
-//
-///**
-//Initialisation de l'application.
-//@return WTemplate
-//*/
+#include <Wt/WFormWidget>
+
+#include "EchoesHome.h"
+
+
+
+
+
+/**
+Class EchoesHome : étend la classe WApplication.
+@param env : variables d'environnement
+*/
+EchoesHome::EchoesHome(Wt::WContainerWidget *parent)
+    : Wt::WContainerWidget(parent),
+
+    session_("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto") 
+    {
+        session_.login().changed().connect(this, &EchoesHome::onAuthEvent);
+        
+        try 
+        {
+            session_.createTables();
+            std::cerr << "Created database." << std::endl;
+        } catch (std::exception& e) {
+            std::cerr << e.what() << std::endl;
+            std::cerr << "Using existing database";
+        }
+
+        
+        // Auth conf
+        Wt::Auth::AuthModel *authModel = new Wt::Auth::AuthModel(Session::auth(),
+                                session_.users(), this);
+        authModel->addPasswordAuth(&Session::passwordAuth());
+        authModel->addOAuth(Session::oAuth());
+
+        Wt::Auth::AuthWidget *authWidget = new Wt::Auth::AuthWidget(session_.login());
+        authWidget->setModel(authModel);
+        authWidget->setRegistrationEnabled(true);
+
+//        root()->addWidget(authWidget);
+        
+        //admin
+        admin_ = new Wt::WLabel("Admin");
+        monitoring_ = new Wt::WLabel("Monitoring");
+        
+        Wt::WText *title = new Wt::WText("<h1>ECHOES Alert</h1>");
+        addWidget(title);
+
+        addWidget(authWidget);
+        
+        mainStack_ = new Wt::WStackedWidget();
+//        mainStack_->setStyleClass("echoesalertstack");
+        addWidget(mainStack_);
+
+        links_ = new WContainerWidget();
+        links_->setStyleClass("links");
+        links_->hide();
+        addWidget(links_);
+
+        adminAnchor_ = new Wt::WAnchor("/admin", "Administration", links_);
+        adminAnchor_->setLink(Wt::WLink(Wt::WLink::InternalPath, "/admin"));
+
+        monitoringAnchor_ = new Wt::WAnchor("/monitoring", "Monitoring", links_);
+        monitoringAnchor_->setLink(Wt::WLink(Wt::WLink::InternalPath, "/monitoring"));
+
+        Wt::WApplication::instance()->internalPathChanged()
+            .connect(this, &EchoesHome::handleInternalPath);
+        
+        
+        authWidget->processEnvironment();
+    }
+
+
+
+/**
+Initialisation de l'application.
+@return WTemplate
+*/
 //void *EchoesHome::initAuthWidget()
 //{
-////    Wt::Auth::AuthService *testAuthService = new Wt::Auth::AuthService();
+//    Wt::Auth::AuthService *testAuthService = new Wt::Auth::AuthService();
+
+//    this->authModel = new Wt::Auth::AuthModel(Session::auth() ,this->session_->users(), this);
+////    this->authModel = new Wt::Auth::AuthModel(Session::auth(),this->session_->users(), this);
+//    this->authModel->addPasswordAuth(&Session::passwordAuth());
+////    this->authModel->addOAuth(Session::oAuth());
 //
-////    this->authModel = new Wt::Auth::AuthModel(Session::auth() ,this->session_->users(), this);
-//////    this->authModel = new Wt::Auth::AuthModel(Session::auth(),this->session_->users(), this);
-////    this->authModel->addPasswordAuth(&Session::passwordAuth());
-//////    this->authModel->addOAuth(Session::oAuth());
-////
-////    this->authWidget = new Wt::Auth::AuthWidget(this->session_->login());
-////    this->authWidget->setModel(this->authModel);
-////    this->authWidget->setRegistrationEnabled(true);
-//    
+//    this->authWidget = new Wt::Auth::AuthWidget(this->session_->login());
+//    this->authWidget->setModel(this->authModel);
+//    this->authWidget->setRegistrationEnabled(true);
+    
 //}
-//
-//
+
+
 ///**
 //Initialisation de l'appli, test des tabs.
 //@return WTabWidget
@@ -105,7 +112,7 @@
 //
 //    return result;
 //}
-//
+
 ///**
 //Création d'un onglet.
 //@param textKey la clé qui permet de retrouver le texte de l'onglet dans le template
@@ -122,7 +129,7 @@
 //    return result;
 //
 //}
-//
+
 ///**
 //Méthode utilisée pour transformer une chaîne classique en objet WString. A utiliser en entrée des méthodes WT qui demandent une WString.
 //@param key chaîne passée en entrée
@@ -132,35 +139,61 @@
 //{
 //    return WString::tr(key);
 //}
-//
-///**
-//Point d'entrée
-//@return EchoesHome
-//*/
-//WApplication *createEchoesHomeApplication(const WEnvironment& env)
-//{
-//    // On instancie la classe EchoesHome qui permet d'afficher le site.
-//    return new EchoesHome(env);
-//}
-//
-//void EchoesHome::handleInternalPath(const std::string &internalPath)
-//{
-////  if (session_->login().loggedIn()) {
-////    if (internalPath == "/play")
-////      doNothing();
-//////    else if (internalPath == "/highscores")
-//////      showHighScores();
-////    else
-////      WApplication::instance()->setInternalPath("/play",  true);
-////  }
-//}
-//
-//
-//void EchoesHome::authEvent()
-//{
-//    if (session_.login().loggedIn())
-//        Wt::log("notice") << "User " << session_.login().user().id()
-//        << " logged in.";
-//    else
-//        Wt::log("notice") << "User logged out.";
-//}
+
+
+void EchoesHome::handleInternalPath(const std::string &internalPath)
+{
+  if (session_.login().loggedIn()) {
+    if (internalPath == "/monitoring")
+      showMonitoring();
+    else if (internalPath == "/admin")
+      showAdmin();
+    else
+      Wt::WApplication::instance()->setInternalPath("/monitoring",  true);
+  }
+}
+
+
+void EchoesHome::showAdmin()
+{
+  if (!admin_)
+//    admin_ = new AdminWidget(&session_, mainStack_);
+    admin_ = new Wt::WLabel("Admin 2");
+
+  mainStack_->setCurrentWidget(admin_);
+//  admin_->update();
+
+  monitoringAnchor_->removeStyleClass("selected-link");
+  adminAnchor_->addStyleClass("selected-link");
+}
+
+void EchoesHome::showMonitoring()
+{
+  if (!monitoring_) {
+//    monitoring_ = new MonitoringWidget(&session_, mainStack_);
+      monitoring_ = new Wt::WLabel("Admin 2");
+//    monitoring_->update();
+  }
+
+  mainStack_->setCurrentWidget(monitoring_);
+
+  monitoringAnchor_->addStyleClass("selected-link");
+  adminAnchor_->removeStyleClass("selected-link");
+}
+
+
+void EchoesHome::onAuthEvent()
+{
+    if (session_.login().loggedIn())
+    {
+        links_->show();
+        handleInternalPath(Wt::WApplication::instance()->internalPath());
+    }
+    else
+    {
+        mainStack_->clear();
+        admin_ = 0;
+        monitoring_ = 0;
+        links_->hide();
+    }
+}

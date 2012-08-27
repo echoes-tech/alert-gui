@@ -119,6 +119,8 @@ private:
   Wt::WButtonGroup *organizationGroup;
 
   void checkLoginName();
+  void checkFirstName();
+  void checkLastName();
   void checkOrganization();
   void checkPassword();
   void checkPassword2();

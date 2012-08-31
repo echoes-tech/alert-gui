@@ -1,11 +1,4 @@
-#include <Wt/WFormWidget>
-#include <Wt/WGroupBox>
-
-
 #include "EchoesHome.h"
-
-
-
 
 
 /**
@@ -13,66 +6,86 @@ Class EchoesHome : étend la classe WContainerWidget.
 */
 EchoesHome::EchoesHome(Wt::WContainerWidget *parent): 
     Wt::WContainerWidget(parent),
-    session_("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto"),
-    admin_(0),
-    monitoring_(0)
-     
+    session("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto"),
+    adminPageTabs(0),
+    monitoringPage(0)
     {
-        session_.login().changed().connect(this, &EchoesHome::onAuthEvent);
+        this->session.login().changed().connect(this, &EchoesHome::onAuthEvent);
         
         try 
         {
-            session_.createTables();
+            this->session.createTables();
             std::cerr << "Created database." << std::endl;
-        } catch (std::exception& e) {
+        } 
+        catch (std::exception& e) 
+        {
             std::cerr << e.what() << std::endl;
             std::cerr << "Using existing database";
         }
 
-        
-        // Auth conf
-        Wt::Auth::AuthModel *authModel = new Wt::Auth::AuthModel(Session::auth(),session_.users(), this);
-        authModel->addPasswordAuth(&Session::passwordAuth());
-        authModel->addOAuth(Session::oAuth());
-
-        Wt::Auth::AuthWidget *authWidget = new Wt::Auth::AuthWidget(session_.login());
-        authWidget->setModel(authModel);
-        authWidget->setRegistrationEnabled(true);
-        
-        //admin
-//        admin_ = initAdminWidget();
-//        monitoring_ = new Wt::WLabel("Monitoring");
-        
-        Wt::WText *title = new Wt::WText("<h1>ECHOES Alert</h1>");
-        addWidget(title);
-
-        addWidget(authWidget);
-        
-        mainStack_ = new Wt::WStackedWidget();
-//        mainStack_->setStyleClass("echoesalertstack");
-        addWidget(mainStack_);
-
-        links_ = new WContainerWidget();
-        links_->setStyleClass("links");
-        links_->hide();
-        addWidget(links_);
-
-        adminAnchor_ = new Wt::WAnchor("/admin", "Administration", links_);
-        adminAnchor_->setLink(Wt::WLink(Wt::WLink::InternalPath, "/admin"));
-
-        monitoringAnchor_ = new Wt::WAnchor("/monitoring", "Monitoring", links_);
-        monitoringAnchor_->setLink(Wt::WLink(Wt::WLink::InternalPath, "/monitoring"));
+        initAuth();
+        initHeader();
+        initMainStack();
+        setLinks();
 
         Wt::WApplication::instance()->internalPathChanged().connect(this, &EchoesHome::handleInternalPath);
-        
-        
-        authWidget->processEnvironment();
+        this->authWidget->processEnvironment();
     }
 
 
+void EchoesHome::initAuth()
+{
+    this->authModel = new Wt::Auth::AuthModel(Session::auth(),this->session.users(), this);
+    this->authModel->addPasswordAuth(&Session::passwordAuth());
+    this->authModel->addOAuth(Session::oAuth());
+
+    this->authWidget = new Wt::Auth::AuthWidget(this->session.login());
+    this->authWidget->setModel(this->authModel);
+    this->authWidget->setRegistrationEnabled(true);
+}
+
+void EchoesHome::initHeader()
+{
+    this->title = new Wt::WText("<h1>ECHOES Alert</h1>");
+        
+    this->topContainer = new Wt::WContainerWidget();
+    this->topContainer->setStyleClass("top-container");
+
+    this->topBoxLoggedInLayout = new Wt::WHBoxLayout();
+    this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
+    this->topRightLayout = new Wt::WVBoxLayout();
+    this->resizeContainers(this->session.login().loggedIn());
+
+    this->addWidget(this->topContainer);
+
+    this->links = new WContainerWidget();
+    this->linksLayout = new Wt::WHBoxLayout();
+    this->links->setLayout(this->linksLayout);
+    this->links->setStyleClass("links");
+    this->links->hide();
+}
+
+void EchoesHome::initMainStack()
+{
+    this->mainStack = new Wt::WStackedWidget();
+    this->mainStack->setStyleClass("echoesalertstack");
+    this->addWidget(this->mainStack);
+}
+
+void EchoesHome::setLinks()
+{
+    this->adminAnchor = new Wt::WAnchor("/admin", "Administration", this->links);
+    this->adminAnchor->setLink(Wt::WLink(Wt::WLink::InternalPath, "/admin"));
+    this->linksLayout->addWidget(this->adminAnchor);
+
+    this->monitoringAnchor = new Wt::WAnchor("/monitoring", "Monitoring", this->links);
+    this->monitoringAnchor->setLink(Wt::WLink(Wt::WLink::InternalPath, "/monitoring"));
+    this->linksLayout->addWidget(this->monitoringAnchor);
+}
+
 Wt::WTabWidget* EchoesHome::initAdminWidget()
 {
-    Wt::WTabWidget *res = new Wt::WTabWidget(mainStack_);
+    Wt::WTabWidget *res = new Wt::WTabWidget(this->mainStack);
     
     Wt::WGroupBox * usersGroupBox = new Wt::WGroupBox("Users list");
     
@@ -80,8 +93,8 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     
     Wt::WTableView *tview = new Wt::WTableView(usersGroupBox);
     {
-        Wt::Dbo::Transaction transaction(session_);
-        Wt::Dbo::Query<Wt::Dbo::ptr<User>,Wt::Dbo::DynamicBinding> q = session_.find<User,Wt::Dbo::DynamicBinding>();
+        Wt::Dbo::Transaction transaction(this->session);
+        Wt::Dbo::Query<Wt::Dbo::ptr<User>,Wt::Dbo::DynamicBinding> q = this->session.find<User,Wt::Dbo::DynamicBinding>();
         qm->setQuery(q, false);
         qm->addColumn("USR_LAST_NAME", "Last name", Wt::ItemIsSelectable);
         qm->setColumnFlags(0,Wt::ItemIsUserCheckable);
@@ -89,23 +102,36 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
         qm->addColumn("USR_MAIL", "E-mail", Wt::ItemIsEditable);
         
         
+        
+        
 //        tview->resize(800, 300);
 //        tview->setSelectionMode(Wt::SingleSelection);
         tview->setModel(qm);
         
+//        session_.add<User>(new User());
+//        
+//        tview->refresh();
         
     }
     
     
     
-
+    
+    Wt::WString userEditionTitle = new Wt::WString("User List");
+   
+    Wt::WGroupBox * userEditionGroupBox = new Wt::WGroupBox(userEditionTitle);
+    
+    Wt::WLabel generalInfoUserEditionLabel = new Wt::WLabel("General");
+    
+    
+    
     
     
     
     res->addTab(new Wt::WText("<h2>TESTEUH 1</h2>"), "Welcome");
     res->addTab(new Wt::WText("<h2>TESTEUH 2</h2>"), "Probes");
     res->addTab(new Wt::WText("<h2>TESTEUH 3</h2>"), "Alerts");
-    res->addTab(tview, "Users");
+    res->addTab(usersGroupBox, "Users");
     res->addTab(new Wt::WText("<h2>TESTEUH 5</h2>"), "General");
     res->addTab(new Wt::WText("<h2>TESTEUH 6</h2>"), "Plugin-store");
     return res;
@@ -113,7 +139,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
 
 void EchoesHome::handleInternalPath(const std::string &internalPath)
 {
-  if (session_.login().loggedIn()) {
+  if (this->session.login().loggedIn()) {
     if (internalPath == "/monitoring")
       showMonitoring();
     else if (internalPath == "/admin")
@@ -126,47 +152,90 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
 
 void EchoesHome::showAdmin()
 {
-  if (!admin_)
+  if (!this->adminPageTabs)
   {
 //    admin_ = new AdminWidget(&session_, mainStack_);
-    admin_ = initAdminWidget();
+    this->adminPageTabs = initAdminWidget();
   }
 
-  mainStack_->setCurrentWidget(admin_);
+  this->mainStack->setCurrentWidget(this->adminPageTabs);
 //  admin_->show();
 
-  monitoringAnchor_->removeStyleClass("selected-link");
-  adminAnchor_->addStyleClass("selected-link");
+  this->monitoringAnchor->removeStyleClass("selected-link");
+  this->adminAnchor->addStyleClass("selected-link");
 }
 
 void EchoesHome::showMonitoring()
 {
-  if (!monitoring_) {
+  if (!this->monitoringPage) {
 //    monitoring_ = new MonitoringWidget(&session_, mainStack_);
-      monitoring_ = new Wt::WLabel("Monitoring 2");
-      monitoring_->show();
+      this->monitoringPage = new Wt::WLabel("Monitoring 2");
+      this->monitoringPage->show();
 //    monitoring_->update();
   }
 
-  mainStack_->setCurrentWidget(monitoring_);
+  this->mainStack->setCurrentWidget(this->monitoringPage);
 
-  monitoringAnchor_->addStyleClass("selected-link");
-  adminAnchor_->removeStyleClass("selected-link");
+  this->monitoringAnchor->addStyleClass("selected-link");
+  this->adminAnchor->removeStyleClass("selected-link");
+}
+
+void EchoesHome::resizeContainers(bool loggedIn)
+{
+    if (loggedIn)
+    {
+        this->topBoxLoggedInLayout = new Wt::WHBoxLayout();
+        
+        this->topBoxLoggedOutLayout->removeWidget(title);
+        this->topBoxLoggedOutLayout->removeWidget(authWidget);
+        this->topBoxLoggedInLayout->addWidget(title,0,Wt::AlignMiddle);
+        
+        this->title->setHeight(Wt::WLength(81));
+        this->authWidget->setHeight(Wt::WLength(20));
+        this->links->setWidth(Wt::WLength(200));
+        this->authWidget->setWidth(Wt::WLength(200));
+        
+        
+        this->topRightLayout = new Wt::WVBoxLayout();
+        this->topRightLayout->addWidget(this->authWidget, 0, Wt::AlignRight);
+        this->topRightLayout->addWidget(this->links, 0, Wt::AlignRight);
+        this->topBoxLoggedInLayout->addLayout(this->topRightLayout, Wt::AlignRight);
+        this->title->setHeight(Wt::WLength(81));
+        this->authWidget->setHeight(Wt::WLength(20));
+        this->topContainer->setLayout(this->topBoxLoggedInLayout);
+        this->topContainer->setHeight(Wt::WLength(94));
+    }
+    else
+    {
+        this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
+        this->topBoxLoggedInLayout->removeWidget(this->title);
+        this->topBoxLoggedInLayout->removeWidget(this->authWidget);
+        this->topBoxLoggedOutLayout->addWidget(this->title,1,Wt::AlignCenter);
+        this->title->setHeight(Wt::WLength(81));
+        this->authWidget->setHeight(Wt::WLength(320));
+        this->topBoxLoggedOutLayout->addWidget(this->authWidget,1,Wt::AlignCenter);
+        this->topContainer->setLayout(this->topBoxLoggedOutLayout);
+        this->topContainer->setHeight(Wt::WLength(400));
+    }
+    this->topContainer->refresh();
+    this->refresh();
 }
 
 
 void EchoesHome::onAuthEvent()
 {
-    if (session_.login().loggedIn())
+    resizeContainers(session.login().loggedIn());
+    if (this->session.login().loggedIn())
     {
-        links_->show();
+        
+        this->links->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
     }
     else
     {
-        mainStack_->clear();
-        admin_ = 0;
-        monitoring_ = 0;
-        links_->hide();
+        this->mainStack->clear();
+        this->adminPageTabs = 0;
+        this->monitoringPage = 0;
+        this->links->hide();
     }
 }

@@ -14,6 +14,9 @@
 #include <Wt/WAnchor>
 #include <Wt/WFormWidget>
 #include <Wt/WTabWidget>
+#include <Wt/WGroupBox>
+#include <Wt/WHBoxLayout>
+#include <Wt/WVBoxLayout>
 
 
 
@@ -23,39 +26,41 @@
 #include <Wt/Dbo/QueryModel>
 #include <Wt/WTableView>
 
-class AdminWidget : public Wt::WLabel
-{
-    public:
-        AdminWidget();
-};
-
-class MonitoringWidget : public Wt::WLabel
-{
-    public:
-        MonitoringWidget();
-};
 
 class EchoesHome : public Wt::WContainerWidget 
 {
 public:
 
     EchoesHome(Wt::WContainerWidget *parent = 0);
-    void handleInternalPath(const std::string &internalPath);
-    Session session_;
 private:
-    Wt::WStackedWidget *mainStack_;
+    Session session;
+    void handleInternalPath(const std::string &internalPath);
+    
+    Wt::Auth::AuthWidget *authWidget;
+    Wt::Auth::AuthModel *authModel;
+    Wt::WText *title;
+    Wt::WContainerWidget *topContainer;
+    Wt::WHBoxLayout *topBoxLoggedInLayout;
+    Wt::WVBoxLayout *topBoxLoggedOutLayout;
+    Wt::WVBoxLayout *topRightLayout;
+    Wt::WStackedWidget *mainStack;
 //    Wt::WLabel *admin_;
-    Wt::WTabWidget *admin_;
-    Wt::WLabel *monitoring_;
-    Wt::WContainerWidget *links_;
-    Wt::WAnchor *adminAnchor_;
-    Wt::WAnchor *monitoringAnchor_;
+    Wt::WTabWidget *adminPageTabs;
+    Wt::WLabel *monitoringPage;
+    Wt::WContainerWidget *links;
+    Wt::WHBoxLayout *linksLayout;
+    Wt::WAnchor *adminAnchor;
+    Wt::WAnchor *monitoringAnchor;
     
     
-    
+    void initAuth();
+    void initHeader();
+    void initMainStack();
+    void setLinks();
     void onAuthEvent();
     void showAdmin();
     void showMonitoring();
+    void resizeContainers(bool loggedIn);
     
     Wt::WTabWidget* initAdminWidget();
 

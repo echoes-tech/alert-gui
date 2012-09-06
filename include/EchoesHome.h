@@ -18,6 +18,8 @@
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
 
+#include "UserEditionWidget.h"
+
 
 
 #include <tools/Session.h>
@@ -33,7 +35,7 @@ public:
 
     EchoesHome(Wt::WContainerWidget *parent = 0);
 private:
-    Session session;
+    Session *session;
     void handleInternalPath(const std::string &internalPath);
     
     Wt::Auth::AuthWidget *authWidget;

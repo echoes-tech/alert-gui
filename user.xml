@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <!-- BaseAuth, PasswordAuth and OAuth models -->
+
+  <message id="Wt.Auth.error-invalid-token">The operation could not be completed: invalid token.</message>
+  <message id="Wt.Auth.error-token-expired">The operation could not be completed: the token has expired.</message>
+  <message id="Wt.Auth.mail-sent">An email has been sent. Follow the instructions to set a new password.</message>
+  <message id="Wt.Auth.info-email-confirmed">Your email address is now confirmed.</message>
+
+
+  <!-- templates -->
+
+  <message id="Wt.Auth.template.login">
+    <div class="Wt-form Wt-auth-login">
+      <h2>${tr:Wt.Auth.login-form-title}</h2>
+      <p>${tr:Wt.Auth.login-form-info}</p>
+
+      <div class="Wt-fields">
+          <label for="${id:first-name}">${first-name-label}
+            ${first-name-info class="Wt-info"}
+	  </label>
+	  ${first-name}
+
+	  <label for="${id:last-name}">${last-name-label}
+            ${last-name-info class="Wt-info"}
+	  </label>
+	  ${last-name}
+
+      </div>
+
+      <div class="Wt-buttons">
+	${login}
+      </div>
+
+      <div class="Wt-buttons">
+	${lost-password} ${sep} ${register}
+      </div>
+    </div>
+  </message>
+
+
+  
+
+</messages>

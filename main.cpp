@@ -17,6 +17,7 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form.css");
 //    app->internalPathChanged().connect(this, &AuthWidget::onPathChange);
     app->messageResourceBundle().use("auth", false);
+    app->messageResourceBundle().use("user", false);
   
 
     new EchoesHome(app->root());

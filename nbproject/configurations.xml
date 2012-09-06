@@ -29,6 +29,10 @@
         <itemPath>include/RegistrationWidget.h</itemPath>
         <itemPath>include/UpdatePasswordWidget.C</itemPath>
         <itemPath>include/UpdatePasswordWidget.h</itemPath>
+        <itemPath>include/UserEditionModel.cpp</itemPath>
+        <itemPath>include/UserEditionModel.h</itemPath>
+        <itemPath>include/UserEditionWidget.cpp</itemPath>
+        <itemPath>include/UserEditionWidget.h</itemPath>
         <itemPath>include/WFormModel</itemPath>
         <itemPath>include/WFormModel.C</itemPath>
         <itemPath>include/WTemplateFormView</itemPath>

@@ -6,15 +6,16 @@ Class EchoesHome : étend la classe WContainerWidget.
 */
 EchoesHome::EchoesHome(Wt::WContainerWidget *parent): 
     Wt::WContainerWidget(parent),
-    session("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto"),
     adminPageTabs(0),
     monitoringPage(0)
     {
-        this->session.login().changed().connect(this, &EchoesHome::onAuthEvent);
+//        session = new Session("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto");
+        session = new Session("hostaddr=172.16.3.101 port=5432 dbname=echoes user=echoes password=toto");
+        this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
         
         try 
         {
-            this->session.createTables();
+            this->session->createTables();
             std::cerr << "Created database." << std::endl;
         } 
         catch (std::exception& e) 
@@ -35,11 +36,11 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent):
 
 void EchoesHome::initAuth()
 {
-    this->authModel = new Wt::Auth::AuthModel(Session::auth(),this->session.users(), this);
+    this->authModel = new Wt::Auth::AuthModel(Session::auth(),this->session->users(), this);
     this->authModel->addPasswordAuth(&Session::passwordAuth());
     this->authModel->addOAuth(Session::oAuth());
 
-    this->authWidget = new Wt::Auth::AuthWidget(this->session.login());
+    this->authWidget = new Wt::Auth::AuthWidget(this->session->login());
     this->authWidget->setModel(this->authModel);
     this->authWidget->setRegistrationEnabled(true);
 }
@@ -54,7 +55,7 @@ void EchoesHome::initHeader()
     this->topBoxLoggedInLayout = new Wt::WHBoxLayout();
     this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
     this->topRightLayout = new Wt::WVBoxLayout();
-    this->resizeContainers(this->session.login().loggedIn());
+    this->resizeContainers(this->session->login().loggedIn());
 
     this->addWidget(this->topContainer);
 
@@ -93,8 +94,8 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     
     Wt::WTableView *tview = new Wt::WTableView(usersGroupBox);
     {
-        Wt::Dbo::Transaction transaction(this->session);
-        Wt::Dbo::Query<Wt::Dbo::ptr<User>,Wt::Dbo::DynamicBinding> q = this->session.find<User,Wt::Dbo::DynamicBinding>();
+        Wt::Dbo::Transaction transaction(*(this->session));
+        Wt::Dbo::Query<Wt::Dbo::ptr<User>,Wt::Dbo::DynamicBinding> q = this->session->find<User,Wt::Dbo::DynamicBinding>();
         qm->setQuery(q, false);
         qm->addColumn("USR_LAST_NAME", "Last name", Wt::ItemIsSelectable);
         qm->setColumnFlags(0,Wt::ItemIsUserCheckable);
@@ -117,29 +118,29 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     
     
     
-    Wt::WString userEditionTitle = new Wt::WString("User List");
+    Wt::WString *userEditionTitle = new Wt::WString("User List");
    
-    Wt::WGroupBox * userEditionGroupBox = new Wt::WGroupBox(userEditionTitle);
+    Wt::WGroupBox * userEditionGroupBox = new Wt::WGroupBox(*userEditionTitle);
     
-    Wt::WLabel generalInfoUserEditionLabel = new Wt::WLabel("General");
-    
-    
+    Wt::WLabel *generalInfoUserEditionLabel = new Wt::WLabel("General");
     
     
     
+    UserEditionWidget *uew = new UserEditionWidget();
+    uew->setModel(new UserEditionModel());
     
     res->addTab(new Wt::WText("<h2>TESTEUH 1</h2>"), "Welcome");
     res->addTab(new Wt::WText("<h2>TESTEUH 2</h2>"), "Probes");
     res->addTab(new Wt::WText("<h2>TESTEUH 3</h2>"), "Alerts");
     res->addTab(usersGroupBox, "Users");
-    res->addTab(new Wt::WText("<h2>TESTEUH 5</h2>"), "General");
+    res->addTab(uew, "General");
     res->addTab(new Wt::WText("<h2>TESTEUH 6</h2>"), "Plugin-store");
     return res;
 }
 
 void EchoesHome::handleInternalPath(const std::string &internalPath)
 {
-  if (this->session.login().loggedIn()) {
+  if (this->session->login().loggedIn()) {
     if (internalPath == "/monitoring")
       showMonitoring();
     else if (internalPath == "/admin")
@@ -224,8 +225,8 @@ void EchoesHome::resizeContainers(bool loggedIn)
 
 void EchoesHome::onAuthEvent()
 {
-    resizeContainers(session.login().loggedIn());
-    if (this->session.login().loggedIn())
+    resizeContainers(session->login().loggedIn());
+    if (this->session->login().loggedIn())
     {
         
         this->links->show();

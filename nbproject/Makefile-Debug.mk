@@ -15,8 +15,8 @@ NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
 CC=gcc
-CCC=distcc
-CXX=distcc
+CCC=g++
+CXX=g++
 FC=gfortran
 AS=as
 
@@ -46,7 +46,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/include/AuthWidget.o \
 	${OBJECTDIR}/include/DomElement.o \
 	${OBJECTDIR}/include/RegistrationWidget.o \
-	${OBJECTDIR}/include/RegistrationModel.o
+	${OBJECTDIR}/include/RegistrationModel.o \
+	${OBJECTDIR}/include/UserEditionModel.o \
+	${OBJECTDIR}/include/UserEditionWidget.o
 
 
 # C Compiler Flags
@@ -137,6 +139,16 @@ ${OBJECTDIR}/include/RegistrationModel.o: include/RegistrationModel.cpp
 	${MKDIR} -p ${OBJECTDIR}/include
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/RegistrationModel.o include/RegistrationModel.cpp
+
+${OBJECTDIR}/include/UserEditionModel.o: include/UserEditionModel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/include
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/UserEditionModel.o include/UserEditionModel.cpp
+
+${OBJECTDIR}/include/UserEditionWidget.o: include/UserEditionWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/include
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/UserEditionWidget.o include/UserEditionWidget.cpp
 
 # Subprojects
 .build-subprojects:

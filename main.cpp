@@ -15,6 +15,7 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
     app->setTitle("ECHOES Alert");    
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-alert.css");
 //    app->internalPathChanged().connect(this, &AuthWidget::onPathChange);
     app->messageResourceBundle().use("auth", false);
     app->messageResourceBundle().use("user", false);

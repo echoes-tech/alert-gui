@@ -20,6 +20,9 @@
 #include "Wt/WPushButton"
 #include "Wt/WText"
 
+#include <Wt/WComboBox>
+#include <Wt/WSelectionBox>
+
 
 #include "tools/Session.h"
 //#include "Login.h"
@@ -31,7 +34,7 @@
 
 
 UserEditionWidget::UserEditionWidget()
-: Wt::WTemplateFormView(Wt::WString::tr("Wt.Auth.template.registration"))
+: Wt::WTemplateFormView(Wt::WString::tr("Alert.User.Edition.template"))
 {
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("user",false);
@@ -88,6 +91,27 @@ Wt::WFormWidget *UserEditionWidget::createFormWidget(UserEditionModel::Field fie
 //        p->changed().connect
 //                (boost::bind(&RegistrationWidget::checkPassword2, this));
         result = p;
+    }
+    else if (field == UserEditionModel::Role)
+    {
+        Wt::WComboBox *combo = new Wt::WComboBox();
+        result = combo;
+    }
+    else if (field == UserEditionModel::State)
+    {
+        result = new Wt::WComboBox();
+    }
+    else if (field == UserEditionModel::MediaEMail)
+    {
+        result = new Wt::WLineEdit();
+    }
+    else if (field == UserEditionModel::MediaSMS)
+    {
+        result = new Wt::WLineEdit();
+    }
+    else if (field == UserEditionModel::MediaMobileApp)
+    {
+        result = new Wt::WLineEdit();
     }
 
     return result;
@@ -176,19 +200,25 @@ void UserEditionWidget::update()
 //        bindEmpty("icons");
 //    }
 //
-//    if (!created_)
-//    {
-//        WPushButton *okButton = new WPushButton(tr("Wt.Auth.register"));
-//        WPushButton *cancelButton = new WPushButton(tr("Wt.WMessageBox.Cancel"));
-//
-//        bindWidget("ok-button", okButton);
-//        bindWidget("cancel-button", cancelButton);
-//
-//        okButton->clicked().connect(this, &RegistrationWidget::doRegister);
-//        cancelButton->clicked().connect(this, &RegistrationWidget::close);
-//
-//        created_ = true;
-//    }
+    if (!created_)
+    {
+        Wt::WPushButton *okButton = new Wt::WPushButton(tr("Wt.Auth.register"));
+        Wt::WPushButton *cancelButton = new Wt::WPushButton(tr("Wt.WMessageBox.Cancel"));
+
+        bindWidget("add-button", okButton);
+        bindWidget("delete-button", cancelButton);
+
+//        okButton->clicked().connect(this, &UserEditionWidget::doRegister);
+//        cancelButton->clicked().connect(this, &UserEditionWidget::close);
+
+        Wt::WSelectionBox *mediaEmailSelectionBow = new Wt::WSelectionBox();
+        Wt::WSelectionBox *mediaSmsSelectionBow = new Wt::WSelectionBox();
+        
+        bindWidget("email-sbox", mediaEmailSelectionBow);
+        bindWidget("sms-sbox", mediaSmsSelectionBow);
+        
+        created_ = true;
+    }
 }
 
 //void RegistrationWidget::checkLoginName()

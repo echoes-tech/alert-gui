@@ -3,41 +3,108 @@
 
   <!-- BaseAuth, PasswordAuth and OAuth models -->
 
-  <message id="Wt.Auth.error-invalid-token">The operation could not be completed: invalid token.</message>
-  <message id="Wt.Auth.error-token-expired">The operation could not be completed: the token has expired.</message>
-  <message id="Wt.Auth.mail-sent">An email has been sent. Follow the instructions to set a new password.</message>
-  <message id="Wt.Auth.info-email-confirmed">Your email address is now confirmed.</message>
+    <message id="Wt.Auth.error-invalid-token">The operation could not be completed: invalid token.</message>
+    <message id="Wt.Auth.error-token-expired">The operation could not be completed: the token has expired.</message>
+    <message id="Wt.Auth.mail-sent">An email has been sent. Follow the instructions to set a new password.</message>
+    <message id="Wt.Auth.info-email-confirmed">Your email address is now confirmed.</message>
 
+    <message id="Alert.User.Edition.form-title">Test.</message>
 
   <!-- templates -->
 
-  <message id="Wt.Auth.template.login">
-    <div class="Wt-form Wt-auth-login">
-      <h2>${tr:Wt.Auth.login-form-title}</h2>
-      <p>${tr:Wt.Auth.login-form-info}</p>
+    <message id="Alert.User.Edition.template">
+        <div class="Alert-form Alert-auth-login">
+            <h2>${tr:Alert.User.Edition.form-title}</h2>
+            <p>${tr:Wt.Auth.login-form-info}</p>
+      
+            <hr></hr>
+      
+            <div class="Alert-fields">
+                <label for="${id:first-name}">${first-name-label}
+                    ${first-name-info class="Alert-info"}
+                </label>
+                ${first-name}
 
-      <div class="Wt-fields">
-          <label for="${id:first-name}">${first-name-label}
-            ${first-name-info class="Wt-info"}
-	  </label>
-	  ${first-name}
+                <label for="${id:last-name}">${last-name-label}
+                    ${last-name-info class="Alert-info"}
+                </label>
+                ${last-name}
+      
+                <label for="${id:email}">${email-label}
+                    ${email-info class="Alert-info"}
+                </label>
+                ${email}
+      
+                <label for="${id:password}">${password-label}
+                    ${password-info class="Alert-info"}
+                </label>
+                ${password}
 
-	  <label for="${id:last-name}">${last-name-label}
-            ${last-name-info class="Wt-info"}
-	  </label>
-	  ${last-name}
+                <label for="${id:repeat-password}">${repeat-password-label}
+                    ${repeat-password-info class="Alert-info"}
+                </label>
+                ${repeat-password}
+      
+                <hr></hr>
+      
+                <label for="${id:role}">${role-label}
+                    ${role-info class="Alert-info"}
+                </label>
+                ${role}
+      
+                <label for="${id:state}">${state-label}
+                    ${state-info class="Alert-info"}
+                </label>
+                ${state}
+      
+                <hr></hr>
 
-      </div>
+            </div>
+      
+      
 
-      <div class="Wt-buttons">
-	${login}
-      </div>
+            <div class="Alert-buttons">
+                ${login}
+            </div>
 
-      <div class="Wt-buttons">
-	${lost-password} ${sep} ${register}
-      </div>
-    </div>
-  </message>
+            <div class="Alert-buttons">
+                ${lost-password} ${sep} ${register}
+            </div>
+        </div>
+        <div class="Alert-form Alert-auth-login">
+            <h2>${tr:Alert.User.Edition.form-title}</h2>
+            <p>${tr:Wt.Auth.login-form-info}</p>
+      
+            <hr></hr>
+            <div class="Alert-fields">
+                <label for="${id:media-email}">${media-email-label}
+                    ${media-email-info class="Alert-info"}
+                </label>
+                ${media-email}
+                
+                <div class="Alert-buttons">
+                    ${add} ${delete}
+                </div>
+            </div>
+                
+                <div class="Alert-sbox">
+                    ${email-sbox}
+                </div>
+      
+            <div class="Alert-fields">
+                <label for="${id:media-sms}">${media-sms-label}
+                    ${media-sms-info class="Alert-info"}
+                </label>
+                ${media-sms}
+                
+                <div class="Alert-buttons">
+                    ${add} ${delete}
+                </div>
+             </div>   
+                ${sms-sbox}
+            
+        </div>
+    </message>
 
 
   

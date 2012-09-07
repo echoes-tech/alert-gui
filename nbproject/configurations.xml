@@ -46,6 +46,10 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>auth.xml</itemPath>
+      <itemPath>resources/form-alert.css</itemPath>
+      <itemPath>resources/form.css</itemPath>
+      <itemPath>user.xml</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -91,10 +95,10 @@
             <pElem>../dbo/dist/SharedObject/GNU-Linux-x86</pElem>
           </linkerAddLib>
           <linkerLibItems>
+            <linkerLibLibItem>dbo</linkerLibLibItem>
             <linkerLibLibItem>wt</linkerLibLibItem>
             <linkerLibLibItem>wthttp</linkerLibLibItem>
             <linkerLibLibItem>wtdbopostgres</linkerLibLibItem>
-            <linkerLibLibItem>dbo</linkerLibLibItem>
             <linkerLibLibItem>wtdbo</linkerLibLibItem>
             <linkerLibLibItem>boost_signals</linkerLibLibItem>
             <linkerLibLibItem>boost_system</linkerLibLibItem>

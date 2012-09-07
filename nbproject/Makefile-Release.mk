@@ -40,9 +40,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/include/Login.o \
 	${OBJECTDIR}/include/FormBaseModel.o \
 	${OBJECTDIR}/include/WFormModel.o \
+	${OBJECTDIR}/include/EscapeOStream.o \
 	${OBJECTDIR}/include/WTemplateFormView.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/include/EscapeOStream.o \
 	${OBJECTDIR}/include/AuthWidget.o \
 	${OBJECTDIR}/include/DomElement.o \
 	${OBJECTDIR}/include/RegistrationWidget.o \
@@ -105,6 +105,11 @@ ${OBJECTDIR}/include/WFormModel.o: include/WFormModel.C
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/WFormModel.o include/WFormModel.C
 
+${OBJECTDIR}/include/EscapeOStream.o: include/EscapeOStream.cpp 
+	${MKDIR} -p ${OBJECTDIR}/include
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/EscapeOStream.o include/EscapeOStream.cpp
+
 ${OBJECTDIR}/include/WTemplateFormView.o: include/WTemplateFormView.C 
 	${MKDIR} -p ${OBJECTDIR}/include
 	${RM} $@.d
@@ -114,11 +119,6 @@ ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
-
-${OBJECTDIR}/include/EscapeOStream.o: include/EscapeOStream.cpp 
-	${MKDIR} -p ${OBJECTDIR}/include
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/EscapeOStream.o include/EscapeOStream.cpp
 
 ${OBJECTDIR}/include/AuthWidget.o: include/AuthWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/include

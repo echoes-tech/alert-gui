@@ -1,0 +1,123 @@
+.Alert-form {
+    margin: 0 auto;
+    margin-left: 50;
+    width: 40em;
+    padding: 0.7em;
+    float:left;
+}
+
+.Alert-form h2 {
+    font-size: 130%;
+    font-weight: bold;
+    padding: 0px;
+    margin: 8px 0px;
+    letter-spacing: inherit;
+    line-height: inherit;
+    color: inherit;
+    background: inherit;
+    height: auto;
+}
+
+.Alert-form h3 {
+    font-size: 100%;
+    font-weight: bold;
+    margin: 8px 0px;
+}
+
+.Alert-form p {
+    font-size: 85%;
+    color: #666666;
+    margin-bottom: 1.5em;
+    border-bottom: solid 1px #b7ddf2;
+    float:left;
+    padding-bottom: 0.5em;
+}
+
+.Alert-form label {
+    display: block;
+    font-weight: bold;
+    text-align: right;
+    width: 14em;
+    float: left;
+    clear: left;
+    line-height: 110%;
+}
+
+.Alert-form .Alert-info {
+    color: #666666;
+    display: block;
+    font-size: 85%;
+    width: 16.47em;
+    font-weight: normal;
+    text-align: right;
+}
+
+.Alert-form .Alert-fields input {
+    float: left;
+    padding: 5px 2px;
+    border: solid 1px #aacfe4;
+    font-size: 90%;
+    width: 14em;
+    margin: 0.5em 0.5em 1.4em 0.7em;
+}
+
+.Alert-form .Alert-fields input[type="checkbox"] {
+    margin-top: 1em;
+    width: auto;
+}
+
+.Alert-form .Alert-fields select {
+    margin-top: 1em;
+    width: 14em;
+    float: left;
+    margin: 0.5em 0.5em 1.4em 0.7em;
+    padding: 5px 2px;
+    font-size: 90%;
+}
+
+.Alert-form .Alert-field {
+    float: left;
+    padding: 5px 2px;
+    width: 15em;
+    margin: 0 0.5em 1.4em 0.7em;
+}
+
+.Alert-form .Alert-fields hr {
+    margin-top: 1em;
+    width: 100%;
+    float: left;
+    margin: 0.5em 0.5em 1.4em 0.7em;
+   
+}
+
+.Alert-form .Alert-buttons {
+    clear: both;
+    text-align: center;
+    margin: 0.5em 0;
+}
+
+.Alert-form .Alert-buttons span {
+    text-decoration: underline;
+    cursor: pointer; cursor: hand;
+}
+
+.Alert-form .Alert-sbox {
+    text-align: center;
+    margin: auto 0;
+}
+
+.Alert-form .Alert-sbox select {
+    margin: auto 0;
+    float: left;
+    width: 20em;
+}
+
+.Alert-form .Alert-error {
+    color: black;
+}
+
+.Alert-form .Alert-col-right {
+    margin-left: 29em;
+    padding-left: 2em;
+    border-left: solid 1px #b7ddf2;
+}

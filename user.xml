@@ -1,19 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
 
-  <!-- BaseAuth, PasswordAuth and OAuth models -->
+  <!-- User creation / modification models -->
 
-    <message id="Wt.Auth.error-invalid-token">The operation could not be completed: invalid token.</message>
-    <message id="Wt.Auth.error-token-expired">The operation could not be completed: the token has expired.</message>
-    <message id="Wt.Auth.mail-sent">An email has been sent. Follow the instructions to set a new password.</message>
-    <message id="Wt.Auth.info-email-confirmed">Your email address is now confirmed.</message>
+    <message id="Alert.User.Edition.form-title">User creation / modification</message>
+    <message id="Alert.User.Edition.media-title">User's medias</message>
 
-    <message id="Alert.User.Edition.form-title">Test.</message>
+    <message id="first-name">First name</message>
+    <message id="Alert.user.edition.first-name">User first name</message>
+    <message id="last-name">Last name</message>
+    <message id="Alert.user.edition.last-name">User last name</message>
+    <message id="email">Email (login)</message>
+    <message id="Alert.user.edition.email">Email used to log in</message>
+    <message id="password">Password</message>
+    <message id="Alert.user.edition.password">User password</message>
+    <message id="repeat-password">Repeat password</message>
+    <message id="Alert.user.edition.repeat-password">Repeat user password</message>
+    
+    <message id="role">Role</message>
+    <message id="Alert.user.edition.role">User role (access rights)</message>
+    <message id="state">User state</message>
+    <message id="Alert.user.edition.state">User state : activated / deactivated</message>
+    
+    <message id="media-email">Email</message>
+    <message id="Alert.user.edition.media-email">Emails usable to send alerts</message>
+    <message id="media-sms">Phone numbers</message>
+    <message id="Alert.user.edition.media-sms">Phone numbers usable to send SMS</message>
+    
+    <message id="Alert.user.edition.add-button">Add</message>
+    <message id="Alert.user.edition.delete-button">Delete</message>
+    
+    <message id="Alert.user.edition.save-button">Save</message>
+    <message id="Alert.user.edition.cancel-button">Cancel</message>
 
   <!-- templates -->
 
     <message id="Alert.User.Edition.template">
-        <div class="Alert-form Alert-auth-login">
+        <div class="Alert-form Alert-form-left Alert-auth-login">
             <h2>${tr:Alert.User.Edition.form-title}</h2>
             <p>${tr:Wt.Auth.login-form-info}</p>
       
@@ -57,22 +80,13 @@
                 </label>
                 ${state}
       
-                <hr></hr>
 
             </div>
+            
       
-      
-
-            <div class="Alert-buttons">
-                ${login}
-            </div>
-
-            <div class="Alert-buttons">
-                ${lost-password} ${sep} ${register}
-            </div>
         </div>
-        <div class="Alert-form Alert-auth-login">
-            <h2>${tr:Alert.User.Edition.form-title}</h2>
+        <div class="Alert-form Alert-form-right Alert-auth-login">
+            <h2>${tr:Alert.User.Edition.media-title}</h2>
             <p>${tr:Wt.Auth.login-form-info}</p>
       
             <hr></hr>
@@ -83,13 +97,13 @@
                 ${media-email}
                 
                 <div class="Alert-buttons">
-                    ${add} ${delete}
+                    ${add-button-email} ${delete-button-email}
                 </div>
             </div>
                 
-                <div class="Alert-sbox">
-                    ${email-sbox}
-                </div>
+            <div class="Alert-sbox">
+                ${email-sbox}
+            </div>
       
             <div class="Alert-fields">
                 <label for="${id:media-sms}">${media-sms-label}
@@ -98,12 +112,23 @@
                 ${media-sms}
                 
                 <div class="Alert-buttons">
-                    ${add} ${delete}
+                    ${add-button-sms} ${delete-button-sms}
                 </div>
-             </div>   
-                ${sms-sbox}
+             </div>
+             
+             <div class="Alert-sbox">
+                    ${sms-sbox}
+            </div>
+            
             
         </div>
+
+        <hr></hr>
+        <div class="Alert-buttons">
+            
+            ${save-button} ${cancel-button}
+        </div>
+
     </message>
 
 

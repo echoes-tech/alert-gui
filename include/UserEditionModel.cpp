@@ -19,8 +19,10 @@ const Wt::WFormModel::Field UserEditionModel::MediaSMS = "media-sms";
 const Wt::WFormModel::Field UserEditionModel::MediaMobileApp = "media-mobileapp";
 
 
-UserEditionModel::UserEditionModel()
+UserEditionModel::UserEditionModel(User *user)
 {
+    this->user = user;
+    setView(this->user);
     reset();
 }
 
@@ -36,6 +38,7 @@ void UserEditionModel::setView(User *user)
     }
     else if (!user->eMail.empty())
     {
+        this->session = static_cast<Session*>(user->session());
         currentView = Modification;
     }
     else

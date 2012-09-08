@@ -124,10 +124,14 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     
     Wt::WLabel *generalInfoUserEditionLabel = new Wt::WLabel("General");
     
-    
-    
+    UserEditionModel *uem;
     UserEditionWidget *uew = new UserEditionWidget();
-    uew->setModel(new UserEditionModel());
+    {
+        Wt::Dbo::Transaction transaction(*(this->session));
+        uem = new UserEditionModel(const_cast<User *>(this->session->user().get()));
+        uew->setModel(uem);
+        uew->setSession(session);
+    }
     
     res->addTab(new Wt::WText("<h2>TESTEUH 1</h2>"), "Welcome");
     res->addTab(new Wt::WText("<h2>TESTEUH 2</h2>"), "Probes");

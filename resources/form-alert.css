@@ -1,8 +1,23 @@
 .Alert-form {
     margin: 0 auto;
-    margin-left: 50;
     width: 40em;
     padding: 0.7em;
+    float:left;
+}
+
+.Alert-form-left {
+    margin-left: 6%;
+    margin-right: 2%;
+    width: 40%;
+    min-width: 500px;
+    float:left;
+}
+
+.Alert-form-right {
+    margin-right: 6%;
+    margin-left: 2%;
+    width: 40%;
+    min-width: 500px;
     float:left;
 }
 
@@ -90,10 +105,17 @@
    
 }
 
-.Alert-form .Alert-buttons {
+.Alert-buttons {
     clear: both;
     text-align: center;
     margin: 0.5em 0;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    float: left;  
 }
 
 .Alert-form .Alert-buttons span {
@@ -107,9 +129,9 @@
 }
 
 .Alert-form .Alert-sbox select {
-    margin: auto 0;
-    float: left;
-    width: 20em;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    width: 30em;
 }
 
 .Alert-form .Alert-error {
@@ -121,3 +143,8 @@
     padding-left: 2em;
     border-left: solid 1px #b7ddf2;
 }
+
+.clear {
+    clear: both;
+}
+

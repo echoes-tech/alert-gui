@@ -45,6 +45,10 @@ public:
   /*! \brief Sets the registration model.
    */
   void setModel(UserEditionModel *model);
+  
+  /*! \brief Sets the session.
+   */
+  void setSession(Session *session);
 
   /*! \brief Returns the registration model.
    *
@@ -57,12 +61,29 @@ public:
 //  void individualClick();
 //  void associationClick();
   
+  void checkMediaEmail();
+  void checkMediaSms();
+  
   /*! \brief Updates the user-interface.
    *
    * This updates the user-interface to reflect the current state of the
    * model.
    */
   void update();
+  
+  Wt::WSelectionBox *mediaEmailSelectionBox;
+  Wt::WSelectionBox *mediaSmsSelectionBox;
+  
+  Wt::WStringListModel *getMediasForCurrentUser(int mediaType);
+  
+  
+  void addMedia(UserEditionModel::Field field, int medId, Wt::WSelectionBox *sBox);
+  void deleteMedia(int medId, Wt::WSelectionBox *sBox);
+  
+  void addEmail();
+  void deleteEmail();
+  void addSms();
+  void deleteSms();
 
 protected:
   /*! \brief Validates the current information.
@@ -109,6 +130,7 @@ protected:
 private:
   AuthWidget *authWidget_;
   UserEditionModel *model_;
+  Session * session;
 
   bool created_;
   Login *confirmPasswordLogin_;

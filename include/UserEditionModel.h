@@ -13,7 +13,7 @@
 
 class UserEditionModel : public Wt::WFormModel {
 public:
-    UserEditionModel();
+    UserEditionModel(User *user);
     virtual ~UserEditionModel();
     
     /*! \brief Enumeration for view
@@ -23,6 +23,8 @@ public:
         Modification, 
         Creation
     };
+    
+    User *user;
     
     //! \brief Choose Password field
     static const Field FirstName;
@@ -35,13 +37,15 @@ public:
     static const Field MediaEMail;
     static const Field MediaSMS;
     static const Field MediaMobileApp;
+    
+    virtual bool validateField(Field field);
 private:
     view currentView;
-    User user;
+    Session *session;
     virtual void reset();
     void setView(User *user = NULL);
     virtual bool isVisible(Field field) const;
-    virtual bool validateField(Field field);
+    
     Wt::WString validateString(Wt::WString stringToValidate) const;
     void setValid(Field field);
 };

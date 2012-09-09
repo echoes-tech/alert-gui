@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <!-- User creation / modification models -->
+
+    <message id="Alert.User.Edition.form-title">User creation / modification</message>
+    <message id="Alert.User.Edition.media-title">User's medias</message>
+
+    <message id="first-name">First name</message>
+    <message id="Alert.user.edition.first-name">User first name</message>
+    <message id="last-name">Last name</message>
+    <message id="Alert.user.edition.last-name">User last name</message>
+    <message id="email">Email (login)</message>
+    <message id="Alert.user.edition.email">Email used to log in</message>
+    <message id="password">Password</message>
+    <message id="Alert.user.edition.password">User password</message>
+    <message id="repeat-password">Repeat password</message>
+    <message id="Alert.user.edition.repeat-password">Repeat user password</message>
+    
+    <message id="role">Role</message>
+    <message id="Alert.user.edition.role">User role (access rights)</message>
+    <message id="state">User state</message>
+    <message id="Alert.user.edition.state">User state : activated / deactivated</message>
+    
+    <message id="media-email">Email</message>
+    <message id="Alert.user.edition.media-email">Emails usable to send alerts</message>
+    <message id="media-sms">Phone numbers</message>
+    <message id="Alert.user.edition.media-sms">Phone numbers usable to send SMS</message>
+    
+    <message id="Alert.user.edition.add-button">Add</message>
+    <message id="Alert.user.edition.delete-button">Delete</message>
+    
+    <message id="Alert.user.edition.save-button">Save</message>
+    <message id="Alert.user.edition.cancel-button">Cancel</message>
+
+  <!-- templates -->
+
+    <message id="Alert.Alert.Edition.template">
+
+        <div class="Alert-form Alert-form-right Alert-auth-login">
+            
+                
+            <div class="Alert-sbox">
+                ${server-sbox}
+            </div>
+      
+            <div class="Alert-sbox">
+                ${application-sbox}
+            </div>
+            
+            
+            
+        </div>
+
+
+
+    </message>
+
+
+  
+
+</messages>

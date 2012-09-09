@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="80">
+<configurationDescriptor version="84">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="include" displayName="include" projectFiles="true">
+        <logicalFolder name="f3" displayName="AdminAlertTab" projectFiles="true">
+          <itemPath>include/AlertEditionModel.h</itemPath>
+          <itemPath>include/AlertEditionWidget.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
+          <itemPath>include/UserEditionModel.h</itemPath>
+          <itemPath>include/UserEditionWidget.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f2" displayName="Auth" projectFiles="true">
+          <itemPath>include/AuthWidget.h</itemPath>
+          <itemPath>include/DomElement.h</itemPath>
+          <itemPath>include/EscapeOStream.h</itemPath>
+          <itemPath>include/FormBaseModel</itemPath>
+          <itemPath>include/Login.h</itemPath>
+          <itemPath>include/RegistrationModel.h</itemPath>
+          <itemPath>include/RegistrationWidget.h</itemPath>
+          <itemPath>include/UpdatePasswordWidget.h</itemPath>
+          <itemPath>include/WFormModel</itemPath>
+          <itemPath>include/WTemplateFormView</itemPath>
+          <itemPath>include/WebUtils.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="rapidxml" displayName="rapidxml" projectFiles="true">
           <itemPath>include/rapidxml/license.txt</itemPath>
           <itemPath>include/rapidxml/manual.html</itemPath>
@@ -14,38 +35,13 @@
           <itemPath>include/rapidxml/rapidxml_utils.hpp</itemPath>
           <itemPath>include/rapidxml/rapidxml_xhtml.hpp</itemPath>
         </logicalFolder>
-        <itemPath>include/DomElement.cpp</itemPath>
-        <itemPath>include/DomElement.h</itemPath>
         <itemPath>include/EchoesHome.h</itemPath>
-        <itemPath>include/EscapeOStream.cpp</itemPath>
-        <itemPath>include/EscapeOStream.h</itemPath>
-        <itemPath>include/FormBaseModel</itemPath>
-        <itemPath>include/FormBaseModel.C</itemPath>
-        <itemPath>include/Login.cpp</itemPath>
-        <itemPath>include/Login.h</itemPath>
-        <itemPath>include/RegistrationModel.cpp</itemPath>
-        <itemPath>include/RegistrationModel.h</itemPath>
-        <itemPath>include/RegistrationWidget.cpp</itemPath>
-        <itemPath>include/RegistrationWidget.h</itemPath>
-        <itemPath>include/UpdatePasswordWidget.C</itemPath>
-        <itemPath>include/UpdatePasswordWidget.h</itemPath>
-        <itemPath>include/UserEditionModel.cpp</itemPath>
-        <itemPath>include/UserEditionModel.h</itemPath>
-        <itemPath>include/UserEditionWidget.cpp</itemPath>
-        <itemPath>include/UserEditionWidget.h</itemPath>
-        <itemPath>include/WFormModel</itemPath>
-        <itemPath>include/WFormModel.C</itemPath>
-        <itemPath>include/WTemplateFormView</itemPath>
-        <itemPath>include/WTemplateFormView.C</itemPath>
-        <itemPath>include/WebUtils.cpp</itemPath>
-        <itemPath>include/WebUtils.h</itemPath>
       </logicalFolder>
-      <itemPath>include/AuthWidget.cpp</itemPath>
-      <itemPath>include/AuthWidget.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>alert.xml</itemPath>
       <itemPath>auth.xml</itemPath>
       <itemPath>resources/form-alert.css</itemPath>
       <itemPath>resources/form.css</itemPath>
@@ -55,6 +51,27 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="src" displayName="src" projectFiles="true">
+        <logicalFolder name="f3" displayName="AdminAlertTab" projectFiles="true">
+          <itemPath>src/AlertEditionModel.cpp</itemPath>
+          <itemPath>src/AlertEditionWidget.cpp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
+          <itemPath>src/UserEditionModel.cpp</itemPath>
+          <itemPath>src/UserEditionWidget.cpp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f2" displayName="Auth" projectFiles="true">
+          <itemPath>src/AuthWidget.cpp</itemPath>
+          <itemPath>src/DomElement.cpp</itemPath>
+          <itemPath>src/EscapeOStream.cpp</itemPath>
+          <itemPath>src/FormBaseModel.C</itemPath>
+          <itemPath>src/Login.cpp</itemPath>
+          <itemPath>src/RegistrationModel.cpp</itemPath>
+          <itemPath>src/RegistrationWidget.cpp</itemPath>
+          <itemPath>src/UpdatePasswordWidget.C</itemPath>
+          <itemPath>src/WFormModel.C</itemPath>
+          <itemPath>src/WTemplateFormView.C</itemPath>
+          <itemPath>src/WebUtils.cpp</itemPath>
+        </logicalFolder>
         <itemPath>src/EchoesHome.cpp</itemPath>
       </logicalFolder>
       <itemPath>main.cpp</itemPath>

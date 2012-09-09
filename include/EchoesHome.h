@@ -19,6 +19,7 @@
 #include <Wt/WVBoxLayout>
 
 #include "UserEditionWidget.h"
+#include "AlertEditionWidget.h"
 
 
 
@@ -36,6 +37,7 @@ public:
     EchoesHome(Wt::WContainerWidget *parent = 0);
 private:
     Session *session;
+    void openUserEdition();
     void handleInternalPath(const std::string &internalPath);
     
     Wt::Auth::AuthWidget *authWidget;

@@ -22,6 +22,7 @@ AS=as
 
 # Macros
 CND_PLATFORM=GNU-Linux-x86
+CND_DLIB_EXT=so
 CND_CONF=Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -34,21 +35,23 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/include/WebUtils.o \
-	${OBJECTDIR}/include/UpdatePasswordWidget.o \
+	${OBJECTDIR}/src/EscapeOStream.o \
+	${OBJECTDIR}/src/UserEditionWidget.o \
 	${OBJECTDIR}/src/EchoesHome.o \
-	${OBJECTDIR}/include/Login.o \
-	${OBJECTDIR}/include/FormBaseModel.o \
-	${OBJECTDIR}/include/WFormModel.o \
-	${OBJECTDIR}/include/WTemplateFormView.o \
+	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/include/EscapeOStream.o \
-	${OBJECTDIR}/include/AuthWidget.o \
-	${OBJECTDIR}/include/DomElement.o \
-	${OBJECTDIR}/include/RegistrationWidget.o \
-	${OBJECTDIR}/include/RegistrationModel.o \
-	${OBJECTDIR}/include/UserEditionModel.o \
-	${OBJECTDIR}/include/UserEditionWidget.o
+	${OBJECTDIR}/src/RegistrationWidget.o \
+	${OBJECTDIR}/src/Login.o \
+	${OBJECTDIR}/src/UpdatePasswordWidget.o \
+	${OBJECTDIR}/src/AlertEditionModel.o \
+	${OBJECTDIR}/src/FormBaseModel.o \
+	${OBJECTDIR}/src/RegistrationModel.o \
+	${OBJECTDIR}/src/AuthWidget.o \
+	${OBJECTDIR}/src/WFormModel.o \
+	${OBJECTDIR}/src/DomElement.o \
+	${OBJECTDIR}/src/WebUtils.o \
+	${OBJECTDIR}/src/WTemplateFormView.o \
+	${OBJECTDIR}/src/AlertEditionWidget.o
 
 
 # C Compiler Flags
@@ -75,80 +78,90 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
-${OBJECTDIR}/include/WebUtils.o: include/WebUtils.cpp 
-	${MKDIR} -p ${OBJECTDIR}/include
+${OBJECTDIR}/src/EscapeOStream.o: src/EscapeOStream.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/WebUtils.o include/WebUtils.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EscapeOStream.o src/EscapeOStream.cpp
 
-${OBJECTDIR}/include/UpdatePasswordWidget.o: include/UpdatePasswordWidget.C 
-	${MKDIR} -p ${OBJECTDIR}/include
+${OBJECTDIR}/src/UserEditionWidget.o: src/UserEditionWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/UpdatePasswordWidget.o include/UpdatePasswordWidget.C
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UserEditionWidget.o src/UserEditionWidget.cpp
 
 ${OBJECTDIR}/src/EchoesHome.o: src/EchoesHome.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EchoesHome.o src/EchoesHome.cpp
 
-${OBJECTDIR}/include/Login.o: include/Login.cpp 
-	${MKDIR} -p ${OBJECTDIR}/include
+${OBJECTDIR}/src/UserEditionModel.o: src/UserEditionModel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/Login.o include/Login.cpp
-
-${OBJECTDIR}/include/FormBaseModel.o: include/FormBaseModel.C 
-	${MKDIR} -p ${OBJECTDIR}/include
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/FormBaseModel.o include/FormBaseModel.C
-
-${OBJECTDIR}/include/WFormModel.o: include/WFormModel.C 
-	${MKDIR} -p ${OBJECTDIR}/include
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/WFormModel.o include/WFormModel.C
-
-${OBJECTDIR}/include/WTemplateFormView.o: include/WTemplateFormView.C 
-	${MKDIR} -p ${OBJECTDIR}/include
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/WTemplateFormView.o include/WTemplateFormView.C
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UserEditionModel.o src/UserEditionModel.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
-${OBJECTDIR}/include/EscapeOStream.o: include/EscapeOStream.cpp 
-	${MKDIR} -p ${OBJECTDIR}/include
+${OBJECTDIR}/src/RegistrationWidget.o: src/RegistrationWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/EscapeOStream.o include/EscapeOStream.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/RegistrationWidget.o src/RegistrationWidget.cpp
 
-${OBJECTDIR}/include/AuthWidget.o: include/AuthWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/include
+${OBJECTDIR}/src/Login.o: src/Login.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/AuthWidget.o include/AuthWidget.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Login.o src/Login.cpp
 
-${OBJECTDIR}/include/DomElement.o: include/DomElement.cpp 
-	${MKDIR} -p ${OBJECTDIR}/include
+${OBJECTDIR}/src/UpdatePasswordWidget.o: src/UpdatePasswordWidget.C 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/DomElement.o include/DomElement.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UpdatePasswordWidget.o src/UpdatePasswordWidget.C
 
-${OBJECTDIR}/include/RegistrationWidget.o: include/RegistrationWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/include
+${OBJECTDIR}/src/AlertEditionModel.o: src/AlertEditionModel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/RegistrationWidget.o include/RegistrationWidget.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AlertEditionModel.o src/AlertEditionModel.cpp
 
-${OBJECTDIR}/include/RegistrationModel.o: include/RegistrationModel.cpp 
-	${MKDIR} -p ${OBJECTDIR}/include
+${OBJECTDIR}/src/FormBaseModel.o: src/FormBaseModel.C 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/RegistrationModel.o include/RegistrationModel.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FormBaseModel.o src/FormBaseModel.C
 
-${OBJECTDIR}/include/UserEditionModel.o: include/UserEditionModel.cpp 
-	${MKDIR} -p ${OBJECTDIR}/include
+${OBJECTDIR}/src/RegistrationModel.o: src/RegistrationModel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/UserEditionModel.o include/UserEditionModel.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/RegistrationModel.o src/RegistrationModel.cpp
 
-${OBJECTDIR}/include/UserEditionWidget.o: include/UserEditionWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/include
+${OBJECTDIR}/src/AuthWidget.o: src/AuthWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/include/UserEditionWidget.o include/UserEditionWidget.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AuthWidget.o src/AuthWidget.cpp
+
+${OBJECTDIR}/src/WFormModel.o: src/WFormModel.C 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/WFormModel.o src/WFormModel.C
+
+${OBJECTDIR}/src/DomElement.o: src/DomElement.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/DomElement.o src/DomElement.cpp
+
+${OBJECTDIR}/src/WebUtils.o: src/WebUtils.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/WebUtils.o src/WebUtils.cpp
+
+${OBJECTDIR}/src/WTemplateFormView.o: src/WTemplateFormView.C 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/WTemplateFormView.o src/WTemplateFormView.C
+
+${OBJECTDIR}/src/AlertEditionWidget.o: src/AlertEditionWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AlertEditionWidget.o src/AlertEditionWidget.cpp
 
 # Subprojects
 .build-subprojects:

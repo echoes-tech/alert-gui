@@ -1,6 +1,7 @@
 #include "EchoesHome.h"
 
 
+
 /**
 Class EchoesHome : étend la classe WContainerWidget.
 */
@@ -9,8 +10,8 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent):
     adminPageTabs(0),
     monitoringPage(0)
     {
-        session = new Session("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto");
-//        session = new Session("hostaddr=172.16.3.101 port=5432 dbname=echoes user=echoes password=toto");
+//        session = new Session("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto");
+        session = new Session("hostaddr=172.16.3.101 port=5432 dbname=echoes user=echoes password=toto");
         this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
         
         try 
@@ -95,34 +96,18 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     Wt::WTableView *tview = new Wt::WTableView(usersGroupBox);
     {
         Wt::Dbo::Transaction transaction(*(this->session));
-        Wt::Dbo::Query<Wt::Dbo::ptr<User>,Wt::Dbo::DynamicBinding> q = this->session->find<User,Wt::Dbo::DynamicBinding>();
+        Wt::Dbo::Query<Wt::Dbo::ptr<User>,Wt::Dbo::DynamicBinding> q = this->session->find<User,Wt::Dbo::DynamicBinding>().where("\"USR_ID\" = ?").bind(this->session->user().id());
         qm->setQuery(q, false);
-        qm->addColumn("USR_LAST_NAME", "Last name", Wt::ItemIsSelectable);
-        qm->setColumnFlags(0,Wt::ItemIsUserCheckable);
-        qm->addColumn("USR_FIRST_NAME", "First name", Wt::ItemIsSelectable);
-        qm->addColumn("USR_MAIL", "E-mail", Wt::ItemIsEditable);
-        
-        
-        
-        
-//        tview->resize(800, 300);
-//        tview->setSelectionMode(Wt::SingleSelection);
-        tview->setModel(qm);
-        
-//        session_.add<User>(new User());
-//        
-//        tview->refresh();
-        
+        qm->addColumn("USR_LAST_NAME", "Last name", Wt::ItemIsEditable);
+//        qm->setColumnFlags(0,Wt::ItemIsUserCheckable);
+        qm->addColumn("USR_FIRST_NAME", "First name", Wt::ItemIsEditable);
+        qm->addColumn("USR_MAIL", "E-mail", Wt::ItemIsSelectable);
+
+        tview->setSelectionMode(Wt::SingleSelection);
+        tview->doubleClicked().connect(boost::bind(&EchoesHome::openUserEdition, this));
+        tview->setModel(qm);       
     }
     
-    
-    
-    
-    Wt::WString *userEditionTitle = new Wt::WString("User List");
-   
-    Wt::WGroupBox * userEditionGroupBox = new Wt::WGroupBox(*userEditionTitle);
-    
-    Wt::WLabel *generalInfoUserEditionLabel = new Wt::WLabel("General");
     
     UserEditionModel *uem;
     UserEditionWidget *uew = new UserEditionWidget();
@@ -133,13 +118,27 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
         uew->setSession(session);
     }
     
+    AlertEditionModel *aem;
+    AlertEditionWidget *aew = new AlertEditionWidget();
+    {
+        Wt::Dbo::Transaction transaction(*(this->session));
+        aem = new AlertEditionModel(const_cast<User *>(this->session->user().get()));
+        aew->setModel(aem);
+        aew->setSession(session);
+    }
+    
     res->addTab(new Wt::WText("<h2>TESTEUH 1</h2>"), "Welcome");
     res->addTab(new Wt::WText("<h2>TESTEUH 2</h2>"), "Probes");
-    res->addTab(new Wt::WText("<h2>TESTEUH 3</h2>"), "Alerts");
+    res->addTab(aew, "Alerts");
     res->addTab(usersGroupBox, "Users");
     res->addTab(uew, "General");
     res->addTab(new Wt::WText("<h2>TESTEUH 6</h2>"), "Plugin-store");
     return res;
+}
+
+void EchoesHome::openUserEdition()
+{
+    
 }
 
 void EchoesHome::handleInternalPath(const std::string &internalPath)

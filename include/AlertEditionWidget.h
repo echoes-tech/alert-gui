@@ -5,46 +5,29 @@
  * Created on 14 août 2012, 11:50
  */
 
-#ifndef USEREDITIONWIDGET_H
-#define	USEREDITIONWIDGET_H
+#ifndef ALERTEDITIONWIDGET_H
+#define	ALERTEDITIONWIDGET_H
 
 #include <Wt/WButtonGroup>
 #include <Wt/WRadioButton>
 #include <Wt/WGroupBox>
 #include <Wt/WBreak>
 #include "WTemplateFormView"
-#include "UserEditionModel.h"
+#include "AlertEditionModel.h"
 
 
-class AuthWidget;
-class Login;
-class OAuthProcess;
-
-/*! \class RegistrationWidget Wt/Auth/RegistrationWidget
- *  \brief A registration widget.
- *
- * This implements a widget which allows a new user to register.  The
- * widget renders the <tt>"Wt.Auth.template.registration"</tt>
- * template. and uses a RegistrationModel for the actual registration
- * logic.
- *
- * Typically, you may want to specialize this widget to ask for other
- * information.
- *
- * \ingroup auth
- */
-class UserEditionWidget : public Wt::WTemplateFormView
+class AlertEditionWidget : public Wt::WTemplateFormView
 {
 public:
   /*! \brief Constructor
    *
    * Creates a new authentication.
    */
-  UserEditionWidget();
+  AlertEditionWidget();
 
   /*! \brief Sets the registration model.
    */
-  void setModel(UserEditionModel *model);
+  void setModel(AlertEditionModel *model);
   
   /*! \brief Sets the session.
    */
@@ -55,7 +38,7 @@ public:
    * This returns the model that is used by the widget to do the actual
    * registration.
    */
-  UserEditionModel *model() const { return model_; }
+  AlertEditionModel *model() const { return model_; }
 
 //  void companyClick();
 //  void individualClick();
@@ -71,13 +54,24 @@ public:
    */
   void update();
   
-  Wt::WSelectionBox *mediaEmailSelectionBox;
-  Wt::WSelectionBox *mediaSmsSelectionBox;
+  Wt::WSelectionBox *serverSelectionBox;
+  Wt::WSelectionBox *applicationSelectionBox;
+  Wt::WSelectionBox *informationSelectionBox;
+  
+  // list of media where the alerts are sent
+  Wt::WTableView *userMediaDestinationTableView;
+  
+  Wt::WSelectionBox *userSelectionBox;
+  Wt::WSelectionBox *mediaSelectionBox;
+  Wt::WSelectionBox *mediaValueSelectionBox;
+  
+  
+  
   
   Wt::WStringListModel *getMediasForCurrentUser(int mediaType);
   
   
-  void addMedia(UserEditionModel::Field field, int medId, Wt::WSelectionBox *sBox);
+  void addMedia(AlertEditionModel::Field field, int medId, Wt::WSelectionBox *sBox);
   void deleteMedia(int medId, Wt::WSelectionBox *sBox);
   
   void addEmail();
@@ -125,15 +119,13 @@ protected:
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
 
 protected:
-  virtual Wt::WFormWidget *createFormWidget(UserEditionModel::Field field);
+  virtual Wt::WFormWidget *createFormWidget(AlertEditionModel::Field field);
 
 private:
-  AuthWidget *authWidget_;
-  UserEditionModel *model_;
+  AlertEditionModel *model_;
   Session * session;
 
   bool created_;
-  Login *confirmPasswordLogin_;
   
   Wt::WGroupBox *organizationContainer;
   Wt::WButtonGroup *organizationGroup;
@@ -151,5 +143,5 @@ private:
 
 
 
-#endif	/* USEREDITIONWIDGET_H */
+#endif	/* ALERTEDITIONWIDGET_H */
 

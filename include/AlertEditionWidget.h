@@ -15,6 +15,8 @@
 #include "WTemplateFormView"
 #include "AlertEditionModel.h"
 
+#include "tools/Session.h"
+
 
 class AlertEditionWidget : public Wt::WTemplateFormView
 {
@@ -54,8 +56,12 @@ public:
    */
   void update();
   
+  // maps needed to keep the link to the base
+  std::map <int,long long*> mapAssetIdSboxRow;
   Wt::WSelectionBox *serverSelectionBox;
+  std::map<int,long long*> mapPluginIdSboxRow;
   Wt::WSelectionBox *applicationSelectionBox;
+  std::map<int,long long*> mapInformationIdSboxRow;
   Wt::WSelectionBox *informationSelectionBox;
   
   // list of media where the alerts are sent
@@ -70,9 +76,6 @@ public:
   
   Wt::WStringListModel *getMediasForCurrentUser(int mediaType);
   
-  
-  void addMedia(AlertEditionModel::Field field, int medId, Wt::WSelectionBox *sBox);
-  void deleteMedia(int medId, Wt::WSelectionBox *sBox);
   
   void addEmail();
   void deleteEmail();

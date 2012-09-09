@@ -29,7 +29,6 @@
 #include "tools/Session.h"
 //#include "Login.h"
 #include "user/User.h"
-#include "UserEditionModel.h"
 
 
 #include <memory>
@@ -65,62 +64,16 @@ void AlertEditionWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
     WTemplate::render(flags);
 }
 
-Wt::WFormWidget *AlertEditionWidget::createFormWidget(UserEditionModel::Field field)
+Wt::WFormWidget *AlertEditionWidget::createFormWidget(AlertEditionModel::Field field)
 {
     Wt::WFormWidget *result = 0;
 
-    if (field == UserEditionModel::FirstName)
+    if (field == AlertEditionModel::ThresholdOperator)
     {
         result = new Wt::WLineEdit();
 //        result->changed().connect(boost::bind(&RegistrationWidget::checkOrganization, this));
     }
-    else if (field == UserEditionModel::LastName)
-    {
-        result = new Wt::WLineEdit();
-    }
-    else if (field == UserEditionModel::Email)
-    {
-        result = new Wt::WLineEdit();
-    }
-    else if (field == UserEditionModel::ChoosePasswordField)
-    {
-        Wt::WLineEdit *p = new Wt::WLineEdit();
-        p->setEchoMode(Wt::WLineEdit::Password);
-//        p->keyWentUp().connect
-//                (boost::bind(&RegistrationWidget::checkPassword, this));
-//        p->changed().connect
-//                (boost::bind(&RegistrationWidget::checkPassword, this));
-        result = p;
-    }
-    else if (field == UserEditionModel::RepeatPasswordField)
-    {
-        Wt::WLineEdit *p = new Wt::WLineEdit();
-        p->setEchoMode(Wt::WLineEdit::Password);
-//        p->changed().connect
-//                (boost::bind(&RegistrationWidget::checkPassword2, this));
-        result = p;
-    }
-    else if (field == UserEditionModel::Role)
-    {
-        Wt::WComboBox *combo = new Wt::WComboBox();
-        result = combo;
-    }
-    else if (field == UserEditionModel::State)
-    {
-        result = new Wt::WComboBox();
-    }
-    else if (field == UserEditionModel::MediaEMail)
-    {
-        result = new Wt::WLineEdit();
-        result->changed().connect(boost::bind(&AlertEditionWidget::checkMediaEmail, this));
-        
-    }
-    else if (field == UserEditionModel::MediaSMS)
-    {
-        result = new Wt::WLineEdit();
-        result->changed().connect(boost::bind(&AlertEditionWidget::checkMediaSms, this));
-    }
-    else if (field == UserEditionModel::MediaMobileApp)
+    else if (field == AlertEditionModel::ThresholdValue)
     {
         result = new Wt::WLineEdit();
     }
@@ -130,18 +83,18 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(UserEditionModel::Field fi
 
 void AlertEditionWidget::checkMediaEmail()
 {
-    updateModelField(model_, UserEditionModel::MediaEMail);
-    model_->validateField(UserEditionModel::MediaEMail);
-    model_->setValidated(UserEditionModel::MediaEMail, false);
-    update();
+//    updateModelField(model_, UserEditionModel::MediaEMail);
+//    model_->validateField(UserEditionModel::MediaEMail);
+//    model_->setValidated(UserEditionModel::MediaEMail, false);
+//    update();
 }
 
 void AlertEditionWidget::checkMediaSms()
 {
-    updateModelField(model_, UserEditionModel::MediaSMS);
-    model_->validateField(UserEditionModel::MediaSMS);
-    model_->setValidated(UserEditionModel::MediaSMS, false);
-    update();
+//    updateModelField(model_, UserEditionModel::MediaSMS);
+//    model_->validateField(UserEditionModel::MediaSMS);
+//    model_->setValidated(UserEditionModel::MediaSMS, false);
+//    update();
 }
 
 void AlertEditionWidget::update()
@@ -159,18 +112,20 @@ void AlertEditionWidget::update()
         Wt::WStringListModel *slmServer = new Wt::WStringListModel;
         Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > assets;
         Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > query;
-        std::string queryString;
-        {
-            Wt::Dbo::Transaction transaction(*session);
-            queryString =  "SELECT ast FROM \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN"
+        std::string queryString =  "SELECT ast FROM \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN"
             "("
                 "SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" where \"PRB_ORG_ORG_ID\" IN "
                 "("
-                    "select \"T_ORGANIZATION_ORG_ORG_ID\" from \"TJ_USR_ORG\" where \"T_USER_USR_USR_ID\" = 0"
+                    "select \"T_ORGANIZATION_ORG_ORG_ID\" from \"TJ_USR_ORG\" where \"T_USER_USR_USR_ID\" = ?"
                 ")"
             ");";
+        
+        // hosts list
+        {
+            Wt::Dbo::Transaction transaction(*session);
             
-            query = session->query<Wt::Dbo::ptr<Asset> >(queryString);//.bind(session->user().id());
+            
+            query = session->query<Wt::Dbo::ptr<Asset> >(queryString).bind(session->user().id());
             assets = query.resultList();
             
             int idx = 0;
@@ -178,6 +133,8 @@ void AlertEditionWidget::update()
             {
                 Wt::log("info") << (*i).get()->name;
                 slmServer->insertString(idx,(*i)->name);
+                long long idAsset = (*i).id();
+                this->mapAssetIdSboxRow[idx] = &idAsset;
                 idx++;
             }
         }
@@ -188,12 +145,10 @@ void AlertEditionWidget::update()
         Wt::WStringListModel *slmApplication = new Wt::WStringListModel;
         {
             Wt::Dbo::Transaction transaction(*session);
-            query = session->query<Wt::Dbo::ptr<Asset> >(queryString);//.bind(session->user().id());
+            query = session->query<Wt::Dbo::ptr<Asset> >(queryString).bind(session->user().id());
             assets = query.resultList();
         
         
-            Wt::log("info") << "avant it";
-            Wt::log("info") << "it size : " << assets.size();
             int idx = 0;
             for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = assets.begin(); i != assets.end(); ++i)
             {
@@ -202,11 +157,16 @@ void AlertEditionWidget::update()
                 {
                     Wt::log("info") << "plugin : " << (*j).get()->name;
                     slmApplication->insertString(idx,(*j).get()->name);
+                    long long idPlugin = (*i).id();
+                    this->mapPluginIdSboxRow[idx] = &idPlugin;
                     idx++;
                 }
             }
         }
-        Wt::log("info") << "apres it";
+        
+        
+        
+        
         applicationSelectionBox->setModel(slmApplication);
         bindWidget("application-sbox", applicationSelectionBox);
         
@@ -234,49 +194,6 @@ Wt::WStringListModel *AlertEditionWidget::getMediasForCurrentUser(int mediaType)
     return res;
 }
 
-void AlertEditionWidget::addMedia(UserEditionModel::Field field, int medId, Wt::WSelectionBox *sBox)
-{
-    if (model_->validateField(field))
-    {
-        Wt::WString emailToAdd = model_->valueText(field);
-        {
-            Wt::Dbo::Transaction transaction(*session);
-            Wt::Dbo::ptr<User> ptrUser = model_->user->self();
-            Wt::Dbo::ptr<Media> media = session->find<Media>().where("\"MED_ID\" = ?").bind(medId);
-            
-            MediaValue *mev = new MediaValue();
-            mev->user= ptrUser;
-            mev->media = media;
-            mev->notifEndOfAlert = false;
-            mev->snoozeDuration = 0;
-            mev->value = emailToAdd;
-            session->add<MediaValue>(mev);
-        }
-    }
-    else
-    {
-        //todo
-    }
-    sBox->setModel(getMediasForCurrentUser(medId));
-    sBox->refresh();
-    
-    const std::string emptyString="";
-    model_->setValue(field,boost::any(emptyString));
-    update();
-}
-
-void AlertEditionWidget::deleteMedia(int medId, Wt::WSelectionBox *sBox)
-{
-    {
-        Wt::Dbo::Transaction transaction(*session);
-        Wt::Dbo::ptr<MediaValue> ptdMevToDelete = session->find<MediaValue>().where("\"MEV_VALUE\" = ?").bind(sBox->valueText())
-                                   .where("\"MEV_USR_USR_ID\" = ?").bind(model_->user->self().id());
-        ptdMevToDelete.remove();
-    }
-    sBox->setModel(getMediasForCurrentUser(medId));
-    sBox->refresh();
-    update(); 
-}
 
 void AlertEditionWidget::addEmail()
 {

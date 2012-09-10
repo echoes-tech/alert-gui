@@ -57,6 +57,15 @@ private:
     Wt::WAnchor *monitoringAnchor;
     
     
+    
+    UserEditionModel *uem;
+    UserEditionWidget *uew;
+
+    AlertEditionModel *aem;
+    AlertEditionWidget *aew;
+    
+    
+    
     void initAuth();
     void initHeader();
     void initMainStack();

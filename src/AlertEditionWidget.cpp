@@ -39,17 +39,17 @@ AlertEditionWidget::AlertEditionWidget()
 {
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("alert",false);
+//    this->userId = session->user().id();
+    this->userId = 0;
 }
 
 void AlertEditionWidget::setModel(AlertEditionModel *model)
 {
-    delete model_;
     model_ = model;
 }
 
 void AlertEditionWidget::setSession(Session *session)
 {
-    delete this->session;
     this->session = session;
 }
 
@@ -104,14 +104,183 @@ void AlertEditionWidget::update()
 
     if (!created_)
     {
-
+        
+        // alert definition
         serverSelectionBox = new Wt::WSelectionBox();
         applicationSelectionBox = new Wt::WSelectionBox();
         informationSelectionBox = new Wt::WSelectionBox();
         
-        Wt::WStringListModel *slmServer = new Wt::WStringListModel;
+        //server list
+        bindWidget("server-sbox", serverSelectionBox);
+        this->updateServerSelectionBox(this->userId);
+        serverSelectionBox->clicked().connect(boost::bind(&AlertEditionWidget::updateApplicationSBFromServerSB, this));
+        
+        // applications list
+        bindWidget("application-sbox", applicationSelectionBox);
+        applicationSelectionBox->clicked().connect(boost::bind(&AlertEditionWidget::updateInformationSBFromApplicationSB, this));
+        
+        // information list
+        bindWidget("information-sbox", informationSelectionBox);
+        
+        // \alert definition
+        
+        // user receiving definition
+        
+        userSelectionBox = new Wt::WSelectionBox();
+        mediaSelectionBox = new Wt::WSelectionBox();
+        mediaValueSelectionBox = new Wt::WSelectionBox();
+        
+        //user list
+        bindWidget("user-sbox", userSelectionBox);
+        this->updateUserSelectionBox(this->userId);
+        userSelectionBox->clicked().connect(boost::bind(&AlertEditionWidget::updateMediaSBFromUserSB, this));
+        
+        //media list
+        bindWidget("media-sbox", mediaSelectionBox);
+        mediaSelectionBox->clicked().connect(boost::bind(&AlertEditionWidget::updateMediaValueSBFromMediaSB, this));
+//        
+//        // information list
+        bindWidget("media-value-sbox", mediaValueSelectionBox);
+        
+        // \user receiving definition
+        
+        created_ = true;
+    }
+}
+
+void AlertEditionWidget::updateMediaSBFromUserSB()
+{
+    if (userSelectionBox->currentIndex() != -1)
+    {
+        this->updateMediaSelectionBox(mapUserIdSboxRow[userSelectionBox->currentIndex()]);
+    }
+}
+
+void AlertEditionWidget::updateMediaValueSBFromMediaSB()
+{
+    if (mediaSelectionBox->currentIndex() != -1)
+    {
+        this->updateMediaValueSelectionBox(mapUserIdSboxRow[userSelectionBox->currentIndex()],mapMediaIdSboxRow[mediaSelectionBox->currentIndex()]);
+    }
+}
+
+void AlertEditionWidget::updateApplicationSBFromServerSB()
+{
+    if (serverSelectionBox->currentIndex() != -1)
+    {
+        this->updateApplicationSelectionBox(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]);
+    }
+}
+
+void AlertEditionWidget::updateInformationSBFromApplicationSB()
+{
+    if (applicationSelectionBox->currentIndex() != -1)
+    {
+        this->updateInformationSelectionBox(mapPluginIdSboxRow[applicationSelectionBox->currentIndex()]);
+    }
+}
+
+void AlertEditionWidget::updateMediaValueSelectionBox(int userId,int medId)
+{
+    Wt::WStringListModel *slmMediaValue = new Wt::WStringListModel;
+    Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> > mediaValues;
+    Wt::Dbo::Query<Wt::Dbo::ptr<MediaValue> > queryMediaValue;
+    std::string queryString = "SELECT mev FROM \"T_MEDIA_VALUE_MEV\" mev "
+                                "WHERE \"MEV_MED_MED_ID\" = ? "
+                                "AND \"MEV_USR_USR_ID\" = ?";
+    
+    // mediaValues list
+    {
+        Wt::Dbo::Transaction transaction(*session);
+        queryMediaValue = session->query<Wt::Dbo::ptr<MediaValue> >(queryString).bind(medId).bind(userId);
+        mediaValues = queryMediaValue.resultList();
+        int idx = 0;
+        
+        for (Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> >::const_iterator i = mediaValues.begin(); i != mediaValues.end(); ++i)
+        {
+            slmMediaValue->insertString(idx,(*i).get()->value);
+            long long idMediaValue = (*i).id();
+            this->mapMediaValueIdSboxRow[idx] = idMediaValue;
+            idx++;
+        }
+    }
+    mediaValueSelectionBox->setModel(slmMediaValue);
+    mediaValueSelectionBox->refresh();                            
+}
+
+void AlertEditionWidget::updateMediaSelectionBox(int userId)
+{
+    Wt::WStringListModel *slmMedia = new Wt::WStringListModel;
+    Wt::Dbo::collection<Wt::Dbo::ptr<Media> > medias;
+    Wt::Dbo::Query<Wt::Dbo::ptr<Media> > queryMedia;
+    std::string queryString = "SELECT med FROM \"T_MEDIA_MED\" med "
+                                "WHERE \"MED_ID\" IN "
+                                "("
+                                    "SELECT \"MEV_MED_MED_ID\" FROM \"T_MEDIA_VALUE_MEV\" "
+                                    "WHERE \"MEV_USR_USR_ID\" = ?"
+                                ")";
+    // medias list
+    {
+        Wt::Dbo::Transaction transaction(*session);
+        queryMedia = session->query<Wt::Dbo::ptr<Media> >(queryString).bind(userId);
+        medias = queryMedia.resultList();
+        
+        int idx = 0;
+        for (Wt::Dbo::collection<Wt::Dbo::ptr<Media> >::const_iterator i = medias.begin(); i != medias.end(); ++i)
+        {
+            slmMedia->insertString(idx,(*i).get()->name);
+            long long idMedia = (*i).id();
+            this->mapMediaIdSboxRow[idx] = idMedia;
+            idx++;
+        }
+        
+        
+    }
+                                
+    mediaSelectionBox->setModel(slmMedia);
+    mediaSelectionBox->refresh();
+    
+}
+
+void AlertEditionWidget::updateUserSelectionBox(int userId)
+{
+    Wt::WStringListModel *slmUser = new Wt::WStringListModel;
+        Wt::Dbo::collection<Wt::Dbo::ptr<User> > users;
+        Wt::Dbo::Query<Wt::Dbo::ptr<User> > queryUser;
+        std::string queryString =  "SELECT usr FROM \"T_USER_USR\" usr where \"USR_ID\" IN"
+            "("
+                "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" where \"T_ORGANIZATION_ORG_ORG_ID\" IN "
+                "("
+                    "select \"T_ORGANIZATION_ORG_ORG_ID\" from \"TJ_USR_ORG\" where \"T_USER_USR_USR_ID\" = ?"
+                ")"
+            ");";
+        
+        // hosts list
+        {
+            Wt::Dbo::Transaction transaction(*session);
+            
+            
+            queryUser = session->query<Wt::Dbo::ptr<User> >(queryString).bind(userId);
+            users = queryUser.resultList();
+            
+            int idx = 0;
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<User> >::const_iterator i = users.begin(); i != users.end(); ++i)
+            {
+                slmUser->insertString(idx,(*i).get()->firstName + " " + (*i).get()->lastName);
+                long long idUser = (*i).id();
+                this->mapUserIdSboxRow[idx] = idUser;
+                idx++;
+            }
+        }
+        userSelectionBox->setModel(slmUser);
+}
+
+
+void AlertEditionWidget::updateServerSelectionBox(int serverId)
+{
+    Wt::WStringListModel *slmServer = new Wt::WStringListModel;
         Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > assets;
-        Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > query;
+        Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > queryAsset;
         std::string queryString =  "SELECT ast FROM \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN"
             "("
                 "SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" where \"PRB_ORG_ORG_ID\" IN "
@@ -125,8 +294,8 @@ void AlertEditionWidget::update()
             Wt::Dbo::Transaction transaction(*session);
             
             
-            query = session->query<Wt::Dbo::ptr<Asset> >(queryString).bind(session->user().id());
-            assets = query.resultList();
+            queryAsset = session->query<Wt::Dbo::ptr<Asset> >(queryString).bind(serverId);
+            assets = queryAsset.resultList();
             
             int idx = 0;
             for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = assets.begin(); i != assets.end(); ++i)
@@ -134,46 +303,80 @@ void AlertEditionWidget::update()
                 Wt::log("info") << (*i).get()->name;
                 slmServer->insertString(idx,(*i)->name);
                 long long idAsset = (*i).id();
-                this->mapAssetIdSboxRow[idx] = &idAsset;
+                this->mapAssetIdSboxRow[idx] = idAsset;
                 idx++;
             }
         }
         serverSelectionBox->setModel(slmServer);
-        bindWidget("server-sbox", serverSelectionBox);
+}
+
+void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
+{
         
-        // applications
-        Wt::WStringListModel *slmApplication = new Wt::WStringListModel;
+        Wt::Dbo::Query<Wt::Dbo::ptr<Information2> > queryInformation;
+        std::string queryStringInfos = "SELECT inf FROM \"T_INFORMATION_INF\" inf WHERE \"PLG_ID_PLG_ID\" = ?";
+        Wt::Dbo::collection<Wt::Dbo::ptr<Information2> > infos;
+        Wt::WStringListModel *slmInformation = new Wt::WStringListModel;
         {
             Wt::Dbo::Transaction transaction(*session);
-            query = session->query<Wt::Dbo::ptr<Asset> >(queryString).bind(session->user().id());
-            assets = query.resultList();
-        
+            queryInformation = session->query<Wt::Dbo::ptr<Information2> >(queryStringInfos).bind(pluginId).orderBy("\"INF_NAME\"");//.bind(session->user().id());
+            infos = queryInformation.resultList();
+           
         
             int idx = 0;
-            for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = assets.begin(); i != assets.end(); ++i)
+            Wt::WString infName;
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<Information2> >::const_iterator k = infos.begin(); k != infos.end(); ++k)
             {
-                Wt::Dbo::collection<Wt::Dbo::ptr<Plugin> > plugins = (*i).get()->plugins;
-                for (Wt::Dbo::collection<Wt::Dbo::ptr<Plugin> >::const_iterator j = plugins.begin(); j != plugins.end(); ++j)
-                {
-                    Wt::log("info") << "plugin : " << (*j).get()->name;
-                    slmApplication->insertString(idx,(*j).get()->name);
-                    long long idPlugin = (*i).id();
-                    this->mapPluginIdSboxRow[idx] = &idPlugin;
-                    idx++;
-                }
+                const Information2 *info = (*k).get();
+                Wt::log("info") << idx << " : " << (*k).id() ;
+                slmInformation->insertString(idx,info->name);
+                infName = info->name;
+                this->mapInformationNameSboxRow[idx] = infName;
+                idx++;
+            }
+        
+        }
+        informationSelectionBox->setModel(slmInformation);
+}
+
+void AlertEditionWidget::updateApplicationSelectionBox(int astId)
+{
+    Wt::WStringListModel *slmApplication = new Wt::WStringListModel;
+    Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > assets;
+//        Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > queryAsset;
+//        std::string queryString =  "SELECT ast FROM \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN"
+//            "("
+//                "SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" where \"PRB_ORG_ORG_ID\" IN "
+//                "("
+//                    "select \"T_ORGANIZATION_ORG_ORG_ID\" from \"TJ_USR_ORG\" where \"T_USER_USR_USR_ID\" = " + boost::lexical_cast<std::string,int>(userId) + ""
+//                ")"
+//            ");";
+        
+    {
+        Wt::Dbo::Transaction transaction(*session);
+//        queryAsset = session->query<Wt::Dbo::ptr<Asset> >(queryString);//.bind(session->user().id());
+        assets = session->find<Asset>().where("\"AST_ID\" = ?").bind(astId);
+
+
+        int idx = 0;
+        long long idPlugin;
+        for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = assets.begin(); i != assets.end(); ++i)
+        {
+            Wt::Dbo::collection<Wt::Dbo::ptr<Plugin> > plugins = (*i).get()->plugins;
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<Plugin> >::const_iterator j = plugins.begin(); j != plugins.end(); ++j)
+            {
+                Wt::log("info") << "plugin : " << (*j).get()->name;
+                slmApplication->insertString(idx,(*j).get()->name);
+                //CHECK: idPlugin i ?? TBCommented
+                idPlugin = (*i).id();
+                this->mapPluginIdSboxRow[idx] = idPlugin;
+                idx++;
             }
         }
-        
-        
-        
-        
-        applicationSelectionBox->setModel(slmApplication);
-        bindWidget("application-sbox", applicationSelectionBox);
-        
-        
-        
-        created_ = true;
     }
+    applicationSelectionBox->setModel(slmApplication);
+    applicationSelectionBox->refresh();
+    
 }
 
 Wt::WStringListModel *AlertEditionWidget::getMediasForCurrentUser(int mediaType)
@@ -215,81 +418,7 @@ void AlertEditionWidget::deleteSms()
 //    deleteMedia(0,mediaSmsSelectionBox);  
 }
 
-//void RegistrationWidget::checkLoginName()
-//{
-//    updateModelField(model_, RegistrationModel::LoginNameField);
-//    model_->validateField(RegistrationModel::LoginNameField);
-//    model_->setValidated(RegistrationModel::LoginNameField, false);
-//    update();
-//}
 
-//void RegistrationWidget::checkFirstName()
-//{
-//    updateModelField(model_, RegistrationModel::FirstNameField);
-//    model_->validateField(RegistrationModel::FirstNameField);
-//    model_->setValidated(RegistrationModel::FirstNameField, false);
-//    update();
-//}
-//
-//void RegistrationWidget::checkLastName()
-//{
-//    updateModelField(model_, RegistrationModel::LastNameField);
-//    model_->validateField(RegistrationModel::LastNameField);
-//    model_->setValidated(RegistrationModel::LastNameField, false);
-//    update();
-//}
-//
-//void RegistrationWidget::checkOrganization()
-//{
-//    updateModelField(model_, RegistrationModel::OrganizationTypeCompanyField);
-//    updateModelField(model_, RegistrationModel::OrganizationTypeIndividualField);
-//    updateModelField(model_, RegistrationModel::OrganizationTypeAssociationField);
-//    updateModelField(model_, RegistrationModel::OrganizationNameField);  
-//    
-//    bool bCompagny = boost::any_cast<bool>(model_->fields_[model_->OrganizationTypeCompanyField].value);
-//    if (bCompagny)
-//    {
-//        model_->setRegistrationType(RegistrationModel::Company);
-//        model_->fields_[model_->OrganizationNameField].readOnly = false;
-//    }
-//    bool bIndividual = boost::any_cast<bool>(model_->fields_[model_->OrganizationTypeIndividualField].value);
-//    if (bIndividual)
-//    {
-//        model_->setRegistrationType(RegistrationModel::Individual);
-//        model_->fields_[model_->OrganizationNameField].readOnly = true;
-//        
-//        const std::string emptyString="";
-//        model_->fields_[model_->OrganizationNameField].value = boost::any(emptyString);
-//    }
-//    bool bAssociation = boost::any_cast<bool>(model_->fields_[model_->OrganizationTypeAssociationField].value);
-//    if (bAssociation)
-//    {
-//        model_->setRegistrationType(RegistrationModel::Association);
-//        model_->fields_[model_->OrganizationNameField].readOnly = false;
-//    }
-//    model_->validateField(RegistrationModel::OrganizationNameField);
-//    model_->setValidated(RegistrationModel::OrganizationNameField, false);
-//    update();
-//}
-//
-//void RegistrationWidget::checkPassword()
-//{
-//    updateModelField(model_, RegistrationModel::LoginNameField);
-//    updateModelField(model_, RegistrationModel::ChoosePasswordField);
-//    updateModelField(model_, RegistrationModel::EmailField);
-//    model_->validateField(RegistrationModel::ChoosePasswordField);
-//    model_->setValidated(RegistrationModel::ChoosePasswordField, false);
-//    update();
-//}
-//
-//void RegistrationWidget::checkPassword2()
-//{
-//    updateModelField(model_, RegistrationModel::ChoosePasswordField);
-//    updateModelField(model_, RegistrationModel::RepeatPasswordField);
-//    model_->validateField(RegistrationModel::RepeatPasswordField);
-//    model_->setValidated(RegistrationModel::RepeatPasswordField, false);
-//    update();
-//}
 
 bool AlertEditionWidget::validate()
 {
@@ -323,42 +452,7 @@ void AlertEditionWidget::doRegister()
 
 void AlertEditionWidget::registerUserDetails(User& user)
 {
-//    Session *session = static_cast<Session*>(dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().get()->session());
-//    
-//    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->firstName = model_->valueText(model_->FirstNameField);
-//    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->eMail = model_->valueText(model_->LoginNameField);
-//    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->lastName = model_->valueText(model_->LastNameField);
-//    
-//    Organization *org = new Organization();
-//    
-//    
-//    Wt::Dbo::ptr<OrganizationType> type;
-//    bool bCompagny = boost::any_cast<bool>(model_->fields_[model_->OrganizationTypeCompanyField].value);
-//    if (bCompagny)
-//    {
-//        type = session->find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Company);
-//        org->name = model_->valueText(model_->OrganizationNameField);
-//    }
-//    bool bIndividual = boost::any_cast<bool>(model_->fields_[model_->OrganizationTypeIndividualField].value);
-//    if (bIndividual)
-//    {
-//        type = session->find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Individual);
-//        org->name = model_->valueText(model_->LastNameField);
-//    }
-//    bool bAssociation = boost::any_cast<bool>(model_->fields_[model_->OrganizationTypeAssociationField].value);
-//    if (bAssociation)
-//    {
-//        type = session->find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Association);
-//        org->name = model_->valueText(model_->OrganizationNameField);
-//    }
-//    
-//    org->organizationType = type;
-//    
-//    Wt::Dbo::ptr<Organization> ptrOrg = session->add<Organization>(org);
-////    Wt::Dbo::collection<Wt::Dbo::ptr<Organization> > colPtrOrg;
-////    colPtrOrg.insert(ptrOrg);
-//    
-//    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->organizations.insert(ptrOrg);
+
 }
 
 void AlertEditionWidget::close()
@@ -366,49 +460,3 @@ void AlertEditionWidget::close()
     delete this;
 }
 
-//void AlertEditionWidget::confirmIsYou()
-//{
-//    updateModel(model_);
-//
-//    switch (model_->confirmIsExistingUser())
-//    {
-//    case RegistrationModel::ConfirmWithPassword:
-//    {
-//        delete confirmPasswordLogin_;
-//        confirmPasswordLogin_ = new Login();
-//        confirmPasswordLogin_->login(model_->existingUser(), WeakLogin);
-//        confirmPasswordLogin_
-//                ->changed().connect(this, &RegistrationWidget::confirmedIsYou);
-//
-//        WDialog *dialog =
-//                authWidget_->createPasswordPromptDialog(*confirmPasswordLogin_);
-//        dialog->show();
-//    }
-//
-//        break;
-//    case RegistrationModel::ConfirmWithEmail:
-//        // FIXME send a confirmation email to merge the new identity
-//        // with the existing one. We need to include the provisional
-//        // id in the token -- no problem there, integrity is verified by a
-//        // hash in the database
-//
-//        log("INFO") << "confirming a new identity to existing user not yet implemented";
-//
-//        break;
-//    default:
-//        log("ERROR") << "that's gone haywire.";
-//    }
-//}
-
-//void AlertEditionWidget::confirmedIsYou()
-//{
-//    if (confirmPasswordLogin_->state() == StrongLogin)
-//    {
-//        model_->existingUserConfirmed();
-//    }
-//    else
-//    {
-//        delete confirmPasswordLogin_;
-//        confirmPasswordLogin_ = 0;
-//    }
-//}

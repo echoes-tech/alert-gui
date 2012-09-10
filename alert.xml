@@ -48,6 +48,22 @@
                 ${application-sbox}
             </div>
             
+            <div class="Alert-sbox">
+                ${information-sbox}
+            </div>
+            
+            <div class="Alert-sbox">
+                ${user-sbox}
+            </div>
+            
+            <div class="Alert-sbox">
+                ${media-sbox}
+            </div>
+            
+            <div class="Alert-sbox">
+                ${media-value-sbox}
+            </div>
+            
             
             
         </div>

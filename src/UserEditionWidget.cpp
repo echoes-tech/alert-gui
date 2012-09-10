@@ -43,13 +43,11 @@ UserEditionWidget::UserEditionWidget()
 
 void UserEditionWidget::setModel(UserEditionModel *model)
 {
-    delete model_;
     model_ = model;
 }
 
 void UserEditionWidget::setSession(Session *session)
 {
-    delete this->session;
     this->session = session;
 }
 

@@ -467,6 +467,9 @@
 	       entry point by passing a location to WServer::addEntryPoint().
 	      -->
 	    <!-- <property name="favicon">images/favicon.ico</property> -->
+
+	    <property name="smtp-host">hermes.gayuxweb.fr</property>
+	    <property name="smtp-port">25</property>
 	</properties>
 
     </application-settings>

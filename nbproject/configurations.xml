@@ -130,6 +130,7 @@
       </toolsSet>
       <compileType>
         <ccTool>
+          <developmentMode>6</developmentMode>
           <incDir>
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>

@@ -56,23 +56,39 @@ public:
    */
   void update();
   
+  long long userId;
+  
   // maps needed to keep the link to the base
-  std::map <int,long long*> mapAssetIdSboxRow;
+  std::map <int,long long> mapAssetIdSboxRow;
   Wt::WSelectionBox *serverSelectionBox;
-  std::map<int,long long*> mapPluginIdSboxRow;
+  std::map<int,long long> mapPluginIdSboxRow;
   Wt::WSelectionBox *applicationSelectionBox;
-  std::map<int,long long*> mapInformationIdSboxRow;
+  std::map<int,Wt::WString> mapInformationNameSboxRow;
   Wt::WSelectionBox *informationSelectionBox;
   
   // list of media where the alerts are sent
   Wt::WTableView *userMediaDestinationTableView;
   
+  std::map<int,long long> mapUserIdSboxRow;
   Wt::WSelectionBox *userSelectionBox;
+  std::map<int,long long> mapMediaIdSboxRow;
   Wt::WSelectionBox *mediaSelectionBox;
+  std::map<int,long long> mapMediaValueIdSboxRow;
   Wt::WSelectionBox *mediaValueSelectionBox;
   
+  void updateMediaSBFromUserSB();
+  void updateMediaValueSBFromMediaSB();
   
+  void updateApplicationSBFromServerSB();
+  void updateInformationSBFromApplicationSB();
   
+  void updateMediaValueSelectionBox(int userId, int medId);
+  void updateMediaSelectionBox(int userId);
+  void updateUserSelectionBox(int userId);
+  
+  void updateServerSelectionBox(int serverId);
+  void updateInformationSelectionBox(int pluginId);
+  void updateApplicationSelectionBox(int astId);
   
   Wt::WStringListModel *getMediasForCurrentUser(int mediaType);
   

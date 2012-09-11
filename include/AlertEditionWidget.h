@@ -76,6 +76,8 @@ public:
   std::map<int,long long> mapMediaValueIdSboxRow;
   Wt::WSelectionBox *mediaValueSelectionBox;
   
+  std::map<int,long long> mapAlertCriteriaIdSboxRow;
+  
   void updateMediaSBFromUserSB();
   void updateMediaValueSBFromMediaSB();
   
@@ -93,10 +95,9 @@ public:
   Wt::WStringListModel *getMediasForCurrentUser(int mediaType);
   
   
-  void addEmail();
-  void deleteEmail();
-  void addSms();
-  void deleteSms();
+  void addMedia();
+  void deleteMedia();
+
 
 protected:
   /*! \brief Validates the current information.

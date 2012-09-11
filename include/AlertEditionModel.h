@@ -28,6 +28,7 @@ public:
     
     static const Field ThresholdOperator;
     static const Field ThresholdValue;
+    static const Field Snooze;
     
     virtual bool validateField(Field field);
 private:

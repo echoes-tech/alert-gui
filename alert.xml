@@ -37,33 +37,67 @@
 
     <message id="Alert.Alert.Edition.template">
 
-        <div class="Alert-form Alert-form-right Alert-auth-login">
+        <div class="Alert-form">
             
                 
-            <div class="Alert-sbox">
+            <div class="Alert-sbox float-left">
                 ${server-sbox}
             </div>
-      
-            <div class="Alert-sbox">
+            
+            <div class="Alert-sbox float-left">
                 ${application-sbox}
             </div>
             
-            <div class="Alert-sbox">
+            <div class="Alert-sbox float-left">
                 ${information-sbox}
             </div>
             
-            <div class="Alert-sbox">
+            <div class = "clear"></div>
+            <hr></hr>
+            
+            <div class="Alert-fields float-left">
+                <label for="${id:threshold-operator}">${threshold-operator-label}
+                    ${threshold-operator-info class="Alert-info"}
+                </label>
+                ${threshold-operator}
+            </div>
+            <div class="Alert-fields float-left">
+                <label for="${id:threshold-value}">${threshold-value-label}
+                    ${threshold-value-info class="Alert-info"}
+                </label>
+                ${threshold-value}
+            </div>
+            
+            <div class = "clear"></div>
+            <hr></hr>
+            
+            <div class="Alert-sbox float-left">
                 ${user-sbox}
             </div>
             
-            <div class="Alert-sbox">
+            <div class="Alert-sbox float-left">
                 ${media-sbox}
             </div>
             
-            <div class="Alert-sbox">
+            <div class="Alert-sbox float-left">
                 ${media-value-sbox}
             </div>
             
+            <div class="Alert-fields float-left">
+                <label for="${id:snooze}">${snooze-label}
+                    ${snooze-info class="Alert-info"}
+                </label>
+                <div class = "clear"></div>
+                ${snooze}
+            </div>
+            
+            <div class="Alert-buttons">
+                    ${add-button-media} ${delete-button-media}
+            
+            </div>
+            <div class="Alert-fields float-left">
+                ${user-media-destination}
+            </div>
             
             
         </div>

@@ -36,47 +36,47 @@
   <!-- templates -->
 
     <message id="Alert.User.Edition.template">
-        <div class="Alert-form Alert-form-left Alert-auth-login">
+        <div class="User-form User-form-left User-auth-login">
             <h2>${tr:Alert.User.Edition.form-title}</h2>
             <p>${tr:Wt.Auth.login-form-info}</p>
       
             <hr></hr>
       
-            <div class="Alert-fields">
+            <div class="User-fields">
                 <label for="${id:first-name}">${first-name-label}
-                    ${first-name-info class="Alert-info"}
+                    ${first-name-info class="User-info"}
                 </label>
                 ${first-name}
 
                 <label for="${id:last-name}">${last-name-label}
-                    ${last-name-info class="Alert-info"}
+                    ${last-name-info class="User-info"}
                 </label>
                 ${last-name}
       
                 <label for="${id:email}">${email-label}
-                    ${email-info class="Alert-info"}
+                    ${email-info class="User-info"}
                 </label>
                 ${email}
       
                 <label for="${id:password}">${password-label}
-                    ${password-info class="Alert-info"}
+                    ${password-info class="User-info"}
                 </label>
                 ${password}
 
                 <label for="${id:repeat-password}">${repeat-password-label}
-                    ${repeat-password-info class="Alert-info"}
+                    ${repeat-password-info class="User-info"}
                 </label>
                 ${repeat-password}
       
                 <hr></hr>
       
                 <label for="${id:role}">${role-label}
-                    ${role-info class="Alert-info"}
+                    ${role-info class="User-info"}
                 </label>
                 ${role}
       
                 <label for="${id:state}">${state-label}
-                    ${state-info class="Alert-info"}
+                    ${state-info class="User-info"}
                 </label>
                 ${state}
       
@@ -85,38 +85,38 @@
             
       
         </div>
-        <div class="Alert-form Alert-form-right Alert-auth-login">
+        <div class="User-form User-form-right User-auth-login">
             <h2>${tr:Alert.User.Edition.media-title}</h2>
             <p>${tr:Wt.Auth.login-form-info}</p>
       
             <hr></hr>
-            <div class="Alert-fields">
+            <div class="User-fields">
                 <label for="${id:media-email}">${media-email-label}
-                    ${media-email-info class="Alert-info"}
+                    ${media-email-info class="User-info"}
                 </label>
                 ${media-email}
                 
-                <div class="Alert-buttons">
+                <div class="User-buttons">
                     ${add-button-email} ${delete-button-email}
                 </div>
             </div>
                 
-            <div class="Alert-sbox">
+            <div class="User-sbox">
                 ${email-sbox}
             </div>
       
-            <div class="Alert-fields">
+            <div class="User-fields">
                 <label for="${id:media-sms}">${media-sms-label}
-                    ${media-sms-info class="Alert-info"}
+                    ${media-sms-info class="User-info"}
                 </label>
                 ${media-sms}
                 
-                <div class="Alert-buttons">
+                <div class="User-buttons">
                     ${add-button-sms} ${delete-button-sms}
                 </div>
              </div>
              
-             <div class="Alert-sbox">
+             <div class="User-sbox">
                     ${sms-sbox}
             </div>
             
@@ -124,7 +124,7 @@
         </div>
 
         <hr></hr>
-        <div class="Alert-buttons">
+        <div class="User-buttons">
             
             ${save-button} ${cancel-button}
         </div>

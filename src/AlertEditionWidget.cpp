@@ -24,6 +24,9 @@
 #include <Wt/WSelectionBox>
 #include <Wt/WStringListModel>
 #include <Wt/Dbo/Query>
+#include <Wt/WSpinBox>
+#include <Wt/WStandardItem>
+#include <Wt/WStandardItemModel>
 
 
 #include "tools/Session.h"
@@ -32,6 +35,7 @@
 
 
 #include <memory>
+#include <Wt/WTableView>
 
 
 AlertEditionWidget::AlertEditionWidget()
@@ -40,7 +44,7 @@ AlertEditionWidget::AlertEditionWidget()
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("alert",false);
 //    this->userId = session->user().id();
-    this->userId = 0;
+    this->userId = 3;
 }
 
 void AlertEditionWidget::setModel(AlertEditionModel *model)
@@ -70,12 +74,43 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(AlertEditionModel::Field f
 
     if (field == AlertEditionModel::ThresholdOperator)
     {
-        result = new Wt::WLineEdit();
+        Wt::WComboBox *combo = new Wt::WComboBox();
+        Wt::WStringListModel *slmOperators = new Wt::WStringListModel();
+        
+        
+        
+        Wt::Dbo::collection<Wt::Dbo::ptr<AlertCriteria> > alertCriterias;
+
+        // mediaValues list
+        {
+            Wt::Dbo::Transaction transaction(*session);
+            alertCriterias = session->find<AlertCriteria>();
+            int idx = 0;
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<AlertCriteria> >::const_iterator i = alertCriterias.begin(); i != alertCriterias.end(); ++i)
+            {
+                slmOperators->insertString(idx,(*i).get()->name);
+                long long idAlertCriteria = (*i).id();
+                this->mapAlertCriteriaIdSboxRow[idx] = idAlertCriteria;
+                idx++;
+            }
+        }
+        combo->setModel(slmOperators);
+        
+        result = combo;
 //        result->changed().connect(boost::bind(&RegistrationWidget::checkOrganization, this));
     }
     else if (field == AlertEditionModel::ThresholdValue)
     {
         result = new Wt::WLineEdit();
+    }
+    else if (field == AlertEditionModel::Snooze)
+    {
+        result = new Wt::WSpinBox();
+        result->setSelectable(false);
+        result->setAttributeValue("step","10");
+        result->setAttributeValue("min","60");
+        result->setAttributeValue("max","259200");
+        result->setAttributeValue("value","60");
     }
 
     return result;
@@ -142,7 +177,35 @@ void AlertEditionWidget::update()
 //        // information list
         bindWidget("media-value-sbox", mediaValueSelectionBox);
         
-        // \user receiving definition
+        
+        Wt::WPushButton *addButtonMedia = new Wt::WPushButton(tr("Alert.alert.edition.add-button"));
+        Wt::WPushButton *deleteButtonMedia = new Wt::WPushButton(tr("Alert.alert.edition.delete-button"));
+
+        bindWidget("add-button-media", addButtonMedia);
+        bindWidget("delete-button-media", deleteButtonMedia);
+
+//        dynamic_cast<Wt::WStringListModel>(userSelectionBox->model())->
+        
+        
+        Wt::WStandardItemModel *sim = new Wt::WStandardItemModel(0, 4, this);
+        const std::string userTitle = "User";
+        const std::string mediaTitle = "Media";
+        const std::string valueTitle = "Value";
+        const std::string snoozeTitle = "Snooze";
+        sim->setHeaderData(0,boost::any(userTitle));
+        sim->setHeaderData(1,boost::any(mediaTitle));
+        sim->setHeaderData(2,boost::any(valueTitle));
+        sim->setHeaderData(3,boost::any(snoozeTitle));
+        
+        userMediaDestinationTableView = new Wt::WTableView();
+        userMediaDestinationTableView->setModel(sim);
+        
+        bindWidget("user-media-destination", userMediaDestinationTableView);
+        
+        
+        addButtonMedia->clicked().connect(this, &AlertEditionWidget::addMedia);
+        deleteButtonMedia->clicked().connect(this, &AlertEditionWidget::deleteMedia);
+        
         
         created_ = true;
     }
@@ -343,18 +406,8 @@ void AlertEditionWidget::updateApplicationSelectionBox(int astId)
 {
     Wt::WStringListModel *slmApplication = new Wt::WStringListModel;
     Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > assets;
-//        Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > queryAsset;
-//        std::string queryString =  "SELECT ast FROM \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN"
-//            "("
-//                "SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" where \"PRB_ORG_ORG_ID\" IN "
-//                "("
-//                    "select \"T_ORGANIZATION_ORG_ORG_ID\" from \"TJ_USR_ORG\" where \"T_USER_USR_USR_ID\" = " + boost::lexical_cast<std::string,int>(userId) + ""
-//                ")"
-//            ");";
-        
     {
         Wt::Dbo::Transaction transaction(*session);
-//        queryAsset = session->query<Wt::Dbo::ptr<Asset> >(queryString);//.bind(session->user().id());
         assets = session->find<Asset>().where("\"AST_ID\" = ?").bind(astId);
 
 
@@ -398,25 +451,54 @@ Wt::WStringListModel *AlertEditionWidget::getMediasForCurrentUser(int mediaType)
 }
 
 
-void AlertEditionWidget::addEmail()
+void AlertEditionWidget::addMedia()
 {
-//    addMedia(model_->MediaEMail,1,mediaEmailSelectionBox);
+    if (!((userSelectionBox->currentIndex() != -1) || (mediaSelectionBox->currentIndex() != -1) || (mediaValueSelectionBox->currentIndex() != -1)))
+    {
+        return;
+    }
+    
+//    long long userMediaIdToRemember = mapAssetIdSboxRow[userSelectionBox->currentIndex()];
+    const Wt::WString userMediaTextToDisplay = userSelectionBox->currentText();
+    Wt::WStandardItem *itemUserMedia = new Wt::WStandardItem();
+    itemUserMedia->setData(boost::any(userMediaTextToDisplay),0);
+    
+//    long long mediaIdToRemember = mapAssetIdSboxRow[mediaSelectionBox->currentIndex()];
+    const Wt::WString mediaTextToDisplay = mediaSelectionBox->currentText();
+    Wt::WStandardItem *itemMedia = new Wt::WStandardItem();
+    itemMedia->setData(boost::any(mediaTextToDisplay),0);
+    
+//    long long mediaValueIdToRemember = mapAssetIdSboxRow[userSelectionBox->currentIndex()];
+    const Wt::WString mediaValueTextToDisplay = mediaValueSelectionBox->currentText();
+    Wt::WStandardItem *itemMediaValue = new Wt::WStandardItem();
+    itemMediaValue->setData(boost::any(mediaValueTextToDisplay),0);
+    
+    model_->validateField(model_->Snooze);
+    const Wt::WString snoozeValueToDisplay = model_->valueText(model_->Snooze);
+    Wt::WStandardItem *itemSnooze = new Wt::WStandardItem();
+    itemSnooze->setData(boost::any(snoozeValueToDisplay),0);
+    
+    // vector of WStandardItem to create the row
+    std::vector<Wt::WStandardItem*> *vectItem = new std::vector<Wt::WStandardItem*>;
+    vectItem->push_back(itemUserMedia);
+    vectItem->push_back(itemMedia);
+    vectItem->push_back(itemMediaValue);
+    vectItem->push_back(itemSnooze);
+    
+    // const to pass it to appendRow
+    const std::vector<Wt::WStandardItem*> *vectItemFilled = vectItem;
+    dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->appendRow(*vectItemFilled);
+    
+    
+    
 }
 
-void AlertEditionWidget::deleteEmail()
+void AlertEditionWidget::deleteMedia()
 {
 //    deleteMedia(1,mediaEmailSelectionBox);  
 }
 
-void AlertEditionWidget::addSms()
-{
-//    addMedia(model_->MediaSMS,0,mediaSmsSelectionBox);
-}
 
-void AlertEditionWidget::deleteSms()
-{
-//    deleteMedia(0,mediaSmsSelectionBox);  
-}
 
 
 

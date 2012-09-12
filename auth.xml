@@ -379,7 +379,7 @@
 
   <!-- Emails -->
 
-  <message id="Wt.Auth.confirmmail.subject">User account activation Link</message>
+  <message id="Wt.Auth.confirmmail.subject">[ECHOES Alert] User account activation Link</message>
 
   <message id="Wt.Auth.confirmmail.body">
 Hello {1},
@@ -389,19 +389,18 @@ Thank you for joining!
 To complete your registration, please finally confirm your account by
 clicking on the following link or copying the URL into your browser.
  
-Please click here to confirm your registration or copy and paste the
-following URL into your browser: (Note: be sure to copy the entire
-URL, including any part of it which goes onto a second line.)
+Please copy and paste the following URL into your browser: (Note: be
+sure to copy the entire URL, including any part of it which goes onto
+a second line.)
 
 {3}
+      
+Thank you for using ECHOES Alert!
 
-This text is resolved from the "Wt.Auth.confirmmail.subject",
-"Wt.Auth.confirmmail.body", and "Wt.Auth.confirmmail.htmlbody"
-resource keys.
+The ECHOES Alert team.
+http://alert.echoes-tech.com/
 
-Good luck with your Wt application,
-
-The Wt team.
+© 2012, ECHOES Technologies
   </message>
 
   <message id="Wt.Auth.confirmmail.htmlbody">
@@ -420,21 +419,18 @@ The Wt team.
     
     <b>{3}</b>
 
+    <p>Thank you for using ECHOES Alert!</p>
+
     <p>
-      <i>Note to developer:</i>
-    </p>
-    <p>
-      This text is resolved from the "Wt.Auth.confirmmail.subject",
-      "Wt.Auth.confirmmail.body", and "Wt.Auth.confirmmail.htmlbody"
-      resource keys.
+        The ECHOES Alert team.
+        <br />
+        <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">http://alert.echoes-tech.com/</a>
     </p>
 
-    <p>Good luck with your Wt application,</p>
-
-    <p>The Wt team.</p>
+    <p><i>© 2012, ECHOES Technologies</i></p>
   </message>
 
-  <message id="Wt.Auth.lostpasswordmail.subject">Lost password instructions</message>
+  <message id="Wt.Auth.lostpasswordmail.subject">[ECHOES Alert] Lost password instructions</message>
 
   <message id="Wt.Auth.lostpasswordmail.body">
 Hello {1},
@@ -452,14 +448,13 @@ sure to copy the entire URL, including any part of it which goes onto
 a second line.)
  
 {3} 
+      
+Thank you for using ECHOES Alert!
 
-This text is resolved from the "Wt.Auth.lostpasswordmail.subject",
-"Wt.Auth.lostpasswordmail.body", and "Wt.Auth.lostpasswordmail.htmlbody"
-resource keys.
+The ECHOES Alert team.
+http://alert.echoes-tech.com/
 
-Good luck with your Wt application,
-
-The Wt team.
+© 2012, ECHOES Technologies
   </message>
 
   <message id="Wt.Auth.lostpasswordmail.htmlbody">
@@ -481,19 +476,15 @@ The Wt team.
     
     <b>{3}</b>
 
+    <p>Thank you for using ECHOES Alert!</p>
+
     <p>
-      <i>Note to developer:</i>
-    </p>
-    <p>
-      This text is resolved from the
-      "Wt.Auth.lostpasswordmail.subject",
-      "Wt.Auth.lostpasswordmail.body", and
-      "Wt.Auth.lostpasswordmail.htmlbody" resource keys.
+        The ECHOES Alert team.
+        <br />
+        <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">http://alert.echoes-tech.com/</a>
     </p>
 
-    <p>Good luck with your Wt application,</p>
-
-    <p>The Wt team.</p>
+    <p><i>© 2012, ECHOES Technologies</i></p>
   </message>
 
 </messages>

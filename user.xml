@@ -36,6 +36,7 @@
   <!-- templates -->
 
     <message id="Alert.User.Edition.template">
+        <!--
         <div class="User-form User-form-left User-auth-login">
             <h2>${tr:Alert.User.Edition.form-title}</h2>
             <p>${tr:Wt.Auth.login-form-info}</p>
@@ -85,7 +86,9 @@
             
       
         </div>
-        <div class="User-form User-form-right User-auth-login">
+        -->
+        <!-- User-form-right -->
+        <div class="User-form User-auth-login">
             <h2>${tr:Alert.User.Edition.media-title}</h2>
             <p>${tr:Wt.Auth.login-form-info}</p>
       

@@ -50,13 +50,13 @@ void UserEditionModel::setView(User *user)
 
 void UserEditionModel::reset()
 {
-    addField(FirstName, Wt::WString::tr("Alert.user.edition.first-name"));
-    addField(LastName, Wt::WString::tr("Alert.user.edition.last-name"));
-    addField(Email, Wt::WString::tr("Alert.user.edition.email"));
-    addField(ChoosePasswordField, Wt::WString::tr("Alert.user.edition.password"));
-    addField(RepeatPasswordField, Wt::WString::tr("Alert.user.edition.repeat-password"));
-    addField(Role, Wt::WString::tr("Alert.user.edition.role"));
-    addField(State, Wt::WString::tr("Alert.user.edition.state"));
+//    addField(FirstName, Wt::WString::tr("Alert.user.edition.first-name"));
+//    addField(LastName, Wt::WString::tr("Alert.user.edition.last-name"));
+//    addField(Email, Wt::WString::tr("Alert.user.edition.email"));
+//    addField(ChoosePasswordField, Wt::WString::tr("Alert.user.edition.password"));
+//    addField(RepeatPasswordField, Wt::WString::tr("Alert.user.edition.repeat-password"));
+//    addField(Role, Wt::WString::tr("Alert.user.edition.role"));
+//    addField(State, Wt::WString::tr("Alert.user.edition.state"));
     addField(MediaEMail, Wt::WString::tr("Alert.user.edition.media-email"));
     addField(MediaSMS, Wt::WString::tr("Alert.user.edition.media-sms"));
     addField(MediaMobileApp, Wt::WString::tr("Alert.user.edition.media-mobileapp"));
@@ -65,7 +65,14 @@ void UserEditionModel::reset()
 
 bool UserEditionModel::isVisible(Field field) const
 {
-    return true;
+    if (field == MediaEMail || field == MediaSMS)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 
@@ -77,7 +84,7 @@ bool UserEditionModel::validateField(Field field)
     bool valid = true;
     Wt::WString error;
 
-    if (field == FirstName || field == LastName)
+    if (field == MediaEMail || field == MediaSMS)
     {
         error = validateString(valueText(field));
 
@@ -91,7 +98,7 @@ bool UserEditionModel::validateField(Field field)
         }
     }
     else
-        valid = true;
+        valid = false;
 
     if (valid)
         setValid(field);

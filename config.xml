@@ -470,7 +470,7 @@
 
 	    <property name="smtp-host">hermes.gayuxweb.fr</property>
 	    <property name="smtp-port">25</property>
-        <property name="auth-mail-sender-name">ECHOES Alert Auth module</property>
+        <property name="auth-mail-sender-name">ECHOES Alert</property>
         <property name="auth-mail-sender-address">noreply-auth@echoes-tech.com</property>
         
 	</properties>

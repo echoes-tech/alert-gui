@@ -382,7 +382,7 @@ void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
 {
         
         Wt::Dbo::Query<Wt::Dbo::ptr<Information2> > queryInformation;
-        std::string queryStringInfos = "SELECT inf FROM \"T_INFORMATION_INF\" inf WHERE \"PLG_ID_PLG_ID\" = ?";
+        std::string queryStringInfos = "SELECT inf FROM \"T_INFORMATION_INF\" inf WHERE \"PLG_ID_PLG_ID\" = ? AND \"SRC_ID\" IN (1,3)";
         Wt::Dbo::collection<Wt::Dbo::ptr<Information2> > infos;
         Wt::WStringListModel *slmInformation = new Wt::WStringListModel;
         {

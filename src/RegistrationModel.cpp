@@ -334,20 +334,21 @@ bool RegistrationModel::validateField(Field field)
     }
     else if (field == OrganizationNameField)
     {
-        std::string name = valueText(OrganizationNameField).toUTF8();
-        if (registrationType_ != Individual)
-        {
-            if (!name.empty())
-            {
-                if (static_cast<int> (name.length()) < 2)
-                    error = WString::tr("Wt.Auth.company-name-invalid");
-            }
-            else
-            {
-                error = WString::tr("Wt.Auth.company-name-invalid");
-            }
-        }
-        valid = error.empty();
+//        std::string name = valueText(OrganizationNameField).toUTF8();
+//        if (registrationType_ != Individual)
+//        {
+//            if (!name.empty())
+//            {
+//                if (static_cast<int> (name.length()) < 2)
+//                    error = WString::tr("Wt.Auth.company-name-invalid");
+//            }
+//            else
+//            {
+//                error = WString::tr("Wt.Auth.company-name-invalid");
+//            }
+//        }
+//        valid = error.empty();
+        valid = true;
     }
     else if (field == FirstNameField)
     {

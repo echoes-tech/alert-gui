@@ -212,7 +212,7 @@
       ${password-description}
 
       <div class="Wt-fields">
-	${<if:organization-type-company>}
+<!--	${<if:organization-type-company>}
 	  <label for="${id:organization-type-company}">${organization-type-company-label}
 	    ${organization-type-company-info class="Wt-info"}
 	  </label>
@@ -238,7 +238,7 @@
 	    ${organization-name-info class="Wt-info"}
 	  </label>
 	  ${organization-name}
-	${</if:organization-name>}
+	${</if:organization-name>}-->
 
         ${<if:user-name>}
 	  <label for="${id:user-name}">${user-name-label}

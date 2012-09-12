@@ -410,6 +410,7 @@ void RegistrationWidget::registerUserDetails(User& user)
 //    colPtrOrg.insert(ptrOrg);
     
     dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->organizations.insert(ptrOrg);
+    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->currentOrganization = ptrOrg;
 }
 
 void RegistrationWidget::close()

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <!-- Models -->
+
+    <message id="disclaimer">
+        <h3>Probe request</h3>
+        
+        <p>
+            On this page you can choose the target Operating System and architecture you want to install the probe on.
+            <br></br>
+            <br></br>
+            When you push the button, it sends a request to our team. We will provide the probe as soon as possible after your request.<br></br>
+            <br></br>
+            The request can be sent only once. If there is no form under this text, it means that you already have sent your request.<br></br>
+            <br></br>
+            If you need more information, please come to our <a href="https://chat.echoes-tech.com">online chat</a>. 
+            <br></br>
+        </p>
+    </message>
+
+  <!-- templates -->
+
+    <message id="Alert.Probe.Download.template">
+
+        <p>${tr:disclaimer}</p>
+        <br></br>
+        <br></br>
+        <div class="Probe-form">
+            
+            
+            ${<if:os>}        
+                <div class="Probe-fields float-left">
+                    <label for="${id:os}">${os-label}
+                        ${os-info class="Probe-info"}
+                    </label>
+                    ${os}
+                </div>
+                <div class="Probe-fields float-left">
+                    <label for="${id:arch}">${arch-label}
+                        ${arch-info class="Probe-info"}
+                    </label>
+                    ${arch}
+                </div>
+
+                
+            ${</if:os>}
+            ${<if:label-probe>}
+                <label for="${id:label-probe-text}">
+                    ${label-probe-text}
+                </label>          
+            ${</if:label-probe>}
+            ${<if:os>}
+                <div class="Probe-buttons">
+                    ${send-mail-button}
+                </div>  
+            ${</if:os>}
+        </div>   
+         
+        
+        
+
+
+
+    </message>
+
+
+  
+
+</messages>

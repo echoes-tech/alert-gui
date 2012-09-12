@@ -112,20 +112,28 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     {
         Wt::Dbo::Transaction transaction(*(this->session));
         uem = new UserEditionModel(const_cast<User *>(this->session->user().get()));
-        uew->setModel(uem);
-        uew->setSession(session);
     }
-    
+    uew->setModel(uem);
+    uew->setSession(session);
+        
     aew = new AlertEditionWidget();
     {
         Wt::Dbo::Transaction transaction(*(this->session));
         aem = new AlertEditionModel(const_cast<User *>(this->session->user().get()));
-        aew->setModel(aem);
-        aew->setSession(session);
     }
+    aew->setModel(aem);
+    aew->setSession(session);
+        
+    pdw = new ProbeDownloadWidget();
+    {
+        Wt::Dbo::Transaction transaction(*(this->session));
+        pdm = new ProbeDownloadModel(const_cast<User *>(this->session->user().get()));
+    }
+    pdw->setModel(pdm);
+    pdw->setSession(session);
     
     res->addTab(new Wt::WText("<h2>TESTEUH 1</h2>"), "Welcome");
-    res->addTab(new Wt::WText("<h2>TESTEUH 2</h2>"), "Probes");
+    res->addTab(pdw, "Probes");
     res->addTab(aew, "Alerts");
     res->addTab(usersGroupBox, "Users");
     res->addTab(uew, "General");

@@ -1,0 +1,155 @@
+.Probe-form {
+    margin: 0 auto;
+    width: 40em;
+    padding: 0.7em;
+    float:left;
+}
+
+.Probe-form-left {
+    margin-left: 6%;
+    margin-right: 2%;
+    width: 40%;
+    min-width: 500px;
+    float:left;
+}
+
+.Probe-form-right {
+    margin-right: 6%;
+    margin-left: 2%;
+    width: 40%;
+    min-width: 500px;
+    float:left;
+}
+
+.Probe-form h2 {
+    font-size: 130%;
+    font-weight: bold;
+    padding: 0px;
+    margin: 8px 0px;
+    letter-spacing: inherit;
+    line-height: inherit;
+    color: inherit;
+    background: inherit;
+    height: auto;
+}
+
+.Probe-form h3 {
+    font-size: 100%;
+    font-weight: bold;
+    margin: 8px 0px;
+}
+
+.Probe-form p {
+    font-size: 85%;
+    color: #666666;
+    margin-bottom: 1.5em;
+    border-bottom: solid 1px #b7ddf2;
+    float:left;
+    padding-bottom: 0.5em;
+}
+
+.Probe-form label {
+    display: block;
+    font-weight: bold;
+    text-align: right;
+    width: 14em;
+    float: left;
+    clear: left;
+    line-height: 110%;
+}
+
+.Probe-form .Probe-info {
+    color: #666666;
+    display: block;
+    font-size: 85%;
+    width: 16.47em;
+    font-weight: normal;
+    text-align: right;
+}
+
+.Probe-form .Probe-fields input {
+    float: left;
+    padding: 5px 2px;
+    border: solid 1px #aacfe4;
+    font-size: 90%;
+    width: 14em;
+    margin: 0.5em 0.5em 1.4em 0.7em;
+}
+
+.Probe-form .Probe-fields input[type="checkbox"] {
+    margin-top: 1em;
+    width: auto;
+}
+
+.Probe-form .Probe-fields select {
+    margin-top: 1em;
+    width: 14em;
+    float: left;
+    margin: 0.5em 0.5em 1.4em 0.7em;
+    padding: 5px 2px;
+    font-size: 90%;
+}
+
+.Probe-form .Probe-field {
+    float: left;
+    padding: 5px 2px;
+    width: 15em;
+    margin: 0 0.5em 1.4em 0.7em;
+}
+
+.Probe-form .Probe-fields hr {
+    margin-top: 1em;
+    width: 100%;
+    float: left;
+    margin: 0.5em 0.5em 1.4em 0.7em;
+   
+}
+
+.Probe-buttons {
+    clear: both;
+    text-align: center;
+    margin: 0.5em 0;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    float: left;  
+}
+
+.Probe-form .Probe-buttons span {
+    text-decoration: underline;
+    cursor: pointer; cursor: hand;
+}
+
+.Probe-form .Probe-sbox {
+    text-align: center;
+    margin: 10px auto;
+    margin-left:4%;
+    margin-right:4%;
+}
+
+.Probe-form .Probe-sbox select {
+    
+    width: 25em;
+}
+
+.Probe-form .Probe-error {
+    color: black;
+}
+
+.Probe-form .Probe-col-right {
+    margin-left: 29em;
+    padding-left: 2em;
+    border-left: solid 1px #b7ddf2;
+}
+
+.float-left {
+    float: left;
+}
+
+.clear {
+    clear: both;
+}
+

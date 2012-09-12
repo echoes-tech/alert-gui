@@ -20,6 +20,7 @@
 
 #include "UserEditionWidget.h"
 #include "AlertEditionWidget.h"
+#include "ProbeDownloadWidget.h"
 
 
 
@@ -63,6 +64,9 @@ private:
 
     AlertEditionModel *aem;
     AlertEditionWidget *aew;
+    
+    ProbeDownloadModel *pdm;
+    ProbeDownloadWidget *pdw;
     
     
     

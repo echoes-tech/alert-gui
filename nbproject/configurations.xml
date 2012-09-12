@@ -43,6 +43,7 @@
                    projectFiles="true">
       <itemPath>alert.xml</itemPath>
       <itemPath>auth.xml</itemPath>
+      <itemPath>config.xml</itemPath>
       <itemPath>resources/form-alert.css</itemPath>
       <itemPath>resources/form-user.css</itemPath>
       <itemPath>resources/form.css</itemPath>

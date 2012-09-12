@@ -43,8 +43,6 @@ AlertEditionWidget::AlertEditionWidget()
 {
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("alert",false);
-//    this->userId = session->user().id();
-    this->userId = 3;
 }
 
 void AlertEditionWidget::setModel(AlertEditionModel *model)
@@ -55,6 +53,7 @@ void AlertEditionWidget::setModel(AlertEditionModel *model)
 void AlertEditionWidget::setSession(Session *session)
 {
     this->session = session;
+    this->userId = session->user().id();
 }
 
 void AlertEditionWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
@@ -199,12 +198,18 @@ void AlertEditionWidget::update()
         
         userMediaDestinationTableView = new Wt::WTableView();
         userMediaDestinationTableView->setModel(sim);
+        userMediaDestinationTableView->setSelectionBehavior(Wt::SelectRows);
+        userMediaDestinationTableView->setSelectionMode(Wt::SingleSelection);
         
         bindWidget("user-media-destination", userMediaDestinationTableView);
         
         
         addButtonMedia->clicked().connect(this, &AlertEditionWidget::addMedia);
         deleteButtonMedia->clicked().connect(this, &AlertEditionWidget::deleteMedia);
+        
+        Wt::WPushButton *createAlertButton = new Wt::WPushButton(tr("Alert.alert.edition.add-button"));
+        bindWidget("create-alert-button", createAlertButton);
+        createAlertButton->clicked().connect(this,&AlertEditionWidget::addAlert);
         
         
         created_ = true;
@@ -387,14 +392,13 @@ void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
            
         
             int idx = 0;
-            Wt::WString infName;
             for (Wt::Dbo::collection<Wt::Dbo::ptr<Information2> >::const_iterator k = infos.begin(); k != infos.end(); ++k)
             {
                 const Information2 *info = (*k).get();
                 Wt::log("info") << idx << " : " << (*k).id() ;
                 slmInformation->insertString(idx,info->name);
-                infName = info->name;
-                this->mapInformationNameSboxRow[idx] = infName;
+                InformationId infId(info->pk.search, info->pk.subSearchNumber);
+                this->mapInformationNameSboxRow[idx] = infId;
                 idx++;
             }
         
@@ -473,7 +477,7 @@ void AlertEditionWidget::addMedia()
     Wt::WStandardItem *itemMediaValue = new Wt::WStandardItem();
     itemMediaValue->setData(boost::any(mediaValueTextToDisplay),0);
     
-    model_->validateField(model_->Snooze);
+    updateModelField(model_,AlertEditionModel::Snooze);
     const Wt::WString snoozeValueToDisplay = model_->valueText(model_->Snooze);
     Wt::WStandardItem *itemSnooze = new Wt::WStandardItem();
     itemSnooze->setData(boost::any(snoozeValueToDisplay),0);
@@ -489,13 +493,33 @@ void AlertEditionWidget::addMedia()
     const std::vector<Wt::WStandardItem*> *vectItemFilled = vectItem;
     dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->appendRow(*vectItemFilled);
     
+    MediaValue *mv = new MediaValue();
+    {
+        Wt::Dbo::Transaction transaction(*session);
+        Wt::Dbo::ptr<Media> mPtr = session->find<Media>().where("\"MED_ID\" = ?").bind(mapMediaIdSboxRow[mediaSelectionBox->currentIndex()]);
+        Wt::Dbo::ptr<User> uPtr = session->find<User>().where("\"USR_ID\" = ?").bind(mapUserIdSboxRow[userSelectionBox->currentIndex()]);
+        mv->media = mPtr;
+        mv->user = uPtr;
+        mv->value = mediaValueTextToDisplay;
+        mv->notifEndOfAlert = false;
+        mv->snoozeDuration = boost::lexical_cast<int,Wt::WString>(snoozeValueToDisplay);
+    }
     
-    
+    const Wt::WStandardItem *constItemUserMedia = itemUserMedia;
+    mapMediaValueTableView[
+            dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())
+                ->indexFromItem
+                (
+                    constItemUserMedia
+                ).row()
+            ] = *mv;
 }
 
 void AlertEditionWidget::deleteMedia()
 {
-//    deleteMedia(1,mediaEmailSelectionBox);  
+    int row = (*(userMediaDestinationTableView->selectedIndexes().begin())).row();
+    const Wt::WModelIndex index = userMediaDestinationTableView->rootIndex();
+    dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->removeRow(row,index);
 }
 
 
@@ -507,34 +531,40 @@ bool AlertEditionWidget::validate()
     return model_->validate();
 }
 
-void AlertEditionWidget::doRegister()
+
+void AlertEditionWidget::addAlert()
 {
-//    std::auto_ptr<AbstractUserDatabase::Transaction>
-//            t(model_->users().startTransaction());
-//
-//    updateModel(model_);
-//
-//    if (validate())
+//    if (!((serverSelectionBox->currentIndex() != -1) || (applicationSelectionBox->currentIndex() != -1) || (informationSelectionBox->currentIndex() != -1)))
 //    {
-//        User user = model_->doRegister();
-//        if (user.isValid())
-//        {
-//            registerUserDetails(user);
-//            model_->login().login(user);
-//        }
-//        else
-//            update();
+//        return;
 //    }
-//    else
-//        update();
-//
-//    if (t.get())
-//        t->commit();
-}
-
-void AlertEditionWidget::registerUserDetails(User& user)
-{
-
+//    if (!((userSelectionBox->currentIndex() != -1) || (mediaSelectionBox->currentIndex() != -1) || (mediaValueSelectionBox->currentIndex() != -1)))
+//    {
+//        return;
+//    }
+//        
+//    {
+//        Alert *alert = new Alert();
+//        Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> > mvCollection = new Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> >();
+//        Wt::Dbo::Transaction transaction(*session);
+//        for (std::map<int,MediaValue>::const_iterator i = mapMediaValueTableView.begin(); i != mapMediaValueTableView.end(); ++i)
+//        {
+//            mvCollection.insert(session->add<MediaValue>((*i)));
+//        }
+//        
+//        
+//        
+//        alert->mediaValues = mvCollection;
+//    }
+//            
+//            
+//    int nbRowTableView = dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->rowCount(userMediaDestinationTableView->rootIndex());
+//    while (nbRowTableView > 0)
+//    {
+//        std::vector<Wt::WStandardItem> vectRow = dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->takeRow();
+//        mv->
+//        nbRowTableView = dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->rowCount(userMediaDestinationTableView->rootIndex());
+//    }
 }
 
 void AlertEditionWidget::close()

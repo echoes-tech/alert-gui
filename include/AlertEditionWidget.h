@@ -63,11 +63,12 @@ public:
   Wt::WSelectionBox *serverSelectionBox;
   std::map<int,long long> mapPluginIdSboxRow;
   Wt::WSelectionBox *applicationSelectionBox;
-  std::map<int,Wt::WString> mapInformationNameSboxRow;
+  std::map<int,InformationId> mapInformationNameSboxRow;
   Wt::WSelectionBox *informationSelectionBox;
   
   // list of media where the alerts are sent
   Wt::WTableView *userMediaDestinationTableView;
+  std::map<int,MediaValue> mapMediaValueTableView;
   
   std::map<int,long long> mapUserIdSboxRow;
   Wt::WSelectionBox *userSelectionBox;
@@ -97,6 +98,8 @@ public:
   
   void addMedia();
   void deleteMedia();
+  
+  void addAlert();
 
 
 protected:
@@ -110,14 +113,6 @@ protected:
    */
   virtual bool validate();
 
-  /*! \brief Performs the registration.
-   *
-   * The default implementation checks if the information is valid
-   * with validate(), and then calls
-   * RegistrationModel::doRegister(). If registration was successful,
-   * it calls registerUserDetails() and subsequently logs the user in.
-   */
-  virtual void doRegister();
 
   /*! \brief Closes the registration widget.
    *
@@ -125,16 +120,6 @@ protected:
    */
   virtual void close();
 
-  /*! \brief Registers more user information.
-   *
-   * This method is called when a new user has been successfully
-   * registered.
-   *
-   * You may want to reimplement this method if you've added other
-   * information to the registration form which needs to be annotated
-   * to the user.
-   */
-  virtual void registerUserDetails(User& user);
 
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
 

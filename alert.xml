@@ -40,15 +40,25 @@
         <div class="Alert-form">
             
                 
-            <div class="Alert-sbox float-left">
+            <div class="Alert-fields Alert-sbox float-left">
+                <label>${tr:server-label}
+                    ${tr:server-info class="Alert-info"}
+                </label>
+                <br></br>
                 ${server-sbox}
             </div>
             
-            <div class="Alert-sbox float-left">
+            <div class="Alert-fields Alert-sbox float-left">
+                <label>${tr:server-label}
+                    ${tr:server-info class="Alert-info"}
+                </label>
+                <br></br>
                 ${application-sbox}
             </div>
             
-            <div class="Alert-sbox float-left">
+            <div class="Alert-fields Alert-sbox float-left">
+                <label>${tr:server-label}</label>
+                <br></br>
                 ${information-sbox}
             </div>
             
@@ -71,15 +81,21 @@
             <div class = "clear"></div>
             <hr></hr>
             
-            <div class="Alert-sbox float-left">
+            <div class="Alert-fields Alert-sbox float-left">
+                <label>${tr:user-label}</label>
+                <br></br>
                 ${user-sbox}
             </div>
             
-            <div class="Alert-sbox float-left">
+            <div class="Alert-fields Alert-sbox float-left">
+                <label>${tr:user-label}</label>
+                <br></br>
                 ${media-sbox}
             </div>
             
-            <div class="Alert-sbox float-left">
+            <div class="Alert-fields Alert-sbox float-left">
+                <label>${tr:user-label}</label>
+                <br></br>
                 ${media-value-sbox}
             </div>
             
@@ -99,6 +115,11 @@
                 ${user-media-destination}
             </div>
             
+            
+            <div class="Alert-buttons">
+                    ${create-alert-button}
+            
+            </div>
             
         </div>
 

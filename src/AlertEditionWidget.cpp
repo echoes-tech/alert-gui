@@ -73,7 +73,7 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(AlertEditionModel::Field f
 
     if (field == AlertEditionModel::ThresholdOperator)
     {
-        Wt::WComboBox *combo = new Wt::WComboBox();
+        comboAlertCrit = new Wt::WComboBox();
         Wt::WStringListModel *slmOperators = new Wt::WStringListModel();
         
         
@@ -93,9 +93,9 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(AlertEditionModel::Field f
                 idx++;
             }
         }
-        combo->setModel(slmOperators);
+        comboAlertCrit->setModel(slmOperators);
         
-        result = combo;
+        result = comboAlertCrit;
 //        result->changed().connect(boost::bind(&RegistrationWidget::checkOrganization, this));
     }
     else if (field == AlertEditionModel::ThresholdValue)
@@ -506,13 +506,13 @@ void AlertEditionWidget::addMedia()
     }
     
     const Wt::WStandardItem *constItemUserMedia = itemUserMedia;
-    mapMediaValueTableView[
+    mapMediaValueIdTableView[
             dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())
                 ->indexFromItem
                 (
                     constItemUserMedia
                 ).row()
-            ] = *mv;
+            ] = mapMediaValueIdSboxRow[mediaValueSelectionBox->currentIndex()]; 
 }
 
 void AlertEditionWidget::deleteMedia()
@@ -534,37 +534,69 @@ bool AlertEditionWidget::validate()
 
 void AlertEditionWidget::addAlert()
 {
-//    if (!((serverSelectionBox->currentIndex() != -1) || (applicationSelectionBox->currentIndex() != -1) || (informationSelectionBox->currentIndex() != -1)))
-//    {
-//        return;
-//    }
-//    if (!((userSelectionBox->currentIndex() != -1) || (mediaSelectionBox->currentIndex() != -1) || (mediaValueSelectionBox->currentIndex() != -1)))
-//    {
-//        return;
-//    }
-//        
-//    {
-//        Alert *alert = new Alert();
-//        Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> > mvCollection = new Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> >();
-//        Wt::Dbo::Transaction transaction(*session);
-//        for (std::map<int,MediaValue>::const_iterator i = mapMediaValueTableView.begin(); i != mapMediaValueTableView.end(); ++i)
-//        {
-//            mvCollection.insert(session->add<MediaValue>((*i)));
-//        }
-//        
-//        
-//        
-//        alert->mediaValues = mvCollection;
-//    }
-//            
-//            
-//    int nbRowTableView = dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->rowCount(userMediaDestinationTableView->rootIndex());
-//    while (nbRowTableView > 0)
-//    {
-//        std::vector<Wt::WStandardItem> vectRow = dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->takeRow();
-//        mv->
-//        nbRowTableView = dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->rowCount(userMediaDestinationTableView->rootIndex());
-//    }
+    if (!((serverSelectionBox->currentIndex() != -1) || (applicationSelectionBox->currentIndex() != -1) || (informationSelectionBox->currentIndex() != -1)))
+    {
+        return;
+    }
+    if (!((userSelectionBox->currentIndex() != -1) || (mediaSelectionBox->currentIndex() != -1) || (mediaValueSelectionBox->currentIndex() != -1)))
+    {
+        return;
+    }
+    
+    Alert *alert = new Alert();
+    AlertValue *ava = new AlertValue();
+    Wt::WString name = serverSelectionBox->currentText() + " - " + applicationSelectionBox->currentText() + " - " + informationSelectionBox->currentText();
+    try
+    {
+        std::vector<Wt::Dbo::ptr<MediaValue> > *mvVector = new std::vector<Wt::Dbo::ptr<MediaValue> >();
+        Wt::Dbo::Transaction transaction(*session);
+        
+        
+        Wt::Dbo::ptr<Information2> infoPtr = session->find<Information2>().where("\"SEA_ID\" = ?")
+                                                        .bind(mapInformationNameSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.id)
+                                                        .where("\"SRC_ID\" = ?")
+                                                        .bind(mapInformationNameSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.source.get()->pk.id)
+                                                        .where("\"PLG_ID_PLG_ID\" = ?")
+                                                        .bind(mapInformationNameSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.source.get()->pk.plugin.id())
+                                                        .where("\"INF_VALUE_NUM\" = ?")
+                                                        .bind(mapInformationNameSboxRow[informationSelectionBox->currentIndex()].subSearchNumber);
+        
+        Wt::Dbo::ptr<AlertCriteria> critPtr = session->find<AlertCriteria>().where("\"ACR_ID\" = ?").bind(mapAlertCriteriaIdSboxRow[comboAlertCrit->currentIndex()]);
+        ava->information = infoPtr;
+        updateModelField(model_,AlertEditionModel::ThresholdValue);
+        ava->value = model_->valueText(model_->ThresholdValue);
+        ava->alertCriteria = critPtr;
+        Wt::Dbo::ptr<AlertValue> avaPtr = session->add<AlertValue>(ava);   
+        
+//        alert->mediaValues = *mvCollection;
+        alert->alertValue = avaPtr;
+        alert->threadSleep = 0;
+        alert->creaDate = Wt::WDateTime::currentDateTime();
+        alert->name = name;
+
+        
+        Wt::Dbo::ptr<Alert> alePtr = session->add<Alert>(alert);
+        
+        for (std::map<int,long long>::const_iterator i = mapMediaValueIdTableView.begin(); i != mapMediaValueIdTableView.end(); ++i)
+        {
+            Wt::Dbo::ptr<MediaValue> mvPtr = session->find<MediaValue>().where("\"MEV_ID\" = ?").bind((*i).second);
+            mvVector->push_back(mvPtr);
+//            alePtr.modify()->mediaValues.insert(session->add<MediaValue>(&mev));
+        }
+        
+        while (mvVector->size() > 0)
+        {
+            Wt::Dbo::ptr<MediaValue> mvPtr = mvVector->back();
+            alePtr.modify()->mediaValues.insert(mvPtr);
+            mvVector->pop_back();
+        }
+        
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << "[AlertEditionWidget] " << e.what();
+    }
+            
 }
 
 void AlertEditionWidget::close()

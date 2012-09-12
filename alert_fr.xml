@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <!-- AlertWidget -->
+
+  <message id="Alert.Alert.alert-form-title">Alertes</message>
+  <message id="Alert.Alert.alert-form-info"></message>
+
+  <message id="Alert.Alert.asset-label">Serveur</message>
+  <message id="Alert.Alert.asset-info">Choisissez votre serveur</message>
+
+  <message id="Alert.Alert.application-label">Application</message>
+  <message id="Alert.Alert.application-info">Choisissez votre application</message>
+
+  <message id="Alert.Alert.information-label">Information</message>
+  <message id="Alert.Alert.information-info">Choisissez votre information</message>
+
+  <message id="Alert.Alert.threshold-operator-label">Opérateur</message>
+  <message id="Alert.Alert.threshold-operator-info">Choisissez votre opérateur</message>
+
+  <message id="Alert.Alert.threshold-value-label">Valeur</message>
+  <message id="Alert.Alert.threshold-value-info">Choisissez votre valeur</message>
+
+  <message id="Alert.Alert.user-label">Destinataire</message>
+  <message id="Alert.Alert.user-info">Choisissez un destinataire pour l'alerte</message>
+
+  <message id="Alert.Alert.media-label">Média</message>
+  <message id="Alert.Alert.media-info">Choisissez un média pour l'alerte</message>
+
+  <message id="Alert.Alert.media-value-label">Média enregistré</message>
+  <message id="Alert.Alert.media-value-info">Choisissez un média enregistré pour l'alerte</message>
+
+  <message id="Alert.Alert.snooze-label">Snooze</message>
+  <message id="Alert.Alert.snooze-info">Choisissez le délai avant la prochaine alerte</message>
+
+  <message id="Alert.alert.edition.add-button">Ajouter</message>
+  <message id="Alert.alert.edition.delete-button">Supprimer</message>
+
+</messages>

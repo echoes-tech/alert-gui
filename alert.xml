@@ -1,133 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
 
-  <!-- User creation / modification models -->
+  <!-- AlertWidget -->
 
-    <message id="Alert.User.Edition.form-title">User creation / modification</message>
-    <message id="Alert.User.Edition.media-title">User's medias</message>
+  <message id="Alert.Alert.alert-form-title">Alerts</message>
+  <message id="Alert.Alert.alert-form-info"></message>
 
-    <message id="first-name">First name</message>
-    <message id="Alert.user.edition.first-name">User first name</message>
-    <message id="last-name">Last name</message>
-    <message id="Alert.user.edition.last-name">User last name</message>
-    <message id="email">Email (login)</message>
-    <message id="Alert.user.edition.email">Email used to log in</message>
-    <message id="password">Password</message>
-    <message id="Alert.user.edition.password">User password</message>
-    <message id="repeat-password">Repeat password</message>
-    <message id="Alert.user.edition.repeat-password">Repeat user password</message>
-    
-    <message id="role">Role</message>
-    <message id="Alert.user.edition.role">User role (access rights)</message>
-    <message id="state">User state</message>
-    <message id="Alert.user.edition.state">User state : activated / deactivated</message>
-    
-    <message id="media-email">Email</message>
-    <message id="Alert.user.edition.media-email">Emails usable to send alerts</message>
-    <message id="media-sms">Phone numbers</message>
-    <message id="Alert.user.edition.media-sms">Phone numbers usable to send SMS</message>
-    
-    <message id="Alert.user.edition.add-button">Add</message>
-    <message id="Alert.user.edition.delete-button">Delete</message>
-    
-    <message id="Alert.user.edition.save-button">Save</message>
-    <message id="Alert.user.edition.cancel-button">Cancel</message>
+  <message id="Alert.Alert.asset-label">Server</message>
+  <message id="Alert.Alert.asset-info">Choose your server</message>
+
+  <message id="Alert.Alert.application-label">Application</message>
+  <message id="Alert.Alert.application-info">Choose your application</message>
+
+  <message id="Alert.Alert.information-label">Information</message>
+  <message id="Alert.Alert.information-info">Choose your information</message>
+
+  <message id="Alert.Alert.threshold-operator-label">Operator</message>
+  <message id="Alert.Alert.threshold-operator-info">Choose your operator</message>
+
+  <message id="Alert.Alert.threshold-value-label">Value</message>
+  <message id="Alert.Alert.threshold-value-info">Choose your value</message>
+
+  <message id="Alert.Alert.user-label">Recipient</message>
+  <message id="Alert.Alert.user-info">Choose an alert recipient</message>
+
+  <message id="Alert.Alert.media-label">Media</message>
+  <message id="Alert.Alert.media-info">Choose an alert media</message>
+
+  <message id="Alert.Alert.media-value-label">Registered media</message>
+  <message id="Alert.Alert.media-value-info">Choose an alert registered media</message>
+
+  <message id="Alert.Alert.snooze-label">Snooze</message>
+  <message id="Alert.Alert.snooze-info">Choose delay before the next alert</message>
+
+  <message id="Alert.alert.edition.add-button">Add</message>
+  <message id="Alert.alert.edition.delete-button">Delete</message>
 
   <!-- templates -->
 
-    <message id="Alert.Alert.Edition.template">
+  <message id="Alert.Alert.Edition.template">
+    <div class="Alert-form">
+      <h2>${tr:Alert.Alert.alert-form-title}</h2>
+      <p>${tr:Alert.Alert.alert-form-info}</p>
+      
+      <div class="Alert-fields Alert-sbox float-left">    
+        <label for="${id:asset}">${tr:Alert.Alert.asset-label}
+           <span class="Alert-info">${tr:Alert.Alert.asset-info}</span>
+        </label>
+        <br />
+        ${server-sbox}
+      </div>
 
-        <div class="Alert-form">
+      <div class="Alert-fields Alert-sbox float-left">
+        <label for="${id:application}">${tr:Alert.Alert.application-label}
+           <span class="Alert-info">${tr:Alert.Alert.application-info}</span>
+        </label>
+        <br />
+        ${application-sbox}
+      </div>
             
-                
-            <div class="Alert-fields Alert-sbox float-left">
-                <label>${tr:server-label}
-                    ${tr:server-info class="Alert-info"}
-                </label>
-                <br></br>
-                ${server-sbox}
-            </div>
+      <div class="Alert-fields Alert-sbox float-left">
+        <label for="${id:information}">${tr:Alert.Alert.information-label}
+           <span class="Alert-info">${tr:Alert.Alert.information-info}</span>
+        </label>
+        <br />
+        ${information-sbox}
+      </div>
             
-            <div class="Alert-fields Alert-sbox float-left">
-                <label>${tr:server-label}
-                    ${tr:server-info class="Alert-info"}
-                </label>
-                <br></br>
-                ${application-sbox}
-            </div>
+      <div class="clear"></div>
+      <hr />
+
+      <div class="Alert-fields float-left">
+        <label for="${id:threshold-operator}">${tr:Alert.Alert.threshold-operator-label}
+            <span class="Alert-info">${tr:Alert.Alert.threshold-operator-info}</span>
+        </label>
+        ${threshold-operator}
+      </div>
+
+      <div class="Alert-fields float-left">
+        <label for="${id:threshold-value}">${tr:Alert.Alert.threshold-value-label}
+          <span class="Alert-info">${tr:Alert.Alert.threshold-value-info}</span>
+        </label>
+        ${threshold-value}
+      </div>
             
-            <div class="Alert-fields Alert-sbox float-left">
-                <label>${tr:server-label}</label>
-                <br></br>
-                ${information-sbox}
-            </div>
+      <div class = "clear"></div>
+      <hr />
             
-            <div class = "clear"></div>
-            <hr></hr>
+      <div class="Alert-fields Alert-sbox float-left">
+        <label>${tr:Alert.Alert.user-label}
+           <span class="Alert-info">${tr:Alert.Alert.user-info}</span>
+        </label>
+        <br />
+        ${user-sbox}
+      </div>
+
+      <div class="Alert-fields Alert-sbox float-left">
+        <label>${tr:Alert.Alert.media-label}
+           <span class="Alert-info">${tr:Alert.Alert.media-info}</span>
+        </label>
+        <br />
+        ${media-sbox}
+      </div>
             
-            <div class="Alert-fields float-left">
-                <label for="${id:threshold-operator}">${threshold-operator-label}
-                    ${threshold-operator-info class="Alert-info"}
-                </label>
-                ${threshold-operator}
-            </div>
-            <div class="Alert-fields float-left">
-                <label for="${id:threshold-value}">${threshold-value-label}
-                    ${threshold-value-info class="Alert-info"}
-                </label>
-                ${threshold-value}
-            </div>
+      <div class="Alert-fields Alert-sbox float-left">
+        <label>${tr:Alert.Alert.media-value-label}
+           <span class="Alert-info">${tr:Alert.Alert.media-value-info}</span>
+        </label>
+        <br />
+        ${media-value-sbox}
+      </div>
             
-            <div class = "clear"></div>
-            <hr></hr>
+      <div class="Alert-fields float-left">
+        <label for="${id:snooze}">${tr:Alert.Alert.snooze-label}
+           <span class="Alert-info">${tr:Alert.Alert.snooze-info}</span>
+        </label>
+        <div class = "clear"></div>
+        ${snooze}
             
-            <div class="Alert-fields Alert-sbox float-left">
-                <label>${tr:user-label}</label>
-                <br></br>
-                ${user-sbox}
-            </div>
-            
-            <div class="Alert-fields Alert-sbox float-left">
-                <label>${tr:user-label}</label>
-                <br></br>
-                ${media-sbox}
-            </div>
-            
-            <div class="Alert-fields Alert-sbox float-left">
-                <label>${tr:user-label}</label>
-                <br></br>
-                ${media-value-sbox}
-            </div>
-            
-            <div class="Alert-fields float-left">
-                <label for="${id:snooze}">${snooze-label}
-                    ${snooze-info class="Alert-info"}
-                </label>
-                <div class = "clear"></div>
-                ${snooze}
-            </div>
-            
-            <div class="Alert-buttons">
-                    ${add-button-media} ${delete-button-media}
-            
-            </div>
-            <div class="Alert-fields float-left">
-                ${user-media-destination}
-            </div>
-            
-            
-            <div class="Alert-buttons">
-                    ${create-alert-button}
-            
-            </div>
-            
+        <div class="Alert-buttons" style="float:right;">
+          ${add-button-media}
         </div>
+      </div>
 
 
+      <div class="Alert-fields float-left">
+        ${user-media-destination}
+      </div>
 
-    </message>
+      <div class="Alert-buttons">
+        ${delete-button-media}
+      </div>
 
+      <hr />
 
-  
+      <div class="Alert-buttons">
+        ${create-alert-button}
+      </div>
+            
+    </div>
+
+  </message>
 
 </messages>

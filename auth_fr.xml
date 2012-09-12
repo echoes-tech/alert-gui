@@ -24,7 +24,6 @@
     Trop long
   </message>
   <message id="Wt.Auth.passwdqc.reason-simpleshort">
-    Not enough different characters or classes for this length
     Pas assez de caractères ou de types de caractères différents pour cette longueur
   </message>
   <message id="Wt.Auth.passwdqc.reason-simple">
@@ -151,9 +150,6 @@ Bonjour {1},
 
 Nous vous remercions de votre inscription et vous souhaitons la bienvenue sur ECHOES Alert.
 
-Pour finaliser votre inscription, veuillez cliquer sur le lien suivant ou
-copier l'URL dans votre navigateur afin de valider votre compte.
-
 Veuillez cliquer sur lien pour valider votre inscription ou copier et coller l'URL
 suivante dans votre navigateur : (Note : assurez-vous de copier l'URL complète,
 y compris toute partie qui pourrait être sur une seconde ligne.)
@@ -172,9 +168,6 @@ http://alert.echoes-tech.com/
     <h3>Bonjour {1},</h3>
 
     <p>Nous vous remercions de votre inscription et vous souhaitons la bienvenue sur ECHOES Alert.</p>
-
-    <p>TPour finaliser votre inscription, veuillez cliquer sur le lien suivant ou
-    copier l'URL dans votre navigateur afin de valider votre compte.</p>
  
     <p>Veuillez <a href="{3}">cliquer ici pour valider</a> votre
     inscription ou copier et coller l'URL suivante dans votre

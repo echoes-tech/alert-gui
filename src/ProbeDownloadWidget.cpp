@@ -158,6 +158,7 @@ void ProbeDownloadWidget::sendMail()
     mailMessage.setSubject("Demande de sonde");
     mailMessage.addHtmlBody(mail);
     session->auth().sendMail(mailMessage);
+    this->refresh();
 }
 
 

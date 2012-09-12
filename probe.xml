@@ -3,18 +3,26 @@
 
   <!-- Models -->
 
+  <message id="Alert.Probe.Download.os-label">Operating System</message>
+  <message id="Alert.Probe.Download.os-info">Choose Server Operation System</message>
+
+  <message id="Alert.Probe.Download.arch-label">Architecture</message>
+  <message id="Alert.Probe.Download.arch-info">Choose Server Architecture</message>
+
+  <message id="Alert.probe.download.send-mail">Send</message>
+
     <message id="disclaimer">
         <h3>Probe request</h3>
         
         <p>
-            On this page you can choose the target Operating System and architecture you want to install the probe on.
+            On this page you can choose the target Operating System and architecture of the server you want to monitor.
             <br></br>
             <br></br>
             When you push the button, it sends a request to our team. We will provide the probe as soon as possible after your request.<br></br>
             <br></br>
             The request can be sent only once. If there is no form under this text, it means that you already have sent your request.<br></br>
             <br></br>
-            If you need more information, please come to our <a href="https://chat.echoes-tech.com">online chat</a>. 
+            If you need more information, please come to our <a href="https://chat.echoes-tech.com" target="_blank">online chat</a>. 
             <br></br>
         </p>
     </message>
@@ -31,14 +39,14 @@
             
             ${<if:os>}        
                 <div class="Probe-fields float-left">
-                    <label for="${id:os}">${os-label}
-                        ${os-info class="Probe-info"}
+                    <label for="${id:os}">${tr:Alert.Probe.Download.os-label}
+                        <span class="Probe-info">${tr:Alert.Probe.Download.os-info}</span>
                     </label>
                     ${os}
                 </div>
                 <div class="Probe-fields float-left">
-                    <label for="${id:arch}">${arch-label}
-                        ${arch-info class="Probe-info"}
+                    <label for="${id:arch}">${tr:Alert.Probe.Download.arch-label}
+                        <span class="Probe-info">${tr:Alert.Probe.Download.arch-info}</span>
                     </label>
                     ${arch}
                 </div>

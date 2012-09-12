@@ -23,16 +23,20 @@
     <message id="Alert.user.edition.state">User state : activated / deactivated</message>
     
     <message id="media-email">Email</message>
-    <message id="Alert.user.edition.media-email">Emails usable to send alerts</message>
+    <message id="Alert.user.edition.media-email">Emails usable to receive alerts</message>
     <message id="media-sms">Phone numbers</message>
-    <message id="Alert.user.edition.media-sms">Phone numbers usable to send SMS</message>
+    <message id="Alert.user.edition.media-sms">Phone numbers usable to receive SMS</message>
     
     <message id="Alert.user.edition.add-button">Add</message>
     <message id="Alert.user.edition.delete-button">Delete</message>
     
     <message id="Alert.user.edition.save-button">Save</message>
     <message id="Alert.user.edition.cancel-button">Cancel</message>
-
+    
+    <message id="Alert.user.edition.string-tooshort">Too short</message>
+    
+    <message id="Alert.user.edition.valid">Valid</message>
+    
   <!-- templates -->
 
     <message id="Alert.User.Edition.template">

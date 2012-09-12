@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <!-- User creation / modification models -->
+
+    <message id="Alert.User.Edition.media-title">Les médias des utilisateurs</message>
+
+    <message id="media-email">Adresses e-mail</message>
+    <message id="Alert.user.edition.media-email">Adresses e-mails utilisables pour recevoir des alertes</message>
+    <message id="media-sms">Numéros de téléphone</message>
+    <message id="Alert.user.edition.media-sms">Numéros de téléphone utilisables pour recevoir des SMS d'alertes</message>
+    
+    <message id="Alert.user.edition.add-button">Ajouter</message>
+    <message id="Alert.user.edition.delete-button">Supprimer</message>
+    
+    <message id="Alert.user.edition.save-button">Enregistrer</message>
+    <message id="Alert.user.edition.cancel-button">Annuler</message>
+    
+  <message id="Alert.user.edition.string-tooshort">
+    Trop court
+  </message>
+  
+  <message id="Alert.user.edition.valid">Valide</message>
+</messages>

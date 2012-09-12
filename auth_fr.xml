@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
+    
+    <message id="welcome-text"><h3>Bienvenue dans la version alpha d'ECHOES Alert !</h3>
+
+    <p>A cette heure vous avez accès aux fonctionnalités suivantes :</p>
+    <p>
+        <ul>
+            <li> S'inscrire (mais ceci est déjà fait visiblement)</li>
+            <li>Commander votre première sonde</li>
+            <li> Définir vos médias d'alertes (téléphone mobile, adresse e-mail)</li>
+            <li> Définir et activer vos alertes sur les informations suivantes :
+            <ul>
+                <li> Utilisation de la mémoire vive (en KB)</li>
+                <li> Charge système (load-average)</li>
+            </ul>
+            </li>
+        </ul>
+    </p>
+
+    <p>
+    Ce produit est en constante évolution (quasi quotidienne).<br/>
+    Nous vous tiendrons informés des nouvelles fonctionnalités au travers de cette page.
+    </p>
+    <p>
+    L'équipe ECHOES Alert.
+    </p>
+    </message>
 
   <!-- BaseAuth, PasswordAuth and OAuth models -->
 

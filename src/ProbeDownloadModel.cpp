@@ -12,9 +12,10 @@ const Wt::WFormModel::Field ProbeDownloadModel::Os = "os";
 const Wt::WFormModel::Field ProbeDownloadModel::Arch = "arch";
 const Wt::WFormModel::Field ProbeDownloadModel::LabelProbe = "label-probe";
 
-ProbeDownloadModel::ProbeDownloadModel(User *user)
+ProbeDownloadModel::ProbeDownloadModel(User *user, Session *session)
 {
     this->user = user;
+    this->session = session;
     setView(this->user);
     reset();
 }
@@ -46,6 +47,10 @@ void ProbeDownloadModel::reset()
     displaySendMail = false;
     {
         Wt::Dbo::Transaction transaction(*session);
+        if (session->user().id() == -1)
+        {
+            return;
+        }
         Wt::Dbo::ptr<Probe> ptrProbe = session->find<Probe>().where("\"PRB_ORG_ORG_ID\" = ?").bind(session->user().get()->currentOrganization.id()).limit(1);
         if (ptrProbe.id() == -1)
         {

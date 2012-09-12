@@ -13,7 +13,7 @@
 
 class ProbeDownloadModel : public Wt::WFormModel {
 public:
-    ProbeDownloadModel(User *user);
+    ProbeDownloadModel(User *user,Session *session);
     virtual ~ProbeDownloadModel();
     
     static const Field Os;

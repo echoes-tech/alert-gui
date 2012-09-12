@@ -47,6 +47,7 @@
                    projectFiles="true">
       <itemPath>alert.xml</itemPath>
       <itemPath>auth.xml</itemPath>
+      <itemPath>auth_fr.xml</itemPath>
       <itemPath>config.xml</itemPath>
       <itemPath>resources/form-alert.css</itemPath>
       <itemPath>resources/form-probe.css</itemPath>

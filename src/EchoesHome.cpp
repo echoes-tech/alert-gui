@@ -71,6 +71,8 @@ void EchoesHome::initMainStack()
 {
     this->mainStack = new Wt::WStackedWidget();
     this->mainStack->setStyleClass("echoesalertstack");
+    this->initAdminWidget();
+    this->initMonitoringWidget();
     this->addWidget(this->mainStack);
 }
 
@@ -85,9 +87,37 @@ void EchoesHome::setLinks()
     this->linksLayout->addWidget(this->monitoringAnchor);
 }
 
+Wt::WPanel* EchoesHome::initMonitoringWidget()
+{
+    Wt::WPanel *res = new Wt::WPanel();
+//    this->mainStack->addWidget(res);
+//    Wt::WGroupBox * groupBox = new Wt::WGroupBox("Alert sent list");
+//    Wt::Dbo::QueryModel<std::vector> *qm = new Wt::Dbo::QueryModel<std::vector>();
+//    std::string queryString = "SELECT ale.\"ALE_NAME\" \"NAME\", mev.\"MEV_VALUE\" \"VALUE\", atr.\"ATR_SEND_DATE\" \"DATE\" FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_VALUE_MEV\" mev "
+//            " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
+//            " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
+//            " AND mev.\"MEV_USR_USR_ID\" = ?";
+//    
+//    Wt::WTableView *tview = new Wt::WTableView(groupBox);
+//    {
+//        Wt::Dbo::Transaction transaction(*(this->session));
+//        Wt::Dbo::Query<std::vector,Wt::Dbo::DynamicBinding> q = this->session->query<std::vector,Wt::Dbo::DynamicBinding>(queryString).bind(session->user().id());
+//        qm->setQuery(q, false);
+//        qm->addColumn("NAME", "Name", Wt::ItemIsSelectable);
+//        qm->addColumn("VALUE", "Value", Wt::ItemIsSelectable);
+//        qm->addColumn("DATE", "Date", Wt::ItemIsSelectable);
+//        tview->setModel(qm)
+//    }    
+//    
+//    
+//    res->setCentralWidget(groupBox);
+    return res;
+}
+
 Wt::WTabWidget* EchoesHome::initAdminWidget()
 {
-    Wt::WTabWidget *res = new Wt::WTabWidget(this->mainStack);
+    Wt::WTabWidget *res = new Wt::WTabWidget(this);
+    this->mainStack->addWidget(res);
     
     Wt::WGroupBox * usersGroupBox = new Wt::WGroupBox("Users list");
     
@@ -127,17 +157,17 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     pdw = new ProbeDownloadWidget();
     {
         Wt::Dbo::Transaction transaction(*(this->session));
-        pdm = new ProbeDownloadModel(const_cast<User *>(this->session->user().get()));
+        pdm = new ProbeDownloadModel(const_cast<User *>(this->session->user().get()),this->session);
     }
     pdw->setModel(pdm);
-    pdw->setSession(session);
+//    pdw->setSession(session);
     
-    res->addTab(new Wt::WText("<h2>TESTEUH 1</h2>"), "Welcome");
-    res->addTab(pdw, "Probes");
-    res->addTab(aew, "Alerts");
-    res->addTab(usersGroupBox, "Users");
-    res->addTab(uew, "General");
-    res->addTab(new Wt::WText("<h2>TESTEUH 6</h2>"), "Plugin-store");
+    res->addTab(new Wt::WText(tr("welcome-text")), "Bienvenue");
+    res->addTab(pdw, "Sondes");
+    res->addTab(aew, "Alertes");
+    res->addTab(usersGroupBox, "Utilisateurs");
+    res->addTab(uew, "Medias");
+//    res->addTab(new Wt::WText("<h2>TESTEUH 6</h2>"), "Plugin-store");
     return res;
 }
 
@@ -154,7 +184,7 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
     else if (internalPath == "/admin")
       showAdmin();
     else
-      Wt::WApplication::instance()->setInternalPath("/monitoring",  true);
+      Wt::WApplication::instance()->setInternalPath("/admin",  true);
   }
 }
 
@@ -166,9 +196,13 @@ void EchoesHome::showAdmin()
 //    admin_ = new AdminWidget(&session_, mainStack_);
     this->adminPageTabs = initAdminWidget();
   }
-
+  if (this->monitoringPage) 
+  {
+    this->monitoringPage->hide();
+  }
+  
+  this->adminPageTabs->show();
   this->mainStack->setCurrentWidget(this->adminPageTabs);
-//  admin_->show();
 
   this->monitoringAnchor->removeStyleClass("selected-link");
   this->adminAnchor->addStyleClass("selected-link");
@@ -176,13 +210,19 @@ void EchoesHome::showAdmin()
 
 void EchoesHome::showMonitoring()
 {
-  if (!this->monitoringPage) {
+  if (!this->monitoringPage) 
+  {
 //    monitoring_ = new MonitoringWidget(&session_, mainStack_);
-      this->monitoringPage = new Wt::WLabel("Monitoring 2");
-      this->monitoringPage->show();
+      this->monitoringPage = initMonitoringWidget();
+//      this->monitoringPage->show();
 //    monitoring_->update();
   }
-
+  if (this->adminPageTabs)
+  {
+    this->adminPageTabs->hide();
+  }
+  
+  this->monitoringPage->show();
   this->mainStack->setCurrentWidget(this->monitoringPage);
 
   this->monitoringAnchor->addStyleClass("selected-link");
@@ -237,7 +277,7 @@ void EchoesHome::onAuthEvent()
     if (this->session->login().loggedIn())
     {
         
-        this->links->show();
+//        this->links->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
     }
     else
@@ -245,6 +285,6 @@ void EchoesHome::onAuthEvent()
         this->mainStack->clear();
         this->adminPageTabs = 0;
         this->monitoringPage = 0;
-        this->links->hide();
+//        this->links->hide();
     }
 }

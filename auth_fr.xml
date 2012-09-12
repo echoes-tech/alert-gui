@@ -144,6 +144,110 @@
   
   <!-- Emails -->
 
-  <message id="Wt.Auth.confirmmail.subject">Lien d'activation du compte utilisateur</message>
+  <message id="Wt.Auth.confirmmail.subject">[ECHOES Alert] Activation du compte utilisateur</message>
 
+  <message id="Wt.Auth.confirmmail.body">
+Bonjour {1},
+
+Nous vous remercions de votre inscription et vous souhaitons la bienvenue sur ECHOES Alert.
+
+Pour finaliser votre inscription, veuillez cliquer sur le lien suivant ou
+copier l'URL dans votre navigateur afin de valider votre compte.
+
+Veuillez cliquer sur lien pour valider votre inscription ou copier et coller l'URL
+suivante dans votre navigateur : (Note : assurez-vous de copier l'URL complète,
+y compris toute partie qui pourrait être sur une seconde ligne.)
+
+{3}
+
+Merci d'utiliser ECHOES Alert !
+
+L'équipe ECHOES Alert.
+http://alert.echoes-tech.com/
+
+© 2012, ECHOES Technologies
+  </message>
+
+  <message id="Wt.Auth.confirmmail.htmlbody">
+    <h3>Bonjour {1},</h3>
+
+    <p>Nous vous remercions de votre inscription et vous souhaitons la bienvenue sur ECHOES Alert.</p>
+
+    <p>TPour finaliser votre inscription, veuillez cliquer sur le lien suivant ou
+    copier l'URL dans votre navigateur afin de valider votre compte.</p>
+ 
+    <p>Veuillez <a href="{3}">cliquer ici pour valider</a> votre
+    inscription ou copier et coller l'URL suivante dans votre
+    navigateur : <i>(Note : assurez-vous de copier l'URL complète,
+    y compris toute partie qui pourrait être sur une seconde ligne.)</i></p>
+    
+    <b>{3}</b>
+
+    <p>Merci d'utiliser ECHOES Alert !</p>
+
+    <p>
+        L'équipe ECHOES Alert.
+        <br />
+        <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">http://alert.echoes-tech.com/</a>
+    </p>
+
+    <p><i>© 2012, ECHOES Technologies</i></p>
+  </message>
+
+  <message id="Wt.Auth.lostpasswordmail.subject">[ECHOES Alerŧ] Instructions de récupération de mot de passe</message>
+
+  <message id="Wt.Auth.lostpasswordmail.body">
+Bonjour {1},
+
+Ce courriel vous a été envoyé car quelqu'un (est-ce bien vous ?)
+a indiqué qu'il souhaitait choisir un nouveau mot de passe.
+
+Si vous êtes effectivement l'auteur de cette demande, alors vous pouvez
+choisir un nouveau mot de passe en cliquant sur le lien suivant ou en copiant
+l'URL dans votre navigateur. Si vous n'avez pas demandé cela, vous pouvez
+ignorer ce courriel et le jeter en toute sécurité.
+
+Veuillez cliquer sur lien ou copier et coller l'URL suivante 
+dans votre navigateur : (Note : assurez-vous de copier l'URL complète,
+y compris toute partie qui pourrait être sur une seconde ligne.)
+ 
+{3} 
+
+Merci d'utiliser ECHOES Alert !
+
+L'équipe ECHOES Alert.
+http://alert.echoes-tech.com/
+
+© 2012, ECHOES Technologies
+  </message>
+
+  <message id="Wt.Auth.lostpasswordmail.htmlbody">
+    <h3>Bonjour {1},</h3>
+
+    <p>Ce courriel vous a été envoyé car quelqu'un (est-ce bien vous ?)
+    a indiqué qu'il souhaitait choisir un nouveau mot de passe.</p>
+
+    <p>Si vous êtes effectivement l'auteur de cette demande, alors vous pouvez
+    choisir un nouveau mot de passe en cliquant sur le lien suivant ou en copiant
+    l'URL dans votre navigateur. Si vous n'avez pas demandé cela, vous pouvez
+    ignorer ce courriel et le jeter en toute sécurité.</p>
+ 
+    <p>Veuillez <a href="{3}">cliquer ici pour choisir un nouveau mot
+    de passe</a> ou copier et coller l'URL suivante dans votre
+    navigateur : <i>(Note : assurez-vous de copier l'URL complète, y
+    compris toute partie qui pourrait être sur une seconde ligne.)</i>
+    </p>
+ 
+    <b>{3}</b>
+
+    <p>Merci d'utiliser ECHOES Alert !</p>
+
+    <p>
+        L'équipe ECHOES Alert.
+        <br />
+        <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">http://alert.echoes-tech.com/</a>
+    </p>
+
+    <p><i>© 2012, ECHOES Technologies</i></p>
+  </message>
 </messages>

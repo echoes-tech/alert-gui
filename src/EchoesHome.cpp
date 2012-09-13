@@ -73,6 +73,7 @@ void EchoesHome::initMainStack()
     this->mainStack->setStyleClass("echoesalertstack");
     this->initAdminWidget();
     this->initMonitoringWidget();
+    this->mainStack->clear();
     this->addWidget(this->mainStack);
 }
 

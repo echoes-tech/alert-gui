@@ -160,7 +160,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
         pdm = new ProbeDownloadModel(const_cast<User *>(this->session->user().get()),this->session);
     }
     pdw->setModel(pdm);
-//    pdw->setSession(session);
+    pdw->setSession(session);
     
     res->addTab(new Wt::WText(tr("welcome-text")), "Bienvenue");
     res->addTab(pdw, "Sondes");

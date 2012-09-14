@@ -99,10 +99,10 @@
   <message id="Wt.Auth.password-info">Saisissez votre mot de passe</message>
   <message id="Wt.Auth.remember-me">Se souvenir de moi</message>
   <message id="Wt.Auth.remember-me-info.days">
-    Rester connecter {1} jours
+    Rester connecté {1} jours
   </message>
   <message id="Wt.Auth.remember-me-info.weeks">
-    Rester connecter {1} semaines
+    Rester connecté {1} semaines
   </message>
   <message id="Wt.Auth.lost-password">Mot de passe oublié</message>
   <message id="Wt.Auth.login">Connexion</message>
@@ -180,7 +180,7 @@ Veuillez cliquer sur lien pour valider votre inscription ou copier et coller l'U
 suivante dans votre navigateur : (Note : assurez-vous de copier l'URL complète,
 y compris toute partie qui pourrait être sur une seconde ligne.)
 
-{3}
+https://alert.echoes-tech.com/auth/mail/{2}
 
 Merci d'utiliser ECHOES Alert !
 
@@ -195,12 +195,12 @@ http://alert.echoes-tech.com/
 
     <p>Nous vous remercions de votre inscription et vous souhaitons la bienvenue sur ECHOES Alert.</p>
  
-    <p>Veuillez <a href="{3}">cliquer ici pour valider</a> votre
+    <p>Veuillez <a href="https://alert.echoes-tech.com/auth/mail/{2}">cliquer ici pour valider</a> votre
     inscription ou copier et coller l'URL suivante dans votre
     navigateur : <i>(Note : assurez-vous de copier l'URL complète,
     y compris toute partie qui pourrait être sur une seconde ligne.)</i></p>
     
-    <b>{3}</b>
+    <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
 
     <p>Merci d'utiliser ECHOES Alert !</p>
 
@@ -230,7 +230,7 @@ Veuillez cliquer sur lien ou copier et coller l'URL suivante
 dans votre navigateur : (Note : assurez-vous de copier l'URL complète,
 y compris toute partie qui pourrait être sur une seconde ligne.)
  
-{3} 
+https://alert.echoes-tech.com/auth/mail/{2}
 
 Merci d'utiliser ECHOES Alert !
 
@@ -247,24 +247,28 @@ http://alert.echoes-tech.com/
     a indiqué qu'il souhaitait choisir un nouveau mot de passe.</p>
 
     <p>Si vous êtes effectivement l'auteur de cette demande, alors vous pouvez
-    choisir un nouveau mot de passe en cliquant sur le lien suivant ou en copiant
-    l'URL dans votre navigateur. Si vous n'avez pas demandé cela, vous pouvez
-    ignorer ce courriel et le jeter en toute sécurité.</p>
+    choisir un nouveau mot de passe en cliquant sur le lien suivant ou en
+    copiant l'URL dans votre navigateur. Si vous n'avez pas demandé cela, vous
+    pouvez ignorer ce courriel et le jeter en toute sécurité.</p>
  
-    <p>Veuillez <a href="{3}">cliquer ici pour choisir un nouveau mot
-    de passe</a> ou copier et coller l'URL suivante dans votre
-    navigateur : <i>(Note : assurez-vous de copier l'URL complète, y
-    compris toute partie qui pourrait être sur une seconde ligne.)</i>
+    <p>
+      Veuillez <a href="https://alert.echoes-tech.com/auth/mail/{2}">cliquer
+      ici pour choisir un nouveau mot de passe</a> ou copier et coller l'URL
+      suivante dans votre navigateur : <i>(Note : assurez-vous de copier l'URL
+      complète, y compris toute partie qui pourrait être sur une seconde ligne.
+      )</i>
     </p>
- 
-    <b>{3}</b>
+
+    <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
 
     <p>Merci d'utiliser ECHOES Alert !</p>
 
     <p>
         L'équipe ECHOES Alert.
         <br />
-        <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">http://alert.echoes-tech.com/</a>
+        <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">
+          http://alert.echoes-tech.com/
+        </a>
     </p>
 
     <p><i>© 2012, ECHOES Technologies</i></p>

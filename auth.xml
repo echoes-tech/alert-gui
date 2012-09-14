@@ -409,7 +409,7 @@ Please copy and paste the following URL into your browser: (Note: be
 sure to copy the entire URL, including any part of it which goes onto
 a second line.)
 
-{3}
+https://alert.echoes-tech.com/auth/mail/{2}
       
 Thank you for using ECHOES Alert!
 
@@ -428,12 +428,12 @@ http://alert.echoes-tech.com/
     account by clicking on the following link or copying the URL into
     your browser.</p>
  
-    <p>Please <a href="{3}">click here to confirm</a> your
+    <p>Please <a href="https://alert.echoes-tech.com/auth/mail/{2}">click here to confirm</a> your
     registration or copy and paste the following URL into your
     browser: <i>(Note: be sure to copy the entire URL, including any
     part of it which goes onto a second line.)</i></p>
     
-    <b>{3}</b>
+    <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
 
     <p>Thank you for using ECHOES Alert!</p>
 
@@ -463,7 +463,7 @@ Please copy and paste the following URL into your browser: (Note: be
 sure to copy the entire URL, including any part of it which goes onto
 a second line.)
  
-{3} 
+https://alert.echoes-tech.com/auth/mail/{2} 
       
 Thank you for using ECHOES Alert!
 
@@ -485,12 +485,12 @@ http://alert.echoes-tech.com/
     didn't request this, you can safely ignore and discard this
     email.</p>
  
-    <p>Please <a href="{3}">click here to choose a new password</a> or
+    <p>Please <a href="https://alert.echoes-tech.com/auth/mail/{2}">click here to choose a new password</a> or
     copy and paste the following URL into your browser: <i>(Note: be
     sure to copy the entire URL, including any part of it which goes
     onto a second line.)</i></p>
     
-    <b>{3}</b>
+    <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
 
     <p>Thank you for using ECHOES Alert!</p>
 

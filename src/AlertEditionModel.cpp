@@ -44,7 +44,7 @@ void AlertEditionModel::setView(User *user)
 void AlertEditionModel::reset()
 {
     addField(ThresholdOperator, Wt::WString::tr("Alert.user.edition.threshold-operator"));
-    addField(ThresholdValue, Wt::WString::tr("Alert.user.edition.threshold-value"));
+    addField(ThresholdValue, Wt::WString::tr("Alert.alert.threshold-value"));
     addField(Snooze, Wt::WString::tr("Alert.user.edition.snooze"));
     
 }
@@ -62,8 +62,16 @@ bool AlertEditionModel::validateField(Field field)
 
     bool valid = true;
     Wt::WString error;
-
-    valid = true;
+    
+    if (field == AlertEditionModel::ThresholdValue)
+    {
+        error = validateThresholdValue(valueText(field));
+        valid = error.empty();
+    }
+    else
+    {
+        valid = true;
+    }
 
     if (valid)
         setValid(field);
@@ -73,6 +81,27 @@ bool AlertEditionModel::validateField(Field field)
     return validation(field).state() == Wt::WValidator::Valid;
 }
 
+Wt::WString AlertEditionModel::validateThresholdValue(Wt::WString stringToValidate) const
+{
+    Wt::WString res = Wt::WString::Empty;
+    if (stringToValidate.toUTF8().length() > 0)
+    {    
+        try 
+        {
+            double x = boost::lexical_cast<double>(stringToValidate); // double could be anything with >> operator.
+        }
+        catch(boost::bad_lexical_cast &) 
+        { 
+            res = Wt::WString::tr("Alert.alert.NaN");
+        }
+    }
+    else 
+    {
+        res = Wt::WString::tr("Alert.user.edition.string-tooshort");
+    }
+    return res;
+  
+}
 
 Wt::WString AlertEditionModel::validateString(Wt::WString stringToValidate) const
 {

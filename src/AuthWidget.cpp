@@ -68,6 +68,8 @@ login_(login)
 
 void AuthWidget::init()
 {
+    WApplication *app = WApplication::instance();
+    app->messageResourceBundle().use("auth", false);
     registrationModel_ = 0;
     registrationEnabled_ = false;
     created_ = false;
@@ -107,7 +109,6 @@ bool AuthWidget::handleRegistrationPath(const std::string& path)
     if (!basePath_.empty())
     {
         WApplication *app = WApplication::instance();
-        app->messageResourceBundle().use("auth", false);
         if (app->internalPathMatches(basePath_))
         {
             std::string ap = app->internalSubPath(basePath_);

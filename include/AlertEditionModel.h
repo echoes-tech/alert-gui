@@ -38,6 +38,7 @@ private:
     void setView(User *user = NULL);
     virtual bool isVisible(Field field) const;
     
+    Wt::WString validateThresholdValue(Wt::WString stringToValidate) const;
     Wt::WString validateString(Wt::WString stringToValidate) const;
     void setValid(Field field);
 };

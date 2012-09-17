@@ -46,6 +46,7 @@
                    displayName="Resource Files"
                    projectFiles="true">
       <itemPath>alert.xml</itemPath>
+      <itemPath>alert_fr.xml</itemPath>
       <itemPath>auth.xml</itemPath>
       <itemPath>auth_fr.xml</itemPath>
       <itemPath>config.xml</itemPath>

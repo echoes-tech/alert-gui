@@ -41,13 +41,9 @@ public:
    * registration.
    */
   AlertEditionModel *model() const { return model_; }
-
-//  void companyClick();
-//  void individualClick();
-//  void associationClick();
   
-  void checkMediaEmail();
-  void checkMediaSms();
+  void checkThresholdValue();
+  void checkSnoozeValue();
   
   /*! \brief Updates the user-interface.
    *

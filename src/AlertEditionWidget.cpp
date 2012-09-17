@@ -39,7 +39,7 @@
 
 
 AlertEditionWidget::AlertEditionWidget()
-: Wt::WTemplateFormView(Wt::WString::tr("Alert.Alert.Edition.template"))
+: Wt::WTemplateFormView(Wt::WString::tr("Alert.alert.Edition.template"))
 {
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("alert",false);
@@ -101,29 +101,31 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(AlertEditionModel::Field f
     else if (field == AlertEditionModel::ThresholdValue)
     {
         result = new Wt::WLineEdit();
+        result->changed().connect(boost::bind(&AlertEditionWidget::checkThresholdValue, this));
     }
     else if (field == AlertEditionModel::Snooze)
     {
-        result = new Wt::WSpinBox();
-        result->setSelectable(false);
-        result->setAttributeValue("step","10");
-        result->setAttributeValue("min","60");
-        result->setAttributeValue("max","259200");
-        result->setAttributeValue("value","60");
+        result = new Wt::WLineEdit();
+        result->changed().connect(boost::bind(&AlertEditionWidget::checkSnoozeValue, this));
+//        result->setSelectable(false);
+//        result->setAttributeValue("step","10");
+//        result->setAttributeValue("min","60");
+//        result->setAttributeValue("max","259200");
+//        result->setAttributeValue("value","60");
     }
 
     return result;
 }
 
-void AlertEditionWidget::checkMediaEmail()
+void AlertEditionWidget::checkThresholdValue()
 {
-//    updateModelField(model_, UserEditionModel::MediaEMail);
-//    model_->validateField(UserEditionModel::MediaEMail);
-//    model_->setValidated(UserEditionModel::MediaEMail, false);
-//    update();
+    updateModelField(model_, AlertEditionModel::ThresholdValue);
+    model_->validateField(AlertEditionModel::ThresholdValue);
+    model_->setValidated(AlertEditionModel::ThresholdValue, false);
+    update();
 }
 
-void AlertEditionWidget::checkMediaSms()
+void AlertEditionWidget::checkSnoozeValue()
 {
 //    updateModelField(model_, UserEditionModel::MediaSMS);
 //    model_->validateField(UserEditionModel::MediaSMS);
@@ -517,9 +519,12 @@ void AlertEditionWidget::addMedia()
 
 void AlertEditionWidget::deleteMedia()
 {
-    int row = (*(userMediaDestinationTableView->selectedIndexes().begin())).row();
-    const Wt::WModelIndex index = userMediaDestinationTableView->rootIndex();
-    dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->removeRow(row,index);
+    if (userMediaDestinationTableView->selectedIndexes().size() > 0)
+    {
+        int row = (*(userMediaDestinationTableView->selectedIndexes().begin())).row();
+        const Wt::WModelIndex index = userMediaDestinationTableView->rootIndex();
+        dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->removeRow(row,index);
+    }
 }
 
 

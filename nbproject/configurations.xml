@@ -55,6 +55,7 @@
       <itemPath>resources/form.css</itemPath>
       <itemPath>probe.xml</itemPath>
       <itemPath>user.xml</itemPath>
+      <itemPath>user_fr.xml</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -86,6 +87,8 @@
           <itemPath>src/WebUtils.cpp</itemPath>
         </logicalFolder>
         <itemPath>src/EchoesHome.cpp</itemPath>
+        <itemPath>src/Enums.cpp</itemPath>
+        <itemPath>include/Enums.h</itemPath>
       </logicalFolder>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>

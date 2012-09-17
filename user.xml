@@ -35,6 +35,12 @@
     
     <message id="Alert.user.edition.string-tooshort">Too short</message>
     
+    <message id="Alert.user.dependant-alert-exists-title">Media in use !</message>
+    <message id="Alert.user.dependant-alert-exists">
+        This media is used by an alert. <br />
+        You have to delete this alert to be able to delete this media.
+    </message>
+    
     <message id="Alert.user.edition.valid">Valid</message>
     
   <!-- templates -->

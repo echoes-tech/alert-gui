@@ -7,14 +7,33 @@
 
 #ifndef USEREDITIONWIDGET_H
 #define	USEREDITIONWIDGET_H
-
+#include "tools/Session.h"
 #include <Wt/WButtonGroup>
 #include <Wt/WRadioButton>
 #include <Wt/WGroupBox>
 #include <Wt/WBreak>
 #include "WTemplateFormView"
-#include "UserEditionModel.h"
+#include "AuthWidget.h"
 
+#include "Wt/WAnchor"
+#include "Wt/WApplication"
+#include "Wt/WContainerWidget"
+#include "Wt/WDialog"
+#include "Wt/WImage"
+#include "Wt/WLineEdit"
+#include "Wt/WPushButton"
+#include "Wt/WText"
+
+#include <Wt/WComboBox>
+#include <Wt/WSelectionBox>
+#include <Wt/WStringListModel>
+
+
+
+#include "user/User.h"
+
+#include "UserEditionModel.h"
+#include <memory>
 
 class AuthWidget;
 class Login;
@@ -103,24 +122,8 @@ protected:
    * RegistrationModel::doRegister(). If registration was successful,
    * it calls registerUserDetails() and subsequently logs the user in.
    */
-  virtual void doRegister();
-
-  /*! \brief Closes the registration widget.
-   *
-   * The default implementation simply deletes the widget.
-   */
+  
   virtual void close();
-
-  /*! \brief Registers more user information.
-   *
-   * This method is called when a new user has been successfully
-   * registered.
-   *
-   * You may want to reimplement this method if you've added other
-   * information to the registration form which needs to be annotated
-   * to the user.
-   */
-  virtual void registerUserDetails(User& user);
 
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
 

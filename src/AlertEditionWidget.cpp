@@ -380,7 +380,7 @@ void AlertEditionWidget::updateServerSelectionBox(int serverId)
 
 void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
 {
-        
+    Wt::log("info") << "[Plg Id] " << pluginId;
         Wt::Dbo::Query<Wt::Dbo::ptr<Information2> > queryInformation;
         std::string queryStringInfos = "SELECT inf FROM \"T_INFORMATION_INF\" inf WHERE \"PLG_ID_PLG_ID\" = ? AND \"SRC_ID\" IN (1,3)";
         Wt::Dbo::collection<Wt::Dbo::ptr<Information2> > infos;
@@ -425,7 +425,7 @@ void AlertEditionWidget::updateApplicationSelectionBox(int astId)
                 Wt::log("info") << "plugin : " << (*j).get()->name;
                 slmApplication->insertString(idx,(*j).get()->name);
                 //CHECK: idPlugin i ?? TBCommented
-                idPlugin = (*i).id();
+                idPlugin = (*j).id();
                 this->mapPluginIdSboxRow[idx] = idPlugin;
                 idx++;
             }

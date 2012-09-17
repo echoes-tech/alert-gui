@@ -122,7 +122,7 @@
   <message id="Wt.Auth.repeat-password">Confirmez-le</message>
   <message id="Wt.Auth.repeat-password-info">Re-saisissez le mot de passe</message>
   <message id="Wt.Auth.email-invalid">Adresse e-mail invalide</message>
-  <message id="Wt.Auth.email-exists">E-mail déjà enregistrée</message>
+  <message id="Wt.Auth.email-exists">E-mail déjà enregistré</message>
   <message id="Wt.Auth.oauth">Votre compte</message>
   <message id="Wt.Auth.oauth-info">Choisissez l'un de vos comptes</message>
   <message id="Wt.Auth.user-name-exists">Utilisateur déjà existant</message>
@@ -213,7 +213,7 @@ http://alert.echoes-tech.com/
     <p><i>© 2012, ECHOES Technologies</i></p>
   </message>
 
-  <message id="Wt.Auth.lostpasswordmail.subject">[ECHOES Alerŧ] Instructions de récupération de mot de passe</message>
+  <message id="Wt.Auth.lostpasswordmail.subject">[ECHOES Alert] Instructions de récupération de mot de passe</message>
 
   <message id="Wt.Auth.lostpasswordmail.body">
 Bonjour {1},

@@ -16,6 +16,11 @@
     <message id="Alert.user.edition.save-button">Enregistrer</message>
     <message id="Alert.user.edition.cancel-button">Annuler</message>
     
+    <message id="Alert.user.dependant-alert-exists-title">Média utilisé !</message>
+    <message id="Alert.user.dependant-alert-exists">
+        Ce média est utilisé par une alerte. <br />
+        Vous devez supprimer cette alerte pour pouvoir supprimer ce média.
+    </message>
   <message id="Alert.user.edition.string-tooshort">
     Trop court
   </message>

@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
     
-      <message id="welcome-text">Welcome on alpha version of ECHOES Alert !
+    <message id="welcome-text">
+        <p>Welcome on alpha version of ECHOES Alert !</p>
 
-At this time, you can :
+        <p>At this time, you can :</p>
 
-* Create an account (but it seems to be done)
-* Order you first probe
-* Define your alert medias (cell phones, mail addresses)
-* Define and activate your alerts about :
-  * Memory usage (KB)
-  * Load average
+<ul>
+    <li>Create an account (but it seems to be done)</li>
+    <li>Order you first probe</li>
+    <li>Define your alert medias (cell phones, mail addresses)</li>
+    <li>Define and activate your alerts about :
+        <ul>
+            <li>Memory usage (KB)</li>
+            <li>Load average</li>
+        </ul>
+    </li>
+</ul>
 
-This product evolves almost every day.
-We will keep you informed about the new features through this page.
+<p>This product evolves almost every day.</p>
+<p>We will keep you informed about the new features through this page.</p>
 
-The ECHOES Alert team.</message>
+<p>The ECHOES Alert team.</p></message>
 
   <!-- BaseAuth, PasswordAuth and OAuth models -->
 

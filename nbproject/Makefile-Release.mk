@@ -46,6 +46,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/AlertEditionModel.o \
 	${OBJECTDIR}/src/FormBaseModel.o \
 	${OBJECTDIR}/src/RegistrationModel.o \
+	${OBJECTDIR}/src/Enums.o \
 	${OBJECTDIR}/src/AuthWidget.o \
 	${OBJECTDIR}/src/WFormModel.o \
 	${OBJECTDIR}/src/DomElement.o \
@@ -134,6 +135,11 @@ ${OBJECTDIR}/src/RegistrationModel.o: src/RegistrationModel.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/RegistrationModel.o src/RegistrationModel.cpp
+
+${OBJECTDIR}/src/Enums.o: src/Enums.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Enums.o src/Enums.cpp
 
 ${OBJECTDIR}/src/AuthWidget.o: src/AuthWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

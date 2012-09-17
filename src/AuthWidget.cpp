@@ -95,7 +95,6 @@ void AuthWidget::setRegistrationEnabled(bool enabled)
 void AuthWidget::setInternalBasePath(const std::string& basePath)
 {
     basePath_ = Utils::append(Utils::prepend(basePath, '/'), '/');
-    ;
 }
 
 void AuthWidget::onPathChange(const std::string& path)
@@ -108,7 +107,7 @@ bool AuthWidget::handleRegistrationPath(const std::string& path)
     if (!basePath_.empty())
     {
         WApplication *app = WApplication::instance();
-
+        app->messageResourceBundle().use("auth", false);
         if (app->internalPathMatches(basePath_))
         {
             std::string ap = app->internalSubPath(basePath_);

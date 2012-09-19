@@ -42,6 +42,7 @@ public:
    */
   AlertEditionModel *model() const { return model_; }
   
+  void checkThresholdOperator();
   void checkThresholdValue();
   void checkSnoozeValue();
   

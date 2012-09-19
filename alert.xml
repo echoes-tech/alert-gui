@@ -4,7 +4,7 @@
   <!-- AlertWidget -->
 
   <message id="Alert.alert.alert-form-title">Alerts</message>
-  <message id="Alert.alert.alert-form-info"></message>
+  <message id="Alert.alert.alert-form-info">This page gives you the possibility to create an alert</message>
 
   <message id="Alert.alert.asset-label">Server</message>
   <message id="Alert.alert.asset-info">Choose your server</message>
@@ -18,8 +18,8 @@
   <message id="Alert.alert.threshold-operator-label">Operator</message>
   <message id="Alert.alert.threshold-operator-info">Choose your operator</message>
 
-  <message id="threshold-value-label">Value</message>
-  <message id="Alert.alert.threshold-value">Choose your value</message>
+  <message id="Alert.alert.threshold-value-label">Value</message>
+  <message id="Alert.alert.threshold-value-info">Choose your value</message>
 
   <message id="Alert.alert.user-label">Recipient</message>
   <message id="Alert.alert.user-info">Choose an alert recipient</message>
@@ -31,13 +31,44 @@
   <message id="Alert.alert.media-value-info">Choose an alert registered media</message>
 
   <message id="Alert.alert.snooze-label">Snooze</message>
-  <message id="Alert.alert.snooze-info">Choose delay before the next alert</message>
+  <message id="Alert.alert.snooze-info">Choose delay between two alerts</message>
 
-  <message id="Alert.alert.edition.add-button">Add</message>
+  <message id="Alert.alert.add-media-button">Add to the list</message>
+  <message id="Alert.alert.delete-media-button">Delete from the list</message>
+
+  <message id="Alert.alert.edition.add-button">Add this alert</message>
   <message id="Alert.alert.edition.delete-button">Delete</message>
   
-  <message id="Alert.alert.NaN">Not a number</message>
+  <message id="Alert.alert.NaN"><span style="color:red">Not a number</span></message>
+  <message id="Alert.alert.snooze-too-small"><span style="color:red">Less than 60</span></message>
+  <message id="Alert.alert.string-tooshort"><span style="color:red">Must not be empty</span></message>
+  <message id="Alert.alert.operator-empty"><span style="color:red">Must not be empty</span></message>
   
+  
+  <message id="Alert.alert.operator.lt">Less</message>
+  <message id="Alert.alert.operator.le">Less or equal</message>
+  <message id="Alert.alert.operator.eq">Equal</message>
+  <message id="Alert.alert.operator.ne">Not equal</message>
+  <message id="Alert.alert.operator.ge">Greater or equal</message>
+  <message id="Alert.alert.operator.gt">Greater</message>
+  
+  <message id="Alert.alert.information-missing-title">Missing information</message>
+  <message id="Alert.alert.information-missing">You didn't choose the information to be monitored</message>
+  
+  <message id="Alert.alert.media-missing-title">Missing media</message>
+  <message id="Alert.alert.media-missing">
+    You didn't choose a destination media. <br />
+    You have to add a least one in the list.
+  </message>
+  
+  <message id="Alert.alert.media-selection-missing-title">Missing media</message>
+  <message id="Alert.alert.media-selection-missing">You didn't select the media to be added</message>
+  
+  <message id="Alert.alert.database-error-title">Database error</message>
+  <message id="Alert.alert.database-error">Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
+  
+  <message id="Alert.alert.alert-created-title">Alert created</message>
+  <message id="Alert.alert.alert-created">Your alert was successfully created !</message>
 
   <!-- templates -->
 
@@ -45,6 +76,7 @@
     <div class="Alert-form">
       <h2>${tr:Alert.alert.alert-form-title}</h2>
       <p>${tr:Alert.alert.alert-form-info}</p>
+      <div class = "clear"></div>
       
       <div class="Alert-fields Alert-sbox float-left">    
         <label for="${id:asset}">${tr:Alert.alert.asset-label}
@@ -62,6 +94,8 @@
         ${application-sbox}
       </div>
             
+      <div class="clear"></div>
+            
       <div class="Alert-fields Alert-sbox float-left">
         <label for="${id:information}">${tr:Alert.alert.information-label}
            <span class="Alert-info">${tr:Alert.alert.information-info}</span>
@@ -69,24 +103,25 @@
         <br />
         ${information-sbox}
       </div>
-            
-      <div class="clear"></div>
-      <hr />
 
-      <div class="Alert-fields float-left">
-        <label for="${id:threshold-operator}">${tr:Alert.alert.threshold-operator-label}
-            <span class="Alert-info">${tr:Alert.alert.threshold-operator-info}</span>
-        </label>
-        ${threshold-operator}
-      </div>
-      
-      <div class="Alert-fields float-left">
-        ${<if:threshold-value>}
-            <label for="${id:threshold-value}">${threshold-value-label}
-              ${threshold-value-info class="Alert-info"}
-            </label>
-            ${threshold-value}
-        ${</if:threshold-value>}   
+      <div class="Alert-fields one-field-large float-left">
+        <div class="float-left">
+              ${<if:threshold-operator>}
+                  <label for="${id:threshold-operator}">${threshold-operator-label}
+                      ${threshold-operator-info class="Alert-info"}
+                  </label>
+                  ${threshold-operator}
+              ${</if:threshold-operator>}  
+        </div>
+
+        <div class="float-left">
+          ${<if:threshold-value>}
+              <label for="${id:threshold-value}">${threshold-value-label}
+                ${threshold-value-info class="Alert-info"}
+              </label>
+              ${threshold-value}
+          ${</if:threshold-value>}   
+        </div>
       </div>
          
       <div class = "clear"></div>
@@ -107,6 +142,8 @@
         <br />
         ${media-sbox}
       </div>
+      
+      <div class = "clear"></div>
             
       <div class="Alert-fields Alert-sbox float-left">
         <label>${tr:Alert.alert.media-value-label}
@@ -115,26 +152,34 @@
         <br />
         ${media-value-sbox}
       </div>
+      
             
-      <div class="Alert-fields float-left">
-        <label for="${id:snooze}">${tr:Alert.alert.snooze-label}
-           <span class="Alert-info">${tr:Alert.alert.snooze-info}</span>
-        </label>
-        <div class = "clear"></div>
-        ${snooze}
-            
-        <div class="Alert-buttons" style="float:right;">
-          ${add-button-media}
+      <div class="Alert-fields one-field-large float-left">      
+        <div class="float-left">
+          ${<if:snooze>}
+              <label for="${id:snooze}">${snooze-label}
+                 ${snooze-info class="Alert-info"}
+              </label>
+              <div class = "clear"></div>
+              ${snooze}
+          ${</if:snooze>}
+
+          <div class="Alert-buttons float-left">
+            ${add-button-media}
+          </div>
         </div>
       </div>
 
+      <div class = "clear"></div>
+      
+      <div class="Alert-fields">
+        <div class="float-left">
+          ${user-media-destination}
+        </div>
 
-      <div class="Alert-fields float-left">
-        ${user-media-destination}
-      </div>
-
-      <div class="Alert-buttons">
-        ${delete-button-media}
+        <div class="Alert-buttons float-left">
+          ${delete-button-media}
+        </div>
       </div>
 
       <hr />

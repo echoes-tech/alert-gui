@@ -27,6 +27,7 @@
 #include <Wt/WSpinBox>
 #include <Wt/WStandardItem>
 #include <Wt/WStandardItemModel>
+#include <Wt/WMessageBox>
 
 
 #include "tools/Session.h"
@@ -85,9 +86,11 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(AlertEditionModel::Field f
             Wt::Dbo::Transaction transaction(*session);
             alertCriterias = session->find<AlertCriteria>();
             int idx = 0;
+            Wt::WString tempString;
             for (Wt::Dbo::collection<Wt::Dbo::ptr<AlertCriteria> >::const_iterator i = alertCriterias.begin(); i != alertCriterias.end(); ++i)
             {
-                slmOperators->insertString(idx,(*i).get()->name);
+                tempString = "Alert.alert.operator." + (*i).get()->name;
+                slmOperators->insertString(idx,Wt::WString::tr(tempString.toUTF8()));
                 long long idAlertCriteria = (*i).id();
                 this->mapAlertCriteriaIdSboxRow[idx] = idAlertCriteria;
                 idx++;
@@ -96,7 +99,7 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(AlertEditionModel::Field f
         comboAlertCrit->setModel(slmOperators);
         
         result = comboAlertCrit;
-//        result->changed().connect(boost::bind(&RegistrationWidget::checkOrganization, this));
+        result->changed().connect(boost::bind(&AlertEditionWidget::checkThresholdOperator, this));
     }
     else if (field == AlertEditionModel::ThresholdValue)
     {
@@ -107,14 +110,18 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(AlertEditionModel::Field f
     {
         result = new Wt::WLineEdit();
         result->changed().connect(boost::bind(&AlertEditionWidget::checkSnoozeValue, this));
-//        result->setSelectable(false);
-//        result->setAttributeValue("step","10");
-//        result->setAttributeValue("min","60");
-//        result->setAttributeValue("max","259200");
-//        result->setAttributeValue("value","60");
+
     }
 
     return result;
+}
+
+void AlertEditionWidget::checkThresholdOperator()
+{
+    updateModelField(model_, AlertEditionModel::ThresholdOperator);
+    model_->validateField(AlertEditionModel::ThresholdOperator);
+    model_->setValidated(AlertEditionModel::ThresholdOperator, false);
+    update();
 }
 
 void AlertEditionWidget::checkThresholdValue()
@@ -127,10 +134,12 @@ void AlertEditionWidget::checkThresholdValue()
 
 void AlertEditionWidget::checkSnoozeValue()
 {
-//    updateModelField(model_, UserEditionModel::MediaSMS);
-//    model_->validateField(UserEditionModel::MediaSMS);
-//    model_->setValidated(UserEditionModel::MediaSMS, false);
-//    update();
+    updateModelField(model_, AlertEditionModel::ThresholdValue);
+    updateModelField(model_, AlertEditionModel::ThresholdOperator);
+    updateModelField(model_, AlertEditionModel::Snooze);
+    model_->validateField(AlertEditionModel::Snooze);
+    model_->setValidated(AlertEditionModel::Snooze, false);
+    update();
 }
 
 void AlertEditionWidget::update()
@@ -179,8 +188,8 @@ void AlertEditionWidget::update()
         bindWidget("media-value-sbox", mediaValueSelectionBox);
         
         
-        Wt::WPushButton *addButtonMedia = new Wt::WPushButton(tr("Alert.alert.edition.add-button"));
-        Wt::WPushButton *deleteButtonMedia = new Wt::WPushButton(tr("Alert.alert.edition.delete-button"));
+        Wt::WPushButton *addButtonMedia = new Wt::WPushButton(tr("Alert.alert.add-media-button"));
+        Wt::WPushButton *deleteButtonMedia = new Wt::WPushButton(tr("Alert.alert.delete-media-button"));
 
         bindWidget("add-button-media", addButtonMedia);
         bindWidget("delete-button-media", deleteButtonMedia);
@@ -189,10 +198,10 @@ void AlertEditionWidget::update()
         
         
         Wt::WStandardItemModel *sim = new Wt::WStandardItemModel(0, 4, this);
-        const std::string userTitle = "User";
-        const std::string mediaTitle = "Media";
-        const std::string valueTitle = "Value";
-        const std::string snoozeTitle = "Snooze";
+        const std::string userTitle = Wt::WString::tr("Alert.alert.user").toUTF8();
+        const std::string mediaTitle = Wt::WString::tr("Alert.alert.media").toUTF8();
+        const std::string valueTitle = Wt::WString::tr("Alert.alert.media-value").toUTF8();
+        const std::string snoozeTitle = Wt::WString::tr("Alert.alert.snooze").toUTF8();
         sim->setHeaderData(0,boost::any(userTitle));
         sim->setHeaderData(1,boost::any(mediaTitle));
         sim->setHeaderData(2,boost::any(valueTitle));
@@ -459,8 +468,15 @@ Wt::WStringListModel *AlertEditionWidget::getMediasForCurrentUser(int mediaType)
 
 void AlertEditionWidget::addMedia()
 {
-    if (!((userSelectionBox->currentIndex() != -1) || (mediaSelectionBox->currentIndex() != -1) || (mediaValueSelectionBox->currentIndex() != -1)))
+    if ((userSelectionBox->currentIndex() == -1) || (mediaSelectionBox->currentIndex() == -1) || (mediaValueSelectionBox->currentIndex() == -1))
     {
+        Wt::WMessageBox::show(tr("Alert.alert.media-selection-missing-title"),tr("Alert.alert.media-selection-missing"),Wt::Ok);
+        return;
+    }
+    checkSnoozeValue();
+    if (!(model_->validateField(AlertEditionModel::Snooze)))
+    {
+        Wt::log("info") << "Snooze value incorrect";
         return;
     }
     
@@ -534,17 +550,27 @@ void AlertEditionWidget::deleteMedia()
 bool AlertEditionWidget::validate()
 {
     return model_->validate();
+    update();
 }
 
 
 void AlertEditionWidget::addAlert()
 {
-    if (!((serverSelectionBox->currentIndex() != -1) || (applicationSelectionBox->currentIndex() != -1) || (informationSelectionBox->currentIndex() != -1)))
+    if (((serverSelectionBox->currentIndex() == -1) || (applicationSelectionBox->currentIndex() == -1) || (informationSelectionBox->currentIndex() == -1)))
     {
+        Wt::WMessageBox::show(tr("Alert.alert.information-missing-title"),tr("Alert.alert.information-missing"),Wt::Ok);
         return;
     }
-    if (!((userSelectionBox->currentIndex() != -1) || (mediaSelectionBox->currentIndex() != -1) || (mediaValueSelectionBox->currentIndex() != -1)))
+    if (userMediaDestinationTableView->model()->rowCount() < 1)
     {
+        Wt::WMessageBox::show(tr("Alert.alert.media-missing-title"),tr("Alert.alert.media-missing"),Wt::Ok);
+        return;
+    }
+    
+    if (!validate())
+    {
+        checkThresholdOperator();
+        checkThresholdValue();
         return;
     }
     
@@ -600,7 +626,17 @@ void AlertEditionWidget::addAlert()
     catch (Wt::Dbo::Exception e)
     {
         Wt::log("error") << "[AlertEditionWidget] " << e.what();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+        return;
     }
+    
+    Wt::WMessageBox::show(tr("Alert.alert.alert-created-title"),tr("Alert.alert.alert-created"),Wt::Ok);
+    
+    created_ = false;
+    model_->reset();
+    //TODO: dirty, do it better
+    createFormWidget(AlertEditionModel::ThresholdOperator);
+    update();
             
 }
 

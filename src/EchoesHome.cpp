@@ -10,9 +10,10 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent):
     adminPageTabs(0),
     monitoringPage(0)
     {
-//    std::string Utils::connection = "hostaddr=92.243.5.246 port=5432 dbname=echoes user=echoes password=9Mw5#vvdC56Gzs#goD3M";
+//    std::string Utils::connection = "hostaddr=172.16.3.101 port=5432 dbname=echoes user=echoes password=toto";
+            session = new Session("hostaddr=172.16.3.101 port=5432 dbname=echoes user=echoes password=toto");
 //        session = new Session("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto");
-        session = new Session("hostaddr=92.243.5.246 port=5432 dbname=echoes user=echoes password=9Mw5#vvdC56Gzs#goD3M");
+//        session = new Session("hostaddr=92.243.5.246 port=5432 dbname=echoes user=echoes password=9Mw5#vvdC56Gzs#goD3M");
         this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
         
         try 
@@ -92,35 +93,38 @@ void EchoesHome::setLinks()
 Wt::WPanel* EchoesHome::initMonitoringWidget()
 {
     Wt::WPanel *res = new Wt::WPanel();
-//    this->mainStack->addWidget(res);
-//    Wt::WGroupBox * groupBox = new Wt::WGroupBox("Alert sent list");
-//    Wt::Dbo::QueryModel<std::vector> *qm = new Wt::Dbo::QueryModel<std::vector>();
-//    std::string queryString = "SELECT ale.\"ALE_NAME\" \"NAME\", mev.\"MEV_VALUE\" \"VALUE\", atr.\"ATR_SEND_DATE\" \"DATE\" FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_VALUE_MEV\" mev "
-//            " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
-//            " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
-//            " AND mev.\"MEV_USR_USR_ID\" = ?";
-//    
-//    Wt::WTableView *tview = new Wt::WTableView(groupBox);
-//    {
-//        Wt::Dbo::Transaction transaction(*(this->session));
-//        Wt::Dbo::Query<std::vector,Wt::Dbo::DynamicBinding> q = this->session->query<std::vector,Wt::Dbo::DynamicBinding>(queryString).bind(session->user().id());
-//        qm->setQuery(q, false);
-//        qm->addColumn("NAME", "Name", Wt::ItemIsSelectable);
-//        qm->addColumn("VALUE", "Value", Wt::ItemIsSelectable);
-//        qm->addColumn("DATE", "Date", Wt::ItemIsSelectable);
-//        tview->setModel(qm)
-//    }    
-//    
-//    
-//    res->setCentralWidget(groupBox);
+    this->mainStack->addWidget(res);
+    Wt::WGroupBox * groupBox = new Wt::WGroupBox("Alert sent list");
+    Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > > *qm = new Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > >();
+    std::string queryString = "SELECT ale, mev, atr FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_VALUE_MEV\" mev "
+            " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
+            " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
+            " AND mev.\"MEV_USR_USR_ID\" = ?";
+    
+    Wt::WTableView *tview = new Wt::WTableView(groupBox);
+    {
+        Wt::Dbo::Transaction transaction(*(this->session));
+        Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding> q = this->session->query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding>(queryString).bind(session->user().id());
+        qm->setQuery(q, false);
+        qm->addColumn("ALE_NAME", "Name", Wt::ItemIsSelectable);
+        qm->addColumn("MEV_VALUE", "Value", Wt::ItemIsSelectable);
+        qm->addColumn("ATR_SEND_DATE", "Date", Wt::ItemIsSelectable);
+        tview->setModel(qm);
+    }    
+    
+    
+    res->setCentralWidget(groupBox);
     return res;
 }
 
 Wt::WTabWidget* EchoesHome::initAdminWidget()
 {
+    // main widget
     Wt::WTabWidget *res = new Wt::WTabWidget(this);
     this->mainStack->addWidget(res);
     
+    
+    //user list widget
     Wt::WGroupBox * usersGroupBox = new Wt::WGroupBox("Users list");
     
     Wt::Dbo::QueryModel<Wt::Dbo::ptr<User> > *qm = new Wt::Dbo::QueryModel<Wt::Dbo::ptr<User> >();
@@ -140,6 +144,69 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
         tview->setModel(qm);       
     }
     
+    // alert list widget
+    Wt::WGroupBox *alertGroupBox = new Wt::WGroupBox("Alert list");
+    
+    Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>, Wt::Dbo::ptr<AlertCriteria>, Wt::Dbo::ptr<AlertValue> > > *qmAlertList = new Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>, Wt::Dbo::ptr<AlertCriteria>, Wt::Dbo::ptr<AlertValue> > >();
+    
+    Wt::WTableView *tviewAlertList = new Wt::WTableView(alertGroupBox);
+    
+    
+    try        
+    {
+        Wt::Dbo::Transaction transaction(*(this->session));
+        
+        //TODO : don't understand why the two lines below are needed, clean this
+        Wt::Dbo::ptr<User> tempUser = this->session->find<User>().where("\"USR_ID\" = ?").bind(this->session->user().id());
+        Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
+        std::string queryString = "SELECT ale, acr, ava FROM \"T_ALERT_ALE\" ale, \"T_ALERT_VALUE_AVA\" ava, \"T_ALERT_CRITERIA_ACR\" acr WHERE \"ALE_ID\" IN "
+        "("
+            "SELECT \"T_ALERT_ALE_ALE_ID\" FROM \"TJ_MEV_ALE\" WHERE \"T_MEDIA_VALUE_MEV_MEV_ID\" IN "
+            "("
+                "SELECT \"MEV_ID\" FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_USR_USR_ID\" IN "
+                "("
+                    "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user().get()->currentOrganization.id()) + ""
+//                "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = 1 "
+                ")"
+           " )"
+        ") "
+        "AND ale.\"ALE_AVA_AVA_ID\" = ava.\"AVA_ID\" "
+        "AND ava.\"AVA_ACR_ACR_ID\" = acr.\"ACR_ID\" ";
+        Wt::Dbo::Query
+                <
+                    boost::tuple
+                    <
+                        Wt::Dbo::ptr<Alert>,
+                        Wt::Dbo::ptr<AlertCriteria>,
+                        Wt::Dbo::ptr<AlertValue> 
+                    > 
+                    ,Wt::Dbo::DynamicBinding
+                > q = this->session->query
+                <
+                    boost::tuple
+                    <
+                        Wt::Dbo::ptr<Alert>, 
+                        Wt::Dbo::ptr<AlertCriteria>, 
+                        Wt::Dbo::ptr<AlertValue> 
+                    >,Wt::Dbo::DynamicBinding
+                >(queryString);
+        qmAlertList->setQuery(q, false);
+        qmAlertList->addColumn("ALE_NAME", "Alert name", Wt::ItemIsSelectable);
+//        qm->setColumnFlags(0,Wt::ItemIsUserCheckable);
+        qmAlertList->addColumn("ACR_NAME", "Criteria", Wt::ItemIsSelectable);
+        qmAlertList->addColumn("AVA_VALUE", "Alert Value", Wt::ItemIsSelectable);
+
+        tviewAlertList->setSelectionMode(Wt::SingleSelection);
+        tviewAlertList->setModel(qmAlertList);  
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << e.what();
+    }
+    
+    
+    
+    // user edition widget
     uew = new UserEditionWidget();
     {
         Wt::Dbo::Transaction transaction(*(this->session));
@@ -167,6 +234,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     res->addTab(new Wt::WText(tr("welcome-text")), "Bienvenue");
     res->addTab(pdw, "Sondes");
     res->addTab(aew, "Alertes");
+    res->addTab(alertGroupBox, "Liste des alertes");
     res->addTab(usersGroupBox, "Utilisateurs");
     res->addTab(uew, "Medias");
 //    res->addTab(new Wt::WText("<h2>TESTEUH 6</h2>"), "Plugin-store");
@@ -279,7 +347,7 @@ void EchoesHome::onAuthEvent()
     if (this->session->login().loggedIn())
     {
         
-//        this->links->show();
+        this->links->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
     }
     else
@@ -287,6 +355,6 @@ void EchoesHome::onAuthEvent()
         this->mainStack->clear();
         this->adminPageTabs = 0;
         this->monitoringPage = 0;
-//        this->links->hide();
+        this->links->hide();
     }
 }

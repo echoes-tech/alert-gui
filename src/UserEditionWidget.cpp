@@ -192,8 +192,8 @@ void UserEditionWidget::addMedia(UserEditionModel::Field field, int medId, Wt::W
             MediaValue *mev = new MediaValue();
             mev->user= ptrUser;
             mev->media = media;
-            mev->notifEndOfAlert = false;
-            mev->snoozeDuration = 0;
+//            mev->notifEndOfAlert = false;
+//            mev->snoozeDuration = 0;
             mev->value = emailToAdd;
             session->add<MediaValue>(mev);
         }

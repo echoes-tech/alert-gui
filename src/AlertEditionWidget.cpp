@@ -511,26 +511,31 @@ void AlertEditionWidget::addMedia()
     const std::vector<Wt::WStandardItem*> *vectItemFilled = vectItem;
     dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->appendRow(*vectItemFilled);
     
-    MediaValue *mv = new MediaValue();
+    AlertMediaSpecialization *ams = new AlertMediaSpecialization();
+    Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr;
+    try
     {
         Wt::Dbo::Transaction transaction(*session);
-        Wt::Dbo::ptr<Media> mPtr = session->find<Media>().where("\"MED_ID\" = ?").bind(mapMediaIdSboxRow[mediaSelectionBox->currentIndex()]);
-        Wt::Dbo::ptr<User> uPtr = session->find<User>().where("\"USR_ID\" = ?").bind(mapUserIdSboxRow[userSelectionBox->currentIndex()]);
-        mv->media = mPtr;
-        mv->user = uPtr;
-        mv->value = mediaValueTextToDisplay;
-        mv->notifEndOfAlert = false;
-        mv->snoozeDuration = boost::lexical_cast<int,Wt::WString>(snoozeValueToDisplay);
+        Wt::Dbo::ptr<MediaValue> mevPtr = session->find<MediaValue>().where("\"MEV_ID\" = ?").bind(mapMediaValueIdSboxRow[mediaValueSelectionBox->currentIndex()]);
+        ams->snoozeDuration = boost::lexical_cast<int,Wt::WString>(snoozeValueToDisplay);
+        ams->mediaValue = mevPtr;
+        ams->notifEndOfAlert = false;
+        amsPtr = session->add<AlertMediaSpecialization>(ams);
     }
-    
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << "[AlertEditionWidget] " << e.what();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+        return;
+    }
     const Wt::WStandardItem *constItemUserMedia = itemUserMedia;
-    mapMediaValueIdTableView[
+    mapAlertMediaSpecializationIdTableView[
             dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())
                 ->indexFromItem
                 (
                     constItemUserMedia
                 ).row()
-            ] = mapMediaValueIdSboxRow[mediaValueSelectionBox->currentIndex()]; 
+            ] = amsPtr.id(); 
 }
 
 void AlertEditionWidget::deleteMedia()
@@ -539,7 +544,22 @@ void AlertEditionWidget::deleteMedia()
     {
         int row = (*(userMediaDestinationTableView->selectedIndexes().begin())).row();
         const Wt::WModelIndex index = userMediaDestinationTableView->rootIndex();
-        dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->removeRow(row,index);
+        
+        try
+        {
+            Wt::Dbo::Transaction transaction(*session);
+            Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr = session->find<AlertMediaSpecialization>()
+                                    .where("\"AMS_ID\" = ?").bind(mapAlertMediaSpecializationIdTableView[row]);
+            amsPtr.remove();
+            dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->removeRow(row,index);
+            transaction.commit();
+        }
+        catch (Wt::Dbo::Exception e)
+        {
+            Wt::log("error") << "[AlertEditionWidget] " << e.what();
+            Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+            return;
+        }
     }
 }
 
@@ -579,7 +599,6 @@ void AlertEditionWidget::addAlert()
     Wt::WString name = serverSelectionBox->currentText() + " - " + applicationSelectionBox->currentText() + " - " + informationSelectionBox->currentText();
     try
     {
-        std::vector<Wt::Dbo::ptr<MediaValue> > *mvVector = new std::vector<Wt::Dbo::ptr<MediaValue> >();
         Wt::Dbo::Transaction transaction(*session);
         
         
@@ -599,7 +618,6 @@ void AlertEditionWidget::addAlert()
         ava->alertCriteria = critPtr;
         Wt::Dbo::ptr<AlertValue> avaPtr = session->add<AlertValue>(ava);   
         
-//        alert->mediaValues = *mvCollection;
         alert->alertValue = avaPtr;
         alert->threadSleep = 0;
         alert->creaDate = Wt::WDateTime::currentDateTime();
@@ -611,23 +629,14 @@ void AlertEditionWidget::addAlert()
         
         Wt::Dbo::ptr<Alert> alePtr = session->add<Alert>(alert);
         
-        for (std::map<int,long long>::const_iterator i = mapMediaValueIdTableView.begin(); i != mapMediaValueIdTableView.end(); ++i)
-        {
-            Wt::Dbo::ptr<MediaValue> mvPtr = session->find<MediaValue>().where("\"MEV_ID\" = ?").bind((*i).second);
-            mvVector->push_back(mvPtr);
-//            alePtr.modify()->mediaValues.insert(session->add<MediaValue>(&mev));
-        }
-        
-        while (mvVector->size() > 0)
-        {
-            Wt::Dbo::ptr<MediaValue> mvPtr = mvVector->back();
-            alePtr.modify()->mediaValues.insert(mvPtr);
-            mvVector->pop_back();
-        }
-        
         alePtr.modify()->assets.insert(assetPtr);
-        transaction.commit();
         
+        for (std::map<int,long long>::const_iterator i = mapAlertMediaSpecializationIdTableView.begin(); i != mapAlertMediaSpecializationIdTableView.end(); ++i)
+        {
+            Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr = session->find<AlertMediaSpecialization>().where("\"AMS_ID\" = ?").bind((*i).second);
+            amsPtr.modify()->alert = alePtr;
+        }
+        transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
     {

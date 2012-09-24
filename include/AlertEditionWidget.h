@@ -65,7 +65,7 @@ public:
   
   // list of media where the alerts are sent
   Wt::WTableView *userMediaDestinationTableView;
-  std::map<int,long long> mapMediaValueIdTableView;
+  std::map<int,long long> mapAlertMediaSpecializationIdTableView;
   
   Wt::WComboBox *comboAlertCrit;
   

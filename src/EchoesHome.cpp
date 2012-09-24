@@ -90,31 +90,45 @@ void EchoesHome::setLinks()
     this->linksLayout->addWidget(this->monitoringAnchor);
 }
 
-Wt::WPanel* EchoesHome::initMonitoringWidget()
+Wt::WGroupBox* EchoesHome::initMonitoringWidget()
 {
-    Wt::WPanel *res = new Wt::WPanel();
-    this->mainStack->addWidget(res);
-    Wt::WGroupBox * groupBox = new Wt::WGroupBox("Alert sent list");
-    Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > > *qm = new Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > >();
-    std::string queryString = "SELECT ale, mev, atr FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_VALUE_MEV\" mev "
-            " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
-            " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
-            " AND mev.\"MEV_USR_USR_ID\" = ?";
     
-    Wt::WTableView *tview = new Wt::WTableView(groupBox);
+    Wt::WGroupBox * alertGroupBox = new Wt::WGroupBox("Alert sent list");
+    this->mainStack->addWidget(alertGroupBox);
+    
+    Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > > *qm = new Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > >();
+    
+    
+    Wt::WTableView *tview = new Wt::WTableView(alertGroupBox);
+    try
     {
         Wt::Dbo::Transaction transaction(*(this->session));
-        Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding> q = this->session->query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding>(queryString).bind(session->user().id());
+        //TODO : don't understand why the two lines below are needed, clean this
+        Wt::Dbo::ptr<User> tempUser = this->session->find<User>().where("\"USR_ID\" = ?").bind(this->session->user().id());
+        Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
+        std::string queryString = "SELECT ale, mev, atr FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_VALUE_MEV\" mev "
+            " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
+            " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
+            " AND mev.\"MEV_USR_USR_ID\" IN"
+            "("
+                "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user().get()->currentOrganization.id()) + ""
+            ")";
+        Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding> q = this->session->query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding>(queryString);
         qm->setQuery(q, false);
+        qm->addColumn("ATR_SEND_DATE", "Date", Wt::ItemIsSelectable);
         qm->addColumn("ALE_NAME", "Name", Wt::ItemIsSelectable);
         qm->addColumn("MEV_VALUE", "Value", Wt::ItemIsSelectable);
-        qm->addColumn("ATR_SEND_DATE", "Date", Wt::ItemIsSelectable);
+        
         tview->setModel(qm);
-    }    
+    }  
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << e.what();
+    }
     
     
-    res->setCentralWidget(groupBox);
-    return res;
+//    res->setCentralWidget(groupBox);
+    return alertGroupBox;
 }
 
 Wt::WTabWidget* EchoesHome::initAdminWidget()
@@ -130,6 +144,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     Wt::Dbo::QueryModel<Wt::Dbo::ptr<User> > *qm = new Wt::Dbo::QueryModel<Wt::Dbo::ptr<User> >();
     
     Wt::WTableView *tview = new Wt::WTableView(usersGroupBox);
+    try
     {
         Wt::Dbo::Transaction transaction(*(this->session));
         Wt::Dbo::Query<Wt::Dbo::ptr<User>,Wt::Dbo::DynamicBinding> q = this->session->find<User,Wt::Dbo::DynamicBinding>().where("\"USR_ID\" = ?").bind(this->session->user().id());
@@ -142,6 +157,10 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
         tview->setSelectionMode(Wt::SingleSelection);
         tview->doubleClicked().connect(boost::bind(&EchoesHome::openUserEdition, this));
         tview->setModel(qm);       
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << e.what();
     }
     
     // alert list widget
@@ -161,12 +180,11 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
         Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
         std::string queryString = "SELECT ale, acr, ava FROM \"T_ALERT_ALE\" ale, \"T_ALERT_VALUE_AVA\" ava, \"T_ALERT_CRITERIA_ACR\" acr WHERE \"ALE_ID\" IN "
         "("
-            "SELECT \"T_ALERT_ALE_ALE_ID\" FROM \"TJ_MEV_ALE\" WHERE \"T_MEDIA_VALUE_MEV_MEV_ID\" IN "
+            "SELECT \"AMS_ALE_ALE_ID\" FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" WHERE \"AMS_MEV_MEV_ID\" IN "
             "("
                 "SELECT \"MEV_ID\" FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_USR_USR_ID\" IN "
                 "("
                     "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user().get()->currentOrganization.id()) + ""
-//                "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = 1 "
                 ")"
            " )"
         ") "

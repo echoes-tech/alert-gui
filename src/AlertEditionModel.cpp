@@ -98,7 +98,7 @@ Wt::WString AlertEditionModel::validateThresholdValue(Wt::WString stringToValida
     {    
         try 
         {
-            double x = boost::lexical_cast<double>(stringToValidate); // double could be anything with >> operator.
+            boost::lexical_cast<double>(stringToValidate); // double could be anything with >> operator.
         }
         catch(boost::bad_lexical_cast &) 
         { 

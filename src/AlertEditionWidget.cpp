@@ -605,6 +605,9 @@ void AlertEditionWidget::addAlert()
         alert->creaDate = Wt::WDateTime::currentDateTime();
         alert->name = name;
 
+        //asset
+        Wt::Dbo::ptr<Asset> assetPtr = session->find<Asset>().where("\"AST_ID\" = ?").bind(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]);
+        
         
         Wt::Dbo::ptr<Alert> alePtr = session->add<Alert>(alert);
         
@@ -621,6 +624,9 @@ void AlertEditionWidget::addAlert()
             alePtr.modify()->mediaValues.insert(mvPtr);
             mvVector->pop_back();
         }
+        
+        alePtr.modify()->assets.insert(assetPtr);
+        transaction.commit();
         
     }
     catch (Wt::Dbo::Exception e)

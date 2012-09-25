@@ -73,5 +73,11 @@
   
   <message id="Alert.alert.alert-created-title">Alerte créée</message>
   <message id="Alert.alert.alert-created">La création de votre alerte s'est déroulée avec succès !</message>
+  
+  <message id="Alert.alert.alert-already-exists-title">Alert existante</message>
+  <message id="Alert.alert.alert-already-exists">
+    Une alerte concernant cette information existe déjà. <br />
+    Les alertes multiples à propos d'une même information ne sont pas encore implémentées.
+  </message>
 
 </messages>

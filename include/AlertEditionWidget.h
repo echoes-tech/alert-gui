@@ -60,7 +60,7 @@ public:
   Wt::WSelectionBox *serverSelectionBox;
   std::map<int,long long> mapPluginIdSboxRow;
   Wt::WSelectionBox *applicationSelectionBox;
-  std::map<int,InformationId> mapInformationNameSboxRow;
+  std::map<int,InformationId> mapInformationIdSboxRow;
   Wt::WSelectionBox *informationSelectionBox;
   
   // list of media where the alerts are sent
@@ -134,15 +134,6 @@ private:
   Wt::WGroupBox *organizationContainer;
   Wt::WButtonGroup *organizationGroup;
 
-//  void checkLoginName();
-//  void checkFirstName();
-//  void checkLastName();
-//  void checkOrganization();
-//  void checkPassword();
-//  void checkPassword2();
-//  void confirmIsYou();
-//  void confirmedIsYou();
-//  void oAuthDone(OAuthProcess *oauth, const Identity& identity);
 };
 
 

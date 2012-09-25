@@ -403,13 +403,12 @@ void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
            
         
             int idx = 0;
-            for (Wt::Dbo::collection<Wt::Dbo::ptr<Information2> >::const_iterator k = infos.begin(); k != infos.end(); ++k)
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<Information2> >::const_iterator k = infos.begin(); k != infos.end(); k++)
             {
-                const Information2 *info = (*k).get();
-                Wt::log("info") << idx << " : " << (*k).id() ;
-                slmInformation->insertString(idx,info->name);
-                InformationId infId(info->pk.search, info->pk.subSearchNumber);
-                this->mapInformationNameSboxRow[idx] = infId;
+                slmInformation->insertString(idx,k->get()->name);
+                InformationId infId(k->get()->pk.search, k->get()->pk.subSearchNumber);
+                
+                this->mapInformationIdSboxRow[idx] = infId;
                 idx++;
             }
         
@@ -581,6 +580,57 @@ void AlertEditionWidget::addAlert()
         Wt::WMessageBox::show(tr("Alert.alert.information-missing-title"),tr("Alert.alert.information-missing"),Wt::Ok);
         return;
     }
+    
+    try
+    {
+        Wt::Dbo::Transaction transaction(*session);
+        
+        
+        Wt::Dbo::collection<Wt::Dbo::ptr<AlertValue> > avaPtrCollec = session->find<AlertValue>().where("\"SEA_ID\" = ?")
+                                                        .bind(mapInformationIdSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.id)
+                                                        .where("\"SRC_ID\" = ?")
+                                                        .bind(mapInformationIdSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.source.get()->pk.id)
+                                                        .where("\"PLG_ID_PLG_ID\" = ?")
+                                                        .bind(mapInformationIdSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.source.get()->pk.plugin.id())
+                                                        .where("\"INF_VALUE_NUM\" = ?")
+                                                        .bind(mapInformationIdSboxRow[informationSelectionBox->currentIndex()].subSearchNumber);
+        
+        if (avaPtrCollec.size() > 0)
+        {
+            std::string inString = "(";
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<AlertValue> >::const_iterator i = avaPtrCollec.begin(); i != avaPtrCollec.end(); i++) 
+            {
+                Wt::log("debug") << " [Class:AlertProcessor] " << " - " << " For iva list : " << (*i).id();
+                inString += boost::lexical_cast<std::string,long long>((*i).id()) + ",";
+                i->flush();
+            }
+            inString.replace(inString.size()-1, 1, "");
+            inString += ")";
+            
+            
+            std::string queryStr = "SELECT ale FROM \"T_ALERT_ALE\" WHERE \"ALE_AVA_AVA_ID\" IN" + inString;
+            Wt::Dbo::Query<Wt::Dbo::ptr<Alert> > queryRes = session->query<Wt::Dbo::ptr<Alert> >(queryStr);
+            
+            Wt::Dbo::collection<Wt::Dbo::ptr<Alert> > alerts = queryRes.resultList();
+            
+            if (alerts.size() > 0)
+            {
+                Wt::log("info") << "[AlertEditionWidget] " << "alert exists";
+                Wt::WMessageBox::show(tr("Alert.alert.alert-already-exists-title"),tr("Alert.alert.alert-already-exists"),Wt::Ok);
+                return;
+            }
+            
+        }
+        
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << "[AlertEditionWidget] " << e.what();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+        return;
+    }
+    
+    
     if (userMediaDestinationTableView->model()->rowCount() < 1)
     {
         Wt::WMessageBox::show(tr("Alert.alert.media-missing-title"),tr("Alert.alert.media-missing"),Wt::Ok);
@@ -603,19 +653,21 @@ void AlertEditionWidget::addAlert()
         
         
         Wt::Dbo::ptr<Information2> infoPtr = session->find<Information2>().where("\"SEA_ID\" = ?")
-                                                        .bind(mapInformationNameSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.id)
+                                                        .bind(mapInformationIdSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.id)
                                                         .where("\"SRC_ID\" = ?")
-                                                        .bind(mapInformationNameSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.source.get()->pk.id)
+                                                        .bind(mapInformationIdSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.source.get()->pk.id)
                                                         .where("\"PLG_ID_PLG_ID\" = ?")
-                                                        .bind(mapInformationNameSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.source.get()->pk.plugin.id())
+                                                        .bind(mapInformationIdSboxRow[informationSelectionBox->currentIndex()].search.get()->pk.source.get()->pk.plugin.id())
                                                         .where("\"INF_VALUE_NUM\" = ?")
-                                                        .bind(mapInformationNameSboxRow[informationSelectionBox->currentIndex()].subSearchNumber);
-        
+                                                        .bind(mapInformationIdSboxRow[informationSelectionBox->currentIndex()].subSearchNumber);
+//        
         Wt::Dbo::ptr<AlertCriteria> critPtr = session->find<AlertCriteria>().where("\"ACR_ID\" = ?").bind(mapAlertCriteriaIdSboxRow[comboAlertCrit->currentIndex()]);
         ava->information = infoPtr;
         updateModelField(model_,AlertEditionModel::ThresholdValue);
         ava->value = model_->valueText(model_->ThresholdValue);
         ava->alertCriteria = critPtr;
+        
+        Wt::log("info") << critPtr.get()->name;
         Wt::Dbo::ptr<AlertValue> avaPtr = session->add<AlertValue>(ava);   
         
         alert->alertValue = avaPtr;
@@ -649,9 +701,8 @@ void AlertEditionWidget::addAlert()
     
     created_ = false;
     model_->reset();
-    //TODO: dirty, do it better
-    createFormWidget(AlertEditionModel::ThresholdOperator);
     update();
+    comboAlertCrit->setCurrentIndex(0);
             
 }
 

@@ -3,11 +3,23 @@
     
     <message id="welcome-text"><h3>Bienvenue dans la version alpha d'ECHOES Alert !</h3>
 
-    <p>A cette heure vous avez accès aux fonctionnalités suivantes :</p>
+    <p>25/09/2012</p>
+    <p>
+        <ul>
+            <li> [Moteur] Correction de plusieurs problèmes dans le moteur de calcul d'alertes</li>
+            <li> [Interface utilisateur] Stabilisation de l'interface</li>
+            <li> [Interface utilisateur] Feedbacks sur la création d'alerte</li>
+            <li> [Interface utilisateur] Affichage de la liste des alertes paramétrées (Onglet "Liste des alertes", à raffraîchir manuellement)</li>
+            <li> [Interface utilisateur] Historique des alertes envoyées (Page Monitoring en haut à droite)</li>
+            <li> [Interface utilisateur / Moteur] Quota SMS (non visible, à zero pour l'instant, rechargeable sur demande)</li>
+        </ul>
+    </p>
+
+    <p>12/09/2012</p>
     <p>
         <ul>
             <li> S'inscrire (mais ceci est déjà fait visiblement)</li>
-            <li>Commander votre première sonde</li>
+            <li> Commander votre première sonde</li>
             <li> Définir vos médias d'alertes (téléphone mobile, adresse e-mail)</li>
             <li> Définir et activer vos alertes sur les informations suivantes :
             <ul>
@@ -17,7 +29,7 @@
             </li>
         </ul>
     </p>
-
+    
     <p>
     Ce produit est en constante évolution (quasi quotidienne).<br/>
     Nous vous tiendrons informés des nouvelles fonctionnalités au travers de cette page.

@@ -69,6 +69,9 @@
   
   <message id="Alert.alert.alert-created-title">Alert created</message>
   <message id="Alert.alert.alert-created">Your alert was successfully created !</message>
+  
+  <message id="Alert.alert.alert-already-exists-title">Alert exists</message>
+  <message id="Alert.alert.alert-already-exists">An alert about this information already exists. Multiple alerts on a single information are not implemented yet.</message>
 
   <!-- templates -->
 

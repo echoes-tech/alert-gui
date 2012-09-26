@@ -609,7 +609,14 @@ void AlertEditionWidget::addAlert()
             inString += ")";
             
             
-            std::string queryStr = "SELECT ale FROM \"T_ALERT_ALE\" WHERE \"ALE_AVA_AVA_ID\" IN" + inString;
+            std::string queryStr = "SELECT ale FROM \"T_ALERT_ALE\" ale WHERE "
+                                    " \"ALE_ID\" IN"
+                                    "("
+                                        "SELECT \"T_ALERT_ALE_ALE_ID\" FROM \"TJ_AST_ALE\" WHERE \"T_ASSET_AST_AST_ID\" = " 
+                                        + boost::lexical_cast<std::string>(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]) +
+                                    ")"
+                                    "AND \"ALE_AVA_AVA_ID\" IN" + inString;
+            
             Wt::Dbo::Query<Wt::Dbo::ptr<Alert> > queryRes = session->query<Wt::Dbo::ptr<Alert> >(queryStr);
             
             Wt::Dbo::collection<Wt::Dbo::ptr<Alert> > alerts = queryRes.resultList();

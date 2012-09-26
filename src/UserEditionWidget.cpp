@@ -13,6 +13,7 @@
 UserEditionWidget::UserEditionWidget()
 : Wt::WTemplateFormView(Wt::WString::tr("Alert.User.Edition.template"))
 {
+    created_ = false;
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("user", false);
 }

@@ -42,6 +42,7 @@
 AlertEditionWidget::AlertEditionWidget()
 : Wt::WTemplateFormView(Wt::WString::tr("Alert.alert.Edition.template"))
 {
+    created_ = false;
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("alert",false);
 }

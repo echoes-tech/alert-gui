@@ -9,9 +9,9 @@
           <itemPath>include/AlertEditionModel.h</itemPath>
           <itemPath>include/AlertEditionWidget.h</itemPath>
         </logicalFolder>
-        <logicalFolder name="f4" displayName="AdminProbeTab" projectFiles="true">
-          <itemPath>include/ProbeDownloadModel.h</itemPath>
-          <itemPath>include/ProbeDownloadWidget.h</itemPath>
+        <logicalFolder name="f4" displayName="AdminAssetTab" projectFiles="true">
+          <itemPath>include/AssetManagementModel.h</itemPath>
+          <itemPath>include/AssetManagementWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>include/UserEditionModel.h</itemPath>
@@ -47,6 +47,8 @@
                    projectFiles="true">
       <itemPath>alert.xml</itemPath>
       <itemPath>alert_fr.xml</itemPath>
+      <itemPath>asset.xml</itemPath>
+      <itemPath>asset_fr.xml</itemPath>
       <itemPath>auth.xml</itemPath>
       <itemPath>auth_fr.xml</itemPath>
       <itemPath>config.xml</itemPath>
@@ -54,7 +56,6 @@
       <itemPath>resources/form-probe.css</itemPath>
       <itemPath>resources/form-user.css</itemPath>
       <itemPath>resources/form.css</itemPath>
-      <itemPath>probe.xml</itemPath>
       <itemPath>user.xml</itemPath>
       <itemPath>user_fr.xml</itemPath>
     </logicalFolder>
@@ -66,9 +67,9 @@
           <itemPath>src/AlertEditionModel.cpp</itemPath>
           <itemPath>src/AlertEditionWidget.cpp</itemPath>
         </logicalFolder>
-        <logicalFolder name="f4" displayName="AdminProbeTab" projectFiles="true">
-          <itemPath>src/ProbeDownloadModel.cpp</itemPath>
-          <itemPath>src/ProbeDownloadWidget.cpp</itemPath>
+        <logicalFolder name="f4" displayName="AdminAssetTab" projectFiles="true">
+          <itemPath>src/AssetManagementModel.cpp</itemPath>
+          <itemPath>src/AssetManagementWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>src/UserEditionModel.cpp</itemPath>

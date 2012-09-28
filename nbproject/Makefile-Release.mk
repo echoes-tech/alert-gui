@@ -41,6 +41,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/src/RegistrationWidget.o \
+	${OBJECTDIR}/src/AssetManagementModel.o \
 	${OBJECTDIR}/src/Login.o \
 	${OBJECTDIR}/src/UpdatePasswordWidget.o \
 	${OBJECTDIR}/src/AlertEditionModel.o \
@@ -50,10 +51,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/AuthWidget.o \
 	${OBJECTDIR}/src/WFormModel.o \
 	${OBJECTDIR}/src/DomElement.o \
-	${OBJECTDIR}/src/ProbeDownloadWidget.o \
 	${OBJECTDIR}/src/WebUtils.o \
 	${OBJECTDIR}/src/WTemplateFormView.o \
-	${OBJECTDIR}/src/ProbeDownloadModel.o \
+	${OBJECTDIR}/src/AssetManagementWidget.o \
 	${OBJECTDIR}/src/AlertEditionWidget.o
 
 
@@ -111,6 +111,11 @@ ${OBJECTDIR}/src/RegistrationWidget.o: src/RegistrationWidget.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/RegistrationWidget.o src/RegistrationWidget.cpp
 
+${OBJECTDIR}/src/AssetManagementModel.o: src/AssetManagementModel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AssetManagementModel.o src/AssetManagementModel.cpp
+
 ${OBJECTDIR}/src/Login.o: src/Login.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -156,11 +161,6 @@ ${OBJECTDIR}/src/DomElement.o: src/DomElement.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/DomElement.o src/DomElement.cpp
 
-${OBJECTDIR}/src/ProbeDownloadWidget.o: src/ProbeDownloadWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ProbeDownloadWidget.o src/ProbeDownloadWidget.cpp
-
 ${OBJECTDIR}/src/WebUtils.o: src/WebUtils.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -171,10 +171,10 @@ ${OBJECTDIR}/src/WTemplateFormView.o: src/WTemplateFormView.C
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/WTemplateFormView.o src/WTemplateFormView.C
 
-${OBJECTDIR}/src/ProbeDownloadModel.o: src/ProbeDownloadModel.cpp 
+${OBJECTDIR}/src/AssetManagementWidget.o: src/AssetManagementWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ProbeDownloadModel.o src/ProbeDownloadModel.cpp
+	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AssetManagementWidget.o src/AssetManagementWidget.cpp
 
 ${OBJECTDIR}/src/AlertEditionWidget.o: src/AlertEditionWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

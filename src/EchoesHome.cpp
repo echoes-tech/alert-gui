@@ -240,17 +240,16 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     }
     aew->setModel(aem);
     aew->setSession(session);
-        
-    pdw = new ProbeDownloadWidget();
+    
+
     {
         Wt::Dbo::Transaction transaction(*(this->session));
-        pdm = new ProbeDownloadModel(const_cast<User *>(this->session->user().get()),this->session);
+        amm = new AssetManagementModel(const_cast<User *>(this->session->user().get()));
     }
-    pdw->setModel(pdm);
-    pdw->setSession(session);
+    amw = new AssetManagementWidget(amm,session);
     
     res->addTab(new Wt::WText(tr("welcome-text")), "Bienvenue");
-    res->addTab(pdw, "Sondes");
+    res->addTab(amw, "Sondes");
     res->addTab(aew, "Alertes");
     res->addTab(alertGroupBox, "Liste des alertes");
     res->addTab(usersGroupBox, "Utilisateurs");

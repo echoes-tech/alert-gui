@@ -29,40 +29,24 @@
 
   <!-- templates -->
 
-    <message id="Alert.Probe.Download.template">
-
-        <p>${tr:disclaimer}</p>
-        <br></br>
-        <br></br>
+    <message id="Alert.Asset.Management.template">
         <div class="Probe-form">
             
-            
-            ${<if:os>}        
-                <div class="Probe-fields float-left">
-                    <label for="${id:os}">${tr:Alert.Probe.Download.os-label}
-                        <span class="Probe-info">${tr:Alert.Probe.Download.os-info}</span>
-                    </label>
-                    ${os}
-                </div>
-                <div class="Probe-fields float-left">
-                    <label for="${id:arch}">${tr:Alert.Probe.Download.arch-label}
-                        <span class="Probe-info">${tr:Alert.Probe.Download.arch-info}</span>
-                    </label>
-                    ${arch}
-                </div>
+            <h2>${tr:Alert.asset.asset-form-title}</h2>
+            <p>${tr:Alert.asset.asset-form-info}</p>
+            <div class = "clear"></div>
+       
+            <div class="Probe-fields float-left">
+                <label for="${id:asset-name}">${tr:Alert.asset.asset-name-label}
+                    <span class="Probe-info">${tr:Alert.asset.asset-name-info}</span>
+                </label>
+                ${asset-name}
+            </div>
 
-                
-            ${</if:os>}
-            ${<if:label-probe>}
-                <label for="${id:label-probe-text}">
-                    ${label-probe-text}
-                </label>          
-            ${</if:label-probe>}
-            ${<if:os>}
-                <div class="Probe-buttons">
-                    ${send-mail-button}
-                </div>  
-            ${</if:os>}
+            <div class="Probe-buttons float-left">
+                ${add-asset-button}
+            </div>
+
         </div>   
          
         

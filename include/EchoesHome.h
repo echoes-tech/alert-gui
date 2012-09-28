@@ -21,7 +21,7 @@
 
 #include "UserEditionWidget.h"
 #include "AlertEditionWidget.h"
-#include "ProbeDownloadWidget.h"
+#include "AssetManagementWidget.h"
 
 
 
@@ -66,8 +66,8 @@ private:
     AlertEditionModel *aem;
     AlertEditionWidget *aew;
     
-    ProbeDownloadModel *pdm;
-    ProbeDownloadWidget *pdw;
+    AssetManagementModel *amm;
+    AssetManagementWidget *amw;
     
     
     

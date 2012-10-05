@@ -4,6 +4,15 @@
     <message id="welcome-text">
         <p>Welcome on alpha version of ECHOES Alert !</p>
         
+        <p>05/10/2012</p>
+        <p>
+            <ul>
+                <li> [Engine] Bugfix : SMS were not always sent</li>
+                <li> [GUI] Bugfix : sometimes it was impossible to add an alert</li>
+                <li> [GUI] Bugfix : Random display problems (??label??)</li>
+            </ul>
+        </p>
+        
         <p>25/09/2012</p>
         <p>
             <ul>

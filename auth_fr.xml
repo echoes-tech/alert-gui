@@ -3,6 +3,15 @@
     
     <message id="welcome-text"><h3>Bienvenue dans la version alpha d'ECHOES Alert !</h3>
 
+    <p>05/10/2012</p>
+    <p>
+        <ul>
+            <li> [Moteur] Correction du bug qui empêchaient les SMS de partir dans certains cas</li>
+            <li> [Interface utilisateur] Correction d'un problème qui empêchait de créer une alerte </li>
+            <li> [Interface utilisateur] Correction des défauts d'affichages survenants aléatoirement type ??label??</li>
+        </ul>
+    </p>
+
     <p>25/09/2012</p>
     <p>
         <ul>

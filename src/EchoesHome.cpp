@@ -50,7 +50,7 @@ void EchoesHome::initAuth()
 
 void EchoesHome::initHeader()
 {
-    this->title = new Wt::WText("<h1>ECHOES Alert</h1>");
+    this->title = new Wt::WText(tr("echoes-alert-title"));
         
     this->topContainer = new Wt::WContainerWidget();
     this->topContainer->setStyleClass("top-container");

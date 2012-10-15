@@ -1,52 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
-    
-    <message id="welcome-text">
-        <p>Welcome on alpha version of ECHOES Alert !</p>
-        
-        <p>05/10/2012</p>
-        <p>
-            <ul>
-                <li> [Engine] Bugfix : SMS were not always sent</li>
-                <li> [GUI] Bugfix : sometimes it was impossible to add an alert</li>
-                <li> [GUI] Bugfix : Random display problems (??label??)</li>
-            </ul>
-        </p>
-        
-        <p>25/09/2012</p>
-        <p>
-            <ul>
-                <li> [Engine] Alert calculation process bugfixes</li>
-                <li> [GUI] Interface stabilization</li>
-                <li> [GUI] Feedbacks during alert creation</li>
-                <li> [GUI] Alert set in the gui displayed ("Alert list" tab, to be refreshed manually)</li>
-                <li> [GUI] Sent alert history (Monitoring link, top right of the screen)</li>
-                <li> [GUI / Engine] SMS Quota (not visible, set to zero by default, recharged on demand)</li>
-            </ul>
-        </p>
-
-        <p>12/09/2012</p>
-
-        <ul>
-            <li>Create an account (but it seems to be done)</li>
-            <li>Order you first probe</li>
-            <li>Define your alert medias (cell phones, mail addresses)</li>
-            <li>Define and activate your alerts about :
-                <ul>
-                    <li>Memory usage (KB)</li>
-                    <li>Load average</li>
-                </ul>
-            </li>
-        </ul>
-
-<p>This product evolves almost every day.</p>
-<p>We will keep you informed about the new features through this page.</p>
-
-<p>The ECHOES Alert team.</p></message>
 
   <!-- BaseAuth, PasswordAuth and OAuth models -->
-  
-  <message id="echoes-alert-title"><img src="images/EchoesAlert.png" alt="ECHOES Alert" /></message>
 
   <message id="Wt.Auth.error-invalid-token">The operation could not be completed: invalid token.</message>
   <message id="Wt.Auth.error-token-expired">The operation could not be completed: the token has expired.</message>
@@ -257,7 +212,7 @@
       ${password-description}
 
       <div class="Wt-fields">
-<!--	${<if:organization-type-company>}
+	${<if:organization-type-company>}
 	  <label for="${id:organization-type-company}">${organization-type-company-label}
 	    ${organization-type-company-info class="Wt-info"}
 	  </label>
@@ -283,7 +238,7 @@
 	    ${organization-name-info class="Wt-info"}
 	  </label>
 	  ${organization-name}
-	${</if:organization-name>}-->
+	${</if:organization-name>}
 
         ${<if:user-name>}
 	  <label for="${id:user-name}">${user-name-label}
@@ -297,7 +252,7 @@
 	  <label for="${id:first-name}">${first-name-label}
 	    ${first-name-info class="Wt-info"}
 	  </label>
-	  ${first-name}
+	  ${user-name}
 	${</if:first-name>}
 
 	${<if:last-name>}
@@ -424,7 +379,7 @@
 
   <!-- Emails -->
 
-  <message id="Wt.Auth.confirmmail.subject">[ECHOES Alert] User account activation Link</message>
+  <message id="Wt.Auth.confirmmail.subject">User account activation Link</message>
 
   <message id="Wt.Auth.confirmmail.body">
 Hello {1},
@@ -434,18 +389,19 @@ Thank you for joining!
 To complete your registration, please finally confirm your account by
 clicking on the following link or copying the URL into your browser.
  
-Please copy and paste the following URL into your browser: (Note: be
-sure to copy the entire URL, including any part of it which goes onto
-a second line.)
+Please click here to confirm your registration or copy and paste the
+following URL into your browser: (Note: be sure to copy the entire
+URL, including any part of it which goes onto a second line.)
 
-https://alert.echoes-tech.com/auth/mail/{2}
-      
-Thank you for using ECHOES Alert!
+{3}
 
-The ECHOES Alert team.
-http://alert.echoes-tech.com/
+This text is resolved from the "Wt.Auth.confirmmail.subject",
+"Wt.Auth.confirmmail.body", and "Wt.Auth.confirmmail.htmlbody"
+resource keys.
 
-© 2012, ECHOES Technologies
+Good luck with your Wt application,
+
+The Wt team.
   </message>
 
   <message id="Wt.Auth.confirmmail.htmlbody">
@@ -457,25 +413,28 @@ http://alert.echoes-tech.com/
     account by clicking on the following link or copying the URL into
     your browser.</p>
  
-    <p>Please <a href="https://alert.echoes-tech.com/auth/mail/{2}">click here to confirm</a> your
+    <p>Please <a href="{3}">click here to confirm</a> your
     registration or copy and paste the following URL into your
     browser: <i>(Note: be sure to copy the entire URL, including any
     part of it which goes onto a second line.)</i></p>
     
-    <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
-
-    <p>Thank you for using ECHOES Alert!</p>
+    <b>{3}</b>
 
     <p>
-        The ECHOES Alert team.
-        <br />
-        <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">http://alert.echoes-tech.com/</a>
+      <i>Note to developer:</i>
+    </p>
+    <p>
+      This text is resolved from the "Wt.Auth.confirmmail.subject",
+      "Wt.Auth.confirmmail.body", and "Wt.Auth.confirmmail.htmlbody"
+      resource keys.
     </p>
 
-    <p><i>© 2012, ECHOES Technologies</i></p>
+    <p>Good luck with your Wt application,</p>
+
+    <p>The Wt team.</p>
   </message>
 
-  <message id="Wt.Auth.lostpasswordmail.subject">[ECHOES Alert] Lost password instructions</message>
+  <message id="Wt.Auth.lostpasswordmail.subject">Lost password instructions</message>
 
   <message id="Wt.Auth.lostpasswordmail.body">
 Hello {1},
@@ -492,14 +451,15 @@ Please copy and paste the following URL into your browser: (Note: be
 sure to copy the entire URL, including any part of it which goes onto
 a second line.)
  
-https://alert.echoes-tech.com/auth/mail/{2} 
-      
-Thank you for using ECHOES Alert!
+{3} 
 
-The ECHOES Alert team.
-http://alert.echoes-tech.com/
+This text is resolved from the "Wt.Auth.lostpasswordmail.subject",
+"Wt.Auth.lostpasswordmail.body", and "Wt.Auth.lostpasswordmail.htmlbody"
+resource keys.
 
-© 2012, ECHOES Technologies
+Good luck with your Wt application,
+
+The Wt team.
   </message>
 
   <message id="Wt.Auth.lostpasswordmail.htmlbody">
@@ -514,22 +474,26 @@ http://alert.echoes-tech.com/
     didn't request this, you can safely ignore and discard this
     email.</p>
  
-    <p>Please <a href="https://alert.echoes-tech.com/auth/mail/{2}">click here to choose a new password</a> or
+    <p>Please <a href="{3}">click here to choose a new password</a> or
     copy and paste the following URL into your browser: <i>(Note: be
     sure to copy the entire URL, including any part of it which goes
     onto a second line.)</i></p>
     
-    <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
-
-    <p>Thank you for using ECHOES Alert!</p>
+    <b>{3}</b>
 
     <p>
-        The ECHOES Alert team.
-        <br />
-        <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">http://alert.echoes-tech.com/</a>
+      <i>Note to developer:</i>
+    </p>
+    <p>
+      This text is resolved from the
+      "Wt.Auth.lostpasswordmail.subject",
+      "Wt.Auth.lostpasswordmail.body", and
+      "Wt.Auth.lostpasswordmail.htmlbody" resource keys.
     </p>
 
-    <p><i>© 2012, ECHOES Technologies</i></p>
+    <p>Good luck with your Wt application,</p>
+
+    <p>The Wt team.</p>
   </message>
 
 </messages>

@@ -6,9 +6,9 @@
     <p>05/10/2012</p>
     <p>
         <ul>
-            <li> [Moteur] Correction du bug qui empêchaient les SMS de partir dans certains cas</li>
+            <li> [Moteur] Correction du bug qui empêchait les SMS de partir dans certains cas</li>
             <li> [Interface utilisateur] Correction d'un problème qui empêchait de créer une alerte </li>
-            <li> [Interface utilisateur] Correction des défauts d'affichages survenants aléatoirement type ??label??</li>
+            <li> [Interface utilisateur] Correction des défauts d'affichage survenant aléatoirement type ??label??</li>
         </ul>
     </p>
 
@@ -18,7 +18,7 @@
             <li> [Moteur] Correction de plusieurs problèmes dans le moteur de calcul d'alertes</li>
             <li> [Interface utilisateur] Stabilisation de l'interface</li>
             <li> [Interface utilisateur] Feedbacks sur la création d'alerte</li>
-            <li> [Interface utilisateur] Affichage de la liste des alertes paramétrées (Onglet "Liste des alertes", à raffraîchir manuellement)</li>
+            <li> [Interface utilisateur] Affichage de la liste des alertes paramétrées (Onglet "Liste des alertes", à raffraîchir manuellement)</li>nn
             <li> [Interface utilisateur] Historique des alertes envoyées (Page Monitoring en haut à droite)</li>
             <li> [Interface utilisateur / Moteur] Quota SMS (non visible, à zero pour l'instant, rechargeable sur demande)</li>
         </ul>

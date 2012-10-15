@@ -170,7 +170,8 @@ void AssetManagementWidget::deleteAsset(long long id)
     {
         Wt::Dbo::Transaction transaction(*session);
         Wt::Dbo::ptr<Asset>  ptrAsset = session->find<Asset>().where("\"AST_ID\" = ?").bind(id);
-        ptrAsset.remove();
+        ptrAsset.modify()->alerts.clear();
+        ptrAsset.modify()->deleteTag = Wt::WDateTime::currentDateTime();
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)

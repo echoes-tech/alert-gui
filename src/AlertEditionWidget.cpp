@@ -367,7 +367,8 @@ void AlertEditionWidget::updateServerSelectionBox(int serverId)
                 "("
                     "select \"T_ORGANIZATION_ORG_ORG_ID\" from \"TJ_USR_ORG\" where \"T_USER_USR_USR_ID\" = ?"
                 ")"
-            ");";
+            ") "
+            " AND \"AST_DELETE\" IS NULL;";
         
         // hosts list
         {
@@ -407,7 +408,7 @@ void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
             for (Wt::Dbo::collection<Wt::Dbo::ptr<Information2> >::const_iterator k = infos.begin(); k != infos.end(); k++)
             {
                 slmInformation->insertString(idx,k->get()->name);
-                InformationId infId(k->get()->pk.search, k->get()->pk.subSearchNumber);
+                InformationId infId(k->get()->pk.search, k->get()->pk.subSearchNumber, k->get()->pk.unit);
                 
                 this->mapInformationIdSboxRow[idx] = infId;
                 idx++;
@@ -423,7 +424,7 @@ void AlertEditionWidget::updateApplicationSelectionBox(int astId)
     Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > assets;
     {
         Wt::Dbo::Transaction transaction(*session);
-        assets = session->find<Asset>().where("\"AST_ID\" = ?").bind(astId);
+        assets = session->find<Asset>().where("\"AST_ID\" = ?").bind(astId).where("\"AST_DELETE\" IS NULL");
 
 
         int idx = 0;
@@ -615,6 +616,7 @@ void AlertEditionWidget::addAlert()
                                         "SELECT \"T_ALERT_ALE_ALE_ID\" FROM \"TJ_AST_ALE\" WHERE \"T_ASSET_AST_AST_ID\" = " 
                                         + boost::lexical_cast<std::string>(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]) +
                                     ")"
+                                    "AND ale.\"ALE_DELETE\" IS NULL "
                                     "AND \"ALE_AVA_AVA_ID\" IN" + inString;
             
             Wt::Dbo::Query<Wt::Dbo::ptr<Alert> > queryRes = session->query<Wt::Dbo::ptr<Alert> >(queryStr);

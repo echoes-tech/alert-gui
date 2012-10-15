@@ -108,6 +108,7 @@ Wt::WGroupBox* EchoesHome::initMonitoringWidget()
         Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
         std::string queryString = "SELECT ale, mev, atr FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_VALUE_MEV\" mev "
             " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
+            " AND ale.\"ALE_DELETE\" IS NULL "
             " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
             " AND mev.\"MEV_USR_USR_ID\" IN"
             "("
@@ -156,7 +157,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
 
         tview->setSelectionMode(Wt::SingleSelection);
         tview->doubleClicked().connect(boost::bind(&EchoesHome::openUserEdition, this));
-        tview->setModel(qm);       
+        tview->setModel(qm);   
     }
     catch (Wt::Dbo::Exception e)
     {
@@ -189,6 +190,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
            " )"
         ") "
         "AND ale.\"ALE_AVA_AVA_ID\" = ava.\"AVA_ID\" "
+        "AND ale.\"ALE_DELETE\" IS NULL "
         "AND ava.\"AVA_ACR_ACR_ID\" = acr.\"ACR_ID\" ";
         Wt::Dbo::Query
                 <

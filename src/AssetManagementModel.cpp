@@ -45,6 +45,7 @@ bool AssetManagementModel::validateField(Field field)
     
     if (field == AssetManagementModel::AssetName)
     {
+        // Check whether the asset doesn't already exists
         error = validateString(valueText(field));
         valid = error.empty();
     }

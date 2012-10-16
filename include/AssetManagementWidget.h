@@ -89,6 +89,8 @@ protected:
 
   virtual Wt::WFormWidget *createFormWidget(AssetManagementModel::Field field);
   
+  
+  void addAsset();
   void deleteAsset(long long id);
   Wt::WFileResource *generateScript(long long i);
   std::string getStringFromFile(std::string resourcePath);
@@ -97,6 +99,8 @@ private:
   AssetManagementModel *model_;
   Session * session;
 
+  Wt::WTemplateFormView *mainForm;
+  
   bool created_;
   
   

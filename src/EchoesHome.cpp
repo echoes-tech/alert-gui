@@ -11,8 +11,8 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent):
     monitoringPage(0)
     {
 //    std::string Utils::connection = "hostaddr=172.16.3.101 port=5432 dbname=echoes user=echoes password=toto";
-            session = new Session("hostaddr=172.16.3.101 port=5432 dbname=echoes user=echoes password=toto");
-//        session = new Session("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto");
+//            session = new Session("hostaddr=172.16.3.101 port=5432 dbname=echoes user=echoes password=toto");
+        session = new Session("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto");
 //        session = new Session("hostaddr=92.243.5.246 port=5432 dbname=echoes user=echoes password=9Mw5#vvdC56Gzs#goD3M");
         this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
         

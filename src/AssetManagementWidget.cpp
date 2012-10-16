@@ -26,6 +26,8 @@
 #include <Wt/Mail/Client>
 #include <Wt/Mail/Message>
 
+#include <Wt/WMessageBox>
+
 #include <Wt/WVBoxLayout>
 #include <Wt/WHBoxLayout>
 #include <Wt/WTable>
@@ -71,13 +73,14 @@ void AssetManagementWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
 void AssetManagementWidget::createUI()
 {
     // Top template
-    Wt::WTemplateFormView *mainForm = new Wt::WTemplateFormView(Wt::WString::tr("Alert.Asset.Management.template"));    
+    mainForm = new Wt::WTemplateFormView(Wt::WString::tr("Alert.Asset.Management.template"));    
     
     // widgets of the template
     mainForm->bindWidget("asset-name", createFormWidget(AssetManagementModel::AssetName));
     
     Wt::WPushButton *addAssetButton = new Wt::WPushButton(tr("Alert.asset.add-asset-button"));
     mainForm->bindWidget("add-asset-button", addAssetButton);
+    addAssetButton->clicked().connect(boost::bind(&AssetManagementWidget::addAsset, this));
 
     mainForm->updateModel(model_);
     mainForm->refresh();
@@ -93,13 +96,19 @@ void AssetManagementWidget::createUI()
     Wt::WText *title = new Wt::WText(tr("example.form"),linksTable->elementAt(row, 0));
     title->decorationStyle().font().setSize(Wt::WFont::XLarge);
     
-    
+    try
     {
         Wt::Dbo::Transaction transaction(*session);
+        //TODO : don't understand why the two lines below are needed, clean this
+        Wt::Dbo::ptr<User> tempUser = session->find<User>().where("\"USR_ID\" = ?").bind(session->user().id());
+        Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
+        Wt::log("info") << "Debug pouet " << session->user().get()->currentOrganization.id();
         std::string queryString =  "select ast from \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN" 
-                                    "("
-                                    "    SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" WHERE \"PRB_ORG_ORG_ID\" = (SELECT \"CURRENT_ORG_ID\" FROM \"T_USER_USR\" WHERE \"USR_ID\" = 6)"
-                                    ")";
+                                    " ("
+                                    "    SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" WHERE \"PRB_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(session->user().get()->currentOrganization.id()) +
+                                    ")"
+                                    " AND \"AST_DELETE\" IS NULL";
+        Wt::log("info") << "Debug : " << queryString ;
         Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > resQuery = session->query<Wt::Dbo::ptr<Asset> >(queryString);
         
         Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > listAssets = resQuery.resultList();
@@ -115,6 +124,11 @@ void AssetManagementWidget::createUI()
             delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
         }
         transaction.commit();
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
+        Wt::log("error") << "[AssetManagementWidget] " << e.what();
     }
     
     
@@ -164,22 +178,67 @@ Wt::WFormWidget *AssetManagementWidget::createFormWidget(AssetManagementModel::F
     return result;
 }
 
+void AssetManagementWidget::addAsset()
+{
+    try
+    {
+        Wt::Dbo::Transaction transaction(*session);
+        mainForm->updateModelField(model_, AssetManagementModel::AssetName);
+        if (model_->validateField(AssetManagementModel::AssetName))
+        {
+            Probe *newProbe = new Probe();
+            Wt::Dbo::ptr<Probe> ptrNewProbe = session->add<Probe>(newProbe);
+            ptrNewProbe.modify()->organization = session->user().get()->currentOrganization;
+            ptrNewProbe.modify()->name = "Probe_" + session->user().get()->lastName + "_" + model_->valueText(AssetManagementModel::AssetName);
+            
+            
+            Asset *newAsset = new Asset();
+            
+            Wt::Dbo::ptr<Asset> ptrNewAsset = session->add<Asset>(newAsset);
+            ptrNewAsset.modify()->name = model_->valueText(AssetManagementModel::AssetName);
+            ptrNewAsset.modify()->assetIsHost = true;
+            ptrNewAsset.modify()->probe = ptrNewProbe;
+        }
+        else
+        {
+            Wt::WMessageBox::show(tr("Alert.asset.asset-name-invalid"),tr("Alert.asset.asset-name-invalid"),Wt::Ok);
+        }
+        transaction.commit();  
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
+        Wt::log("error") << "[AssetManagementWidget] " << e.what();
+    }
+    created_ = false;
+    model_->reset();
+    createUI();
+}
+
 void AssetManagementWidget::deleteAsset(long long id)
 {
     try
     {
         Wt::Dbo::Transaction transaction(*session);
         Wt::Dbo::ptr<Asset>  ptrAsset = session->find<Asset>().where("\"AST_ID\" = ?").bind(id);
-        ptrAsset.modify()->alerts.clear();
+        //FIXME: doesn't work, bug posted in Wt forge #1479
+        //ptrAsset.modify()->alerts.clear();
+        std::string executeString = "DELETE FROM \"T_ALERT_ALE\" USING \"TJ_AST_ALE\" " 
+                                    " WHERE \"TJ_AST_ALE\".\"T_ALERT_ALE_ALE_ID\" = \"T_ALERT_ALE\".\"ALE_ID\" " 
+                                    " AND \"TJ_AST_ALE\".\"T_ASSET_AST_AST_ID\" = " + boost::lexical_cast<std::string>(id);
+        session->execute(executeString);
         ptrAsset.modify()->deleteTag = Wt::WDateTime::currentDateTime();
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
     {
-        Wt::log("error") << "[AssetManagementWidget] " << e.what();
+        Wt::log("error") << "[AssetManagementWidget] [deleteAsset] " << e.what();
     }
             
-    refresh();
+//    refresh();
+    created_ = false;
+    model_->reset();
+    createUI();
 
 }
 

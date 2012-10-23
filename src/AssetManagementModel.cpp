@@ -10,9 +10,8 @@
 
 const Wt::WFormModel::Field AssetManagementModel::AssetName = "asset-name";
 
-AssetManagementModel::AssetManagementModel(User *user)
-{
-    this->user = user;
+AssetManagementModel::AssetManagementModel()
+{ 
     reset();
 }
 

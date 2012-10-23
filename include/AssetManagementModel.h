@@ -13,10 +13,9 @@
 
 class AssetManagementModel : public Wt::WFormModel {
 public:
-    AssetManagementModel(User *user);
+    AssetManagementModel();
     virtual ~AssetManagementModel();
     
-    User *user;
     
     static const Field AssetName;
     

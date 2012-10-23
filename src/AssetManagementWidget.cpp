@@ -55,7 +55,7 @@ AssetManagementWidget::AssetManagementWidget(AssetManagementModel *model, Sessio
     created_ = false;
     this->session = session;
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use("asset",false);
+    app->messageResourceBundle().use("asset",false);      
     createUI();
 }
 
@@ -87,47 +87,51 @@ void AssetManagementWidget::createUI()
     // Table where the links / buttons are added
     Wt::WTable *linksTable = new Wt::WTable();
     
-    Wt::WLabel *label;
     int row = 0;
 
     linksTable->elementAt(row, 0)->setColumnSpan(3);
     linksTable->elementAt(row, 0)->setContentAlignment(Wt::AlignTop | Wt::AlignCenter);
     linksTable->elementAt(row, 0)->setPadding(10);
-    Wt::WText *title = new Wt::WText(tr("example.form"),linksTable->elementAt(row, 0));
+    Wt::WText *title = new Wt::WText(tr("Alert.asset.add-asset-form"),linksTable->elementAt(row, 0));
     title->decorationStyle().font().setSize(Wt::WFont::XLarge);
     
     try
     {
-        Wt::Dbo::Transaction transaction(*session);
+        Wt::log("info") << "Debug : before transaction";
+        Wt::Dbo::Transaction transaction(*this->session);
         //TODO : don't understand why the two lines below are needed, clean this
         Wt::Dbo::ptr<User> tempUser = session->find<User>().where("\"USR_ID\" = ?").bind(session->user().id());
-        Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
-        Wt::log("info") << "Debug pouet " << session->user().get()->currentOrganization.id();
-        std::string queryString =  "select ast from \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN" 
-                                    " ("
-                                    "    SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" WHERE \"PRB_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(session->user().get()->currentOrganization.id()) +
-                                    ")"
-                                    " AND \"AST_DELETE\" IS NULL";
-        Wt::log("info") << "Debug : " << queryString ;
-        Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > resQuery = session->query<Wt::Dbo::ptr<Asset> >(queryString);
-        
-        Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > listAssets = resQuery.resultList();
-        for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = listAssets.begin(); i != listAssets.end(); ++i) 
+        Wt::log("info") << "Debug : user found";
+        if (tempUser)
         {
-            ++row;
-            Wt::WFileResource *file = generateScript(i->id());
-            Wt::WAnchor *anchor = new Wt::WAnchor(file,tr("download-script"),linksTable->elementAt(row, 2));
-            anchor->setTarget(Wt::TargetNewWindow);
-            label = new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
-            
-            Wt::WPushButton *delButton = new Wt::WPushButton(tr("delete-asset"), linksTable->elementAt(row, 3));
-            delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
+            Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
+    //        Wt::log("info") << "Debug : " << session->user().get()->currentOrganization.id();
+            std::string queryString =  "select ast from \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN" 
+                                        " ("
+                                        "    SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" WHERE \"PRB_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(tempUser->currentOrganization.id()) +
+                                        ")"
+                                        " AND \"AST_DELETE\" IS NULL";
+            Wt::log("info") << "Debug : " << queryString ;
+            Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > resQuery = session->query<Wt::Dbo::ptr<Asset> >(queryString);
+
+            Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > listAssets = resQuery.resultList();
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = listAssets.begin(); i != listAssets.end(); ++i) 
+            {
+                ++row;
+                Wt::WFileResource *file = generateScript(i->id());
+                Wt::WAnchor *anchor = new Wt::WAnchor(file,tr("Alert.asset.download-script"),linksTable->elementAt(row, 2));
+                anchor->setTarget(Wt::TargetNewWindow);
+                new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
+
+                Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 3));
+                delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
+            }
         }
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
     {
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("1"),Wt::Ok);
         Wt::log("error") << "[AssetManagementWidget] " << e.what();
     }
     
@@ -207,7 +211,7 @@ void AssetManagementWidget::addAsset()
     }
     catch (Wt::Dbo::Exception e)
     {
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("2"),Wt::Ok);
         Wt::log("error") << "[AssetManagementWidget] " << e.what();
     }
     created_ = false;
@@ -269,7 +273,8 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i)
     
     // temp file
     char *tmpname = strdup("/tmp/echoes-tmp-fileXXXXXX");
-    mkstemp(tmpname);
+    int mkstempRes = mkstemp(tmpname);
+    Wt::log("debug") << "[AssetManagementWidget] " << "Res temp file creation : " << mkstempRes;
     std::ofstream f(tmpname);
     f << contentToSend;
     f.close();

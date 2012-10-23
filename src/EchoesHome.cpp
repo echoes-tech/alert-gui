@@ -217,7 +217,8 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
         qmAlertList->addColumn("AVA_VALUE", "Alert Value", Wt::ItemIsSelectable);
 
         tviewAlertList->setSelectionMode(Wt::SingleSelection);
-        tviewAlertList->setModel(qmAlertList);  
+        tviewAlertList->setModel(qmAlertList);
+        transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
     {
@@ -228,27 +229,44 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     
     // user edition widget
     uew = new UserEditionWidget();
+    try
     {
         Wt::Dbo::Transaction transaction(*(this->session));
         uem = new UserEditionModel(const_cast<User *>(this->session->user().get()));
+        transaction.commit();
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << e.what();
     }
     uew->setModel(uem);
     uew->setSession(session);
         
     aew = new AlertEditionWidget();
+    try
     {
         Wt::Dbo::Transaction transaction(*(this->session));
         aem = new AlertEditionModel(const_cast<User *>(this->session->user().get()));
+        transaction.commit();
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << e.what();
     }
     aew->setModel(aem);
     aew->setSession(session);
     
-
+    try
     {
         Wt::Dbo::Transaction transaction(*(this->session));
-        amm = new AssetManagementModel(const_cast<User *>(this->session->user().get()));
+        amm = new AssetManagementModel();
+        transaction.commit();
     }
-    amw = new AssetManagementWidget(amm,session);
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << e.what();
+    }
+    amw = new AssetManagementWidget(amm,this->session);
     
     res->addTab(new Wt::WText(tr("welcome-text")), "Bienvenue");
     res->addTab(amw, "Sondes");

@@ -202,6 +202,13 @@ void AssetManagementWidget::addAsset()
             ptrNewAsset.modify()->name = model_->valueText(AssetManagementModel::AssetName);
             ptrNewAsset.modify()->assetIsHost = true;
             ptrNewAsset.modify()->probe = ptrNewProbe;
+            
+            //fixme : temporaire jusqu'à la gestion des plugins
+            Wt::Dbo::ptr<Plugin> plgSystem = session->find<Plugin>().where("\"PLG_ID\" = ?").bind(1);
+            if (plgSystem)
+            {
+                ptrNewAsset.modify()->plugins.insert(plgSystem);
+            }
         }
         else
         {
@@ -231,6 +238,11 @@ void AssetManagementWidget::deleteAsset(long long id)
                                     " WHERE \"TJ_AST_ALE\".\"T_ALERT_ALE_ALE_ID\" = \"T_ALERT_ALE\".\"ALE_ID\" " 
                                     " AND \"TJ_AST_ALE\".\"T_ASSET_AST_AST_ID\" = " + boost::lexical_cast<std::string>(id);
         session->execute(executeString);
+        
+        executeString = "DELETE FROM \"TJ_AST_PLG\" " 
+                                    " WHERE \"TJ_AST_PLG\".\"T_ASSET_AST_AST_ID\" = " + boost::lexical_cast<std::string>(id);
+        session->execute(executeString);
+        
         ptrAsset.modify()->deleteTag = Wt::WDateTime::currentDateTime();
         transaction.commit();
     }

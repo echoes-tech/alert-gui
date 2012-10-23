@@ -167,7 +167,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     // alert list widget
     Wt::WGroupBox *alertGroupBox = new Wt::WGroupBox("Alert list");
     
-    Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>, Wt::Dbo::ptr<AlertCriteria>, Wt::Dbo::ptr<AlertValue> > > *qmAlertList = new Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>, Wt::Dbo::ptr<AlertCriteria>, Wt::Dbo::ptr<AlertValue> > >();
+    Wt::Dbo::QueryModel<boost::tuple<std::string,Wt::Dbo::ptr<Alert>, Wt::Dbo::ptr<AlertCriteria>, Wt::Dbo::ptr<AlertValue> > > *qmAlertList = new Wt::Dbo::QueryModel<boost::tuple<std::string,Wt::Dbo::ptr<Alert>, Wt::Dbo::ptr<AlertCriteria>, Wt::Dbo::ptr<AlertValue> > >();
     
     Wt::WTableView *tviewAlertList = new Wt::WTableView(alertGroupBox);
     
@@ -179,7 +179,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
         //TODO : don't understand why the two lines below are needed, clean this
         Wt::Dbo::ptr<User> tempUser = this->session->find<User>().where("\"USR_ID\" = ?").bind(this->session->user().id());
         Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
-        std::string queryString = "SELECT ale, acr, ava FROM \"T_ALERT_ALE\" ale, \"T_ALERT_VALUE_AVA\" ava, \"T_ALERT_CRITERIA_ACR\" acr WHERE \"ALE_ID\" IN "
+        std::string queryString = "SELECT NULL , ale, acr, ava FROM \"T_ALERT_ALE\" ale, \"T_ALERT_VALUE_AVA\" ava, \"T_ALERT_CRITERIA_ACR\" acr WHERE \"ALE_ID\" IN "
         "("
             "SELECT \"AMS_ALE_ALE_ID\" FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" WHERE \"AMS_MEV_MEV_ID\" IN "
             "("
@@ -196,6 +196,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
                 <
                     boost::tuple
                     <
+                        std::string,
                         Wt::Dbo::ptr<Alert>,
                         Wt::Dbo::ptr<AlertCriteria>,
                         Wt::Dbo::ptr<AlertValue> 
@@ -205,20 +206,30 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
                 <
                     boost::tuple
                     <
+                        std::string,
                         Wt::Dbo::ptr<Alert>, 
                         Wt::Dbo::ptr<AlertCriteria>, 
                         Wt::Dbo::ptr<AlertValue> 
                     >,Wt::Dbo::DynamicBinding
                 >(queryString);
         qmAlertList->setQuery(q, false);
+        qmAlertList->addColumn(q.fields().at(0).name(), "Select", Wt::ItemIsUserCheckable);
+        
         qmAlertList->addColumn("ALE_NAME", "Alert name", Wt::ItemIsSelectable);
 //        qm->setColumnFlags(0,Wt::ItemIsUserCheckable);
         qmAlertList->addColumn("ACR_NAME", "Criteria", Wt::ItemIsSelectable);
         qmAlertList->addColumn("AVA_VALUE", "Alert Value", Wt::ItemIsSelectable);
+//        qm->setColumnFlags(1,Wt::ItemIsUserCheckable);
+        
 
         tviewAlertList->setSelectionMode(Wt::SingleSelection);
         tviewAlertList->setModel(qmAlertList);
-        transaction.commit();
+        
+//        const char * test = "";
+//        boost::any anyTest(test);
+//        Wt::WModelIndex index = qmAlertList->index(0,0,tviewAlertList->rootIndex());
+//        qmAlertList->setData(index,anyTest,Wt::EditRole);
+//        transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
     {

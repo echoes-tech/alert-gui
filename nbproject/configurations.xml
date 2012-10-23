@@ -128,8 +128,8 @@
         </ccTool>
         <linkerTool>
           <linkerAddLib>
-            <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/default/dist/Release_SharedObject/GNU-Linux-x86</pElem>
-            <pElem>../dbo/dist/Release_SharedObject/GNU-Linux-x86</pElem>
+            <pElem>../dbo/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
+            <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/default/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>dbo</linkerLibLibItem>
@@ -160,8 +160,8 @@
         </ccTool>
         <linkerTool>
           <linkerAddLib>
-            <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/default/dist/Release_SharedObject/GNU-Linux-x86</pElem>
             <pElem>../dbo/dist/Release_SharedObject/GNU-Linux-x86</pElem>
+            <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/default/dist/Release_SharedObject/GNU-Linux-x86</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>wt</linkerLibLibItem>

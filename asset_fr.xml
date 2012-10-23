@@ -2,33 +2,24 @@
 <messages xmlns:if="Wt.WTemplate.conditions">
 
     <!-- Models -->
+  
+  <message id="Alert.asset.asset-form-title">Serveurs</message>
+  <message id="Alert.asset.asset-form-info">Sur cette page vous pouvez ajouter des serveurs à surveiller et récupérer les scripts de configuration correspondant.</message>
+  
+  <message id="Alert.asset.asset-name-label">Serveur</message>
+  <message id="Alert.asset.asset-name-info">Serveur à surveiller.</message>
+  
+  <message id="Alert.asset.add-asset-button">Ajouter un serveur</message>
 
-  <message id="Alert.Probe.Download.os-label">Système d'exploitation</message>
-  <message id="Alert.Probe.Download.os-info">Choisissez le système d'exploitation de votre serveur</message>
+  <message id="Alert.asset.add-asset-form">Vos serveurs</message>
+  
+  <message id="Alert.asset.download-script">Télécharger</message>
+  <message id="Alert.asset.delete-asset">Supprimer ce serveur</message>
 
-  <message id="Alert.Probe.Download.arch-label">Architecture</message>
-  <message id="Alert.Probe.Download.arch-info">Choisissez l'architecture de votre serveur</message>
-
-  <message id="Alert.probe.download.send-mail">Envoyer</message>
+  <message id="Alert.asset.asset-form-title">Serveurs</message>
     
-    <message id="disclaimer">
-        <h3>Demande de sonde</h3>
-        
-        <p>
-            Sur cette page, vous pouvez choisir le système d'exploitation et l'architecture du serveur que vous souhaitez superviser.
-            <br/>
-            <br/>
-            Notre équipe est notifiée à la validation du formulaire. Nous vous enverrons la sonde de supervision par email le plus rapidement possible.
-            <br/>
-            <br/>
-            Vous ne pouvez effectuer qu'une seule demande. Si vous ne visualisez pas de formulaire ci-dessous, cela signifie que vous nous avez déjà fait part de votre demande.
-            <br/>
-            <br/>
-            Si vous souhaitez plus d'informations, n'hésitez pas à nous rejoindre sur notre <a href="https://chat.echoes-tech.com" target="_blank">salon de discussion</a>. 
-            <br/>
-        </p>
-    </message>
-
-    
+  <message id="Alert.asset.asset-name-invalid">Invalide</message>
+  <message id="Alert.asset.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.asset.database-error">Erreur : {1} | {2}</message>
     
 </messages>

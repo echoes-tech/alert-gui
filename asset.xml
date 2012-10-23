@@ -3,30 +3,23 @@
 
   <!-- Models -->
 
-  <message id="Alert.Probe.Download.os-label">Operating System</message>
-  <message id="Alert.Probe.Download.os-info">Choose Server Operation System</message>
+  <message id="Alert.asset.asset-form-title">Servers</message>
+  <message id="Alert.asset.asset-form-info">On this page you can add the servers you need to monitor and get the scripts to configure them.</message>
+  
+  <message id="Alert.asset.asset-name-label">Server</message>
+  <message id="Alert.asset.asset-name-info">Serveur to monitor.</message>
+  
+  <message id="Alert.asset.add-asset-button">Add a server</message>
 
-  <message id="Alert.Probe.Download.arch-label">Architecture</message>
-  <message id="Alert.Probe.Download.arch-info">Choose Server Architecture</message>
+  <message id="Alert.asset.add-asset-form">Your servers</message>
+  
+  <message id="Alert.asset.download-script">Download</message>
+  <message id="Alert.asset.delete-asset">Delete this server</message>
 
-  <message id="Alert.probe.download.send-mail">Send</message>
-
-    <message id="disclaimer">
-        <h3>Probe request</h3>
-        
-        <p>
-            On this page you can choose the target Operating System and architecture of the server you want to monitor.
-            <br></br>
-            <br></br>
-            When you push the button, it sends a request to our team. We will provide the probe as soon as possible after your request.<br></br>
-            <br></br>
-            The request can be sent only once. If there is no form under this text, it means that you already have sent your request.<br></br>
-            <br></br>
-            If you need more information, please come to our <a href="https://chat.echoes-tech.com" target="_blank">online chat</a>. 
-            <br></br>
-        </p>
-    </message>
-
+  <message id="Alert.asset.asset-name-invalid">Invalid</message>
+  <message id="Alert.asset.database-error-title">Database error</message>
+  <message id="Alert.asset.database-error">Error : {1} | {2}</message>
+  
   <!-- templates -->
 
     <message id="Alert.Asset.Management.template">

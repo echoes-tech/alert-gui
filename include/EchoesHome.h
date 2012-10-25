@@ -22,6 +22,7 @@
 #include "UserEditionWidget.h"
 #include "AlertEditionWidget.h"
 #include "AssetManagementWidget.h"
+#include "AlertListWidget.h"
 
 
 
@@ -30,6 +31,7 @@
 #include <Wt/Dbo/Query>
 #include <Wt/Dbo/QueryModel>
 #include <Wt/WTableView>
+#include <Wt/WTable>
 
 
 class EchoesHome : public Wt::WContainerWidget 
@@ -58,7 +60,7 @@ private:
     Wt::WAnchor *adminAnchor;
     Wt::WAnchor *monitoringAnchor;
     
-    
+    AlertListWidget *alertGroupBox;
     
     UserEditionModel *uem;
     UserEditionWidget *uew;
@@ -82,6 +84,8 @@ private:
     
     Wt::WGroupBox *initMonitoringWidget();
     Wt::WTabWidget* initAdminWidget();
+    
+    virtual void refresh();
 
 };
 

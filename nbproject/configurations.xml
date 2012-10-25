@@ -5,6 +5,9 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="include" displayName="include" projectFiles="true">
+        <logicalFolder name="f5" displayName="AdminAlertListTab" projectFiles="true">
+          <itemPath>include/AlertListWidget.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="f3" displayName="AdminAlertTab" projectFiles="true">
           <itemPath>include/AlertEditionModel.h</itemPath>
           <itemPath>include/AlertEditionWidget.h</itemPath>
@@ -45,6 +48,8 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>alert-list.xml</itemPath>
+      <itemPath>alert-list_fr.xml</itemPath>
       <itemPath>alert.xml</itemPath>
       <itemPath>alert_fr.xml</itemPath>
       <itemPath>asset.xml</itemPath>
@@ -56,6 +61,8 @@
       <itemPath>resources/form-probe.css</itemPath>
       <itemPath>resources/form-user.css</itemPath>
       <itemPath>resources/form.css</itemPath>
+      <itemPath>global.xml</itemPath>
+      <itemPath>global_fr.xml</itemPath>
       <itemPath>user.xml</itemPath>
       <itemPath>user_fr.xml</itemPath>
     </logicalFolder>
@@ -63,6 +70,9 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="src" displayName="src" projectFiles="true">
+        <logicalFolder name="f5" displayName="AdminAlertListTab" projectFiles="true">
+          <itemPath>src/AlertListWidget.cpp</itemPath>
+        </logicalFolder>
         <logicalFolder name="f3" displayName="AdminAlertTab" projectFiles="true">
           <itemPath>src/AlertEditionModel.cpp</itemPath>
           <itemPath>src/AlertEditionWidget.cpp</itemPath>

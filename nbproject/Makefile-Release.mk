@@ -41,6 +41,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/src/RegistrationWidget.o \
+	${OBJECTDIR}/src/AlertListWidget.o \
 	${OBJECTDIR}/src/AssetManagementModel.o \
 	${OBJECTDIR}/src/Login.o \
 	${OBJECTDIR}/src/UpdatePasswordWidget.o \
@@ -110,6 +111,11 @@ ${OBJECTDIR}/src/RegistrationWidget.o: src/RegistrationWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/RegistrationWidget.o src/RegistrationWidget.cpp
+
+${OBJECTDIR}/src/AlertListWidget.o: src/AlertListWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AlertListWidget.o src/AlertListWidget.cpp
 
 ${OBJECTDIR}/src/AssetManagementModel.o: src/AssetManagementModel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

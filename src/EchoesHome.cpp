@@ -1,4 +1,5 @@
 #include "EchoesHome.h"
+#include "AlertListWidget.h"
 
 
 
@@ -20,6 +21,39 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent):
         {
             this->session->createTables();
             std::cerr << "Created database." << std::endl;
+            Wt::Dbo::Transaction transaction(*(this->session));
+            this->session->execute(
+                        "CREATE OR REPLACE FUNCTION trg_slo_slh()"
+                        "  RETURNS trigger AS"
+                        " $BODY$"
+                        " BEGIN"
+                        " INSERT INTO \"T_SYSLOG_HISTORY_SLH\" "
+                        " VALUES (NEW.\"SLO_ID\","
+                            "NEW.\"version\","
+                            "NEW.\"SLO_APP_NAME\","
+                            "NEW.\"SLO_HOSTNAME\","
+                            "NEW.\"SLO_MSG_ID\","
+                            "NEW.\"SLO_SD\","
+                            "NEW.\"SLO_DELETE\","
+                            "NEW.\"SLO_RCPT_DATE\","
+                            "NEW.\"SLO_SENT_DATE\","
+                            "NEW.\"SLO_PRI\","
+                            "NEW.\"SLO_PROC_ID\","
+                            "NEW.\"SLO_STATE\","
+                            "NEW.\"SLO_VERSION\","
+                            "NEW.\"SLO_PRB_PRB_ID\") ;"
+                        " RETURN NULL;"
+                        " END;"
+                        " $BODY$"
+                          " LANGUAGE plpgsql VOLATILE;"
+              );
+              this->session->execute(
+                          "CREATE TRIGGER insert_slo"
+                          " AFTER INSERT"
+                          " ON \"T_SYSLOG_SLO\""
+                          " FOR EACH ROW"
+                          " EXECUTE PROCEDURE trg_slo_slh();"
+              );
         } 
         catch (std::exception& e) 
         {
@@ -164,79 +198,9 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
         Wt::log("error") << e.what();
     }
     
-    // alert list widget
-    Wt::WGroupBox *alertGroupBox = new Wt::WGroupBox("Alert list");
-    
-    Wt::Dbo::QueryModel<boost::tuple<std::string,Wt::Dbo::ptr<Alert>, Wt::Dbo::ptr<AlertCriteria>, Wt::Dbo::ptr<AlertValue> > > *qmAlertList = new Wt::Dbo::QueryModel<boost::tuple<std::string,Wt::Dbo::ptr<Alert>, Wt::Dbo::ptr<AlertCriteria>, Wt::Dbo::ptr<AlertValue> > >();
-    
-    Wt::WTableView *tviewAlertList = new Wt::WTableView(alertGroupBox);
-    
-    
-    try        
-    {
-        Wt::Dbo::Transaction transaction(*(this->session));
-        
-        //TODO : don't understand why the two lines below are needed, clean this
-        Wt::Dbo::ptr<User> tempUser = this->session->find<User>().where("\"USR_ID\" = ?").bind(this->session->user().id());
-        Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
-        std::string queryString = "SELECT NULL , ale, acr, ava FROM \"T_ALERT_ALE\" ale, \"T_ALERT_VALUE_AVA\" ava, \"T_ALERT_CRITERIA_ACR\" acr WHERE \"ALE_ID\" IN "
-        "("
-            "SELECT \"AMS_ALE_ALE_ID\" FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" WHERE \"AMS_MEV_MEV_ID\" IN "
-            "("
-                "SELECT \"MEV_ID\" FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_USR_USR_ID\" IN "
-                "("
-                    "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user().get()->currentOrganization.id()) + ""
-                ")"
-           " )"
-        ") "
-        "AND ale.\"ALE_AVA_AVA_ID\" = ava.\"AVA_ID\" "
-        "AND ale.\"ALE_DELETE\" IS NULL "
-        "AND ava.\"AVA_ACR_ACR_ID\" = acr.\"ACR_ID\" ";
-        Wt::Dbo::Query
-                <
-                    boost::tuple
-                    <
-                        std::string,
-                        Wt::Dbo::ptr<Alert>,
-                        Wt::Dbo::ptr<AlertCriteria>,
-                        Wt::Dbo::ptr<AlertValue> 
-                    > 
-                    ,Wt::Dbo::DynamicBinding
-                > q = this->session->query
-                <
-                    boost::tuple
-                    <
-                        std::string,
-                        Wt::Dbo::ptr<Alert>, 
-                        Wt::Dbo::ptr<AlertCriteria>, 
-                        Wt::Dbo::ptr<AlertValue> 
-                    >,Wt::Dbo::DynamicBinding
-                >(queryString);
-        qmAlertList->setQuery(q, false);
-        qmAlertList->addColumn(q.fields().at(0).name(), "Select", Wt::ItemIsUserCheckable);
-        
-        qmAlertList->addColumn("ALE_NAME", "Alert name", Wt::ItemIsSelectable);
-//        qm->setColumnFlags(0,Wt::ItemIsUserCheckable);
-        qmAlertList->addColumn("ACR_NAME", "Criteria", Wt::ItemIsSelectable);
-        qmAlertList->addColumn("AVA_VALUE", "Alert Value", Wt::ItemIsSelectable);
-//        qm->setColumnFlags(1,Wt::ItemIsUserCheckable);
-        
 
-        tviewAlertList->setSelectionMode(Wt::SingleSelection);
-        tviewAlertList->setModel(qmAlertList);
-        
-//        const char * test = "";
-//        boost::any anyTest(test);
-//        Wt::WModelIndex index = qmAlertList->index(0,0,tviewAlertList->rootIndex());
-//        qmAlertList->setData(index,anyTest,Wt::EditRole);
-//        transaction.commit();
-    }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::log("error") << e.what();
-    }
     
-    
+    alertGroupBox = new AlertListWidget(this->session);
     
     // user edition widget
     uew = new UserEditionWidget();
@@ -279,15 +243,17 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     }
     amw = new AssetManagementWidget(amm,this->session);
     
-    res->addTab(new Wt::WText(tr("welcome-text")), "Bienvenue");
-    res->addTab(amw, "Sondes");
-    res->addTab(aew, "Alertes");
-    res->addTab(alertGroupBox, "Liste des alertes");
-    res->addTab(usersGroupBox, "Utilisateurs");
-    res->addTab(uew, "Medias");
+    res->addTab(new Wt::WText(tr("welcome-text")), tr("Alert.admin.welcome-tab"));
+    res->addTab(amw, tr("Alert.admin.asset-tab"));
+    res->addTab(uew, tr("Alert.admin.medias-tab"));
+    res->addTab(aew, tr("Alert.admin.alert-creation-tab"));
+    res->addTab(alertGroupBox, tr("Alert.admin.alert-list-tab"));
+    res->addTab(usersGroupBox, tr("Alert.admin.users-tab"));
+    
 //    res->addTab(new Wt::WText("<h2>TESTEUH 6</h2>"), "Plugin-store");
     return res;
 }
+
 
 void EchoesHome::openUserEdition()
 {
@@ -384,8 +350,6 @@ void EchoesHome::resizeContainers(bool loggedIn)
         this->topContainer->setLayout(this->topBoxLoggedOutLayout);
         this->topContainer->setHeight(Wt::WLength(400));
     }
-    this->topContainer->refresh();
-    this->refresh();
 }
 
 
@@ -405,4 +369,9 @@ void EchoesHome::onAuthEvent()
         this->monitoringPage = 0;
         this->links->hide();
     }
+}
+
+void EchoesHome::refresh()
+{
+    this->alertGroupBox->refresh();
 }

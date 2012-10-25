@@ -713,7 +713,10 @@ void AlertEditionWidget::addAlert()
     model_->reset();
     update();
     comboAlertCrit->setCurrentIndex(0);
-            
+    
+    
+    Wt::WApplication *app = Wt::WApplication::instance();
+    app->root()->widget(0)->refresh();
 }
 
 void AlertEditionWidget::close()

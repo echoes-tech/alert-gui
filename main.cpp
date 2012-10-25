@@ -13,11 +13,16 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     // On instancie la classe EchoesHome qui permet d'afficher le site.
     Wt::WApplication *app = new Wt::WApplication(env);
     
-    app->setTitle("ECHOES Alert");    
+    app->setTitle("ECHOES Alert");
+    
+    app->messageResourceBundle().use("global",false);
+    
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-alert.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-user.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-probe.css");
+    
+    app->setCssTheme("polished");
   
 
     new EchoesHome(app->root());

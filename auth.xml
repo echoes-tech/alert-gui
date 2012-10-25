@@ -1,48 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
     
-    <message id="welcome-text">
-        <p>Welcome on alpha version of ECHOES Alert !</p>
-        
-        <p>05/10/2012</p>
-        <p>
-            <ul>
-                <li> [Engine] Bugfix : SMS were not always sent</li>
-                <li> [GUI] Bugfix : sometimes it was impossible to add an alert</li>
-                <li> [GUI] Bugfix : Random display problems (??label??)</li>
-            </ul>
-        </p>
-        
-        <p>25/09/2012</p>
-        <p>
-            <ul>
-                <li> [Engine] Alert calculation process bugfixes</li>
-                <li> [GUI] Interface stabilization</li>
-                <li> [GUI] Feedbacks during alert creation</li>
-                <li> [GUI] Alert set in the gui displayed ("Alert list" tab, to be refreshed manually)</li>
-                <li> [GUI] Sent alert history (Monitoring link, top right of the screen)</li>
-                <li> [GUI / Engine] SMS Quota (not visible, set to zero by default, recharged on demand)</li>
-            </ul>
-        </p>
-
-        <p>12/09/2012</p>
-
-        <ul>
-            <li>Create an account (but it seems to be done)</li>
-            <li>Order you first probe</li>
-            <li>Define your alert medias (cell phones, mail addresses)</li>
-            <li>Define and activate your alerts about :
-                <ul>
-                    <li>Memory usage (KB)</li>
-                    <li>Load average</li>
-                </ul>
-            </li>
-        </ul>
-
-<p>This product evolves almost every day.</p>
-<p>We will keep you informed about the new features through this page.</p>
-
-<p>The ECHOES Alert team.</p></message>
+    
 
   <!-- BaseAuth, PasswordAuth and OAuth models -->
   

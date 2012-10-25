@@ -52,6 +52,11 @@
   <message id="Alert.alert.operator.ge">Greater or equal</message>
   <message id="Alert.alert.operator.gt">Greater</message>
   
+  <message id="Alert.alert.user">User</message>
+  <message id="Alert.alert.media">Media</message>
+  <message id="Alert.alert.media-value">Value</message>
+  <message id="Alert.alert.snooze">Snooze</message>
+  
   <message id="Alert.alert.information-missing-title">Missing information</message>
   <message id="Alert.alert.information-missing">You didn't choose the information to be monitored</message>
   

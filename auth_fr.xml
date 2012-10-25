@@ -1,52 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
     
-    <message id="welcome-text"><h3>Bienvenue dans la version alpha d'ECHOES Alert !</h3>
-
-    <p>05/10/2012</p>
-    <p>
-        <ul>
-            <li> [Moteur] Correction du bug qui empêchait les SMS de partir dans certains cas</li>
-            <li> [Interface utilisateur] Correction d'un problème qui empêchait de créer une alerte </li>
-            <li> [Interface utilisateur] Correction des défauts d'affichage survenant aléatoirement type ??label??</li>
-        </ul>
-    </p>
-
-    <p>25/09/2012</p>
-    <p>
-        <ul>
-            <li> [Moteur] Correction de plusieurs problèmes dans le moteur de calcul d'alertes</li>
-            <li> [Interface utilisateur] Stabilisation de l'interface</li>
-            <li> [Interface utilisateur] Feedbacks sur la création d'alerte</li>
-            <li> [Interface utilisateur] Affichage de la liste des alertes paramétrées (Onglet "Liste des alertes", à raffraîchir manuellement)</li>nn
-            <li> [Interface utilisateur] Historique des alertes envoyées (Page Monitoring en haut à droite)</li>
-            <li> [Interface utilisateur / Moteur] Quota SMS (non visible, à zero pour l'instant, rechargeable sur demande)</li>
-        </ul>
-    </p>
-
-    <p>12/09/2012</p>
-    <p>
-        <ul>
-            <li> S'inscrire (mais ceci est déjà fait visiblement)</li>
-            <li> Commander votre première sonde</li>
-            <li> Définir vos médias d'alertes (téléphone mobile, adresse e-mail)</li>
-            <li> Définir et activer vos alertes sur les informations suivantes :
-            <ul>
-                <li> Utilisation de la mémoire vive (en KB)</li>
-                <li> Charge système (load-average)</li>
-            </ul>
-            </li>
-        </ul>
-    </p>
-    
-    <p>
-    Ce produit est en constante évolution (quasi quotidienne).<br/>
-    Nous vous tiendrons informés des nouvelles fonctionnalités au travers de cette page.
-    </p>
-    <p>
-    L'équipe ECHOES Alert.
-    </p>
-    </message>
 
   <!-- BaseAuth, PasswordAuth and OAuth models -->
 
@@ -96,7 +50,7 @@
   <message id="Wt.Auth.FacebookService.badresponse">
     <p>Désolé, impossible de se connecter en utilisant votre compte Facebook.</p>
     <small>
-      <p>Le serveur d'identification de Facebook a généré une réponse inattendue.</p>
+      <p>Le serveur d'identification de Facebook a génér� une réponse inattendue.</p>
     </small>
   </message>
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <message id="Alert.alert-list.title">Liste des alertes</message>
+  
+  <message id="Alert.alert-list.alert-form">Alertes actuellement paramétrées</message>  
+  <message id="Alert.alert-list.alert-name">Nom de l'alerte</message>
+  <message id="Alert.alert-list.criteria-name">Critère</message>
+  <message id="Alert.alert-list.alert-value">Valeur du seuil</message>
+  <message id="Alert.alert-list.alert-actions">Actions</message>
+  
+  <message id="Alert.alert-list.delete-alert">Supprimer</message>
+
+</messages>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <message id="welcome-text"><h3>Bienvenue dans la version beta d'ECHOES Alert !</h3>
+    <h2>Beta</h2>
+    <p>29/10/2012</p>
+    <p>
+        <ul>
+            <li> [Moteur] Stabilisation : amélioration des performances
+                <ul>
+                    <li>Traitement des alertes</li>
+                    <li>Analyse des données remontées par la sonde</li>
+                    <li>Stockage de l'historique des données</li>
+                </ul>
+            </li>
+            <li> [Moteur] Amélioration de la robustesse</li>
+            <li> [Moteur] Gestion des données multiples</li>
+            <li> [Interface utilisateur] Ajout et suppression des serveurs</li>
+            <li> [Interface utilisateur] Téléchargement du script d'installation automatique</li>
+            <li> [Interface utilisateur] Suppression des alertes</li>
+            <li> [Interface utilisateur] Affichage des unités</li>
+            <li> [Interface utilisateur] Gestion du quota de SMS</li>
+        </ul>
+    </p>
+    
+    
+    <hr></hr>
+    <h2>Alpha</h2>
+            
+    <p>05/10/2012</p>
+    <p>
+        <ul>
+            <li> [Moteur] Correction du bug qui empêchait les SMS de partir dans certains cas</li>
+            <li> [Interface utilisateur] Correction d'un problème qui empêchait de créer une alerte </li>
+            <li> [Interface utilisateur] Correction des défauts d'affichage survenant aléatoirement type ??label??</li>
+        </ul>
+    </p>
+
+    <p>25/09/2012</p>
+    <p>
+        <ul>
+            <li> [Moteur] Correction de plusieurs problèmes dans le moteur de calcul d'alertes</li>
+            <li> [Interface utilisateur] Stabilisation de l'interface</li>
+            <li> [Interface utilisateur] Feedbacks sur la création d'alerte</li>
+            <li> [Interface utilisateur] Affichage de la liste des alertes paramétrées (Onglet "Liste des alertes", à raffraîchir manuellement)</li>nn
+            <li> [Interface utilisateur] Historique des alertes envoyées (Page Monitoring en haut à droite)</li>
+            <li> [Interface utilisateur / Moteur] Quota SMS (non visible, à zero pour l'instant, rechargeable sur demande)</li>
+        </ul>
+    </p>
+
+    <p>12/09/2012</p>
+    <p>
+        <ul>
+            <li> S'inscrire (mais ceci est déjà fait visiblement)</li>
+            <li> Commander votre première sonde</li>
+            <li> Définir vos médias d'alertes (téléphone mobile, adresse e-mail)</li>
+            <li> Définir et activer vos alertes sur les informations suivantes :
+            <ul>
+                <li> Utilisation de la mémoire vive (en KB)</li>
+                <li> Charge système (load-average)</li>
+            </ul>
+            </li>
+        </ul>
+    </p>
+    
+    <p>
+    Ce produit est en constante évolution (quasi quotidienne).<br/>
+    Nous vous tiendrons informés des nouvelles fonctionnalités au travers de cette page.
+    </p>
+    <p>
+    L'équipe ECHOES Alert.
+    </p>
+  </message>
+    
+  <message id="Alert.admin.welcome-tab">Bienvenue</message>
+  <message id="Alert.admin.asset-tab">Serveurs</message>
+  <message id="Alert.admin.alert-creation-tab">Création d'alerte</message>
+  <message id="Alert.admin.alert-list-tab">Liste des alertes</message>
+  <message id="Alert.admin.users-tab">Utilisateurs</message>
+  <message id="Alert.admin.medias-tab">Médias</message>
+  
+  <message id="Alert.admin.title">Administration</message>
+  <message id="Alert.monitoring.title">Supervision</message>
+
+</messages>

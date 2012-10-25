@@ -1,4 +1,22 @@
 /*
+ * Validators
+ */
+.Wt-invalid {
+    background-color: #f7dada;
+}
+
+.Wt-valid {
+    background-color: #daf7da
+}
+
+/*
+ * Effects
+ */
+.Wt-animated {
+    -webkit-backface-visibility: hidden; /* avoids flicker on Chrome */
+}
+
+/*
  * Outset
  */
 .Wt-outset {
@@ -21,10 +39,6 @@
     height: 100%; width: 100%;
     top: 0px; left: 0px;
     position: fixed;
-}
-
-.Wt-animated {
-    -webkit-backface-visibility: hidden; /* avoids flicker on Chrome */
 }
 
 /*
@@ -175,6 +189,22 @@
     background-color: #EEEEEE;
 }
 
+.Wt-dialog .closeicon {
+    background: transparent url(closeicons-dialog.png) no-repeat scroll right top;
+    width: 13px;
+    height: 13px;
+    background-position: right 0px;
+    cursor: default;
+    vertical-align: center;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.Wt-dialog .closeicon:hover {
+    background-position: right -13px;
+}
+
 .Wt-dialog .titlebar {
     background: #888888; color: #FFFFFF;
     cursor: move;
@@ -182,15 +212,15 @@
 }
 
 .Wt-dialog .body {
-    background: #EEEEEE;
     padding: 4px 6px 4px;
 }
+
 
 /*
  * WMenuItem
  */
 .Wt-closeicon {
-    background: transparent url(../../closeicons-mi.png) no-repeat scroll right top;
+    background: transparent url(closeicons-mi.png) no-repeat scroll right top;
     height: 8px;
     width: 9px;
     margin: 0px 5px 0px 2px;
@@ -215,34 +245,45 @@
  * WGridLayout
  */
 
-.Wt-hrh div, .Wt-vsh {
+.Wt-hrh div, .Wt-vsh, .Wt-hrh2, .Wt-vsh2 {
     cursor: row-resize;
+}
+
+.Wt-hrh div, .Wt-vsh {
     margin: 2px;
 }
 
-.Wt-vrh div, .Wt-hsh {
+.Wt-vrh div, .Wt-hsh, .Wt-vrh2, .Wt-hsh2 {
     cursor: col-resize;
+}
+
+.Wt-vrh div, .Wt-hsh {
     margin: 0px 2px;
 }
 
-.Wt-hrh div {
+.Wt-hrh div, .Wt-hrh2 {
     background: url(splitter-v.png) no-repeat 50% 50%;
 }
 
-.Wt-vrh div {
+.Wt-vrh div, .Wt-vrh2 {
     background: url(splitter-h.png) no-repeat 50% 50%;
 }
 
-.Wt-hrh div, .Wt-vrh div {
+.Wt-hrh div, .Wt-vrh div, .Wt-vrh2 {
     background-color: #CCCCCC;
 }
 
-.Wt-hsh, .Wt-vsh {
+.Wt-hsh, .Wt-vsh, .Wt-hsh2, .Wt-vsh2 {
     background-color: #EEEEEE;
 }
 
-.Wt-hrh div:hover, .Wt-vrh div:hover {
+.Wt-hrh div:hover, .Wt-vrh div:hover,
+.Wt-vrh2:hover, .Wt-hrh2:hover {
     background-color: #EEEEEE;
+}
+
+.Wt-chwrap {
+    position: relative;
 }
 
 /*
@@ -345,6 +386,16 @@
 }
 
 /*
+ * WResizable
+ */
+.Wt-resizable {
+    background-image: url(../../resizable.png);
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: right bottom;
+}
+
+/*
  * WSlider
  */
 .Wt-slider-h {
@@ -364,11 +415,38 @@
 }
 
 .Wt-slider-h .handle {
+    cursor: pointer; cursor: hand;
     background: url(slider-thumb-h.gif) no-repeat scroll center bottom;
 }
 
 .Wt-slider-v .handle {
+    cursor: pointer; cursor: hand;
     background: url(slider-thumb-v.gif) no-repeat scroll right center;
+}
+
+/*
+ * WSlider - disabled
+ */
+.Wt-slider-v.Wt-disabled .handle {
+    background: url(slider-thumb-v-disabled.gif) no-repeat scroll right center;
+}
+
+.Wt-slider-h.Wt-disabled {
+    background: url(sliderbg-h-disabled.png) repeat-x scroll left center;
+}
+
+.Wt-slider-v.Wt-disabled {
+    background: url(sliderbg-v-disabled.png) repeat-y scroll center top;
+}
+
+.Wt-slider-h.Wt-disabled .handle {
+    cursor: auto;
+    background: url(slider-thumb-h-disabled.gif) no-repeat scroll center bottom;
+}
+
+.Wt-slider-v.Wt-disabled .handle {
+    cursor: auto;
+    background: url(slider-thumb-v-disabled.gif) no-repeat scroll right center;
 }
 
 /*
@@ -469,7 +547,7 @@ body.Wt-rtl .Wt-tabs span {
 }
 
 .Wt-tabs .Wt-closeicon, .Wt-tabs span.citemselected .Wt-closeicon {
-    background: transparent url(../../closeicons-tab.png) no-repeat scroll right top;
+    background: transparent url(closeicons-tab.png) no-repeat scroll right top;
     margin: 6px 4px 0px 0px;
     height: 13px;
     width: 13px;
@@ -487,8 +565,8 @@ body.Wt-rtl .Wt-tabs span {
  */
 .Wt-tooltip {
     position: absolute;
-    max-width: 300px;
-    background-color: #ede0b2;
+    max-width: 1000px;
+    background-color: #ffffcc;
     border: 1px solid black;
     padding: 1px 2px;
     font-family: sans-serif;
@@ -581,11 +659,16 @@ body.Wt-rtl .Wt-tabs span {
     float: right;
     width: 4px;
     cursor: col-resize;
-    padding-left: 0px;
 }
 
 body.Wt-rtl .Wt-itemview div.Wt-tv-rh {
-    float: left; padding-right: 0px;
+    float: left;
+}
+
+.Wt-itemview div.Wt-tv-no-rh {
+    width: 0px;
+    margin-left: 4px;
+    cursor: default;
 }
 
 /* sort handles */
@@ -627,15 +710,12 @@ body.Wt-rtl .Wt-itemview .Wt-tv-sh {
     font-weight: bold;
     text-overflow: ellipsis;
     overflow: hidden; /* needed for IE only */
-}
-
-.Wt-itemview .Wt-multiline div.Wt-label {
-    white-space: normal;
-}
-
-.Wt-itemview .Wt-singleline div.Wt-label {
     white-space: nowrap;
-    overflow: hidden;
+}
+
+.Wt-itemview .Wt-header .Wt-wwrap .Wt-label {
+    overflow: visible;
+    white-space: normal;
 }
 
 .Wt-itemview .Wt-tv-rh:hover {
@@ -679,6 +759,8 @@ body.Wt-rtl .Wt-tableview .Wt-header .Wt-tv-c {
 .Wt-tableview .Wt-tv-contents .Wt-tv-c,
 .Wt-plaintable .Wt-tv-c {
     padding: 0px 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .Wt-tableview .Wt-tv-contents img.icon,

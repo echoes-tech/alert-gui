@@ -1,7 +1,17 @@
 /*
+ * Validators
+ */
+.Wt-invalid {
+    background-color: #f79a9a;
+}
+
+.Wt-valid {
+    background-color: #9af79a
+}
+
+/*
  * Effects
  */
-
 .Wt-animated {
     -webkit-backface-visibility: hidden; /* avoids flicker on Chrome */
 }
@@ -220,6 +230,22 @@
     padding: 3px 6px;
 }
 
+.Wt-dialog .closeicon {
+    background: transparent url(closeicons-dialog.png) no-repeat scroll right top;
+    width: 13px;
+    height: 13px;
+    background-position: right 0px;
+    cursor: default;
+    vertical-align: center;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.Wt-dialog .closeicon:hover {
+    background-position: right -13px;
+}
+
 .Wt-dialog .body {
     padding: 4px 6px;
 }
@@ -236,34 +262,45 @@
  * WGridLayout
  */
 
-.Wt-hrh div, .Wt-vsh {
+.Wt-hrh div, .Wt-vsh, .Wt-hrh2, .Wt-vsh2 {
     cursor: row-resize;
+}
+
+.Wt-hrh div, .Wt-vsh {
     margin: 2px;
 }
 
-.Wt-vrh div, .Wt-hsh {
+.Wt-vrh div, .Wt-hsh, .Wt-vrh2, .Wt-hsh2 {
     cursor: col-resize;
+}
+
+.Wt-vrh div, .Wt-hsh {
     margin: 0px 2px;
 }
 
-.Wt-hrh div {
+.Wt-hrh div, .Wt-hrh2 {
     background: url(splitter-v.png) no-repeat 50% 50%;
 }
 
-.Wt-vrh div {
+.Wt-vrh div, .Wt-vrh2 {
     background: url(splitter-h.png) no-repeat 50% 50%;
 }
 
-.Wt-hrh div, .Wt-vrh div {
+.Wt-hrh div, .Wt-vrh div, .Wt-vrh2 {
     background-color: #EEEEEE;
 }
 
-.Wt-hsh, .Wt-vsh {
+.Wt-hsh, .Wt-vsh, .Wt-hsh2, .Wt-vsh2 {
     background-color: #8ea2bd;
 }
 
-.Wt-hrh div:hover, .Wt-vrh div:hover {
+.Wt-hrh div:hover, .Wt-vrh div:hover,
+.Wt-vrh2:hover, .Wt-hrh2:hover {
     background-color: #8ea2bd;
+}
+
+.Wt-chwrap {
+    position: relative;
 }
 
 /*
@@ -390,6 +427,16 @@
 }
 
 /*
+ * WResizable
+ */
+.Wt-resizable {
+    background-image: url(../../resizable.png);
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: right bottom;
+}
+
+/*
  * WSlider
  */
 .Wt-slider-h .Wt-slider-bg {
@@ -439,11 +486,72 @@
 }
 
 .Wt-slider-h .handle {
+    cursor: pointer; cursor: hand;
     background: url(slider-thumb.png) no-repeat scroll center;
 }
 
 .Wt-slider-v .handle {
+    cursor: pointer; cursor: hand;
     background: url(slider-thumb.png) no-repeat scroll center;
+}
+
+/*
+ * WSlider - disabled
+ */
+.Wt-slider-h.Wt-disabled .Wt-slider-bg {
+    background: url(sliderbg-h-disabled.png) repeat-x scroll left center;
+    margin: 0px 5px;
+}
+
+.Wt-slider-v.Wt-disabled .Wt-slider-bg {
+    background: url(sliderbg-v-disabled.png) repeat-y scroll center top;
+    margin: 5px 0px;
+}
+
+.Wt-slider-h.Wt-disabled .Wt-w {
+    position: absolute;
+    left: 0px;
+    width: 5px;
+    top: 0px;
+    bottom: 0px;
+    background: url(sliderbg-hw-disabled.png) no-repeat scroll left center;
+}
+
+.Wt-slider-h.Wt-disabled .Wt-e {
+    position: absolute;
+    right: 0px;
+    width: 5px;
+    top: 0px;
+    bottom: 0px;
+    background: url(sliderbg-he-disabled.png) no-repeat scroll left center;
+}
+
+.Wt-slider-v.Wt-disabled .Wt-w {
+    position: absolute;
+    left: 0px;
+    height: 5px;
+    top: 0px;
+    right: 0px;
+    background: url(sliderbg-vw-disabled.png) no-repeat scroll center top;
+}
+
+.Wt-slider-v.Wt-disabled .Wt-e {
+    position: absolute;
+    left: 0px;
+    height: 5px;
+    right: 0px;
+    bottom: 0px;
+    background: url(sliderbg-ve-disabled.png) no-repeat scroll center top;
+}
+
+.Wt-slider-h.Wt-disabled .handle {
+    cursor: auto;
+    background: url(slider-thumb-disabled.png) no-repeat scroll center;
+}
+
+.Wt-slider-v.Wt-disabled .handle {
+    cursor: auto;
+    background: url(slider-thumb-disabled.png) no-repeat scroll center;
 }
 
 /* 
@@ -497,10 +605,6 @@
 /*
  * WTabWidget
  */
-.Wt-tabs-clear {
-    clear: both;
-}
-
 .Wt-tabs {
     border-bottom: 1px solid gray;
 }
@@ -528,11 +632,17 @@
     border-bottom: none;
     background: #6880A0 url(title-gradient.png) repeat-x scroll 0 -20px;
     color: #FFFFFF;
+    height: 16px;
+}
+
+body.Wt-rtl .Wt-tabs .item, body.Wt-rtl .Wt-tabs .itemselected,
+body.Wt-rtl .Wt-tabs .citem, body.Wt-rtl .Wt-tabs .citemselected {
+    float: right;
 }
 
 .Wt-tabs li a, .Wt-tabs li button {
-   text-decoration: none;
-   color: inherit;
+    text-decoration: none;
+    color: inherit;
 }
 
 .Wt-tabs li button a {
@@ -558,7 +668,9 @@
 }
 
 .Wt-tabs .Wt-closeicon, .Wt-tabs span.citemselected .Wt-closeicon {
-    background: transparent url(../../closeicons-tab.png) no-repeat scroll right top;
+    background: transparent url(closeicons-tab.png) no-repeat scroll right top;
+    height: 16px;
+    display: inline-block;
     background-position: right 3px;
     border-width: 3px 0px 0px 0px;
     padding: 0px 6px 0px 7px;
@@ -571,13 +683,16 @@
     background-position: right -10px;
 }
 
+.Wt-tabs:after { content: ""; display: block; height: 0; clear: both; }
+.Wt-tabs { clear-after: both; }
+
 /*
  * XHTML Tooltips
  */
 .Wt-tooltip {
     position: absolute;
-    max-width: 300px;
-    background-color: #ede0b2;
+    max-width: 1000px;
+    background-color: #ffffcc;
     border: 1px solid black;
     padding: 1px 2px;
     font-family: sans-serif;
@@ -673,11 +788,16 @@
     float: right;
     width: 4px;
     cursor: col-resize;
-    padding-left: 0px;
 }
 
 body.Wt-rtl .Wt-itemview div.Wt-tv-rh {
-    float: left; padding-right: 0px;
+    float: left;
+}
+
+.Wt-itemview div.Wt-tv-no-rh {
+    width: 0px;
+    margin-left: 4px;
+    cursor: default;
 }
 
 /* sort handles */
@@ -721,15 +841,13 @@ body.Wt-rtl .Wt-itemview .Wt-tv-sh {
 .Wt-itemview .Wt-header .Wt-label {
     font-weight: bold;
     text-overflow: ellipsis;
-}
-
-.Wt-itemview .Wt-multiline div.Wt-label {
-    white-space: normal;
-}
-
-.Wt-itemview .Wt-singleline div.Wt-label {
+    overflow: hidden; /* needed for IE only */
     white-space: nowrap;
-    overflow: hidden;
+}
+
+.Wt-itemview .Wt-header .Wt-wwrap .Wt-label {
+    overflow: visible;
+    white-space: normal;
 }
 
 .Wt-itemview .Wt-tv-rh:hover {
@@ -774,6 +892,8 @@ body.Wt-rtl .Wt-tableview .Wt-header .Wt-tv-c {
 .Wt-tableview .Wt-tv-contents .Wt-tv-c,
 .Wt-plaintable .Wt-tv-c {
     padding: 0px 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .Wt-tableview .Wt-tv-contents img.icon,

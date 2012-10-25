@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <message id="welcome-text">
+    <p>Welcome on beta version of ECHOES Alert !</p>
+    <h2>Beta</h2>
+    <p>29/10/2012</p>
+    <p>
+        <ul>
+            <li> [Engine] Stabilization : performances improved
+                <ul>
+                    <li>Alert processing</li>
+                    <li>Probe datas parsing</li>
+                    <li>History data storage</li>
+                </ul>
+            </li>
+            <li> [Engine] Robustness improvement</li>
+            <li> [Engine] Multiple datas management</li>
+            <li> [GUI] Possibility to add and delete a server</li>
+            <li> [GUI] Download of an automated installation script</li>
+            <li> [GUI] Possibility to delete alerts</li>
+            <li> [GUI] Unit displayed</li>
+            <li> [GUI] SMS quota management</li>
+        </ul>
+    </p>
+    
+    
+    <hr></hr>
+    <h2>Alpha</h2>
+    <p>05/10/2012</p>
+    <p>
+        <ul>
+            <li> [Engine] Bugfix : SMS were not always sent</li>
+            <li> [GUI] Bugfix : sometimes it was impossible to add an alert</li>
+            <li> [GUI] Bugfix : Random display problems (??label??)</li>
+        </ul>
+    </p>
+
+    <p>25/09/2012</p>
+    <p>
+        <ul>
+            <li> [Engine] Alert calculation process bugfixes</li>
+            <li> [GUI] Interface stabilization</li>
+            <li> [GUI] Feedbacks during alert creation</li>
+            <li> [GUI] Alert set in the gui displayed ("Alert list" tab, to be refreshed manually)</li>
+            <li> [GUI] Sent alert history (Monitoring link, top right of the screen)</li>
+            <li> [GUI / Engine] SMS Quota (not visible, set to zero by default, recharged on demand)</li>
+        </ul>
+    </p>
+
+    <p>12/09/2012</p>
+
+    <ul>
+        <li>Create an account (but it seems to be done)</li>
+        <li>Order you first probe</li>
+        <li>Define your alert medias (cell phones, mail addresses)</li>
+        <li>Define and activate your alerts about :
+            <ul>
+                <li>Memory usage (KB)</li>
+                <li>Load average</li>
+            </ul>
+        </li>
+    </ul>
+
+    <p>This product evolves almost every day.</p>
+    <p>We will keep you informed about the new features through this page.</p>
+
+    <p>The ECHOES Alert team.</p>
+  </message>
+    
+    
+  <message id="Alert.admin.welcome-tab">Welcome</message>
+  <message id="Alert.admin.asset-tab">Servers</message>
+  <message id="Alert.admin.alert-creation-tab">Alert creation</message>
+  <message id="Alert.admin.alert-list-tab">Alerts list</message>
+  <message id="Alert.admin.users-tab">Users</message>
+  <message id="Alert.admin.medias-tab">Medias</message><message id="Alert.admin.welcome-tab">Welcome</message>
+  <message id="Alert.admin.asset-tab">Servers</message>
+  <message id="Alert.admin.alert-creation-tab">Alert creation</message>
+  <message id="Alert.admin.alert-list-tab">Alerts list</message>
+  <message id="Alert.admin.users-tab">Users</message>
+  <message id="Alert.admin.medias-tab">Medias</message>
+  
+  <message id="Alert.admin.title">Administration</message>
+  <message id="Alert.monitoring.title">Monitoring</message>
+
+</messages>

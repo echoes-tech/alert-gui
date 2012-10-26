@@ -1,8 +1,5 @@
 #include "EchoesHome.h"
 
-
-
-
 /**
 Class EchoesHome : étend la classe WContainerWidget.
 */
@@ -11,10 +8,17 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent):
     adminPageTabs(0),
     monitoringPage(0)
     {
-//    std::string Utils::connection = "hostaddr=172.16.3.101 port=5432 dbname=echoes user=echoes password=toto";
-//            session = new Session("hostaddr=172.16.3.101 port=5432 dbname=echoes user=echoes password=toto");
-        session = new Session("hostaddr=127.0.0.1 port=5432 dbname=echoes user=echoes password=toto");
-//        session = new Session("hostaddr=92.243.5.246 port=5432 dbname=echoes user=echoes password=9Mw5#vvdC56Gzs#goD3M");
+        std::string dbHost = "127.0.0.1";
+        std::string dbPort = "5432";
+        std::string dbName = "echoes";
+        std::string dbUser = "echoes";
+        std::string dbPassword = "toto";
+        Wt::WApplication::readConfigurationProperty("db-host", dbHost);
+        Wt::WApplication::readConfigurationProperty("db-port", dbPort);
+        Wt::WApplication::readConfigurationProperty("db-name", dbName);
+        Wt::WApplication::readConfigurationProperty("db-user", dbUser);
+        Wt::WApplication::readConfigurationProperty("db-password", dbPassword);
+        session = new Session("hostaddr=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " user=" + dbUser + " password=" + dbPassword);
         this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
         
         try 

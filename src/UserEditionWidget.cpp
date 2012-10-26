@@ -185,6 +185,7 @@ void UserEditionWidget::addMedia(UserEditionModel::Field field, int medId, Wt::W
     if (model_->validateField(field))
     {
         Wt::WString emailToAdd = model_->valueText(field);
+        try
         {
             Wt::Dbo::Transaction transaction(*session);
             Wt::Dbo::ptr<User> ptrUser = model_->user->self();
@@ -198,6 +199,11 @@ void UserEditionWidget::addMedia(UserEditionModel::Field field, int medId, Wt::W
             mev->value = emailToAdd;
             session->add<MediaValue>(mev);
         }
+        catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << "[UserEditionWidget] " << e.what();
+        Wt::WMessageBox::show(tr("Alert.user.problem-adding-media-title"),tr("Alert.user.problem-adding-media"),Wt::Ok);
+    }
     }
     else
     {
@@ -240,7 +246,7 @@ void UserEditionWidget::addEmail()
 
 void UserEditionWidget::deleteEmail()
 {
-    deleteMedia(1,mediaEmailSelectionBox);  
+    deleteMedia(Enums::email,mediaEmailSelectionBox);  
 }
 
 void UserEditionWidget::addSms()
@@ -250,7 +256,7 @@ void UserEditionWidget::addSms()
 
 void UserEditionWidget::deleteSms()
 {
-    deleteMedia(0,mediaSmsSelectionBox);  
+    deleteMedia(Enums::sms,mediaSmsSelectionBox);  
 }
 
 

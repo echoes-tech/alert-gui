@@ -43,7 +43,10 @@
           <itemPath>include/rapidxml/rapidxml_xhtml.hpp</itemPath>
         </logicalFolder>
         <itemPath>include/EchoesHome.h</itemPath>
+        <itemPath>include/GlobalIncludeFile.h</itemPath>
       </logicalFolder>
+      <itemPath>include/Enums.h</itemPath>
+      <itemPath>include/UserActionManagement.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -100,7 +103,7 @@
         </logicalFolder>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
-        <itemPath>include/Enums.h</itemPath>
+        <itemPath>scr/UserActionManagement.cpp</itemPath>
       </logicalFolder>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>

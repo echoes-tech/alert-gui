@@ -6,6 +6,7 @@
 
 #include "Wt/Auth/AuthService"
 #include "FormBaseModel"
+//#include "WebUtils.h"
 #include "WebUtils.h"
 
 namespace Wt {
@@ -34,7 +35,7 @@ void FormBaseModel::addOAuth(const OAuthService *auth)
 
 void FormBaseModel::addOAuth(const std::vector<const OAuthService *>& auth)
 {
-  Utils::insert(oAuth_, auth);
+  Wt::Utils::insert(oAuth_, auth);
 }
 
 WString FormBaseModel::label(Field field) const

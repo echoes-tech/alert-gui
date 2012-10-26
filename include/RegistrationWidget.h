@@ -8,12 +8,27 @@
 #ifndef REGISTRATIONWIDGET_H
 #define	REGISTRATIONWIDGET_H
 
+#include "GlobalIncludeFile.h"
+
 #include <Wt/WButtonGroup>
 #include <Wt/WRadioButton>
 #include <Wt/WGroupBox>
 #include <Wt/WBreak>
-#include "WTemplateFormView"
-#include "RegistrationModel.h"
+
+//#include "Wt/Auth/AbstractUserDatabase"
+#include "AuthWidget.h"
+//#include "Login.h"
+
+#include "Wt/WAnchor"
+#include "Wt/WApplication"
+#include "Wt/WContainerWidget"
+#include "Wt/WDialog"
+#include "Wt/WImage"
+#include "Wt/WLineEdit"
+#include "Wt/WPushButton"
+#include "Wt/WText"
+
+#include <memory>
 
 namespace Wt {
   namespace Auth {

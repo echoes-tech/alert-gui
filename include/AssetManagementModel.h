@@ -8,8 +8,7 @@
 #ifndef ASSETMANAGEMENTMODEL_H
 #define	ASSETMANAGEMENTMODEL_H
 
-#include "tools/Session.h"
-#include "WFormModel"
+#include "GlobalIncludeFile.h"
 
 class AssetManagementModel : public Wt::WFormModel {
 public:

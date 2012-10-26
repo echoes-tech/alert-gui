@@ -7,38 +7,6 @@
 
 #include "AlertEditionWidget.h"
 
-//#include "Wt/Auth/AbstractUserDatabase"
-#include "AuthWidget.h"
-//#include "Login.h"
-
-#include "Wt/WAnchor"
-#include "Wt/WApplication"
-#include "Wt/WContainerWidget"
-#include "Wt/WDialog"
-#include "Wt/WImage"
-#include "Wt/WLineEdit"
-#include "Wt/WPushButton"
-#include "Wt/WText"
-
-#include <Wt/WComboBox>
-#include <Wt/WSelectionBox>
-#include <Wt/WStringListModel>
-#include <Wt/Dbo/Query>
-#include <Wt/WSpinBox>
-#include <Wt/WStandardItem>
-#include <Wt/WStandardItemModel>
-#include <Wt/WMessageBox>
-
-
-#include "tools/Session.h"
-//#include "Login.h"
-#include "user/User.h"
-
-
-#include <memory>
-#include <Wt/WTableView>
-
-
 AlertEditionWidget::AlertEditionWidget()
 : Wt::WTemplateFormView(Wt::WString::tr("Alert.alert.Edition.template"))
 {
@@ -537,6 +505,7 @@ void AlertEditionWidget::addMedia()
                     constItemUserMedia
                 ).row()
             ] = amsPtr.id(); 
+    UserActionManagement::registerUserAction(Enums::add,Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,amsPtr.id());
 }
 
 void AlertEditionWidget::deleteMedia()
@@ -554,6 +523,7 @@ void AlertEditionWidget::deleteMedia()
             amsPtr.remove();
             dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->removeRow(row,index);
             transaction.commit();
+            UserActionManagement::registerUserAction(Enums::del,Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,mapAlertMediaSpecializationIdTableView[row]);
         }
         catch (Wt::Dbo::Exception e)
         {
@@ -699,6 +669,7 @@ void AlertEditionWidget::addAlert()
             amsPtr.modify()->alert = alePtr;
         }
         transaction.commit();
+        UserActionManagement::registerUserAction(Enums::add,Constants::T_ALERT_ALE,alePtr.id());
     }
     catch (Wt::Dbo::Exception e)
     {

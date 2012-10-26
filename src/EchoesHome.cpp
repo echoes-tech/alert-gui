@@ -1,5 +1,5 @@
 #include "EchoesHome.h"
-#include "AlertListWidget.h"
+
 
 
 
@@ -70,6 +70,10 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent):
         this->authWidget->processEnvironment();
     }
 
+Session* EchoesHome::getSession()
+{
+    return this->session;
+}
 
 void EchoesHome::initAuth()
 {
@@ -250,10 +254,17 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     res->addTab(alertGroupBox, tr("Alert.admin.alert-list-tab"));
     res->addTab(usersGroupBox, tr("Alert.admin.users-tab"));
     
+    res->currentChanged().connect(boost::bind(&EchoesHome::tabSelected, this));
+    
+    
 //    res->addTab(new Wt::WText("<h2>TESTEUH 6</h2>"), "Plugin-store");
     return res;
 }
 
+void EchoesHome::tabSelected()
+{
+    UserActionManagement::registerUserAction(Enums::display,adminPageTabs->tabText(adminPageTabs->currentIndex()),adminPageTabs->currentIndex());
+}
 
 void EchoesHome::openUserEdition()
 {
@@ -264,11 +275,20 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
 {
   if (this->session->login().loggedIn()) {
     if (internalPath == "/monitoring")
+    {
+      UserActionManagement::registerUserAction(Enums::display,"/monitoring",0);
       showMonitoring();
+    }
     else if (internalPath == "/admin")
+    {
+        UserActionManagement::registerUserAction(Enums::display,"/admin",0);
       showAdmin();
+    }
     else
+    {
+      UserActionManagement::registerUserAction(Enums::display,"/admin (default)",0);
       Wt::WApplication::instance()->setInternalPath("/admin",  true);
+    }
   }
 }
 
@@ -358,12 +378,13 @@ void EchoesHome::onAuthEvent()
     resizeContainers(session->login().loggedIn());
     if (this->session->login().loggedIn())
     {
-        
+        UserActionManagement::registerUserAction(Enums::login,"success",1);
         this->links->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
     }
     else
     {
+        UserActionManagement::registerUserAction(Enums::logout,"",0);
         this->mainStack->clear();
         this->adminPageTabs = 0;
         this->monitoringPage = 0;

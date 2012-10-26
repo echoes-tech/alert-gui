@@ -5,7 +5,8 @@
 #include <Wt/WEnvironment>
 #include <Wt/WApplication>
 
-#include <EchoesHome.h>
+#include "GlobalIncludeFile.h"
+
 //---------------------------------------------------------------------------
 
 Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env) 

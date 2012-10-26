@@ -6,34 +6,7 @@
  */
 
 #include "AuthWidget.h"
-#include "RegistrationWidget.h"
 
-#include "Wt/Auth/AbstractUserDatabase"
-#include "Wt/Auth/AuthModel"
-#include "Wt/Auth/AuthService"
-#include "Wt/Auth/LostPasswordWidget"
-#include "Wt/Auth/PasswordPromptDialog"
-#include "UpdatePasswordWidget.h"
-
-#include "Wt/Auth/OAuthService"
-
-#include "Wt/WApplication"
-#include "Wt/WAnchor"
-#include "Wt/WCheckBox"
-#include "Wt/WContainerWidget"
-#include "Wt/WDialog"
-#include "Wt/WEnvironment"
-#include "Wt/WImage"
-#include "Wt/WLineEdit"
-#include "Wt/WMessageBox"
-#include "Wt/WPushButton"
-#include "Wt/WTemplate"
-#include "Wt/WText"
-
-#include "Login.h"
-#include "WebUtils.h"
-
-#include <memory>
 
 //namespace skeletons
 //{
@@ -131,6 +104,7 @@ void AuthWidget::registerNewUser()
 
 void AuthWidget::registerNewUser(const Identity& oauth)
 {
+    UserActionManagement::registerUserAction(Enums::display,"register",0);
     showDialog(tr("Wt.Auth.registration"), createRegistrationView(oauth));
 }
 

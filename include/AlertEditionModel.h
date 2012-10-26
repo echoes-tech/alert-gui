@@ -8,8 +8,7 @@
 #ifndef ALERTEDITIONMODEL_H
 #define	ALERTEDITIONMODEL_H
 
-#include "tools/Session.h"
-#include "WFormModel"
+#include "GlobalIncludeFile.h"
 
 class AlertEditionModel : public Wt::WFormModel {
 public:

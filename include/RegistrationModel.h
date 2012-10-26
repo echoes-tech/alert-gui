@@ -8,6 +8,7 @@
 #ifndef REGISTRATIONMODEL_H
 #define	REGISTRATIONMODEL_H
 
+#include "GlobalIncludeFile.h"
 #include <Wt/Auth/Identity>
 #include "FormBaseModel"
 #include <Wt/Auth/User>

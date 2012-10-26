@@ -7,25 +7,7 @@
 
 #include "RegistrationWidget.h"
 
-//#include "Wt/Auth/AbstractUserDatabase"
-#include "AuthWidget.h"
-//#include "Login.h"
 
-#include "Wt/WAnchor"
-#include "Wt/WApplication"
-#include "Wt/WContainerWidget"
-#include "Wt/WDialog"
-#include "Wt/WImage"
-#include "Wt/WLineEdit"
-#include "Wt/WPushButton"
-#include "Wt/WText"
-
-
-#include "tools/Session.h"
-//#include "Login.h"
-#include "user/User.h"
-
-#include <memory>
 
 namespace skeletons
 {
@@ -256,7 +238,10 @@ void RegistrationWidget::oAuthDone(OAuthProcess *oauth,
                 << identity.email();
 
         if (!model_->registerIdentified(identity))
+        {
+            UserActionManagement::registerUserAction(Enums::registration,"success",1);
             update();
+        }
     }
     else
     {

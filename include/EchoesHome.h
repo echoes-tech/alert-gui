@@ -1,12 +1,13 @@
 #ifndef ECHOESHOME_H_
 #define ECHOESHOME_H_
 
+#include "GlobalIncludeFile.h"
+
 #include <Wt/WApplication>
 #include <Wt/WContainerWidget>
 #include <Wt/WServer>
 
 #include <Wt/Auth/AuthModel>
-#include "AuthWidget.h"
 #include <Wt/Auth/PasswordService>
 #include <Wt/WLabel>
 #include <Wt/WText>
@@ -19,29 +20,25 @@
 #include <Wt/WVBoxLayout>
 #include <Wt/WPanel>
 
-#include "UserEditionWidget.h"
-#include "AlertEditionWidget.h"
-#include "AssetManagementWidget.h"
-#include "AlertListWidget.h"
-
-
-
-#include <tools/Session.h>
-
 #include <Wt/Dbo/Query>
 #include <Wt/Dbo/QueryModel>
 #include <Wt/WTableView>
 #include <Wt/WTable>
 
+class AlertEditionWidget;
+class UserEditionWidget;
+class AlertListWidget;
 
 class EchoesHome : public Wt::WContainerWidget 
 {
 public:
 
     EchoesHome(Wt::WContainerWidget *parent = 0);
+    Session *getSession();
 private:
     Session *session;
     void openUserEdition();
+    void tabSelected();
     void handleInternalPath(const std::string &internalPath);
     
     Wt::Auth::AuthWidget *authWidget;

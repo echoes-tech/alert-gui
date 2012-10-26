@@ -161,6 +161,7 @@ void AlertListWidget::deleteAlert(long long id)
         
         ptrAlert.modify()->deleteTag = Wt::WDateTime::currentDateTime();
         transaction.commit();
+        UserActionManagement::registerUserAction(Enums::del,Constants::T_ALERT_ALE,ptrAlert.id());
     }
     catch (Wt::Dbo::Exception e)
     {

@@ -8,8 +8,10 @@
 #ifndef USEREDITIONMODEL_H
 #define	USEREDITIONMODEL_H
 
-#include "tools/Session.h"
-#include "WFormModel"
+#include "GlobalIncludeFile.h"
+
+#include <Wt/WMessageBox>
+
 
 class UserEditionModel : public Wt::WFormModel {
 public:

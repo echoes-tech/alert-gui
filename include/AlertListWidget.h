@@ -8,7 +8,7 @@
 #ifndef ALERTLISTWIDGET_H
 #define	ALERTLISTWIDGET_H
 
-#include <tools/Session.h>
+#include "GlobalIncludeFile.h"
 
 #include <Wt/WTable>
 #include <Wt/WPushButton>

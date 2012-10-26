@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/scr/UserActionManagement.o \
 	${OBJECTDIR}/src/EscapeOStream.o \
 	${OBJECTDIR}/src/UserEditionWidget.o \
 	${OBJECTDIR}/src/EchoesHome.o \
@@ -81,6 +82,11 @@ LDLIBSOPTIONS=-L../dbo/dist/Debug_SharedObject/GNU-Linux-x86 -L/var/lib/jenkins/
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/scr/UserActionManagement.o: scr/UserActionManagement.cpp 
+	${MKDIR} -p ${OBJECTDIR}/scr
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/scr/UserActionManagement.o scr/UserActionManagement.cpp
 
 ${OBJECTDIR}/src/EscapeOStream.o: src/EscapeOStream.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

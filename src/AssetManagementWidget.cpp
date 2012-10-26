@@ -8,44 +8,7 @@
 #include "AssetManagementWidget.h"
 
 
-#include "Wt/WAnchor"
-#include "Wt/WApplication"
-#include "Wt/WContainerWidget"
-#include "Wt/WDialog"
-#include "Wt/WImage"
-#include "Wt/WLineEdit"
-#include "Wt/WPushButton"
-#include "Wt/WText"
 
-#include <Wt/WComboBox>
-#include <Wt/WSelectionBox>
-#include <Wt/WStringListModel>
-#include <Wt/Dbo/Query>
-#include <Wt/WStandardItem>
-#include <Wt/WStandardItemModel>
-#include <Wt/Mail/Client>
-#include <Wt/Mail/Message>
-
-#include <Wt/WMessageBox>
-
-#include <Wt/WVBoxLayout>
-#include <Wt/WHBoxLayout>
-#include <Wt/WTable>
-
-
-#include "tools/Session.h"
-//#include "Login.h"
-#include "user/User.h"
-
-
-#include <memory>
-#include <Wt/WTableView>
-#include <Wt/Utils>
-#include <Wt/WLabel>
-#include <Wt/WVBoxLayout>
-
-#include <iostream>
-#include <fstream>
 
 
 AssetManagementWidget::AssetManagementWidget(AssetManagementModel *model, Session *session)
@@ -121,6 +84,8 @@ void AssetManagementWidget::createUI()
                 Wt::WFileResource *file = generateScript(i->id());
                 Wt::WAnchor *anchor = new Wt::WAnchor(file,tr("Alert.asset.download-script"),linksTable->elementAt(row, 2));
                 anchor->setTarget(Wt::TargetNewWindow);
+                anchor->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this,file->fileName()));
+                
                 new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
 
                 Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 3));
@@ -169,6 +134,11 @@ void AssetManagementWidget::createUI()
     
 }
 
+void AssetManagementWidget::downloadScript(std::string fileName)
+{
+    UserActionManagement::registerUserAction(Enums::download,fileName,0);
+}
+
 Wt::WFormWidget *AssetManagementWidget::createFormWidget(AssetManagementModel::Field field)
 {
     Wt::WFormWidget *result = 0;
@@ -209,6 +179,7 @@ void AssetManagementWidget::addAsset()
             {
                 ptrNewAsset.modify()->plugins.insert(plgSystem);
             }
+            UserActionManagement::registerUserAction(Enums::add,Constants::T_ASSET_AST,ptrNewAsset.id());
         }
         else
         {
@@ -244,6 +215,7 @@ void AssetManagementWidget::deleteAsset(long long id)
         session->execute(executeString);
         
         ptrAsset.modify()->deleteTag = Wt::WDateTime::currentDateTime();
+        UserActionManagement::registerUserAction(Enums::del,Constants::T_ASSET_AST,ptrAsset.id());
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)

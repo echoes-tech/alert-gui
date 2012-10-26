@@ -13,7 +13,21 @@ public:
     Enums();
     Enums(const Enums& orig);
     virtual ~Enums();
-    enum {email = 1, sms = 2};
+    enum 
+    {
+        email = 1, 
+        sms = 2
+    };
+    enum EAction
+    {
+        login = 1, 
+        registration = 2, 
+        logout = 3,
+        display = 4,
+        download = 5,
+        add = 6,
+        del = 7
+    };
 private:
 
 };

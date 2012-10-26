@@ -8,15 +8,39 @@
 #ifndef ALERTEDITIONWIDGET_H
 #define	ALERTEDITIONWIDGET_H
 
+#include "GlobalIncludeFile.h"
+
 #include <Wt/WButtonGroup>
 #include <Wt/WRadioButton>
 #include <Wt/WGroupBox>
 #include <Wt/WBreak>
-#include "WTemplateFormView"
-#include "AlertEditionModel.h"
 
-#include "tools/Session.h"
 
+#include "Wt/WAnchor"
+#include "Wt/WApplication"
+#include "Wt/WContainerWidget"
+#include "Wt/WDialog"
+#include "Wt/WImage"
+#include "Wt/WLineEdit"
+#include "Wt/WPushButton"
+#include "Wt/WText"
+
+#include <Wt/WComboBox>
+#include <Wt/WSelectionBox>
+#include <Wt/WStringListModel>
+#include <Wt/Dbo/Query>
+#include <Wt/WSpinBox>
+#include <Wt/WStandardItem>
+#include <Wt/WStandardItemModel>
+#include <Wt/WMessageBox>
+
+
+
+#include <memory>
+#include <Wt/WTableView>
+
+class EchoesHome;
+class UserActionManagement;
 
 class AlertEditionWidget : public Wt::WTemplateFormView
 {

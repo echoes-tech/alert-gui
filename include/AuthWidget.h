@@ -14,9 +14,37 @@
 #ifndef WT_AUTH_AUTH_WIDGET_H_
 #define WT_AUTH_AUTH_WIDGET_H_
 
-#include "WTemplateFormView"
+#include "GlobalIncludeFile.h"
 #include <Wt/Auth/AuthModel>
 #include <Wt/Auth/OAuthService>
+
+
+#include "Wt/Auth/AbstractUserDatabase"
+#include "Wt/Auth/AuthModel"
+#include "Wt/Auth/AuthService"
+#include "Wt/Auth/LostPasswordWidget"
+#include "Wt/Auth/PasswordPromptDialog"
+#include "UpdatePasswordWidget.h"
+
+#include "Wt/Auth/OAuthService"
+
+#include "Wt/WApplication"
+#include "Wt/WAnchor"
+#include "Wt/WCheckBox"
+#include "Wt/WContainerWidget"
+#include "Wt/WDialog"
+#include "Wt/WEnvironment"
+#include "Wt/WImage"
+#include "Wt/WLineEdit"
+#include "Wt/WMessageBox"
+#include "Wt/WPushButton"
+#include "Wt/WTemplate"
+#include "Wt/WText"
+
+//#include "Login.h"
+#include "WebUtils.h"
+
+#include <memory>
 
 namespace Wt {
   namespace Auth {

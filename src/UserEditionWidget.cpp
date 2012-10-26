@@ -4,9 +4,7 @@
  * 
  * Created on 14 août 2012, 11:50
  */
-#include <Wt/WMessageBox>
 
-#include "Enums.h"
 #include "UserEditionWidget.h"
 
 
@@ -197,13 +195,15 @@ void UserEditionWidget::addMedia(UserEditionModel::Field field, int medId, Wt::W
 //            mev->notifEndOfAlert = false;
 //            mev->snoozeDuration = 0;
             mev->value = emailToAdd;
-            session->add<MediaValue>(mev);
+            Wt::Dbo::ptr<MediaValue> ptrMev = session->add<MediaValue>(mev);
+            transaction.commit();
+            UserActionManagement::registerUserAction(Enums::add,Constants::T_MEDIA_VALUE_MEV,ptrMev.id());
         }
         catch (Wt::Dbo::Exception e)
-    {
-        Wt::log("error") << "[UserEditionWidget] " << e.what();
-        Wt::WMessageBox::show(tr("Alert.user.problem-adding-media-title"),tr("Alert.user.problem-adding-media"),Wt::Ok);
-    }
+        {
+            Wt::log("error") << "[UserEditionWidget] " << e.what();
+            Wt::WMessageBox::show(tr("Alert.user.problem-adding-media-title"),tr("Alert.user.problem-adding-media"),Wt::Ok);
+        }
     }
     else
     {
@@ -229,6 +229,7 @@ void UserEditionWidget::deleteMedia(int medId, Wt::WSelectionBox *sBox)
         ptdMevToDelete.remove();
         sBox->setModel(getMediasForCurrentUser(medId));
         sBox->refresh();
+        UserActionManagement::registerUserAction(Enums::del,Constants::T_MEDIA_VALUE_MEV,medId);
         update(); 
     }
     catch (Wt::Dbo::Exception e)

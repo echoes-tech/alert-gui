@@ -1,5 +1,5 @@
 /* 
- * File:   ProbeDownloadWidget.h
+ * File:   AssetManagementWidget.h
  * Author: tsa
  *
  * Created on 14 août 2012, 11:50
@@ -8,34 +8,55 @@
 #ifndef ASSETMANAGEMENTWIDGET_H
 #define	ASSETMANAGEMENTWIDGET_H
 
-#include <Wt/WButtonGroup>
-#include <Wt/WRadioButton>
-#include <Wt/WGroupBox>
-#include <Wt/WBreak>
-#include "WTemplateFormView"
-#include "AssetManagementModel.h"
-#include <Wt/Mail/Client>
+#include "GlobalIncludeFile.h"
 
-#include "tools/Session.h"
-
-
-
-
-
+#include <Wt/WAnchor>
 #include <Wt/WApplication>
+#include <Wt/WContainerWidget>
+#include <Wt/WDialog>
+#include <Wt/WImage>
+#include <Wt/WLineEdit>
+#include <Wt/WPushButton>
+#include <Wt/WText>
+
 #include <Wt/WBreak>
 #include <Wt/WDatePicker>
 #include <Wt/WSelectionBox>
-#include <Wt/WContainerWidget>
-#include <Wt/WImage>
 #include <Wt/WIntValidator>
-#include <Wt/WLabel>
-#include <Wt/WLineEdit>
-#include <Wt/WPushButton>
-#include <Wt/WTableCell>
 #include <Wt/WTextArea>
-#include <Wt/WText>
-#include<Wt/WFileResource>
+#include <Wt/WFileResource>
+
+#include <Wt/WComboBox>
+#include <Wt/WSelectionBox>
+#include <Wt/WStringListModel>
+#include <Wt/Dbo/Query>
+#include <Wt/WStandardItem>
+#include <Wt/WStandardItemModel>
+#include <Wt/Mail/Client>
+#include <Wt/Mail/Message>
+
+#include <Wt/WMessageBox>
+
+#include <Wt/WVBoxLayout>
+#include <Wt/WHBoxLayout>
+#include <Wt/WTable>
+#include <Wt/WTableCell>
+#include <Wt/WTableView>
+
+#include <Wt/Utils>
+#include <Wt/WLabel>
+
+#include <Wt/WGroupBox>
+#include <Wt/WButtonGroup>
+#include <Wt/WRadioButton>
+
+
+
+
+
+#include <memory>
+#include <iostream>
+#include <fstream>
 
 
 
@@ -103,10 +124,7 @@ private:
   
   bool created_;
   
-  
-  
-  
-  
+  void downloadScript(std::string fileName);
   
   Wt::WContainerWidget *feedbackMessages_;
 

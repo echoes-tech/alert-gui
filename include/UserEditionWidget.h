@@ -1,5 +1,5 @@
 /* 
- * File:   RegistrationWidget.h
+ * File:   UserEditionWidget.h
  * Author: tsa
  *
  * Created on 14 août 2012, 11:50
@@ -7,37 +7,33 @@
 
 #ifndef USEREDITIONWIDGET_H
 #define	USEREDITIONWIDGET_H
-#include "tools/Session.h"
+
+#include "GlobalIncludeFile.h"
+
 #include <Wt/WButtonGroup>
 #include <Wt/WRadioButton>
 #include <Wt/WGroupBox>
 #include <Wt/WBreak>
-#include "WTemplateFormView"
-#include "AuthWidget.h"
 
-#include "Wt/WAnchor"
-#include "Wt/WApplication"
-#include "Wt/WContainerWidget"
-#include "Wt/WDialog"
-#include "Wt/WImage"
-#include "Wt/WLineEdit"
-#include "Wt/WPushButton"
-#include "Wt/WText"
+#include <Wt/WAnchor>
+#include <Wt/WApplication>
+#include <Wt/WContainerWidget>
+#include <Wt/WDialog>
+#include <Wt/WImage>
+#include <Wt/WLineEdit>
+#include <Wt/WPushButton>
+#include <Wt/WText>
 
 #include <Wt/WComboBox>
 #include <Wt/WSelectionBox>
 #include <Wt/WStringListModel>
 
-
-
-#include "user/User.h"
-
-#include "UserEditionModel.h"
 #include <memory>
 
 class AuthWidget;
 class Login;
 class OAuthProcess;
+class EchoesHome;
 
 /*! \class RegistrationWidget Wt/Auth/RegistrationWidget
  *  \brief A registration widget.
@@ -141,15 +137,6 @@ private:
   Wt::WGroupBox *organizationContainer;
   Wt::WButtonGroup *organizationGroup;
 
-//  void checkLoginName();
-//  void checkFirstName();
-//  void checkLastName();
-//  void checkOrganization();
-//  void checkPassword();
-//  void checkPassword2();
-//  void confirmIsYou();
-//  void confirmedIsYou();
-//  void oAuthDone(OAuthProcess *oauth, const Identity& identity);
 };
 
 

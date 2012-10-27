@@ -39,9 +39,6 @@
 #include <memory>
 #include <Wt/WTableView>
 
-class EchoesHome;
-class UserActionManagement;
-
 class AlertEditionWidget : public Wt::WTemplateFormView
 {
 public:
@@ -147,7 +144,7 @@ protected:
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
 
 protected:
-  virtual Wt::WFormWidget *createFormWidget(AlertEditionModel::Field field);
+  virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
 
 private:
   AlertEditionModel *model_;

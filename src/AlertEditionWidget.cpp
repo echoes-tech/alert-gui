@@ -37,7 +37,7 @@ void AlertEditionWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
     WTemplate::render(flags);
 }
 
-Wt::WFormWidget *AlertEditionWidget::createFormWidget(AlertEditionModel::Field field)
+Wt::WFormWidget *AlertEditionWidget::createFormWidget(Wt::WFormModel::Field field)
 {
     Wt::WFormWidget *result = 0;
 

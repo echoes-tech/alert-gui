@@ -31,3 +31,16 @@
 
 #endif	/* GLOBALINCLUDEFILE_H */
 
+class AlertEditionWidget;
+class UserEditionWidget;
+class AlertListWidget;
+class UserEditionModel;
+class AssetManagementWidget;
+class AssetManagementModel;
+class AlertEditionModel;
+class EchoesHome;
+class UserActionManagement;
+class AuthWidget;
+class Login;
+class OAuthProcess;
+

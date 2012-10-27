@@ -103,7 +103,7 @@
         </logicalFolder>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
-        <itemPath>scr/UserActionManagement.cpp</itemPath>
+        <itemPath>src/UserActionManagement.cpp</itemPath>
       </logicalFolder>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>

@@ -139,7 +139,7 @@ void AssetManagementWidget::downloadScript(std::string fileName)
     UserActionManagement::registerUserAction(Enums::download,fileName,0);
 }
 
-Wt::WFormWidget *AssetManagementWidget::createFormWidget(AssetManagementModel::Field field)
+Wt::WFormWidget *AssetManagementWidget::createFormWidget(Wt::WFormModel::Field field)
 {
     Wt::WFormWidget *result = 0;
 

@@ -35,7 +35,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/scr/UserActionManagement.o \
 	${OBJECTDIR}/src/EscapeOStream.o \
 	${OBJECTDIR}/src/UserEditionWidget.o \
 	${OBJECTDIR}/src/EchoesHome.o \
@@ -48,6 +47,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/UpdatePasswordWidget.o \
 	${OBJECTDIR}/src/AlertEditionModel.o \
 	${OBJECTDIR}/src/FormBaseModel.o \
+	${OBJECTDIR}/src/UserActionManagement.o \
 	${OBJECTDIR}/src/RegistrationModel.o \
 	${OBJECTDIR}/src/Enums.o \
 	${OBJECTDIR}/src/AuthWidget.o \
@@ -82,11 +82,6 @@ LDLIBSOPTIONS=-L../dbo/dist/Release_SharedObject/GNU-Linux-x86 -L/var/lib/jenkin
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui ${OBJECTFILES} ${LDLIBSOPTIONS} 
-
-${OBJECTDIR}/scr/UserActionManagement.o: scr/UserActionManagement.cpp 
-	${MKDIR} -p ${OBJECTDIR}/scr
-	${RM} $@.d
-	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/scr/UserActionManagement.o scr/UserActionManagement.cpp
 
 ${OBJECTDIR}/src/EscapeOStream.o: src/EscapeOStream.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -147,6 +142,11 @@ ${OBJECTDIR}/src/FormBaseModel.o: src/FormBaseModel.C
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FormBaseModel.o src/FormBaseModel.C
+
+${OBJECTDIR}/src/UserActionManagement.o: src/UserActionManagement.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UserActionManagement.o src/UserActionManagement.cpp
 
 ${OBJECTDIR}/src/RegistrationModel.o: src/RegistrationModel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

@@ -121,7 +121,7 @@ protected:
   virtual void render(WFlags<RenderFlag> flags);
 
 protected:
-  virtual WFormWidget *createFormWidget(RegistrationModel::Field field);
+  virtual WFormWidget *createFormWidget(Wt::WFormModel::Field field);
 
 private:
   AuthWidget *authWidget_;

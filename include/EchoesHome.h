@@ -25,10 +25,6 @@
 #include <Wt/WTableView>
 #include <Wt/WTable>
 
-class AlertEditionWidget;
-class UserEditionWidget;
-class AlertListWidget;
-
 class EchoesHome : public Wt::WContainerWidget 
 {
 public:

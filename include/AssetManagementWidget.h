@@ -50,15 +50,9 @@
 #include <Wt/WButtonGroup>
 #include <Wt/WRadioButton>
 
-
-
-
-
 #include <memory>
 #include <iostream>
 #include <fstream>
-
-
 
 class AssetManagementWidget : public Wt::WContainerWidget
 {
@@ -108,7 +102,7 @@ protected:
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   void createUI();
 
-  virtual Wt::WFormWidget *createFormWidget(AssetManagementModel::Field field);
+  virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
   
   
   void addAsset();

@@ -178,7 +178,7 @@ Wt::WStringListModel *UserEditionWidget::getMediasForCurrentUser(int mediaType)
     return res;
 }
 
-void UserEditionWidget::addMedia(UserEditionModel::Field field, int medId, Wt::WSelectionBox *sBox)
+void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medId, Wt::WSelectionBox *sBox)
 {
     if (model_->validateField(field))
     {

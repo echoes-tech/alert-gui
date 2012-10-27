@@ -30,11 +30,6 @@
 
 #include <memory>
 
-class AuthWidget;
-class Login;
-class OAuthProcess;
-class EchoesHome;
-
 /*! \class RegistrationWidget Wt/Auth/RegistrationWidget
  *  \brief A registration widget.
  *
@@ -92,7 +87,7 @@ public:
   Wt::WStringListModel *getMediasForCurrentUser(int mediaType);
   
   
-  void addMedia(UserEditionModel::Field field, int medId, Wt::WSelectionBox *sBox);
+  void addMedia(Wt::WFormModel::Field field, int medId, Wt::WSelectionBox *sBox);
   void deleteMedia(int medId, Wt::WSelectionBox *sBox);
   
   void addEmail();
@@ -124,7 +119,7 @@ protected:
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
 
 protected:
-  virtual Wt::WFormWidget *createFormWidget(UserEditionModel::Field field);
+  virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
 
 private:
   AuthWidget *authWidget_;

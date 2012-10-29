@@ -50,7 +50,7 @@
   <message id="Wt.Auth.FacebookService.badresponse">
     <p>Désolé, impossible de se connecter en utilisant votre compte Facebook.</p>
     <small>
-      <p>Le serveur d'identification de Facebook a génér� une réponse inattendue.</p>
+      <p>Le serveur d'identification de Facebook a généré une réponse inattendue.</p>
     </small>
   </message>
 

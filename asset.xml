@@ -20,6 +20,36 @@
   <message id="Alert.asset.database-error-title">Database error</message>
   <message id="Alert.asset.database-error">Error : {1} | {2}</message>
   
+  <!-- templates -->
 
+    <message id="Alert.Asset.Management.template">
+        <div class="Probe-form">
+
+            <h2>${tr:Alert.asset.asset-form-title}</h2>
+            <p>${tr:Alert.asset.asset-form-info}</p>
+            <div class = "clear"></div>
+       
+            <div class="Probe-fields float-left">
+                <label for="${id:asset-name}">${tr:Alert.asset.asset-name-label}
+                    <span class="Probe-info">${tr:Alert.asset.asset-name-info}</span>
+                </label>
+                ${asset-name}
+            </div>
+
+            <div class="Probe-buttons float-left">
+                ${add-asset-button}
+            </div>
+
+        </div>   
+         
+        
+        
+
+
+
+    </message>
+
+
+  
 
 </messages>

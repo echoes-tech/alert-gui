@@ -128,7 +128,15 @@ hr {
     clear: both;
 }
 
+.no-margin {
+    margin: 0px;
+}
+
 .one-field-large {
     width: 30em;
     margin-top: 2%;
+}
+
+.small-input input {
+    width: 4em;
 }

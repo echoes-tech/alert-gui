@@ -64,6 +64,7 @@ public:
   AlertEditionModel *model() const { return model_; }
   
   void checkThresholdOperator();
+  void checkThresholdValueKey();
   void checkThresholdValue();
   void checkSnoozeValue();
   
@@ -81,7 +82,13 @@ public:
   Wt::WSelectionBox *serverSelectionBox;
   std::map<int,long long> mapPluginIdSboxRow;
   Wt::WSelectionBox *applicationSelectionBox;
-  std::map<int,InformationId> mapInformationIdSboxRow;
+  // five maps to keep each primary key element without keeping a dbo ptr open out of a transaction + pos_key_value
+  std::map<int,long long> mapInformationSeaIdSboxRow;
+  std::map<int,long long> mapInformationSrcIdSboxRow;
+  std::map<int,long long> mapInformationPlgIdSboxRow;
+  std::map<int, int> mapInformationIvnSboxRow;
+  std::map<int,long long> mapInformationInuIdSboxRow;
+  std::map<int,int> mapInformationPkvSboxRow;
   Wt::WSelectionBox *informationSelectionBox;
   
   // list of media where the alerts are sent
@@ -104,6 +111,7 @@ public:
   
   void updateApplicationSBFromServerSB();
   void updateInformationSBFromApplicationSB();
+  void updateInformationDetailsFromInformationSB();
   
   void updateMediaValueSelectionBox(int userId, int medId);
   void updateMediaSelectionBox(int userId);
@@ -112,6 +120,7 @@ public:
   void updateServerSelectionBox(int serverId);
   void updateInformationSelectionBox(int pluginId);
   void updateApplicationSelectionBox(int astId);
+  void updateInformationDetails(int index);
   
   Wt::WStringListModel *getMediasForCurrentUser(int mediaType);
   
@@ -143,7 +152,6 @@ protected:
 
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
 
-protected:
   virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
 
 private:

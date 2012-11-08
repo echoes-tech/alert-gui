@@ -9,10 +9,11 @@
 
 
 const Wt::WFormModel::Field AlertEditionModel::ThresholdOperator = "threshold-operator";
+const Wt::WFormModel::Field AlertEditionModel::ThresholdValueKey = "threshold-value-key";
 const Wt::WFormModel::Field AlertEditionModel::ThresholdValue = "threshold-value";
 const Wt::WFormModel::Field AlertEditionModel::Snooze = "snooze";
 
-AlertEditionModel::AlertEditionModel(User *user)
+AlertEditionModel::AlertEditionModel(User *user) : WFormModel()
 {
     this->user = user;
     setView(this->user);
@@ -43,8 +44,9 @@ void AlertEditionModel::setView(User *user)
 
 void AlertEditionModel::reset()
 {
-    WFormModel::reset();
+    Wt::WFormModel::reset();
     addField(ThresholdOperator, Wt::WString::tr("Alert.alert.threshold-operator-info"));
+    addField(ThresholdValueKey, Wt::WString::tr("Alert.alert.threshold-value-key-info"));
     addField(ThresholdValue, Wt::WString::tr("Alert.alert.threshold-value-info"));
     addField(Snooze, Wt::WString::tr("Alert.alert.snooze-info"));
 }
@@ -66,6 +68,11 @@ bool AlertEditionModel::validateField(Field field)
     if (field == AlertEditionModel::ThresholdValue)
     {
         error = validateThresholdValue(valueText(field));
+        valid = error.empty();
+    }
+    else if (field == AlertEditionModel::ThresholdValueKey)
+    {
+        error = validateString(valueText(field));
         valid = error.empty();
     }
     else if (field == AlertEditionModel::Snooze)
@@ -168,4 +175,9 @@ Wt::WString AlertEditionModel::label(Field field) const
 void AlertEditionModel::setValid(Field field)
 {
     setValidation(field,Wt::WValidator::Result(Wt::WValidator::Valid,Wt::WString::tr("Alert.user.edition.valid")));
+}
+
+void AlertEditionModel::modifyField(Field field, const Wt::WString& info)
+{
+    Wt::WFormModel::fields_[field].validation = Wt::WValidator::Result(Wt::WValidator::Invalid, info);
 }

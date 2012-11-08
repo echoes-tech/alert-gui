@@ -257,6 +257,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     res->addTab(aew, tr("Alert.admin.alert-creation-tab"));
     res->addTab(alertGroupBox, tr("Alert.admin.alert-list-tab"));
     res->addTab(usersGroupBox, tr("Alert.admin.users-tab"));
+    res->addTab(new Wt::WText("blabla"), tr("Alert.options-tab"));
     
     res->currentChanged().connect(boost::bind(&EchoesHome::tabSelected, this));
     

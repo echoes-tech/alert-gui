@@ -21,6 +21,9 @@
   <message id="Alert.alert.threshold-value-label">Value</message>
   <message id="Alert.alert.threshold-value-info">Choose your value</message>
 
+  <message id="Alert.alert.threshold-value-key-label">Value key</message>
+  <message id="Alert.alert.threshold-value-key-info">Key for the value (Interface for information about network)</message>
+
   <message id="Alert.alert.user-label">Recipient</message>
   <message id="Alert.alert.user-info">Choose an alert recipient</message>
 
@@ -112,24 +115,36 @@
         ${information-sbox}
       </div>
 
-      <div class="Alert-fields one-field-large float-left">
-        <div class="float-left">
-              ${<if:threshold-operator>}
-                  <label for="${id:threshold-operator}">${threshold-operator-label}
-                      ${threshold-operator-info class="Alert-info"}
-                  </label>
-                  ${threshold-operator}
-              ${</if:threshold-operator>}  
-        </div>
 
-        <div class="float-left">
-          ${<if:threshold-value>}
-              <label for="${id:threshold-value}">${threshold-value-label}
-                ${threshold-value-info class="Alert-info"}
-              </label>
-              ${threshold-value}
-          ${</if:threshold-value>}   
-        </div>
+      <div class="Alert-fields one-field-large float-left">
+            <div class="float-left small-input">
+                ${<if:threshold-value-key>}
+                    <label for="${id:threshold-value}">${threshold-value-key-label}
+                      ${threshold-value-key-info class="Alert-info"}
+                    </label>
+                    ${threshold-value-key}  
+                ${</if:threshold-value-key>}   
+            </div>
+            
+            <div class="float-left">
+                ${<if:threshold-operator>}
+                    <label for="${id:threshold-operator}">${threshold-operator-label}
+                        ${threshold-operator-info class="Alert-info"}
+                    </label>
+                    ${threshold-operator}
+                ${</if:threshold-operator>}  
+            </div>
+
+            <div class="float-left">
+                ${<if:threshold-value>}
+                    <label for="${id:threshold-value}">${threshold-value-label}
+                      ${threshold-value-info class="Alert-info"}
+                    </label>
+                    ${threshold-value}
+                ${</if:threshold-value>}   
+            </div>
+        
+        
       </div>
          
       <div class = "clear"></div>

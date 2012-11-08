@@ -26,11 +26,14 @@ public:
     User *user;
     
     static const Field ThresholdOperator;
+    static const Field ThresholdValueKey;
     static const Field ThresholdValue;
     static const Field Snooze;
     
     virtual bool validateField(Field field);
     virtual void reset();
+    
+    void modifyField(Field field, const Wt::WString& info);
 private:
     view currentView;
     Session *session;

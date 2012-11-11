@@ -33,6 +33,7 @@
 #include <Wt/WStandardItem>
 #include <Wt/WStandardItemModel>
 #include <Wt/WMessageBox>
+#include <Wt/WSuggestionPopup>
 
 
 
@@ -77,6 +78,8 @@ public:
   
   long long userId;
   
+  Wt::WLineEdit *valueLineEdit;
+  
   // maps needed to keep the link to the base
   std::map <int,long long> mapAssetIdSboxRow;
   Wt::WSelectionBox *serverSelectionBox;
@@ -89,13 +92,18 @@ public:
   std::map<int, int> mapInformationIvnSboxRow;
   std::map<int,long long> mapInformationInuIdSboxRow;
   std::map<int,int> mapInformationPkvSboxRow;
+  std::map<int,long long> mapInformatioInuIdSboxRow;
   Wt::WSelectionBox *informationSelectionBox;
+  
+  std::map<int,long long> mapInformationUnitCombo;
   
   // list of media where the alerts are sent
   Wt::WTableView *userMediaDestinationTableView;
   std::map<int,long long> mapAlertMediaSpecializationIdTableView;
   
   Wt::WComboBox *comboAlertCrit;
+  
+  Wt::WComboBox *comboInformationUnit;
   
   std::map<int,long long> mapUserIdSboxRow;
   Wt::WSelectionBox *userSelectionBox;

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
 
-  <!-- AlertWidget -->
 
   <message id="Alert.alert.alert-form-title">Alerts</message>
   <message id="Alert.alert.alert-form-info">This page gives you the possibility to create an alert</message>
@@ -83,139 +82,21 @@
 
   <!-- templates -->
 
-  <message id="Alert.alert.Edition.template">
+  <message id="Alert.Option.Management.template">
     <div class="Alert-form">
       <h2>${tr:Alert.alert.alert-form-title}</h2>
       <p>${tr:Alert.alert.alert-form-info}</p>
       <div class = "clear"></div>
       
       <div class="Alert-fields Alert-sbox float-left">    
-        <label for="${id:asset}">${tr:Alert.alert.asset-label}
-           <span class="Alert-info">${tr:Alert.alert.asset-info}</span>
+        <label for="${id:sms-quota}">${tr:Alert.alert.sms-quota-label}
+           <span class="Alert-info">${tr:Alert.alert.sms-quota-info}</span>
         </label>
-        <br />
-        ${server-sbox}
+        ${sms-quota}
+        ${sms-ask}
       </div>
-
-      <div class="Alert-fields Alert-sbox float-left">
-        <label for="${id:application}">${tr:Alert.alert.application-label}
-           <span class="Alert-info">${tr:Alert.alert.application-info}</span>
-        </label>
-        <br />
-        ${application-sbox}
-      </div>
-            
-      <div class="clear"></div>
-            
-      <div class="Alert-fields Alert-sbox float-left">
-        <label for="${id:information}">${tr:Alert.alert.information-label}
-           <span class="Alert-info">${tr:Alert.alert.information-info}</span>
-        </label>
-        <br />
-        ${information-sbox}
-      </div>
-
-
-      <div class="Alert-fields one-field-large float-left">
-            <div class="float-left small-input">
-                ${<if:threshold-value-key>}
-                    <label for="${id:threshold-value}">${threshold-value-key-label}
-                      ${threshold-value-key-info class="Alert-info"}
-                    </label>
-                    ${threshold-value-key}  
-                ${</if:threshold-value-key>}   
-            </div>
-            
-            <div class="float-left">
-                ${<if:threshold-operator>}
-                    <label for="${id:threshold-operator}">${threshold-operator-label}
-                        ${threshold-operator-info class="Alert-info"}
-                    </label>
-                    ${threshold-operator}
-                ${</if:threshold-operator>}  
-            </div>
-
-            <div class="float-left">
-                ${<if:threshold-value>}
-                    <label for="${id:threshold-value}">${threshold-value-label}
-                      ${threshold-value-info class="Alert-info"}
-                    </label>
-                    ${threshold-value}
-                    <label for="${id:information-unit}">${information-unit-label}
-                      ${information-unit-info class="Alert-info"}
-                    </label>
-                    ${information-unit}
-                ${</if:threshold-value>}   
-            </div>
-        
-        
-      </div>
-         
-      <div class = "clear"></div>
-      <hr />
-            
-      <div class="Alert-fields Alert-sbox float-left">
-        <label>${tr:Alert.alert.user-label}
-           <span class="Alert-info">${tr:Alert.alert.user-info}</span>
-        </label>
-        <br />
-        ${user-sbox}
-      </div>
-
-      <div class="Alert-fields Alert-sbox float-left">
-        <label>${tr:Alert.alert.media-label}
-           <span class="Alert-info">${tr:Alert.alert.media-info}</span>
-        </label>
-        <br />
-        ${media-sbox}
-      </div>
-      
-      <div class = "clear"></div>
-            
-      <div class="Alert-fields Alert-sbox float-left">
-        <label>${tr:Alert.alert.media-value-label}
-           <span class="Alert-info">${tr:Alert.alert.media-value-info}</span>
-        </label>
-        <br />
-        ${media-value-sbox}
-      </div>
-      
-            
-      <div class="Alert-fields one-field-large float-left">      
-        <div class="float-left">
-          ${<if:snooze>}
-              <label for="${id:snooze}">${snooze-label}
-                 ${snooze-info class="Alert-info"}
-              </label>
-              <div class = "clear"></div>
-              ${snooze}
-          ${</if:snooze>}
-
-          <div class="Alert-buttons float-left">
-            ${add-button-media}
-          </div>
-        </div>
-      </div>
-
-      <div class = "clear"></div>
-      
-      <div class="Alert-fields">
-        <div class="float-left">
-          ${user-media-destination}
-        </div>
-
-        <div class="Alert-buttons float-left">
-          ${delete-button-media}
-        </div>
-      </div>
-
-      <hr />
-
-      <div class="Alert-buttons">
-        ${create-alert-button}
-      </div>
-            
     </div>
+
 
   </message>
 

@@ -37,6 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/src/EscapeOStream.o \
 	${OBJECTDIR}/src/UserEditionWidget.o \
+	${OBJECTDIR}/src/OptionManagementWidget.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/main.o \
@@ -44,6 +45,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/AlertListWidget.o \
 	${OBJECTDIR}/src/AssetManagementModel.o \
 	${OBJECTDIR}/src/Login.o \
+	${OBJECTDIR}/src/OptionManagementModel.o \
 	${OBJECTDIR}/src/UpdatePasswordWidget.o \
 	${OBJECTDIR}/src/AlertEditionModel.o \
 	${OBJECTDIR}/src/FormBaseModel.o \
@@ -93,6 +95,11 @@ ${OBJECTDIR}/src/UserEditionWidget.o: src/UserEditionWidget.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UserEditionWidget.o src/UserEditionWidget.cpp
 
+${OBJECTDIR}/src/OptionManagementWidget.o: src/OptionManagementWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/OptionManagementWidget.o src/OptionManagementWidget.cpp
+
 ${OBJECTDIR}/src/EchoesHome.o: src/EchoesHome.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -127,6 +134,11 @@ ${OBJECTDIR}/src/Login.o: src/Login.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Login.o src/Login.cpp
+
+${OBJECTDIR}/src/OptionManagementModel.o: src/OptionManagementModel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/OptionManagementModel.o src/OptionManagementModel.cpp
 
 ${OBJECTDIR}/src/UpdatePasswordWidget.o: src/UpdatePasswordWidget.C 
 	${MKDIR} -p ${OBJECTDIR}/src

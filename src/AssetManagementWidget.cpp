@@ -7,10 +7,6 @@
 
 #include "AssetManagementWidget.h"
 
-
-
-
-
 AssetManagementWidget::AssetManagementWidget(AssetManagementModel *model, Session *session)
 : Wt::WContainerWidget()
 {

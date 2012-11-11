@@ -251,18 +251,30 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     }
     amw = new AssetManagementWidget(amm,this->session);
     
+    try
+    {
+        Wt::Dbo::Transaction transaction(*(this->session));
+        omm = new OptionManagementModel();
+        transaction.commit();
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << e.what();
+    }
+    omw = new OptionManagementWidget(omm,this->session);
+    
+    
+    
     res->addTab(new Wt::WText(tr("welcome-text")), tr("Alert.admin.welcome-tab"));
     res->addTab(amw, tr("Alert.admin.asset-tab"));
     res->addTab(uew, tr("Alert.admin.medias-tab"));
     res->addTab(aew, tr("Alert.admin.alert-creation-tab"));
     res->addTab(alertGroupBox, tr("Alert.admin.alert-list-tab"));
     res->addTab(usersGroupBox, tr("Alert.admin.users-tab"));
-    res->addTab(new Wt::WText("blabla"), tr("Alert.options-tab"));
+    res->addTab(omw, tr("Alert.admin.options-tab"));
     
     res->currentChanged().connect(boost::bind(&EchoesHome::tabSelected, this));
     
-    
-//    res->addTab(new Wt::WText("<h2>TESTEUH 6</h2>"), "Plugin-store");
     return res;
 }
 

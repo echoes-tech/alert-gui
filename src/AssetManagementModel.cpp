@@ -7,7 +7,6 @@
 
 #include "AssetManagementModel.h"
 
-
 const Wt::WFormModel::Field AssetManagementModel::AssetName = "asset-name";
 
 AssetManagementModel::AssetManagementModel()
@@ -25,14 +24,12 @@ void AssetManagementModel::reset()
 {
     WFormModel::reset();
     addField(AssetName, Wt::WString::tr("Alert.asset.asset-name-info"));
-
 }
 
 bool AssetManagementModel::isVisible(Field field) const
 {
     return true;
 }
-
 
 bool AssetManagementModel::validateField(Field field)
 {

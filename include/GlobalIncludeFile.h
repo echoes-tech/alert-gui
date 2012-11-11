@@ -27,6 +27,8 @@
 #include "AlertListWidget.h"
 #include "AuthWidget.h"
 #include "UserActionManagement.h"
+#include "OptionManagementModel.h"
+#include "OptionManagementWidget.h"
 #include "EchoesHome.h"
 
 #endif	/* GLOBALINCLUDEFILE_H */
@@ -37,6 +39,8 @@ class AlertListWidget;
 class UserEditionModel;
 class AssetManagementWidget;
 class AssetManagementModel;
+class OptionManagementWidget;
+class OptionManagementModel;
 class AlertEditionModel;
 class EchoesHome;
 class UserActionManagement;

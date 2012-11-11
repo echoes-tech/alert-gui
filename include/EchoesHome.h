@@ -64,6 +64,9 @@ private:
     AssetManagementModel *amm;
     AssetManagementWidget *amw;
     
+    OptionManagementModel *omm;
+    OptionManagementWidget *omw;
+    
     
     
     void initAuth();

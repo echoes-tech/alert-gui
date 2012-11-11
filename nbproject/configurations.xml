@@ -16,6 +16,10 @@
           <itemPath>include/AssetManagementModel.h</itemPath>
           <itemPath>include/AssetManagementWidget.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="f6" displayName="AdminOptionTab" projectFiles="true">
+          <itemPath>include/OptionManagementModel.h</itemPath>
+          <itemPath>include/OptionManagementWidget.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>include/UserEditionModel.h</itemPath>
           <itemPath>include/UserEditionWidget.h</itemPath>
@@ -66,6 +70,8 @@
       <itemPath>resources/form.css</itemPath>
       <itemPath>global.xml</itemPath>
       <itemPath>global_fr.xml</itemPath>
+      <itemPath>options.xml</itemPath>
+      <itemPath>options_fr.xml</itemPath>
       <itemPath>user.xml</itemPath>
       <itemPath>user_fr.xml</itemPath>
     </logicalFolder>
@@ -83,6 +89,10 @@
         <logicalFolder name="f4" displayName="AdminAssetTab" projectFiles="true">
           <itemPath>src/AssetManagementModel.cpp</itemPath>
           <itemPath>src/AssetManagementWidget.cpp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f6" displayName="AdminOptionTab" projectFiles="true">
+          <itemPath>src/OptionManagementModel.cpp</itemPath>
+          <itemPath>src/OptionManagementWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>src/UserEditionModel.cpp</itemPath>

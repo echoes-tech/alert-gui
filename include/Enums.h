@@ -28,6 +28,16 @@ public:
         add = 6,
         del = 7
     };
+    enum EInformationUnitType
+    {
+        text = 1, 
+        number = 2
+    };
+    enum EOption
+    {
+        quotaAsset = 1,
+        quotaSms = 2
+    };
 private:
 
 };

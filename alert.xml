@@ -22,7 +22,8 @@
   <message id="Alert.alert.threshold-value-info">Choose your value</message>
 
   <message id="Alert.alert.threshold-value-key-label">Value key</message>
-  <message id="Alert.alert.threshold-value-key-info">Key for the value (Interface for information about network)</message>
+  <message id="Alert.alert.threshold-value-key-info">Key for the value</message>
+  <message id="Alert.alert.not-applicable">Not applicable for this information</message>
 
   <message id="Alert.alert.user-label">Recipient</message>
   <message id="Alert.alert.user-info">Choose an alert recipient</message>
@@ -35,6 +36,9 @@
 
   <message id="Alert.alert.snooze-label">Snooze</message>
   <message id="Alert.alert.snooze-info">Choose delay between two alerts</message>
+
+  <message id="Alert.alert.information-unit-label">Unit</message>
+  <message id="Alert.alert.information-unit-info">Unit used to set the alert</message>
 
   <message id="Alert.alert.add-media-button">Add to the list</message>
   <message id="Alert.alert.delete-media-button">Delete from the list</message>
@@ -80,6 +84,22 @@
   
   <message id="Alert.alert.alert-already-exists-title">Alert exists</message>
   <message id="Alert.alert.alert-already-exists">An alert about this information already exists. Multiple alerts on a single information are not implemented yet.</message>
+  
+  <message id="Alert.alert.unit.bits">Bits</message>
+  <message id="Alert.alert.unit.packets">Packets</message>
+  <message id="Alert.alert.unit.octets">Octets</message>
+  <message id="Alert.alert.unit.name">Name</message>
+  <message id="Alert.alert.unit.load">Load</message>
+  <message id="Alert.alert.unit.time_user_hz">Time user hertz</message>
+  <message id="Alert.alert.unit.percent">Percent</message>
+  <message id="Alert.alert.unit.time_secs">Seconds</message>
+  <message id="Alert.alert.unit.oct_secs">Octets / second</message>
+  
+  <message id="Alert.alert.sub-unit.ko_s">Ko / second</message>
+  <message id="Alert.alert.sub-unit.mo_s">Mo / second</message>
+  <message id="Alert.alert.sub-unit.go_s">Go / second</message>
+
+  
 
   <!-- templates -->
 

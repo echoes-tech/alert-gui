@@ -30,6 +30,7 @@ public:
     static const Field ThresholdValue;
     static const Field ThresholdValueUnit;
     static const Field Snooze;
+    static const Field Unit;
     
     virtual bool validateField(Field field);
     virtual void reset();
@@ -44,6 +45,7 @@ private:
     
     Wt::WString validateThresholdValue(Wt::WString stringToValidate) const;
     Wt::WString validateThresholdOperator(Wt::WString stringToValidate) const;
+    Wt::WString validateUnit(Wt::WString stringToValidate) const;
     Wt::WString validateSnooze(Wt::WString stringToValidate) const;
     Wt::WString validateString(Wt::WString stringToValidate) const;
     

@@ -80,6 +80,7 @@ void OptionManagementWidget::createUI()
         }
         transaction.commit();
         model_->setValue(model_->smsQuota,boost::any(smsQuotaValue));
+        model_->setReadOnly(model_->smsQuota,true);
         mainForm->updateView(model_);
     }
     catch (Wt::Dbo::Exception e)

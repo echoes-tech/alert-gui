@@ -7,11 +7,11 @@
 
 #include "AlertEditionModel.h"
 
-
 const Wt::WFormModel::Field AlertEditionModel::ThresholdOperator = "threshold-operator";
 const Wt::WFormModel::Field AlertEditionModel::ThresholdValueKey = "threshold-value-key";
 const Wt::WFormModel::Field AlertEditionModel::ThresholdValue = "threshold-value";
 const Wt::WFormModel::Field AlertEditionModel::Snooze = "snooze";
+const Wt::WFormModel::Field AlertEditionModel::Unit = "information-unit";
 
 AlertEditionModel::AlertEditionModel(User *user) : WFormModel()
 {
@@ -49,6 +49,7 @@ void AlertEditionModel::reset()
     addField(ThresholdValueKey, Wt::WString::tr("Alert.alert.threshold-value-key-info"));
     addField(ThresholdValue, Wt::WString::tr("Alert.alert.threshold-value-info"));
     addField(Snooze, Wt::WString::tr("Alert.alert.snooze-info"));
+    addField(Unit, Wt::WString::tr("Alert.alert.information-unit-info"));
 }
 
 bool AlertEditionModel::isVisible(Field field) const
@@ -83,6 +84,11 @@ bool AlertEditionModel::validateField(Field field)
     else if (field == AlertEditionModel::ThresholdOperator)
     {
         error = validateThresholdOperator(valueText(field));
+        valid = error.empty();
+    }
+    else if (field == AlertEditionModel::Unit)
+    {
+        error = validateUnit(valueText(field));
         valid = error.empty();
     }
     else
@@ -126,6 +132,17 @@ Wt::WString AlertEditionModel::validateThresholdOperator(Wt::WString stringToVal
     if (stringToValidate.toUTF8().length() < 1)
     {    
         res = Wt::WString::tr("Alert.alert.operator-empty");
+    }
+    return res;
+  
+}
+
+Wt::WString AlertEditionModel::validateUnit(Wt::WString stringToValidate) const
+{
+    Wt::WString res = Wt::WString::Empty;
+    if (stringToValidate.toUTF8().length() < 1)
+    {    
+        res = Wt::WString::tr("Alert.alert.information-unit-empty");
     }
     return res;
   

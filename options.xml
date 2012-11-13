@@ -7,18 +7,25 @@
   <message id="Alert.option.ask-sms-quota-subject">Demande quota SMS</message>
   
   <message id="Alert.option.ask-sms-title">Sent</message>
-  <message id="Alert.asset.ask-sms">An e-mail was sent to our team. You will receive an e-mail when your quota will be renewed.</message>
+  <message id="Alert.option.ask-sms">An e-mail was sent to our team. You will receive an e-mail when your quota will be renewed.</message>
+  
+  <message id="Alert.option.option-form-title">Options</message>
+  <message id="Alert.option.option-form-info">In this page you can set the different options of your account.</message>
+  
+  <message id="Alert.option.sms-quota-label">SMS quota</message>
+  <message id="Alert.option.sms-quota-info">The number of SMS remaining</message>
+  
   <!-- templates -->
 
   <message id="Alert.Option.Management.template">
     <div class="Alert-form">
-      <h2>${tr:Alert.alert.alert-form-title}</h2>
-      <p>${tr:Alert.alert.alert-form-info}</p>
+      <h2>${tr:Alert.option.option-form-title}</h2>
+      <p>${tr:Alert.option.option-form-info}</p>
       <div class = "clear"></div>
       
       <div class="Alert-fields Alert-sbox float-left">    
-        <label for="${id:sms-quota}">${tr:Alert.alert.sms-quota-label}
-           <span class="Alert-info">${tr:Alert.alert.sms-quota-info}</span>
+        <label for="${id:sms-quota}">${tr:Alert.option.sms-quota-label}
+           <span class="Alert-info">${tr:Alert.option.sms-quota-info}</span>
         </label>
         ${sms-quota}
         ${sms-ask}

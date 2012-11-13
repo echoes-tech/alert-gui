@@ -35,7 +35,7 @@
 #include <Wt/WMessageBox>
 #include <Wt/WSuggestionPopup>
 
-
+#include <boost/any.hpp>
 
 #include <memory>
 #include <Wt/WTableView>
@@ -68,6 +68,7 @@ public:
   void checkThresholdValueKey();
   void checkThresholdValue();
   void checkSnoozeValue();
+  void rememberUnitValue();
   
   /*! \brief Updates the user-interface.
    *
@@ -113,6 +114,9 @@ public:
   Wt::WSelectionBox *mediaValueSelectionBox;
   
   std::map<int,long long> mapAlertCriteriaIdSboxRow;
+  
+  int amsIdx;
+  std::map<int,long long> mapAmsCreated;
   
   void updateMediaSBFromUserSB();
   void updateMediaValueSBFromMediaSB();

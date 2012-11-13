@@ -10,6 +10,7 @@
 AlertEditionWidget::AlertEditionWidget()
 : Wt::WTemplateFormView(Wt::WString::tr("Alert.alert.Edition.template"))
 {
+    this->amsIdx = 0;
     created_ = false;
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("alert",false);
@@ -95,6 +96,13 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(Wt::WFormModel::Field fiel
         result->changed().connect(boost::bind(&AlertEditionWidget::checkSnoozeValue, this));
 
     }
+    else if (field == AlertEditionModel::Unit)
+    {
+        comboInformationUnit = new Wt::WComboBox();
+        comboInformationUnit->changed().connect(boost::bind(&AlertEditionWidget::rememberUnitValue, this));
+//        comboInformationUnit->().connect(boost::bind(&AlertEditionWidget::rememberUnitValue, this));
+        result = comboInformationUnit;
+    }
 
     return result;
 }
@@ -104,7 +112,6 @@ void AlertEditionWidget::checkThresholdOperator()
     updateModelField(model_, AlertEditionModel::ThresholdOperator);
     model_->validateField(AlertEditionModel::ThresholdOperator);
     model_->setValidated(AlertEditionModel::ThresholdOperator, false);
-    update();
 }
 
 void AlertEditionWidget::checkThresholdValueKey()
@@ -112,7 +119,6 @@ void AlertEditionWidget::checkThresholdValueKey()
     updateModelField(model_, AlertEditionModel::ThresholdValueKey);
     model_->validateField(AlertEditionModel::ThresholdValueKey);
     model_->setValidated(AlertEditionModel::ThresholdValueKey, false);
-    update();
 }
 
 void AlertEditionWidget::checkThresholdValue()
@@ -120,7 +126,6 @@ void AlertEditionWidget::checkThresholdValue()
     updateModelField(model_, AlertEditionModel::ThresholdValue);
     model_->validateField(AlertEditionModel::ThresholdValue);
     model_->setValidated(AlertEditionModel::ThresholdValue, false);
-    update();
 }
 
 void AlertEditionWidget::checkSnoozeValue()
@@ -130,7 +135,13 @@ void AlertEditionWidget::checkSnoozeValue()
     updateModelField(model_, AlertEditionModel::Snooze);
     model_->validateField(AlertEditionModel::Snooze);
     model_->setValidated(AlertEditionModel::Snooze, false);
-    update();
+}
+
+void AlertEditionWidget::rememberUnitValue()
+{
+    updateModelField(model_, AlertEditionModel::Unit);
+    model_->validateField(AlertEditionModel::Unit);
+    model_->setValidated(AlertEditionModel::Unit, false);
 }
 
 void AlertEditionWidget::update()
@@ -159,10 +170,7 @@ void AlertEditionWidget::update()
         bindWidget("information-sbox", informationSelectionBox);
         informationSelectionBox->clicked().connect(boost::bind(&AlertEditionWidget::updateInformationDetailsFromInformationSB, this));
         
-        // units
-        comboInformationUnit = new Wt::WComboBox();
-        bindWidget("information-unit", comboInformationUnit);
-        
+                
         // \alert definition
         
         // user receiving definition
@@ -229,6 +237,7 @@ void AlertEditionWidget::updateMediaSBFromUserSB()
     {
         this->updateMediaSelectionBox(mapUserIdSboxRow[userSelectionBox->currentIndex()]);
     }
+    mediaValueSelectionBox->clear();
 }
 
 void AlertEditionWidget::updateMediaValueSBFromMediaSB()
@@ -245,6 +254,8 @@ void AlertEditionWidget::updateApplicationSBFromServerSB()
     {
         this->updateApplicationSelectionBox(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]);
     }
+    informationSelectionBox->clear();
+    updateView(model_);
 }
 
 void AlertEditionWidget::updateInformationSBFromApplicationSB()
@@ -442,7 +453,7 @@ void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
             int idx = 0;
             for (Wt::Dbo::collection<Wt::Dbo::ptr<Information2> >::const_iterator k = infos.begin(); k != infos.end(); k++)
             {
-                slmInformation->insertString(idx,k->get()->name + " (" + k->get()->pk.unit.get()->name + ")");
+                slmInformation->insertString(idx,k->get()->name);
                 
                 this->mapInformationSeaIdSboxRow[idx] = k->get()->pk.search.get()->pk.id;
                 this->mapInformationSrcIdSboxRow[idx] = k->get()->pk.search.get()->pk.source.get()->pk.id;
@@ -500,7 +511,7 @@ void AlertEditionWidget::updateApplicationSelectionBox(int astId)
         return;
     }
     applicationSelectionBox->setModel(slmApplication);
-    applicationSelectionBox->refresh();
+//    applicationSelectionBox->refresh();
     
 }
 
@@ -511,46 +522,7 @@ void AlertEditionWidget::updateInformationDetails(int idx)
                 
         Wt::Dbo::Transaction transaction(*session);
 
-        Wt::Dbo::ptr<Information2> ptrInfoKey = session->find<Information2>().where("\"SEA_ID\" = ?").bind(this->mapInformationSeaIdSboxRow[idx])
-                                    .where("\"SRC_ID\" = ?").bind(this->mapInformationSrcIdSboxRow[idx])
-                                    .where("\"PLG_ID_PLG_ID\" = ?").bind(this->mapInformationPlgIdSboxRow[idx])
-                                    .where("\"INF_VALUE_NUM\" = ?").bind(this->mapInformationPkvSboxRow[idx])
-                                    .limit(1);
-        
-        
-   
-        if (ptrInfoKey)
-        {
-            model_->modifyField(model_->ThresholdValueKey,ptrInfoKey.get()->name);
-        }
-        else
-        {
-            Wt::log("error") << "[AlertEditionWidget] " << "ptr ptrInfoKey empty";
-        }
-        
-        Wt::Dbo::ptr<InformationUnit> ptrInfoUnit = session->find<InformationUnit>().where("\"INU_ID\" = ?").bind(this->mapInformatioInuIdSboxRow[idx]);
-        Wt::Dbo::collection<Wt::Dbo::ptr<InformationSubUnit> > ptrInfoSubUnit = session->find<InformationSubUnit>().where("\"ISU_INU_INU_ID\" = ?").bind(this->mapInformatioInuIdSboxRow[idx]);
-        
-        Wt::WStringListModel *slmInformationSubUnits = new Wt::WStringListModel;
-        int idx = 0;
-        slmInformationSubUnits->insertString(idx,Wt::WString::tr(ptrInfoUnit.get()->name.toUTF8()));
-        
-        mapInformationUnitCombo[idx]= ptrInfoUnit.id();
-        
-        idx++;
-        for (Wt::Dbo::collection<Wt::Dbo::ptr<InformationSubUnit> >::const_iterator k = ptrInfoSubUnit.begin(); k != ptrInfoSubUnit.end(); k++)
-        {
-            slmInformationSubUnits->insertString(idx,Wt::WString::tr(k->get()->name.toUTF8()));
-            mapInformationUnitCombo[idx] = k->id();
-            idx++;
-        }
-        comboInformationUnit->setModel(slmInformationSubUnits);
-        
-        
-        
-        
-       
-
+        // Suggestion popup for value key
         Wt::WApplication *app = Wt::WApplication::instance();
         Wt::WSuggestionPopup::Options suggestionOptions;
         suggestionOptions.highlightBeginTag = "<span class=\"highlight\">";
@@ -559,41 +531,91 @@ void AlertEditionWidget::updateInformationDetails(int idx)
         suggestionOptions.wordSeparators = " ";
         suggestionOptions.listSeparator = '\0';
         suggestionOptions.appendReplacedText = "";
-
+        // Value key hint
         Wt::WSuggestionPopup *sp =
-          new Wt::WSuggestionPopup(Wt::WSuggestionPopup::generateMatcherJS(suggestionOptions),
-                   Wt::WSuggestionPopup::generateReplacerJS(suggestionOptions),
-                   app->root());
-
-        sp->forEdit(valueLineEdit,Wt::WSuggestionPopup::DropDownIcon);
+              new Wt::WSuggestionPopup(Wt::WSuggestionPopup::generateMatcherJS(suggestionOptions),
+                       Wt::WSuggestionPopup::generateReplacerJS(suggestionOptions),
+                       app->root());
         
-        
-         std::string queryString = 
-        "SELECT iva FROM \"T_INFORMATION_VALUE_IVA\" iva WHERE \"IVA_ID\" IN ( SELECT \"IVA_ID\" FROM"
-        "("
-        "SELECT DISTINCT ON (\"IVA_VALUE\") \"IVA_VALUE\", \"IVA_ID\" FROM"
-        "(" "SELECT iva.\"IVA_VALUE\", iva.\"IVA_ID\" FROM \"T_INFORMATION_VALUE_IVA\" iva"
-        " WHERE \"SEA_ID\" = " + boost::lexical_cast<std::string>(this->mapInformationSeaIdSboxRow[idx]) + 
-        " AND \"SRC_ID\" = " + boost::lexical_cast<std::string>(this->mapInformationSrcIdSboxRow[idx]) + 
-        " AND \"PLG_ID_PLG_ID\" = " + boost::lexical_cast<std::string>(this->mapInformationPlgIdSboxRow[idx]) + 
-        " AND \"INF_VALUE_NUM\" = " + boost::lexical_cast<std::string>(this->mapInformationPkvSboxRow[idx]) + 
-        " AND \"IVA_AST_AST_ID\" = " + boost::lexical_cast<std::string>(this->mapAssetIdSboxRow[serverSelectionBox->currentIndex()]) + " ORDER BY \"IVA_ID\" DESC LIMIT 50) sr"
-        " ) sr_sr"
-        ");";
-        
-         
-        Wt::log("debug") << "query : " <<  queryString;
-         
-        std::string valueExample = "";
-        Wt::Dbo::collection<Wt::Dbo::ptr<InformationValue> > collPtrIva = session->query<Wt::Dbo::ptr<InformationValue> >(queryString);
-        for (Wt::Dbo::collection<Wt::Dbo::ptr<InformationValue> >::const_iterator k = collPtrIva.begin(); k != collPtrIva.end(); k++)
+        if (this->mapInformationPkvSboxRow[idx] != 0)
         {
-            Wt::WString res = k->get()->value;
-            sp->addSuggestion(res,res);
-            
-        }
+            model_->setReadOnly(model_->ThresholdValueKey, false);
+            model_->setValue(model_->ThresholdValueKey,boost::any(Wt::WString::Empty));
+            Wt::Dbo::ptr<Information2> ptrInfoKey = session->find<Information2>().where("\"SEA_ID\" = ?").bind(this->mapInformationSeaIdSboxRow[idx])
+                                        .where("\"SRC_ID\" = ?").bind(this->mapInformationSrcIdSboxRow[idx])
+                                        .where("\"PLG_ID_PLG_ID\" = ?").bind(this->mapInformationPlgIdSboxRow[idx])
+                                        .where("\"INF_VALUE_NUM\" = ?").bind(this->mapInformationPkvSboxRow[idx])
+                                        .limit(1);
 
-//        model_->modifyField(model_->ThresholdValueKey,ptrInfoKey.get()->name)
+
+
+            if (ptrInfoKey)
+            {
+                model_->modifyField(model_->ThresholdValueKey,ptrInfoKey.get()->name);
+            }
+            else
+            {
+                Wt::log("error") << "[AlertEditionWidget] " << "ptr ptrInfoKey empty";
+            }
+
+
+            sp->forEdit(valueLineEdit,Wt::WSuggestionPopup::DropDownIcon);
+
+
+             std::string queryString = 
+            "SELECT iva FROM \"T_INFORMATION_VALUE_IVA\" iva WHERE \"IVA_ID\" IN ( SELECT \"IVA_ID\" FROM"
+            "("
+            "SELECT DISTINCT ON (\"IVA_VALUE\") \"IVA_VALUE\", \"IVA_ID\" FROM"
+            "(" "SELECT iva.\"IVA_VALUE\", iva.\"IVA_ID\" FROM \"T_INFORMATION_VALUE_IVA\" iva"
+            " WHERE \"SEA_ID\" = " + boost::lexical_cast<std::string>(this->mapInformationSeaIdSboxRow[idx]) + 
+            " AND \"SRC_ID\" = " + boost::lexical_cast<std::string>(this->mapInformationSrcIdSboxRow[idx]) + 
+            " AND \"PLG_ID_PLG_ID\" = " + boost::lexical_cast<std::string>(this->mapInformationPlgIdSboxRow[idx]) + 
+            " AND \"INF_VALUE_NUM\" = " + boost::lexical_cast<std::string>(this->mapInformationPkvSboxRow[idx]) + 
+            " AND \"IVA_AST_AST_ID\" = " + boost::lexical_cast<std::string>(this->mapAssetIdSboxRow[serverSelectionBox->currentIndex()]) + " ORDER BY \"IVA_ID\" DESC LIMIT 50) sr"
+            " ) sr_sr"
+            ");";
+
+
+            std::string valueExample = "";
+            Wt::Dbo::collection<Wt::Dbo::ptr<InformationValue> > collPtrIva = session->query<Wt::Dbo::ptr<InformationValue> >(queryString);
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<InformationValue> >::const_iterator k = collPtrIva.begin(); k != collPtrIva.end(); k++)
+            {
+                Wt::WString res = k->get()->value;
+                sp->addSuggestion(res,res);
+
+            }
+        }
+        else
+        {
+            std::string na = "N/A";
+            model_->setReadOnly(model_->ThresholdValueKey, true);
+            model_->modifyField(model_->ThresholdValueKey,Wt::WString::tr("Alert.alert.not-applicable"));
+            model_->setValue(model_->ThresholdValueKey,boost::any(na));
+        }
+        updateView(model_);
+        
+        // Units
+        Wt::Dbo::ptr<InformationUnit> ptrInfoUnit = session->find<InformationUnit>().where("\"INU_ID\" = ?").bind(this->mapInformatioInuIdSboxRow[idx]);
+        Wt::Dbo::collection<Wt::Dbo::ptr<InformationSubUnit> > ptrInfoSubUnit = session->find<InformationSubUnit>().where("\"ISU_INU_INU_ID\" = ?").bind(this->mapInformatioInuIdSboxRow[idx]);
+        
+        Wt::WStringListModel *slmInformationSubUnits = new Wt::WStringListModel;
+        int idx = 0;
+        slmInformationSubUnits->insertString(idx,Wt::WString::tr("Alert.alert.unit." + ptrInfoUnit.get()->name.toUTF8()));
+        
+        mapInformationUnitCombo[idx]= ptrInfoUnit.id();
+        
+        idx++;
+        for (Wt::Dbo::collection<Wt::Dbo::ptr<InformationSubUnit> >::const_iterator k = ptrInfoSubUnit.begin(); k != ptrInfoSubUnit.end(); k++)
+        {
+            slmInformationSubUnits->insertString(idx,Wt::WString::tr("Alert.alert.sub-unit." + k->get()->name.toUTF8()));
+            mapInformationUnitCombo[idx] = k->id();
+            idx++;
+        }
+        comboInformationUnit->setModel(slmInformationSubUnits);
+        Wt::log("info") << "[AlertEditionWidget] " << slmInformationSubUnits->stringList()[0];
+        model_->setValue(model_->Unit,boost::any(slmInformationSubUnits->stringList()[0]));
+        update();
+
         
         transaction.commit();
         
@@ -601,10 +623,10 @@ void AlertEditionWidget::updateInformationDetails(int idx)
     catch (Wt::Dbo::Exception e)
     {
         Wt::log("error") << "[AlertEditionWidget] " << e.what();
-        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
         return;
     }
-    update();
+//    update();
     return;
     
 }
@@ -691,6 +713,8 @@ void AlertEditionWidget::addMedia()
         ams->mediaValue = mevPtr;
         ams->notifEndOfAlert = false;
         amsPtr = session->add<AlertMediaSpecialization>(ams);
+        mapAmsCreated[this->amsIdx]=amsPtr.id();
+        this->amsIdx++;
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
@@ -737,9 +761,6 @@ void AlertEditionWidget::deleteMedia()
 }
 
 
-
-
-
 bool AlertEditionWidget::validate()
 {
     return model_->validate();
@@ -776,7 +797,7 @@ void AlertEditionWidget::addAlert()
             std::string inString = "(";
             for (Wt::Dbo::collection<Wt::Dbo::ptr<AlertValue> >::const_iterator i = avaPtrCollec.begin(); i != avaPtrCollec.end(); i++) 
             {
-                Wt::log("debug") << " [Class:AlertProcessor] " << " - " << " For iva list : " << (*i).id();
+                Wt::log("debug") << " [Class:AlertEditionWidget] " << " - " << " For ava list : " << (*i).id();
                 inString += boost::lexical_cast<std::string,long long>((*i).id()) + ",";
                 i->flush();
             }
@@ -826,6 +847,7 @@ void AlertEditionWidget::addAlert()
     {
         checkThresholdOperator();
         checkThresholdValue();
+        update();
         return;
     }
     
@@ -919,7 +941,34 @@ void AlertEditionWidget::addAlert()
             amsPtr.modify()->alert = alePtr;
         }
         transaction.commit();
+        
+        
         UserActionManagement::registerUserAction(Enums::add,Constants::T_ALERT_ALE,alePtr.id());
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << "[AlertEditionWidget] " << e.what();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+        return;
+    }
+    
+    try
+    {
+        Wt::Dbo::Transaction transaction2(*session);
+        
+        std::string inString = "(";
+        for (int i = 0 ; i < this->amsIdx ; i++) 
+        {
+            inString += boost::lexical_cast<std::string,long long>(mapAmsCreated[i]) + ",";
+        }
+        inString.replace(inString.size()-1, 1, "");
+        inString += ")";
+        
+        session->execute("DELETE FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" WHERE \"AMS_ID\" IN " + inString + " AND \"AMS_ALE_ALE_ID\" IS NULL");
+        this->amsIdx = 0;
+        this->mapAmsCreated.clear();
+       
+        transaction2.commit();
     }
     catch (Wt::Dbo::Exception e)
     {

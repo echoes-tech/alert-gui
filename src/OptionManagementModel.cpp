@@ -10,7 +10,7 @@
 const Wt::WFormModel::Field OptionManagementModel::smsQuota = "sms-quota";
 const Wt::WFormModel::Field OptionManagementModel::smsAsk = "sms-ask";
 
-OptionManagementModel::OptionManagementModel() 
+OptionManagementModel::OptionManagementModel() : WFormModel()
 {
     reset();
 }
@@ -74,4 +74,9 @@ Wt::WString OptionManagementModel::label(Field field) const
 void OptionManagementModel::setValid(Field field)
 {
     setValidation(field,Wt::WValidator::Result(Wt::WValidator::Valid,Wt::WString::tr("Alert.option.valid")));
+}
+
+void OptionManagementModel::modifyField(Field field, const Wt::WString& info)
+{
+    Wt::WFormModel::fields_[field].validation = Wt::WValidator::Result(Wt::WValidator::Invalid, info);
 }

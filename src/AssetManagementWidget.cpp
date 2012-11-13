@@ -97,29 +97,13 @@ void AssetManagementWidget::createUI()
     }
     
     
-
-//    // Submit
-//    ++row;
-//    Wt::WPushButton *submit = new Wt::WPushButton(tr("submit"),
-//                      linksTable->elementAt(row, 0));
-//    submit->clicked().connect(this, &AssetManagementWidget::downloadScript);
-//    submit->setMargin(15, Wt::Top);
-//    linksTable->elementAt(row, 0)->setColumnSpan(3);
-//    linksTable->elementAt(row, 0)->setContentAlignment(Wt::AlignTop | Wt::AlignCenter);
-//
-//    // Set column widths for label and validation icon
-//    linksTable->elementAt(2, 0)->resize(Wt::WLength(30, Wt::WLength::FontEx), Wt::WLength::Auto);
-//    linksTable->elementAt(2, 1)->resize(20, Wt::WLength::Auto);
-    
-    
-    
+     
     
     Wt::WVBoxLayout *mainVerticalLayout = new Wt::WVBoxLayout();
     Wt::WHBoxLayout *topHorizontalLayout = new Wt::WHBoxLayout();
     Wt::WHBoxLayout *bottomHorizontalLayout = new Wt::WHBoxLayout();
     
-    
-    
+  
     topHorizontalLayout->addWidget(mainForm);
     bottomHorizontalLayout->addWidget(linksTable);
     

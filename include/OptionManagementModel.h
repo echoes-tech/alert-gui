@@ -20,6 +20,7 @@ public:
     static const Field smsAsk;
     virtual bool validateField(Field field);
     virtual void reset();
+    void modifyField(Field field, const Wt::WString& info);
 private:
     Session *session;
     

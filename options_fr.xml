@@ -3,81 +3,9 @@
 
   <!-- AlertWidget -->
 
-  <message id="Alert.alert.alert-form-title">Alertes</message>
-  <message id="Alert.alert.alert-form-info">Cette page vous donne la possibilité de créer une alerte</message>
-
-  <message id="Alert.alert.asset-label">Serveur</message>
-  <message id="Alert.alert.asset-info">Serveur sur lequel est installé la sonde</message>
-
-  <message id="Alert.alert.application-label">Application</message>
-  <message id="Alert.alert.application-info">Application à surveiller</message>
-
-  <message id="Alert.alert.information-label">Information</message>
-  <message id="Alert.alert.information-info">Information à collecter</message>
-
-  <message id="Alert.alert.threshold-operator-label">Opérateur</message>
-  <message id="Alert.alert.threshold-operator-info">Opérateur de comparaison</message>
-
-  <message id="Alert.alert.threshold-value-label">Valeur</message>
-  <message id="Alert.alert.threshold-value-info">Valeur à comparer</message>
-
-  <message id="Alert.alert.user-label">Destinataire</message>
-  <message id="Alert.alert.user-info">Destinataire pour l'alerte</message>
-
-  <message id="Alert.alert.media-label">Média</message>
-  <message id="Alert.alert.media-info">Média pour l'alerte</message>
-
-  <message id="Alert.alert.media-value-label">Média enregistré</message>
-  <message id="Alert.alert.media-value-info">Média enregistré pour l'alerte</message>
-
-  <message id="Alert.alert.snooze-label">Snooze</message>
-  <message id="Alert.alert.snooze-info">Délai entre deux alertes (s) (> 60)</message>
-
-  <message id="Alert.alert.edition.add-button">Ajouter cette alerte</message>
-  <message id="Alert.alert.edition.delete-button">Supprimer</message>
+  <message id="Alert.option.ask-sms-button">Demander un renouvellement de quota SMS</message>
   
-  <message id="Alert.alert.add-media-button">Ajouter à la liste</message>
-  <message id="Alert.alert.delete-media-button">Supprimer de la liste</message>
-  
-  <message id="Alert.alert.NaN"><span style="color:red">Ce n'est pas un nombre</span></message>
-  <message id="Alert.alert.snooze-too-small"><span style="color:red">Inférieur à 60</span></message>
-  <message id="Alert.alert.string-tooshort"><span style="color:red">Ne doit pas être vide</span></message>
-  <message id="Alert.alert.operator-empty"><span style="color:red">Ne doit pas être vide</span></message>
-  
-  <message id="Alert.alert.operator.lt">Inférieur</message>
-  <message id="Alert.alert.operator.le">Inférieur ou égal</message>
-  <message id="Alert.alert.operator.eq">Egal</message>
-  <message id="Alert.alert.operator.ne">Différent </message>
-  <message id="Alert.alert.operator.ge">Supérieur ou égal</message>
-  <message id="Alert.alert.operator.gt">Supérieur</message>
-  
-  <message id="Alert.alert.user">Utilisateur</message>
-  <message id="Alert.alert.media">Média</message>
-  <message id="Alert.alert.media-value">Valeur</message>
-  <message id="Alert.alert.snooze">Snooze</message>
-  
-  <message id="Alert.alert.information-missing-title">Information manquante</message>
-  <message id="Alert.alert.information-missing">Vous n'avez pas spécifié sur quelle information porte l'alerte</message>
-  
-  <message id="Alert.alert.media-missing-title">Média manquant</message>
-  <message id="Alert.alert.media-missing">
-    Vous n'avez pas choisi de média de destination pour l'alerte. <br />
-    Vous devez en ajouter au moins un dans la liste.
-  </message>
-  
-  <message id="Alert.alert.media-selection-missing-title">Média manquant</message>
-  <message id="Alert.alert.media-selection-missing">Vous n'avez pas choisi le média à ajouter</message>
-  
-  <message id="Alert.alert.database-error-title">Erreur base de données</message>
-  <message id="Alert.alert.database-error">Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com</message>
-  
-  <message id="Alert.alert.alert-created-title">Alerte créée</message>
-  <message id="Alert.alert.alert-created">La création de votre alerte s'est déroulée avec succès !</message>
-  
-  <message id="Alert.alert.alert-already-exists-title">Alert existante</message>
-  <message id="Alert.alert.alert-already-exists">
-    Une alerte concernant cette information existe déjà. <br />
-    Les alertes multiples à propos d'une même information ne sont pas encore implémentées.
-  </message>
+  <message id="Alert.option.ask-sms-title">Envoyé</message>
+  <message id="Alert.asset.ask-sms">Un email a été envoyé à notre équipe. Vous recevrez un email lorsque votre quota aura été renouvellé.</message>
 
 </messages>

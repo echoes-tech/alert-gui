@@ -84,7 +84,7 @@ void OptionManagementWidget::createUI()
     }
     catch (Wt::Dbo::Exception e)
     {
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("1"),Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"),tr("Alert.global.database-error").arg(e.what()).arg("1"),Wt::Ok);
         Wt::log("error") << "[AssetManagementWidget] " << e.what();
     }
 }
@@ -123,11 +123,11 @@ void OptionManagementWidget::askSms()
     Wt::WString mail;
     const Wt::WString constMailRecipient = "contact@echoes-tech.com";
     const Wt::WString constMailRecipientName = "Contact";
-    mail =  Wt::Utils::htmlEncode(Wt::WString("Demande de quota SMS.").toUTF8(), Wt::Utils::EncodeNewLines)
+    mail =  Wt::Utils::htmlEncode(Wt::WString::tr("Alert.option.ask-sms-quota-body").toUTF8(), Wt::Utils::EncodeNewLines)
             + "</br> " + session->user().get()->firstName + " " + session->user().get()->lastName
             + " : " + session->user().get()->eMail;
     mailMessage.addRecipient(Wt::Mail::To, Wt::Mail::Mailbox(constMailRecipient.toUTF8(), constMailRecipientName.toUTF8()));
-    mailMessage.setSubject("Demande quota SMS");
+    mailMessage.setSubject(Wt::WString::tr("Alert.option.ask-sms-quota-subject"));
     mailMessage.addHtmlBody(mail);
     session->auth().sendMail(mailMessage);
     this->refresh();

@@ -8,6 +8,8 @@
   <message id="Alert.alert-list.criteria-name">Criteria</message>
   <message id="Alert.alert-list.alert-value">Threshold value</message>
   <message id="Alert.alert-list.alert-actions">Actions</message>
+  <message id="Alert.alert-list.alert-media">Media</message>
+  <message id="Alert.alert-list.alert-snooze">Snooze</message>
   
   <message id="Alert.alert-list.delete-alert">Delete</message>
   

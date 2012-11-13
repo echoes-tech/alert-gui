@@ -83,5 +83,10 @@
   
   <message id="Alert.admin.title">Administration</message>
   <message id="Alert.monitoring.title">Monitoring</message>
+  
+  
+  <message id="Alert.admin.options-tab">Options</message>
+  <message id="Alert.global.database-error-title">Database error</message>
+  <message id="Alert.global.database-error">Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>id="Alert.global.database-error-title">Database Error</messages>
 
 </messages>

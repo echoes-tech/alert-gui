@@ -196,6 +196,7 @@ void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medId, Wt::WSe
 //            mev->snoozeDuration = 0;
             mev->value = emailToAdd;
             Wt::Dbo::ptr<MediaValue> ptrMev = session->add<MediaValue>(mev);
+            model_->setValidated(field,false);
             transaction.commit();
             UserActionManagement::registerUserAction(Enums::add,Constants::T_MEDIA_VALUE_MEV,ptrMev.id());
         }
@@ -221,23 +222,48 @@ void UserEditionWidget::deleteMedia(int medId, Wt::WSelectionBox *sBox)
 {
     try
     {
+        Wt::Dbo::Transaction transaction2(*session);
+        
+        std::string qryString = "DELETE FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" "
+                                " WHERE \"AMS_ALE_ALE_ID\" IS NULL"
+                                " AND \"AMS_MEV_MEV_ID\" IN "
+                                " (SELECT \"MEV_ID\" FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_USR_USR_ID\" = " + boost::lexical_cast<std::string>(model_->user->self().id())  + ")";
+
+        session->execute(qryString);
+
+        
+        transaction2.commit();
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << "[UserEditionWidget] [deleteMedia]" << e.what();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+        return;
+    }
+    
+    try
+    {
         Wt::Dbo::Transaction transaction(*session);
-        Wt::Dbo::ptr<MediaValue> ptdMevToDelete = session->find<MediaValue>().where("\"MEV_VALUE\" = ?").bind(sBox->valueText())
-                                    .where("\"MEV_MED_MED_ID\" = ?").bind(medId)
-                                    .where("\"MEV_USR_USR_ID\" = ?").bind(model_->user->self().id())
-                                    .limit(1);
-        ptdMevToDelete.remove();
-        sBox->setModel(getMediasForCurrentUser(medId));
-        sBox->refresh();
+        session->execute("DELETE FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_VALUE\" = \'" + sBox->valueText().toUTF8() + "\'"
+                         " AND \"MEV_MED_MED_ID\" = " + boost::lexical_cast<std::string>(medId)
+                         + " AND \"MEV_USR_USR_ID\" = " + boost::lexical_cast<std::string>(model_->user->self().id()));
+//        Wt::Dbo::ptr<MediaValue> ptdMevToDelete = session->find<MediaValue>().where("\"MEV_VALUE\" = ?").bind(sBox->valueText())
+//                                    .where("\"MEV_MED_MED_ID\" = ?").bind(medId)
+//                                    .where("\"MEV_USR_USR_ID\" = ?").bind(model_->user->self().id())
+//                                    .limit(1);
+//        ptdMevToDelete.remove();
+        transaction.commit();
         UserActionManagement::registerUserAction(Enums::del,Constants::T_MEDIA_VALUE_MEV,medId);
-        update(); 
     }
     catch (Wt::Dbo::Exception e)
     {
         Wt::log("error") << "[UserEditionWidget] " << e.what();
         Wt::WMessageBox::show(tr("Alert.user.dependant-alert-exists-title"),tr("Alert.user.dependant-alert-exists"),Wt::Ok);
+        return;
     }
-    
+    sBox->setModel(getMediasForCurrentUser(medId));
+    sBox->refresh();
+    update(); 
 }
 
 void UserEditionWidget::addEmail()
@@ -271,5 +297,3 @@ void UserEditionWidget::close()
 {
     delete this;
 }
-
-

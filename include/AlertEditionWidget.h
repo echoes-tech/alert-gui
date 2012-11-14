@@ -115,9 +115,6 @@ public:
   
   std::map<int,long long> mapAlertCriteriaIdSboxRow;
   
-  int amsIdx;
-  std::map<int,long long> mapAmsCreated;
-  
   void updateMediaSBFromUserSB();
   void updateMediaValueSBFromMediaSB();
   

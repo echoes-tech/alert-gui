@@ -10,7 +10,6 @@
 AlertEditionWidget::AlertEditionWidget()
 : Wt::WTemplateFormView(Wt::WString::tr("Alert.alert.Edition.template"))
 {
-    this->amsIdx = 0;
     created_ = false;
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("alert",false);
@@ -669,7 +668,12 @@ void AlertEditionWidget::addMedia()
     if (!(model_->validateField(AlertEditionModel::Snooze)))
     {
         Wt::log("info") << "Snooze value incorrect";
+        update();
         return;
+    }
+    else
+    {
+        update();
     }
     
 //    long long userMediaIdToRemember = mapAssetIdSboxRow[userSelectionBox->currentIndex()];
@@ -713,8 +717,6 @@ void AlertEditionWidget::addMedia()
         ams->mediaValue = mevPtr;
         ams->notifEndOfAlert = false;
         amsPtr = session->add<AlertMediaSpecialization>(ams);
-        mapAmsCreated[this->amsIdx]=amsPtr.id();
-        this->amsIdx++;
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
@@ -770,6 +772,8 @@ bool AlertEditionWidget::validate()
 
 void AlertEditionWidget::addAlert()
 {
+    Wt::WApplication *app = Wt::WApplication::instance();
+    
     if (((serverSelectionBox->currentIndex() == -1) || (applicationSelectionBox->currentIndex() == -1) || (informationSelectionBox->currentIndex() == -1)))
     {
         Wt::WMessageBox::show(tr("Alert.alert.information-missing-title"),tr("Alert.alert.information-missing"),Wt::Ok);
@@ -952,22 +956,22 @@ void AlertEditionWidget::addAlert()
         return;
     }
     
+    app->root()->widget(0)->refresh();
+    
     try
     {
         Wt::Dbo::Transaction transaction2(*session);
         
-        std::string inString = "(";
-        for (int i = 0 ; i < this->amsIdx ; i++) 
-        {
-            inString += boost::lexical_cast<std::string,long long>(mapAmsCreated[i]) + ",";
-        }
-        inString.replace(inString.size()-1, 1, "");
-        inString += ")";
+        std::string qryString = "DELETE FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" ams "
+                                " WHERE \"AMS_ALE_ALE_ID\" IS NULL"
+                                " AND \"AMS_MEV_MEV_ID\" IN (SELECT \"MEV_ID\" FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_USR_USR_ID\" = " + boost::lexical_cast<std::string>(this->userId)  + ");";
+//        Wt::Dbo::collection<Wt::Dbo::ptr<AlertMediaSpecialization> listAms = session->query<Wt::Dbo::ptr<AlertMediaSpecialization>(qryString);
+        session->execute(qryString);
+//        for (Wt::Dbo::collection<Wt::Dbo::ptr<AlertMediaSpecialization> >::const_iterator i = listAms.begin(); i != listAms.end(); i++) 
+//        {
+//            i->remove();
+//        }
         
-        session->execute("DELETE FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" WHERE \"AMS_ID\" IN " + inString + " AND \"AMS_ALE_ALE_ID\" IS NULL");
-        this->amsIdx = 0;
-        this->mapAmsCreated.clear();
-       
         transaction2.commit();
     }
     catch (Wt::Dbo::Exception e)
@@ -985,7 +989,7 @@ void AlertEditionWidget::addAlert()
     comboAlertCrit->setCurrentIndex(0);
     
     
-    Wt::WApplication *app = Wt::WApplication::instance();
+    
     app->root()->widget(0)->refresh();
 }
 

@@ -105,42 +105,49 @@ void AlertListWidget::createUI()
      
 
             Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<AlertCriteria>,Wt::Dbo::ptr<AlertValue>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertMediaSpecialization> > > listTuples = resQuery.resultList();
-            for (Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<AlertCriteria>,Wt::Dbo::ptr<AlertValue>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertMediaSpecialization> > >::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i) 
+            if (listTuples.size() > 0)
             {
-                row++;
-                alertsTable->elementAt(row, 1)->setPadding(5, Wt::Left | Wt::Right);
-                alertsTable->elementAt(row, 2)->setPadding(5, Wt::Left | Wt::Right);
-//                alertsTable->elementAt(row, 3)->setPadding(10, Wt::Right);
-//                alertsTable->elementAt(row, 4)->setPadding(10);
-                
-                new Wt::WText(i->get<0>().get()->name, alertsTable->elementAt(row, 1));
-                
-                
-                Wt::WString tempOperator = "Alert.alert.operator." + i->get<1>().get()->name;
-                new Wt::WText(tr(tempOperator.toUTF8().c_str()), alertsTable->elementAt(row, 2));
-                alertsTable->elementAt(row, 2)->setContentAlignment(Wt::AlignCenter);
-                
-                new Wt::WText(i->get<2>().get()->value, alertsTable->elementAt(row, 3));
-                alertsTable->elementAt(row, 3)->setContentAlignment(Wt::AlignCenter);
-                
-                new Wt::WText(i->get<3>().get()->value, alertsTable->elementAt(row, 4));
-                alertsTable->elementAt(row, 4)->setContentAlignment(Wt::AlignCenter);
-                
-                new Wt::WText(boost::lexical_cast<std::string>(i->get<4>().get()->snoozeDuration), alertsTable->elementAt(row, 5));
-                alertsTable->elementAt(row, 5)->setContentAlignment(Wt::AlignCenter);
-                
-                Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.alert-list.delete-alert"), alertsTable->elementAt(row, 6));
-                delButton->clicked().connect(boost::bind(&AlertListWidget::deleteAlert,this,(i->get<0>().id())));
-                
-                
+            for (Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<AlertCriteria>,Wt::Dbo::ptr<AlertValue>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertMediaSpecialization> > >::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i) 
+                {
+                    row++;
+                    alertsTable->elementAt(row, 1)->setPadding(5, Wt::Left | Wt::Right);
+                    alertsTable->elementAt(row, 2)->setPadding(5, Wt::Left | Wt::Right);
+    //                alertsTable->elementAt(row, 3)->setPadding(10, Wt::Right);
+    //                alertsTable->elementAt(row, 4)->setPadding(10);
+
+                    new Wt::WText(i->get<0>().get()->name, alertsTable->elementAt(row, 1));
+
+
+                    Wt::WString tempOperator = "Alert.alert.operator." + i->get<1>().get()->name;
+                    new Wt::WText(tr(tempOperator.toUTF8().c_str()), alertsTable->elementAt(row, 2));
+                    alertsTable->elementAt(row, 2)->setContentAlignment(Wt::AlignCenter);
+
+                    new Wt::WText(i->get<2>().get()->value, alertsTable->elementAt(row, 3));
+                    alertsTable->elementAt(row, 3)->setContentAlignment(Wt::AlignCenter);
+
+                    new Wt::WText(i->get<3>().get()->value, alertsTable->elementAt(row, 4));
+                    alertsTable->elementAt(row, 4)->setContentAlignment(Wt::AlignCenter);
+
+                    new Wt::WText(boost::lexical_cast<std::string>(i->get<4>().get()->snoozeDuration), alertsTable->elementAt(row, 5));
+                    alertsTable->elementAt(row, 5)->setContentAlignment(Wt::AlignCenter);
+
+                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.alert-list.delete-alert"), alertsTable->elementAt(row, 6));
+                    delButton->clicked().connect(boost::bind(&AlertListWidget::deleteAlert,this,(i->get<0>().id())));
+
+
+                }
+            }
+            else
+            {
+                alertsTable->hide();
             }
         }
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
     {
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("1"),Wt::Ok);
-        Wt::log("error") << "[AlertListWidget] " << e.what();
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("1"),Wt::Ok);
+        Wt::log("error") << "[AlertListWidget] [createUI] " << e.what();
     }
 }
 
@@ -156,7 +163,9 @@ void AlertListWidget::deleteAlert(long long id)
                                     " WHERE \"TJ_AST_ALE\".\"T_ALERT_ALE_ALE_ID\" = " + boost::lexical_cast<std::string>(id);
         session->execute(executeString);
         
-           
+        std::string executeString2 = "DELETE FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" " 
+                                    " WHERE \"AMS_ALE_ALE_ID\" = " + boost::lexical_cast<std::string>(id);
+        session->execute(executeString2);   
         
         
         ptrAlert.modify()->deleteTag = Wt::WDateTime::currentDateTime();
@@ -166,6 +175,7 @@ void AlertListWidget::deleteAlert(long long id)
     catch (Wt::Dbo::Exception e)
     {
         Wt::log("error") << "[AlertListWidget] [deleteAlert] " << e.what();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
     }
     createUI();
 }

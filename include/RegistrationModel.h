@@ -12,6 +12,9 @@
 #include <Wt/Auth/Identity>
 #include "FormBaseModel"
 #include <Wt/Auth/User>
+#include <boost/random.hpp>
+#include <boost/random/random_device.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
 
 namespace Wt {
     namespace Auth {
@@ -242,6 +245,8 @@ namespace Wt {
             /*! \brief Performs the registration process.
              */
             virtual User doRegister();
+            
+            std::string generateToken();
 
             virtual bool isVisible(Field field) const;
             virtual bool isReadOnly(Field field) const;

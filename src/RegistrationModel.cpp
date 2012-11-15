@@ -504,5 +504,24 @@ User RegistrationModel::doRegister()
     }
 }
 
+std::string RegistrationModel::generateToken()
+{
+    std::string res = "";
+    std::string chars(
+        "abcdefghijklmnopqrstuvwxyz"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "1234567890"
+//        "!@#$%^&*()"
+//        "`~-_=+[{]{\\|;:'\",<.>/? "
+    );
+    boost::random::random_device rng;
+    boost::random::uniform_int_distribution<> index_dist(0, chars.size() - 1);
+    for(int i = 0; i < 25; ++i) 
+    {
+        res += chars[index_dist(rng)];
+    }
+    return res;
+}
+
 }
 }

@@ -224,7 +224,8 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i)
     {
         Wt::Dbo::ptr<User> tempUser = this->session->find<User>().where("\"USR_ID\" = ?").bind(this->session->user().id());
         scriptCustomPart = "\nLOGIN=\"" + tempUser->eMail.toUTF8() + "\"\n" 
-        + "ASSET_ID=" + boost::lexical_cast<std::string, long long>(i) + "\n";
+        + "ASSET_ID=" + boost::lexical_cast<std::string, long long>(i) + "\n"
+        + "TOKEN=\"" + tempUser->currentOrganization.get()->token.toUTF8() + "\"\n";
     }
     catch (Wt::Dbo::Exception e)
     {
@@ -270,9 +271,6 @@ std::string AssetManagementWidget::getStringFromFile(std::string resourcePath)
     }
     return res;
 }
-
-
-
 
 bool AssetManagementWidget::validate()
 {

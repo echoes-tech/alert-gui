@@ -162,6 +162,7 @@
             <linkerLibLibItem>wtdbo</linkerLibLibItem>
             <linkerLibLibItem>boost_signals</linkerLibLibItem>
             <linkerLibLibItem>boost_system</linkerLibLibItem>
+            <linkerLibLibItem>boost_random</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -194,6 +195,7 @@
             <linkerLibLibItem>boost_signals</linkerLibLibItem>
             <linkerLibLibItem>boost_system</linkerLibLibItem>
             <linkerLibLibItem>wtfcgi</linkerLibLibItem>
+            <linkerLibLibItem>boost_random</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

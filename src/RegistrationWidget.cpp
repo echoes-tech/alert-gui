@@ -389,8 +389,27 @@ void RegistrationWidget::registerUserDetails(User& user)
     }
     
     org->organizationType = type;
+    org->token = model_->generateToken();
+    
+    
     
     Wt::Dbo::ptr<Organization> ptrOrg = session->add<Organization>(org);
+    
+    //TODO : hardcoded, should be changed when the pack selection will be available
+    Wt::Dbo::ptr<Pack> ptrPack = session->find<Pack>().where("\"PCK_ID\" = ?").bind(1);
+    ptrOrg.modify()->pack = ptrPack;
+    
+    OptionValue *optionValue = new OptionValue();
+
+    OptionValueId *opvId = new OptionValueId(ptrOrg,session->find<Option>().where("\"OPT_ID\" = ?").bind(Enums::sms));
+    optionValue->pk.option = opvId->option;
+    optionValue->pk.organization = opvId->organization;
+    //FIXME : should be the default value found in the table POP
+    optionValue->value = "5";
+    
+    Wt::Dbo::ptr<OptionValue> ptrOptionValue = session->add<OptionValue>(optionValue);
+    
+    
 //    Wt::Dbo::collection<Wt::Dbo::ptr<Organization> > colPtrOrg;
 //    colPtrOrg.insert(ptrOrg);
     

@@ -412,4 +412,5 @@ void EchoesHome::onAuthEvent()
 void EchoesHome::refresh()
 {
     this->alertGroupBox->refresh();
+    this->aew->updateServerSelectionBox(this->session->user().id());
 }

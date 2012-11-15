@@ -175,6 +175,8 @@ void AssetManagementWidget::addAsset()
     created_ = false;
     model_->reset();
     createUI();
+    Wt::WApplication *app = Wt::WApplication::instance();
+    app->root()->widget(0)->refresh();
 }
 
 void AssetManagementWidget::deleteAsset(long long id)
@@ -207,7 +209,8 @@ void AssetManagementWidget::deleteAsset(long long id)
     created_ = false;
     model_->reset();
     createUI();
-
+    Wt::WApplication *app = Wt::WApplication::instance();
+    app->root()->widget(0)->refresh();
 }
 
 

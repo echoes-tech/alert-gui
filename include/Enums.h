@@ -13,7 +13,7 @@ public:
     Enums();
     Enums(const Enums& orig);
     virtual ~Enums();
-    enum 
+    enum EMedia
     {
         email = 1, 
         sms = 2

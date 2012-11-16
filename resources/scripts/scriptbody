@@ -129,18 +129,25 @@ probe_installation() {
 	then
 		if [ -x '/usr/bin/dpkg' ]
 		then
-			/usr/bin/dpkg -i $PKG
+			if [ -x '/usr/bin/apt-get' ]
+			then
+				/usr/bin/dpkg -i $PKG
+				/usr/bin/apt-get -f install
+			else
+                	        echo "$ERR_INSTALL_MSG: can't find apt-get conmmand."
+        	                exit 1
+	                fi
 		else
 			echo "$ERR_INSTALL_MSG: can't find dpkg conmmand."
 			exit 1
 		fi
 	elif [ $PKG_TYPE = 'rpm' ]
 	then
-		if [ -x '/bin/rpm' ]
+		if [ -x '/usr/bin/yum' ]
 		then
-			/bin/rpm -Uvh $PKG
+			/usr/bin/yum install $PKG
 		else
-			echo "$ERR_INSTALL_MSG: can't find rpm conmmand."
+			echo "$ERR_INSTALL_MSG: can't find yum conmmand."
 			exit 1
 		fi
 	else
@@ -148,7 +155,6 @@ probe_installation() {
 		exit 1
 	fi
 }
-
 
 ###########
 # EXECUTION
@@ -178,7 +184,7 @@ echo "ECHOES Alert Probe downloaded."
 probe_installation
 echo "ECHOES Alert Probe installed."
 
-sed -i -e "s/\(probe_id=\).*/\1$PROBE_ID/" $INSTALL_DIR/etc/probe.conf
+sed -i -e "s/\(probe_id=\).*/\1$PROBE_ID/" -e "s/\(token=\).*/\1$TOKEN/" $INSTALL_DIR/etc/probe.conf
 echo "ECHOES Alert Probe configured."
 
 get "$API_URI/asset/$ASSET_ID/plugin?login=$LOGIN&password=$PASSWORD" plugins_list_res

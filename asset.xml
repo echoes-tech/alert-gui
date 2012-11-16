@@ -20,6 +20,10 @@
   <message id="Alert.asset.database-error-title">Database error</message>
   <message id="Alert.asset.database-error">Error : {1} | {2}</message>
   
+  <message id="Alert.asset.file-not-generated">
+      <span style="color:red">The file as not been generated. Please contact us.</span>
+  </message>
+  
   <!-- templates -->
 
     <message id="Alert.Asset.Management.template">

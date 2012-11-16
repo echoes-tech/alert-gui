@@ -21,5 +21,9 @@
   <message id="Alert.asset.asset-name-invalid">Invalide</message>
   <message id="Alert.asset.database-error-title">Erreur base de donnée</message>
   <message id="Alert.asset.database-error">Erreur : {1} | {2}</message>
+  
+  <message id="Alert.asset.file-not-generated">
+      <span style="color:red">Le fichier n'a pas été généré. Contactez-nous s'il vous plait.</span>
+  </message>
     
 </messages>

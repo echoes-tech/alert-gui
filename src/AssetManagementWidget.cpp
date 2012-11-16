@@ -78,14 +78,25 @@ void AssetManagementWidget::createUI()
             {
                 ++row;
                 Wt::WFileResource *file = generateScript(i->id());
-                Wt::WAnchor *anchor = new Wt::WAnchor(file,tr("Alert.asset.download-script"),linksTable->elementAt(row, 2));
-                anchor->setTarget(Wt::TargetNewWindow);
-                anchor->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this,file->fileName()));
-                
-                new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
+                if (file == NULL)
+                {
+                    new Wt::WLabel(Wt::WString::tr("Alert.asset.file-not-generated"),linksTable->elementAt(row, 1));
+                    new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
 
-                Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 3));
-                delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
+                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 2));
+                    delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
+                }
+                else
+                {
+                    Wt::WAnchor *anchor = new Wt::WAnchor(file,tr("Alert.asset.download-script"),linksTable->elementAt(row, 1));
+                    anchor->setTarget(Wt::TargetNewWindow);
+                    anchor->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this,file->fileName()));
+
+                    new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
+
+                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 2));
+                    delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
+                }
             }
         }
         transaction.commit();
@@ -233,6 +244,7 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i)
     catch (Wt::Dbo::Exception e)
     {
         Wt::log("error") << "[AssetManagementWidget] " << e.what();
+        return NULL;
     }
     
     // full script to send

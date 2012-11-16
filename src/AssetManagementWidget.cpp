@@ -218,8 +218,8 @@ void AssetManagementWidget::deleteAsset(long long id)
 Wt::WFileResource *AssetManagementWidget::generateScript(long long i)
 {
     // static part of file
-    std::string disclaimerString = getStringFromFile("scripts/disclaimer");
-    std::string bodyString = getStringFromFile("scripts/scriptbody");
+    std::string disclaimerString = getStringFromFile("resources/scripts/disclaimer");
+    std::string bodyString = getStringFromFile("resources/scripts/scriptbody");
     
     // custom part
     std::string scriptCustomPart = "";
@@ -257,7 +257,7 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i)
 
 std::string AssetManagementWidget::getStringFromFile(std::string resourcePath)
 {
-    std::string filePath = "." + Wt::WApplication::instance()->resourcesUrl()+resourcePath;
+    std::string filePath = Wt::WApplication::instance()->appRoot()+resourcePath;
     std::ifstream file(filePath.c_str());
     
     std::string res = "";
@@ -269,8 +269,8 @@ std::string AssetManagementWidget::getStringFromFile(std::string resourcePath)
     }
     else
     {
-        Wt::log("info") << filePath;
-        Wt::log("error") << "fla";
+        Wt::log("error") << filePath;
+        Wt::log("error") << "File not found." ;
     }
     return res;
 }

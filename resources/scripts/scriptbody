@@ -145,7 +145,7 @@ probe_installation() {
 	then
 		if [ -x '/usr/bin/yum' ]
 		then
-			/usr/bin/yum install $PKG
+			/usr/bin/yum install --nogpgcheck $PKG
 		else
 			echo "$ERR_INSTALL_MSG: can't find yum conmmand."
 			exit 1

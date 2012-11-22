@@ -77,7 +77,7 @@ void AssetManagementWidget::createUI()
             for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = listAssets.begin(); i != listAssets.end(); ++i) 
             {
                 ++row;
-                Wt::WFileResource *file = generateScript(i->id());
+                Wt::WFileResource *file = generateScript(i->id(),i->get()->name);
                 if (file == NULL)
                 {
                     new Wt::WLabel(Wt::WString::tr("Alert.asset.file-not-generated"),linksTable->elementAt(row, 1));
@@ -214,6 +214,8 @@ void AssetManagementWidget::deleteAsset(long long id)
     catch (Wt::Dbo::Exception e)
     {
         Wt::log("error") << "[AssetManagementWidget] [deleteAsset] " << e.what();
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("3"),Wt::Ok);
+        return;
     }
             
 //    refresh();
@@ -226,7 +228,7 @@ void AssetManagementWidget::deleteAsset(long long id)
 
 
 
-Wt::WFileResource *AssetManagementWidget::generateScript(long long i)
+Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WString assetName)
 {
     // static part of file
     std::string disclaimerString = getStringFromFile("resources/scripts/disclaimer");
@@ -262,7 +264,7 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i)
     // creating resource to send to the client
     Wt::WFileResource *res = new Wt::WFileResource();
     res->setFileName(tmpname);
-    res->suggestFileName("ea-probe-install.sh",Wt::WResource::Attachment);
+    res->suggestFileName("ea-probe-install_" + assetName + ".sh",Wt::WResource::Attachment);
     res->setMimeType("application/x-sh");
     return res;
 }

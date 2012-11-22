@@ -110,7 +110,7 @@ protected:
   
   void addAsset();
   void deleteAsset(long long id);
-  Wt::WFileResource *generateScript(long long i);
+  Wt::WFileResource *generateScript(long long i, Wt::WString assetName);
   std::string getStringFromFile(std::string resourcePath);
 
 private:

@@ -412,5 +412,11 @@ void EchoesHome::onAuthEvent()
 void EchoesHome::refresh()
 {
     this->alertGroupBox->refresh();
-    this->aew->updateServerSelectionBox(this->session->user().id());
+    if (this->aew->isCreated())
+    {
+        this->aew->updateServerSelectionBox(this->session->user().id());
+    }else
+    {
+        this->aew->refresh();
+    }
 }

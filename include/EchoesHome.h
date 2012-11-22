@@ -82,6 +82,7 @@ private:
     Wt::WTabWidget* initAdminWidget();
     
     virtual void refresh();
+    
 
 };
 

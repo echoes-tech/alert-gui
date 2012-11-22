@@ -139,6 +139,7 @@ public:
   
   void addAlert();
 
+  bool isCreated();
 
 protected:
   /*! \brief Validates the current information.

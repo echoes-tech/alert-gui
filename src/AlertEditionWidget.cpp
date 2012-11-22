@@ -998,3 +998,7 @@ void AlertEditionWidget::close()
     delete this;
 }
 
+bool AlertEditionWidget::isCreated()
+{
+    return this->created_;
+}

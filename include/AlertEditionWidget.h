@@ -81,6 +81,8 @@ public:
   
   Wt::WLineEdit *valueLineEdit;
   
+  Wt::WSuggestionPopup *sp;
+  
   // maps needed to keep the link to the base
   std::map <int,long long> mapAssetIdSboxRow;
   Wt::WSelectionBox *serverSelectionBox;
@@ -93,7 +95,7 @@ public:
   std::map<int, int> mapInformationIvnSboxRow;
   std::map<int,long long> mapInformationInuIdSboxRow;
   std::map<int,int> mapInformationPkvSboxRow;
-  std::map<int,long long> mapInformatioInuIdSboxRow;
+//  std::map<int,long long> mapInformatioInuIdSboxRow;
   Wt::WSelectionBox *informationSelectionBox;
   
   std::map<int,long long> mapInformationUnitCombo;

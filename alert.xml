@@ -85,7 +85,7 @@
   <message id="Alert.alert.alert-already-exists-title">Alert exists</message>
   <message id="Alert.alert.alert-already-exists">An alert about this information already exists. Multiple alerts on a single information are not implemented yet.</message>
   
-  <message id="Alert.alert.unit.bits">Bits</message>
+  <message id="Alert.alert.unit.kilo_bits">Kilo bits</message>
   <message id="Alert.alert.unit.packets">Packets</message>
   <message id="Alert.alert.unit.octets">Octets</message>
   <message id="Alert.alert.unit.name">Name</message>

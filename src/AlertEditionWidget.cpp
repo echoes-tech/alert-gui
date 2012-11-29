@@ -13,6 +13,20 @@ AlertEditionWidget::AlertEditionWidget()
     created_ = false;
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("alert",false);
+    
+    // Suggestion popup for value key
+        Wt::WSuggestionPopup::Options suggestionOptions;
+        suggestionOptions.highlightBeginTag = "<span class=\"highlight\">";
+        suggestionOptions.highlightEndTag = "</span>";
+        suggestionOptions.whitespace = "";
+        suggestionOptions.wordSeparators = " ";
+        suggestionOptions.listSeparator = '\0';
+        suggestionOptions.appendReplacedText = "";
+    
+    this->sp =
+              new Wt::WSuggestionPopup(Wt::WSuggestionPopup::generateMatcherJS(suggestionOptions),
+                       Wt::WSuggestionPopup::generateReplacerJS(suggestionOptions),
+                       app->root());
 }
 
 void AlertEditionWidget::setModel(AlertEditionModel *model)
@@ -83,6 +97,7 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(Wt::WFormModel::Field fiel
         this->valueLineEdit = new Wt::WLineEdit();
         result = valueLineEdit;
         result->changed().connect(boost::bind(&AlertEditionWidget::checkThresholdValueKey, this));
+        sp->forEdit(valueLineEdit,Wt::WSuggestionPopup::DropDownIcon);
     }
     else if (field == AlertEditionModel::ThresholdValue)
     {
@@ -460,7 +475,7 @@ void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
                 this->mapInformationIvnSboxRow[idx] = k->get()->pk.subSearchNumber;
                 this->mapInformationInuIdSboxRow[idx] = k->get()->pk.unit.id();
                 this->mapInformationPkvSboxRow[idx] = k->get()->pk.search.get()->pos_key_value;
-                this->mapInformatioInuIdSboxRow[idx] = k->get()->pk.unit.id();
+//                this->mapInformatioInuIdSboxRow[idx] = k->get()->pk.unit.id();
                 idx++;
             }
             transaction.commit();
@@ -520,21 +535,10 @@ void AlertEditionWidget::updateInformationDetails(int idx)
     {
                 
         Wt::Dbo::Transaction transaction(*session);
-
-        // Suggestion popup for value key
-        Wt::WApplication *app = Wt::WApplication::instance();
-        Wt::WSuggestionPopup::Options suggestionOptions;
-        suggestionOptions.highlightBeginTag = "<span class=\"highlight\">";
-        suggestionOptions.highlightEndTag = "</span>";
-        suggestionOptions.whitespace = "";
-        suggestionOptions.wordSeparators = " ";
-        suggestionOptions.listSeparator = '\0';
-        suggestionOptions.appendReplacedText = "";
+    
         // Value key hint
-        Wt::WSuggestionPopup *sp =
-              new Wt::WSuggestionPopup(Wt::WSuggestionPopup::generateMatcherJS(suggestionOptions),
-                       Wt::WSuggestionPopup::generateReplacerJS(suggestionOptions),
-                       app->root());
+  
+        this->sp->clearSuggestions();
         
         if (this->mapInformationPkvSboxRow[idx] != 0)
         {
@@ -544,6 +548,7 @@ void AlertEditionWidget::updateInformationDetails(int idx)
                                         .where("\"SRC_ID\" = ?").bind(this->mapInformationSrcIdSboxRow[idx])
                                         .where("\"PLG_ID_PLG_ID\" = ?").bind(this->mapInformationPlgIdSboxRow[idx])
                                         .where("\"INF_VALUE_NUM\" = ?").bind(this->mapInformationPkvSboxRow[idx])
+                                        .where("\"INU_ID_INU_ID\" = ?").bind(this->mapInformationInuIdSboxRow[idx])
                                         .limit(1);
 
 
@@ -557,11 +562,7 @@ void AlertEditionWidget::updateInformationDetails(int idx)
                 Wt::log("error") << "[AlertEditionWidget] " << "ptr ptrInfoKey empty";
             }
 
-
-            sp->forEdit(valueLineEdit,Wt::WSuggestionPopup::DropDownIcon);
-
-
-             std::string queryString = 
+            std::string queryString = 
             "SELECT iva FROM \"T_INFORMATION_VALUE_IVA\" iva WHERE \"IVA_ID\" IN ( SELECT \"IVA_ID\" FROM"
             "("
             "SELECT DISTINCT ON (\"IVA_VALUE\") \"IVA_VALUE\", \"IVA_ID\" FROM"
@@ -580,7 +581,7 @@ void AlertEditionWidget::updateInformationDetails(int idx)
             for (Wt::Dbo::collection<Wt::Dbo::ptr<InformationValue> >::const_iterator k = collPtrIva.begin(); k != collPtrIva.end(); k++)
             {
                 Wt::WString res = k->get()->value;
-                sp->addSuggestion(res,res);
+                this->sp->addSuggestion(res,res);
 
             }
         }
@@ -592,10 +593,24 @@ void AlertEditionWidget::updateInformationDetails(int idx)
             model_->setValue(model_->ThresholdValueKey,boost::any(na));
         }
         updateView(model_);
+        transaction.commit();
         
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << "[AlertEditionWidget] key values suggestion : " << e.what();
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+        return;
+    }    
+    try
+    {
+                
+        Wt::Dbo::Transaction transaction(*session);
         // Units
-        Wt::Dbo::ptr<InformationUnit> ptrInfoUnit = session->find<InformationUnit>().where("\"INU_ID\" = ?").bind(this->mapInformatioInuIdSboxRow[idx]);
-        Wt::Dbo::collection<Wt::Dbo::ptr<InformationSubUnit> > ptrInfoSubUnit = session->find<InformationSubUnit>().where("\"ISU_INU_INU_ID\" = ?").bind(this->mapInformatioInuIdSboxRow[idx]);
+        Wt::log("info") << this->mapInformationInuIdSboxRow[idx];
+        Wt::Dbo::collection<Wt::Dbo::ptr<InformationSubUnit> > ptrInfoSubUnit = session->find<InformationSubUnit>().where("\"ISU_INU_INU_ID\" = ?").bind(this->mapInformationInuIdSboxRow[idx]);
+        Wt::Dbo::ptr<InformationUnit> ptrInfoUnit = session->find<InformationUnit>().where("\"INU_ID\" = ?").bind(this->mapInformationInuIdSboxRow[idx]);
+        
         
         Wt::WStringListModel *slmInformationSubUnits = new Wt::WStringListModel;
         int idx = 0;
@@ -621,7 +636,7 @@ void AlertEditionWidget::updateInformationDetails(int idx)
     }
     catch (Wt::Dbo::Exception e)
     {
-        Wt::log("error") << "[AlertEditionWidget] " << e.what();
+        Wt::log("error") << "[AlertEditionWidget] units : " << e.what();
         Wt::WMessageBox::show(tr("Alert.option.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
         return;
     }
@@ -665,6 +680,7 @@ void AlertEditionWidget::addMedia()
         return;
     }
     checkSnoozeValue();
+    checkThresholdValueKey();
     if (!(model_->validateField(AlertEditionModel::Snooze)))
     {
         Wt::log("info") << "Snooze value incorrect";

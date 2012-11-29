@@ -20,6 +20,10 @@
 
   <message id="Alert.alert.threshold-value-label">Valeur</message>
   <message id="Alert.alert.threshold-value-info">Valeur à comparer</message>
+  
+  <message id="Alert.alert.threshold-value-key-label">Valeur clé</message>
+  <message id="Alert.alert.threshold-value-key-info">Clé pour l'information</message>
+  <message id="Alert.alert.not-applicable">Non applicable dans ce cas</message>
 
   <message id="Alert.alert.user-label">Destinataire</message>
   <message id="Alert.alert.user-info">Destinataire pour l'alerte</message>
@@ -32,6 +36,9 @@
 
   <message id="Alert.alert.snooze-label">Snooze</message>
   <message id="Alert.alert.snooze-info">Délai entre deux alertes (s) (> 60)</message>
+  
+  <message id="Alert.alert.information-unit-label">Unité</message>
+  <message id="Alert.alert.information-unit-info">Unité utilisée pour paramétrer l'alerte</message>
 
   <message id="Alert.alert.edition.add-button">Ajouter cette alerte</message>
   <message id="Alert.alert.edition.delete-button">Supprimer</message>
@@ -79,5 +86,19 @@
     Une alerte concernant cette information existe déjà. <br />
     Les alertes multiples à propos d'une même information ne sont pas encore implémentées.
   </message>
+  
+  <message id="Alert.alert.unit.kilo_bits">Kilo bits</message>
+  <message id="Alert.alert.unit.packets">Paquets</message>
+  <message id="Alert.alert.unit.octets">Octets</message>
+  <message id="Alert.alert.unit.name">Nom</message>
+  <message id="Alert.alert.unit.load">Charge</message>
+  <message id="Alert.alert.unit.time_user_hz">Temps utilisateur hertz</message>
+  <message id="Alert.alert.unit.percent">Pourcents</message>
+  <message id="Alert.alert.unit.time_secs">Secondes</message>
+  <message id="Alert.alert.unit.oct_secs">Octets / seconde</message>
+  
+  <message id="Alert.alert.sub-unit.ko_s">Ko / seconde</message>
+  <message id="Alert.alert.sub-unit.mo_s">Mo / seconde</message>
+  <message id="Alert.alert.sub-unit.go_s">Go / seconde</message>
 
 </messages>

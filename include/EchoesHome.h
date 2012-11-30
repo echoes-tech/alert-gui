@@ -47,7 +47,7 @@ private:
     Wt::WStackedWidget *mainStack;
 //    Wt::WLabel *admin_;
     Wt::WTabWidget *adminPageTabs;
-    Wt::WGroupBox *monitoringPage;
+    Wt::WContainerWidget *monitoringPage;
     Wt::WContainerWidget *links;
     Wt::WHBoxLayout *linksLayout;
     Wt::WAnchor *adminAnchor;
@@ -78,7 +78,7 @@ private:
     void showMonitoring();
     void resizeContainers(bool loggedIn);
     
-    Wt::WGroupBox *initMonitoringWidget();
+    Wt::WContainerWidget *initMonitoringWidget();
     Wt::WTabWidget* initAdminWidget();
     
     virtual void refresh();

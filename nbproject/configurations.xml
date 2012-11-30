@@ -37,6 +37,9 @@
           <itemPath>include/WTemplateFormView</itemPath>
           <itemPath>include/WebUtils.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
+          <itemPath>include/MonitoringWidget.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="rapidxml" displayName="rapidxml" projectFiles="true">
           <itemPath>include/rapidxml/license.txt</itemPath>
           <itemPath>include/rapidxml/manual.html</itemPath>
@@ -111,6 +114,9 @@
           <itemPath>src/WFormModel.C</itemPath>
           <itemPath>src/WTemplateFormView.C</itemPath>
           <itemPath>src/WebUtils.cpp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
+          <itemPath>src/MonitoringWidget.cpp</itemPath>
         </logicalFolder>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>

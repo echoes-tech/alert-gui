@@ -132,46 +132,11 @@ void EchoesHome::setLinks()
     this->linksLayout->addWidget(this->monitoringAnchor);
 }
 
-Wt::WGroupBox* EchoesHome::initMonitoringWidget()
+Wt::WContainerWidget* EchoesHome::initMonitoringWidget()
 {
-    
-    Wt::WGroupBox * alertGroupBox = new Wt::WGroupBox("Alert sent list");
-    this->mainStack->addWidget(alertGroupBox);
-    
-    Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > > *qm = new Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > >();
-    
-    
-    Wt::WTableView *tview = new Wt::WTableView(alertGroupBox);
-    try
-    {
-        Wt::Dbo::Transaction transaction(*(this->session));
-        //TODO : don't understand why the two lines below are needed, clean this
-        Wt::Dbo::ptr<User> tempUser = this->session->find<User>().where("\"USR_ID\" = ?").bind(this->session->user().id());
-        Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
-        std::string queryString = "SELECT ale, mev, atr FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_VALUE_MEV\" mev "
-            " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
-            " AND ale.\"ALE_DELETE\" IS NULL "
-            " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
-            " AND mev.\"MEV_USR_USR_ID\" IN"
-            "("
-                "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user().get()->currentOrganization.id()) + ""
-            ")";
-        Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding> q = this->session->query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding>(queryString);
-        qm->setQuery(q, false);
-        qm->addColumn("ATR_SEND_DATE", "Date", Wt::ItemIsSelectable);
-        qm->addColumn("ALE_NAME", "Name", Wt::ItemIsSelectable);
-        qm->addColumn("MEV_VALUE", "Value", Wt::ItemIsSelectable);
-        
-        tview->setModel(qm);
-    }  
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::log("error") << e.what();
-    }
-    
-    
-//    res->setCentralWidget(groupBox);
-    return alertGroupBox;
+    MonitoringWidget *res = new MonitoringWidget(this->session);
+    this->mainStack->addWidget(res);
+    return res;
 }
 
 Wt::WTabWidget* EchoesHome::initAdminWidget()

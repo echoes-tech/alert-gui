@@ -40,6 +40,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/UserEditionModel.o \
+	${OBJECTDIR}/src/MonitoringWidget.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/src/RegistrationWidget.o \
 	${OBJECTDIR}/src/AlertListWidget.o \
@@ -109,6 +110,11 @@ ${OBJECTDIR}/src/UserEditionModel.o: src/UserEditionModel.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UserEditionModel.o src/UserEditionModel.cpp
+
+${OBJECTDIR}/src/MonitoringWidget.o: src/MonitoringWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MonitoringWidget.o src/MonitoringWidget.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

@@ -1,0 +1,19 @@
+table {
+border: thin solid #AACFE4;
+border-collapse: collapse;
+margin-top: 20px;
+}
+.table-list th {
+border: thin solid #AACFE4;
+width: auto;
+padding: 5px;
+background-color: #D0E3FA;
+background-image: url(sky.jpg);
+}
+.table-list td {
+border: thin solid #AACFE4;
+width: auto;
+padding: 5px;
+text-align: center;
+background-color: #ffffff;
+}

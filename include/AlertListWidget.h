@@ -17,7 +17,7 @@
 #include <Wt/WGroupBox>
 #include <Wt/WText>
 
-class AlertListWidget : public Wt::WGroupBox {
+class AlertListWidget : public Wt::WContainerWidget {
 public:
     AlertListWidget(Session *session);
     AlertListWidget(const AlertListWidget& orig);

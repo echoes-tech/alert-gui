@@ -22,6 +22,7 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-alert.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-user.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-probe.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "alert.css");
     
     app->setCssTheme("polished");
   

@@ -8,7 +8,7 @@
 #include "AlertListWidget.h"
 
 AlertListWidget::AlertListWidget(Session *session)
-: Wt::WGroupBox()
+: Wt::WContainerWidget()
 {
     this->session = session;
     
@@ -28,31 +28,32 @@ AlertListWidget::~AlertListWidget() {
 void AlertListWidget::createUI()
 {
     this->clear();
-    this->setTitle(tr("Alert.alert-list.title"));
-
     
     Wt::WTable *alertsTable = new Wt::WTable(this);
-    alertsTable->setStyleClass("alert-table");
+    alertsTable->setStyleClass("table-list");
+    
+    Wt::WText *noAlertText = new Wt::WText(Wt::WString::tr("Alert.alert-list.no-alert"));
     
     int row = 0;
+    int col = 0;
     
-    alertsTable->setHeaderCount(2,Wt::Horizontal);
+    alertsTable->setHeaderCount(1,Wt::Horizontal);
     
-    alertsTable->elementAt(row, 1)->setColumnSpan(6);
-    alertsTable->elementAt(row, 1)->setContentAlignment(Wt::AlignTop | Wt::AlignCenter);
-    alertsTable->elementAt(row, 1)->setPadding(5);
+    alertsTable->elementAt(row, col)->setColumnSpan(7);
+    alertsTable->elementAt(row, col)->setContentAlignment(Wt::AlignTop | Wt::AlignCenter);
+    alertsTable->elementAt(row, col)->setPadding(5);
     
-    Wt::WText *title = new Wt::WText(tr("Alert.alert-list.alert-form"),alertsTable->elementAt(row, 1));
+    Wt::WText *title = new Wt::WText(tr("Alert.alert-list.alert-form"),alertsTable->elementAt(row, 0));
     title->decorationStyle().font().setSize(Wt::WFont::XLarge);
     
     row = 1;
-    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-name"), alertsTable->elementAt(row, 1));
-    new Wt::WText(Wt::WString::tr("Alert.alert-list.criteria-name"), alertsTable->elementAt(row, 2));
-    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-value"), alertsTable->elementAt(row, 3));
-    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-unit"), alertsTable->elementAt(row, 4));
-    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-media"), alertsTable->elementAt(row, 5));
-    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-snooze"), alertsTable->elementAt(row, 6));
-    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-actions"), alertsTable->elementAt(row, 7));
+    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-name"), alertsTable->elementAt(row, col));
+    new Wt::WText(Wt::WString::tr("Alert.alert-list.criteria-name"), alertsTable->elementAt(row, ++col));
+    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-value"), alertsTable->elementAt(row, ++col));
+    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-unit"), alertsTable->elementAt(row, ++col));
+    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-media"), alertsTable->elementAt(row, ++col));
+    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-snooze"), alertsTable->elementAt(row, ++col));
+    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-actions"), alertsTable->elementAt(row, ++col));
   
     
     try
@@ -124,7 +125,8 @@ void AlertListWidget::createUI()
                     Wt::Dbo::ptr<InformationUnit> > > listTuples = resQuery.resultList();
             if (listTuples.size() > 0)
             {
-            for (Wt::Dbo::collection<boost::tuple<
+                noAlertText->hide();
+                for (Wt::Dbo::collection<boost::tuple<
                     Wt::Dbo::ptr<Alert>,
                     Wt::Dbo::ptr<AlertCriteria>,
                     Wt::Dbo::ptr<AlertValue>,
@@ -133,41 +135,40 @@ void AlertListWidget::createUI()
                     Wt::Dbo::ptr<InformationUnit> > >::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i) 
                 {
                     row++;
-                    alertsTable->elementAt(row, 1)->setPadding(5, Wt::Left | Wt::Right);
-                    alertsTable->elementAt(row, 2)->setPadding(5, Wt::Left | Wt::Right);
+//                    alertsTable->elementAt(row, 1)->setPadding(5, Wt::Left | Wt::Right);
+//                    alertsTable->elementAt(row, 2)->setPadding(5, Wt::Left | Wt::Right);
     //                alertsTable->elementAt(row, 3)->setPadding(10, Wt::Right);
     //                alertsTable->elementAt(row, 4)->setPadding(10);
                     
-                    int rowNum = 0;
+                    int colNum = 0;
 
-                    new Wt::WText(i->get<0>().get()->name, alertsTable->elementAt(row, ++rowNum));
+                    new Wt::WText(i->get<0>().get()->name, alertsTable->elementAt(row, colNum));
 
 
                     Wt::WString tempOperator = "Alert.alert.operator." + i->get<1>().get()->name;
-                    new Wt::WText(tr(tempOperator.toUTF8().c_str()), alertsTable->elementAt(row, ++rowNum));
-                    alertsTable->elementAt(row, rowNum)->setContentAlignment(Wt::AlignCenter);
+                    new Wt::WText(tr(tempOperator.toUTF8().c_str()), alertsTable->elementAt(row, ++colNum));
+                    alertsTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
 
-                    new Wt::WText(i->get<2>().get()->value, alertsTable->elementAt(row, ++rowNum));
-                    alertsTable->elementAt(row, rowNum)->setContentAlignment(Wt::AlignCenter);
+                    new Wt::WText(i->get<2>().get()->value, alertsTable->elementAt(row, ++colNum));
+                    alertsTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
     
                     Wt::WString tempUnitName = "Alert.alert.unit." + i->get<5>().get()->name;
-                    new Wt::WText(tr(tempUnitName.toUTF8().c_str()), alertsTable->elementAt(row, ++rowNum));
-                    alertsTable->elementAt(row, rowNum)->setContentAlignment(Wt::AlignCenter);
+                    new Wt::WText(tr(tempUnitName.toUTF8().c_str()), alertsTable->elementAt(row, ++colNum));
+                    alertsTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
 
-                    new Wt::WText(i->get<3>().get()->value, alertsTable->elementAt(row, ++rowNum));
-                    alertsTable->elementAt(row, rowNum)->setContentAlignment(Wt::AlignCenter);
+                    new Wt::WText(i->get<3>().get()->value, alertsTable->elementAt(row, ++colNum));
+                    alertsTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
 
-                    new Wt::WText(boost::lexical_cast<std::string>(i->get<4>().get()->snoozeDuration), alertsTable->elementAt(row, ++rowNum));
-                    alertsTable->elementAt(row, rowNum)->setContentAlignment(Wt::AlignCenter);
+                    new Wt::WText(boost::lexical_cast<std::string>(i->get<4>().get()->snoozeDuration), alertsTable->elementAt(row, ++colNum));
+                    alertsTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
 
-                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.alert-list.delete-alert"), alertsTable->elementAt(row, ++rowNum));
+                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.alert-list.delete-alert"), alertsTable->elementAt(row, ++colNum));
                     delButton->clicked().connect(boost::bind(&AlertListWidget::deleteAlert,this,(i->get<0>().id())));
-
-
                 }
             }
             else
             {
+                noAlertText->show();
                 alertsTable->hide();
             }
         }
@@ -178,6 +179,24 @@ void AlertListWidget::createUI()
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("1"),Wt::Ok);
         Wt::log("error") << "[AlertListWidget] [createUI] " << e.what();
     }
+    
+    Wt::WVBoxLayout *mainVerticalLayout = new Wt::WVBoxLayout();
+//    Wt::WHBoxLayout *topHorizontalLayout = new Wt::WHBoxLayout();
+    Wt::WHBoxLayout *bottomHorizontalLayout = new Wt::WHBoxLayout();
+    
+      
+//    topHorizontalLayout->addWidget(mainForm);
+    bottomHorizontalLayout->addWidget(noAlertText);
+    bottomHorizontalLayout->addWidget(alertsTable);
+    
+    // empty container to reduce table width which is linked to the container
+    Wt::WContainerWidget *emptyContainer = new Wt::WContainerWidget();
+    bottomHorizontalLayout->addWidget(emptyContainer);
+    
+//    mainVerticalLayout->addLayout(topHorizontalLayout);
+    mainVerticalLayout->addLayout(bottomHorizontalLayout);
+    
+    this->setLayout(mainVerticalLayout);
 }
 
 void AlertListWidget::deleteAlert(long long id)

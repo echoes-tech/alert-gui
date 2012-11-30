@@ -48,9 +48,12 @@ void AssetManagementWidget::createUI()
     
     int row = 0;
 
+    linksTable->setStyleClass("table-list");
+    
+    linksTable->setHeaderCount(1,Wt::Horizontal);
+    
+    
     linksTable->elementAt(row, 0)->setColumnSpan(3);
-    linksTable->elementAt(row, 0)->setContentAlignment(Wt::AlignTop | Wt::AlignCenter);
-    linksTable->elementAt(row, 0)->setPadding(10);
     Wt::WText *title = new Wt::WText(tr("Alert.asset.add-asset-form"),linksTable->elementAt(row, 0));
     title->decorationStyle().font().setSize(Wt::WFont::XLarge);
     
@@ -114,9 +117,13 @@ void AssetManagementWidget::createUI()
     Wt::WHBoxLayout *topHorizontalLayout = new Wt::WHBoxLayout();
     Wt::WHBoxLayout *bottomHorizontalLayout = new Wt::WHBoxLayout();
     
-  
+      
     topHorizontalLayout->addWidget(mainForm);
     bottomHorizontalLayout->addWidget(linksTable);
+    
+    // empty container to reduce table width which is linked to the container
+    Wt::WContainerWidget *emptyContainer = new Wt::WContainerWidget();
+    bottomHorizontalLayout->addWidget(emptyContainer);
     
     mainVerticalLayout->addLayout(topHorizontalLayout);
     mainVerticalLayout->addLayout(bottomHorizontalLayout);

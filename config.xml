@@ -473,11 +473,12 @@
         <property name="auth-mail-sender-name">ECHOES Alert</property>
         <property name="auth-mail-sender-address">noreply-auth@echoes-tech.com</property>
         
-        <property name="db-host">127.0.0.1</property>
+        <!-- PREPROD <property name="db-host">172.16.3.102</property> -->
+        <property name="db-host">92.243.5.246</property>
         <property name="db-port">5432</property>
         <property name="db-name">echoes</property>
         <property name="db-user">echoes</property>
-        <property name="db-password">toto</property>
+        <property name="db-password">9Mw5#vvdC56Gzs#goD3M</property>
         
 	</properties>
 

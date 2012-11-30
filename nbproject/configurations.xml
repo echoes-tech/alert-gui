@@ -57,6 +57,7 @@
                    projectFiles="true">
       <itemPath>alert-list.xml</itemPath>
       <itemPath>alert-list_fr.xml</itemPath>
+      <itemPath>resources/alert.css</itemPath>
       <itemPath>alert.xml</itemPath>
       <itemPath>alert_fr.xml</itemPath>
       <itemPath>asset.xml</itemPath>

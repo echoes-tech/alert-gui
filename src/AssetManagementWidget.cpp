@@ -267,10 +267,14 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WStrin
     f << contentToSend;
     f.close();
     
+    
+    std::string assetNameSpacesReplaced = assetName.toUTF8();
+    boost::replace_all(assetNameSpacesReplaced, " ", "_");
+    
     // creating resource to send to the client
     Wt::WFileResource *res = new Wt::WFileResource();
     res->setFileName(tmpname);
-    res->suggestFileName("ea-probe-install_" + assetName + ".sh",Wt::WResource::Attachment);
+    res->suggestFileName("ea-probe-install_" + assetNameSpacesReplaced + ".sh",Wt::WResource::Attachment);
     res->setMimeType("application/x-sh");
     return res;
 }

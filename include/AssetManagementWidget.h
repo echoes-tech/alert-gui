@@ -56,6 +56,7 @@
 #include <boost/random.hpp>
 #include <boost/random/random_device.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
+#include <boost/algorithm/string.hpp>
 
 class AssetManagementWidget : public Wt::WContainerWidget
 {

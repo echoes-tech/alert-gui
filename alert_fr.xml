@@ -35,7 +35,7 @@
   <message id="Alert.alert.media-value-info">Média enregistré pour l'alerte</message>
 
   <message id="Alert.alert.snooze-label">Snooze</message>
-  <message id="Alert.alert.snooze-info">Délai entre deux alertes (s) (> 60)</message>
+  <message id="Alert.alert.snooze-info">Délai entre deux alertes (secondes) (> 60)</message>
   
   <message id="Alert.alert.information-unit-label">Unité</message>
   <message id="Alert.alert.information-unit-info">Unité utilisée pour paramétrer l'alerte</message>

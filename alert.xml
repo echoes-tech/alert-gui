@@ -35,7 +35,7 @@
   <message id="Alert.alert.media-value-info">Choose an alert registered media</message>
 
   <message id="Alert.alert.snooze-label">Snooze</message>
-  <message id="Alert.alert.snooze-info">Choose delay between two alerts</message>
+  <message id="Alert.alert.snooze-info">Delay between two alerts (seconds) (> 60)</message>
 
   <message id="Alert.alert.information-unit-label">Unit</message>
   <message id="Alert.alert.information-unit-info">Unit used to set the alert</message>

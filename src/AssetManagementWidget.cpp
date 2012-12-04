@@ -54,8 +54,7 @@ void AssetManagementWidget::createUI()
     
     
     linksTable->elementAt(row, 0)->setColumnSpan(3);
-    Wt::WText *title = new Wt::WText(tr("Alert.asset.add-asset-form"),linksTable->elementAt(row, 0));
-    title->decorationStyle().font().setSize(Wt::WFont::XLarge);
+    new Wt::WText(tr("Alert.asset.add-asset-form"),linksTable->elementAt(row, 0));
     
     try
     {

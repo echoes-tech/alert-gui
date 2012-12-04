@@ -12,6 +12,7 @@
   <message id="Alert.alert-list.criteria-name"><b>Critère</b></message>
   <message id="Alert.alert-list.alert-value"><b>Valeur du seuil</b></message>
   <message id="Alert.alert-list.alert-unit"><b>Unité</b></message>
+  <message id="Alert.alert-list.alert-key-value"><b>Valeur clé</b></message>
   <message id="Alert.alert-list.alert-actions"><b>Actions</b></message>
   <message id="Alert.alert-list.alert-media"><b>Média</b></message>
   <message id="Alert.alert-list.alert-snooze"><b>Snooze</b></message>

@@ -39,18 +39,18 @@ void AlertListWidget::createUI()
     
     alertsTable->setHeaderCount(1,Wt::Horizontal);
     
-    alertsTable->elementAt(row, col)->setColumnSpan(7);
+    alertsTable->elementAt(row, col)->setColumnSpan(8);
     alertsTable->elementAt(row, col)->setContentAlignment(Wt::AlignTop | Wt::AlignCenter);
     alertsTable->elementAt(row, col)->setPadding(5);
     
-    Wt::WText *title = new Wt::WText(tr("Alert.alert-list.alert-form"),alertsTable->elementAt(row, 0));
-    title->decorationStyle().font().setSize(Wt::WFont::XLarge);
+    new Wt::WText(tr("Alert.alert-list.alert-form"),alertsTable->elementAt(row, 0));
     
     row = 1;
     new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-name"), alertsTable->elementAt(row, col));
     new Wt::WText(Wt::WString::tr("Alert.alert-list.criteria-name"), alertsTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-value"), alertsTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-unit"), alertsTable->elementAt(row, ++col));
+    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-key-value"), alertsTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-media"), alertsTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-snooze"), alertsTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-actions"), alertsTable->elementAt(row, ++col));
@@ -154,6 +154,9 @@ void AlertListWidget::createUI()
     
                     Wt::WString tempUnitName = "Alert.alert.unit." + i->get<5>().get()->name;
                     new Wt::WText(tr(tempUnitName.toUTF8().c_str()), alertsTable->elementAt(row, ++colNum));
+                    alertsTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
+                    
+                    new Wt::WText(i->get<2>().get()->keyValue.get(), alertsTable->elementAt(row, ++colNum));
                     alertsTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
 
                     new Wt::WText(i->get<3>().get()->value, alertsTable->elementAt(row, ++colNum));

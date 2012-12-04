@@ -10,6 +10,7 @@
   <message id="Alert.alert-list.criteria-name"><b>Criteria</b></message>
   <message id="Alert.alert-list.alert-value"><b>Threshold value</b></message>
   <message id="Alert.alert-list.alert-unit"><b>Unit</b></message>
+  <message id="Alert.alert-list.alert-key-value"><b>Key value</b></message>
   <message id="Alert.alert-list.alert-actions"><b>Actions</b></message>
   <message id="Alert.alert-list.alert-media"><b>Media</b></message>
   <message id="Alert.alert-list.alert-snooze"><b>Snooze</b></message>

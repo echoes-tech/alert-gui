@@ -35,29 +35,20 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/src/EscapeOStream.o \
 	${OBJECTDIR}/src/UserEditionWidget.o \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/src/MonitoringWidget.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/src/RegistrationWidget.o \
 	${OBJECTDIR}/src/AlertListWidget.o \
 	${OBJECTDIR}/src/AssetManagementModel.o \
-	${OBJECTDIR}/src/Login.o \
 	${OBJECTDIR}/src/OptionManagementModel.o \
-	${OBJECTDIR}/src/UpdatePasswordWidget.o \
 	${OBJECTDIR}/src/AlertEditionModel.o \
-	${OBJECTDIR}/src/FormBaseModel.o \
 	${OBJECTDIR}/src/UserActionManagement.o \
-	${OBJECTDIR}/src/RegistrationModel.o \
 	${OBJECTDIR}/src/Enums.o \
 	${OBJECTDIR}/src/AuthWidget.o \
 	${OBJECTDIR}/src/WFormModel.o \
-	${OBJECTDIR}/src/DomElement.o \
-	${OBJECTDIR}/src/WebUtils.o \
-	${OBJECTDIR}/src/WTemplateFormView.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
 	${OBJECTDIR}/src/AlertEditionWidget.o
 
@@ -85,11 +76,6 @@ LDLIBSOPTIONS=-L../dbo/dist/Debug_SharedObject/GNU-Linux-x86 -L/var/lib/jenkins/
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui ${OBJECTFILES} ${LDLIBSOPTIONS} 
-
-${OBJECTDIR}/src/EscapeOStream.o: src/EscapeOStream.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EscapeOStream.o src/EscapeOStream.cpp
 
 ${OBJECTDIR}/src/UserEditionWidget.o: src/UserEditionWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -121,11 +107,6 @@ ${OBJECTDIR}/main.o: main.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
-${OBJECTDIR}/src/RegistrationWidget.o: src/RegistrationWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/RegistrationWidget.o src/RegistrationWidget.cpp
-
 ${OBJECTDIR}/src/AlertListWidget.o: src/AlertListWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -136,40 +117,20 @@ ${OBJECTDIR}/src/AssetManagementModel.o: src/AssetManagementModel.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AssetManagementModel.o src/AssetManagementModel.cpp
 
-${OBJECTDIR}/src/Login.o: src/Login.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Login.o src/Login.cpp
-
 ${OBJECTDIR}/src/OptionManagementModel.o: src/OptionManagementModel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/OptionManagementModel.o src/OptionManagementModel.cpp
-
-${OBJECTDIR}/src/UpdatePasswordWidget.o: src/UpdatePasswordWidget.C 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UpdatePasswordWidget.o src/UpdatePasswordWidget.C
 
 ${OBJECTDIR}/src/AlertEditionModel.o: src/AlertEditionModel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AlertEditionModel.o src/AlertEditionModel.cpp
 
-${OBJECTDIR}/src/FormBaseModel.o: src/FormBaseModel.C 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FormBaseModel.o src/FormBaseModel.C
-
 ${OBJECTDIR}/src/UserActionManagement.o: src/UserActionManagement.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UserActionManagement.o src/UserActionManagement.cpp
-
-${OBJECTDIR}/src/RegistrationModel.o: src/RegistrationModel.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/RegistrationModel.o src/RegistrationModel.cpp
 
 ${OBJECTDIR}/src/Enums.o: src/Enums.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -185,21 +146,6 @@ ${OBJECTDIR}/src/WFormModel.o: src/WFormModel.C
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/WFormModel.o src/WFormModel.C
-
-${OBJECTDIR}/src/DomElement.o: src/DomElement.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/DomElement.o src/DomElement.cpp
-
-${OBJECTDIR}/src/WebUtils.o: src/WebUtils.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/WebUtils.o src/WebUtils.cpp
-
-${OBJECTDIR}/src/WTemplateFormView.o: src/WTemplateFormView.C 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/WTemplateFormView.o src/WTemplateFormView.C
 
 ${OBJECTDIR}/src/AssetManagementWidget.o: src/AssetManagementWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

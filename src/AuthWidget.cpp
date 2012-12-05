@@ -69,7 +69,7 @@ void AuthWidget::setRegistrationEnabled(bool enabled)
 
 void AuthWidget::setInternalBasePath(const std::string& basePath)
 {
-    basePath_ = Utils::append(Utils::prepend(basePath, '/'), '/');
+    basePath_ = Wt::Utils::append(Wt::Utils::prepend(basePath, '/'), '/');
 }
 
 void AuthWidget::onPathChange(const std::string& path)

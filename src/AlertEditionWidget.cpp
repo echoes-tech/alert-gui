@@ -548,10 +548,7 @@ void AlertEditionWidget::updateInformationDetails(int idx)
                                         .where("\"SRC_ID\" = ?").bind(this->mapInformationSrcIdSboxRow[idx])
                                         .where("\"PLG_ID_PLG_ID\" = ?").bind(this->mapInformationPlgIdSboxRow[idx])
                                         .where("\"INF_VALUE_NUM\" = ?").bind(this->mapInformationPkvSboxRow[idx])
-                                        .where("\"INU_ID_INU_ID\" = ?").bind(this->mapInformationInuIdSboxRow[idx])
                                         .limit(1);
-
-
 
             if (ptrInfoKey)
             {

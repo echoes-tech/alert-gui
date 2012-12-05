@@ -104,5 +104,24 @@
   
   <message id="Alert.alert.sub-unit.mo">Mega octets</message>
   <message id="Alert.alert.sub-unit.go">Giga octets</message>
+  
+  <message id="Alert.alert.information.cpu_usage">Utilisation CPU</message>
+  <message id="Alert.alert.information.incoming_traffic">Trafic entrant</message>
+  <message id="Alert.alert.information.load_1_minute">Charge 1 minute</message>
+  <message id="Alert.alert.information.load_5_minutes">Charge 5 minutes</message>
+  <message id="Alert.alert.information.load_15_minutes">Charge 15 minutes</message>
+  <message id="Alert.alert.information.memory_free">Mémoire libre</message>
+  <message id="Alert.alert.information.memory_swap_free">Mémoire virtuelle libre</message>
+  <message id="Alert.alert.information.outgoing_traffic">Trafic sortant</message>
+  <message id="Alert.alert.information.received_drops">Paquets reçus : drops</message>
+  <message id="Alert.alert.information.received_errors">Paquets reçus : erreurs</message>
+  <message id="Alert.alert.information.received_packets">Paquets reçus</message>
+  <message id="Alert.alert.information.transmitted_drops">Paquets transmis : drops</message>
+  <message id="Alert.alert.information.transmitted_errors">Paquets transmis : erreurs</message>
+  <message id="Alert.alert.information.transmitted_packets">Paquets transmis</message>
+  
+  <message id="Alert.alert.hint.network_interface_name">Nom interface réseau</message>
+  <message id="Alert.alert.hint.cpu_name">Nom CPU</message>
+  
 
 </messages>

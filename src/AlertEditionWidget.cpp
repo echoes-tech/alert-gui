@@ -460,14 +460,14 @@ void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
         try
         {
             Wt::Dbo::Transaction transaction(*session);
-            queryInformation = session->query<Wt::Dbo::ptr<Information2> >(queryStringInfos).bind(pluginId).orderBy("\"INF_NAME\"");//.bind(session->user().id());
+            queryInformation = session->query<Wt::Dbo::ptr<Information2> >(queryStringInfos).bind(pluginId).orderBy("\"SRC_ID\",\"INF_NAME\"");//.bind(session->user().id());
             infos = queryInformation.resultList();
            
         
             int idx = 0;
             for (Wt::Dbo::collection<Wt::Dbo::ptr<Information2> >::const_iterator k = infos.begin(); k != infos.end(); k++)
             {
-                slmInformation->insertString(idx,k->get()->name);
+                slmInformation->insertString(idx,Wt::WString::tr("Alert.alert.information." + k->get()->name.toUTF8()));
                 
                 this->mapInformationSeaIdSboxRow[idx] = k->get()->pk.search.get()->pk.id;
                 this->mapInformationSrcIdSboxRow[idx] = k->get()->pk.search.get()->pk.source.get()->pk.id;
@@ -552,7 +552,7 @@ void AlertEditionWidget::updateInformationDetails(int idx)
 
             if (ptrInfoKey)
             {
-                model_->modifyField(model_->ThresholdValueKey,ptrInfoKey.get()->name);
+                model_->modifyField(model_->ThresholdValueKey,Wt::WString::tr("Alert.alert.hint." + ptrInfoKey.get()->name.toUTF8()));
             }
             else
             {

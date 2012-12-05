@@ -90,6 +90,7 @@
   <message id="Alert.alert.unit.kilo_bits">Kilo bits</message>
   <message id="Alert.alert.unit.packets">Paquets</message>
   <message id="Alert.alert.unit.octets">Octets</message>
+  <message id="Alert.alert.unit.kilo_octets">Kilo octets</message>
   <message id="Alert.alert.unit.name">Nom</message>
   <message id="Alert.alert.unit.load">Charge</message>
   <message id="Alert.alert.unit.time_user_hz">Temps utilisateur hertz</message>
@@ -100,5 +101,8 @@
   <message id="Alert.alert.sub-unit.ko_s">Ko / seconde</message>
   <message id="Alert.alert.sub-unit.mo_s">Mo / seconde</message>
   <message id="Alert.alert.sub-unit.go_s">Go / seconde</message>
+  
+  <message id="Alert.alert.sub-unit.mo">Mega octets</message>
+  <message id="Alert.alert.sub-unit.go">Giga octets</message>
 
 </messages>

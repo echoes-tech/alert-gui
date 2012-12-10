@@ -211,13 +211,19 @@ void AlertListWidget::deleteAlert(long long id)
         Wt::Dbo::ptr<Alert>  ptrAlert = session->query<Wt::Dbo::ptr<Alert > >(queryStr).bind(id).limit(1);
         //FIXME: doesn't work, bug posted in Wt forge #1479
         //ptrAsset.modify()->alerts.clear();
-        std::string executeString = "DELETE FROM \"TJ_AST_ALE\" " 
-                                    " WHERE \"TJ_AST_ALE\".\"T_ALERT_ALE_ALE_ID\" = " + boost::lexical_cast<std::string>(id);
-        session->execute(executeString);
+        std::string executeString1 = " SELECT astale FROM \"TJ_AST_ALE\" astale" 
+                                    " WHERE astale.\"T_ALERT_ALE_ALE_ID\" = " + boost::lexical_cast<std::string>(id) + "FOR UPDATE";
+        std::string executeString1bis = " DELETE FROM \"TJ_AST_ALE\" " 
+                                        " WHERE \"TJ_AST_ALE\".\"T_ALERT_ALE_ALE_ID\" = " + boost::lexical_cast<std::string>(id);
+        session->execute(executeString1);
+        session->execute(executeString1bis);
         
-        std::string executeString2 = "DELETE FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" " 
-                                    " WHERE \"AMS_ALE_ALE_ID\" = " + boost::lexical_cast<std::string>(id);
-        session->execute(executeString2);   
+        std::string executeString2 = "SELECT ams FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" ams " 
+                                     " WHERE \"AMS_ALE_ALE_ID\" = " + boost::lexical_cast<std::string>(id) + "FOR UPDATE";
+        std::string executeString2bis =  " DELETE FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" "
+                                     " WHERE \"AMS_ALE_ALE_ID\" = " + boost::lexical_cast<std::string>(id);
+        session->execute(executeString2);
+        session->execute(executeString2bis);
         
         
         ptrAlert.modify()->deleteTag = Wt::WDateTime::currentDateTime();

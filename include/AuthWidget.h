@@ -24,7 +24,8 @@
 #include "Wt/Auth/AuthService"
 #include "Wt/Auth/LostPasswordWidget"
 #include "Wt/Auth/PasswordPromptDialog"
-#include "UpdatePasswordWidget.h"
+#include "Wt/Auth/UpdatePasswordWidget"
+#include "Wt/Auth/RegistrationWidget"
 
 #include "Wt/Auth/OAuthService"
 
@@ -40,9 +41,10 @@
 #include "Wt/WPushButton"
 #include "Wt/WTemplate"
 #include "Wt/WText"
+#include "WebUtils.h"
 
 //#include "Login.h"
-#include "WebUtils.h"
+//#include "WebUtils.h"
 
 #include <memory>
 

@@ -88,6 +88,7 @@
   <message id="Alert.alert.unit.kilo_bits">Kilo bits</message>
   <message id="Alert.alert.unit.packets">Packets</message>
   <message id="Alert.alert.unit.octets">Octets</message>
+  <message id="Alert.alert.unit.kilo_octets">Kilo octets</message>
   <message id="Alert.alert.unit.name">Name</message>
   <message id="Alert.alert.unit.load">Load</message>
   <message id="Alert.alert.unit.time_user_hz">Time user hertz</message>
@@ -98,7 +99,27 @@
   <message id="Alert.alert.sub-unit.ko_s">Ko / second</message>
   <message id="Alert.alert.sub-unit.mo_s">Mo / second</message>
   <message id="Alert.alert.sub-unit.go_s">Go / second</message>
+  
+  <message id="Alert.alert.sub-unit.mo">Mega octets</message>
+  <message id="Alert.alert.sub-unit.go">Giga octets</message>
+  
+  <message id="Alert.alert.information.cpu_usage">CPU Usage</message>
+  <message id="Alert.alert.information.incoming_traffic">Incoming traffic</message>
+  <message id="Alert.alert.information.load_1_minute">Load 1 minute</message>
+  <message id="Alert.alert.information.load_5_minutes">Load 5 minutes</message>
+  <message id="Alert.alert.information.load_15_minutes">Load 15 minutes</message>
+  <message id="Alert.alert.information.memory_free">Memory free</message>
+  <message id="Alert.alert.information.memory_swap_free">Swap memory free</message>
+  <message id="Alert.alert.information.outgoing_traffic">Outgoing traffic</message>
+  <message id="Alert.alert.information.received_drops">Received packets : drops</message>
+  <message id="Alert.alert.information.received_errors">Received packets : errors</message>
+  <message id="Alert.alert.information.received_packets">Received packets</message>
+  <message id="Alert.alert.information.transmitted_drops">Transmitted packets : drops</message>
+  <message id="Alert.alert.information.transmitted_errors">Transmitted packets : errors</message>
+  <message id="Alert.alert.information.transmitted_packets">Transmitted packets</message>
 
+  <message id="Alert.alert.hint.network_interface_name">Network interface name</message>
+  <message id="Alert.alert.hint.cpu_name">CPU name</message>
   
 
   <!-- templates -->

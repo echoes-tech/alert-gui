@@ -196,5 +196,5 @@ void AlertEditionModel::setValid(Field field)
 
 void AlertEditionModel::modifyField(Field field, const Wt::WString& info)
 {
-    Wt::WFormModel::fields_[field].validation = Wt::WValidator::Result(Wt::WValidator::Invalid, info);
+    WFormModel::fields_[field].validation = Wt::WValidator::Result(Wt::WValidator::Invalid, info);
 }

@@ -12,12 +12,13 @@
 #include "Enums.h"
 
 
-
-#include "WTemplateFormView"
 #include "WFormModel"
+#include "Wt/WTemplateFormView"
 
-#include "RegistrationModel.h"
-#include "RegistrationWidget.h"
+
+
+//#include "RegistrationModel.h"
+//#include "RegistrationWidget.h"
 #include "AssetManagementModel.h"
 #include "AssetManagementWidget.h"
 #include "AlertEditionModel.h"

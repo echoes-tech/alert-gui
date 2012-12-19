@@ -3,8 +3,13 @@
 
   <message id="welcome-text"><h3>Bienvenue dans la version beta d'ECHOES Alert !</h3>
     <h2>Beta</h2>
-    <p>29/10/2012</p>
+    <p>18/12/2012</p>
     <p>
+        Beta ouverte tous les jours de 14h à 2h.
+        <ul>
+            <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge pour toutes vos demandes</a></li>
+            <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Forum d'entraide</a></li>         
+        </ul>
         <ul>
             <li> [Moteur] Stabilisation : amélioration des performances
                 <ul>

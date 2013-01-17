@@ -4,8 +4,13 @@
   <message id="welcome-text">
     <p>Welcome on beta version of ECHOES Alert !</p>
     <h2>Beta</h2>
-    <p>29/10/2012</p>
+    <p>18/12/2012</p>
     <p>
+        Beta version opened every day between 2pm and 2am.
+        <ul>
+            <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge to ask everything you need.</a></li>
+            <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Assistance forum.</a></li>         
+        </ul>
         <ul>
             <li> [Engine] Stabilization : performances improved
                 <ul>

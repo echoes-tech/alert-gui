@@ -120,6 +120,15 @@
   <message id="Alert.alert.information.transmitted_errors">Paquets transmis : erreurs</message>
   <message id="Alert.alert.information.transmitted_packets">Paquets transmis</message>
   
+  <message id="Alert.alert.information.humid_couloir">Humidité couloir</message>
+  <message id="Alert.alert.information.temp_couloir">Temperature couloir</message>
+  <message id="Alert.alert.information.humid_salle">Humidité salle</message>
+  <message id="Alert.alert.information.temp_salle">Température salle</message>
+  <message id="Alert.alert.information.temp_baie_1">Temp baie 1</message>
+  <message id="Alert.alert.information.temp_baie_2">Temp baie 2</message>
+  <message id="Alert.alert.information.temp_baie_3">Temp baie 3</message>
+  <message id="Alert.alert.information.temp_baie_4">Temp baie 4</message>
+  
   <message id="Alert.alert.hint.network_interface_name">Nom interface réseau</message>
   <message id="Alert.alert.hint.cpu_name">Nom CPU</message>
   

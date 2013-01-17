@@ -97,6 +97,8 @@
   <message id="Alert.alert.unit.percent">Pourcents</message>
   <message id="Alert.alert.unit.time_secs">Secondes</message>
   <message id="Alert.alert.unit.oct_secs">Octets / seconde</message>
+  <message id="Alert.alert.unit.degrees">Degrés</message>
+  
   
   <message id="Alert.alert.sub-unit.ko_s">Ko / seconde</message>
   <message id="Alert.alert.sub-unit.mo_s">Mo / seconde</message>

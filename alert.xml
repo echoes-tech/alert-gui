@@ -117,6 +117,15 @@
   <message id="Alert.alert.information.transmitted_drops">Transmitted packets : drops</message>
   <message id="Alert.alert.information.transmitted_errors">Transmitted packets : errors</message>
   <message id="Alert.alert.information.transmitted_packets">Transmitted packets</message>
+  
+  <message id="Alert.alert.information.humid_couloir">Corridor humidity</message>
+  <message id="Alert.alert.information.temp_couloir">Corridor temperature</message>
+  <message id="Alert.alert.information.humid_salle">Room humidity</message>
+  <message id="Alert.alert.information.temp_salle">Room temperature</message>
+  <message id="Alert.alert.information.temp_baie_1">Bay 1 temperature</message>
+  <message id="Alert.alert.information.temp_baie_2">Bay 2 temperature</message>
+  <message id="Alert.alert.information.temp_baie_3">Bay 3 temperature</message>
+  <message id="Alert.alert.information.temp_baie_4">Bay 4 temperature</message>
 
   <message id="Alert.alert.hint.network_interface_name">Network interface name</message>
   <message id="Alert.alert.hint.cpu_name">CPU name</message>

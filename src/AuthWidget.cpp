@@ -8,6 +8,8 @@
 #include "AuthWidget.h"
 
 
+
+
 //namespace skeletons
 //{
 //extern const char * Auth_xml1;
@@ -150,11 +152,13 @@ void AuthWidget::closeDialog()
     }
 }
 
-RegistrationModel *AuthWidget::createRegistrationModel()
+RegistrationModelAlert *AuthWidget::createRegistrationModel()
 {
-    RegistrationModel *result = new RegistrationModel(*model_->baseAuth(),
+    RegistrationModelAlert *result = new RegistrationModelAlert(*model_->baseAuth(),
                                                       model_->users(),
                                                       login_, this);
+    
+    std::cout << "taille dans le model pendant créa : " << result->fields().size() << std::endl;
 
     if (model_->passwordAuth())
         result->addPasswordAuth(model_->passwordAuth());
@@ -173,8 +177,10 @@ WWidget *AuthWidget::createRegistrationView(const Identity& id)
 
     if (id.isValid())
         registrationModel_->registerIdentified(id);
+    
+    std::cout << "taille à la création : " << registrationModel_->fields().size() << std::endl;
 
-    RegistrationWidget *w = new RegistrationWidget(this);
+    RegistrationWidgetAlert *w = new RegistrationWidgetAlert(this);
     w->setModel(registrationModel_);
 
     return w;
@@ -187,7 +193,7 @@ void AuthWidget::handleLostPassword()
 
 WWidget *AuthWidget::createLostPasswordView()
 {
-    return new LostPasswordWidget(model_->users(), *model_->baseAuth());
+    return new LostPasswordWidgetAlert(model_->users(), *model_->baseAuth());
 }
 
 void AuthWidget::letUpdatePassword(const User& user, bool promptPassword)

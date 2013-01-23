@@ -12,13 +12,9 @@
 #include "Enums.h"
 
 
-#include "WFormModel"
-#include "Wt/WTemplateFormView"
 
-
-
-//#include "RegistrationModel.h"
-//#include "RegistrationWidget.h"
+#include "Auth/RegistrationModelAlert.h"
+#include "Auth/RegistrationWidgetAlert.h"
 #include "AssetManagementModel.h"
 #include "AssetManagementWidget.h"
 #include "AlertEditionModel.h"
@@ -48,5 +44,4 @@ class EchoesHome;
 class UserActionManagement;
 class AuthWidget;
 class Login;
-class OAuthProcess;
 

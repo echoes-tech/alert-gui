@@ -6,6 +6,14 @@
 #include <Wt/WApplication>
 
 #include "GlobalIncludeFile.h"
+#include "tools/SessionPool.h"
+#include <mutex>
+
+
+
+SessionPool* SessionPool::instance = 0;
+std::string SessionPool::credentials = "";
+std::mutex SessionPool::mutex;
 
 //---------------------------------------------------------------------------
 

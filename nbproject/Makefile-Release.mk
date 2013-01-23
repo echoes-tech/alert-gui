@@ -38,8 +38,10 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/UserEditionWidget.o \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
 	${OBJECTDIR}/src/EchoesHome.o \
+	${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o \
 	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/src/MonitoringWidget.o \
+	${OBJECTDIR}/src/Auth/RegistrationModelAlert.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/src/AlertListWidget.o \
 	${OBJECTDIR}/src/AssetManagementModel.o \
@@ -48,7 +50,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/UserActionManagement.o \
 	${OBJECTDIR}/src/Enums.o \
 	${OBJECTDIR}/src/AuthWidget.o \
-	${OBJECTDIR}/src/WFormModel.o \
+	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
 	${OBJECTDIR}/src/AlertEditionWidget.o
 
@@ -92,6 +94,11 @@ ${OBJECTDIR}/src/EchoesHome.o: src/EchoesHome.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EchoesHome.o src/EchoesHome.cpp
 
+${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o: src/Auth/LostPasswordWidgetAlert.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/Auth
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o src/Auth/LostPasswordWidgetAlert.cpp
+
 ${OBJECTDIR}/src/UserEditionModel.o: src/UserEditionModel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -101,6 +108,11 @@ ${OBJECTDIR}/src/MonitoringWidget.o: src/MonitoringWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MonitoringWidget.o src/MonitoringWidget.cpp
+
+${OBJECTDIR}/src/Auth/RegistrationModelAlert.o: src/Auth/RegistrationModelAlert.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/Auth
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Auth/RegistrationModelAlert.o src/Auth/RegistrationModelAlert.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -142,10 +154,10 @@ ${OBJECTDIR}/src/AuthWidget.o: src/AuthWidget.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AuthWidget.o src/AuthWidget.cpp
 
-${OBJECTDIR}/src/WFormModel.o: src/WFormModel.C 
-	${MKDIR} -p ${OBJECTDIR}/src
+${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o: src/Auth/RegistrationWidgetAlert.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/Auth
 	${RM} $@.d
-	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/WFormModel.o src/WFormModel.C
+	$(COMPILE.cc) -O3 -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o src/Auth/RegistrationWidgetAlert.cpp
 
 ${OBJECTDIR}/src/AssetManagementWidget.o: src/AssetManagementWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

@@ -26,7 +26,9 @@
         </logicalFolder>
         <logicalFolder name="f2" displayName="Auth" projectFiles="true">
           <itemPath>include/AuthWidget.h</itemPath>
-          <itemPath>include/WFormModel</itemPath>
+          <itemPath>include/Auth/LostPasswordWidgetAlert.h</itemPath>
+          <itemPath>include/Auth/RegistrationModelAlert.h</itemPath>
+          <itemPath>include/Auth/RegistrationWidgetAlert.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>include/MonitoringWidget.h</itemPath>
@@ -95,7 +97,9 @@
         </logicalFolder>
         <logicalFolder name="f2" displayName="Auth" projectFiles="true">
           <itemPath>src/AuthWidget.cpp</itemPath>
-          <itemPath>src/WFormModel.C</itemPath>
+          <itemPath>src/Auth/LostPasswordWidgetAlert.cpp</itemPath>
+          <itemPath>src/Auth/RegistrationModelAlert.cpp</itemPath>
+          <itemPath>src/Auth/RegistrationWidgetAlert.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>src/MonitoringWidget.cpp</itemPath>
@@ -131,6 +135,7 @@
       </toolsSet>
       <compileType>
         <ccTool>
+          <standard>8</standard>
           <incDir>
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>

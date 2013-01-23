@@ -15,17 +15,20 @@
 #define WT_AUTH_AUTH_WIDGET_H_
 
 #include "GlobalIncludeFile.h"
+
+#include "Auth/LostPasswordWidgetAlert.h"
+
 #include <Wt/Auth/AuthModel>
 #include <Wt/Auth/OAuthService>
+#include "Auth/RegistrationModelAlert.h"
+#include "Auth/RegistrationWidgetAlert.h"
 
 
 #include "Wt/Auth/AbstractUserDatabase"
 #include "Wt/Auth/AuthModel"
 #include "Wt/Auth/AuthService"
-#include "Wt/Auth/LostPasswordWidget"
 #include "Wt/Auth/PasswordPromptDialog"
 #include "Wt/Auth/UpdatePasswordWidget"
-#include "Wt/Auth/RegistrationWidget"
 
 #include "Wt/Auth/OAuthService"
 
@@ -364,7 +367,7 @@ protected:
    *
    * \sa registerNewUser()
    */
-  virtual RegistrationModel *createRegistrationModel();
+  virtual RegistrationModelAlert *createRegistrationModel();
 
   virtual WFormWidget *createFormWidget(AuthModel::Field field);
 
@@ -372,7 +375,7 @@ protected:
 
 private:
   AuthModel *model_;
-  RegistrationModel *registrationModel_;
+  RegistrationModelAlert *registrationModel_;
   Login& login_;
   std::string basePath_;
   bool registrationEnabled_;

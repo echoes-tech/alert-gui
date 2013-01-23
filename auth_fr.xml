@@ -80,6 +80,7 @@
     Rester connecté {1} semaines
   </message>
   <message id="Wt.Auth.lost-password">Mot de passe oublié</message>
+  <message id="Wt.Auth.mail-invalid">Adresse email non valide. Il peut s'agir d'une adresse non confirmée lors de l'inscription ou d'une adresse incorrecte.</message>
   <message id="Wt.Auth.login">Connexion</message>
   <message id="Wt.Auth.logout">Déconnexion</message>
   <message id="Wt.Auth.throttle-retry">Réessayez dans {1}s</message>

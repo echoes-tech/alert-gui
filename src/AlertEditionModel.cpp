@@ -196,5 +196,12 @@ void AlertEditionModel::setValid(Field field)
 
 void AlertEditionModel::modifyField(Field field, const Wt::WString& info)
 {
-    WFormModel::fields_[field].validation = Wt::WValidator::Result(Wt::WValidator::Invalid, info);
+    for (unsigned int i = 0; i < fields().size(); i++)
+    {
+        if (strcmp(fields().at(i), field) == 0)
+        {
+            addField(field,info);
+            break;
+        }
+    }
 }

@@ -7,13 +7,13 @@
 
 #include "GlobalIncludeFile.h"
 #include "tools/SessionPool.h"
-#include <mutex>
+#include <boost/thread.hpp>
 
 
 
 SessionPool* SessionPool::instance = 0;
 std::string SessionPool::credentials = "";
-std::mutex SessionPool::mutex;
+boost::mutex SessionPool::mutex;
 
 //---------------------------------------------------------------------------
 

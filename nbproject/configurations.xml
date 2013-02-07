@@ -61,7 +61,6 @@
       <itemPath>auth.xml</itemPath>
       <itemPath>auth_fr.xml</itemPath>
       <itemPath>config.xml</itemPath>
-      <itemPath>config.xml.erb</itemPath>
       <itemPath>resources/form-alert.css</itemPath>
       <itemPath>resources/form-probe.css</itemPath>
       <itemPath>resources/form-user.css</itemPath>
@@ -137,19 +136,17 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
-          <commandlineTool>DISTCC_FALLBACK=0 distcc</commandlineTool>
           <incDir>
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>
-            <pElem>/var/lib/jenkins/jobs/ea-dbo-master/workspace/include</pElem>
+            <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/include</pElem>
           </incDir>
-          <commandLine>-pedantic</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
           <linkerAddLib>
             <pElem>../dbo/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
-            <pElem>/var/lib/jenkins/jobs/ea-dbo-master/workspace/default/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
+            <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/default/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>dbo</linkerLibLibItem>
@@ -172,23 +169,18 @@
       <compileType>
         <ccTool>
           <developmentMode>6</developmentMode>
-          <stripSymbols>true</stripSymbols>
-          <commandlineTool>g++-4.4</commandlineTool>
           <incDir>
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>
-            <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/include</pElem>
+            <pElem>/var/lib/jenkins/jobs/ea-dbo-master/workspace/include</pElem>
           </incDir>
-          <commandLine>-DNDEBUG -std=c++0x</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
           <linkerAddLib>
             <pElem>../dbo/dist/Release_SharedObject/GNU-Linux-x86</pElem>
-            <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/default/dist/Release_SharedObject/GNU-Linux-x86</pElem>
+            <pElem>/var/lib/jenkins/jobs/ea-dbo-master/workspace/default/dist/Release_SharedObject/GNU-Linux-x86</pElem>
           </linkerAddLib>
-          <stripSymbols>true</stripSymbols>
-          <commandlineTool>g++-4.4</commandlineTool>
           <linkerLibItems>
             <linkerLibLibItem>wt</linkerLibLibItem>
             <linkerLibLibItem>wtdbopostgres</linkerLibLibItem>

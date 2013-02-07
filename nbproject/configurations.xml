@@ -169,11 +169,14 @@
       <compileType>
         <ccTool>
           <developmentMode>6</developmentMode>
+          <stripSymbols>true</stripSymbols>
+          <commandlineTool>g++-4.4</commandlineTool>
           <incDir>
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>
             <pElem>/var/lib/jenkins/jobs/ea-dbo-develop/workspace/include</pElem>
           </incDir>
+          <commandLine>-std=c++0x</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
@@ -181,6 +184,7 @@
             <pElem>../dbo/dist/Release_SharedObject/GNU-Linux-x86</pElem>
             <pElem>/var/lib/jenkins/jobs/ea-dbo-develop/workspace/default/dist/Release_SharedObject/GNU-Linux-x86</pElem>
           </linkerAddLib>
+          <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerLibLibItem>wt</linkerLibLibItem>
             <linkerLibLibItem>wtdbopostgres</linkerLibLibItem>

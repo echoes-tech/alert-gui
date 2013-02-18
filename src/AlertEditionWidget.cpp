@@ -799,7 +799,7 @@ void AlertEditionWidget::addAlert()
         
         
         Wt::Dbo::collection<Wt::Dbo::ptr<AlertValue> > avaPtrCollec = session->find<AlertValue>().where("\"SEA_ID\" = ?")
-                                                        .bind(mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()])
+                                                        .bind(mapInformationSeaIdSboxRow[informationSelectionBox->currentIndex()])
                                                         .where("\"SRC_ID\" = ?")
                                                         .bind(mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()])
                                                         .where("\"PLG_ID_PLG_ID\" = ?")

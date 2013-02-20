@@ -41,6 +41,7 @@ public:
     static const Field MediaMobileApp;
     
     virtual bool validateField(Field field);
+    void setSession(Session *session);
 private:
     view currentView;
     Session *session;

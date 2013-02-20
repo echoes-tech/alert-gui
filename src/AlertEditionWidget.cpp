@@ -649,7 +649,7 @@ Wt::WStringListModel *AlertEditionWidget::getMediasForCurrentUser(int mediaType)
     try
     {
         Wt::Dbo::Transaction transaction(*session);
-        Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> > medias = session->find<MediaValue>().where("\"MEV_USR_USR_ID\" = ?").bind(model_->user->self().id())
+        Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> > medias = session->find<MediaValue>().where("\"MEV_USR_USR_ID\" = ?").bind(session->user().id())
                                                                                             .where("\"MEV_MED_MED_ID\" = ?").bind(mediaType);
         int idx = 0;
         for (Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> >::const_iterator i = medias.begin(); i != medias.end(); ++i)

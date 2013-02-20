@@ -38,7 +38,6 @@ void UserEditionModel::setView(User *user)
     }
     else if (!user->eMail.empty())
     {
-        this->session = static_cast<Session*>(user->session());
         currentView = Modification;
     }
     else
@@ -120,4 +119,9 @@ Wt::WString UserEditionModel::validateString(Wt::WString stringToValidate) const
 void UserEditionModel::setValid(Field field)
 {
     setValidation(field,Wt::WValidator::Result(Wt::WValidator::Valid,Wt::WString::tr("Alert.user.edition.valid")));
+}
+
+void UserEditionModel::setSession(Session *session)
+{
+    this->session = session;
 }

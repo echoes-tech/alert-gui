@@ -36,6 +36,7 @@ public:
     virtual void reset();
     
     void modifyField(Field field, const Wt::WString& info);
+    void setSession(Session *session);
 private:
     view currentView;
     Session *session;

@@ -181,6 +181,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     {
         Wt::Dbo::Transaction transaction(*(this->session));
         uem = new UserEditionModel(const_cast<User *>(this->session->user().get()));
+        uem->setSession(session);
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
@@ -195,6 +196,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     {
         Wt::Dbo::Transaction transaction(*(this->session));
         aem = new AlertEditionModel(const_cast<User *>(this->session->user().get()));
+        aem->setSession(session);
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)

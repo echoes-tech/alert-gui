@@ -47,60 +47,62 @@ void RegistrationWidgetAlert::render(Wt::WFlags<Wt::RenderFlag> flags)
 
 void RegistrationWidgetAlert::registerUserDetails(Wt::Auth::User& user)
 {
-    Session *session = static_cast<Session*>(dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().get()->session());
-    
     dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->firstName = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->FirstNameField);
     dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->eMail = model()->valueText(model()->LoginNameField);
     dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->lastName = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->LastNameField);
-    
+
     Organization *org = new Organization();
-    
-    
+
+
     Wt::Dbo::ptr<OrganizationType> type;
     bool bCompagny = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeCompanyField));
     if (bCompagny)
     {
-        type = session->find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Company);
+        type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Company);
         org->name = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField);
     }
     bool bIndividual = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeIndividualField));
     if (bIndividual)
     {
-        type = session->find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Individual);
+        type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Individual);
         org->name = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->LastNameField);
     }
     bool bAssociation = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeAssociationField));
     if (bAssociation)
     {
-        type = session->find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Association);
+        type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Association);
         org->name = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField);
     }
-    
+
+    //triche
+    type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Individual);
+    org->name = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->LastNameField);
+
     org->organizationType = type;
     org->token = reinterpret_cast<RegistrationModelAlert*>(model())->generateToken();
-    
-    
-    
-    Wt::Dbo::ptr<Organization> ptrOrg = session->add<Organization>(org);
-    
+
+
+
+    Wt::Dbo::ptr<Organization> ptrOrg = ((UserDatabase*)user.database())->session_.add<Organization>(org);
+
     //TODO : hardcoded, should be changed when the pack selection will be available
-    Wt::Dbo::ptr<Pack> ptrPack = session->find<Pack>().where("\"PCK_ID\" = ?").bind(1);
+    Wt::Dbo::ptr<Pack> ptrPack = ((UserDatabase*)user.database())->session_.find<Pack>().where("\"PCK_ID\" = ?").bind(1);
     ptrOrg.modify()->pack = ptrPack;
-    
+
     OptionValue *optionValue = new OptionValue();
 
-    OptionValueId *opvId = new OptionValueId(ptrOrg,session->find<Option>().where("\"OPT_ID\" = ?").bind(Enums::sms));
+    OptionValueId *opvId = new OptionValueId(ptrOrg,((UserDatabase*)user.database())->session_.find<Option>().where("\"OPT_ID\" = ?").bind(Enums::sms));
     optionValue->pk.option = opvId->option;
     optionValue->pk.organization = opvId->organization;
     //FIXME : should be the default value found in the table POP
     optionValue->value = "5";
-    
-    Wt::Dbo::ptr<OptionValue> ptrOptionValue = session->add<OptionValue>(optionValue);
-    
-    
+
+    Wt::Dbo::ptr<OptionValue> ptrOptionValue = ((UserDatabase*)user.database())->session_.add<OptionValue>(optionValue);
+
+
 //    Wt::Dbo::collection<Wt::Dbo::ptr<Organization> > colPtrOrg;
 //    colPtrOrg.insert(ptrOrg);
-    
+
     dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->organizations.insert(ptrOrg);
     dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->currentOrganization = ptrOrg;
 }
@@ -362,7 +364,7 @@ bool RegistrationWidgetAlert::validate() {
 void RegistrationWidgetAlert::doRegister() {
     std::auto_ptr<Wt::Auth::AbstractUserDatabase::Transaction>
             t(model()->users().startTransaction());
-
+    
     updateModel(model());
 
     if (validate()) {

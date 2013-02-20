@@ -13,6 +13,7 @@
 #include "Auth/RegistrationModelAlert.h"
 #include "AuthWidget.h"
 #include "tools/Session.h"
+//#include "tools/SessionPool.h"
 #include <Wt/WRadioButton>
 #include <Wt/WButtonGroup>
 #include <Wt/WLineEdit>

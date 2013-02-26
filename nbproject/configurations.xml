@@ -141,6 +141,7 @@
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>
             <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/include</pElem>
+            <pElem>../wt-3.3.0-rc2/build/src</pElem>
           </incDir>
           <warningLevel>2</warningLevel>
         </ccTool>
@@ -148,6 +149,7 @@
           <linkerAddLib>
             <pElem>../dbo/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
             <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/default/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
+            <pElem>../wt-3.3.0-rc2/build/src</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>dbo</linkerLibLibItem>

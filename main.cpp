@@ -4,6 +4,7 @@
 #include <Wt/Http/Response>
 #include <Wt/WEnvironment>
 #include <Wt/WApplication>
+#include <Wt/WBootstrapTheme>
 
 #include "GlobalIncludeFile.h"
 #include "tools/SessionPool.h"
@@ -26,14 +27,21 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
     app->messageResourceBundle().use("global",false);
     
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form.css");
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-alert.css");
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-user.css");
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-probe.css");
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "alert.css");
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form.css");
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-alert.css");
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-user.css");
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-probe.css");
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "alert.css");
     
-    app->setCssTheme("polished");
-  
+    std::string cssToLoad = "default.css";
+    Wt::WApplication::readConfigurationProperty("css-to-load", cssToLoad);
+    
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + cssToLoad);
+    
+    Wt::WBootstrapTheme *theme = new Wt::WBootstrapTheme();
+
+    app->setTheme(theme);
+//      app->setCssTheme("bootstrap");
 
     new EchoesHome(app->root());
 

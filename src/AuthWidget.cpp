@@ -51,11 +51,12 @@ void AuthWidget::init()
     dialog_ = 0;
     messageBox_ = 0;
 
-    addFunction("id", WT_TEMPLATE_FUNCTION(id));
-    addFunction("tr", WT_TEMPLATE_FUNCTION(tr));
+//    addFunction("id", WT_TEMPLATE_FUNCTION(id));
+//    addFunction("tr", WT_TEMPLATE_FUNCTION(tr));
 
     
 //    app->builtinLocalizedStrings().useBuiltin(skeletons::Auth_xml1);
+//     app->theme()->apply(this, this, AuthWidgets);
 }
 
 void AuthWidget::setModel(AuthModel *model)

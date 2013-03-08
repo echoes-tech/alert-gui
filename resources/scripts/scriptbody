@@ -225,13 +225,14 @@ PROBE_ID=$(grep '"id"' probe_creation_res | sed -e 's/ //g' | cut -d':' -f 2 | c
 PKG=$(grep '"filename"' probe_creation_res | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
 PKG_TYPE=$(echo $PKG | sed 's/.*\.\(.*\)$/\1/g')
 
-cat probe_creation_res | tr -d '\r\n' | sed 's/.*content": "\(.*\)\",\s\+"version.*/\1/g' | /usr/bin/base64 -d > $PKG
-if [ $(ls -s $PKG | cut -d' ' -f 1) -eq 0 ]
+PKG_CONTENT_B64=$(cat probe_creation_res | tr -d '\r\n' | sed 's/.*content": "\(.*\)\",\s\+"version.*/\1/g')
+if [ -z $PKG_CONTENT_B64 ]
 then
   echo "$ERR_INSTALL_MSG: this release of your Linux distribution is not yet supported."
   echo "Please open a ticket on https://forge.echoes-tech.com/projects/echoes-alert/issues"
   exit 1
 fi
+echo $PKG_CONTENT_B64 | /usr/bin/base64 -d > $PKG
 
 echo "ECHOES Alert Probe downloaded."
 

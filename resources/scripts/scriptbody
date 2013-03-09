@@ -276,7 +276,7 @@ do
   fi
 done < ../plugins_list_res
 
-rm -f *_header
+rm -f *_header *_tmp
 cp * $INSTALL_DIR/etc/plugins/
 
 cd "$CURRENT_DIR"

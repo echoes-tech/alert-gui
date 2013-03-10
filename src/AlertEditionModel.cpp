@@ -32,7 +32,6 @@ void AlertEditionModel::setView(User *user)
     }
     else if (!user->eMail.empty())
     {
-        this->session = static_cast<Session*>(user->session());
         currentView = Modification;
     }
     else
@@ -204,4 +203,9 @@ void AlertEditionModel::modifyField(Field field, const Wt::WString& info)
             break;
         }
     }
+}
+
+void AlertEditionModel::setSession(Session *session)
+{
+    this->session = session;
 }

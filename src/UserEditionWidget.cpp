@@ -166,7 +166,7 @@ Wt::WStringListModel *UserEditionWidget::getMediasForCurrentUser(int mediaType)
         
     {
         Wt::Dbo::Transaction transaction(*session);
-        Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> > medias = session->find<MediaValue>().where("\"MEV_USR_USR_ID\" = ?").bind(model_->user->self().id())
+        Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> > medias = session->find<MediaValue>().where("\"MEV_USR_USR_ID\" = ?").bind(session->user().id())
                                                                                             .where("\"MEV_MED_MED_ID\" = ?").bind(mediaType);
         int idx = 0;
         for (Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> >::const_iterator i = medias.begin(); i != medias.end(); ++i)
@@ -186,7 +186,7 @@ void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medId, Wt::WSe
         try
         {
             Wt::Dbo::Transaction transaction(*session);
-            Wt::Dbo::ptr<User> ptrUser = model_->user->self();
+            Wt::Dbo::ptr<User> ptrUser = session->user();
             Wt::Dbo::ptr<Media> media = session->find<Media>().where("\"MED_ID\" = ?").bind(medId);
             
             MediaValue *mev = new MediaValue();
@@ -227,7 +227,7 @@ void UserEditionWidget::deleteMedia(int medId, Wt::WSelectionBox *sBox)
         std::string qryString = "DELETE FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" "
                                 " WHERE \"AMS_ALE_ALE_ID\" IS NULL"
                                 " AND \"AMS_MEV_MEV_ID\" IN "
-                                " (SELECT \"MEV_ID\" FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_USR_USR_ID\" = " + boost::lexical_cast<std::string>(model_->user->self().id())  + ")";
+                                " (SELECT \"MEV_ID\" FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_USR_USR_ID\" = " + boost::lexical_cast<std::string>(session->user().id())  + ")";
 
         session->execute(qryString);
 
@@ -246,7 +246,7 @@ void UserEditionWidget::deleteMedia(int medId, Wt::WSelectionBox *sBox)
         Wt::Dbo::Transaction transaction(*session);
         session->execute("DELETE FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_VALUE\" = \'" + sBox->valueText().toUTF8() + "\'"
                          " AND \"MEV_MED_MED_ID\" = " + boost::lexical_cast<std::string>(medId)
-                         + " AND \"MEV_USR_USR_ID\" = " + boost::lexical_cast<std::string>(model_->user->self().id()));
+                         + " AND \"MEV_USR_USR_ID\" = " + boost::lexical_cast<std::string>(session->user().id()));
 //        Wt::Dbo::ptr<MediaValue> ptdMevToDelete = session->find<MediaValue>().where("\"MEV_VALUE\" = ?").bind(sBox->valueText())
 //                                    .where("\"MEV_MED_MED_ID\" = ?").bind(medId)
 //                                    .where("\"MEV_USR_USR_ID\" = ?").bind(model_->user->self().id())

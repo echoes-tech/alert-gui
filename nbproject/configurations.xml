@@ -136,6 +136,7 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
+          <commandlineTool>DISTCC_FALLBACK=0 distcc</commandlineTool>
           <incDir>
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>
@@ -177,13 +178,15 @@
             <pElem>../dbo/include</pElem>
             <pElem>/var/lib/jenkins/jobs/ea-dbo-master/workspace/include</pElem>
           </incDir>
-          <commandLine>-pedantic -std=c++0x</commandLine>
+          <commandLine>-std=c++0x</commandLine>
+          <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
           <linkerAddLib>
             <pElem>../dbo/dist/Release_SharedObject/GNU-Linux-x86</pElem>
             <pElem>/var/lib/jenkins/jobs/ea-dbo-master/workspace/default/dist/Release_SharedObject/GNU-Linux-x86</pElem>
           </linkerAddLib>
+          <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerLibLibItem>wt</linkerLibLibItem>
             <linkerLibLibItem>wtdbopostgres</linkerLibLibItem>

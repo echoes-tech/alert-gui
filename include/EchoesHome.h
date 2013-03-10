@@ -25,6 +25,8 @@
 #include <Wt/WTableView>
 #include <Wt/WTable>
 
+#include "TestWidget.h"
+
 class EchoesHome : public Wt::WContainerWidget 
 {
 public:
@@ -48,10 +50,13 @@ private:
 //    Wt::WLabel *admin_;
     Wt::WTabWidget *adminPageTabs;
     Wt::WContainerWidget *monitoringPage;
+    TestWidget *testPage;
     Wt::WContainerWidget *links;
     Wt::WHBoxLayout *linksLayout;
     Wt::WAnchor *adminAnchor;
     Wt::WAnchor *monitoringAnchor;
+    
+    Wt::WAnchor *testAnchor;
     
     AlertListWidget *alertGroupBox;
     
@@ -76,10 +81,12 @@ private:
     void onAuthEvent();
     void showAdmin();
     void showMonitoring();
+    void showTest();
     void resizeContainers(bool loggedIn);
     
     Wt::WContainerWidget *initMonitoringWidget();
     Wt::WTabWidget* initAdminWidget();
+    TestWidget *initTestWidget();
     
     virtual void refresh();
     

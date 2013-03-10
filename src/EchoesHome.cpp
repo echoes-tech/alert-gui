@@ -130,11 +130,22 @@ void EchoesHome::setLinks()
     this->monitoringAnchor = new Wt::WAnchor("/monitoring", "Monitoring", this->links);
     this->monitoringAnchor->setLink(Wt::WLink(Wt::WLink::InternalPath, "/monitoring"));
     this->linksLayout->addWidget(this->monitoringAnchor);
+    
+    this->testAnchor = new Wt::WAnchor("/test", "Test", this->links);
+    this->testAnchor->setLink(Wt::WLink(Wt::WLink::InternalPath, "/test"));
+    this->linksLayout->addWidget(this->testAnchor);
 }
 
 Wt::WContainerWidget* EchoesHome::initMonitoringWidget()
 {
     MonitoringWidget *res = new MonitoringWidget(this->session);
+    this->mainStack->addWidget(res);
+    return res;
+}
+
+TestWidget* EchoesHome::initTestWidget()
+{
+    TestWidget *res = new TestWidget(this->session);
     this->mainStack->addWidget(res);
     return res;
 }
@@ -260,19 +271,29 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
   if (this->session->login().loggedIn()) {
     if (internalPath == "/monitoring")
     {
-      UserActionManagement::registerUserAction(Enums::display,"/monitoring",0);
-      showMonitoring();
+        UserActionManagement::registerUserAction(Enums::display,"/monitoring",0);
+        showMonitoring();
     }
     else if (internalPath == "/admin")
     {
         UserActionManagement::registerUserAction(Enums::display,"/admin",0);
-      showAdmin();
+        showAdmin();
     }
-    else
+    else if (internalPath == "/test")
     {
-      UserActionManagement::registerUserAction(Enums::display,"/admin (default)",0);
-      Wt::WApplication::instance()->setInternalPath("/admin",  true);
+        UserActionManagement::registerUserAction(Enums::display,"/test",0);
+        showTest();
     }
+    else if (internalPath == "/test/test-2")
+    {
+        UserActionManagement::registerUserAction(Enums::display,"/test/test-2/",0);
+        this->testPage->testMenu("test-2");
+    }
+//    else
+//    {
+//      UserActionManagement::registerUserAction(Enums::display,"/admin (default)",0);
+//      Wt::WApplication::instance()->setInternalPath("/admin",  true);
+//    }
   }
 }
 
@@ -288,10 +309,15 @@ void EchoesHome::showAdmin()
   {
     this->monitoringPage->hide();
   }
+  if (this->testPage) 
+  {
+    this->testPage->hide();
+  }
   
   this->adminPageTabs->show();
   this->mainStack->setCurrentWidget(this->adminPageTabs);
 
+  this->testAnchor->removeStyleClass("selected-link");
   this->monitoringAnchor->removeStyleClass("selected-link");
   this->adminAnchor->addStyleClass("selected-link");
 }
@@ -309,11 +335,39 @@ void EchoesHome::showMonitoring()
   {
     this->adminPageTabs->hide();
   }
+  if (this->testPage) 
+  {
+    this->testPage->hide();
+  }
   
   this->monitoringPage->show();
   this->mainStack->setCurrentWidget(this->monitoringPage);
 
+  this->testAnchor->removeStyleClass("selected-link");
   this->monitoringAnchor->addStyleClass("selected-link");
+  this->adminAnchor->removeStyleClass("selected-link");
+}
+
+void EchoesHome::showTest()
+{
+  if (!this->testPage) 
+  {
+      this->testPage = initTestWidget();
+  }
+  if (this->adminPageTabs)
+  {
+    this->adminPageTabs->hide();
+  }
+  if (this->monitoringPage) 
+  {
+    this->monitoringPage->hide();
+  }
+  
+  this->testPage->show();
+  this->mainStack->setCurrentWidget(this->testPage);
+
+  this->testAnchor->addStyleClass("selected-link");
+  this->monitoringAnchor->removeStyleClass("selected-link");
   this->adminAnchor->removeStyleClass("selected-link");
 }
 

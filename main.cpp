@@ -23,6 +23,17 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     // On instancie la classe EchoesHome qui permet d'afficher le site.
     Wt::WApplication *app = new Wt::WApplication(env);
     
+    
+//    app->requireJQuery(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.js");
+//    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
+//    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.ui.custom.js");
+//    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/bootstrap.min.js");
+//    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.uniform.js");
+//    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/select2.min.js");
+//    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.validate.js");
+//    
+//    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.form_validation.js");
+    
     app->setTitle("ECHOES Alert");
     
     app->messageResourceBundle().use("global",false);
@@ -33,17 +44,37 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
 //    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-probe.css");
 //    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "alert.css");
     
-    std::string cssToLoad = "default.css";
-    Wt::WApplication::readConfigurationProperty("css-to-load", cssToLoad);
     
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + cssToLoad);
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/bootstrap-responsive.css");
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/bootstrap.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.login.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/colorpicker.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/jquery.gritter.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.grey.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/datepicker.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/fullcalendar.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/uniform.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/select2.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.main.css");
+    
+
+    
+    
+    
+//    std::string cssToLoad = "default.css";
+//    Wt::WApplication::readConfigurationProperty("css-to-load", cssToLoad);
+    
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + cssToLoad);
     
     Wt::WBootstrapTheme *theme = new Wt::WBootstrapTheme();
 
     app->setTheme(theme);
-//      app->setCssTheme("bootstrap");
+//      app->setCssTheme("");
 
     new EchoesHome(app->root());
+    
+    
+    
 
     return app;
     

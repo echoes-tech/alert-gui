@@ -51,6 +51,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Enums.o \
 	${OBJECTDIR}/src/AuthWidget.o \
 	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
+	${OBJECTDIR}/src/TestWidget.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
 	${OBJECTDIR}/src/AlertEditionWidget.o
 
@@ -158,6 +159,11 @@ ${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o: src/Auth/RegistrationWidgetAler
 	${MKDIR} -p ${OBJECTDIR}/src/Auth
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -I../wt-3.3.0-rc2/build/src -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o src/Auth/RegistrationWidgetAlert.cpp
+
+${OBJECTDIR}/src/TestWidget.o: src/TestWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -I../wt-3.3.0-rc2/build/src -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TestWidget.o src/TestWidget.cpp
 
 ${OBJECTDIR}/src/AssetManagementWidget.o: src/AssetManagementWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

@@ -42,6 +42,9 @@
           <itemPath>include/rapidxml/rapidxml_utils.hpp</itemPath>
           <itemPath>include/rapidxml/rapidxml_xhtml.hpp</itemPath>
         </logicalFolder>
+        <logicalFolder name="f8" displayName="TestUnicorn" projectFiles="true">
+          <itemPath>include/TestWidget.h</itemPath>
+        </logicalFolder>
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
       </logicalFolder>
@@ -103,6 +106,9 @@
         </logicalFolder>
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>src/MonitoringWidget.cpp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f8" displayName="TestUnicorn" projectFiles="true">
+          <itemPath>src/TestWidget.cpp</itemPath>
         </logicalFolder>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>

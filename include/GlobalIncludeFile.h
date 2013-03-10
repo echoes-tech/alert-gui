@@ -27,6 +27,7 @@
 #include "OptionManagementModel.h"
 #include "OptionManagementWidget.h"
 #include "MonitoringWidget.h"
+#include "TestWidget.h"
 #include "EchoesHome.h"
 
 #endif	/* GLOBALINCLUDEFILE_H */

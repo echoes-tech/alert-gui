@@ -169,6 +169,7 @@ void AssetManagementWidget::addAsset()
             ptrNewAsset.modify()->name = model_->valueText(AssetManagementModel::AssetName);
             ptrNewAsset.modify()->assetIsHost = true;
             ptrNewAsset.modify()->probe = ptrNewProbe;
+            ptrNewAsset.modify()->organization = session->user().get()->currentOrganization;
             
             //fixme : temporaire jusqu'à la gestion des plugins
             Wt::Dbo::ptr<Plugin> plgSystem = session->find<Plugin>().where("\"PLG_ID\" = ?").bind(1);

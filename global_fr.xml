@@ -2,6 +2,90 @@
 <messages xmlns:if="Wt.WTemplate.conditions">
 
   <message id="welcome-text"><h3>Bienvenue dans la version beta d'ECHOES Alert !</h3>
+    <h2>Beta 3</h2>
+    <p>11/03/2012</p>
+    
+    <p>
+        <ul>
+            <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge pour toutes vos demandes</a></li>
+            <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Forum d'entraide</a></li>         
+        </ul>
+        
+        <ul>
+            <li> [API] Nouvelles fonctionnalités
+                <ul>
+                    <li>Suivi des recommandations RESTful</li>
+                    <li>Système de gestion des packages</li>    
+                </ul>
+            </li>
+            <br />
+            <li> [Moteur] Nouvelle fonctionnalité
+                <ul>
+                    <li>Alertes sur des informations textuelles</li>
+                </ul>
+            </li>
+            <br />
+            <li> [Interface utilisateur] Correction de bugs
+                <ul>
+                    <li>Correction d'un bug qui empêchait la création d'alertes dans certains cas</li>
+                    <li>Correction d'un bug qui empêchait la création du lien entre un utilisateur et son organisation dans certains cas</li>    
+                </ul>
+            </li>
+            <br />
+            <li> [Script d'installation] Evolutions / Nouvelles fonctionnalités
+                <ul>
+                    <li>Utilisation de l'API</li>
+                    <li>Utilisation du client openssl à la place de wget (utilisation de la méthode PUT)</li>
+                    <li>Ajout d'aide</li>
+                </ul>
+            </li>
+            <br />
+            <li> [Probe] Corrections de bugs / Nouvelles fonctionnalités
+                <ul>
+                    <li>Suppression de fuites mémoire</li>
+                    <li>Addon SNMP</li>
+                    <li>Addon MySQL</li>
+                    <li>Ajout des bibliothèques manquantes pour CentOS 5</li>
+                    <li>Exploitation correcte de la bibliothèque SNMP pour le multithreading</li>
+                </ul>
+            </li>
+            <br />
+            <li> [Deploiement] Nouvelles fonctionnalités
+                <ul>
+                    <li>Mise en place d'une procédure de déploiement automatisé</li>
+                    <li>Mise en place d'indicateurs clés à propos du développement</li>
+                </ul>
+            </li>
+            <br />
+            <li> <b>Changements majeurs prochaine release (avril ?)</b>
+                <ul>
+                    <li>Intégration du moteur de thèmes Bootstrap</li>
+                    <li>Ajout des alertes sur informations corrélées</li>
+                    <li>Personnalisation des alertes en fonction du métier</li>
+                    <li>Implémentation de l'ensemble de nos resources dans l'API</li>
+                    <li>Nouveaux plugins</li>
+                </ul>
+            </li>
+            
+        </ul>
+    </p>
+    
+    <hr></hr>
+    
+    <h2>Beta 2</h2>
+    <p>16/01/2012</p>
+    <p>
+        Beta ouverte toute la journée.
+        <ul>
+            <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge pour toutes vos demandes</a></li>
+            <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Forum d'entraide</a></li>         
+        </ul>
+        <ul>
+            <li>[ECHOES Alert] Corrections de divers bugs</li>
+        </ul>
+    </p>
+    
+    <hr></hr>
     <h2>Beta</h2>
     <p>18/12/2012</p>
     <p>

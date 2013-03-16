@@ -25,7 +25,6 @@
 #include <Wt/WTableView>
 #include <Wt/WTable>
 
-#include "TestWidget.h"
 
 class EchoesHome : public Wt::WContainerWidget 
 {

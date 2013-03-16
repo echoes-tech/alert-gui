@@ -52,7 +52,9 @@ class TestWidget : public Wt::WContainerWidget
 public:
 
   TestWidget(Session *session);
-  void testMenu(Wt::WString name);
+  void testMenu(Wt::WString name, int index = -1);
+  
+  Wt::WMenu *getMenu();
 protected:
 
   virtual void close();

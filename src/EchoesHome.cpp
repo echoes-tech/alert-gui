@@ -69,6 +69,11 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent):
         initHeader();
         initMainStack();
         setLinks();
+        
+        this->mainStack->hide();
+        this->adminPageTabs = initAdminWidget();
+        this->monitoringPage = initMonitoringWidget();
+        this->testPage = initTestWidget();
 
         Wt::WApplication::instance()->internalPathChanged().connect(this, &EchoesHome::handleInternalPath);
         this->authWidget->processEnvironment();
@@ -140,6 +145,7 @@ Wt::WContainerWidget* EchoesHome::initMonitoringWidget()
 {
     MonitoringWidget *res = new MonitoringWidget(this->session);
     this->mainStack->addWidget(res);
+    res->hide();
     return res;
 }
 
@@ -147,6 +153,7 @@ TestWidget* EchoesHome::initTestWidget()
 {
     TestWidget *res = new TestWidget(this->session);
     this->mainStack->addWidget(res);
+    res->hide();
     return res;
 }
 
@@ -155,6 +162,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     // main widget
     Wt::WTabWidget *res = new Wt::WTabWidget(this);
     this->mainStack->addWidget(res);
+    res->hide();
     
     
     //user list widget
@@ -284,53 +292,63 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
         UserActionManagement::registerUserAction(Enums::display,"/test",0);
         showTest();
     }
-    else if (internalPath == "/test/test-2")
+    else if (internalPath == "/test/testu1/")
     {
-        UserActionManagement::registerUserAction(Enums::display,"/test/test-2/",0);
-        this->testPage->testMenu("test-2");
+        UserActionManagement::registerUserAction(Enums::display,"/test/testu1",0);
+        showTest();
+        if (this->testPage->getMenu()->currentIndex() != 0)
+        {
+            this->testPage->getMenu()->select(0);
+        }
     }
-//    else
-//    {
-//      UserActionManagement::registerUserAction(Enums::display,"/admin (default)",0);
-//      Wt::WApplication::instance()->setInternalPath("/admin",  true);
-//    }
+    else if (internalPath == "/test/testu2/")
+    {
+        UserActionManagement::registerUserAction(Enums::display,"/test/testu2",0);
+        showTest();
+        if (this->testPage->getMenu()->currentIndex() != 1)
+        {
+            this->testPage->getMenu()->select(1);
+        }
+    }
+    else if (internalPath == "/test/testu3/")
+    {
+        UserActionManagement::registerUserAction(Enums::display,"/test/testu3",0);
+        showTest();
+        if (this->testPage->getMenu()->currentIndex() != 2)
+        {
+            this->testPage->getMenu()->select(2);
+        }
+    }
+    else
+    {
+      //Todo 404
+      UserActionManagement::registerUserAction(Enums::display,"/admin (default)",0);
+      Wt::WApplication::instance()->setInternalPath("/admin",  true);
+    }
   }
 }
 
 
 void EchoesHome::showAdmin()
 {
-  if (!this->adminPageTabs)
-  {
-//    admin_ = new AdminWidget(&session_, mainStack_);
-    this->adminPageTabs = initAdminWidget();
-  }
-  if (this->monitoringPage) 
-  {
-    this->monitoringPage->hide();
-  }
-  if (this->testPage) 
-  {
-    this->testPage->hide();
-  }
-  
-  this->adminPageTabs->show();
-  this->mainStack->setCurrentWidget(this->adminPageTabs);
 
-  this->testAnchor->removeStyleClass("selected-link");
-  this->monitoringAnchor->removeStyleClass("selected-link");
-  this->adminAnchor->addStyleClass("selected-link");
+    this->monitoringPage->hide();
+
+
+    this->testPage->hide();
+
+
+    this->adminPageTabs->show();
+    this->mainStack->setCurrentWidget(this->adminPageTabs);
+
+    this->testAnchor->removeStyleClass("selected-link");
+    this->monitoringAnchor->removeStyleClass("selected-link");
+    this->adminAnchor->addStyleClass("selected-link");
 }
 
 void EchoesHome::showMonitoring()
 {
-  if (!this->monitoringPage) 
-  {
-//    monitoring_ = new MonitoringWidget(&session_, mainStack_);
-      this->monitoringPage = initMonitoringWidget();
-//      this->monitoringPage->show();
-//    monitoring_->update();
-  }
+
   if (this->adminPageTabs)
   {
     this->adminPageTabs->hide();
@@ -350,18 +368,12 @@ void EchoesHome::showMonitoring()
 
 void EchoesHome::showTest()
 {
-  if (!this->testPage) 
-  {
-      this->testPage = initTestWidget();
-  }
-  if (this->adminPageTabs)
-  {
-    this->adminPageTabs->hide();
-  }
-  if (this->monitoringPage) 
-  {
-    this->monitoringPage->hide();
-  }
+  
+  this->adminPageTabs->hide();
+
+
+  this->monitoringPage->hide();
+
   
   this->testPage->show();
   this->mainStack->setCurrentWidget(this->testPage);
@@ -417,6 +429,7 @@ void EchoesHome::onAuthEvent()
     if (this->session->login().loggedIn())
     {
         UserActionManagement::registerUserAction(Enums::login,"success",1);
+        this->mainStack->show();
         this->links->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
     }

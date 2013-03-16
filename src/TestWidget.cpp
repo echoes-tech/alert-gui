@@ -58,17 +58,20 @@ void TestWidget::createUI()
 
     // Add menu items using the default lazy loading policy.
     
-    Wt::WMenuItem *itemTest1 = new Wt::WMenuItem("Test 1");
+    Wt::WMenuItem *itemTest1 = new Wt::WMenuItem("Test 178");
     itemTest1->setAttributeValue("name","t1");
+    itemTest1->setPathComponent("testu1/");
     Wt::WMenuItem *itemTest2 = new Wt::WMenuItem("Test 2");
     itemTest2->setAttributeValue("name","t2");
+    itemTest2->setPathComponent("testu2/");
     Wt::WMenuItem *itemTest3 = new Wt::WMenuItem("Test 3");
     itemTest3->setAttributeValue("name","t3");
+    itemTest3->setPathComponent("testu3/");
     menu->addItem(itemTest1);
     menu->addItem(itemTest2);
     menu->addItem(itemTest3);
     
-    menu->setInternalPathEnabled();
+    menu->setInternalPathEnabled("/test");
     
     
     
@@ -83,9 +86,31 @@ void TestWidget::createUI()
     
     menu->addMenu("test", subMenu);
     
-    menu->select(0);
+    std::string internalPath = Wt::WApplication::instance()->internalPath();
     
-    menu->itemSelected().connect(boost::bind(&TestWidget::testMenu, this, menu->currentItem()->attributeValue("name")));
+    if (internalPath == "/test/testu1/")
+    {
+        UserActionManagement::registerUserAction(Enums::display,"/test/testu1",0);
+        menu->select(0);
+        testMenu("testu1", 0);
+    }
+    else if (internalPath == "/test/testu2/")
+    {
+        UserActionManagement::registerUserAction(Enums::display,"/test/testu2",0);
+        menu->select(1);
+        testMenu("testu2", 1);
+    }
+    else if (internalPath == "/test/testu3/")
+    {
+        UserActionManagement::registerUserAction(Enums::display,"/test/testu3",0);
+        menu->select(2);
+        testMenu("testu3", 2);
+    }
+    
+    if (menu->currentIndex() != -1)
+    {
+        menu->itemSelected().connect(boost::bind(&TestWidget::testMenu, this, menu->currentItem()->attributeValue("name"), -1));
+    }
 //    this->addWidget(contents);
     
     createContentDiv("test");
@@ -152,11 +177,20 @@ void TestWidget::createContentDiv(Wt::WString content)
     createContainerFluid(content);
 }
 
-void TestWidget::testMenu(Wt::WString name)
+void TestWidget::testMenu(Wt::WString name, int index)
 {
 //    if menu->currentItem()->is
     updateBreadcrumbs(name);
     createContainerFluid(menu->currentItem()->attributeValue("name"));
+    if ((index != -1) && (this->menu->currentIndex() != index))
+    {
+        this->menu->select(index);
+    }
+}
+
+Wt::WMenu * TestWidget::getMenu()
+{
+    return this->menu;
 }
 
 void TestWidget::close()

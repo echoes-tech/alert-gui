@@ -41,6 +41,7 @@ class AssetManagementModel;
 class OptionManagementWidget;
 class OptionManagementModel;
 class AlertEditionModel;
+class TestWidget;
 class EchoesHome;
 class UserActionManagement;
 class AuthWidget;

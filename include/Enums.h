@@ -38,6 +38,13 @@ public:
         quotaAsset = 1,
         quotaSms = 2
     };
+    
+    enum EPageType
+    {
+        WELCOME,
+        ASSET,
+        OPTION
+    };
 private:
 
 };

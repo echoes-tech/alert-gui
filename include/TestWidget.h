@@ -52,19 +52,32 @@ class TestWidget : public Wt::WContainerWidget
 public:
 
   TestWidget(Session *session);
-  void testMenu(Wt::WString name, int index = -1);
+  void testMenu(int index = -1);
   
   Wt::WMenu *getMenu();
 protected:
+    
+  
 
   virtual void close();
 
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   void createUI();
   Wt::WContainerWidget *createContentHeader();
-  void updateBreadcrumbs(Wt::WString content);
-  void createContainerFluid(Wt::WString content);
+  void updateBreadcrumbs();
+  void createContainerFluid();
+  void updateContainerFluid(int type);
   void createContentDiv(Wt::WString content);
+  
+  void createMenuItem(Enums::EPageType type);
+  void createPage(Enums::EPageType type);
+  
+  AssetManagementModel *amm;
+  AssetManagementWidget *amw;
+  
+  Wt::WText *wcw;
+  
+  
   
   
   
@@ -80,7 +93,9 @@ private:
   Wt::WContainerWidget *contentContainer;
   Wt::WContainerWidget *contentFluid;
   Wt::WContainerWidget *breadCrumbsContainer;
-  Wt::WAnchor *breadCrumbsAnchor;
+  Wt::WAnchor *breadCrumbsAnchor0;
+  Wt::WAnchor *breadCrumbsAnchor1;
+  Wt::WAnchor *breadCrumbsAnchor2;
   Wt::WMenu *menu;
   
 };

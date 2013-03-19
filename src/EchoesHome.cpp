@@ -20,60 +20,15 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent):
         Wt::WApplication::readConfigurationProperty("db-password", dbPassword);
         session = new Session("hostaddr=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " user=" + dbUser + " password=" + dbPassword);
         this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
-        
-        try 
-        {
-            this->session->createTables();
-            std::cerr << "Created database." << std::endl;
-            Wt::Dbo::Transaction transaction(*(this->session));
-            this->session->execute(
-                        "CREATE OR REPLACE FUNCTION trg_slo_slh()"
-                        "  RETURNS trigger AS"
-                        " $BODY$"
-                        " BEGIN"
-                        " INSERT INTO \"T_SYSLOG_HISTORY_SLH\" "
-                        " VALUES (NEW.\"SLO_ID\","
-                            "NEW.\"version\","
-                            "NEW.\"SLO_APP_NAME\","
-                            "NEW.\"SLO_HOSTNAME\","
-                            "NEW.\"SLO_MSG_ID\","
-                            "NEW.\"SLO_SD\","
-                            "NEW.\"SLO_DELETE\","
-                            "NEW.\"SLO_RCPT_DATE\","
-                            "NEW.\"SLO_SENT_DATE\","
-                            "NEW.\"SLO_PRI\","
-                            "NEW.\"SLO_PROC_ID\","
-                            "NEW.\"SLO_STATE\","
-                            "NEW.\"SLO_VERSION\","
-                            "NEW.\"SLO_PRB_PRB_ID\") ;"
-                        " RETURN NULL;"
-                        " END;"
-                        " $BODY$"
-                          " LANGUAGE plpgsql VOLATILE;"
-              );
-              this->session->execute(
-                          "CREATE TRIGGER insert_slo"
-                          " AFTER INSERT"
-                          " ON \"T_SYSLOG_SLO\""
-                          " FOR EACH ROW"
-                          " EXECUTE PROCEDURE trg_slo_slh();"
-              );
-        } 
-        catch (std::exception& e) 
-        {
-            std::cerr << e.what() << std::endl;
-            std::cerr << "Using existing database";
-        }
+
 
         initAuth();
+        
+        this->testPage = initTestWidget();
+        
         initHeader();
         initMainStack();
-        setLinks();
-        
-        this->mainStack->hide();
-        this->adminPageTabs = initAdminWidget();
-        this->monitoringPage = initMonitoringWidget();
-        this->testPage = initTestWidget();
+
 
         Wt::WApplication::instance()->internalPathChanged().connect(this, &EchoesHome::handleInternalPath);
         this->authWidget->processEnvironment();
@@ -108,37 +63,17 @@ void EchoesHome::initHeader()
     this->resizeContainers(this->session->login().loggedIn());
 
     this->addWidget(this->topContainer);
-
-    this->links = new WContainerWidget();
-    this->linksLayout = new Wt::WHBoxLayout();
-    this->links->setLayout(this->linksLayout);
-    this->links->setStyleClass("links");
-    this->links->hide();
 }
 
 void EchoesHome::initMainStack()
 {
-    this->mainStack = new Wt::WStackedWidget();
-    this->mainStack->setStyleClass("echoesalertstack");
-    this->initAdminWidget();
-    this->initMonitoringWidget();
-    this->mainStack->clear();
-    this->addWidget(this->mainStack);
+
+    this->addWidget(this->testPage);
 }
 
 void EchoesHome::setLinks()
 {
-    this->adminAnchor = new Wt::WAnchor("/admin", "Administration", this->links);
-    this->adminAnchor->setLink(Wt::WLink(Wt::WLink::InternalPath, "/admin"));
-    this->linksLayout->addWidget(this->adminAnchor);
 
-    this->monitoringAnchor = new Wt::WAnchor("/monitoring", "Monitoring", this->links);
-    this->monitoringAnchor->setLink(Wt::WLink(Wt::WLink::InternalPath, "/monitoring"));
-    this->linksLayout->addWidget(this->monitoringAnchor);
-    
-    this->testAnchor = new Wt::WAnchor("/test", "Test", this->links);
-    this->testAnchor->setLink(Wt::WLink(Wt::WLink::InternalPath, "/test"));
-    this->linksLayout->addWidget(this->testAnchor);
 }
 
 Wt::WContainerWidget* EchoesHome::initMonitoringWidget()
@@ -152,7 +87,7 @@ Wt::WContainerWidget* EchoesHome::initMonitoringWidget()
 TestWidget* EchoesHome::initTestWidget()
 {
     TestWidget *res = new TestWidget(this->session);
-    this->mainStack->addWidget(res);
+//    this->mainStack->addWidget(res);
     res->hide();
     return res;
 }
@@ -276,54 +211,37 @@ void EchoesHome::openUserEdition()
 
 void EchoesHome::handleInternalPath(const std::string &internalPath)
 {
-  if (this->session->login().loggedIn()) {
-    if (internalPath == "/monitoring")
+  if (this->session->login().loggedIn()) 
+  {
+ 
+    if (internalPath == "/assets/")
     {
-        UserActionManagement::registerUserAction(Enums::display,"/monitoring",0);
-        showMonitoring();
-    }
-    else if (internalPath == "/admin")
-    {
-        UserActionManagement::registerUserAction(Enums::display,"/admin",0);
-        showAdmin();
-    }
-    else if (internalPath == "/test")
-    {
-        UserActionManagement::registerUserAction(Enums::display,"/test",0);
-        showTest();
-    }
-    else if (internalPath == "/test/testu1/")
-    {
-        UserActionManagement::registerUserAction(Enums::display,"/test/testu1",0);
-        showTest();
-        if (this->testPage->getMenu()->currentIndex() != 0)
+        UserActionManagement::registerUserAction(Enums::display,"/assets",0);
+        if (this->testPage->getMenu()->currentIndex() != Enums::ASSET)
         {
-            this->testPage->getMenu()->select(0);
+            this->testPage->getMenu()->select(Enums::ASSET);
         }
+        showTest(Enums::ASSET);
     }
-    else if (internalPath == "/test/testu2/")
+    else if (internalPath == "/welcome/")
     {
-        UserActionManagement::registerUserAction(Enums::display,"/test/testu2",0);
-        showTest();
-        if (this->testPage->getMenu()->currentIndex() != 1)
+        UserActionManagement::registerUserAction(Enums::display,"/welcome",0);
+        if (this->testPage->getMenu()->currentIndex() != Enums::WELCOME)
         {
-            this->testPage->getMenu()->select(1);
+            this->testPage->getMenu()->select(Enums::WELCOME);
         }
-    }
-    else if (internalPath == "/test/testu3/")
-    {
-        UserActionManagement::registerUserAction(Enums::display,"/test/testu3",0);
-        showTest();
-        if (this->testPage->getMenu()->currentIndex() != 2)
-        {
-            this->testPage->getMenu()->select(2);
-        }
+        showTest(Enums::WELCOME);
     }
     else
     {
       //Todo 404
-      UserActionManagement::registerUserAction(Enums::display,"/admin (default)",0);
-      Wt::WApplication::instance()->setInternalPath("/admin",  true);
+        UserActionManagement::registerUserAction(Enums::display,"/welcome/ (default)",0);
+        Wt::WApplication::instance()->setInternalPath("/welcome/",  true);
+        if (this->testPage->getMenu()->currentIndex() != Enums::WELCOME)
+        {
+            this->testPage->getMenu()->select(Enums::WELCOME);
+        }
+        showTest(Enums::WELCOME);
     }
   }
 }
@@ -332,55 +250,56 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
 void EchoesHome::showAdmin()
 {
 
-    this->monitoringPage->hide();
-
-
-    this->testPage->hide();
-
-
-    this->adminPageTabs->show();
-    this->mainStack->setCurrentWidget(this->adminPageTabs);
-
-    this->testAnchor->removeStyleClass("selected-link");
-    this->monitoringAnchor->removeStyleClass("selected-link");
-    this->adminAnchor->addStyleClass("selected-link");
+//    this->monitoringPage->hide();
+//
+//
+//    this->testPage->hide();
+//
+//
+//    this->adminPageTabs->show();
+//    this->mainStack->setCurrentWidget(this->adminPageTabs);
+//
+//    this->testAnchor->removeStyleClass("selected-link");
+//    this->monitoringAnchor->removeStyleClass("selected-link");
+//    this->adminAnchor->addStyleClass("selected-link");
 }
 
 void EchoesHome::showMonitoring()
 {
 
-  if (this->adminPageTabs)
-  {
-    this->adminPageTabs->hide();
-  }
-  if (this->testPage) 
-  {
-    this->testPage->hide();
-  }
-  
-  this->monitoringPage->show();
-  this->mainStack->setCurrentWidget(this->monitoringPage);
-
-  this->testAnchor->removeStyleClass("selected-link");
-  this->monitoringAnchor->addStyleClass("selected-link");
-  this->adminAnchor->removeStyleClass("selected-link");
+//  if (this->adminPageTabs)
+//  {
+//    this->adminPageTabs->hide();
+//  }
+//  if (this->testPage) 
+//  {
+//    this->testPage->hide();
+//  }
+//  
+//  this->monitoringPage->show();
+//  this->mainStack->setCurrentWidget(this->monitoringPage);
+//
+//  this->testAnchor->removeStyleClass("selected-link");
+//  this->monitoringAnchor->addStyleClass("selected-link");
+//  this->adminAnchor->removeStyleClass("selected-link");
 }
 
-void EchoesHome::showTest()
+void EchoesHome::showTest(int type)
 {
   
-  this->adminPageTabs->hide();
-
-
-  this->monitoringPage->hide();
+//  this->adminPageTabs->hide();
+//
+//
+//  this->monitoringPage->hide();
 
   
   this->testPage->show();
-  this->mainStack->setCurrentWidget(this->testPage);
+  this->testPage->testMenu(type);
+//  this->mainStack->setCurrentWidget(this->testPage);
 
-  this->testAnchor->addStyleClass("selected-link");
-  this->monitoringAnchor->removeStyleClass("selected-link");
-  this->adminAnchor->removeStyleClass("selected-link");
+//  this->testAnchor->addStyleClass("selected-link");
+//  this->monitoringAnchor->removeStyleClass("selected-link");
+//  this->adminAnchor->removeStyleClass("selected-link");
 }
 
 void EchoesHome::resizeContainers(bool loggedIn)
@@ -395,13 +314,13 @@ void EchoesHome::resizeContainers(bool loggedIn)
         
         this->title->setHeight(Wt::WLength(81));
         this->authWidget->setHeight(Wt::WLength(20));
-        this->links->setWidth(Wt::WLength(200));
+//        this->links->setWidth(Wt::WLength(200));
         this->authWidget->setWidth(Wt::WLength(200));
         
         
         this->topRightLayout = new Wt::WVBoxLayout();
         this->topRightLayout->addWidget(this->authWidget, 0, Wt::AlignRight);
-        this->topRightLayout->addWidget(this->links, 0, Wt::AlignRight);
+//        this->topRightLayout->addWidget(this->links, 0, Wt::AlignRight);
         this->topBoxLoggedInLayout->addLayout(this->topRightLayout, Wt::AlignRight);
         this->title->setHeight(Wt::WLength(81));
         this->authWidget->setHeight(Wt::WLength(20));
@@ -429,17 +348,17 @@ void EchoesHome::onAuthEvent()
     if (this->session->login().loggedIn())
     {
         UserActionManagement::registerUserAction(Enums::login,"success",1);
-        this->mainStack->show();
-        this->links->show();
+        this->testPage->show();
+//        this->links->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
     }
     else
     {
         UserActionManagement::registerUserAction(Enums::logout,"",0);
-        this->mainStack->clear();
-        this->adminPageTabs = 0;
-        this->monitoringPage = 0;
-        this->links->hide();
+        this->testPage->clear();
+//        this->adminPageTabs = 0;
+//        this->monitoringPage = 0;
+//        this->links->hide();
     }
 }
 

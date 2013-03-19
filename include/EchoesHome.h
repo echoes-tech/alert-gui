@@ -80,7 +80,7 @@ private:
     void onAuthEvent();
     void showAdmin();
     void showMonitoring();
-    void showTest();
+    void showTest(int page);
     void resizeContainers(bool loggedIn);
     
     Wt::WContainerWidget *initMonitoringWidget();

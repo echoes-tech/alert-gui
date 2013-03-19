@@ -44,43 +44,56 @@ void TestWidget::createUI()
     contentContainer = new Wt::WContainerWidget(this);
     contentContainer->setId("content");
     
+    
+    // BREADCRUMBS
     breadCrumbsContainer = new Wt::WContainerWidget(this);
     breadCrumbsContainer->setId("breadcrumb");
     
-    breadCrumbsAnchor = new Wt::WAnchor("");
-    breadCrumbsAnchor->setAttributeValue("class","tip-bottom");
-    breadCrumbsContainer->addWidget(breadCrumbsAnchor);
+    breadCrumbsAnchor0 = new Wt::WAnchor("");
+    breadCrumbsAnchor0->setAttributeValue("class","tip-bottom");
+    
+    breadCrumbsAnchor1 = new Wt::WAnchor("");
+    breadCrumbsAnchor1->setAttributeValue("class","tip-bottom");
+    
+    breadCrumbsAnchor2 = new Wt::WAnchor("");
+    breadCrumbsAnchor2->setAttributeValue("class","tip-bottom");
+    
+    const Wt::WLink *test = new Wt::WLink("");
+    breadCrumbsAnchor0->setText("Accueil");
+    breadCrumbsAnchor0->setLink(*test);
+    
+    breadCrumbsContainer->addWidget(breadCrumbsAnchor0);
+//    breadCrumbsContainer->addWidget(breadCrumbsAnchor1);
+//    breadCrumbsContainer->addWidget(breadCrumbsAnchor2);
+    // END BREADCRUMBS
+    
+    createContentDiv("test");
+    createContainerFluid();
+    
     
     menu = new Wt::WMenu(sideBarContainer);
     
     
 //    menu->setStyleClass("navbar navbar-inverse nav-tabs nav-stacked");
 
-    // Add menu items using the default lazy loading policy.
     
-    Wt::WMenuItem *itemTest1 = new Wt::WMenuItem("Test 178");
-    itemTest1->setAttributeValue("name","t1");
-    itemTest1->setPathComponent("testu1/");
-    Wt::WMenuItem *itemTest2 = new Wt::WMenuItem("Test 2");
-    itemTest2->setAttributeValue("name","t2");
-    itemTest2->setPathComponent("testu2/");
-    Wt::WMenuItem *itemTest3 = new Wt::WMenuItem("Test 3");
-    itemTest3->setAttributeValue("name","t3");
-    itemTest3->setPathComponent("testu3/");
-    menu->addItem(itemTest1);
-    menu->addItem(itemTest2);
-    menu->addItem(itemTest3);
     
-    menu->setInternalPathEnabled("/test");
+    
+    createMenuItem(Enums::WELCOME);
+    createPage(Enums::WELCOME);
+    createMenuItem(Enums::ASSET);
+    createPage(Enums::ASSET);
+    
+    menu->setInternalPathEnabled("/");
     
     
     
     Wt::WMenu *subMenu = new Wt::WMenu();
     
     Wt::WMenuItem *itemSubTest1 = new Wt::WMenuItem("Test Sub 1");
-    itemTest1->setAttributeValue("name","ts1");
+    itemSubTest1->setAttributeValue("name","11");
     Wt::WMenuItem *itemSubTest2 = new Wt::WMenuItem("Test Sub 2");
-    itemTest2->setAttributeValue("name","ts2");
+    itemSubTest2->setAttributeValue("name","21");
     subMenu->addItem(itemSubTest1);
     subMenu->addItem(itemSubTest2);
     
@@ -88,32 +101,28 @@ void TestWidget::createUI()
     
     std::string internalPath = Wt::WApplication::instance()->internalPath();
     
-    if (internalPath == "/test/testu1/")
+    if (internalPath == "/assets/")
     {
-        UserActionManagement::registerUserAction(Enums::display,"/test/testu1",0);
-        menu->select(0);
-        testMenu("testu1", 0);
+        UserActionManagement::registerUserAction(Enums::display,"/assets/",0);
+        menu->select(Enums::ASSET);
+        testMenu(Enums::ASSET);
     }
-    else if (internalPath == "/test/testu2/")
+    if (internalPath == "/welcome/")
     {
-        UserActionManagement::registerUserAction(Enums::display,"/test/testu2",0);
-        menu->select(1);
-        testMenu("testu2", 1);
-    }
-    else if (internalPath == "/test/testu3/")
-    {
-        UserActionManagement::registerUserAction(Enums::display,"/test/testu3",0);
-        menu->select(2);
-        testMenu("testu3", 2);
+        UserActionManagement::registerUserAction(Enums::display,"/welcome/",0);
+        menu->select(Enums::WELCOME);
+        testMenu(Enums::WELCOME);
     }
     
     if (menu->currentIndex() != -1)
     {
-        menu->itemSelected().connect(boost::bind(&TestWidget::testMenu, this, menu->currentItem()->attributeValue("name"), -1));
+        menu->itemSelected().connect(boost::bind(&TestWidget::testMenu, this,-1));
     }
 //    this->addWidget(contents);
     
-    createContentDiv("test");
+    
+    
+    
 
     
 //    new ScatterPlot(this);
@@ -132,41 +141,157 @@ Wt::WContainerWidget * TestWidget::createContentHeader()
     return res;
 }
 
-void TestWidget::updateBreadcrumbs(Wt::WString content)
+void TestWidget::createMenuItem(Enums::EPageType type)
 {
-    const Wt::WLink *test = new Wt::WLink("test");
-    breadCrumbsAnchor->setText(content);
-    breadCrumbsAnchor->setLink(*test);
+    switch (type)
+    {
+        case Enums::ASSET:
+        {
+            Wt::WMenuItem *itemTest1 = new Wt::WMenuItem(tr("Alert.admin.asset-tab"));
+            itemTest1->setAttributeValue("name",boost::lexical_cast<std::string>(type));
+            itemTest1->setPathComponent("assets/");
+            menu->addItem(itemTest1);
+            break;
+        }
+        case Enums::WELCOME:
+        {
+            Wt::WMenuItem *itemTest1 = new Wt::WMenuItem(tr("Alert.admin.welcome-tab"));
+            itemTest1->setAttributeValue("name",boost::lexical_cast<std::string>(type));
+            itemTest1->setPathComponent("welcome/");
+            menu->addItem(itemTest1);
+            break;
+            break;
+        }
+        default:
+            break;
+    }
+        
+                
+    
 }
 
-void TestWidget::createContainerFluid(Wt::WString content)
+void TestWidget::createPage(Enums::EPageType type)
 {
-    if (contentFluid)
+    switch (type)
     {
-        delete contentFluid;
+        case Enums::ASSET:
+        {
+            try
+            {
+                Wt::Dbo::Transaction transaction(*(this->session));
+                amm = new AssetManagementModel();
+                transaction.commit();
+            }
+            catch (Wt::Dbo::Exception e)
+            {
+                Wt::log("error") << e.what();
+            }
+            amw = new AssetManagementWidget(amm,this->session);
+            break;
+        }
+        case Enums::WELCOME:
+        {
+            wcw = new Wt::WText(tr("welcome-text"));
+            break;
+        }
+        default:
+            break;
     }
+
+}
+
+
+void TestWidget::updateBreadcrumbs()
+{
+    this->breadCrumbsContainer->removeWidget(breadCrumbsAnchor1);
+    this->breadCrumbsContainer->removeWidget(breadCrumbsAnchor2);
+    
+    std::string internalPath = Wt::WApplication::instance()->internalPath();
+    std::vector<std::string> internalPathSplitResult;
+    boost::split(internalPathSplitResult, internalPath, boost::is_any_of("/"), boost::token_compress_on);
+    
+    
+    
+    for (unsigned int i = 1; i < internalPathSplitResult.size(); i++)
+    {
+        std::cout << internalPathSplitResult[i] << std::endl;
+        if (i >= 4)
+        {
+            break;
+        }
+        
+        switch (i)
+        {
+            case 1:
+            {
+                const Wt::WLink *test = new Wt::WLink(internalPathSplitResult[i]);
+                breadCrumbsAnchor0->setText(internalPathSplitResult[i]);
+                breadCrumbsAnchor0->setLink(*test);
+                break;
+            }
+            case 2:
+            {
+                if (internalPathSplitResult[i].compare(""))
+                {
+                    const Wt::WLink *test = new Wt::WLink(internalPathSplitResult[i-1] + "/" + internalPathSplitResult[i]);
+                    breadCrumbsAnchor1->setText(internalPathSplitResult[i]);
+                    breadCrumbsAnchor1->setLink(*test);
+                    this->breadCrumbsContainer->addWidget(breadCrumbsAnchor1);
+                }
+                break;
+            }
+            case 3:
+            {
+                if (internalPathSplitResult[i].compare(""))
+                {
+                    const Wt::WLink *test = new Wt::WLink(internalPathSplitResult[i-1] + "/" + internalPathSplitResult[i]);
+                    breadCrumbsAnchor2->setText(internalPathSplitResult[i]);
+                    breadCrumbsAnchor2->setLink(*test);
+                    this->breadCrumbsContainer->addWidget(breadCrumbsAnchor2);
+                }
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+
+    }
+
+}
+
+void TestWidget::updateContainerFluid(int type)
+{
+    for (int i = 0 ; i < this->contentFluid->count() ; i++)
+    {
+        contentFluid->removeWidget(contentFluid->widget(i));
+    }
+    
+    switch (type)
+    {
+        case Enums::ASSET:
+        {
+            this->contentFluid->addWidget(amw);
+            break;
+        }
+        case Enums::WELCOME:
+        {
+            this->contentFluid->addWidget(wcw);
+            break;
+        }
+        default:
+            break;
+    }
+
+}
+
+void TestWidget::createContainerFluid()
+{
     contentFluid = new Wt::WContainerWidget();
     contentFluid->setStyleClass("container-fluid");
     
-    Wt::WLineEdit *edit = new Wt::WLineEdit(contentFluid);
-    edit->setEmptyText(content);
-    edit->setStyleClass("span8");
-
-    edit = new Wt::WLineEdit(contentFluid);
-    edit->setEmptyText(".span1");
-    edit->setStyleClass("span1");
-
-    edit = new Wt::WLineEdit(contentFluid);
-    edit->setEmptyText(".span2");
-    edit->setStyleClass("span2");
-
-    edit = new Wt::WLineEdit(contentFluid);
-    edit->setEmptyText(".span3");
-    edit->setStyleClass("span3");
-
-    edit = new Wt::WLineEdit(contentFluid);
-    edit->setEmptyText(".span2");
-    edit->setStyleClass("span2");
+    
     contentContainer->addWidget(contentFluid);
 }
 
@@ -174,14 +299,13 @@ void TestWidget::createContentDiv(Wt::WString content)
 {
     contentContainer->addWidget(createContentHeader());
     contentContainer->addWidget(breadCrumbsContainer);
-    createContainerFluid(content);
 }
 
-void TestWidget::testMenu(Wt::WString name, int index)
+void TestWidget::testMenu(int index)
 {
 //    if menu->currentItem()->is
-    updateBreadcrumbs(name);
-    createContainerFluid(menu->currentItem()->attributeValue("name"));
+    updateBreadcrumbs();
+    updateContainerFluid(index);
     if ((index != -1) && (this->menu->currentIndex() != index))
     {
         this->menu->select(index);

@@ -12,6 +12,7 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent):
         initAuth();
         initHeader();
         initMainPageWidget();
+        processEnvironment();
     }
 
 Session* EchoesHome::getSession()
@@ -45,8 +46,6 @@ void EchoesHome::initAuth()
     this->authWidget = new Wt::Auth::AuthWidget(this->session->login());
     this->authWidget->setModel(this->authModel);
     this->authWidget->setRegistrationEnabled(true);
-    
-    this->authWidget->processEnvironment();
 }
 
 void EchoesHome::initHeader()
@@ -54,7 +53,9 @@ void EchoesHome::initHeader()
     this->title = new Wt::WText(tr("echoes-alert-title"));
         
     this->topContainer = new Wt::WContainerWidget();
-    this->topContainer->setStyleClass("top-container");
+    this->topContainer->setId("header");
+    
+    this->topContainer->setHeight(Wt::WLength(78));
 
     this->topBoxLoggedInLayout = new Wt::WHBoxLayout();
     this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
@@ -76,8 +77,14 @@ void EchoesHome::initMainPageWidget()
 {
     this->mainPageWidget = new MainWidget(this->session);
     this->mainPageWidget->hide();
+    this->addWidget(this->mainPageWidget->getSideBarContainer());
     this->addWidget(this->mainPageWidget);
     Wt::WApplication::instance()->internalPathChanged().connect(this, &EchoesHome::handleInternalPath);
+}
+
+void EchoesHome::processEnvironment()
+{
+    this->authWidget->processEnvironment();
 }
 
 Wt::WTabWidget* EchoesHome::initAdminWidget()
@@ -105,7 +112,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
         qm->addColumn("USR_MAIL", "E-mail", Wt::ItemIsSelectable);
 
         tview->setSelectionMode(Wt::SingleSelection);
-        tview->doubleClicked().connect(boost::bind(&EchoesHome::openUserEdition, this));
+//        tview->doubleClicked().connect(boost::bind(&EchoesHome::openUserEdition, this));
         tview->setModel(qm);   
     }
     catch (Wt::Dbo::Exception e)
@@ -174,27 +181,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     
     
     
-    res->addTab(new Wt::WText(tr("welcome-text")), tr("Alert.admin.welcome-tab"));
-    res->addTab(amw, tr("Alert.admin.asset-tab"));
-    res->addTab(uew, tr("Alert.admin.medias-tab"));
-    res->addTab(aew, tr("Alert.admin.alert-creation-tab"));
-    res->addTab(alertGroupBox, tr("Alert.admin.alert-list-tab"));
-    res->addTab(usersGroupBox, tr("Alert.admin.users-tab"));
-    res->addTab(omw, tr("Alert.admin.options-tab"));
-    
-    res->currentChanged().connect(boost::bind(&EchoesHome::tabSelected, this));
-    
     return res;
-}
-
-void EchoesHome::tabSelected()
-{
-    UserActionManagement::registerUserAction(Enums::display,adminPageTabs->tabText(adminPageTabs->currentIndex()),adminPageTabs->currentIndex());
-}
-
-void EchoesHome::openUserEdition()
-{
-    
 }
 
 void EchoesHome::handleInternalPath(const std::string &internalPath)
@@ -216,7 +203,7 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
                     this->mainPageWidget->getMenu()->itemAt(i->index())->setFromInternalPath(internalPath);
                 }
                 UserActionManagement::registerUserAction(Enums::display,internalPathUnslashed,0);
-                showTest(i->index());
+                showPage(i->index());
                 displayed = true;
                 break;
             }
@@ -229,67 +216,19 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
             {
                 this->mainPageWidget->getMenu()->itemAt(Enums::EPageType::WELCOME)->setFromInternalPath(internalPath);
             }
-            showTest(Enums::EPageType::WELCOME);
+            showPage(Enums::EPageType::WELCOME);
         }
     }
 }
 
 
-void EchoesHome::showAdmin()
+void EchoesHome::showPage(int type)
 {
-
-//    this->monitoringPage->hide();
-//
-//
-//    this->testPage->hide();
-//
-//
-//    this->adminPageTabs->show();
-//    this->mainStack->setCurrentWidget(this->adminPageTabs);
-//
-//    this->testAnchor->removeStyleClass("selected-link");
-//    this->monitoringAnchor->removeStyleClass("selected-link");
-//    this->adminAnchor->addStyleClass("selected-link");
-}
-
-void EchoesHome::showMonitoring()
-{
-
-//  if (this->adminPageTabs)
-//  {
-//    this->adminPageTabs->hide();
-//  }
-//  if (this->testPage) 
-//  {
-//    this->testPage->hide();
-//  }
-//  
-//  this->monitoringPage->show();
-//  this->mainStack->setCurrentWidget(this->monitoringPage);
-//
-//  this->testAnchor->removeStyleClass("selected-link");
-//  this->monitoringAnchor->addStyleClass("selected-link");
-//  this->adminAnchor->removeStyleClass("selected-link");
-}
-
-void EchoesHome::showTest(int type)
-{
-  
-//  this->adminPageTabs->hide();
-//
-//
-//  this->monitoringPage->hide();
-
     if (this->mainPageWidget->isHidden())
     {
         this->mainPageWidget->show();
     }
     this->mainPageWidget->testMenu(type);
-//  this->mainStack->setCurrentWidget(this->testPage);
-
-//  this->testAnchor->addStyleClass("selected-link");
-//  this->monitoringAnchor->removeStyleClass("selected-link");
-//  this->adminAnchor->removeStyleClass("selected-link");
 }
 
 void EchoesHome::resizeContainers(bool loggedIn)
@@ -305,11 +244,13 @@ void EchoesHome::resizeContainers(bool loggedIn)
         this->title->setHeight(Wt::WLength(81));
         this->authWidget->setHeight(Wt::WLength(20));
 //        this->links->setWidth(Wt::WLength(200));
-        this->authWidget->setWidth(Wt::WLength(200));
+        this->authWidget->setWidth(Wt::WLength(300));
         
         
-        this->topRightLayout = new Wt::WVBoxLayout();
-        this->topRightLayout->addWidget(this->authWidget, 0, Wt::AlignRight);
+//        this->topRightLayout = new Wt::WVBoxLayout();
+//        this->topRightLayout->addWidget(this->authWidget, 0, Wt::AlignRight);
+        this->addWidget(this->authWidget);
+        
 //        this->topRightLayout->addWidget(this->links, 0, Wt::AlignRight);
         this->topBoxLoggedInLayout->addLayout(this->topRightLayout, Wt::AlignRight);
         this->title->setHeight(Wt::WLength(81));
@@ -321,7 +262,8 @@ void EchoesHome::resizeContainers(bool loggedIn)
     {
         this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
         this->topBoxLoggedInLayout->removeWidget(this->title);
-        this->topBoxLoggedInLayout->removeWidget(this->authWidget);
+//        this->topBoxLoggedInLayout->removeWidget(this->authWidget);
+        this->removeWidget(this->authWidget);
         this->topBoxLoggedOutLayout->addWidget(this->title,1,Wt::AlignCenter);
         this->title->setHeight(Wt::WLength(81));
         this->authWidget->setHeight(Wt::WLength(320));
@@ -339,12 +281,14 @@ void EchoesHome::onAuthEvent()
     {
         UserActionManagement::registerUserAction(Enums::login,"success",1);
         this->mainPageWidget->show();
+        this->mainPageWidget->getSideBarContainer()->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
     }
     else
     {
         UserActionManagement::registerUserAction(Enums::logout,"",0);
         this->mainPageWidget->hide();
+        this->mainPageWidget->getSideBarContainer()->hide();
     }
 }
 

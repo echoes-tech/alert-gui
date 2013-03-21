@@ -48,6 +48,7 @@ public:
   void testMenu(int index = -1);
   
   Wt::WMenu *getMenu();
+  Wt::WContainerWidget *getSideBarContainer();
 protected:
     
   virtual void close();
@@ -55,7 +56,9 @@ protected:
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   void createUI();
   Wt::WContainerWidget *createContentHeader();
+  void updateTitle(int index);
   void updateBreadcrumbs();
+  std::string getBreadcrumbsClass(int pathSize, int level);
   void createContainerFluid();
   void updateContainerFluid(int type);
   void createContentDiv();
@@ -75,6 +78,7 @@ private:
  
   bool created_;
   
+  Wt::WText *titleText;
   Wt::WContainerWidget *sideBarContainer;
   Wt::WContainerWidget *contentContainer;
   Wt::WContainerWidget *contentFluid;
@@ -82,6 +86,7 @@ private:
   Wt::WAnchor *breadCrumbsAnchor0;
   Wt::WAnchor *breadCrumbsAnchor1;
   Wt::WAnchor *breadCrumbsAnchor2;
+  Wt::WAnchor *breadCrumbsAnchor3;
   Wt::WMenu *menu;
   
 };

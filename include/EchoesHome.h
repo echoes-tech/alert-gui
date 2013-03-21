@@ -34,8 +34,7 @@ public:
     Session *getSession();
 private:
     Session *session;
-    void openUserEdition();
-    void tabSelected();
+    
     void handleInternalPath(const std::string &internalPath);
     
     Wt::Auth::AuthWidget *authWidget;
@@ -75,11 +74,10 @@ private:
     void initSession();
     void initAuth();
     void initHeader();
+    void processEnvironment();
 
     void onAuthEvent();
-    void showAdmin();
-    void showMonitoring();
-    void showTest(int page);
+    void showPage(int page);
     void resizeContainers(bool loggedIn);
     
     Wt::WContainerWidget *initMonitoringWidget();

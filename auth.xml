@@ -378,7 +378,7 @@
 
   <message id="Wt.Auth.template.logged-in">
     <div class="Wt-auth-logged-in">
-      <b>${user-name}</b> ${logout}
+      ${menu}
     </div>
   </message>
 

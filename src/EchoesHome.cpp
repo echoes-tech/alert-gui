@@ -8,35 +8,32 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent):
     adminPageTabs(0),
     monitoringPage(0)
     {
-        std::string dbHost = "127.0.0.1";
-        std::string dbPort = "5432";
-        std::string dbName = "echoes";
-        std::string dbUser = "echoes";
-        std::string dbPassword = "toto";
-        Wt::WApplication::readConfigurationProperty("db-host", dbHost);
-        Wt::WApplication::readConfigurationProperty("db-port", dbPort);
-        Wt::WApplication::readConfigurationProperty("db-name", dbName);
-        Wt::WApplication::readConfigurationProperty("db-user", dbUser);
-        Wt::WApplication::readConfigurationProperty("db-password", dbPassword);
-        session = new Session("hostaddr=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " user=" + dbUser + " password=" + dbPassword);
-        this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
-
-
+        initSession();
         initAuth();
-        
-        this->testPage = initTestWidget();
-        
         initHeader();
-        initMainStack();
-
-
-        Wt::WApplication::instance()->internalPathChanged().connect(this, &EchoesHome::handleInternalPath);
-        this->authWidget->processEnvironment();
+        initMainPageWidget();
     }
 
 Session* EchoesHome::getSession()
 {
     return this->session;
+}
+
+
+void EchoesHome::initSession()
+{
+    std::string dbHost = "127.0.0.1";
+    std::string dbPort = "5432";
+    std::string dbName = "echoes";
+    std::string dbUser = "echoes";
+    std::string dbPassword = "toto";
+    Wt::WApplication::readConfigurationProperty("db-host", dbHost);
+    Wt::WApplication::readConfigurationProperty("db-port", dbPort);
+    Wt::WApplication::readConfigurationProperty("db-name", dbName);
+    Wt::WApplication::readConfigurationProperty("db-user", dbUser);
+    Wt::WApplication::readConfigurationProperty("db-password", dbPassword);
+    this->session = new Session("hostaddr=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " user=" + dbUser + " password=" + dbPassword);
+    this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
 }
 
 void EchoesHome::initAuth()
@@ -48,6 +45,8 @@ void EchoesHome::initAuth()
     this->authWidget = new Wt::Auth::AuthWidget(this->session->login());
     this->authWidget->setModel(this->authModel);
     this->authWidget->setRegistrationEnabled(true);
+    
+    this->authWidget->processEnvironment();
 }
 
 void EchoesHome::initHeader()
@@ -65,17 +64,6 @@ void EchoesHome::initHeader()
     this->addWidget(this->topContainer);
 }
 
-void EchoesHome::initMainStack()
-{
-
-    this->addWidget(this->testPage);
-}
-
-void EchoesHome::setLinks()
-{
-
-}
-
 Wt::WContainerWidget* EchoesHome::initMonitoringWidget()
 {
     MonitoringWidget *res = new MonitoringWidget(this->session);
@@ -84,12 +72,12 @@ Wt::WContainerWidget* EchoesHome::initMonitoringWidget()
     return res;
 }
 
-TestWidget* EchoesHome::initTestWidget()
+void EchoesHome::initMainPageWidget()
 {
-    TestWidget *res = new TestWidget(this->session);
-//    this->mainStack->addWidget(res);
-    res->hide();
-    return res;
+    this->mainPageWidget = new MainWidget(this->session);
+    this->mainPageWidget->hide();
+    this->addWidget(this->mainPageWidget);
+    Wt::WApplication::instance()->internalPathChanged().connect(this, &EchoesHome::handleInternalPath);
 }
 
 Wt::WTabWidget* EchoesHome::initAdminWidget()
@@ -211,39 +199,39 @@ void EchoesHome::openUserEdition()
 
 void EchoesHome::handleInternalPath(const std::string &internalPath)
 {
-  if (this->session->login().loggedIn()) 
-  {
- 
-    if (internalPath == "/assets/")
+    if (this->session->login().loggedIn()) 
     {
-        UserActionManagement::registerUserAction(Enums::display,"/assets",0);
-        if (this->testPage->getMenu()->currentIndex() != Enums::ASSET)
+        std::string internalPathUnslashed = "";
+        int nbrSlashes = std::count_if(internalPath.begin(),internalPath.end(),std::bind1st(std::equal_to<char>(),'/'));
+        internalPathUnslashed.resize(internalPath.size()-nbrSlashes);
+        std::remove_copy(internalPath.begin(),internalPath.end(),internalPathUnslashed.begin(),'/');
+        bool displayed = false;
+        for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
         {
-            this->testPage->getMenu()->select(Enums::ASSET);
+//            std::string test = i->value();
+            if (internalPathUnslashed.compare(i->value()) == 0)
+            {
+                if (this->mainPageWidget->getMenu()->currentIndex() != i->index())
+                {
+                    this->mainPageWidget->getMenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                }
+                UserActionManagement::registerUserAction(Enums::display,internalPathUnslashed,0);
+                showTest(i->index());
+                displayed = true;
+                break;
+            }
         }
-        showTest(Enums::ASSET);
-    }
-    else if (internalPath == "/welcome/")
-    {
-        UserActionManagement::registerUserAction(Enums::display,"/welcome",0);
-        if (this->testPage->getMenu()->currentIndex() != Enums::WELCOME)
+        if (!displayed)
         {
-            this->testPage->getMenu()->select(Enums::WELCOME);
+            UserActionManagement::registerUserAction(Enums::display,"/welcome/ (default)",0);
+            Wt::WApplication::instance()->setInternalPath("/welcome",  false);
+            if (this->mainPageWidget->getMenu()->currentIndex() != Enums::EPageType::WELCOME)
+            {
+                this->mainPageWidget->getMenu()->itemAt(Enums::EPageType::WELCOME)->setFromInternalPath(internalPath);
+            }
+            showTest(Enums::EPageType::WELCOME);
         }
-        showTest(Enums::WELCOME);
     }
-    else
-    {
-      //Todo 404
-        UserActionManagement::registerUserAction(Enums::display,"/welcome/ (default)",0);
-        Wt::WApplication::instance()->setInternalPath("/welcome/",  true);
-        if (this->testPage->getMenu()->currentIndex() != Enums::WELCOME)
-        {
-            this->testPage->getMenu()->select(Enums::WELCOME);
-        }
-        showTest(Enums::WELCOME);
-    }
-  }
 }
 
 
@@ -292,9 +280,11 @@ void EchoesHome::showTest(int type)
 //
 //  this->monitoringPage->hide();
 
-  
-  this->testPage->show();
-  this->testPage->testMenu(type);
+    if (this->mainPageWidget->isHidden())
+    {
+        this->mainPageWidget->show();
+    }
+    this->mainPageWidget->testMenu(type);
 //  this->mainStack->setCurrentWidget(this->testPage);
 
 //  this->testAnchor->addStyleClass("selected-link");
@@ -348,17 +338,13 @@ void EchoesHome::onAuthEvent()
     if (this->session->login().loggedIn())
     {
         UserActionManagement::registerUserAction(Enums::login,"success",1);
-        this->testPage->show();
-//        this->links->show();
+        this->mainPageWidget->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
     }
     else
     {
         UserActionManagement::registerUserAction(Enums::logout,"",0);
-        this->testPage->clear();
-//        this->adminPageTabs = 0;
-//        this->monitoringPage = 0;
-//        this->links->hide();
+        this->mainPageWidget->hide();
     }
 }
 

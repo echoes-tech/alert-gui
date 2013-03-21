@@ -24,10 +24,6 @@
 #include <boost/random/random_device.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 
-
-
-
-
 #include <Wt/WApplication>
 #include <Wt/WDate>
 #include <Wt/WEnvironment>
@@ -44,21 +40,16 @@
 #include <Wt/Chart/WCartesianChart>
 #include <Wt/Chart/WPieChart>
 
-
-
-
-class TestWidget : public Wt::WContainerWidget
+class MainWidget : public Wt::WContainerWidget
 {
 public:
 
-  TestWidget(Session *session);
+  MainWidget(Session *session);
   void testMenu(int index = -1);
   
   Wt::WMenu *getMenu();
 protected:
     
-  
-
   virtual void close();
 
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
@@ -67,22 +58,17 @@ protected:
   void updateBreadcrumbs();
   void createContainerFluid();
   void updateContainerFluid(int type);
-  void createContentDiv(Wt::WString content);
+  void createContentDiv();
   
-  void createMenuItem(Enums::EPageType type);
-  void createPage(Enums::EPageType type);
+  void createMenuItem(Enums::EPageType enumPT);
+  void createPage(Enums::EPageType enumPT);
   
   AssetManagementModel *amm;
   AssetManagementWidget *amw;
+  OptionManagementModel *omm;
+  OptionManagementWidget *omw;
   
   Wt::WText *wcw;
-  
-  
-  
-  
-  
-  
-
 
 private:
   Session * session;
@@ -101,6 +87,4 @@ private:
 };
 
 
-
 #endif	/* TESTWIDGET_H */
-

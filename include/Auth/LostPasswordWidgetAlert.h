@@ -19,7 +19,6 @@
 
 #include <Wt/WTemplate>
 
-
 class AbstractUserDatabase;
 class AuthService;
 

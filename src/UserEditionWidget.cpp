@@ -7,7 +7,6 @@
 
 #include "UserEditionWidget.h"
 
-
 UserEditionWidget::UserEditionWidget()
 : Wt::WTemplateFormView(Wt::WString::tr("Alert.User.Edition.template"))
 {

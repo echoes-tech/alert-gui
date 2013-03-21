@@ -56,11 +56,7 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/uniform.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/select2.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.main.css");
-    
 
-    
-    
-    
 //    std::string cssToLoad = "default.css";
 //    Wt::WApplication::readConfigurationProperty("css-to-load", cssToLoad);
     
@@ -72,9 +68,6 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
 //      app->setCssTheme("");
 
     new EchoesHome(app->root());
-    
-    
-    
 
     return app;
     

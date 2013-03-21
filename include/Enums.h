@@ -8,6 +8,9 @@
 #ifndef ENUMS_H
 #define	ENUMS_H
 
+#include "enum.hpp"
+#include <string.h>
+
 class Enums {
 public:
     Enums();
@@ -39,12 +42,11 @@ public:
         quotaSms = 2
     };
     
-    enum EPageType
-    {
-        WELCOME,
-        ASSET,
-        OPTION
-    };
+    BOOST_ENUM_VALUES(EPageType, const char*,
+    (WELCOME)("welcome")
+    (ASSET)("assets")
+    (OPTION)("options")
+    )
 private:
 
 };

@@ -51,7 +51,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Enums.o \
 	${OBJECTDIR}/src/AuthWidget.o \
 	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
-	${OBJECTDIR}/src/TestWidget.o \
+	${OBJECTDIR}/src/MainWidget.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
 	${OBJECTDIR}/src/AlertEditionWidget.o
 
@@ -160,10 +160,10 @@ ${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o: src/Auth/RegistrationWidgetAler
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -Wall -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-develop/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o src/Auth/RegistrationWidgetAlert.cpp
 
-${OBJECTDIR}/src/TestWidget.o: src/TestWidget.cpp 
+${OBJECTDIR}/src/MainWidget.o: src/MainWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -O3 -Wall -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-develop/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TestWidget.o src/TestWidget.cpp
+	$(COMPILE.cc) -O3 -Wall -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-develop/workspace/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MainWidget.o src/MainWidget.cpp
 
 ${OBJECTDIR}/src/AssetManagementWidget.o: src/AssetManagementWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

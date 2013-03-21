@@ -27,7 +27,7 @@
 #include "OptionManagementModel.h"
 #include "OptionManagementWidget.h"
 #include "MonitoringWidget.h"
-#include "TestWidget.h"
+#include "MainWidget.h"
 #include "EchoesHome.h"
 
 #endif	/* GLOBALINCLUDEFILE_H */
@@ -41,7 +41,7 @@ class AssetManagementModel;
 class OptionManagementWidget;
 class OptionManagementModel;
 class AlertEditionModel;
-class TestWidget;
+class MainWidget;
 class EchoesHome;
 class UserActionManagement;
 class AuthWidget;

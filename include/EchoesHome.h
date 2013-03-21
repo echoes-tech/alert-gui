@@ -49,7 +49,7 @@ private:
 //    Wt::WLabel *admin_;
     Wt::WTabWidget *adminPageTabs;
     Wt::WContainerWidget *monitoringPage;
-    TestWidget *testPage;
+    MainWidget *mainPageWidget;
     Wt::WContainerWidget *links;
     Wt::WHBoxLayout *linksLayout;
     Wt::WAnchor *adminAnchor;
@@ -72,11 +72,10 @@ private:
     OptionManagementWidget *omw;
     
     
-    
+    void initSession();
     void initAuth();
     void initHeader();
-    void initMainStack();
-    void setLinks();
+
     void onAuthEvent();
     void showAdmin();
     void showMonitoring();
@@ -85,7 +84,7 @@ private:
     
     Wt::WContainerWidget *initMonitoringWidget();
     Wt::WTabWidget* initAdminWidget();
-    TestWidget *initTestWidget();
+    void initMainPageWidget();
     
     virtual void refresh();
     

@@ -30,6 +30,15 @@
           <itemPath>include/Auth/RegistrationModelAlert.h</itemPath>
           <itemPath>include/Auth/RegistrationWidgetAlert.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="enum" displayName="enum" projectFiles="true">
+          <itemPath>include/enum/base.hpp</itemPath>
+          <itemPath>include/enum/bitfield.hpp</itemPath>
+          <itemPath>include/enum/iterator.hpp</itemPath>
+          <itemPath>include/enum/macros.hpp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
+          <itemPath>include/MainWidget.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>include/MonitoringWidget.h</itemPath>
         </logicalFolder>
@@ -42,11 +51,9 @@
           <itemPath>include/rapidxml/rapidxml_utils.hpp</itemPath>
           <itemPath>include/rapidxml/rapidxml_xhtml.hpp</itemPath>
         </logicalFolder>
-        <logicalFolder name="f8" displayName="TestUnicorn" projectFiles="true">
-          <itemPath>include/TestWidget.h</itemPath>
-        </logicalFolder>
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
+        <itemPath>include/enum.hpp</itemPath>
       </logicalFolder>
       <itemPath>include/Enums.h</itemPath>
       <itemPath>include/UserActionManagement.h</itemPath>
@@ -104,11 +111,11 @@
           <itemPath>src/Auth/RegistrationModelAlert.cpp</itemPath>
           <itemPath>src/Auth/RegistrationWidgetAlert.cpp</itemPath>
         </logicalFolder>
+        <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
+          <itemPath>src/MainWidget.cpp</itemPath>
+        </logicalFolder>
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>src/MonitoringWidget.cpp</itemPath>
-        </logicalFolder>
-        <logicalFolder name="f8" displayName="TestUnicorn" projectFiles="true">
-          <itemPath>src/TestWidget.cpp</itemPath>
         </logicalFolder>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>

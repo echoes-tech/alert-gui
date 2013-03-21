@@ -18,7 +18,6 @@ const Wt::WFormModel::Field UserEditionModel::MediaEMail = "media-email";
 const Wt::WFormModel::Field UserEditionModel::MediaSMS = "media-sms";
 const Wt::WFormModel::Field UserEditionModel::MediaMobileApp = "media-mobileapp";
 
-
 UserEditionModel::UserEditionModel(User *user)
 {
     this->user = user;

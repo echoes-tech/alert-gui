@@ -18,8 +18,8 @@
   <!-- templates -->
 
   <message id="Alert.Option.Management.template">
+    <br />
     <div class="Alert-form">
-      <h2>${tr:Alert.option.option-form-title}</h2>
       <p>${tr:Alert.option.option-form-info}</p>
       <div class = "clear"></div>
       

@@ -81,6 +81,7 @@
   <message id="Alert.admin.users-tab">Users</message>
   <message id="Alert.admin.medias-tab">Medias</message><message id="Alert.admin.welcome-tab">Welcome</message>
   <message id="Alert.admin.assets-tab">Servers</message>
+  <message id="Alert.admin.alerts-tab">Alerts</message>
   <message id="Alert.admin.alert-creation-tab">Alert creation</message>
   <message id="Alert.admin.alert-list-tab">Alerts list</message>
   <message id="Alert.admin.users-tab">Users</message>

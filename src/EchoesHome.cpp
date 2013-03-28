@@ -35,6 +35,8 @@ void EchoesHome::initSession()
     Wt::WApplication::readConfigurationProperty("db-password", dbPassword);
     this->session = new Session("hostaddr=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " user=" + dbUser + " password=" + dbPassword);
     this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
+    
+    
 }
 
 void EchoesHome::initAuth()
@@ -139,48 +141,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     }
     uew->setModel(uem);
     uew->setSession(session);
-        
-    aew = new AlertEditionWidget();
-    try
-    {
-        Wt::Dbo::Transaction transaction(*(this->session));
-        aem = new AlertEditionModel(const_cast<User *>(this->session->user().get()));
-        aem->setSession(session);
-        transaction.commit();
-    }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::log("error") << e.what();
-    }
-    aew->setModel(aem);
-    aew->setSession(session);
-    
-    try
-    {
-        Wt::Dbo::Transaction transaction(*(this->session));
-        amm = new AssetManagementModel();
-        transaction.commit();
-    }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::log("error") << e.what();
-    }
-    amw = new AssetManagementWidget(amm,this->session);
-    
-    try
-    {
-        Wt::Dbo::Transaction transaction(*(this->session));
-        omm = new OptionManagementModel();
-        transaction.commit();
-    }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::log("error") << e.what();
-    }
-    omw = new OptionManagementWidget(omm,this->session);
-    
-    
-    
+
     return res;
 }
 
@@ -188,26 +149,91 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
 {
     if (this->session->login().loggedIn()) 
     {
-        std::string internalPathUnslashed = "";
-        int nbrSlashes = std::count_if(internalPath.begin(),internalPath.end(),std::bind1st(std::equal_to<char>(),'/'));
-        internalPathUnslashed.resize(internalPath.size()-nbrSlashes);
-        std::remove_copy(internalPath.begin(),internalPath.end(),internalPathUnslashed.begin(),'/');
-        bool displayed = false;
-        for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
+        std::vector<std::string> internalPathSplitResult;
+        std::vector<std::string> internalPathWithoutBlank;
+        boost::split(internalPathSplitResult, internalPath, boost::is_any_of("/"), boost::token_compress_on);
+        for (std::vector<std::string>::const_iterator i = internalPathSplitResult.begin() ; i != internalPathSplitResult.end() ; i++)
         {
-//            std::string test = i->value();
-            if (internalPathUnslashed.compare(i->value()) == 0)
+            if (i->compare("") != 0)
             {
-                if (this->mainPageWidget->getMenu()->currentIndex() != i->index())
-                {
-                    this->mainPageWidget->getMenu()->itemAt(i->index())->setFromInternalPath(internalPath);
-                }
-                UserActionManagement::registerUserAction(Enums::display,internalPathUnslashed,0);
-                showPage(i->index());
-                displayed = true;
-                break;
+                internalPathWithoutBlank.push_back(*i);
             }
         }
+        
+        bool displayed = false;
+        switch (internalPathWithoutBlank.size())
+        {
+        case 1:
+        {
+            for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
+            {
+    //            std::string test = i->value();
+                if (internalPathWithoutBlank[0].compare(i->value()) == 0)
+                {
+                    if (this->mainPageWidget->getMenu()->currentIndex() != i->index())
+                    {
+                        this->mainPageWidget->getMenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                    }
+                    UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
+                    showPage(i->index());
+                    displayed = true;
+                    break;
+                }
+            }
+            if ((!displayed) && (boost::starts_with(internalPathWithoutBlank[0], "submenu_")))
+            {
+                displayed = true;
+            }
+            break;
+        }
+        case 2:
+        {
+            for (Enums::EAlertSubmenu::const_iterator i = Enums::EAlertSubmenu::begin(); i != Enums::EAlertSubmenu::end(); ++i)
+            {
+                if (internalPathWithoutBlank[1].compare(i->value()) == 0)
+                {
+                    if (this->mainPageWidget->getAlertSubmenu()->currentIndex() != i->index())
+                    {
+                        this->mainPageWidget->getAlertSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                    }
+                    UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
+                    showPage(internalPathWithoutBlank[0],i->index());
+                    displayed = true;
+                    break;
+                }
+            }
+            if (!displayed)
+            {
+                for (Enums::EAccountSubmenu::const_iterator i = Enums::EAccountSubmenu::begin(); i != Enums::EAccountSubmenu::end(); ++i)
+                {
+                    if (internalPathWithoutBlank[1].compare(i->value()) == 0)
+                    {
+                        if (this->mainPageWidget->getAccountSubmenu()->currentIndex() != i->index())
+                        {
+                            this->mainPageWidget->getAccountSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                        }
+                        UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
+                        showPage(internalPathWithoutBlank[0],i->index());
+                        displayed = true;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        default:
+        {
+            
+        }
+        }
+        
+        
+        
+//        if ((!displayed) && (internalPathWithoutBlank[0].compare("submenu") == 0))
+//        {
+//            doJavaScript("alert('s');");
+//            displayed = true;
+//        }
         if (!displayed)
         {
             UserActionManagement::registerUserAction(Enums::display,"/welcome/ (default)",0);
@@ -218,6 +244,10 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
             }
             showPage(Enums::EPageType::WELCOME);
         }
+        std::ifstream ifs(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
+        std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+
+        this->doJavaScript(content);
     }
 }
 
@@ -228,7 +258,16 @@ void EchoesHome::showPage(int type)
     {
         this->mainPageWidget->show();
     }
-    this->mainPageWidget->testMenu(type);
+    this->mainPageWidget->doActionMenu(type);
+}
+
+void EchoesHome::showPage(std::string subMenu,int type)
+{
+    if (this->mainPageWidget->isHidden())
+    {
+        this->mainPageWidget->show();
+    }
+    this->mainPageWidget->doActionMenu(type);
 }
 
 void EchoesHome::resizeContainers(bool loggedIn)
@@ -295,11 +334,11 @@ void EchoesHome::onAuthEvent()
 void EchoesHome::refresh()
 {
     this->alertGroupBox->refresh();
-    if (this->aew->isCreated())
+    if (this->mainPageWidget->aew->isCreated())
     {
-        this->aew->updateServerSelectionBox(this->session->user().id());
+        this->mainPageWidget->aew->updateServerSelectionBox(this->session->user().id());
     }else
     {
-        this->aew->refresh();
+        this->mainPageWidget->aew->refresh();
     }
 }

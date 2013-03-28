@@ -36,16 +36,35 @@ MainWidget::MainWidget(Session *session)
     breadCrumbsAnchor2 = new Wt::WAnchor("");
     breadCrumbsAnchor2->setAttributeValue("class","tip-bottom");
     
-    breadCrumbsAnchor3 = new Wt::WAnchor("");
-    breadCrumbsAnchor3->setAttributeValue("class","tip-bottom");
-    
     menu = new Wt::WMenu(sideBarContainer);
     menu->setInternalPathEnabled("/");
+    
+    alertSubmenu = new Wt::WMenu(sideBarContainer);
+    Enums::EPageType *enumPTAl = new Enums::EPageType(Enums::EPageType::SUBMENU_ALERT);
+    alertSubmenu->setInternalPathEnabled("/" + boost::lexical_cast<std::string>(enumPTAl->value()) +  "/");
+    
+    accountSubmenu = new Wt::WMenu(sideBarContainer);
+    Enums::EPageType *enumPTAc = new Enums::EPageType(Enums::EPageType::SUBMENU_ACCOUNT);
+    accountSubmenu->setInternalPathEnabled("/" + boost::lexical_cast<std::string>(enumPTAc->value()) +  "/");
+    
+//        std::ifstream ifs("resources/themes/bootstrap/js/unicorn.js");
+//        std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+
+    //    Wt::WText * textTest = new Wt::WText("<p>ICI</p><script type='text/javascript' src='" + Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js'></script>", Wt::XHTMLUnsafeText, this);
+//        Wt::WText * textTest = new Wt::WText("<p>ICI</p></div></div><script type='text/javascript'>" + content + "</script>", Wt::XHTMLUnsafeText, this);
+//        textTest->setInline(false);
+    //    textTest->createDomElement()
+    
+    
+//    menu->itemAt(0)->insertWidget(0,textTest);
     
     createContentDiv();
     createContainerFluid();
     
     createUI();
+    
+
+    
 }
 
 void MainWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
@@ -70,18 +89,26 @@ void MainWidget::createUI()
        
     for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
     {
-        createMenuItem(*i);
-        createPage(*i);
+//        Enums::EPageType *test;
+//        std::string strTest = test->value();
+        if (!boost::starts_with(i->value(), "submenu"))
+        {
+            createMenuItem(*i,menu);
+            createPage(*i);
+        }
+        else
+        {
+            createSubMenu(*i);
+        }
     }
     
     if (menu->currentIndex() != -1)
     {
-        menu->itemSelected().connect(boost::bind(&MainWidget::testMenu, this,-1));
+        menu->itemAt(menu->currentIndex())->select();
     }
     else 
     {
-        menu->itemAt(0)->setFromInternalPath("/welcome");
-        menu->itemSelected().connect(boost::bind(&MainWidget::testMenu, this,-1));
+        menu->itemAt(0)->select();
     }
 
     
@@ -99,12 +126,38 @@ Wt::WContainerWidget * MainWidget::createContentHeader()
     return res;
 }
 
-void MainWidget::createMenuItem(Enums::EPageType enumPT)
+void MainWidget::doNothing()
 {
-    Wt::WMenuItem *newMenuItem = new Wt::WMenuItem(tr(boost::lexical_cast<std::string>("Alert.admin.")+enumPT.value()+boost::lexical_cast<std::string>("-tab")));
-//    newMenuItem->setAttributeValue("name",boost::lexical_cast<std::string>(enumPT.index()));
-    newMenuItem->setPathComponent(enumPT.value());
-    menu->addItem(newMenuItem);
+    
+}
+
+void MainWidget::createSubMenu(Enums::EPageType enumPT)
+{
+    switch (enumPT.index())
+    {
+        case Enums::EPageType::SUBMENU_ALERT:
+        {
+            for (Enums::EAlertSubmenu::const_iterator i = Enums::EAlertSubmenu::begin(); i != Enums::EAlertSubmenu::end(); ++i)
+            {
+                createMenuItem(*i,alertSubmenu);
+                createAlertPage(*i);
+            }
+            menu->addMenu(enumPT.value(),alertSubmenu);
+            break;
+        }
+        case Enums::EPageType::SUBMENU_ACCOUNT:
+        {
+            for (Enums::EAccountSubmenu::const_iterator i = Enums::EAccountSubmenu::begin(); i != Enums::EAccountSubmenu::end(); ++i)
+            {
+                createMenuItem(*i,accountSubmenu);
+                createAccountPage(*i);
+            }
+            menu->addMenu(enumPT.value(),accountSubmenu);
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 void MainWidget::createPage(Enums::EPageType enumPT)
@@ -131,7 +184,45 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             wcw = new Wt::WText(tr("welcome-text"));
             break;
         }
-        case Enums::EPageType::OPTION:
+        default:
+            break;
+    }
+
+}
+
+void MainWidget::createAlertPage(Enums::EAlertSubmenu enumSAL)
+{
+    switch (enumSAL.index())
+    {
+        case Enums::EAlertSubmenu::ALERT:
+        {
+            aew = new AlertEditionWidget();
+            try
+            {
+                Wt::Dbo::Transaction transaction(*(this->session));
+                aem = new AlertEditionModel(const_cast<User *>(this->session->user().get()));
+                aem->setSession(session);
+                transaction.commit();
+            }
+            catch (Wt::Dbo::Exception e)
+            {
+                Wt::log("error") << e.what();
+            }
+            aew->setModel(aem);
+            aew->setSession(session);
+            break;
+        }
+        default:
+            break;
+    }
+
+}
+
+void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
+{
+    switch (enumSAC.index())
+    {
+    case Enums::EAccountSubmenu::OPTION:
         {
             try
             {
@@ -158,7 +249,7 @@ void MainWidget::updateTitle(int index)
     {
         if (i->index() == index)
         {
-            this->titleText->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+i->value()+boost::lexical_cast<std::string>("-tab")));
+            this->titleText->setText("<h1>" + tr(boost::lexical_cast<std::string>("Alert.admin.")+i->value()+boost::lexical_cast<std::string>("-tab")) + "</h1>");
             break;
         }
     }
@@ -166,64 +257,46 @@ void MainWidget::updateTitle(int index)
 
 void MainWidget::updateBreadcrumbs()
 {
-//    this->breadCrumbsContainer->removeWidget(breadCrumbsAnchor1);
     this->breadCrumbsContainer->removeWidget(breadCrumbsAnchor2);
-    this->breadCrumbsContainer->removeWidget(breadCrumbsAnchor3);
     
     std::string internalPath = Wt::WApplication::instance()->internalPath();
     std::vector<std::string> internalPathSplitResult;
+    std::vector<std::string> internalPathWithoutBlank;
     boost::split(internalPathSplitResult, internalPath, boost::is_any_of("/"), boost::token_compress_on);
-    
-    int pathSize = 0;
-    for (unsigned int i = 1; i < internalPathSplitResult.size(); i++)
+    for (std::vector<std::string>::const_iterator i = internalPathSplitResult.begin() ; i != internalPathSplitResult.end() ; i++)
     {
-        if (internalPathSplitResult[i].compare(""))
+        if (i->compare("") != 0)
         {
-            pathSize++;
+            internalPathWithoutBlank.push_back(*i);
         }
     }
     
     
-    for (unsigned int i = 1; i < internalPathSplitResult.size(); i++)
+    for (unsigned int i = 0; i < internalPathWithoutBlank.size(); i++)
     {
-        if (i >= 4)
+        if (i >= 3)
         {
             break;
         }
         
-        switch (i)
+        switch (i+1)
         {
             case 1:
             {
-                const Wt::WLink *test = new Wt::WLink(internalPathSplitResult[i]);
-                breadCrumbsAnchor1->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathSplitResult[i]+boost::lexical_cast<std::string>("-tab")));
+                const Wt::WLink *test = new Wt::WLink(internalPathWithoutBlank[i]);
+                breadCrumbsAnchor1->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<std::string>("-tab")));
                 breadCrumbsAnchor1->setLink(*test);
                 this->breadCrumbsContainer->addWidget(breadCrumbsAnchor1);
-                breadCrumbsAnchor1->setAttributeValue("class", getBreadcrumbsClass(pathSize,1).c_str());
+                breadCrumbsAnchor1->setAttributeValue("class", getBreadcrumbsClass(internalPathWithoutBlank.size(),1).c_str());
                 break;
             }
             case 2:
             {
-                if (internalPathSplitResult[i].compare(""))
-                {
-                    const Wt::WLink *test = new Wt::WLink(internalPathSplitResult[i-1] + "/" + internalPathSplitResult[i]);
-                    breadCrumbsAnchor2->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathSplitResult[i]+boost::lexical_cast<std::string>("-tab")));
-                    breadCrumbsAnchor2->setLink(*test);
-                    this->breadCrumbsContainer->addWidget(breadCrumbsAnchor2);
-                    breadCrumbsAnchor2->setAttributeValue("class", getBreadcrumbsClass(pathSize,2).c_str());
-                }
-                break;
-            }
-            case 3:
-            {
-                if (internalPathSplitResult[i].compare(""))
-                {
-                    const Wt::WLink *test = new Wt::WLink(internalPathSplitResult[i-1] + "/" + internalPathSplitResult[i]);
-                    breadCrumbsAnchor3->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathSplitResult[i]+boost::lexical_cast<std::string>("-tab")));
-                    breadCrumbsAnchor3->setLink(*test);
-                    this->breadCrumbsContainer->addWidget(breadCrumbsAnchor3);
-                    breadCrumbsAnchor3->setAttributeValue("class", getBreadcrumbsClass(pathSize,3).c_str());
-                }
+                const Wt::WLink *test = new Wt::WLink(internalPathWithoutBlank[i-1] + "/" + internalPathSplitResult[i]);
+                breadCrumbsAnchor2->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathSplitResult[i]+boost::lexical_cast<std::string>("-tab")));
+                breadCrumbsAnchor2->setLink(*test);
+                this->breadCrumbsContainer->addWidget(breadCrumbsAnchor2);
+                breadCrumbsAnchor2->setAttributeValue("class", getBreadcrumbsClass(internalPathWithoutBlank.size(),2).c_str());
                 break;
             }
             default:
@@ -250,6 +323,8 @@ std::string MainWidget::getBreadcrumbsClass(int pathSize, int level)
     return res;
 }
 
+
+// ToDo ajouter deux update poru les sous menus
 void MainWidget::updateContainerFluid(int type)
 {
     for (int i = 0 ; i < this->contentFluid->count() ; i++)
@@ -269,11 +344,16 @@ void MainWidget::updateContainerFluid(int type)
             this->contentFluid->addWidget(wcw);
             break;
         }
-        case Enums::EPageType::OPTION:
-        {
-            this->contentFluid->addWidget(omw);
-            break;
-        }
+//        case Enums::EPageType::OPTION:
+//        {
+//            this->contentFluid->addWidget(omw);
+//            break;
+//        }
+//        case Enums::EPageType::ALERT:
+//        {
+//            this->contentFluid->addWidget(aew);
+//            break;
+//        }
         default:
             break;
     }
@@ -295,8 +375,9 @@ void MainWidget::createContentDiv()
     contentContainer->addWidget(breadCrumbsContainer);
 }
 
-void MainWidget::testMenu(int index)
+void MainWidget::doActionMenu(int index)
 {
+    menu->itemAt(index)->setFromInternalPath(Wt::WApplication::instance()->internalPath());
     updateTitle(index);
     updateBreadcrumbs();
     updateContainerFluid(index);
@@ -305,6 +386,16 @@ void MainWidget::testMenu(int index)
 Wt::WMenu * MainWidget::getMenu()
 {
     return this->menu;
+}
+
+Wt::WMenu * MainWidget::getAlertSubmenu()
+{
+    return this->alertSubmenu;
+}
+
+Wt::WMenu * MainWidget::getAccountSubmenu()
+{
+    return this->accountSubmenu;
 }
 
 Wt::WContainerWidget * MainWidget::getSideBarContainer()

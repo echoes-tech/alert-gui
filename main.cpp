@@ -25,7 +25,7 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
     
 //    app->requireJQuery(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.js");
-//    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
+    
 //    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.ui.custom.js");
 //    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/bootstrap.min.js");
 //    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.uniform.js");
@@ -56,6 +56,10 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/uniform.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/select2.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.main.css");
+    
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/echoes-alert-custom.css");
+    
+    
 
 //    std::string cssToLoad = "default.css";
 //    Wt::WApplication::readConfigurationProperty("css-to-load", cssToLoad);
@@ -67,8 +71,20 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     app->setTheme(theme);
 //      app->setCssTheme("");
 
+//    std::ifstream ifs("resources/themes/bootstrap/js/unicorn.js");
+//    std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+    
+//    Wt::WText * textTest = new Wt::WText("<p>ICI</p><script type='text/javascript' src='" + Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js'></script>", Wt::XHTMLUnsafeText, this);
+//    Wt::WText * textTest = new Wt::WText("<p>ICI</p></div></div><script type='text/javascript'>" + content + "</script>", Wt::XHTMLUnsafeText, app->root());
+//    textTest->setInline(false);
+//    textTest->createDomElement()
+    
+    
     new EchoesHome(app->root());
+    
+    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
 
+//    app->domRoot()->insertWidget(1,textTest);
     return app;
     
 }

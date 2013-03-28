@@ -35,7 +35,7 @@ void MonitoringWidget::createUI()
 //    Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > > *qm = new Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > >();
     
     
-    Wt::WTableView *tview = new Wt::WTableView(this);
+//    Wt::WTableView *tview = new Wt::WTableView(this);
 //    try
 //    {
 //        Wt::Dbo::Transaction transaction(*(this->session));

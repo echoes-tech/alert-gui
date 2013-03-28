@@ -27,9 +27,9 @@
   <!-- templates -->
 
     <message id="Alert.Asset.Management.template">
+        <br />
         <div class="Probe-form">
 
-            <h2>${tr:Alert.asset.asset-form-title}</h2>
             <p>${tr:Alert.asset.asset-form-info}</p>
             <div class = "clear"></div>
        

@@ -61,16 +61,6 @@ private:
     UserEditionModel *uem;
     UserEditionWidget *uew;
 
-    AlertEditionModel *aem;
-    AlertEditionWidget *aew;
-    
-    AssetManagementModel *amm;
-    AssetManagementWidget *amw;
-    
-    OptionManagementModel *omm;
-    OptionManagementWidget *omw;
-    
-    
     void initSession();
     void initAuth();
     void initHeader();
@@ -78,6 +68,7 @@ private:
 
     void onAuthEvent();
     void showPage(int page);
+    void showPage(std::string subMenu, int page);
     void resizeContainers(bool loggedIn);
     
     Wt::WContainerWidget *initMonitoringWidget();

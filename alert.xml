@@ -135,8 +135,8 @@
   <!-- templates -->
 
   <message id="Alert.alert.Edition.template">
+    <br />  
     <div class="Alert-form">
-      <h2>${tr:Alert.alert.alert-form-title}</h2>
       <p>${tr:Alert.alert.alert-form-info}</p>
       <div class = "clear"></div>
       

@@ -79,6 +79,7 @@
     
   <message id="Alert.admin.welcome-tab">Bienvenue</message>
   <message id="Alert.admin.assets-tab">Serveurs</message>
+  <message id="Alert.admin.alerts-tab">Alertes</message>
   <message id="Alert.admin.alert-creation-tab">Création d'alerte</message>
   <message id="Alert.admin.alert-list-tab">Liste des alertes</message>
   <message id="Alert.admin.users-tab">Utilisateurs</message>

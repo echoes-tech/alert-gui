@@ -7,8 +7,7 @@ $(document).ready(function(){
 	
 	
 	// === Sidebar navigation === //
-	
-	$('.submenu > a').click(function(e)
+	$('.submenu > a').live('click',function(e)
 	{
 		e.preventDefault();
 		var submenu = $(this).siblings('ul');
@@ -39,7 +38,7 @@ $(document).ready(function(){
 	
 	var ul = $('#sidebar > ul');
 	
-	$('#sidebar > a').click(function(e)
+	$('#sidebar > a').live('click',function(e)
 	{
 		e.preventDefault();
 		var sidebar = $('#sidebar');
@@ -109,22 +108,22 @@ $(document).ready(function(){
 	}
 	
 	// === Style switcher === //
-	$('#style-switcher i').click(function()
+	$('#style-switcher i').live('click',function()
 	{
 		if($(this).hasClass('open'))
 		{
-			$(this).parent().animate({marginRight:'-=190'});
+			$(this).parent().animate({marginRight:'-=220'});
 			$(this).removeClass('open');
 		} else 
 		{
-			$(this).parent().animate({marginRight:'+=190'});
+			$(this).parent().animate({marginRight:'+=220'});
 			$(this).addClass('open');
 		}
 		$(this).toggleClass('icon-arrow-left');
 		$(this).toggleClass('icon-arrow-right');
 	});
 	
-	$('#style-switcher a').click(function()
+	$('#style-switcher a').live('click',function()
 	{
 		var style = $(this).attr('href').replace('#','');
 		$('.skin-color').attr('href','css/unicorn.'+style+'.css');

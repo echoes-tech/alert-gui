@@ -45,10 +45,14 @@ class MainWidget : public Wt::WContainerWidget
 public:
 
   MainWidget(Session *session);
-  void testMenu(int index = -1);
+  void doActionMenu(int index = -1);
   
   Wt::WMenu *getMenu();
+  Wt::WMenu *getAlertSubmenu();
+  Wt::WMenu *getAccountSubmenu();
   Wt::WContainerWidget *getSideBarContainer();
+  
+  AlertEditionWidget *aew;
 protected:
     
   virtual void close();
@@ -63,13 +67,23 @@ protected:
   void updateContainerFluid(int type);
   void createContentDiv();
   
-  void createMenuItem(Enums::EPageType enumPT);
+  void doNothing();
+  
+  void createSubMenu(Enums::EPageType enumPT);
   void createPage(Enums::EPageType enumPT);
+  void createAlertPage(Enums::EAlertSubmenu enumSAL);
+  void createAccountPage(Enums::EAccountSubmenu enumSAC);
+  
+  template <class C>
+  void createMenuItem(C enumC, Wt::WMenu *submenu);
   
   AssetManagementModel *amm;
   AssetManagementWidget *amw;
   OptionManagementModel *omm;
   OptionManagementWidget *omw;
+  AlertEditionModel *aem;
+  
+  
   
   Wt::WText *wcw;
 
@@ -86,10 +100,22 @@ private:
   Wt::WAnchor *breadCrumbsAnchor0;
   Wt::WAnchor *breadCrumbsAnchor1;
   Wt::WAnchor *breadCrumbsAnchor2;
-  Wt::WAnchor *breadCrumbsAnchor3;
   Wt::WMenu *menu;
+  Wt::WMenu *alertSubmenu;
+  Wt::WMenu *accountSubmenu;
   
 };
+
+
+template <class C>
+void MainWidget::createMenuItem(C enumC, Wt::WMenu *submenu)
+{
+    Wt::WMenuItem *newMenuItem = new Wt::WMenuItem(tr(boost::lexical_cast<std::string>("Alert.admin.")+enumC.value()+boost::lexical_cast<std::string>("-tab")));
+    newMenuItem->setPathComponent(enumC.value());
+    submenu->addItem(newMenuItem);
+}
+
+
 
 
 #endif	/* TESTWIDGET_H */

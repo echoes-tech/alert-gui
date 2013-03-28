@@ -42,6 +42,11 @@ MainWidget::MainWidget(Session *session)
     alertSubmenu = new Wt::WMenu(sideBarContainer);
     Enums::EPageType *enumPTAl = new Enums::EPageType(Enums::EPageType::SUBMENU_ALERT);
     alertSubmenu->setInternalPathEnabled("/" + boost::lexical_cast<std::string>(enumPTAl->value()) +  "/");
+    sideBarContainer->widget(0)->setStyleClass("style_widget0");
+    
+    
+    alertSubmenu->parent()->setStyleClass("style_parent");
+    alertSubmenu->setStyleClass("style_objet");
     
     accountSubmenu = new Wt::WMenu(sideBarContainer);
     Enums::EPageType *enumPTAc = new Enums::EPageType(Enums::EPageType::SUBMENU_ACCOUNT);
@@ -109,6 +114,15 @@ void MainWidget::createUI()
     else 
     {
         menu->itemAt(0)->select();
+    }
+    
+    // add submenu classes to the menu
+    for (unsigned int i = 0; i < menu->items().size() ; i++)
+    {
+        if (menu->items()[i]->menu())
+        {
+            menu->items()[i]->setStyleClass("submenu");
+        }
     }
 
     

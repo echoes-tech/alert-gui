@@ -111,6 +111,12 @@ template <class C>
 void MainWidget::createMenuItem(C enumC, Wt::WMenu *submenu)
 {
     Wt::WMenuItem *newMenuItem = new Wt::WMenuItem(tr(boost::lexical_cast<std::string>("Alert.admin.")+enumC.value()+boost::lexical_cast<std::string>("-tab")));
+    
+    Wt::WText *alertCount = new Wt::WText("<i class='icon icon-home'></i>",Wt::XHTMLUnsafeText);
+//    alertCount->setAttributeValue("class","label label-important");
+    Wt::WAnchor *anchorTemp = (Wt::WAnchor*)newMenuItem->widget(0);
+    anchorTemp->insertWidget(0,alertCount);
+    
     newMenuItem->setPathComponent(enumC.value());
     submenu->addItem(newMenuItem);
 }

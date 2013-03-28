@@ -154,7 +154,7 @@
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>
             <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/include</pElem>
-            <pElem>../wt-3.3.0-rc2/build/src</pElem>
+            <pElem>../wt-3.3.0-rc4/build/src</pElem>
           </incDir>
           <commandLine>-pedantic</commandLine>
           <warningLevel>2</warningLevel>
@@ -163,7 +163,7 @@
           <linkerAddLib>
             <pElem>../dbo/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
             <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/default/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
-            <pElem>../wt-3.3.0-rc2/build/src</pElem>
+            <pElem>../wt-3.3.0-rc4/build/src</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>dbo</linkerLibLibItem>

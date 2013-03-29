@@ -98,12 +98,16 @@ void MainWidget::createUI()
 //        std::string strTest = test->value();
         if (!boost::starts_with(i->value(), "submenu"))
         {
-            createMenuItem(*i,menu);
+            createMenuItem(*i,menu,getIconName(*i));
             createPage(*i);
         }
         else
         {
             createSubMenu(*i);
+            menu->items().back()->setStyleClass("submenu");
+            Wt::WText *iconHTML = new Wt::WText("</span><i class='icon icon-" + getIconName(*i) + "'></i><span>",Wt::XHTMLUnsafeText);
+            Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)menu->items().back()->widget(0);
+            anchorInsideMenu->insertWidget(0,iconHTML);
         }
     }
     
@@ -115,16 +119,6 @@ void MainWidget::createUI()
     {
         menu->itemAt(0)->select();
     }
-    
-    // add submenu classes to the menu
-    for (unsigned int i = 0; i < menu->items().size() ; i++)
-    {
-        if (menu->items()[i]->menu())
-        {
-            menu->items()[i]->setStyleClass("submenu");
-        }
-    }
-
     
 //    new ScatterPlot(this);
 }
@@ -153,7 +147,7 @@ void MainWidget::createSubMenu(Enums::EPageType enumPT)
         {
             for (Enums::EAlertSubmenu::const_iterator i = Enums::EAlertSubmenu::begin(); i != Enums::EAlertSubmenu::end(); ++i)
             {
-                createMenuItem(*i,alertSubmenu);
+                createMenuItem(*i,alertSubmenu,"");
                 createAlertPage(*i);
             }
             menu->addMenu(enumPT.value(),alertSubmenu);
@@ -163,7 +157,7 @@ void MainWidget::createSubMenu(Enums::EPageType enumPT)
         {
             for (Enums::EAccountSubmenu::const_iterator i = Enums::EAccountSubmenu::begin(); i != Enums::EAccountSubmenu::end(); ++i)
             {
-                createMenuItem(*i,accountSubmenu);
+                createMenuItem(*i,accountSubmenu,"");
                 createAccountPage(*i);
             }
             menu->addMenu(enumPT.value(),accountSubmenu);
@@ -395,6 +389,35 @@ void MainWidget::doActionMenu(int index)
     updateTitle(index);
     updateBreadcrumbs();
     updateContainerFluid(index);
+}
+
+std::string MainWidget::getIconName(Enums::EPageType enumPT)
+{
+    std::string res = "home";
+    switch (enumPT.index())
+    {
+        case Enums::EPageType::WELCOME:
+        {
+            res = "home";
+            break;
+        }
+        case Enums::EPageType::ASSET:
+        {
+            res = "hdd";
+            break;
+        }
+        case Enums::EPageType::SUBMENU_ALERT:
+        {
+            res = "exclamation-sign";
+            break;
+        }
+        case Enums::EPageType::SUBMENU_ACCOUNT:
+        {
+            res = "user";
+            break;
+        }
+    }
+    return res;
 }
 
 Wt::WMenu * MainWidget::getMenu()

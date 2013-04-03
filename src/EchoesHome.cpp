@@ -36,7 +36,6 @@ void EchoesHome::initSession()
     this->session = new Session("hostaddr=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " user=" + dbUser + " password=" + dbPassword);
     this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
     
-    
 }
 
 void EchoesHome::initAuth()
@@ -295,6 +294,7 @@ void EchoesHome::onAuthEvent()
     if (this->session->login().loggedIn())
     {
         UserActionManagement::registerUserAction(Enums::login,"success",1);
+        this->mainPageWidget->createUI();
         this->mainPageWidget->show();
         this->mainPageWidget->getSideBarContainer()->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
@@ -310,6 +310,7 @@ void EchoesHome::onAuthEvent()
 void EchoesHome::refresh()
 {
 //    this->alertGroupBox->refresh();
+    this->mainPageWidget->refresh();
     if (this->mainPageWidget->aew->isCreated())
     {
         this->mainPageWidget->aew->updateServerSelectionBox(this->session->user().id());

@@ -38,6 +38,7 @@ void AssetManagementWidget::createUI()
     mainForm->bindWidget("asset-name", createFormWidget(AssetManagementModel::AssetName));
     
     Wt::WPushButton *addAssetButton = new Wt::WPushButton(tr("Alert.asset.add-asset-button"));
+    addAssetButton->setAttributeValue("class","btn btn-success");
     mainForm->bindWidget("add-asset-button", addAssetButton);
     addAssetButton->clicked().connect(boost::bind(&AssetManagementWidget::addAsset, this));
 
@@ -45,10 +46,14 @@ void AssetManagementWidget::createUI()
     mainForm->refresh();
     // Table where the links / buttons are added
     Wt::WTable *linksTable = new Wt::WTable();
+    linksTable->addStyleClass("table");
+    linksTable->addStyleClass("table-bordered");
+    linksTable->addStyleClass("table-striped");
+    linksTable->addStyleClass("span6");
     
     int row = 0;
 
-    linksTable->setStyleClass("table-list");
+//    linksTable->setStyleClass("table-list");
     
     linksTable->setHeaderCount(1,Wt::Horizontal);
     
@@ -62,7 +67,7 @@ void AssetManagementWidget::createUI()
         Wt::Dbo::Transaction transaction(*this->session);
         //TODO : don't understand why the two lines below are needed, clean this
         Wt::Dbo::ptr<User> tempUser = session->find<User>().where("\"USR_ID\" = ?").bind(session->user().id());
-        Wt::log("info") << "Debug : user found";
+        Wt::log("info") << "Debug : user found" << session->user().id();
         if (tempUser)
         {
             Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
@@ -97,6 +102,8 @@ void AssetManagementWidget::createUI()
                     new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
 
                     Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 2));
+                    delButton->setAttributeValue("class","btn btn-danger");
+                    
                     delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
                 }
             }
@@ -108,8 +115,6 @@ void AssetManagementWidget::createUI()
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("1"),Wt::Ok);
         Wt::log("error") << "[AssetManagementWidget] " << e.what();
     }
-    
-    
      
     
     Wt::WVBoxLayout *mainVerticalLayout = new Wt::WVBoxLayout();
@@ -119,10 +124,6 @@ void AssetManagementWidget::createUI()
       
     topHorizontalLayout->addWidget(mainForm);
     bottomHorizontalLayout->addWidget(linksTable);
-    
-    // empty container to reduce table width which is linked to the container
-    Wt::WContainerWidget *emptyContainer = new Wt::WContainerWidget();
-    bottomHorizontalLayout->addWidget(emptyContainer);
     
     mainVerticalLayout->addLayout(topHorizontalLayout);
     mainVerticalLayout->addLayout(bottomHorizontalLayout);

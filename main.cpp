@@ -34,8 +34,8 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
 //    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "alert.css");
     
     
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/bootstrap-responsive.css");
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/bootstrap.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap-responsive.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap.css");
 //    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.login.css");
 
     //    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/colorpicker.css");

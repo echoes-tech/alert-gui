@@ -53,12 +53,14 @@ public:
   Wt::WContainerWidget *getSideBarContainer();
   
   AlertEditionWidget *aew;
+  void createUI();
+  virtual void refresh();
 protected:
     
   virtual void close();
 
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
-  void createUI();
+  
   Wt::WContainerWidget *createContentHeader();
   void updateTitle(int index, Enums::EMenuRoot menuRoot = Enums::main);
   void updateBreadcrumbs(Enums::EMenuRoot menuRoot = Enums::main);
@@ -78,7 +80,6 @@ protected:
   template <class C>
   void createMenuItem(C enumC, Wt::WMenu *submenu, std::string iconStr);
  
-  
   
   AssetManagementModel *amm;
   AssetManagementWidget *amw;

@@ -534,7 +534,7 @@ void AuthWidget::processEnvironment()
             login_.login(result.user());
         }
 
-        WApplication::instance()->setInternalPath("/");
+//        WApplication::instance()->setInternalPath("/");
 
         return;
     }

@@ -58,10 +58,9 @@ MainWidget::MainWidget(Session *session)
     Enums::EPageType *enumPTAc = new Enums::EPageType(Enums::EPageType::SUBMENU_ACCOUNT);
     accountSubmenu->setInternalPathEnabled("/" + boost::lexical_cast<std::string>(enumPTAc->value()) +  "/");
     
-    createContentDiv();
-    createContainerFluid();
     
-    createUI();
+    
+//    createUI();
     
 
     
@@ -80,6 +79,9 @@ void MainWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
 
 void MainWidget::createUI()
 {
+    createContentDiv();
+    createContainerFluid();
+    
     const Wt::WLink *test = new Wt::WLink("");
     breadCrumbsAnchor0->setText("Accueil");
     breadCrumbsAnchor0->setLink(*test);
@@ -115,8 +117,7 @@ void MainWidget::createUI()
     {
         menu->itemAt(0)->select();
     }
-    
-//    new ScatterPlot(this);
+
 }
 
 Wt::WContainerWidget * MainWidget::createContentHeader()
@@ -550,4 +551,9 @@ Wt::WContainerWidget * MainWidget::getSideBarContainer()
 void MainWidget::close()
 {
     delete this;
+}
+
+void MainWidget::refresh()
+{
+    this->amw->refresh();
 }

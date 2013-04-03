@@ -79,12 +79,14 @@
     
   <message id="Alert.admin.welcome-tab">Bienvenue</message>
   <message id="Alert.admin.assets-tab">Serveurs</message>
-  <message id="Alert.admin.alerts-tab">Alertes</message>
+  <message id="Alert.admin.alerts-tab">Définition des alertes</message>
   <message id="Alert.admin.alert-creation-tab">Création d'alerte</message>
-  <message id="Alert.admin.alert-list-tab">Liste des alertes</message>
+  <message id="Alert.admin.alerts_list-tab">Liste des alertes</message>
   <message id="Alert.admin.users-tab">Utilisateurs</message>
   <message id="Alert.admin.medias-tab">Médias</message>
-  
+  <message id="Alert.admin.submenu_alerts-tab">Gestion des alertes</message>
+  <message id="Alert.admin.submenu_accounts-tab">Options du compte</message>
+      
   <message id="Alert.admin.title">Administration</message>
   <message id="Alert.monitoring.title">Supervision</message>
   

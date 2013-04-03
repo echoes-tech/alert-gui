@@ -5,7 +5,7 @@
 
   <!-- BaseAuth, PasswordAuth and OAuth models -->
   
-  <message id="echoes-alert-title"><img src="images/EchoesAlert.png" alt="ECHOES Alert" /></message>
+  <message id="echoes-alert-title"><h1></h1></message>
 
   <message id="Wt.Auth.error-invalid-token">The operation could not be completed: invalid token.</message>
   <message id="Wt.Auth.error-token-expired">The operation could not be completed: the token has expired.</message>

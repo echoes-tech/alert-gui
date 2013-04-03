@@ -484,21 +484,21 @@ void AuthWidget::createLoggedInView()
     
     menu->setAttributeValue("class","nav btn-group");
     
-    WMenuItem *alertMenuItem = new WMenuItem("Alertes");
-//    logoutMenuItem->clicked().connect(this, &AuthWidget::logout);
-    alertMenuItem->setAttributeValue("class","btn btn-inverse");
-    
-    WText *alertCount = new WText("5");
-    alertCount->setAttributeValue("class","label label-important");
-    WAnchor *anchorTemp = (WAnchor*)alertMenuItem->widget(0);
-    anchorTemp->addWidget(alertCount);
+//    WMenuItem *alertMenuItem = new WMenuItem("Alertes");
+////    logoutMenuItem->clicked().connect(this, &AuthWidget::logout);
+//    alertMenuItem->setAttributeValue("class","btn btn-inverse");
+//    
+//    WText *alertCount = new WText("5");
+//    alertCount->setAttributeValue("class","label label-important");
+//    WAnchor *anchorTemp = (WAnchor*)alertMenuItem->widget(0);
+//    anchorTemp->addWidget(alertCount);
     
     WMenuItem *logoutMenuItem = new WMenuItem(tr("Wt.Auth.logout"));
 //    newMenuItem->setAttributeValue("name",boost::lexical_cast<std::string>(enumPT.index()));
     logoutMenuItem->clicked().connect(this, &AuthWidget::logout);
     logoutMenuItem->setAttributeValue("class","btn btn-inverse");
     
-    menu->addItem(alertMenuItem);
+//    menu->addItem(alertMenuItem);
     menu->addItem(logoutMenuItem);
     
     bindWidget("menu",menuContainer);

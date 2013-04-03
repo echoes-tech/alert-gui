@@ -40,7 +40,7 @@ private:
     Wt::Auth::AuthWidget *authWidget;
     Wt::Auth::AuthModel *authModel;
     Wt::WText *title;
-    Wt::WContainerWidget *topContainer;
+//    Wt::WContainerWidget *topContainer;
     Wt::WHBoxLayout *topBoxLoggedInLayout;
     Wt::WVBoxLayout *topBoxLoggedOutLayout;
     Wt::WVBoxLayout *topRightLayout;
@@ -56,10 +56,7 @@ private:
     
     Wt::WAnchor *testAnchor;
     
-    AlertListWidget *alertGroupBox;
     
-    UserEditionModel *uem;
-    UserEditionWidget *uew;
 
     void initSession();
     void initAuth();
@@ -67,8 +64,7 @@ private:
     void processEnvironment();
 
     void onAuthEvent();
-    void showPage(int page);
-    void showPage(std::string subMenu, int page);
+    void showPage(int page, Enums::EMenuRoot menuRoot = Enums::main);
     void resizeContainers(bool loggedIn);
     
     Wt::WContainerWidget *initMonitoringWidget();

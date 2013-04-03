@@ -20,6 +20,11 @@ MainWidget::MainWidget(Session *session)
     sideBarContainer = new Wt::WContainerWidget();
     sideBarContainer->setId("sidebar");
     
+    Wt::WAnchor *phoneMenuAnchor = new Wt::WAnchor("#");
+    phoneMenuAnchor->setText("Menu");
+    phoneMenuAnchor->setAttributeValue("class","visible-phone");
+    sideBarContainer->insertWidget(0,phoneMenuAnchor);
+    
     contentContainer = new Wt::WContainerWidget(this);
     contentContainer->setId("content");
     
@@ -42,26 +47,16 @@ MainWidget::MainWidget(Session *session)
     alertSubmenu = new Wt::WMenu(sideBarContainer);
     Enums::EPageType *enumPTAl = new Enums::EPageType(Enums::EPageType::SUBMENU_ALERT);
     alertSubmenu->setInternalPathEnabled("/" + boost::lexical_cast<std::string>(enumPTAl->value()) +  "/");
-    sideBarContainer->widget(0)->setStyleClass("style_widget0");
+   
+//    sideBarContainer->widget(0)->setStyleClass("style_widget0");
     
     
-    alertSubmenu->parent()->setStyleClass("style_parent");
-    alertSubmenu->setStyleClass("style_objet");
+//    alertSubmenu->parent()->setStyleClass("style_parent");
+//    alertSubmenu->setStyleClass("style_objet");
     
     accountSubmenu = new Wt::WMenu(sideBarContainer);
     Enums::EPageType *enumPTAc = new Enums::EPageType(Enums::EPageType::SUBMENU_ACCOUNT);
     accountSubmenu->setInternalPathEnabled("/" + boost::lexical_cast<std::string>(enumPTAc->value()) +  "/");
-    
-//        std::ifstream ifs("resources/themes/bootstrap/js/unicorn.js");
-//        std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
-
-    //    Wt::WText * textTest = new Wt::WText("<p>ICI</p><script type='text/javascript' src='" + Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js'></script>", Wt::XHTMLUnsafeText, this);
-//        Wt::WText * textTest = new Wt::WText("<p>ICI</p></div></div><script type='text/javascript'>" + content + "</script>", Wt::XHTMLUnsafeText, this);
-//        textTest->setInline(false);
-    //    textTest->createDomElement()
-    
-    
-//    menu->itemAt(0)->insertWidget(0,textTest);
     
     createContentDiv();
     createContainerFluid();
@@ -111,6 +106,7 @@ void MainWidget::createUI()
         }
     }
     
+    
     if (menu->currentIndex() != -1)
     {
         menu->itemAt(menu->currentIndex())->select();
@@ -150,7 +146,11 @@ void MainWidget::createSubMenu(Enums::EPageType enumPT)
                 createMenuItem(*i,alertSubmenu,"");
                 createAlertPage(*i);
             }
-            menu->addMenu(enumPT.value(),alertSubmenu);
+            Wt::WMenuItem *itemMenuAlert = menu->addMenu(tr("Alert.admin." + boost::lexical_cast<std::string>(enumPT.value()) + "-tab"),alertSubmenu);
+            itemMenuAlert->setPathComponent(boost::lexical_cast<std::string>(enumPT.value()));
+            Wt::WText *labelHTML = new Wt::WText("</span><span class='label'>" + boost::lexical_cast<std::string>(alertSubmenu->items().size()) + "</span><span>" ,Wt::XHTMLUnsafeText);
+            Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)menu->items().back()->widget(0);
+            anchorInsideMenu->addWidget(labelHTML);
             break;
         }
         case Enums::EPageType::SUBMENU_ACCOUNT:
@@ -160,7 +160,11 @@ void MainWidget::createSubMenu(Enums::EPageType enumPT)
                 createMenuItem(*i,accountSubmenu,"");
                 createAccountPage(*i);
             }
-            menu->addMenu(enumPT.value(),accountSubmenu);
+            Wt::WMenuItem *itemMenuAccount = menu->addMenu(tr("Alert.admin." + boost::lexical_cast<std::string>(enumPT.value()) + "-tab"),accountSubmenu);
+            itemMenuAccount->setPathComponent(boost::lexical_cast<std::string>(enumPT.value()));
+            Wt::WText *labelHTML = new Wt::WText("</span><span class='label'>" + boost::lexical_cast<std::string>(accountSubmenu->items().size()) + "</span><span>" ,Wt::XHTMLUnsafeText);
+            Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)menu->items().back()->widget(0);
+            anchorInsideMenu->addWidget(labelHTML);
             break;
         }
         default:
@@ -220,6 +224,11 @@ void MainWidget::createAlertPage(Enums::EAlertSubmenu enumSAL)
             aew->setSession(session);
             break;
         }
+        case Enums::EAlertSubmenu::ALERT_LIST:
+        {
+            alw = new AlertListWidget(this->session);
+            break;
+        }
         default:
             break;
     }
@@ -230,7 +239,7 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
 {
     switch (enumSAC.index())
     {
-    case Enums::EAccountSubmenu::OPTION:
+        case Enums::EAccountSubmenu::OPTION:
         {
             try
             {
@@ -245,25 +254,83 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
             omw = new OptionManagementWidget(omm,this->session);
             break;
         }
+        case Enums::EAccountSubmenu::USER:
+        {
+            
+            break;
+        }
+        case Enums::EAccountSubmenu::MEDIA:
+        {
+           uew = new UserEditionWidget();
+            try
+            {
+                Wt::Dbo::Transaction transaction(*(this->session));
+                uem = new UserEditionModel(const_cast<User *>(this->session->user().get()));
+                uem->setSession(session);
+                transaction.commit();
+            }
+            catch (Wt::Dbo::Exception e)
+            {
+                Wt::log("error") << e.what();
+            }
+            uew->setModel(uem);
+            uew->setSession(session); 
+
+            break;
+        }
         default:
             break;
     }
 
 }
 
-void MainWidget::updateTitle(int index)
+// ToDo : temlate ?
+void MainWidget::updateTitle(int index, Enums::EMenuRoot menuRoot)
 {
-    for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
+    switch (menuRoot)
     {
-        if (i->index() == index)
+        case Enums::main:
         {
-            this->titleText->setText("<h1>" + tr(boost::lexical_cast<std::string>("Alert.admin.")+i->value()+boost::lexical_cast<std::string>("-tab")) + "</h1>");
+            for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
+            {
+                if (i->index() == index)
+                {
+                    this->titleText->setText("<h1>" + tr(boost::lexical_cast<std::string>("Alert.admin.")+i->value()+boost::lexical_cast<std::string>("-tab")) + "</h1>");
+                    break;
+                }
+            }
             break;
         }
+        case Enums::alerts:
+        {
+            for (Enums::EAlertSubmenu::const_iterator i = Enums::EAlertSubmenu::begin(); i != Enums::EAlertSubmenu::end(); ++i)
+            {
+                if (i->index() == index)
+                {
+                    this->titleText->setText("<h1>" + tr(boost::lexical_cast<std::string>("Alert.admin.")+i->value()+boost::lexical_cast<std::string>("-tab")) + "</h1>");
+                    break;
+                }
+            }
+            break;
+        }
+        case Enums::accounts:
+        {
+            for (Enums::EAccountSubmenu::const_iterator i = Enums::EAccountSubmenu::begin(); i != Enums::EAccountSubmenu::end(); ++i)
+            {
+                if (i->index() == index)
+                {
+                    this->titleText->setText("<h1>" + tr(boost::lexical_cast<std::string>("Alert.admin.")+i->value()+boost::lexical_cast<std::string>("-tab")) + "</h1>");
+                    break;
+                }
+            }
+            break;
+        }
+        
     }
+    
 }
 
-void MainWidget::updateBreadcrumbs()
+void MainWidget::updateBreadcrumbs(Enums::EMenuRoot menuRoot)
 {
     this->breadCrumbsContainer->removeWidget(breadCrumbsAnchor2);
     
@@ -300,8 +367,8 @@ void MainWidget::updateBreadcrumbs()
             }
             case 2:
             {
-                const Wt::WLink *test = new Wt::WLink(internalPathWithoutBlank[i-1] + "/" + internalPathSplitResult[i]);
-                breadCrumbsAnchor2->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathSplitResult[i]+boost::lexical_cast<std::string>("-tab")));
+                const Wt::WLink *test = new Wt::WLink(internalPathWithoutBlank[i-1] + "/" + internalPathWithoutBlank[i]);
+                breadCrumbsAnchor2->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<std::string>("-tab")));
                 breadCrumbsAnchor2->setLink(*test);
                 this->breadCrumbsContainer->addWidget(breadCrumbsAnchor2);
                 breadCrumbsAnchor2->setAttributeValue("class", getBreadcrumbsClass(internalPathWithoutBlank.size(),2).c_str());
@@ -333,38 +400,78 @@ std::string MainWidget::getBreadcrumbsClass(int pathSize, int level)
 
 
 // ToDo ajouter deux update poru les sous menus
-void MainWidget::updateContainerFluid(int type)
+void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
 {
     for (int i = 0 ; i < this->contentFluid->count() ; i++)
     {
         contentFluid->removeWidget(contentFluid->widget(i));
     }
     
-    switch (type)
+    switch (menuRoot)
     {
-        case Enums::EPageType::ASSET:
+        case Enums::main:
         {
-            this->contentFluid->addWidget(amw);
+            switch (type)
+            {
+                case Enums::EPageType::ASSET:
+                {
+                    this->contentFluid->addWidget(amw);
+                    break;
+                }
+                case Enums::EPageType::WELCOME:
+                {
+                    this->contentFluid->addWidget(wcw);
+                    break;
+                }
+                default:
+                    break;
+            }
             break;
         }
-        case Enums::EPageType::WELCOME:
+        case Enums::alerts:
         {
-            this->contentFluid->addWidget(wcw);
+            switch (type)
+            {
+                case Enums::EAlertSubmenu::ALERT:
+                {
+                    this->contentFluid->addWidget(aew);
+                    break;
+                }
+                case Enums::EAlertSubmenu::ALERT_LIST:
+                {
+                    this->contentFluid->addWidget(alw);
+                    break;
+                }
+                default:
+                    break;
+            }
             break;
         }
-//        case Enums::EPageType::OPTION:
-//        {
-//            this->contentFluid->addWidget(omw);
-//            break;
-//        }
-//        case Enums::EPageType::ALERT:
-//        {
-//            this->contentFluid->addWidget(aew);
-//            break;
-//        }
-        default:
-            break;
+        case Enums::accounts:
+        {
+            switch (type)
+            {
+                case Enums::EAccountSubmenu::USER:
+                {
+    //                this->contentFluid->addWidget(aew);
+                    break;
+                }
+                case Enums::EAccountSubmenu::OPTION:
+                {
+                    this->contentFluid->addWidget(omw);
+                    break;
+                }
+                case Enums::EAccountSubmenu::MEDIA:
+                {
+                    this->contentFluid->addWidget(uew);
+                    break;
+                }
+            }
+        }
+        
     }
+    
+    
 
 }
 
@@ -383,12 +490,12 @@ void MainWidget::createContentDiv()
     contentContainer->addWidget(breadCrumbsContainer);
 }
 
-void MainWidget::doActionMenu(int index)
+void MainWidget::doActionMenu(int index, Enums::EMenuRoot menuRoot)
 {
     menu->itemAt(index)->setFromInternalPath(Wt::WApplication::instance()->internalPath());
-    updateTitle(index);
-    updateBreadcrumbs();
-    updateContainerFluid(index);
+    updateTitle(index,menuRoot);
+    updateBreadcrumbs(menuRoot);
+    updateContainerFluid(index,menuRoot);
 }
 
 std::string MainWidget::getIconName(Enums::EPageType enumPT)
@@ -408,7 +515,7 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
         }
         case Enums::EPageType::SUBMENU_ALERT:
         {
-            res = "exclamation-sign";
+            res = "eye-open";
             break;
         }
         case Enums::EPageType::SUBMENU_ACCOUNT:

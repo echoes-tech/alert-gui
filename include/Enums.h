@@ -42,6 +42,13 @@ public:
         quotaSms = 2
     };
     
+    enum EMenuRoot
+    {
+        main,
+        alerts,
+        accounts
+    };
+    
     BOOST_ENUM_VALUES(EPageType, const char*,
     (WELCOME)("welcome")
     (ASSET)("assets")

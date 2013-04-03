@@ -45,7 +45,7 @@ class MainWidget : public Wt::WContainerWidget
 public:
 
   MainWidget(Session *session);
-  void doActionMenu(int index = -1);
+  void doActionMenu(int index = -1, Enums::EMenuRoot menuRoot = Enums::main);
   
   Wt::WMenu *getMenu();
   Wt::WMenu *getAlertSubmenu();
@@ -60,11 +60,11 @@ protected:
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   void createUI();
   Wt::WContainerWidget *createContentHeader();
-  void updateTitle(int index);
-  void updateBreadcrumbs();
+  void updateTitle(int index, Enums::EMenuRoot menuRoot = Enums::main);
+  void updateBreadcrumbs(Enums::EMenuRoot menuRoot = Enums::main);
   std::string getBreadcrumbsClass(int pathSize, int level);
   void createContainerFluid();
-  void updateContainerFluid(int type);
+  void updateContainerFluid(int type, Enums::EMenuRoot menuRoot = Enums::main);
   void createContentDiv();
   
   void doNothing();
@@ -85,8 +85,10 @@ protected:
   OptionManagementModel *omm;
   OptionManagementWidget *omw;
   AlertEditionModel *aem;
+  AlertListWidget *alw;
   
-  
+  UserEditionModel *uem;
+  UserEditionWidget *uew;
   
   Wt::WText *wcw;
 

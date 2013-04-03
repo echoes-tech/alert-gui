@@ -52,19 +52,19 @@ void EchoesHome::initAuth()
 
 void EchoesHome::initHeader()
 {
+//    Wt::WApplication *app = Wt::WApplication::instance();
     this->title = new Wt::WText(tr("echoes-alert-title"));
-        
-    this->topContainer = new Wt::WContainerWidget();
-    this->topContainer->setId("header");
-    
-    this->topContainer->setHeight(Wt::WLength(78));
+    this->title->setId("header");
+
 
     this->topBoxLoggedInLayout = new Wt::WHBoxLayout();
     this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
     this->topRightLayout = new Wt::WVBoxLayout();
     this->resizeContainers(this->session->login().loggedIn());
 
-    this->addWidget(this->topContainer);
+    this->addWidget(this->title);
+    
+//    app->root()->addWidget(this->title);
 }
 
 Wt::WContainerWidget* EchoesHome::initMonitoringWidget()
@@ -121,26 +121,7 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     {
         Wt::log("error") << e.what();
     }
-    
 
-    
-    alertGroupBox = new AlertListWidget(this->session);
-    
-    // user edition widget
-    uew = new UserEditionWidget();
-    try
-    {
-        Wt::Dbo::Transaction transaction(*(this->session));
-        uem = new UserEditionModel(const_cast<User *>(this->session->user().get()));
-        uem->setSession(session);
-        transaction.commit();
-    }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::log("error") << e.what();
-    }
-    uew->setModel(uem);
-    uew->setSession(session);
 
     return res;
 }
@@ -168,16 +149,19 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
             for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
             {
     //            std::string test = i->value();
-                if (internalPathWithoutBlank[0].compare(i->value()) == 0)
+                if (!boost::starts_with(i->value(), "submenu_"))
                 {
-                    if (this->mainPageWidget->getMenu()->currentIndex() != i->index())
+                    if (internalPathWithoutBlank[0].compare(i->value()) == 0)
                     {
-                        this->mainPageWidget->getMenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                        if (this->mainPageWidget->getMenu()->currentIndex() != i->index())
+                        {
+                            this->mainPageWidget->getMenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                        }
+                        UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
+                        showPage(i->index());
+                        displayed = true;
+                        break;
                     }
-                    UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
-                    showPage(i->index());
-                    displayed = true;
-                    break;
                 }
             }
             if ((!displayed) && (boost::starts_with(internalPathWithoutBlank[0], "submenu_")))
@@ -197,7 +181,7 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
                         this->mainPageWidget->getAlertSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
                     }
                     UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
-                    showPage(internalPathWithoutBlank[0],i->index());
+                    showPage(i->index(), Enums::alerts);
                     displayed = true;
                     break;
                 }
@@ -213,7 +197,7 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
                             this->mainPageWidget->getAccountSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
                         }
                         UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
-                        showPage(internalPathWithoutBlank[0],i->index());
+                        showPage(i->index(), Enums::accounts);
                         displayed = true;
                         break;
                     }
@@ -244,43 +228,34 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
             }
             showPage(Enums::EPageType::WELCOME);
         }
-        std::ifstream ifs(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
-        std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
-
-        this->doJavaScript(content);
+//        std::ifstream ifs(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
+//        std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+//
+//        this->doJavaScript(content);
     }
 }
 
 
-void EchoesHome::showPage(int type)
+void EchoesHome::showPage(int type, Enums::EMenuRoot menuRoot)
 {
     if (this->mainPageWidget->isHidden())
     {
         this->mainPageWidget->show();
     }
-    this->mainPageWidget->doActionMenu(type);
-}
-
-void EchoesHome::showPage(std::string subMenu,int type)
-{
-    if (this->mainPageWidget->isHidden())
-    {
-        this->mainPageWidget->show();
-    }
-    this->mainPageWidget->doActionMenu(type);
+    this->mainPageWidget->doActionMenu(type,menuRoot);
 }
 
 void EchoesHome::resizeContainers(bool loggedIn)
 {
     if (loggedIn)
     {
-        this->topBoxLoggedInLayout = new Wt::WHBoxLayout();
+//        this->topBoxLoggedInLayout = new Wt::WHBoxLayout();
         
-        this->topBoxLoggedOutLayout->removeWidget(title);
-        this->topBoxLoggedOutLayout->removeWidget(authWidget);
-        this->topBoxLoggedInLayout->addWidget(title,0,Wt::AlignMiddle);
+//        this->topBoxLoggedOutLayout->removeWidget(title);
+//        this->topBoxLoggedOutLayout->removeWidget(authWidget);
+//        this->topBoxLoggedInLayout->addWidget(title);
         
-        this->title->setHeight(Wt::WLength(81));
+//        this->title->setHeight(Wt::WLength(81));
         this->authWidget->setHeight(Wt::WLength(20));
 //        this->links->setWidth(Wt::WLength(200));
         this->authWidget->setWidth(Wt::WLength(300));
@@ -291,24 +266,25 @@ void EchoesHome::resizeContainers(bool loggedIn)
         this->addWidget(this->authWidget);
         
 //        this->topRightLayout->addWidget(this->links, 0, Wt::AlignRight);
-        this->topBoxLoggedInLayout->addLayout(this->topRightLayout, Wt::AlignRight);
-        this->title->setHeight(Wt::WLength(81));
+//        this->topBoxLoggedInLayout->addLayout(this->topRightLayout, Wt::AlignRight);
+//        this->title->setHeight(Wt::WLength(81));
         this->authWidget->setHeight(Wt::WLength(20));
-        this->topContainer->setLayout(this->topBoxLoggedInLayout);
-        this->topContainer->setHeight(Wt::WLength(94));
+//        this->topContainer->setLayout(this->topBoxLoggedInLayout);
+//        this->topContainer->setHeight(Wt::WLength(94));
     }
     else
     {
         this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
-        this->topBoxLoggedInLayout->removeWidget(this->title);
+//        this->topBoxLoggedInLayout->removeWidget(this->title);
 //        this->topBoxLoggedInLayout->removeWidget(this->authWidget);
         this->removeWidget(this->authWidget);
-        this->topBoxLoggedOutLayout->addWidget(this->title,1,Wt::AlignCenter);
-        this->title->setHeight(Wt::WLength(81));
+//        this->topBoxLoggedOutLayout->addWidget(this->title);
+//        this->title->setHeight(Wt::WLength(81));
         this->authWidget->setHeight(Wt::WLength(320));
-        this->topBoxLoggedOutLayout->addWidget(this->authWidget,1,Wt::AlignCenter);
-        this->topContainer->setLayout(this->topBoxLoggedOutLayout);
-        this->topContainer->setHeight(Wt::WLength(400));
+//        this->topBoxLoggedOutLayout->addWidget(this->authWidget,1,Wt::AlignCenter);
+//        this->topContainer->setLayout(this->topBoxLoggedOutLayout);
+//        this->topContainer->setHeight(Wt::WLength(400));
+        this->addWidget(this->authWidget);
     }
 }
 
@@ -333,7 +309,7 @@ void EchoesHome::onAuthEvent()
 
 void EchoesHome::refresh()
 {
-    this->alertGroupBox->refresh();
+//    this->alertGroupBox->refresh();
     if (this->mainPageWidget->aew->isCreated())
     {
         this->mainPageWidget->aew->updateServerSelectionBox(this->session->user().id());

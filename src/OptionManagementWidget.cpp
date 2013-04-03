@@ -132,5 +132,5 @@ void OptionManagementWidget::askSms()
     mailMessage.addHtmlBody(mail);
     session->auth().sendMail(mailMessage);
     this->refresh();
-    Wt::WMessageBox::show(tr("Alert.option.ask-sms-title"),tr("Alert.asset.ask-sms"),Wt::Ok);
+    Wt::WMessageBox::show(tr("Alert.option.ask-sms-title"),tr("Alert.option.ask-sms"),Wt::Ok);
 }

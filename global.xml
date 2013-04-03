@@ -3,6 +3,92 @@
 
   <message id="welcome-text">
     <p>Welcome on beta version of ECHOES Alert !</p>
+    
+    <h2>Beta 3</h2>
+    <p>11/03/2012</p>
+    
+    <p>
+        <ul>
+            <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge to ask everything you need.</a></li>
+            <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Assistance forum.</a></li>         
+        </ul>
+        
+        <ul>
+            <li> [API] New Features
+                <ul>
+                    <li>RESTful compliant</li>
+                    <li>Packages management system</li>    
+                </ul>
+            </li>
+            <br />
+            <li> [Engine] New feature
+                <ul>
+                    <li>Alerts about textual pieces of information</li>
+                </ul>
+            </li>
+            <br />
+            <li> [GUI] Bugfixes
+                <ul>
+                    <li>Impossible to create alerts in some cases</li>
+                    <li>Impossible to link user and organisation in some cases</li>    
+                </ul>
+            </li>
+            <br />
+            <li> [Install script] Evolutions / New features
+                <ul>
+                    <li>Uses API</li>
+                    <li>Uses openssl binary instead of wget (use of PUT method)</li>
+                    <li>Help added</li>
+                </ul>
+            </li>
+            <br />
+            <li> [Probe] Bugfixes / New features
+                <ul>
+                    <li>Memory leaks deleted</li>
+                    <li>SNMP addon</li>
+                    <li>MySQL Addon</li>
+                    <li>Missing libraries for CentOS 5 added</li>
+                    <li>Bugfix library SNMP : multithreading</li>
+                </ul>
+            </li>
+            <br />
+            <li> [Deployment] New features
+                <ul>
+                    <li>Automatic deployment process</li>
+                    <li>New key process indicators about development</li>
+                </ul>
+            </li>
+            <br />
+            <li> <b>Major changes in next release (April ?)</b>
+                <ul>
+                    <li>Bootstrap theme engine integration</li>
+                    <li>Alerts about correlated pieces of information</li>
+                    <li>Alert customization depending on the user job</li>
+                    <li>All our resources will be implemented within the API</li>
+                    <li>New plugins</li>
+                </ul>
+            </li>
+            
+        </ul>
+    </p>
+    
+    <hr></hr>
+    
+    <h2>Beta 2</h2>
+    <p>16/01/2012</p>
+    <p>
+        Beta version opened all day.
+        <ul>
+            <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge to ask everything you need.</a></li>
+            <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Assistance forum.</a></li>         
+        </ul>
+        <ul>
+            <li>[ECHOES Alert] Various bugfixes</li>
+        </ul>
+    </p>
+    
+    <hr></hr>
+    
     <h2>Beta</h2>
     <p>18/12/2012</p>
     <p>

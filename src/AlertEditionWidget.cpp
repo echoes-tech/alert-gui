@@ -950,7 +950,8 @@ void AlertEditionWidget::addAlert()
         
         Wt::Dbo::ptr<Alert> alePtr = session->add<Alert>(alert);
         
-        alePtr.modify()->assets.insert(assetPtr);
+        // FZEMOKFZEMOKFOEK
+//        alePtr.modify()->assets.insert(assetPtr);
         
         for (std::map<int,long long>::const_iterator i = mapAlertMediaSpecializationIdTableView.begin(); i != mapAlertMediaSpecializationIdTableView.end(); ++i)
         {

@@ -38,7 +38,7 @@ void AssetManagementWidget::createUI()
     mainForm->bindWidget("asset-name", createFormWidget(AssetManagementModel::AssetName));
     
     Wt::WPushButton *addAssetButton = new Wt::WPushButton(tr("Alert.asset.add-asset-button"));
-    addAssetButton->setAttributeValue("class","btn btn-success");
+    addAssetButton->setAttributeValue("class","btn btn-info");
     mainForm->bindWidget("add-asset-button", addAssetButton);
     addAssetButton->clicked().connect(boost::bind(&AssetManagementWidget::addAsset, this));
 
@@ -49,17 +49,22 @@ void AssetManagementWidget::createUI()
     linksTable->addStyleClass("table");
     linksTable->addStyleClass("table-bordered");
     linksTable->addStyleClass("table-striped");
-    linksTable->addStyleClass("span6");
     
     int row = 0;
 
 //    linksTable->setStyleClass("table-list");
     
-    linksTable->setHeaderCount(1,Wt::Horizontal);
+    linksTable->setHeaderCount(2,Wt::Horizontal);
+    linksTable->elementAt(row, 0)->setColumnSpan(2);
+    linksTable->columnAt(1)->setStyleClass("asset-action-width");
     
-    
-    linksTable->elementAt(row, 0)->setColumnSpan(3);
-    new Wt::WText(tr("Alert.asset.add-asset-form"),linksTable->elementAt(row, 0));
+    Wt::WText *tableTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-hdd'></i></span><h5>"+ tr("Alert.asset.add-asset-form") + "</h5></div>",linksTable->elementAt(row, 0));
+    linksTable->elementAt(row, 0)->setPadding(*(new Wt::WLength("0px")));
+    tableTitle->setTextFormat(Wt::XHTMLUnsafeText);
+    ++row;
+    new Wt::WText(tr("Alert.asset.asset-name"),linksTable->elementAt(row, 0));
+    new Wt::WText(tr("Alert.asset.asset-action"),linksTable->elementAt(row, 1));
+     
     
     try
     {
@@ -90,20 +95,30 @@ void AssetManagementWidget::createUI()
                     new Wt::WLabel(Wt::WString::tr("Alert.asset.file-not-generated"),linksTable->elementAt(row, 1));
                     new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
 
-                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 2));
+                    Wt::WPushButton *delButton = new Wt::WPushButton("", linksTable->elementAt(row, 1));
                     delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
                 }
                 else
                 {
-                    Wt::WAnchor *anchor = new Wt::WAnchor(file,tr("Alert.asset.download-script"),linksTable->elementAt(row, 1));
+                    Wt::WAnchor *anchor = new Wt::WAnchor(file,"",linksTable->elementAt(row, 1));
+                    anchor->setTextFormat(Wt::XHTMLUnsafeText);
+                    anchor->setText("<i class='icon-download icon-white'></i> " + tr("Alert.asset.download-script"));
+                    anchor->addStyleClass("btn");
+                    anchor->addStyleClass("btn-info");
                     anchor->setTarget(Wt::TargetNewWindow);
                     anchor->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this,file->fileName()));
 
                     new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
-
-                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 2));
+                    
+                    Wt::WText *nbspText = new Wt::WText("&nbsp;", linksTable->elementAt(row, 1));
+                    nbspText->setTextFormat(Wt::XHTMLUnsafeText);
+                    
+                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 1));
                     delButton->setAttributeValue("class","btn btn-danger");
                     
+                    delButton->setTextFormat(Wt::XHTMLUnsafeText);
+                    delButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.asset.delete-asset"));
+
                     delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
                 }
             }
@@ -152,6 +167,8 @@ Wt::WFormWidget *AssetManagementWidget::createFormWidget(Wt::WFormModel::Field f
 
 void AssetManagementWidget::addAsset()
 {
+    doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "').toggleClass('error',false)");
+    doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "-hint').hide()");
     try
     {
         Wt::Dbo::Transaction transaction(*session);
@@ -182,7 +199,9 @@ void AssetManagementWidget::addAsset()
         }
         else
         {
-            Wt::WMessageBox::show(tr("Alert.asset.asset-name-invalid"),tr("Alert.asset.asset-name-invalid"),Wt::Ok);
+            mainForm->updateModelField(model_, AssetManagementModel::AssetName);
+            doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "').toggleClass('error')");
+            doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "-hint').show()");
         }
         transaction.commit();  
     }

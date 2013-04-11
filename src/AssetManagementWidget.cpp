@@ -41,6 +41,7 @@ void AssetManagementWidget::createUI()
     addAssetButton->setAttributeValue("class","btn btn-info");
     mainForm->bindWidget("add-asset-button", addAssetButton);
     addAssetButton->clicked().connect(boost::bind(&AssetManagementWidget::addAsset, this));
+    
 
     mainForm->updateModel(model_);
     mainForm->refresh();
@@ -65,6 +66,11 @@ void AssetManagementWidget::createUI()
     new Wt::WText(tr("Alert.asset.asset-name"),linksTable->elementAt(row, 0));
     new Wt::WText(tr("Alert.asset.asset-action"),linksTable->elementAt(row, 1));
      
+    
+//    ++row;
+//    linksTable->elementAt(row,0)->addWidget(createFormWidget(AssetManagementModel::AssetName));
+//    Wt::WPushButton *addAssetButton = new Wt::WPushButton(tr("Alert.asset.add-asset-button"),linksTable->elementAt(row,1));
+//    addAssetButton->setAttributeValue("class","btn btn-info");
     
     try
     {

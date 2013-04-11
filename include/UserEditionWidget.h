@@ -30,19 +30,6 @@
 
 #include <memory>
 
-/*! \class RegistrationWidget Wt/Auth/RegistrationWidget
- *  \brief A registration widget.
- *
- * This implements a widget which allows a new user to register.  The
- * widget renders the <tt>"Wt.Auth.template.registration"</tt>
- * template. and uses a RegistrationModel for the actual registration
- * logic.
- *
- * Typically, you may want to specialize this widget to ask for other
- * information.
- *
- * \ingroup auth
- */
 class UserEditionWidget : public Wt::WTemplateFormView
 {
 public:

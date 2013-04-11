@@ -99,10 +99,7 @@
         -->
         <!-- User-form-right -->
         <div class="User-form User-auth-login">
-            <h2>${tr:Alert.User.Edition.media-title}</h2>
-            <p>${tr:Wt.Auth.login-form-info}</p>
       
-            <hr></hr>
             <div class="User-fields">
                 <label for="${id:media-email}">${media-email-label}
                     ${media-email-info class="User-info"}
@@ -136,11 +133,11 @@
             
         </div>
 
-        <hr></hr>
+<!--        <hr></hr>
         <div class="User-buttons">
             
             ${save-button} ${cancel-button}
-        </div>
+        </div>-->
 
     </message>
 

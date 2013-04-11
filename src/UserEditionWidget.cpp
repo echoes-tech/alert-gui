@@ -40,47 +40,47 @@ Wt::WFormWidget *UserEditionWidget::createFormWidget(UserEditionModel::Field fie
 {
     Wt::WFormWidget *result = 0;
 
-    if (field == UserEditionModel::FirstName)
-    {
-        result = new Wt::WLineEdit();
-//        result->changed().connect(boost::bind(&RegistrationWidget::checkOrganization, this));
-    }
-    else if (field == UserEditionModel::LastName)
-    {
-        result = new Wt::WLineEdit();
-    }
-    else if (field == UserEditionModel::Email)
-    {
-        result = new Wt::WLineEdit();
-    }
-    else if (field == UserEditionModel::ChoosePasswordField)
-    {
-        Wt::WLineEdit *p = new Wt::WLineEdit();
-        p->setEchoMode(Wt::WLineEdit::Password);
-//        p->keyWentUp().connect
-//                (boost::bind(&RegistrationWidget::checkPassword, this));
-//        p->changed().connect
-//                (boost::bind(&RegistrationWidget::checkPassword, this));
-        result = p;
-    }
-    else if (field == UserEditionModel::RepeatPasswordField)
-    {
-        Wt::WLineEdit *p = new Wt::WLineEdit();
-        p->setEchoMode(Wt::WLineEdit::Password);
-//        p->changed().connect
-//                (boost::bind(&RegistrationWidget::checkPassword2, this));
-        result = p;
-    }
-    else if (field == UserEditionModel::Role)
-    {
-        Wt::WComboBox *combo = new Wt::WComboBox();
-        result = combo;
-    }
-    else if (field == UserEditionModel::State)
-    {
-        result = new Wt::WComboBox();
-    }
-    else if (field == UserEditionModel::MediaEMail)
+//    if (field == UserEditionModel::FirstName)
+//    {
+//        result = new Wt::WLineEdit();
+////        result->changed().connect(boost::bind(&RegistrationWidget::checkOrganization, this));
+//    }
+//    else if (field == UserEditionModel::LastName)
+//    {
+//        result = new Wt::WLineEdit();
+//    }
+//    else if (field == UserEditionModel::Email)
+//    {
+//        result = new Wt::WLineEdit();
+//    }
+//    else if (field == UserEditionModel::ChoosePasswordField)
+//    {
+//        Wt::WLineEdit *p = new Wt::WLineEdit();
+//        p->setEchoMode(Wt::WLineEdit::Password);
+////        p->keyWentUp().connect
+////                (boost::bind(&RegistrationWidget::checkPassword, this));
+////        p->changed().connect
+////                (boost::bind(&RegistrationWidget::checkPassword, this));
+//        result = p;
+//    }
+//    else if (field == UserEditionModel::RepeatPasswordField)
+//    {
+//        Wt::WLineEdit *p = new Wt::WLineEdit();
+//        p->setEchoMode(Wt::WLineEdit::Password);
+////        p->changed().connect
+////                (boost::bind(&RegistrationWidget::checkPassword2, this));
+//        result = p;
+//    }
+//    else if (field == UserEditionModel::Role)
+//    {
+//        Wt::WComboBox *combo = new Wt::WComboBox();
+//        result = combo;
+//    }
+//    else if (field == UserEditionModel::State)
+//    {
+//        result = new Wt::WComboBox();
+//    }
+    if (field == UserEditionModel::MediaEMail)
     {
         result = new Wt::WLineEdit();
         result->changed().connect(boost::bind(&UserEditionWidget::checkMediaEmail, this));
@@ -91,10 +91,10 @@ Wt::WFormWidget *UserEditionWidget::createFormWidget(UserEditionModel::Field fie
         result = new Wt::WLineEdit();
         result->changed().connect(boost::bind(&UserEditionWidget::checkMediaSms, this));
     }
-    else if (field == UserEditionModel::MediaMobileApp)
-    {
-        result = new Wt::WLineEdit();
-    }
+//    else if (field == UserEditionModel::MediaMobileApp)
+//    {
+//        result = new Wt::WLineEdit();
+//    }
 
     return result;
 }
@@ -123,6 +123,101 @@ void UserEditionWidget::update()
 
     if (!created_)
     {
+//        Wt::WTable *mediaEmailTable = new Wt::WTable();
+//        mediaEmailTable->addStyleClass("table");
+//        mediaEmailTable->addStyleClass("table-bordered");
+//        mediaEmailTable->addStyleClass("table-striped");
+//    
+//        int row = 0;
+//
+//        mediaEmailTable->setHeaderCount(2,Wt::Horizontal);
+//        mediaEmailTable->elementAt(row, 0)->setColumnSpan(2);
+//    
+//    Wt::WText *tableTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-hdd'></i></span><h5>"+ tr("Alert.asset.add-asset-form") + "</h5></div>",linksTable->elementAt(row, 0));
+//    linksTable->elementAt(row, 0)->setPadding(*(new Wt::WLength("0px")));
+//    tableTitle->setTextFormat(Wt::XHTMLUnsafeText);
+//    ++row;
+//    new Wt::WText(tr("Alert.asset.asset-name"),linksTable->elementAt(row, 0));
+//    new Wt::WText(tr("Alert.asset.asset-action"),linksTable->elementAt(row, 1));
+//     
+//    
+////    ++row;
+////    linksTable->elementAt(row,0)->addWidget(createFormWidget(AssetManagementModel::AssetName));
+////    Wt::WPushButton *addAssetButton = new Wt::WPushButton(tr("Alert.asset.add-asset-button"),linksTable->elementAt(row,1));
+////    addAssetButton->setAttributeValue("class","btn btn-info");
+//    
+//    try
+//    {
+//        Wt::log("info") << "Debug : before transaction";
+//        Wt::Dbo::Transaction transaction(*this->session);
+//        //TODO : don't understand why the two lines below are needed, clean this
+//        Wt::Dbo::ptr<User> tempUser = session->find<User>().where("\"USR_ID\" = ?").bind(session->user().id());
+//        Wt::log("info") << "Debug : user found" << session->user().id();
+//        if (tempUser)
+//        {
+//            Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
+//    //        Wt::log("info") << "Debug : " << session->user().get()->currentOrganization.id();
+//            std::string queryString =  "select ast from \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN" 
+//                                        " ("
+//                                        "    SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" WHERE \"PRB_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(tempUser->currentOrganization.id()) +
+//                                        ")"
+//                                        " AND \"AST_DELETE\" IS NULL";
+//            Wt::log("info") << "Debug : " << queryString ;
+//            Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > resQuery = session->query<Wt::Dbo::ptr<Asset> >(queryString);
+//
+//            Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > listAssets = resQuery.resultList();
+//            for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = listAssets.begin(); i != listAssets.end(); ++i) 
+//            {
+//                ++row;
+//                Wt::WFileResource *file = generateScript(i->id(),i->get()->name);
+//                if (file == NULL)
+//                {
+//                    new Wt::WLabel(Wt::WString::tr("Alert.asset.file-not-generated"),linksTable->elementAt(row, 1));
+//                    new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
+//
+//                    Wt::WPushButton *delButton = new Wt::WPushButton("", linksTable->elementAt(row, 1));
+//                    delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
+//                }
+//                else
+//                {
+//                    Wt::WAnchor *anchor = new Wt::WAnchor(file,"",linksTable->elementAt(row, 1));
+//                    anchor->setTextFormat(Wt::XHTMLUnsafeText);
+//                    anchor->setText("<i class='icon-download icon-white'></i> " + tr("Alert.asset.download-script"));
+//                    anchor->addStyleClass("btn");
+//                    anchor->addStyleClass("btn-info");
+//                    anchor->setTarget(Wt::TargetNewWindow);
+//                    anchor->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this,file->fileName()));
+//
+//                    new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
+//                    
+//                    Wt::WText *nbspText = new Wt::WText("&nbsp;", linksTable->elementAt(row, 1));
+//                    nbspText->setTextFormat(Wt::XHTMLUnsafeText);
+//                    
+//                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 1));
+//                    delButton->setAttributeValue("class","btn btn-danger");
+//                    
+//                    delButton->setTextFormat(Wt::XHTMLUnsafeText);
+//                    delButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.asset.delete-asset"));
+//
+//                    delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
+//                }
+//            }
+//        }
+//        transaction.commit();
+//    }
+//    catch (Wt::Dbo::Exception e)
+//    {
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("1"),Wt::Ok);
+//        Wt::log("error") << "[AssetManagementWidget] " << e.what();
+//    }
+//        
+//        
+//        
+        
+        
+        
+        
+        
         Wt::WPushButton *addButtonEmail = new Wt::WPushButton(tr("Alert.user.edition.add-button"));
         Wt::WPushButton *deleteButtonEmail = new Wt::WPushButton(tr("Alert.user.edition.delete-button"));
 
@@ -246,11 +341,7 @@ void UserEditionWidget::deleteMedia(int medId, Wt::WSelectionBox *sBox)
         session->execute("DELETE FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_VALUE\" = \'" + sBox->valueText().toUTF8() + "\'"
                          " AND \"MEV_MED_MED_ID\" = " + boost::lexical_cast<std::string>(medId)
                          + " AND \"MEV_USR_USR_ID\" = " + boost::lexical_cast<std::string>(session->user().id()));
-//        Wt::Dbo::ptr<MediaValue> ptdMevToDelete = session->find<MediaValue>().where("\"MEV_VALUE\" = ?").bind(sBox->valueText())
-//                                    .where("\"MEV_MED_MED_ID\" = ?").bind(medId)
-//                                    .where("\"MEV_USR_USR_ID\" = ?").bind(model_->user->self().id())
-//                                    .limit(1);
-//        ptdMevToDelete.remove();
+
         transaction.commit();
         UserActionManagement::registerUserAction(Enums::del,Constants::T_MEDIA_VALUE_MEV,medId);
     }

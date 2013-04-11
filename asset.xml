@@ -33,7 +33,7 @@
         <br />
         <div class="Probe-form">
 
-            <p>${tr:Alert.asset.asset-form-info}</p>
+            <div class ="alert alert-info">${tr:Alert.asset.asset-form-info}</div>
             <div class = "clear"></div>
        
             <div id="asset-name" class="control-group">

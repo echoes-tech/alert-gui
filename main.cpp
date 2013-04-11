@@ -36,27 +36,42 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap-responsive.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap.css");
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.login.css");
+    
 
     //    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/colorpicker.css");
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/jquery.gritter.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/jquery.gritter.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.grey.css");
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/datepicker.css");
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/fullcalendar.css");
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/uniform.css");
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/select2.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/jquery-ui.css");
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/fullcalendar.css");
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/uniform.css");
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/select2.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.main.css");
     
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/echoes-alert-custom.css");
        
     
-//    app->requireJQuery(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.js");
-    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
-    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.ui.custom.js");
+    
+    
+    
+    
+    
     
     Wt::WBootstrapTheme *theme = new Wt::WBootstrapTheme();
 
     app->setTheme(theme);
+    
+    app->requireJQuery(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.js");
+    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.peity.js");
+    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.gritter.js");
+//    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.ui.custom.js");
+    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery-ui.custom.js");
+    
+    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/bootstrap.js");
+    
+    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
+    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.interface.js");
+    
+//    app->require("http://twitter.github.io/bootstrap/assets/js/application.js");
     
     new EchoesHome(app->root());
 

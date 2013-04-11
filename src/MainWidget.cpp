@@ -101,22 +101,24 @@ void MainWidget::createUI()
         else
         {
             createSubMenu(*i);
-            menu->items().back()->setStyleClass("submenu");
-            Wt::WText *iconHTML = new Wt::WText("</span><i class='icon icon-" + getIconName(*i) + "'></i><span>",Wt::XHTMLUnsafeText);
-            Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)menu->items().back()->widget(0);
-            anchorInsideMenu->insertWidget(0,iconHTML);
+//            Wt::WMenuItem *item;
+//            item->setAttributeValue("class", "submenu");
+//            menu->items().back()->setAttributeValue("class", "submenu");
+//            Wt::WText *iconHTML = new Wt::WText("</span><i class='icon icon-" + getIconName(*i) + "'></i><span>",Wt::XHTMLUnsafeText);
+//            Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)menu->items().back()->widget(0);
+//            anchorInsideMenu->insertWidget(0,iconHTML);
         }
     }
     
     
-    if (menu->currentIndex() != -1)
-    {
-        menu->itemAt(menu->currentIndex())->select();
-    }
-    else 
-    {
-        menu->itemAt(0)->select();
-    }
+//    if (menu->currentIndex() != -1)
+//    {
+//        menu->itemAt(menu->currentIndex())->select();
+//    }
+//    else 
+//    {
+//        menu->itemAt(0)->select();
+//    }
 
 }
 
@@ -138,6 +140,8 @@ void MainWidget::doNothing()
 
 void MainWidget::createSubMenu(Enums::EPageType enumPT)
 {
+    Wt::WMenuItem *itemMenu;
+    Wt::WText *labelHTML;
     switch (enumPT.index())
     {
         case Enums::EPageType::SUBMENU_ALERT:
@@ -147,11 +151,10 @@ void MainWidget::createSubMenu(Enums::EPageType enumPT)
                 createMenuItem(*i,alertSubmenu,"");
                 createAlertPage(*i);
             }
-            Wt::WMenuItem *itemMenuAlert = menu->addMenu(tr("Alert.admin." + boost::lexical_cast<std::string>(enumPT.value()) + "-tab"),alertSubmenu);
-            itemMenuAlert->setPathComponent(boost::lexical_cast<std::string>(enumPT.value()));
-            Wt::WText *labelHTML = new Wt::WText("</span><span class='label'>" + boost::lexical_cast<std::string>(alertSubmenu->items().size()) + "</span><span>" ,Wt::XHTMLUnsafeText);
-            Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)menu->items().back()->widget(0);
-            anchorInsideMenu->addWidget(labelHTML);
+            
+            
+            itemMenu = menu->addMenu(tr("Alert.admin." + boost::lexical_cast<std::string>(enumPT.value()) + "-tab"),alertSubmenu);
+            labelHTML = new Wt::WText("</span><span class='label'>" + boost::lexical_cast<std::string>(alertSubmenu->items().size()) + "</span><span>" ,Wt::XHTMLUnsafeText);
             break;
         }
         case Enums::EPageType::SUBMENU_ACCOUNT:
@@ -161,16 +164,19 @@ void MainWidget::createSubMenu(Enums::EPageType enumPT)
                 createMenuItem(*i,accountSubmenu,"");
                 createAccountPage(*i);
             }
-            Wt::WMenuItem *itemMenuAccount = menu->addMenu(tr("Alert.admin." + boost::lexical_cast<std::string>(enumPT.value()) + "-tab"),accountSubmenu);
-            itemMenuAccount->setPathComponent(boost::lexical_cast<std::string>(enumPT.value()));
-            Wt::WText *labelHTML = new Wt::WText("</span><span class='label'>" + boost::lexical_cast<std::string>(accountSubmenu->items().size()) + "</span><span>" ,Wt::XHTMLUnsafeText);
-            Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)menu->items().back()->widget(0);
-            anchorInsideMenu->addWidget(labelHTML);
+            itemMenu = menu->addMenu(tr("Alert.admin." + boost::lexical_cast<std::string>(enumPT.value()) + "-tab"),accountSubmenu);
+            labelHTML = new Wt::WText("</span><span class='label'>" + boost::lexical_cast<std::string>(accountSubmenu->items().size()) + "</span><span>" ,Wt::XHTMLUnsafeText);
             break;
         }
         default:
             break;
     }
+    itemMenu->setPathComponent(boost::lexical_cast<std::string>(enumPT.value()));
+    Wt::WText *iconHTML = new Wt::WText("</span><i class='icon icon-" + getIconName(enumPT) + "'></i><span>",Wt::XHTMLUnsafeText);
+    Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)itemMenu->widget(0);
+    anchorInsideMenu->insertWidget(0,iconHTML);
+    anchorInsideMenu->addWidget(labelHTML);
+    itemMenu->addStyleClass("submenu",true);
 }
 
 void MainWidget::createPage(Enums::EPageType enumPT)
@@ -494,6 +500,7 @@ void MainWidget::createContentDiv()
 void MainWidget::doActionMenu(int index, Enums::EMenuRoot menuRoot)
 {
     menu->itemAt(index)->setFromInternalPath(Wt::WApplication::instance()->internalPath());
+    // ToDo open the menu if necessary
     updateTitle(index,menuRoot);
     updateBreadcrumbs(menuRoot);
     updateContainerFluid(index,menuRoot);

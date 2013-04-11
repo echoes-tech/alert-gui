@@ -212,11 +212,6 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
         
         
         
-//        if ((!displayed) && (internalPathWithoutBlank[0].compare("submenu") == 0))
-//        {
-//            doJavaScript("alert('s');");
-//            displayed = true;
-//        }
         if (!displayed)
         {
             UserActionManagement::registerUserAction(Enums::display,"/welcome/ (default)",0);
@@ -227,10 +222,7 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
             }
             showPage(Enums::EPageType::WELCOME);
         }
-//        std::ifstream ifs(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
-//        std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
-//
-//        this->doJavaScript(content);
+
     }
 }
 

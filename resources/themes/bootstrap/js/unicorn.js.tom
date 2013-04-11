@@ -7,8 +7,8 @@ $(document).ready(function(){
 	
 	
 	// === Sidebar navigation === //
-	
-	$(document.body).on('click','.submenu > a',function(e)
+	$('.submenu > a').live('click',function(e)
+	//$('.submenu').live('click','a',function(e)
 	{
 		e.preventDefault();
 		var submenu = $(this).siblings('ul');
@@ -39,7 +39,7 @@ $(document).ready(function(){
 	
 	var ul = $('#sidebar > ul');
 	
-	$(document.body).on('click','#sidebar > a',function(e)
+	$('#sidebar > a').live('click',function(e)
 	{
 		e.preventDefault();
 		var sidebar = $('#sidebar');
@@ -86,29 +86,12 @@ $(document).ready(function(){
 	}
 	
 	// === Tooltips === //
-	/*$('.tip').tooltip();	
+	$('.tip').tooltip();	
 	$('.tip-left').tooltip({ placement: 'left' });	
 	$('.tip-right').tooltip({ placement: 'right' });	
 	$('.tip-top').tooltip({ placement: 'top' });	
-	$('.tip-bottom').tooltip({ placement: 'bottom' };*/
-
-	/*$('body').tooltip({
-	    selector: '[rel=tooltipleft]',
-	    placement: 'left'
-	});
-
-	$('body').tooltip({
-	    selector: '[rel=tooltip]'
-	});*/
-
-	$(document).on('mouseenter','[rel=tooltip]', function(){
-	    $(this).tooltip('show');
-	});
-
-	$(document).on('mouseleave','[rel=tooltip]', function(){
-	    $(this).tooltip('hide');
-	});
-
+	$('.tip-bottom').tooltip({ placement: 'bottom' });	
+	
 	// === Search input typeahead === //
 	$('#search input[type=text]').typeahead({
 		source: ['Dashboard','Form elements','Common Elements','Validation','Wizard','Buttons','Icons','Interface elements','Support','Calendar','Gallery','Reports','Charts','Graphs','Widgets'],
@@ -126,7 +109,7 @@ $(document).ready(function(){
 	}
 	
 	// === Style switcher === //
-	/*$('#style-switcher i').click(function()
+	$('#style-switcher i').live('click',function()
 	{
 		if($(this).hasClass('open'))
 		{
@@ -141,11 +124,11 @@ $(document).ready(function(){
 		$(this).toggleClass('icon-arrow-right');
 	});
 	
-	$('#style-switcher a').click(function()
+	$('#style-switcher a').live('click',function()
 	{
 		var style = $(this).attr('href').replace('#','');
 		$('.skin-color').attr('href','css/unicorn.'+style+'.css');
 		$(this).siblings('a').css({'border-color':'transparent'});
 		$(this).css({'border-color':'#aaaaaa'});
-	});*/
+	});
 });

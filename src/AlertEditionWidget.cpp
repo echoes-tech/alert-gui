@@ -104,12 +104,6 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(Wt::WFormModel::Field fiel
         result = new Wt::WLineEdit();
         result->changed().connect(boost::bind(&AlertEditionWidget::checkThresholdValue, this));
     }
-    else if (field == AlertEditionModel::Snooze)
-    {
-        result = new Wt::WLineEdit();
-        result->changed().connect(boost::bind(&AlertEditionWidget::checkSnoozeValue, this));
-
-    }
     else if (field == AlertEditionModel::Unit)
     {
         comboInformationUnit = new Wt::WComboBox();
@@ -146,9 +140,9 @@ void AlertEditionWidget::checkSnoozeValue()
 {
     updateModelField(model_, AlertEditionModel::ThresholdValue);
     updateModelField(model_, AlertEditionModel::ThresholdOperator);
-    updateModelField(model_, AlertEditionModel::Snooze);
-    model_->validateField(AlertEditionModel::Snooze);
-    model_->setValidated(AlertEditionModel::Snooze, false);
+//    updateModelField(model_, AlertEditionModel::Snooze);
+//    model_->validateField(AlertEditionModel::Snooze);
+//    model_->setValidated(AlertEditionModel::Snooze, false);
 }
 
 void AlertEditionWidget::rememberUnitValue()
@@ -167,9 +161,9 @@ void AlertEditionWidget::update()
     {
         
         // alert definition
-        serverSelectionBox = new Wt::WSelectionBox();
-        applicationSelectionBox = new Wt::WSelectionBox();
-        informationSelectionBox = new Wt::WSelectionBox();
+        serverSelectionBox = new Wt::WComboBox();
+        applicationSelectionBox = new Wt::WComboBox();
+        informationSelectionBox = new Wt::WComboBox();
         
         //server list
         bindWidget("server-sbox", serverSelectionBox);
@@ -189,28 +183,28 @@ void AlertEditionWidget::update()
         
         // user receiving definition
         
-        userSelectionBox = new Wt::WSelectionBox();
-        mediaSelectionBox = new Wt::WSelectionBox();
-        mediaValueSelectionBox = new Wt::WSelectionBox();
+        userSelectionBox = new Wt::WComboBox();
+        mediaSelectionBox = new Wt::WComboBox();
+        mediaValueSelectionBox = new Wt::WComboBox();
         
         //user list
-        bindWidget("user-sbox", userSelectionBox);
+//        bindWidget("user-sbox", userSelectionBox);
         this->updateUserSelectionBox(this->userId);
         userSelectionBox->clicked().connect(boost::bind(&AlertEditionWidget::updateMediaSBFromUserSB, this));
         
         //media list
-        bindWidget("media-sbox", mediaSelectionBox);
+//        bindWidget("media-sbox", mediaSelectionBox);
         mediaSelectionBox->clicked().connect(boost::bind(&AlertEditionWidget::updateMediaValueSBFromMediaSB, this));
 //        
 //        // information list
-        bindWidget("media-value-sbox", mediaValueSelectionBox);
+//        bindWidget("media-value-sbox", mediaValueSelectionBox);
         
         
         Wt::WPushButton *addButtonMedia = new Wt::WPushButton(tr("Alert.alert.add-media-button"));
         Wt::WPushButton *deleteButtonMedia = new Wt::WPushButton(tr("Alert.alert.delete-media-button"));
 
-        bindWidget("add-button-media", addButtonMedia);
-        bindWidget("delete-button-media", deleteButtonMedia);
+//        bindWidget("add-button-media", addButtonMedia);
+//        bindWidget("delete-button-media", deleteButtonMedia);
 
 //        dynamic_cast<Wt::WStringListModel>(userSelectionBox->model())->
         
@@ -225,20 +219,64 @@ void AlertEditionWidget::update()
         sim->setHeaderData(2,boost::any(valueTitle));
         sim->setHeaderData(3,boost::any(snoozeTitle));
         
-        userMediaDestinationTableView = new Wt::WTableView();
-        userMediaDestinationTableView->setModel(sim);
-        userMediaDestinationTableView->setSelectionBehavior(Wt::SelectRows);
-        userMediaDestinationTableView->setSelectionMode(Wt::SingleSelection);
+//        userMediaDestinationTableView = new Wt::WTableView();
+//        userMediaDestinationTableView->setModel(sim);
+//        userMediaDestinationTableView->setSelectionBehavior(Wt::SelectRows);
+//        userMediaDestinationTableView->setSelectionMode(Wt::SingleSelection);
         
-        bindWidget("user-media-destination", userMediaDestinationTableView);
+//        bindWidget("user-media-destination", userMediaDestinationTableView);
         
+        tableMediaDestination = new Wt::WTable();
+        tableMediaDestination->setHeaderCount(2,Wt::Horizontal);
+
+        tableMediaDestination->addStyleClass("table");
+        tableMediaDestination->addStyleClass("table-bordered");
+        tableMediaDestination->addStyleClass("table-striped");
+
+        // header 1
+        int row = 0;
+        tableMediaDestination->elementAt(row, 0)->setColumnSpan(5);
+
+        Wt::WText *tableTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-envelope'></i></span><h5>"+ tr("Alert.alert.media-destination-table") + "</h5></div>",tableMediaDestination->elementAt(row, 0));
+        tableTitle->setTextFormat(Wt::XHTMLUnsafeText);
+        tableMediaDestination->elementAt(row, 0)->setPadding(*(new Wt::WLength("0px")));
         
-        addButtonMedia->clicked().connect(this, &AlertEditionWidget::addMedia);
-        deleteButtonMedia->clicked().connect(this, &AlertEditionWidget::deleteMedia);
+        // header 2
+        ++row;
+        new Wt::WText(tr("Alert.alert.user"),tableMediaDestination->elementAt(row, 0));
+        new Wt::WText(tr("Alert.alert.media"),tableMediaDestination->elementAt(row, 1));
+        new Wt::WText(tr("Alert.alert.media-value"),tableMediaDestination->elementAt(row, 2));
+        new Wt::WText(tr("Alert.alert.snooze"),tableMediaDestination->elementAt(row, 3));
+        new Wt::WText(tr("Alert.alert.action"),tableMediaDestination->elementAt(row, 4));
+        
+        // first line
+        ++row;
+        tableMediaDestination->elementAt(row,0)->addWidget(userSelectionBox);
+        tableMediaDestination->elementAt(row,1)->addWidget(mediaSelectionBox);
+        tableMediaDestination->elementAt(row,2)->addWidget(mediaValueSelectionBox);
+        
+        snoozeEdit = new Wt::WLineEdit();
+        snoozeEdit->changed().connect(boost::bind(&AlertEditionWidget::checkSnoozeValue, this));
+        
+        tableMediaDestination->elementAt(row,3)->addWidget(snoozeEdit);
         
         Wt::WPushButton *createAlertButton = new Wt::WPushButton(tr("Alert.alert.edition.add-button"));
+        createAlertButton->setStyleClass("btn btn-primary");
         bindWidget("create-alert-button", createAlertButton);
         createAlertButton->clicked().connect(this,&AlertEditionWidget::addAlert);
+        
+        tableMediaDestination->elementAt(row,4)->addWidget(addButtonMedia);
+        
+        
+        
+        
+        bindWidget("table-media-destination",tableMediaDestination);
+        
+//        
+        addButtonMedia->clicked().connect(this, &AlertEditionWidget::addMedia);
+//        deleteButtonMedia->clicked().connect(this, &AlertEditionWidget::deleteMedia);
+//        
+        
         
         
         created_ = true;
@@ -671,6 +709,7 @@ Wt::WStringListModel *AlertEditionWidget::getMediasForCurrentUser(int mediaType)
 
 void AlertEditionWidget::addMedia()
 {
+    
     if ((userSelectionBox->currentIndex() == -1) || (mediaSelectionBox->currentIndex() == -1) || (mediaValueSelectionBox->currentIndex() == -1))
     {
         Wt::WMessageBox::show(tr("Alert.alert.media-selection-missing-title"),tr("Alert.alert.media-selection-missing"),Wt::Ok);
@@ -678,47 +717,27 @@ void AlertEditionWidget::addMedia()
     }
     checkSnoozeValue();
     checkThresholdValueKey();
-    if (!(model_->validateField(AlertEditionModel::Snooze)))
-    {
-        Wt::log("info") << "Snooze value incorrect";
-        update();
-        return;
-    }
-    else
-    {
-        update();
-    }
+
+    update();
+
+    const Wt::WString snoozeValueToDisplay = snoozeEdit->text();
     
-//    long long userMediaIdToRemember = mapAssetIdSboxRow[userSelectionBox->currentIndex()];
-    const Wt::WString userMediaTextToDisplay = userSelectionBox->currentText();
-    Wt::WStandardItem *itemUserMedia = new Wt::WStandardItem();
-    itemUserMedia->setData(boost::any(userMediaTextToDisplay),0);
+    int row = tableMediaDestination->rowCount() - 1;
     
-//    long long mediaIdToRemember = mapAssetIdSboxRow[mediaSelectionBox->currentIndex()];
-    const Wt::WString mediaTextToDisplay = mediaSelectionBox->currentText();
-    Wt::WStandardItem *itemMedia = new Wt::WStandardItem();
-    itemMedia->setData(boost::any(mediaTextToDisplay),0);
+    Wt::WPushButton *deleteButton = new Wt::WPushButton(tr("Alert.alert.delete-media-button"));
+    deleteButton->clicked().connect(boost::bind(&AlertEditionWidget::deleteMedia,this,row));
     
-//    long long mediaValueIdToRemember = mapAssetIdSboxRow[userSelectionBox->currentIndex()];
-    const Wt::WString mediaValueTextToDisplay = mediaValueSelectionBox->currentText();
-    Wt::WStandardItem *itemMediaValue = new Wt::WStandardItem();
-    itemMediaValue->setData(boost::any(mediaValueTextToDisplay),0);
+    tableMediaDestination->insertRow(row);
+    tableMediaDestination->elementAt(row,0)->addWidget(new Wt::WText(userSelectionBox->currentText()));
+    tableMediaDestination->elementAt(row,1)->addWidget(new Wt::WText(mediaSelectionBox->currentText()));
+    tableMediaDestination->elementAt(row,2)->addWidget(new Wt::WText(mediaValueSelectionBox->currentText()));
+    tableMediaDestination->elementAt(row,3)->addWidget(new Wt::WText(snoozeEdit->text()));
+    tableMediaDestination->elementAt(row,4)->addWidget(deleteButton);
     
-    updateModelField(model_,AlertEditionModel::Snooze);
-    const Wt::WString snoozeValueToDisplay = model_->valueText(model_->Snooze);
-    Wt::WStandardItem *itemSnooze = new Wt::WStandardItem();
-    itemSnooze->setData(boost::any(snoozeValueToDisplay),0);
     
-    // vector of WStandardItem to create the row
-    std::vector<Wt::WStandardItem*> *vectItem = new std::vector<Wt::WStandardItem*>;
-    vectItem->push_back(itemUserMedia);
-    vectItem->push_back(itemMedia);
-    vectItem->push_back(itemMediaValue);
-    vectItem->push_back(itemSnooze);
     
-    // const to pass it to appendRow
-    const std::vector<Wt::WStandardItem*> *vectItemFilled = vectItem;
-    dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->appendRow(*vectItemFilled);
+    
+    
     
     AlertMediaSpecialization *ams = new AlertMediaSpecialization();
     Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr;
@@ -738,40 +757,40 @@ void AlertEditionWidget::addMedia()
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
         return;
     }
-    const Wt::WStandardItem *constItemUserMedia = itemUserMedia;
-    mapAlertMediaSpecializationIdTableView[
-            dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())
-                ->indexFromItem
-                (
-                    constItemUserMedia
-                ).row()
-            ] = amsPtr.id(); 
+//    const Wt::WStandardItem *constItemUserMedia = itemUserMedia;
+    mapAlertMediaSpecializationIdTableView[row] = amsPtr.id(); 
     UserActionManagement::registerUserAction(Enums::add,Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,amsPtr.id());
 }
 
-void AlertEditionWidget::deleteMedia()
+void AlertEditionWidget::deleteMedia(int row)
 {
-    if (userMediaDestinationTableView->selectedIndexes().size() > 0)
+    try
     {
-        int row = (*(userMediaDestinationTableView->selectedIndexes().begin())).row();
-        const Wt::WModelIndex index = userMediaDestinationTableView->rootIndex();
-        
-        try
+        UserActionManagement::registerUserAction(Enums::del,Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,mapAlertMediaSpecializationIdTableView[row]);
+        Wt::Dbo::Transaction transaction(*session);
+        Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr = session->find<AlertMediaSpecialization>()
+                                .where("\"AMS_ID\" = ?").bind(mapAlertMediaSpecializationIdTableView[row]);
+        amsPtr.remove();
+        for (std::map<int,long long>::const_iterator i = mapAlertMediaSpecializationIdTableView.begin() ; i != mapAlertMediaSpecializationIdTableView.end(); ++i)
         {
-            Wt::Dbo::Transaction transaction(*session);
-            Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr = session->find<AlertMediaSpecialization>()
-                                    .where("\"AMS_ID\" = ?").bind(mapAlertMediaSpecializationIdTableView[row]);
-            amsPtr.remove();
-            dynamic_cast<Wt::WStandardItemModel*>(userMediaDestinationTableView->model())->removeRow(row,index);
-            transaction.commit();
-            UserActionManagement::registerUserAction(Enums::del,Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,mapAlertMediaSpecializationIdTableView[row]);
+            std::cout << i->first << std::endl;
+            std::cout << i->second << std::endl;
         }
-        catch (Wt::Dbo::Exception e)
+        mapAlertMediaSpecializationIdTableView.erase(row);
+        std::cout << "phase 2" << std::endl;
+        for (std::map<int,long long>::const_iterator i = mapAlertMediaSpecializationIdTableView.begin() ; i != mapAlertMediaSpecializationIdTableView.end() ; ++i)
         {
-            Wt::log("error") << "[AlertEditionWidget] " << e.what();
-            Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
-            return;
+            std::cout << i->first << std::endl;
+            std::cout << i->second << std::endl;
         }
+        tableMediaDestination->deleteRow(row);
+        transaction.commit();
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << "[AlertEditionWidget] " << e.what();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+        return;
     }
 }
 
@@ -793,68 +812,69 @@ void AlertEditionWidget::addAlert()
         return;
     }
     
-    try
-    {
-        Wt::Dbo::Transaction transaction(*session);
-        
-        
-        Wt::Dbo::collection<Wt::Dbo::ptr<AlertValue> > avaPtrCollec = session->find<AlertValue>().where("\"SEA_ID\" = ?")
-                                                        .bind(mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()])
-                                                        .where("\"SRC_ID\" = ?")
-                                                        .bind(mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()])
-                                                        .where("\"PLG_ID_PLG_ID\" = ?")
-                                                        .bind(mapInformationPlgIdSboxRow[informationSelectionBox->currentIndex()])
-                                                        .where("\"INF_VALUE_NUM\" = ?")
-                                                        .bind(mapInformationIvnSboxRow[informationSelectionBox->currentIndex()])
-                                                        .where("\"INU_ID_INU_ID\" = ?")
-                                                        .bind(mapInformationInuIdSboxRow[informationSelectionBox->currentIndex()]);
-        
-        if (avaPtrCollec.size() > 0)
-        {
-            std::string inString = "(";
-            for (Wt::Dbo::collection<Wt::Dbo::ptr<AlertValue> >::const_iterator i = avaPtrCollec.begin(); i != avaPtrCollec.end(); i++) 
-            {
-                Wt::log("debug") << " [Class:AlertEditionWidget] " << " - " << " For ava list : " << (*i).id();
-                inString += boost::lexical_cast<std::string,long long>((*i).id()) + ",";
-                i->flush();
-            }
-            inString.replace(inString.size()-1, 1, "");
-            inString += ")";
-            
-            
-            std::string queryStr = "SELECT ale FROM \"T_ALERT_ALE\" ale WHERE "
-                                    " \"ALE_ID\" IN"
-                                    "("
-                                        "SELECT \"T_ALERT_ALE_ALE_ID\" FROM \"TJ_AST_ALE\" WHERE \"T_ASSET_AST_AST_ID\" = " 
-                                        + boost::lexical_cast<std::string>(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]) +
-                                    ")"
-                                    "AND ale.\"ALE_DELETE\" IS NULL "
-                                    "AND \"ALE_AVA_AVA_ID\" IN" + inString;
-            
-            Wt::Dbo::Query<Wt::Dbo::ptr<Alert> > queryRes = session->query<Wt::Dbo::ptr<Alert> >(queryStr);
-            
-            Wt::Dbo::collection<Wt::Dbo::ptr<Alert> > alerts = queryRes.resultList();
-            
-            if (alerts.size() > 0)
-            {
-                Wt::log("info") << "[AlertEditionWidget] " << "alert exists";
-                Wt::WMessageBox::show(tr("Alert.alert.alert-already-exists-title"),tr("Alert.alert.alert-already-exists"),Wt::Ok);
-                return;
-            }
-            
-        }
-        transaction.commit();
-        
-    }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::log("error") << "[AlertEditionWidget] " << e.what();
-        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
-        return;
-    }
+//    try
+//    {
+//        Wt::Dbo::Transaction transaction(*session);
+//        
+//        
+//        Wt::Dbo::collection<Wt::Dbo::ptr<AlertValue> > avaPtrCollec = session->find<AlertValue>().where("\"SEA_ID\" = ?")
+//                                                        .bind(mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()])
+//                                                        .where("\"SRC_ID\" = ?")
+//                                                        .bind(mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()])
+//                                                        .where("\"PLG_ID_PLG_ID\" = ?")
+//                                                        .bind(mapInformationPlgIdSboxRow[informationSelectionBox->currentIndex()])
+//                                                        .where("\"INF_VALUE_NUM\" = ?")
+//                                                        .bind(mapInformationIvnSboxRow[informationSelectionBox->currentIndex()])
+//                                                        .where("\"INU_ID_INU_ID\" = ?")
+//                                                        .bind(mapInformationInuIdSboxRow[informationSelectionBox->currentIndex()]);
+//        
+//        if (avaPtrCollec.size() > 0)
+//        {
+//            std::string inString = "(";
+//            for (Wt::Dbo::collection<Wt::Dbo::ptr<AlertValue> >::const_iterator i = avaPtrCollec.begin(); i != avaPtrCollec.end(); i++) 
+//            {
+//                Wt::log("debug") << " [Class:AlertEditionWidget] " << " - " << " For ava list : " << (*i).id();
+//                inString += boost::lexical_cast<std::string,long long>((*i).id()) + ",";
+//                i->flush();
+//            }
+//            inString.replace(inString.size()-1, 1, "");
+//            inString += ")";
+//            
+//            
+//            std::string queryStr = "SELECT ale FROM \"T_ALERT_ALE\" ale WHERE "
+//                                    " \"ALE_ID\" IN"
+//                                    "("
+//                                        "SELECT \"T_ALERT_ALE_ALE_ID\" FROM \"TJ_AST_ALE\" WHERE \"T_ASSET_AST_AST_ID\" = " 
+//                                        + boost::lexical_cast<std::string>(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]) +
+//                                    ")"
+//                                    "AND ale.\"ALE_DELETE\" IS NULL "
+//                                    "AND \"ALE_AVA_AVA_ID\" IN" + inString;
+//            
+//            Wt::Dbo::Query<Wt::Dbo::ptr<Alert> > queryRes = session->query<Wt::Dbo::ptr<Alert> >(queryStr);
+//            
+//            Wt::Dbo::collection<Wt::Dbo::ptr<Alert> > alerts = queryRes.resultList();
+//            
+//            if (alerts.size() > 0)
+//            {
+//                Wt::log("info") << "[AlertEditionWidget] " << "alert exists";
+//                Wt::WMessageBox::show(tr("Alert.alert.alert-already-exists-title"),tr("Alert.alert.alert-already-exists"),Wt::Ok);
+//                return;
+//            }
+//            
+//        }
+//        transaction.commit();
+//        
+//    }
+//    catch (Wt::Dbo::Exception e)
+//    {
+//        Wt::log("error") << "[AlertEditionWidget] " << e.what();
+//        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+//        return;
+//    }
     
     
-    if (userMediaDestinationTableView->model()->rowCount() < 1)
+    
+    if (tableMediaDestination->rowCount() < 4)
     {
         Wt::WMessageBox::show(tr("Alert.alert.media-missing-title"),tr("Alert.alert.media-missing"),Wt::Ok);
         return;
@@ -936,6 +956,10 @@ void AlertEditionWidget::addAlert()
         
         ava->keyValue = model_->valueText(model_->ThresholdValueKey);
         
+        //asset
+        Wt::Dbo::ptr<Asset> assetPtr = session->find<Asset>().where("\"AST_ID\" = ?").bind(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]);
+        ava->asset = assetPtr;
+        
         Wt::log("info") << critPtr.get()->name;
         Wt::Dbo::ptr<AlertValue> avaPtr = session->add<AlertValue>(ava);   
         
@@ -944,18 +968,16 @@ void AlertEditionWidget::addAlert()
         alert->creaDate = Wt::WDateTime::currentDateTime();
         alert->name = name;
 
-        //asset
-        Wt::Dbo::ptr<Asset> assetPtr = session->find<Asset>().where("\"AST_ID\" = ?").bind(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]);
+        
         
         
         Wt::Dbo::ptr<Alert> alePtr = session->add<Alert>(alert);
-        
-        // FZEMOKFZEMOKFOEK
+        alePtr.flush();
 //        alePtr.modify()->assets.insert(assetPtr);
         
         for (std::map<int,long long>::const_iterator i = mapAlertMediaSpecializationIdTableView.begin(); i != mapAlertMediaSpecializationIdTableView.end(); ++i)
         {
-            Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr = session->find<AlertMediaSpecialization>().where("\"AMS_ID\" = ?").bind((*i).second);
+            Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr = session->find<AlertMediaSpecialization>().where("\"AMS_ID\" = ?").bind(i->second);
             amsPtr.modify()->alert = alePtr;
         }
         transaction.commit();

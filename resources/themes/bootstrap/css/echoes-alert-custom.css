@@ -33,3 +33,13 @@ input[type="color"],
 .uneditable-input {
   margin-bottom: 0px;
 }
+
+.cur-pointer
+{
+	cursor: help;
+}
+
+.no-margin
+{
+	margin: 0px;
+}

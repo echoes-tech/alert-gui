@@ -47,6 +47,7 @@ void EchoesHome::initAuth()
     this->authWidget = new Wt::Auth::AuthWidget(this->session->login());
     this->authWidget->setModel(this->authModel);
     this->authWidget->setRegistrationEnabled(true);
+    this->addWidget(this->authWidget);
 }
 
 void EchoesHome::initHeader()
@@ -54,6 +55,7 @@ void EchoesHome::initHeader()
 //    Wt::WApplication *app = Wt::WApplication::instance();
     this->title = new Wt::WText(tr("echoes-alert-title"));
     this->title->setId("header");
+    this->title->hide();
 
 
     this->topBoxLoggedInLayout = new Wt::WHBoxLayout();
@@ -247,35 +249,35 @@ void EchoesHome::resizeContainers(bool loggedIn)
 //        this->topBoxLoggedInLayout->addWidget(title);
         
 //        this->title->setHeight(Wt::WLength(81));
-        this->authWidget->setHeight(Wt::WLength(20));
+//        this->authWidget->setHeight(Wt::WLength(20));
 //        this->links->setWidth(Wt::WLength(200));
-        this->authWidget->setWidth(Wt::WLength(300));
+//        this->authWidget->setWidth(Wt::WLength(300));
         
         
 //        this->topRightLayout = new Wt::WVBoxLayout();
 //        this->topRightLayout->addWidget(this->authWidget, 0, Wt::AlignRight);
-        this->addWidget(this->authWidget);
+//        this->addWidget(this->authWidget);
         
 //        this->topRightLayout->addWidget(this->links, 0, Wt::AlignRight);
 //        this->topBoxLoggedInLayout->addLayout(this->topRightLayout, Wt::AlignRight);
 //        this->title->setHeight(Wt::WLength(81));
-        this->authWidget->setHeight(Wt::WLength(20));
+//        this->authWidget->setHeight(Wt::WLength(20));
 //        this->topContainer->setLayout(this->topBoxLoggedInLayout);
 //        this->topContainer->setHeight(Wt::WLength(94));
     }
     else
     {
-        this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
+//        this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
 //        this->topBoxLoggedInLayout->removeWidget(this->title);
 //        this->topBoxLoggedInLayout->removeWidget(this->authWidget);
-        this->removeWidget(this->authWidget);
+//        this->removeWidget(this->authWidget);
 //        this->topBoxLoggedOutLayout->addWidget(this->title);
 //        this->title->setHeight(Wt::WLength(81));
-        this->authWidget->setHeight(Wt::WLength(320));
+//        this->authWidget->setHeight(Wt::WLength(320));
 //        this->topBoxLoggedOutLayout->addWidget(this->authWidget,1,Wt::AlignCenter);
 //        this->topContainer->setLayout(this->topBoxLoggedOutLayout);
 //        this->topContainer->setHeight(Wt::WLength(400));
-        this->addWidget(this->authWidget);
+//        this->addWidget(this->authWidget);
     }
 }
 
@@ -286,6 +288,7 @@ void EchoesHome::onAuthEvent()
     if (this->session->login().loggedIn())
     {
         UserActionManagement::registerUserAction(Enums::login,"success",1);
+        this->title->show();
         this->mainPageWidget->createUI();
         this->mainPageWidget->show();
         this->mainPageWidget->getSideBarContainer()->show();
@@ -296,6 +299,7 @@ void EchoesHome::onAuthEvent()
         UserActionManagement::registerUserAction(Enums::logout,"",0);
         this->mainPageWidget->hide();
         this->mainPageWidget->getSideBarContainer()->hide();
+        this->title->hide();
     }
 }
 

@@ -45,6 +45,7 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
 //    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/fullcalendar.css");
 //    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/uniform.css");
 //    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/select2.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.login.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.main.css");
     
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/echoes-alert-custom.css");

@@ -63,7 +63,6 @@
                    projectFiles="true">
       <itemPath>alert-list.xml</itemPath>
       <itemPath>alert-list_fr.xml</itemPath>
-      <itemPath>resources/alert.css</itemPath>
       <itemPath>alert.xml</itemPath>
       <itemPath>alert_fr.xml</itemPath>
       <itemPath>asset.xml</itemPath>
@@ -71,10 +70,6 @@
       <itemPath>auth.xml</itemPath>
       <itemPath>auth_fr.xml</itemPath>
       <itemPath>config.xml</itemPath>
-      <itemPath>resources/form-alert.css</itemPath>
-      <itemPath>resources/form-probe.css</itemPath>
-      <itemPath>resources/form-user.css</itemPath>
-      <itemPath>resources/form.css</itemPath>
       <itemPath>global.xml</itemPath>
       <itemPath>global_fr.xml</itemPath>
       <itemPath>options.xml</itemPath>
@@ -290,16 +285,6 @@
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="resources/alert.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-alert.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-probe.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-user.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form.css" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/AlertEditionModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AlertEditionWidget.cpp" ex="false" tool="1" flavor2="0">
@@ -498,16 +483,6 @@
       <item path="options.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/alert.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-alert.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-probe.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-user.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form.css" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/AlertEditionModel.cpp" ex="false" tool="1" flavor2="0">
       </item>

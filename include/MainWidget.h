@@ -52,6 +52,7 @@ public:
   Wt::WMenu *getAccountSubmenu();
   Wt::WContainerWidget *getSideBarContainer();
   
+  
   AlertEditionWidget *aew;
   void createUI();
   virtual void refresh();

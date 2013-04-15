@@ -335,6 +335,8 @@ void AuthWidget::updatePasswordLoginView()
         if (!login)
         {
             login = new WPushButton(tr("Wt.Auth.login"));
+            login->addStyleClass("btn");
+            login->addStyleClass("btn-inverse");
             login->clicked().connect(this, &AuthWidget::attemptPasswordLogin);
             bindWidget("login", login);
 
@@ -342,9 +344,12 @@ void AuthWidget::updatePasswordLoginView()
 
             if (model_->baseAuth()->emailVerificationEnabled())
             {
-                WText *text = new WText(tr("Wt.Auth.lost-password"));
-                text->clicked().connect(this, &AuthWidget::handleLostPassword);
-                bindWidget("lost-password", text);
+                WAnchor *anchor = new WAnchor();
+                anchor->setText(tr("Wt.Auth.lost-password"));
+                anchor->addStyleClass("flip-link");
+                anchor->setId("to-recover");
+                anchor->clicked().connect(this, &AuthWidget::handleLostPassword);
+                bindWidget("lost-password", anchor);
             }
             else
                 bindEmpty("lost-password");
@@ -357,11 +362,14 @@ void AuthWidget::updatePasswordLoginView()
                     w = new WAnchor
                             (WLink(WLink::InternalPath, basePath_ + "register"),
                              tr("Wt.Auth.register"));
+                    w->addStyleClass("flip-link");
                 }
                 else
                 {
-                    w = new WText(tr("Wt.Auth.register"));
+                    w = new WAnchor();
+                    ((WAnchor*)w)->setText(tr("Wt.Auth.register"));
                     w->clicked().connect(this, &AuthWidget::registerNewUser);
+                    w->addStyleClass("flip-link");
                 }
 
                 bindWidget("register", w);

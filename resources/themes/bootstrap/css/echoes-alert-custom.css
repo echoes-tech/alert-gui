@@ -43,3 +43,8 @@ input[type="color"],
 {
 	margin: 0px;
 }
+
+.clear
+{
+	clear: both;
+}

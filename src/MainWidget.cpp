@@ -19,6 +19,7 @@ MainWidget::MainWidget(Session *session)
     
     sideBarContainer = new Wt::WContainerWidget();
     sideBarContainer->setId("sidebar");
+    sideBarContainer->hide();
     
     Wt::WAnchor *phoneMenuAnchor = new Wt::WAnchor("#");
     phoneMenuAnchor->setText("Menu");

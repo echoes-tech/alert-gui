@@ -61,11 +61,9 @@ void EchoesHome::initHeader()
     this->topBoxLoggedInLayout = new Wt::WHBoxLayout();
     this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
     this->topRightLayout = new Wt::WVBoxLayout();
-    this->resizeContainers(this->session->login().loggedIn());
 
     this->addWidget(this->title);
     
-//    app->root()->addWidget(this->title);
 }
 
 Wt::WContainerWidget* EchoesHome::initMonitoringWidget()
@@ -238,53 +236,8 @@ void EchoesHome::showPage(int type, Enums::EMenuRoot menuRoot)
     this->mainPageWidget->doActionMenu(type,menuRoot);
 }
 
-void EchoesHome::resizeContainers(bool loggedIn)
-{
-    if (loggedIn)
-    {
-//        this->topBoxLoggedInLayout = new Wt::WHBoxLayout();
-        
-//        this->topBoxLoggedOutLayout->removeWidget(title);
-//        this->topBoxLoggedOutLayout->removeWidget(authWidget);
-//        this->topBoxLoggedInLayout->addWidget(title);
-        
-//        this->title->setHeight(Wt::WLength(81));
-//        this->authWidget->setHeight(Wt::WLength(20));
-//        this->links->setWidth(Wt::WLength(200));
-//        this->authWidget->setWidth(Wt::WLength(300));
-        
-        
-//        this->topRightLayout = new Wt::WVBoxLayout();
-//        this->topRightLayout->addWidget(this->authWidget, 0, Wt::AlignRight);
-//        this->addWidget(this->authWidget);
-        
-//        this->topRightLayout->addWidget(this->links, 0, Wt::AlignRight);
-//        this->topBoxLoggedInLayout->addLayout(this->topRightLayout, Wt::AlignRight);
-//        this->title->setHeight(Wt::WLength(81));
-//        this->authWidget->setHeight(Wt::WLength(20));
-//        this->topContainer->setLayout(this->topBoxLoggedInLayout);
-//        this->topContainer->setHeight(Wt::WLength(94));
-    }
-    else
-    {
-//        this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
-//        this->topBoxLoggedInLayout->removeWidget(this->title);
-//        this->topBoxLoggedInLayout->removeWidget(this->authWidget);
-//        this->removeWidget(this->authWidget);
-//        this->topBoxLoggedOutLayout->addWidget(this->title);
-//        this->title->setHeight(Wt::WLength(81));
-//        this->authWidget->setHeight(Wt::WLength(320));
-//        this->topBoxLoggedOutLayout->addWidget(this->authWidget,1,Wt::AlignCenter);
-//        this->topContainer->setLayout(this->topBoxLoggedOutLayout);
-//        this->topContainer->setHeight(Wt::WLength(400));
-//        this->addWidget(this->authWidget);
-    }
-}
-
-
 void EchoesHome::onAuthEvent()
 {
-    resizeContainers(session->login().loggedIn());
     if (this->session->login().loggedIn())
     {
         UserActionManagement::registerUserAction(Enums::login,"success",1);

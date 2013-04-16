@@ -22,7 +22,6 @@ void AssetManagementWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
 {
     if (!created_)
     {
-//        update();
         created_ = true;
     }
 
@@ -53,7 +52,6 @@ void AssetManagementWidget::createUI()
     
     int row = 0;
 
-//    linksTable->setStyleClass("table-list");
     
     linksTable->setHeaderCount(2,Wt::Horizontal);
     linksTable->elementAt(row, 0)->setColumnSpan(2);
@@ -65,13 +63,7 @@ void AssetManagementWidget::createUI()
     ++row;
     new Wt::WText(tr("Alert.asset.asset-name"),linksTable->elementAt(row, 0));
     new Wt::WText(tr("Alert.asset.asset-action"),linksTable->elementAt(row, 1));
-     
-    
-//    ++row;
-//    linksTable->elementAt(row,0)->addWidget(createFormWidget(AssetManagementModel::AssetName));
-//    Wt::WPushButton *addAssetButton = new Wt::WPushButton(tr("Alert.asset.add-asset-button"),linksTable->elementAt(row,1));
-//    addAssetButton->setAttributeValue("class","btn btn-info");
-    
+         
     try
     {
         Wt::log("info") << "Debug : before transaction";
@@ -251,7 +243,6 @@ void AssetManagementWidget::deleteAsset(long long id)
         return;
     }
             
-//    refresh();
     created_ = false;
     model_->reset();
     createUI();

@@ -82,7 +82,8 @@ Wt::WFormWidget *UserEditionWidget::createFormWidget(UserEditionModel::Field fie
 //    }
     if (field == UserEditionModel::MediaEMail)
     {
-        result = new Wt::WLineEdit();
+        emailEdit = new Wt::WLineEdit();
+        result = emailEdit;
         result->changed().connect(boost::bind(&UserEditionWidget::checkMediaEmail, this));
         
     }
@@ -212,20 +213,79 @@ void UserEditionWidget::update()
 //    }
 //        
 //        
-//        
         
         
         
-        
-        
-        Wt::WPushButton *addButtonEmail = new Wt::WPushButton(tr("Alert.user.edition.add-button"));
-        Wt::WPushButton *deleteButtonEmail = new Wt::WPushButton(tr("Alert.user.edition.delete-button"));
+        emailsTable = new Wt::WTable();
+        emailsTable->addStyleClass("table");
+        emailsTable->addStyleClass("table-bordered");
+        emailsTable->addStyleClass("table-striped");
 
-        bindWidget("add-button-email", addButtonEmail);
-        bindWidget("delete-button-email", deleteButtonEmail);
+        int rowEmail = 0;
 
+
+        emailsTable->setHeaderCount(2,Wt::Horizontal);
+        emailsTable->elementAt(rowEmail, 0)->setColumnSpan(2);
+        emailsTable->columnAt(1)->setStyleClass("asset-action-width");
+
+        Wt::WText *tableEmailTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-envelope'></i></span><h5>"+ tr("Alert.media.add-email-table") + "</h5></div>",emailsTable->elementAt(rowEmail, 0));
+        emailsTable->elementAt(rowEmail, 0)->setPadding(*(new Wt::WLength("0px")));
+        tableEmailTitle->setTextFormat(Wt::XHTMLUnsafeText);
+        ++rowEmail;
+        new Wt::WText(tr("Alert.media.email-name"),emailsTable->elementAt(rowEmail, 0));
+        new Wt::WText(tr("Alert.media.email-action"),emailsTable->elementAt(rowEmail, 1));
+
+        
+        
+        
+        std::map<long long,Wt::WString> emailMap = getMediasForCurrentUser(Enums::email);
+        for (std::map<long long,Wt::WString>::const_iterator i = emailMap.begin() ; i != emailMap.end(); ++i)
+        {
+            ++rowEmail;
+            new Wt::WText(i->second,emailsTable->elementAt(rowEmail, 0));
+            Wt::WPushButton *deleteButtonEmail = new Wt::WPushButton(tr("Alert.user.edition.delete-button"),emailsTable->elementAt(rowEmail, 1));
+            deleteButtonEmail->clicked().connect(boost::bind(&UserEditionWidget::deleteMedia,this,Enums::email,i->first,rowEmail));
+        }
+        
+        ++rowEmail;
+        Wt::WPushButton *addButtonEmail = new Wt::WPushButton(tr("Alert.user.edition.add-button"),emailsTable->elementAt(rowEmail, 1));
+        emailsTable->elementAt(rowEmail, 0)->addWidget(emailEdit);
+        
         addButtonEmail->clicked().connect(this, &UserEditionWidget::addEmail);
-        deleteButtonEmail->clicked().connect(this, &UserEditionWidget::deleteEmail);
+        
+        
+//        smsTable = new Wt::WTable();
+//        smsTable->addStyleClass("table");
+//        smsTable->addStyleClass("table-bordered");
+//        smsTable->addStyleClass("table-striped");
+//
+//        int rowSms = 0;
+//
+//
+//        smsTable->setHeaderCount(2,Wt::Horizontal);
+//        smsTable->elementAt(rowSms, 0)->setColumnSpan(2);
+//        smsTable->columnAt(1)->setStyleClass("asset-action-width");
+//
+//        Wt::WText *tableSmsTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-envelope'></i></span><h5>"+ tr("Alert.media.add-sms-table") + "</h5></div>",smsTable->elementAt(rowSms, 0));
+//        smsTable->elementAt(rowSms, 0)->setPadding(*(new Wt::WLength("0px")));
+//        tableSmsTitle->setTextFormat(Wt::XHTMLUnsafeText);
+//        ++rowSms;
+//        new Wt::WText(tr("Alert.media.sms-name"),smsTable->elementAt(rowSms, 0));
+//        new Wt::WText(tr("Alert.media.sms-action"),smsTable->elementAt(rowSms, 1));
+//
+//        ++rowSms;
+//        std::map<int,Wt::WString> smsMap = getMediasForCurrentUser(Enums::sms);
+//        for (std::map<int,Wt::WString>::const_iterator i = smsMap.begin() ; i != smsMap.end(); ++i)
+//        {
+//            new Wt::WText(i->second,smsTable->elementAt(rowSms, 0));
+//            ++rowSms;
+//        }
+        
+        
+        
+    
+
+        
         
         Wt::WPushButton *addButtonSms = new Wt::WPushButton(tr("Alert.user.edition.add-button"));
         Wt::WPushButton *deleteButtonSms = new Wt::WPushButton(tr("Alert.user.edition.delete-button"));
@@ -235,44 +295,47 @@ void UserEditionWidget::update()
 
         addButtonSms->clicked().connect(this, &UserEditionWidget::addSms);
         deleteButtonSms->clicked().connect(this, &UserEditionWidget::deleteSms);
-
-        mediaEmailSelectionBox = new Wt::WSelectionBox();
-        mediaSmsSelectionBox = new Wt::WSelectionBox();
-        mediaEmailSelectionBox->setModel(getMediasForCurrentUser(Enums::email));
-        mediaSmsSelectionBox->setModel(getMediasForCurrentUser(Enums::sms));
         
-        bindWidget("email-sbox", mediaEmailSelectionBox);
-        bindWidget("sms-sbox", mediaSmsSelectionBox);
+        bindWidget("email-table", emailsTable);
+        bindWidget("sms-table", smsTable);
         
-        Wt::WPushButton *saveButton = new Wt::WPushButton(tr("Alert.user.edition.save-button"));
-        Wt::WPushButton *cancelButton = new Wt::WPushButton(tr("Alert.user.edition.cancel-button"));
-
-        bindWidget("save-button", saveButton);
-        bindWidget("cancel-button", cancelButton);
+//        Wt::WPushButton *saveButton = new Wt::WPushButton(tr("Alert.user.edition.save-button"));
+//        Wt::WPushButton *cancelButton = new Wt::WPushButton(tr("Alert.user.edition.cancel-button"));
+//
+//        bindWidget("save-button", saveButton);
+//        bindWidget("cancel-button", cancelButton);
         
         created_ = true;
     }
 }
 
-Wt::WStringListModel *UserEditionWidget::getMediasForCurrentUser(int mediaType)
+std::map<long long, Wt::WString> UserEditionWidget::getMediasForCurrentUser(int mediaType)
 {
-    Wt::WStringListModel *res = new Wt::WStringListModel();
-        
+    std::map<long long, Wt::WString> res;
+    try
     {
         Wt::Dbo::Transaction transaction(*session);
         Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> > medias = session->find<MediaValue>().where("\"MEV_USR_USR_ID\" = ?").bind(session->user().id())
-                                                                                            .where("\"MEV_MED_MED_ID\" = ?").bind(mediaType);
+                                                                                            .where("\"MEV_MED_MED_ID\" = ?").bind(mediaType)
+                                                                                            .where("\"MEV_DELETE\" IS NULL");
         int idx = 0;
         for (Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> >::const_iterator i = medias.begin(); i != medias.end(); ++i)
         {
-            res->insertString(idx,(*i)->value);
+            Wt::WString test = i->get()->value;
+            res[i->id()] = test;
             idx++;
         }
+        transaction.commit();
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("1"),Wt::Ok);
+        Wt::log("error") << "[UserEditionWidget] " << e.what();
     }
     return res;
 }
 
-void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medId, Wt::WSelectionBox *sBox)
+void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medEnumId)
 {
     if (model_->validateField(field))
     {
@@ -281,7 +344,7 @@ void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medId, Wt::WSe
         {
             Wt::Dbo::Transaction transaction(*session);
             Wt::Dbo::ptr<User> ptrUser = session->user();
-            Wt::Dbo::ptr<Media> media = session->find<Media>().where("\"MED_ID\" = ?").bind(medId);
+            Wt::Dbo::ptr<Media> media = session->find<Media>().where("\"MED_ID\" = ?").bind(medEnumId);
             
             MediaValue *mev = new MediaValue();
             mev->user= ptrUser;
@@ -292,6 +355,14 @@ void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medId, Wt::WSe
             Wt::Dbo::ptr<MediaValue> ptrMev = session->add<MediaValue>(mev);
             model_->setValidated(field,false);
             transaction.commit();
+            
+            
+            int tableRow = emailsTable->rowCount() - 1;
+            emailsTable->insertRow(tableRow);
+            new Wt::WText(emailToAdd,emailsTable->elementAt(tableRow, 0));
+            Wt::WPushButton *deleteButtonEmail = new Wt::WPushButton(tr("Alert.user.edition.delete-button"),emailsTable->elementAt(tableRow, 1));
+            deleteButtonEmail->clicked().connect(boost::bind(&UserEditionWidget::deleteMedia,this,Enums::email,ptrMev->id,tableRow));
+            
             UserActionManagement::registerUserAction(Enums::add,Constants::T_MEDIA_VALUE_MEV,ptrMev.id());
         }
         catch (Wt::Dbo::Exception e)
@@ -304,15 +375,15 @@ void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medId, Wt::WSe
     {
         //todo
     }
-    sBox->setModel(getMediasForCurrentUser(medId));
-    sBox->refresh();
+//    sBox->setModel(getMediasForCurrentUser(medId));
+//    sBox->refresh();
     
     const std::string emptyString="";
     model_->setValue(field,boost::any(emptyString));
     update();
 }
 
-void UserEditionWidget::deleteMedia(int medId, Wt::WSelectionBox *sBox)
+void UserEditionWidget::deleteMedia(int medEnumId, long long medId, int row)
 {
     try
     {
@@ -331,16 +402,18 @@ void UserEditionWidget::deleteMedia(int medId, Wt::WSelectionBox *sBox)
     catch (Wt::Dbo::Exception e)
     {
         Wt::log("error") << "[UserEditionWidget] [deleteMedia]" << e.what();
-        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
-        return;
+//        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+//        return;
     }
     
     try
     {
         Wt::Dbo::Transaction transaction(*session);
-        session->execute("DELETE FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_VALUE\" = \'" + sBox->valueText().toUTF8() + "\'"
-                         " AND \"MEV_MED_MED_ID\" = " + boost::lexical_cast<std::string>(medId)
-                         + " AND \"MEV_USR_USR_ID\" = " + boost::lexical_cast<std::string>(session->user().id()));
+        Wt::Dbo::ptr<MediaValue> mediaValue = session->find<MediaValue>().where("\"MEV_ID\" = ?").bind(medId)
+                                                                           .where("\"MEV_MED_MED_ID\" = ?").bind(medEnumId)
+                                                                           .where("\"MEV_USR_USR_ID\" = ?").bind(session->user().id());
+        
+        mediaValue.modify()->deleteTag = Wt::WDateTime::currentDateTime();
 
         transaction.commit();
         UserActionManagement::registerUserAction(Enums::del,Constants::T_MEDIA_VALUE_MEV,medId);
@@ -351,29 +424,42 @@ void UserEditionWidget::deleteMedia(int medId, Wt::WSelectionBox *sBox)
         Wt::WMessageBox::show(tr("Alert.user.dependant-alert-exists-title"),tr("Alert.user.dependant-alert-exists"),Wt::Ok);
         return;
     }
-    sBox->setModel(getMediasForCurrentUser(medId));
-    sBox->refresh();
+    
+    switch(medEnumId)
+    {
+        case Enums::email:
+        {
+            emailsTable->deleteRow(row);
+            break;
+        }
+        case Enums::sms:
+        {
+            smsTable->deleteRow(row);
+            break;
+        }
+    }
+    
     update(); 
 }
 
 void UserEditionWidget::addEmail()
 {
-    addMedia(model_->MediaEMail,Enums::email,mediaEmailSelectionBox);
+    addMedia(model_->MediaEMail,Enums::email);
 }
 
 void UserEditionWidget::deleteEmail()
 {
-    deleteMedia(Enums::email,mediaEmailSelectionBox);  
+//    deleteMedia(Enums::email,row);  
 }
 
 void UserEditionWidget::addSms()
 {
-    addMedia(model_->MediaSMS,Enums::sms,mediaSmsSelectionBox);
+//    addMedia(model_->MediaSMS,Enums::sms,mediaSmsSelectionBox);
 }
 
 void UserEditionWidget::deleteSms()
 {
-    deleteMedia(Enums::sms,mediaSmsSelectionBox);  
+//    deleteMedia(Enums::sms,row);  
 }
 
 

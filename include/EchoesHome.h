@@ -65,7 +65,6 @@ private:
 
     void onAuthEvent();
     void showPage(int page, Enums::EMenuRoot menuRoot = Enums::main);
-    void resizeContainers(bool loggedIn);
     
     Wt::WContainerWidget *initMonitoringWidget();
     Wt::WTabWidget* initAdminWidget();

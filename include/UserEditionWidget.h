@@ -68,14 +68,15 @@ public:
    */
   void update();
   
-  Wt::WSelectionBox *mediaEmailSelectionBox;
-  Wt::WSelectionBox *mediaSmsSelectionBox;
+  Wt::WTable *emailsTable;
+  Wt::WTable *smsTable;
+  Wt::WLineEdit *emailEdit;
   
-  Wt::WStringListModel *getMediasForCurrentUser(int mediaType);
+  std::map<long long, Wt::WString> getMediasForCurrentUser(int mediaType);
   
   
-  void addMedia(Wt::WFormModel::Field field, int medId, Wt::WSelectionBox *sBox);
-  void deleteMedia(int medId, Wt::WSelectionBox *sBox);
+  void addMedia(Wt::WFormModel::Field field, int medId);
+  void deleteMedia(int medEnumId, long long medId, int row);
   
   void addEmail();
   void deleteEmail();

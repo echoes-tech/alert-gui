@@ -1,3 +1,7 @@
+html,body {
+	height: 100%
+}
+
 .Wt-domRoot {
 	position: static;
 }
@@ -47,4 +51,8 @@ input[type="color"],
 .clear
 {
 	clear: both;
+}
+
+#content {
+	height: 100%;
 }

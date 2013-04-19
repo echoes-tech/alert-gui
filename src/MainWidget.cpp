@@ -84,7 +84,7 @@ void MainWidget::createUI()
     
 //    const Wt::WLink *test = new Wt::WLink("");
     breadCrumbsAnchor0->setTextFormat(Wt::XHTMLUnsafeText);
-    breadCrumbsAnchor0->setText("<i class='icon-home'></i>ToTrAccueil");
+    breadCrumbsAnchor0->setText("<i class='icon-home'></i>" + tr("Alert.admin.home"));
 //    breadCrumbsAnchor0->setLink(*test);
     
     breadCrumbsContainer->addWidget(breadCrumbsAnchor0);
@@ -127,7 +127,6 @@ Wt::WContainerWidget * MainWidget::createContentHeader()
 {
     Wt::WContainerWidget *res = new Wt::WContainerWidget();
     Wt::WHBoxLayout *layout = new Wt::WHBoxLayout();
-//    titleText->setWidth("60%");
     res->setLayout(layout);
     layout->addWidget(titleText);
     res->setId("content-header");
@@ -262,11 +261,11 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
             omw = new OptionManagementWidget(omm,this->session);
             break;
         }
-        case Enums::EAccountSubmenu::USER:
-        {
-            
-            break;
-        }
+//        case Enums::EAccountSubmenu::USER:
+//        {
+//            
+//            break;
+//        }
         case Enums::EAccountSubmenu::MEDIA:
         {
            uew = new UserEditionWidget();
@@ -459,11 +458,11 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
         {
             switch (type)
             {
-                case Enums::EAccountSubmenu::USER:
-                {
-    //                this->contentFluid->addWidget(aew);
-                    break;
-                }
+//                case Enums::EAccountSubmenu::USER:
+//                {
+//    //                this->contentFluid->addWidget(aew);
+//                    break;
+//                }
                 case Enums::EAccountSubmenu::OPTION:
                 {
                     this->contentFluid->addWidget(omw);

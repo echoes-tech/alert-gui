@@ -140,7 +140,7 @@ public:
   
   
   void addMedia();
-  void deleteMedia(int row);
+  void deleteMedia(Wt::WTableCell *cell);
   
   void addAlert();
 

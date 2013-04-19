@@ -275,6 +275,7 @@
   <message id="Alert.admin.submenu_alerts-tab">Alerts Management</message>
   <message id="Alert.admin.submenu_accounts-tab">Account options</message>
   
+  <message id="Alert.admin.home">Home</message>
   <message id="Alert.admin.title">Administration</message>
   <message id="Alert.monitoring.title">Monitoring</message>
   

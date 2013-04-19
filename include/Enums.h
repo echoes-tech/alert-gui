@@ -60,9 +60,10 @@ public:
     (ALERT)("alerts")
     (ALERT_LIST)("alerts_list")
     )
+
+//    (USER)("users")
     
     BOOST_ENUM_VALUES(EAccountSubmenu, const char*,
-    (USER)("users")
     (OPTION)("options")
     (MEDIA)("medias")
     )

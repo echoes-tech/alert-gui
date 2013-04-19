@@ -71,17 +71,18 @@ public:
   Wt::WTable *emailsTable;
   Wt::WTable *smsTable;
   Wt::WLineEdit *emailEdit;
+  Wt::WLineEdit *smsEdit;
+  
+  void createMediaTable(int medEnumId);
   
   std::map<long long, Wt::WString> getMediasForCurrentUser(int mediaType);
   
   
   void addMedia(Wt::WFormModel::Field field, int medId);
-  void deleteMedia(int medEnumId, long long medId, int row);
+  void deleteMedia(int medEnumId, long long medId, Wt::WTableCell * cell);
   
   void addEmail();
-  void deleteEmail();
   void addSms();
-  void deleteSms();
 
 protected:
   /*! \brief Validates the current information.

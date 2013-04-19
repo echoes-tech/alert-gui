@@ -3,6 +3,7 @@
 
   <!-- AlertWidget -->
 
+  <message id="Alert.option.option-table-title">Liste des options</message>
   <message id="Alert.option.ask-sms-button">Demander un renouvellement de quota SMS</message>
   
   <message id="Alert.option.ask-sms-title">Envoyé</message>

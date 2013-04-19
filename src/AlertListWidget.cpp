@@ -30,9 +30,17 @@ AlertListWidget::~AlertListWidget()
 void AlertListWidget::createUI()
 {
     this->clear();
-
+    
+    Wt::WText *helpText = new Wt::WText();
+    helpText->setTextFormat(Wt::XHTMLUnsafeText);
+    helpText->setText("<br /><div class ='alert alert-info'>" + tr("Alert.alert.alert-form-info") + "</div>");
+    
+    
+    
     Wt::WTable *alertsTable = new Wt::WTable(this);
-    alertsTable->setStyleClass("table-list");
+    alertsTable->addStyleClass("table");
+    alertsTable->addStyleClass("table-bordered");
+    alertsTable->addStyleClass("table-striped");
 
     Wt::WText *noAlertText = new Wt::WText(Wt::WString::tr("Alert.alert-list.no-alert"));
 
@@ -167,8 +175,12 @@ void AlertListWidget::createUI()
                     new Wt::WText(boost::lexical_cast<std::string > (i->get < 4 > ().get()->snoozeDuration), alertsTable->elementAt(row, ++colNum));
                     alertsTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
 
-                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.alert-list.delete-alert"), alertsTable->elementAt(row, ++colNum));
+                    Wt::WPushButton *delButton = new Wt::WPushButton(alertsTable->elementAt(row, ++colNum));
+                    delButton->setAttributeValue("class","btn btn-danger");
+                    delButton->setTextFormat(Wt::XHTMLUnsafeText);
+                    delButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.alert-list.delete-alert"));
                     delButton->clicked().connect(boost::bind(&AlertListWidget::deleteAlert, this, (i->get < 0 > ().id())));
+
                 }
             }
             else
@@ -191,6 +203,7 @@ void AlertListWidget::createUI()
 
 
     //    topHorizontalLayout->addWidget(mainForm);
+    
     bottomHorizontalLayout->addWidget(noAlertText);
     bottomHorizontalLayout->addWidget(alertsTable);
 
@@ -199,6 +212,7 @@ void AlertListWidget::createUI()
     bottomHorizontalLayout->addWidget(emptyContainer);
 
     //    mainVerticalLayout->addLayout(topHorizontalLayout);
+    mainVerticalLayout->addWidget(helpText);
     mainVerticalLayout->addLayout(bottomHorizontalLayout);
 
     this->setLayout(mainVerticalLayout);

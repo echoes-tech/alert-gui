@@ -187,26 +187,21 @@ void AlertEditionWidget::update()
         mediaSelectionBox = new Wt::WComboBox();
         mediaValueSelectionBox = new Wt::WComboBox();
         
-        //user list
-//        bindWidget("user-sbox", userSelectionBox);
+
         this->updateUserSelectionBox(this->userId);
         userSelectionBox->clicked().connect(boost::bind(&AlertEditionWidget::updateMediaSBFromUserSB, this));
         
-        //media list
-//        bindWidget("media-sbox", mediaSelectionBox);
+
         mediaSelectionBox->clicked().connect(boost::bind(&AlertEditionWidget::updateMediaValueSBFromMediaSB, this));
-//        
-//        // information list
-//        bindWidget("media-value-sbox", mediaValueSelectionBox);
+
         
         
-        Wt::WPushButton *addButtonMedia = new Wt::WPushButton(tr("Alert.alert.add-media-button"));
-        Wt::WPushButton *deleteButtonMedia = new Wt::WPushButton(tr("Alert.alert.delete-media-button"));
+        Wt::WPushButton *addButtonMedia = new Wt::WPushButton();
+        addButtonMedia->addStyleClass("btn");
+        addButtonMedia->addStyleClass("btn-info");
+        addButtonMedia->setTextFormat(Wt::XHTMLUnsafeText);
+        addButtonMedia->setText("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.alert.add-media-button"));
 
-//        bindWidget("add-button-media", addButtonMedia);
-//        bindWidget("delete-button-media", deleteButtonMedia);
-
-//        dynamic_cast<Wt::WStringListModel>(userSelectionBox->model())->
         
         
         Wt::WStandardItemModel *sim = new Wt::WStandardItemModel(0, 4, this);
@@ -219,13 +214,7 @@ void AlertEditionWidget::update()
         sim->setHeaderData(2,boost::any(valueTitle));
         sim->setHeaderData(3,boost::any(snoozeTitle));
         
-//        userMediaDestinationTableView = new Wt::WTableView();
-//        userMediaDestinationTableView->setModel(sim);
-//        userMediaDestinationTableView->setSelectionBehavior(Wt::SelectRows);
-//        userMediaDestinationTableView->setSelectionMode(Wt::SingleSelection);
-        
-//        bindWidget("user-media-destination", userMediaDestinationTableView);
-        
+       
         tableMediaDestination = new Wt::WTable();
         tableMediaDestination->setHeaderCount(2,Wt::Horizontal);
 
@@ -247,7 +236,7 @@ void AlertEditionWidget::update()
         new Wt::WText(tr("Alert.alert.media"),tableMediaDestination->elementAt(row, 1));
         new Wt::WText(tr("Alert.alert.media-value"),tableMediaDestination->elementAt(row, 2));
         new Wt::WText(tr("Alert.alert.snooze"),tableMediaDestination->elementAt(row, 3));
-        new Wt::WText(tr("Alert.alert.action"),tableMediaDestination->elementAt(row, 4));
+        new Wt::WText(tr("Alert.global.action"),tableMediaDestination->elementAt(row, 4));
         
         // first line
         ++row;
@@ -272,12 +261,7 @@ void AlertEditionWidget::update()
         
         bindWidget("table-media-destination",tableMediaDestination);
         
-//        
         addButtonMedia->clicked().connect(this, &AlertEditionWidget::addMedia);
-//        deleteButtonMedia->clicked().connect(this, &AlertEditionWidget::deleteMedia);
-//        
-        
-        
         
         created_ = true;
     }
@@ -724,9 +708,12 @@ void AlertEditionWidget::addMedia()
     
     int row = tableMediaDestination->rowCount() - 1;
     
-    Wt::WPushButton *deleteButton = new Wt::WPushButton(tr("Alert.alert.delete-media-button"));
-    deleteButton->clicked().connect(boost::bind(&AlertEditionWidget::deleteMedia,this,row));
-    
+    Wt::WPushButton *deleteButton = new Wt::WPushButton();
+    deleteButton->addStyleClass("btn");
+    deleteButton->addStyleClass("btn-danger");
+    deleteButton->setTextFormat(Wt::XHTMLUnsafeText);
+    deleteButton->setText("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.alert.delete-media-button"));
+
     tableMediaDestination->insertRow(row);
     tableMediaDestination->elementAt(row,0)->addWidget(new Wt::WText(userSelectionBox->currentText()));
     tableMediaDestination->elementAt(row,1)->addWidget(new Wt::WText(mediaSelectionBox->currentText()));
@@ -734,7 +721,7 @@ void AlertEditionWidget::addMedia()
     tableMediaDestination->elementAt(row,3)->addWidget(new Wt::WText(snoozeEdit->text()));
     tableMediaDestination->elementAt(row,4)->addWidget(deleteButton);
     
-    
+    deleteButton->clicked().connect(boost::bind(&AlertEditionWidget::deleteMedia,this,tableMediaDestination->elementAt(row,4)));
     
     
     
@@ -762,28 +749,28 @@ void AlertEditionWidget::addMedia()
     UserActionManagement::registerUserAction(Enums::add,Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,amsPtr.id());
 }
 
-void AlertEditionWidget::deleteMedia(int row)
+void AlertEditionWidget::deleteMedia(Wt::WTableCell *cell)
 {
     try
     {
-        UserActionManagement::registerUserAction(Enums::del,Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,mapAlertMediaSpecializationIdTableView[row]);
+        UserActionManagement::registerUserAction(Enums::del,Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,mapAlertMediaSpecializationIdTableView[cell->row()]);
         Wt::Dbo::Transaction transaction(*session);
         Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr = session->find<AlertMediaSpecialization>()
-                                .where("\"AMS_ID\" = ?").bind(mapAlertMediaSpecializationIdTableView[row]);
+                                .where("\"AMS_ID\" = ?").bind(mapAlertMediaSpecializationIdTableView[cell->row()]);
         amsPtr.remove();
         for (std::map<int,long long>::const_iterator i = mapAlertMediaSpecializationIdTableView.begin() ; i != mapAlertMediaSpecializationIdTableView.end(); ++i)
         {
             std::cout << i->first << std::endl;
             std::cout << i->second << std::endl;
         }
-        mapAlertMediaSpecializationIdTableView.erase(row);
+        mapAlertMediaSpecializationIdTableView.erase(cell->row());
         std::cout << "phase 2" << std::endl;
         for (std::map<int,long long>::const_iterator i = mapAlertMediaSpecializationIdTableView.begin() ; i != mapAlertMediaSpecializationIdTableView.end() ; ++i)
         {
             std::cout << i->first << std::endl;
             std::cout << i->second << std::endl;
         }
-        tableMediaDestination->deleteRow(row);
+        tableMediaDestination->deleteRow(cell->row());
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)

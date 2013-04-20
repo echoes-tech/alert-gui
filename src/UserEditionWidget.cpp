@@ -179,7 +179,7 @@ void UserEditionWidget::createMediaTable(int medEnumId)
     tableMediaTitle->setTextFormat(Wt::XHTMLUnsafeText);
     ++row;
     new Wt::WText(tr("Alert.media."+desc+"-name"),mediasTable->elementAt(row, 0));
-    new Wt::WText(tr("Alert.media."+desc+"-action"),mediasTable->elementAt(row, 1));
+    new Wt::WText(tr("Alert.global.action"),mediasTable->elementAt(row, 1));
 
 
 
@@ -189,12 +189,20 @@ void UserEditionWidget::createMediaTable(int medEnumId)
     {
         ++row;
         new Wt::WText(i->second,mediasTable->elementAt(row, 0));
-        Wt::WPushButton *deleteButton = new Wt::WPushButton(tr("Alert.user.edition.delete-button"),mediasTable->elementAt(row, 1));
+        Wt::WPushButton *deleteButton = new Wt::WPushButton(mediasTable->elementAt(row, 1));
+        deleteButton->setTextFormat(Wt::XHTMLUnsafeText);
+        deleteButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.user.edition.delete-button"));
+        deleteButton->addStyleClass("btn");
+        deleteButton->addStyleClass("btn-danger");
         deleteButton->clicked().connect(boost::bind(&UserEditionWidget::deleteMedia,this,medEnumId,i->first,mediasTable->elementAt(row, 1)));
     }
 
     ++row;
-    Wt::WPushButton *addButton = new Wt::WPushButton(tr("Alert.user.edition.add-button"),mediasTable->elementAt(row, 1));
+    Wt::WPushButton *addButton = new Wt::WPushButton(mediasTable->elementAt(row, 1));
+    addButton->setTextFormat(Wt::XHTMLUnsafeText);
+    addButton->setText("<i class='icon-plus icon-white'></i> " + tr("Alert.user.edition.add-button"));
+    addButton->addStyleClass("btn");
+    addButton->addStyleClass("btn-info");
     
 
     switch (medEnumId)

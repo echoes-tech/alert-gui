@@ -50,6 +50,7 @@ void RegistrationWidgetAlert::registerUserDetails(Wt::Auth::User& user)
     dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->firstName = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->FirstNameField);
     dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->eMail = model()->valueText(model()->LoginNameField);
     dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->lastName = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->LastNameField);
+    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->token = reinterpret_cast<RegistrationModelAlert*>(model())->generateToken();
 
     Organization *org = new Organization();
 

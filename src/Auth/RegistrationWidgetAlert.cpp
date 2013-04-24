@@ -53,7 +53,6 @@ void RegistrationWidgetAlert::registerUserDetails(Wt::Auth::User& user)
 
     Organization *org = new Organization();
 
-
     Wt::Dbo::ptr<OrganizationType> type;
     bool bCompagny = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeCompanyField));
     if (bCompagny)
@@ -81,8 +80,6 @@ void RegistrationWidgetAlert::registerUserDetails(Wt::Auth::User& user)
     org->organizationType = type;
     org->token = reinterpret_cast<RegistrationModelAlert*>(model())->generateToken();
 
-
-
     Wt::Dbo::ptr<Organization> ptrOrg = ((UserDatabase*)user.database())->session_.add<Organization>(org);
 
     //TODO : hardcoded, should be changed when the pack selection will be available
@@ -105,6 +102,18 @@ void RegistrationWidgetAlert::registerUserDetails(Wt::Auth::User& user)
 
     dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->organizations.insert(ptrOrg);
     dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->currentOrganization = ptrOrg;
+
+    EngOrg *engOrg = new EngOrg();
+    engOrg->pk.organization = ptrOrg;
+    engOrg->token = reinterpret_cast<RegistrationModelAlert*>(model())->generateToken();
+    
+    //TODO : hardcoded, should be changed for multiple Engines
+    Wt::Dbo::ptr<Engine> enginePtr = ((UserDatabase*)user.database())->session_.find<Engine>().where("\"ENG_ID\" = ?").bind(1);
+
+    engOrg->pk.engine = enginePtr;
+    
+    Wt::Dbo::ptr<EngOrg> enoPtr = ((UserDatabase*)user.database())->session_.add<EngOrg>(engOrg);
+    
 }
 
 

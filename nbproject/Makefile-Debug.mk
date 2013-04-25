@@ -51,6 +51,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/MonitoringWidget.o \
 	${OBJECTDIR}/src/OptionManagementModel.o \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
+	${OBJECTDIR}/src/PluginEditionModel.o \
+	${OBJECTDIR}/src/PluginEditionWidget.o \
 	${OBJECTDIR}/src/UserActionManagement.o \
 	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/src/UserEditionWidget.o
@@ -159,6 +161,16 @@ ${OBJECTDIR}/src/OptionManagementWidget.o: src/OptionManagementWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/OptionManagementWidget.o src/OptionManagementWidget.cpp
+
+${OBJECTDIR}/src/PluginEditionModel.o: src/PluginEditionModel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/PluginEditionModel.o src/PluginEditionModel.cpp
+
+${OBJECTDIR}/src/PluginEditionWidget.o: src/PluginEditionWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/PluginEditionWidget.o src/PluginEditionWidget.cpp
 
 ${OBJECTDIR}/src/UserActionManagement.o: src/UserActionManagement.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

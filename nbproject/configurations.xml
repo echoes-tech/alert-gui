@@ -20,6 +20,10 @@
           <itemPath>include/OptionManagementModel.h</itemPath>
           <itemPath>include/OptionManagementWidget.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
+          <itemPath>include/PluginEditionModel.h</itemPath>
+          <itemPath>include/PluginEditionWidget.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>include/UserEditionModel.h</itemPath>
           <itemPath>include/UserEditionWidget.h</itemPath>
@@ -79,6 +83,8 @@
       <itemPath>global_fr.xml</itemPath>
       <itemPath>options.xml</itemPath>
       <itemPath>options_fr.xml</itemPath>
+      <itemPath>plugin.xml</itemPath>
+      <itemPath>plugin_fr.xml</itemPath>
       <itemPath>user.xml</itemPath>
       <itemPath>user_fr.xml</itemPath>
     </logicalFolder>
@@ -100,6 +106,10 @@
         <logicalFolder name="f6" displayName="AdminOptionTab" projectFiles="true">
           <itemPath>src/OptionManagementModel.cpp</itemPath>
           <itemPath>src/OptionManagementWidget.cpp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
+          <itemPath>src/PluginEditionModel.cpp</itemPath>
+          <itemPath>src/PluginEditionWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>src/UserEditionModel.cpp</itemPath>
@@ -238,6 +248,10 @@
       </item>
       <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserEditionModel.h" ex="false" tool="3" flavor2="0">
@@ -285,6 +299,10 @@
       <item path="options.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/alert.css" ex="false" tool="3" flavor2="0">
       </item>
@@ -334,6 +352,10 @@
       <item path="src/OptionManagementModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -447,6 +469,10 @@
       </item>
       <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserEditionModel.h" ex="false" tool="3" flavor2="0">
@@ -494,6 +520,10 @@
       <item path="options.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/alert.css" ex="false" tool="3" flavor2="0">
       </item>
@@ -543,6 +573,10 @@
       <item path="src/OptionManagementModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>

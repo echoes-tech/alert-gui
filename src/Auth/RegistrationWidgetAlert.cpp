@@ -8,7 +8,6 @@
 
 #include "Auth/RegistrationWidgetAlert.h"
 
-
 RegistrationWidgetAlert::RegistrationWidgetAlert(Wt::Auth::AuthWidget *authWidget) 
 : Wt::WTemplateFormView(tr("Wt.Auth.template.registration.echoes.alert")),
     authWidget_(authWidget),

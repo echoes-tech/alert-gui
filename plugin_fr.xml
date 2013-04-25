@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <!-- Models -->
+
+  <message id="Alert.plugins.add-plugin-button">Ajouter une application</message>
+  <message id="Alert.plugins.delete-plugin-button">Supprimer une application</message>
+  
+  <message id="Alert.plugins.add-source-button">Ajouter une source</message>
+  <message id="Alert.plugins.delete-source-button">Supprimer une source</message>
+  <message id="Alert.plugins.modify-source-button">Modifier une source</message>
+
+  <message id="Alert.plugins.add-search-and-information-button">Ajouter une recherche et ses informations</message> 
+  <message id="Alert.plugins.delete-search-button">Supprimer une recherche</message>
+  <message id="Alert.plugins.modify-search-button">Modifier une recherche</message>
+  
+  <message id="Alert.plugins.create-JSON-button">Télécharcher l'application</message>
+  
+  
+  <message id="Alert.plugins.alert-form-title">Alertes</message>
+  <message id="Alert.plugins.alert-form-info">Cette page vous donne la possibilité de créer une application</message>
+  <message id="Alert.plugins.plugin-table-title">Créer une application</message>
+  <message id="Alert.plugins.source-table-title">Créer une source pour l'application sélectionnée</message>
+  <message id="Alert.plugins.search-table-title">Créer une recherche et ses informations pour la source sélectionnée</message>
+  
+  <message id="Alert.plugins.name-label">Nom</message>
+  <message id="Alert.plugins.description-label">Déscription</message> 
+  <message id="Alert.plugins.search-periode-label">Période</message> 
+  <message id="Alert.plugins.search-static-label">Est statique</message> 
+  <message id="Alert.plugins.search-key-value">Position de la valeur clé</message> 
+  <message id="Alert.plugins.search-nomber-value">Nombre de valeur</message> 
+ 
+  <message id="Alert.plugins.value-number-title">Valeur numéros</message>
+  <message id="Alert.plugins.name-title">Nom</message> 
+  <message id="Alert.plugins.unit-title">Unité</message>
+  <message id="Alert.plugins.display-title">Est visible</message>
+  <message id="Alert.plugins.calculate-title">Est calculé</message>
+  <message id="Alert.plugins.value-title">Valeur</message> 
+  <message id="Alert.plugins.parameter-title">Paramétre</message> 
+  
+</messages>

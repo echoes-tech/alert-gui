@@ -12,7 +12,6 @@
 
 #include <Wt/WMessageBox>
 
-
 class UserEditionModel : public Wt::WFormModel {
 public:
     UserEditionModel(User *user);

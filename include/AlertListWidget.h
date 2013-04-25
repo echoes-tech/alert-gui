@@ -16,7 +16,7 @@
 #include <Wt/WMessageBox>
 #include <Wt/WGroupBox>
 #include <Wt/WText>
-
+        
 class AlertListWidget : public Wt::WContainerWidget {
 public:
     AlertListWidget(Session *session);

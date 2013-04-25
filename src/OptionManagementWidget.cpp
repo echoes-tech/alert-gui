@@ -110,7 +110,10 @@ Wt::WFormWidget *OptionManagementWidget::createFormWidget(Wt::WFormModel::Field 
     
     if (field == OptionManagementModel::smsAsk)
     {
-        Wt::WPushButton *button = new Wt::WPushButton(tr("Alert.option.ask-sms-button"));
+        Wt::WPushButton *button = new Wt::WPushButton();
+        button->setAttributeValue("class","btn btn-info");
+        button->setTextFormat(Wt::XHTMLUnsafeText);
+        button->setText("<i class='icon-shopping-cart icon-white'></i> " + tr("Alert.option.ask-sms-button"));
         button->clicked().connect(boost::bind(&OptionManagementWidget::askSms, this));
         result = button;
     }

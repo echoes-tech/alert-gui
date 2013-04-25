@@ -74,15 +74,8 @@ public:
    */
   AssetManagementModel *model() const { return model_; }
   
-
-
-  
   long long userId;
-  
- 
-  
-  
-  
+
   
 protected:
   /*! \brief Validates the current information.

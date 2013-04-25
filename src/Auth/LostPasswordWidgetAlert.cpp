@@ -13,7 +13,8 @@ LostPasswordWidgetAlert::LostPasswordWidgetAlert(Wt::Auth::AbstractUserDatabase&
 users_(users),
 baseAuth_(auth) {
 //    addFunction("id", WT_TEMPLATE_FUNCTION(id));
-    addFunction("tr", WT_TEMPLATE_FUNCTION(tr));
+    addFunction("tr", &Functions::tr);
+    addFunction("block", &Functions::block);
 
     Wt::WLineEdit *email = new Wt::WLineEdit();
     email->setFocus();

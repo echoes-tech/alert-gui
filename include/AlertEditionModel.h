@@ -29,7 +29,6 @@ public:
     static const Field ThresholdValueKey;
     static const Field ThresholdValue;
     static const Field ThresholdValueUnit;
-    static const Field Snooze;
     static const Field Unit;
     
     virtual bool validateField(Field field);

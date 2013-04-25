@@ -25,6 +25,7 @@
 #include <Wt/WTableView>
 #include <Wt/WTable>
 
+
 class EchoesHome : public Wt::WContainerWidget 
 {
 public:
@@ -33,14 +34,13 @@ public:
     Session *getSession();
 private:
     Session *session;
-    void openUserEdition();
-    void tabSelected();
+    
     void handleInternalPath(const std::string &internalPath);
     
     Wt::Auth::AuthWidget *authWidget;
     Wt::Auth::AuthModel *authModel;
     Wt::WText *title;
-    Wt::WContainerWidget *topContainer;
+//    Wt::WContainerWidget *topContainer;
     Wt::WHBoxLayout *topBoxLoggedInLayout;
     Wt::WVBoxLayout *topBoxLoggedOutLayout;
     Wt::WVBoxLayout *topRightLayout;
@@ -48,38 +48,27 @@ private:
 //    Wt::WLabel *admin_;
     Wt::WTabWidget *adminPageTabs;
     Wt::WContainerWidget *monitoringPage;
+    MainWidget *mainPageWidget;
     Wt::WContainerWidget *links;
     Wt::WHBoxLayout *linksLayout;
     Wt::WAnchor *adminAnchor;
     Wt::WAnchor *monitoringAnchor;
     
-    AlertListWidget *alertGroupBox;
+    Wt::WAnchor *testAnchor;
     
-    UserEditionModel *uem;
-    UserEditionWidget *uew;
+    
 
-    AlertEditionModel *aem;
-    AlertEditionWidget *aew;
-    
-    AssetManagementModel *amm;
-    AssetManagementWidget *amw;
-    
-    OptionManagementModel *omm;
-    OptionManagementWidget *omw;
-    
-    
-    
+    void initSession();
     void initAuth();
     void initHeader();
-    void initMainStack();
-    void setLinks();
+    void processEnvironment();
+
     void onAuthEvent();
-    void showAdmin();
-    void showMonitoring();
-    void resizeContainers(bool loggedIn);
+    void showPage(int page, Enums::EMenuRoot menuRoot = Enums::main);
     
     Wt::WContainerWidget *initMonitoringWidget();
     Wt::WTabWidget* initAdminWidget();
+    void initMainPageWidget();
     
     virtual void refresh();
     

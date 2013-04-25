@@ -269,7 +269,7 @@
   <message id="Alert.admin.assets-tab">Servers</message>
   <message id="Alert.admin.alerts-tab">Alerts definition</message>
   <message id="Alert.admin.alert-creation-tab">Alert creation</message>
-  <message id="Alert.admin.alert-list-tab">Alerts list</message>
+  <message id="Alert.admin.alerts_list-tab">Alerts list</message>
   <message id="Alert.admin.users-tab">Users</message>
   <message id="Alert.admin.medias-tab">Medias</message>
   <message id="Alert.admin.submenu_alerts-tab">Alerts Management</message>
@@ -283,5 +283,7 @@
   <message id="Alert.admin.options-tab">Options</message>
   <message id="Alert.global.database-error-title">Database error</message>
   <message id="Alert.global.database-error">Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
+  
+  <message id="Alert.global.action">Actions</message>
 
 </messages>

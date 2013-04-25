@@ -41,6 +41,15 @@
         You have to delete this alert to be able to delete this media.
     </message>
     
+    
+    <message id="Alert.media.media-info">On this page you can add the medias used to send alerts.</message>
+    
+    <message id="Alert.media.add-email-table">Emails</message>
+    <message id="Alert.media.add-sms-table">SMS</message>
+    
+    <message id="Alert.media.email-name">Email address</message>
+    <message id="Alert.media.sms-name">Phone number</message>
+    
     <message id="Alert.user.edition.valid">Valid</message>
     
   <!-- templates -->

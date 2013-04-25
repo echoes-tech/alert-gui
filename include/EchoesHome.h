@@ -32,6 +32,7 @@ public:
 
     EchoesHome(Wt::WContainerWidget *parent = 0);
     Session *getSession();
+
 private:
     Session *session;
     
@@ -71,7 +72,6 @@ private:
     void initMainPageWidget();
     
     virtual void refresh();
-    
 
 };
 

@@ -66,6 +66,7 @@ public:
     BOOST_ENUM_VALUES(EAccountSubmenu, const char*,
     (OPTION)("options")
     (MEDIA)("medias")
+    (ROLE)("role")
     )
 private:
 

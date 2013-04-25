@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+	<message id="Alert.role.role-customization-info">In this page you can customize the alerts</message>
+	<message id="Alert.admin.role-tab">Roles</message>
+
+	<message id="Alert.role.customization.template">
+	    <br />
+	    <div class ="alert alert-info">${tr:Alert.role.role-customization-info}</div>
+	    
+	    
+        ${medias-combo-box}
+        ${roles-combo-box}
+        ${assets-container}
+        ${plugins-combo-box}
+        
+        <br />
+        
+
+        ${plugins-container}    
+        
+        <br />
+        
+        ${informations-container}
+        
+  
+  	</message>
+</messages>

@@ -27,6 +27,7 @@
 #include "OptionManagementModel.h"
 #include "OptionManagementWidget.h"
 #include "MonitoringWidget.h"
+#include "RoleCustomizationWidget.h"
 #include "MainWidget.h"
 #include "EchoesHome.h"
 
@@ -41,6 +42,7 @@ class AssetManagementModel;
 class OptionManagementWidget;
 class OptionManagementModel;
 class AlertEditionModel;
+class RoleCustomizationWidget;
 class MainWidget;
 class EchoesHome;
 class UserActionManagement;

@@ -51,6 +51,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/MonitoringWidget.o \
 	${OBJECTDIR}/src/OptionManagementModel.o \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
+	${OBJECTDIR}/src/RoleCustomizationWidget.o \
 	${OBJECTDIR}/src/UserActionManagement.o \
 	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/src/UserEditionWidget.o
@@ -159,6 +160,11 @@ ${OBJECTDIR}/src/OptionManagementWidget.o: src/OptionManagementWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -I../wt-3.3.0/build/src -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/OptionManagementWidget.o src/OptionManagementWidget.cpp
+
+${OBJECTDIR}/src/RoleCustomizationWidget.o: src/RoleCustomizationWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo/workspace/include -I../wt-3.3.0/build/src -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/RoleCustomizationWidget.o src/RoleCustomizationWidget.cpp
 
 ${OBJECTDIR}/src/UserActionManagement.o: src/UserActionManagement.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

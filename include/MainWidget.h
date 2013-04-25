@@ -92,6 +92,8 @@ protected:
   UserEditionModel *uem;
   UserEditionWidget *uew;
   
+  RoleCustomizationWidget *rcw;
+  
   Wt::WText *wcw;
 
 private:

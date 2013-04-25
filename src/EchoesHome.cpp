@@ -20,7 +20,6 @@ Session* EchoesHome::getSession()
     return this->session;
 }
 
-
 void EchoesHome::initSession()
 {
     std::string dbHost = "127.0.0.1";
@@ -35,7 +34,6 @@ void EchoesHome::initSession()
     Wt::WApplication::readConfigurationProperty("db-password", dbPassword);
     this->session = new Session("hostaddr=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " user=" + dbUser + " password=" + dbPassword);
     this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
-    
 }
 
 void EchoesHome::initAuth()

@@ -5,8 +5,6 @@
   <message id="Alert.option.ask-sms-button">Ask to renew the SMS quota</message>
   
   <message id="Alert.option.option-table-title">Options list</message>
-  <message id="Alert.option.ask-sms-quota-body">Demande de renouvellement quota SMS.</message>
-  <message id="Alert.option.ask-sms-quota-subject">Demande quota SMS</message>
   
   <message id="Alert.option.ask-sms-title">Sent</message>
   <message id="Alert.option.ask-sms">An e-mail was sent to our team. You will receive an e-mail when your quota will be renewed.</message>

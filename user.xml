@@ -41,6 +41,15 @@
         You have to delete this alert to be able to delete this media.
     </message>
     
+    
+    <message id="Alert.media.media-info">On this page you can add the medias used to send alerts.</message>
+    
+    <message id="Alert.media.add-email-table">Emails</message>
+    <message id="Alert.media.add-sms-table">SMS</message>
+    
+    <message id="Alert.media.email-name">Email address</message>
+    <message id="Alert.media.sms-name">Phone number</message>
+    
     <message id="Alert.user.edition.valid">Valid</message>
     
   <!-- templates -->
@@ -98,49 +107,22 @@
         </div>
         -->
         <!-- User-form-right -->
-        <div class="User-form User-auth-login">
-            <h2>${tr:Alert.User.Edition.media-title}</h2>
-            <p>${tr:Wt.Auth.login-form-info}</p>
-      
-            <hr></hr>
-            <div class="User-fields">
-                <label for="${id:media-email}">${media-email-label}
-                    ${media-email-info class="User-info"}
-                </label>
-                ${media-email}
-                
-                <div class="User-buttons">
-                    ${add-button-email} ${delete-button-email}
-                </div>
-            </div>
-                
-            <div class="User-sbox">
-                ${email-sbox}
-            </div>
-      
-            <div class="User-fields">
-                <label for="${id:media-sms}">${media-sms-label}
-                    ${media-sms-info class="User-info"}
-                </label>
-                ${media-sms}
-                
-                <div class="User-buttons">
-                    ${add-button-sms} ${delete-button-sms}
-                </div>
-             </div>
-             
-             <div class="User-sbox">
-                    ${sms-sbox}
-            </div>
-            
-            
+        <br /> 
+        <div class ="alert alert-info">${tr:Alert.media.media-info}</div>
+        <div class = "clear"></div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span6">${email-table}</div>
+                <div class="span6">${sms-table}</div>
+            </div>    
         </div>
+        
 
-        <hr></hr>
+<!--        <hr></hr>
         <div class="User-buttons">
             
             ${save-button} ${cancel-button}
-        </div>
+        </div>-->
 
     </message>
 

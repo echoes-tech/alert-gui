@@ -6,12 +6,15 @@
   <message id="Alert.asset.asset-form-title">Servers</message>
   <message id="Alert.asset.asset-form-info">On this page you can add the servers you need to monitor and get the scripts to configure them.</message>
   
-  <message id="Alert.asset.asset-name-label">Server</message>
-  <message id="Alert.asset.asset-name-info">Serveur to monitor.</message>
+  <message id="Alert.asset.asset-name-label">Server to add: </message>
+  <message id="Alert.asset.asset-name-info">Invalid name</message>
   
   <message id="Alert.asset.add-asset-button">Add a server</message>
 
   <message id="Alert.asset.add-asset-form">Your servers</message>
+  
+  <message id="Alert.asset.asset-name">Asset name</message>
+  <message id="Alert.asset.asset-action">Actions</message>
   
   <message id="Alert.asset.download-script">Download</message>
   <message id="Alert.asset.delete-asset">Delete this server</message>
@@ -27,22 +30,21 @@
   <!-- templates -->
 
     <message id="Alert.Asset.Management.template">
+        <br />
         <div class="Probe-form">
 
-            <h2>${tr:Alert.asset.asset-form-title}</h2>
-            <p>${tr:Alert.asset.asset-form-info}</p>
+            <div class ="alert alert-info">${tr:Alert.asset.asset-form-info}</div>
             <div class = "clear"></div>
        
-            <div class="Probe-fields float-left">
-                <label for="${id:asset-name}">${tr:Alert.asset.asset-name-label}
-                    <span class="Probe-info">${tr:Alert.asset.asset-name-info}</span>
-                </label>
-                ${asset-name}
+            <div id="asset-name" class="control-group">
+                <div class="row-fluid">
+                    <div class="span2">${tr:Alert.asset.asset-name-label}</div>
+                    <div class="span3">${asset-name}</div>
+                    <div class="span3">${add-asset-button}</div><span id="asset-name-hint" class="help-inline span3" style="display: none; ">${tr:Alert.asset.asset-name-info}</span>
+                </div>
             </div>
 
-            <div class="Probe-buttons float-left">
-                ${add-asset-button}
-            </div>
+            
 
         </div>   
          

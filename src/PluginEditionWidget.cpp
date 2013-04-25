@@ -1833,13 +1833,10 @@ void PluginEditionWidget::searchToken()
         Wt::Dbo::Transaction transaction(*(this->session));
         
         //on prend le token de la ligne avec le plus grand id (le token le plus récemment créé)
-        std::string queryStr = "SELECT \"value\" FROM \"auth_token\" "
-                                "WHERE \"auth_info_id\" IN "
-                                        "(SELECT \"auth_info_id\" FROM \"auth_identity\" "
-                                        "WHERE \"identity\" = '" + boost::lexical_cast<std::string>(this->session->user().get()->eMail.toUTF8()) +
-                                        "')"  
-                                "ORDER BY \"id\" DESC "
-                                "LIMIT 1";
+        std::string queryStr = "SELECT \"USR_TOKEN\" FROM \"T_USER_USR\" "
+                               " WHERE \"USR_MAIL\"  = '" + boost::lexical_cast<std::string>(this->session->user().get()->eMail.toUTF8()) +
+                               "' ORDER BY \"USR_TOKEN\" DESC "
+                               " LIMIT 1";
 
         token = session->query<Wt::WString> (queryStr);
         transaction.commit();

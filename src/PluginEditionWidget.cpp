@@ -65,17 +65,17 @@ void PluginEditionWidget::createUI()
     validatorRegExp->setMandatory(true);
     
     // creation plugin
-    pluginSelectionBox = new Wt::WSelectionBox();
+    pluginSelectionBox = new Wt::WComboBox();
     
     pluginSelectionBox->clicked().connect(this, &PluginEditionWidget::selectedPlugin);
-    bindWidget("plugin-selection-box", pluginSelectionBox);
+    bindWidget("plugin-selection-box", pluginSelectionBox); 
 
     plgNameEdit = new Wt::WLineEdit();
-    bindWidget("plugin-name-edit", plgNameEdit);
+//    bindWidget("plugin-name-edit", plgNameEdit);
     plgNameEdit->setValidator(validatorRegExp);
 
     plgDescEdit = new Wt::WLineEdit();
-    bindWidget("plugin-description-edit", plgDescEdit);
+//    bindWidget("plugin-description-edit", plgDescEdit);
     plgDescEdit->setValidator(validatorRegExp);
 
     Wt::WPushButton *addPlugin = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-plugin-button"));
@@ -83,16 +83,21 @@ void PluginEditionWidget::createUI()
     addPlugin->addStyleClass("btn-info");
     addPlugin->setTextFormat(Wt::XHTMLUnsafeText);
     addPlugin->clicked().connect(this, &PluginEditionWidget::addPlugin);
-    bindWidget("plugin-add-plugin-button", addPlugin);
     
-    Wt::WPushButton *deletePlugin = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-plugin-button"));
-    deletePlugin->addStyleClass("btn");
-    deletePlugin->addStyleClass("btn-danger");
-    deletePlugin->setTextFormat(Wt::XHTMLUnsafeText);
-    deletePlugin->clicked().connect(this, &PluginEditionWidget::deletePlugin);
-    bindWidget("plugin-delete-plugin-button", deletePlugin);
+   tablePlugin = new Wt::WTable();
     
-   
+    tablePlugin->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.name-title")));
+    tablePlugin->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.description-title")));
+    tablePlugin->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.plugins.action-title")));
+    tablePlugin->elementAt(1, 0)->addWidget(plgNameEdit);
+    tablePlugin->elementAt(1, 1)->addWidget(plgDescEdit);
+    tablePlugin->elementAt(1, 2)->addWidget(addPlugin);
+    tablePlugin->setHeaderCount(0, Wt::Horizontal);
+    fixStyleTable(tablePlugin);
+    tablePlugin->columnAt(0)->setWidth("40%");
+    tablePlugin->columnAt(1)->setWidth("40%");
+    tablePlugin->columnAt(2)->setWidth("20%");
+    bindWidget("plugin-table-plugin-creation", tablePlugin);
     
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgList, this, _1, _2));
@@ -556,14 +561,14 @@ void PluginEditionWidget::addSearch()
     }
 }
 
-void PluginEditionWidget::deletePlugin()
+void PluginEditionWidget::deletePlugin(int pluginId)
 {
     createJSONAnchor->disable();
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeletePlg, this, _1, _2));
     Wt::Http::Message message;
     message.addBodyText("");
-    std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) +
+    std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginId]) +
                        "?login=" + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
     if(client1->deleteRequest(urlAdd ,message))
     {
@@ -911,8 +916,8 @@ void PluginEditionWidget::resetSearch()
 void PluginEditionWidget::selectedPlugin()
 {
     createJSONAnchor->disable();
-    plgNameEdit->setText(pluginSelectionBox->currentText());
-    plgDescEdit->setText(mapPluginsDescrition[pluginSelectionBox->currentIndex()]);
+//    plgNameEdit->setText(pluginSelectionBox->currentText());
+//    plgDescEdit->setText(mapPluginsDescrition[pluginSelectionBox->currentIndex()]);
     resetSource();
     resetSearch();
     
@@ -1514,6 +1519,16 @@ void PluginEditionWidget::handleHttpResponseAddPlg(boost::system::error_code err
             pluginSelectionBox->setCurrentIndex(-1);//utile lorsqu'on crée le premier plugin sinon elle ne se selectionne pas automatiqement
             pluginSelectionBox->setCurrentIndex(mapPluginsIdSboxRow.size());
             mapPluginsDescrition[mapPluginsIdSboxRow.size()-1] = pluginDesc;
+            Wt::WPushButton *deletePlugin = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-plugin-button"));
+            deletePlugin->addStyleClass("btn");
+            deletePlugin->addStyleClass("btn-danger");
+            deletePlugin->setTextFormat(Wt::XHTMLUnsafeText);
+            int row = tablePlugin->rowCount() - 1;
+            deletePlugin->clicked().connect( boost::bind(&PluginEditionWidget::deletePlugin,this, row-1));
+            tablePlugin->insertRow(row);
+            tablePlugin->elementAt(row,0)->addWidget(new Wt::WText(strTmp));
+            tablePlugin->elementAt(row,1)->addWidget(new Wt::WText(pluginDesc));
+            tablePlugin->elementAt(row,2)->addWidget(deletePlugin);   
             
         }
         catch (Wt::Json::ParseError const& e)
@@ -1711,7 +1726,14 @@ void PluginEditionWidget::handleHttpResponseAddonParameters(boost::system::error
 void PluginEditionWidget::handleHttpResponsePlgList(boost::system::error_code err, const Wt::Http::Message& response)
 {
     Wt::WApplication::instance()->resumeRendering();
-
+    
+    int countTmp = tablePlugin->rowCount() -1;
+    for(int i=1; i<countTmp; i++)
+    {
+        tablePlugin->deleteRow(1);
+    }
+    
+    
     delete client1;
     pluginSelectionBox->clear();
     mapPluginsIdSboxRow.clear();
@@ -1739,6 +1761,19 @@ void PluginEditionWidget::handleHttpResponsePlgList(boost::system::error_code er
                 pluginSelectionBox->addItem(strTmp);
                 mapPluginsIdSboxRow[idx] = pluginId;
                 mapPluginsDescrition[idx] = pluginDesc;
+                
+                int row = tablePlugin->rowCount() - 1;
+       
+                Wt::WPushButton *deletePlugin = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-plugin-button"));
+                deletePlugin->addStyleClass("btn");
+                deletePlugin->addStyleClass("btn-danger");
+                deletePlugin->setTextFormat(Wt::XHTMLUnsafeText);
+                deletePlugin->clicked().connect( boost::bind(&PluginEditionWidget::deletePlugin,this, row-1));
+
+                tablePlugin->insertRow(row);
+                tablePlugin->elementAt(row,0)->addWidget(new Wt::WText(strTmp));
+                tablePlugin->elementAt(row,1)->addWidget(new Wt::WText(pluginDesc));
+                tablePlugin->elementAt(row,2)->addWidget(deletePlugin);            
                 idx ++;
             }
         }
@@ -1923,6 +1958,7 @@ void PluginEditionWidget::handleHttpResponseDeletePlg(boost::system::error_code 
         pluginSelectionBox->setCurrentIndex(-1);
         plgDescEdit->setText("");
         plgNameEdit->setText("");
+        
         
         client1 = new Wt::Http::Client();
         client1->setTimeout(30);

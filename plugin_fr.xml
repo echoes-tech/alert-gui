@@ -20,11 +20,13 @@
   
   <message id="Alert.plugins.alert-form-title">Alertes</message>
   <message id="Alert.plugins.alert-form-info">Cette page vous donne la possibilité de créer une application</message>
-  <message id="Alert.plugins.plugin-table-title">Créer une application</message>
-  <message id="Alert.plugins.source-table-title">Créer une source pour l'application sélectionnée</message>
-  <message id="Alert.plugins.search-table-title">Créer une recherche et ses informations pour la source sélectionnée</message>
+  <message id="Alert.plugins.plugin-table-create-title">Créer une application</message>
+  <message id="Alert.plugins.plugin-table-title">Editer une application</message>
+  <message id="Alert.plugins.source-table-title">Editer une source pour l'application sélectionnée</message>
+  <message id="Alert.plugins.search-table-title">Editer une recherche et ses informations pour la source sélectionnée</message>
   
   <message id="Alert.plugins.name-label">Nom</message>
+  <message id="Alert.plugins.choice-label">Application à editer</message>
   <message id="Alert.plugins.description-label">Déscription</message> 
   <message id="Alert.plugins.search-periode-label">Période</message> 
   <message id="Alert.plugins.search-static-label">Est statique</message> 
@@ -38,6 +40,9 @@
   <message id="Alert.plugins.calculate-title">Est calculé</message>
   <message id="Alert.plugins.value-title">Valeur</message> 
   <message id="Alert.plugins.parameter-title">Paramétre</message> 
+  <message id="Alert.plugins.description-title">Déscription</message> 
+  <message id="Alert.plugins.action-title">Action</message> 
+  
   
   <message id="Alert.plugins.message-box-error">Erreur</message> 
   <message id="Alert.plugins.message-field">Le champ : "</message>

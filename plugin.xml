@@ -18,13 +18,15 @@
   <message id="Alert.plugins.create-JSON-anchor">Download plugin</message>
   <message id="Alert.plugin.create-JSON-anchor-info">To download plugin, you must first generate</message>
   
-  <message id="Alert.plugins.plugin-table-title">Create plugin</message>
-  <message id="Alert.plugins.source-table-title">Create source for selected plugin</message>
-  <message id="Alert.plugins.search-table-title">Create search for selected source</message>
+  <message id="Alert.plugins.plugin-table-create-title">Create plugin</message>
+  <message id="Alert.plugins.plugin-table-title">Edit plugin</message>
+  <message id="Alert.plugins.source-table-title">Edit source for selected plugin</message>
+  <message id="Alert.plugins.search-table-title">Edit search for selected source</message>
   <message id="Alert.plugins.alert-form-title">Alerts</message>
   <message id="Alert.plugins.alert-form-info">On this page you can add a plugin</message>
   
   <message id="Alert.plugins.name-label">Name</message>
+  <message id="Alert.plugins.choice-label">Plugin to edit</message>
   <message id="Alert.plugins.description-label">Description</message> 
   <message id="Alert.plugins.search-periode-label">Periode</message> 
   <message id="Alert.plugins.search-static-label">Is static</message> 
@@ -38,6 +40,8 @@
   <message id="Alert.plugins.calculate-title">Is calculate</message>
   <message id="Alert.plugins.value-title">Value</message> 
   <message id="Alert.plugins.parameter-title">Parameter</message> 
+  <message id="Alert.plugins.description-title">Description</message> 
+  <message id="Alert.plugins.action-title">Action</message> 
   
   <message id="Alert.plugins.message-box-error">Error</message> 
   <message id="Alert.plugins.message-field">Field : "</message>
@@ -56,7 +60,31 @@
 
       <div class="row-fluid">
             <div class="span12">
+                        <!--test-->
                 <div class="widget-box">
+                     <div class="widget-title">
+                         <span class="icon">
+                            <i class='icon-pencil'></i>
+                        </span>
+                        <h5>${tr:Alert.plugins.plugin-table-create-title}</h5>
+                    </div> 
+                    <div class="widget-content">
+                         <!-- to disable the :first-child behaviour -->
+                        <div class="row-fluid" style="display:none"></div>
+                        
+                        <!--plugin-->
+                        <div class="row-fluid">
+ 
+                            <div class="span12">                            
+                                ${plugin-table-plugin-creation}
+<!--                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.name-info}"></i>-->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    </div>
+                        <!--test-->
+                        <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon">
                             <i class='icon-pencil'></i>
@@ -64,11 +92,18 @@
                         <h5>${tr:Alert.plugins.plugin-table-title}</h5>
                     </div> 
                     <div class="widget-content">
-                        
-                        <!-- to disable the :first-child behaviour -->
+                        <div class="row-fluid">
+                            <div class="span1">    
+                                <label class="control-label">${tr:Alert.plugins.choice-label} </label>
+                            </div>
+                            <div class="span3">
+                                ${plugin-selection-box}
+                            </div> 
+                        </div>
+<!--                         to disable the :first-child behaviour 
                         <div class="row-fluid" style="display:none"></div>
                         
-                        <!--plugin-->
+                        plugin
                         <div class="row-fluid">
                             <div class="span3">
                                 ${plugin-selection-box}
@@ -78,7 +113,7 @@
                             </div>
                             <div class="span2">                            
                                 ${plugin-name-edit}
-<!--                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.name-info}"></i>-->
+                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.name-info}"></i>
                             </div>
                             <div class="span1">
                             </div>
@@ -87,7 +122,7 @@
                             </div>
                             <div class="span4">                            
                                 ${plugin-description-edit}
-<!--                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.description-info}"></i>-->
+                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.description-info}"></i>
                             </div>
                         </div>
                         
@@ -96,7 +131,7 @@
                                 ${plugin-add-plugin-button}
                                 ${plugin-delete-plugin-button}
                             </span>
-                        </div>
+                        </div>-->
                         
                         <!--source-->
                         <div class="widget-box">

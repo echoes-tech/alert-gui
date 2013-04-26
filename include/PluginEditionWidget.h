@@ -87,7 +87,7 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         void createTableInformation();
         bool validatePlugin(std::string &badField);
         void addPlugin();
-        void deletePlugin();
+        void deletePlugin(int pluginId);
         void resetSource();
         bool validateSource(std::string &badField);
         void addSource();
@@ -124,11 +124,13 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         Wt::WAnchor *createJSONAnchor;
         
         //partie add Plugin
-        Wt::WSelectionBox *pluginSelectionBox;
+        Wt::WComboBox *pluginSelectionBox;
         Wt::WLineEdit *plgNameEdit;
         Wt::WLineEdit *plgDescEdit;
         std::map<int,long long> mapPluginsIdSboxRow;
         std::map<int,Wt::WString> mapPluginsDescrition;
+        
+        Wt::WTable *tablePlugin;
         
         //partie add Source        
         Wt::WSelectionBox *sourceSelectionBox;

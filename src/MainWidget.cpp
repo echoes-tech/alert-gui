@@ -541,6 +541,11 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
             res = "user";
             break;
         }
+        case Enums::EPageType::PLUGIN:
+        {
+            res = "pencil";
+            break;
+        }
     }
     return res;
 }

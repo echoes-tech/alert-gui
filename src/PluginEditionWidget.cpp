@@ -58,7 +58,7 @@ void PluginEditionWidget::refresh1()
 void PluginEditionWidget::createUI()
 {
     //validator
-    validatorInt = new Wt::WIntValidator(0, 1000); 
+    validatorInt = new Wt::WIntValidator(0, 10000); 
     validatorInt->setMandatory(true);
     //valide : les backslash doivent être par paire et les " ne sont pas autorisées (sinon crash de l'API ou du GUI suivant les cas lorsque l'on parse le JSON).
     validatorRegExp = new Wt::WRegExpValidator("([\\\\]{2}|[^\\\\\"]+)*");
@@ -92,13 +92,17 @@ void PluginEditionWidget::createUI()
     deletePlugin->clicked().connect(this, &PluginEditionWidget::deletePlugin);
     bindWidget("plugin-delete-plugin-button", deletePlugin);
     
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgList, this, _1, _2));
-    std::string urlAdd("http://" + host + ":" + port + "/plugins?login=" + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
+   
     
-    client->get(urlAdd);
-    
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgList, this, _1, _2));
+    std::string urlAdd("http://" + host + ":" + port + "/plugins?login=" 
+                        + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
+    if(client1->get(urlAdd))
+    {
+         Wt::WApplication::instance()->deferRendering();
+    }
+ 
     // creation source
     sourceSelectionBox = new Wt::WSelectionBox();
     bindWidget("source-selection-box", sourceSelectionBox);
@@ -204,41 +208,59 @@ void PluginEditionWidget::createUI()
     deleteSearch->clicked().connect(this, &PluginEditionWidget::deleteSearch);
     bindWidget("plugin-delete-search-button", deleteSearch);
     
-    Wt::WPushButton *createJSON = new Wt::WPushButton("<i class='icon-download icon-white'></i> " + tr("Alert.plugins.create-JSON-button"));
-    createJSON->addStyleClass("btn");
-    createJSON->addStyleClass("btn-primary");
-    createJSON->setTextFormat(Wt::XHTMLUnsafeText);
-    createJSON->clicked().connect(this, &PluginEditionWidget::createJSON);
-    bindWidget("plugin-create-JSON-button", createJSON);
+    createJSONButton = new Wt::WPushButton("<i class='icon-download icon-white'></i> " + tr("Alert.plugins.create-JSON-button"));
+    createJSONButton->addStyleClass("btn");
+    createJSONButton->addStyleClass("btn-primary");
+    createJSONButton->setTextFormat(Wt::XHTMLUnsafeText);
+    createJSONButton->clicked().connect(this, &PluginEditionWidget::createJSON);
+    bindWidget("plugin-create-JSON-button", createJSONButton);
+    
+    createJSONAnchor = new Wt::WAnchor();
+    createJSONAnchor->setText("<i class='icon-download icon-white'></i> " + tr("Alert.plugins.create-JSON-anchor"));
+    createJSONAnchor->addStyleClass("btn");
+    createJSONAnchor->addStyleClass("btn-primary");
+    createJSONAnchor->setTextFormat(Wt::XHTMLUnsafeText);
+    createJSONAnchor->setTarget(Wt::TargetNewWindow);
+    createJSONAnchor->clicked().connect(this, &PluginEditionWidget::displayButtonCreateJSON);
+    createJSONAnchor->disable();
+    bindWidget("plugin-create-JSON-anchor", createJSONAnchor);
+}
+
+void PluginEditionWidget::displayButtonCreateJSON()
+{
+    createJSONAnchor->disable();
 }
 
 void PluginEditionWidget::createJSON()
 {
     if(pluginSelectionBox->currentIndex() != -1)
     {
-        client = new Wt::Http::Client();
-        client->setTimeout(30); 
-        client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
-        std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
-                            + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
-
-        client->get(urlAdd);
+        client1 = new Wt::Http::Client();
+        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
+        std::string urlAdd2 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
+                            + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
+        if(client1->get(urlAdd2))
+        {
+            Wt::WApplication::instance()->deferRendering();
+        } 
     }
     else
     {
-        Wt::WMessageBox::show("Erreur", "Aucun plugin selectionné",Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-no-selected-plugin"),Wt::Ok);
     }
 }
 
 void PluginEditionWidget::createTableUnit()
 {
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseUnits, this, _1, _2));
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseUnits, this, _1, _2));
     std::string urlAdd("http://" + host + ":" +port + "/units?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
 
-    client->get(urlAdd);
+    if(client1->get(urlAdd))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
 }
 
 void PluginEditionWidget::createFormSearchParameters()
@@ -251,13 +273,16 @@ void PluginEditionWidget::createFormSearchParameters()
     {
         buttonModifySearch->disable();
     }
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSeaTypeParameters, this, _1, _2));
+    
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSeaTypeParameters, this, _1, _2));
     std::string urlAdd("http://" + host + ":" +port + "/search_types/" + boost::lexical_cast<std::string>(mapSeaTypeIdSboxRow[comboSeaType->currentIndex()]) +"/parameters?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
 
-    client->get(urlAdd);
+    if(client1->get(urlAdd))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
 }
 
 void PluginEditionWidget::createFormSourceParameters()
@@ -271,16 +296,18 @@ void PluginEditionWidget::createFormSourceParameters()
     {
         buttonModifySource->enable();
     }
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddonParameters, this, _1, _2));
+    client1 = new Wt::Http::Client();
+   client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddonParameters, this, _1, _2));
     std::string urlAdd("http://" + host + ":" +port + "/addons/" + boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +"/parameters?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
-
-    client->get(urlAdd);
+    if(client1->get(urlAdd))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+    
 }
 
-bool PluginEditionWidget::validatePlugin()
+bool PluginEditionWidget::validatePlugin(std::string &badField)
 {
     if (plgNameEdit->validate() == Wt::WValidator::State::Valid)
     {
@@ -288,6 +315,14 @@ bool PluginEditionWidget::validatePlugin()
         {
             return true;
         }
+        else
+        {
+            badField = "Alert.plugins.description-label";
+        }
+    }
+    else
+    {
+        badField = "Alert.plugins.name-label";
     }
     
     return false;
@@ -295,13 +330,14 @@ bool PluginEditionWidget::validatePlugin()
 
 void PluginEditionWidget::addPlugin()
 {
+    createJSONAnchor->disable(); 
+    std::string badField = "";
     resetSearch();
     resetSource();
-    if(validatePlugin())
+    if(validatePlugin(badField))
     {
-        client = new Wt::Http::Client();
-        client->setTimeout(30);
-        client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddPlg, this, _1, _2));
+        client1 = new Wt::Http::Client();
+        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddPlg, this, _1, _2));
         
         //si il y a des backslash dans le nom
         std::string strTmp = boost::lexical_cast<std::string>(plgNameEdit->text()); 
@@ -318,16 +354,21 @@ void PluginEditionWidget::addPlugin()
         std::string urlAdd("http://" + host + ":" +port + "/plugins?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
         
-        client->post(urlAdd ,message);
+        if(client1->post(urlAdd ,message))
+        {
+            Wt::WApplication::instance()->deferRendering();
+        }
     }
     else
     {
-        Wt::WMessageBox::show("Erreur", "Plugin mal remplit",Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") + 
+                                tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
+                                tr("Alert.plugins.message-cause"),Wt::Ok);
         std::cerr << "[addPlugin] : Mal remplit"<< std::endl;
     }
 } 
 
-bool PluginEditionWidget::validateSource()
+bool PluginEditionWidget::validateSource(std::string &badField)
 {
     if(pluginSelectionBox->currentIndex() != -1)
     {
@@ -335,6 +376,7 @@ bool PluginEditionWidget::validateSource()
         {
             if (mapLEAddonParam[mapAddonParameterNameSBoxRow[i]]->validate() != Wt::WValidator::State::Valid)
             {
+                 badField = "Alert.plugins.parameter-title";
                  return false;
             }
         }
@@ -346,7 +388,9 @@ bool PluginEditionWidget::validateSource()
 
 void PluginEditionWidget::addSource()
 {
-    if(validateSource())
+    createJSONAnchor->disable();
+    std::string badField = "";
+    if(validateSource(badField))
     {
         buttonModifySource->enable();
         for(int row = 1; row < tableSrcParam->rowCount(); row ++)
@@ -354,9 +398,8 @@ void PluginEditionWidget::addSource()
             mapAddonParameterValueSBoxRow[row-1] = mapLEAddonParam[mapAddonParameterNameSBoxRow[row - 1]]->text();
         }
 
-        client = new Wt::Http::Client();
-        client->setTimeout(30);
-        client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddSource, this, _1, _2));
+        client1 = new Wt::Http::Client();
+        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddSource, this, _1, _2));
         std::string messAdd ="{\n\"addon_id\" : "+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]);
 
         if(mapAddonParameterNameSBoxRow.size() == mapAddonParameterValueSBoxRow.size())
@@ -374,7 +417,10 @@ void PluginEditionWidget::addSource()
             message.addBodyText(messAdd);
             std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/sources?login=" 
                             + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
-            client->post(urlAdd ,message);
+            if(client1->post(urlAdd ,message))
+            {
+                Wt::WApplication::instance()->deferRendering();
+            }
         }
         else
         {
@@ -384,12 +430,14 @@ void PluginEditionWidget::addSource()
     }
     else
     {
-        Wt::WMessageBox::show("Erreur", "Source mal remplit",Wt::Ok);
+         Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") + 
+                                tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
+                                tr("Alert.plugins.message-cause"),Wt::Ok);
         std::cerr << "[addSource] : Mal remplit"<< std::endl;
     }
 }
 
-bool PluginEditionWidget::validateSearch()
+bool PluginEditionWidget::validateSearch(std::string &badField)
 {
     if(sourceSelectionBox->currentIndex() == -1 || pluginSelectionBox->currentIndex() == -1)
     {
@@ -399,10 +447,12 @@ bool PluginEditionWidget::validateSearch()
     {
         if (mapLENameInformation[i]->validate() != Wt::WValidator::State::Valid)
         {
+             badField = "Alert.plugins.name-title";
              return false;
         }
         if(mapCBCalculateInformation[i]->isChecked() && mapLECalculateInformation[i]->validate() != Wt::WValidator::State::Valid)
         {
+            badField = "Alert.plugins.calculate-title";
              return false;
         }
     }
@@ -410,19 +460,23 @@ bool PluginEditionWidget::validateSearch()
     {
         if (mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[i]]->validate() != Wt::WValidator::State::Valid)
         {
+            badField = "Alert.plugins.parameter-title";
              return false;
         }
     }
     if(periodeLE->validate() != Wt::WValidator::State::Valid)
     {
+        badField = "Alert.plugins.search-periode-label";
          return false;
     }
     if(pKValueLE->validate() != Wt::WValidator::State::Valid)
     {
+        badField = "Alert.plugins.search-key-value";
          return false;
     }
     if(nbValueLE->validate() != Wt::WValidator::State::Valid)
     {
+        badField = "Alert.plugins.search-nomber-value";
          return false;
     }
     return true;
@@ -430,7 +484,9 @@ bool PluginEditionWidget::validateSearch()
 
 void PluginEditionWidget::addSearch()
 {
-    if(validateSearch())
+    createJSONAnchor->disable();
+    std::string badField = "";
+    if(validateSearch(badField))
     {
         for(int row = 1; row < tableSeaTypeParam->rowCount(); row ++)
         {
@@ -442,9 +498,8 @@ void PluginEditionWidget::addSearch()
         else
             tmpBool = "false";
 
-        client = new Wt::Http::Client();
-        client->setTimeout(30);
-        client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddSearch, this, _1, _2));
+        client1 = new Wt::Http::Client();
+        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddSearch, this, _1, _2));
         std::string messAdd ="{\n    \"sty_id\" : "+ boost::lexical_cast<std::string>(mapSeaTypeIdSboxRow[comboSeaType->currentIndex()]) +",\n\
     \"sea_period\" : " + boost::lexical_cast<std::string>(periodeLE->text()) +",\n\
     \"sea_is_static\" : " + tmpBool + ",\n\
@@ -478,7 +533,11 @@ void PluginEditionWidget::addSearch()
             std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                                "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + "/searches/?login=" 
                             + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
-            client->post(urlAdd ,message);
+            
+            if(client1->post(urlAdd ,message))
+            {
+                Wt::WApplication::instance()->deferRendering();
+            }
 
         }
         else
@@ -490,36 +549,42 @@ void PluginEditionWidget::addSearch()
     }
     else
     {
-        Wt::WMessageBox::show("Erreur", "Search mal remplit",Wt::Ok);
+         Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") + 
+                                tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
+                                tr("Alert.plugins.message-cause"),Wt::Ok);
         std::cerr << "[addSearch] : Mal remplit"<< std::endl;
     }
 }
 
 void PluginEditionWidget::deletePlugin()
 {
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeletePlg, this, _1, _2));
+    createJSONAnchor->disable();
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeletePlg, this, _1, _2));
     Wt::Http::Message message;
     message.addBodyText("");
     std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) +
                        "?login=" + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
-    client->deleteRequest(urlAdd ,message);
+    if(client1->deleteRequest(urlAdd ,message))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
     
 }
 
 void PluginEditionWidget::modifySource()
 {
-    if(validateSource())
+    createJSONAnchor->disable();
+    std::string badField = "";
+    if(validateSource(badField))
     {
         for(int row = 1; row < tableSrcParam->rowCount(); row ++)
         {
             mapAddonParameterValueSBoxRow[row-1] = mapLEAddonParam[mapAddonParameterNameSBoxRow[row - 1]]->text();
         }
 
-        client = new Wt::Http::Client();
-        client->setTimeout(30);
-        client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseModifySource, this, _1, _2));
+        client1 = new Wt::Http::Client();
+        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseModifySource, this, _1, _2));
 
         std::string messAdd ="{\n\"addon_id\" : "+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +",\n";
 
@@ -544,31 +609,41 @@ void PluginEditionWidget::modifySource()
         std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                         "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + "/parameters?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
-        client->post(urlAdd ,message);
+        if(client1->post(urlAdd ,message))
+        {
+            Wt::WApplication::instance()->deferRendering();
+        }
     }
     else
     {
-        Wt::WMessageBox::show("Erreur", "Source mal remplit",Wt::Ok);
+         Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") + 
+                                tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
+                                tr("Alert.plugins.message-cause"),Wt::Ok);
         std::cerr << "[addSource] : Mal remplit"<< std::endl;
     }
 }
 
 void PluginEditionWidget::deleteSource()
 {
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeleteSource, this, _1, _2));
+    createJSONAnchor->disable();
+    createJSONAnchor->disable();
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeleteSource, this, _1, _2));
     Wt::Http::Message message;
     message.addBodyText("");
     std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                        "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) +
                        "?login=" + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
-    client->deleteRequest(urlAdd ,message);
+    if(client1->deleteRequest(urlAdd ,message))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
 }
 
 void PluginEditionWidget::modifySearch()
 {
-    if(validateSearch())
+    std::string badField = "";
+    if(validateSearch(badField))
     {
         for(int row = 1; row < tableSeaTypeParam->rowCount(); row ++)
         {
@@ -580,9 +655,8 @@ void PluginEditionWidget::modifySearch()
         else
             tmpBool = "false";
 
-        client = new Wt::Http::Client();
-        client->setTimeout(30);
-        client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseModifySearch, this, _1, _2));
+        client1 = new Wt::Http::Client();
+        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseModifySearch, this, _1, _2));
         
         std::string messAdd ="{\n    \"sea_period\" : " + boost::lexical_cast<std::string>(periodeLE->text()) +",\n\
     \"sea_is_static\" : " + tmpBool + ",\n\
@@ -606,7 +680,11 @@ void PluginEditionWidget::modifySearch()
                                "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + 
                                "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]) +  "/?login=" 
                             + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
-            client->post(urlAdd ,message);
+            
+            if(client1->post(urlAdd ,message))
+            {
+                Wt::WApplication::instance()->deferRendering();
+            }
 
         }
         else
@@ -618,23 +696,28 @@ void PluginEditionWidget::modifySearch()
     }
     else
     {
-        Wt::WMessageBox::show("Erreur", "Search mal remplit",Wt::Ok);
+         Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") + 
+                                tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
+                                tr("Alert.plugins.message-cause"),Wt::Ok);
         std::cerr << "[addSource] : Mal remplit"<< std::endl;
     }
 }
 
 void PluginEditionWidget::deleteSearch()
 {
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeleteSearch, this, _1, _2));
+    createJSONAnchor->disable();
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeleteSearch, this, _1, _2));
     Wt::Http::Message message;
     message.addBodyText("");
     std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                        "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + 
                        "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]) + 
                        "?login=" + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
-    client->deleteRequest(urlAdd ,message);
+    if(client1->deleteRequest(urlAdd ,message))
+    {
+        Wt::WApplication::instance()->deferRendering();    
+    }
 }
 
 void PluginEditionWidget::addInformation()
@@ -651,9 +734,8 @@ void PluginEditionWidget::addInformation()
 
     
     
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddInformation, this, _1, _2));
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddInformation, this, _1, _2));
     std::string messAdd ="{\n\"inf_name\" : \""+ boost::lexical_cast<std::string>(mapLENameInformation[currentInformation]->text()) +"\",\n\
 \"inf_display\" : "+ tmpBoolDisplay + ",\n";
     if(boost::lexical_cast<int>(mapCBCalculateInformation[currentInformation]->isChecked()))
@@ -669,7 +751,10 @@ void PluginEditionWidget::addInformation()
                        "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + 
                        "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]/*searchId*/) + "/informations/?login=" 
                     + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
-    client->post(urlAdd ,message);
+    if(client1->post(urlAdd ,message))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
 }
 
 void PluginEditionWidget::createTableInformation()
@@ -729,14 +814,17 @@ void PluginEditionWidget::createTableInformation()
     }
     if(tableInformationState == "Modify")
     {
-        client = new Wt::Http::Client();
-        client->setTimeout(30);
-        client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseInformationsList, this, _1, _2));
+        client1 = new Wt::Http::Client();
+        client1->setTimeout(30);
+        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseInformationsList, this, _1, _2));
         std::string urlAdd1 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                               "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + 
                               "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]) + "/informations/?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
-        client->get(urlAdd1); 
+        if(client1->get(urlAdd1))
+        {
+            Wt::WApplication::instance()->deferRendering();
+        }
         tableInformationState = "";
     }
     refresh1();
@@ -822,18 +910,21 @@ void PluginEditionWidget::resetSearch()
 
 void PluginEditionWidget::selectedPlugin()
 {
+    createJSONAnchor->disable();
     plgNameEdit->setText(pluginSelectionBox->currentText());
     plgDescEdit->setText(mapPluginsDescrition[pluginSelectionBox->currentIndex()]);
     resetSource();
     resetSearch();
     
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSourceList, this, _1, _2));
+     client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSourceList, this, _1, _2));
     std::string urlAdd1 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/sources/?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
-    client->get(urlAdd1);
-    
+    if(client1->get(urlAdd1))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+       
 }
 
 void PluginEditionWidget::selectedSource()
@@ -956,19 +1047,22 @@ void PluginEditionWidget::completFormSource()
 
 void PluginEditionWidget::completFormSearch()
 {
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchParameters, this, _1, _2));
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchParameters, this, _1, _2));
     std::string urlAdd1 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                           "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + 
                           "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]) + "/parameters/?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
-    client->get(urlAdd1); 
+    if(client1->get(urlAdd1))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
 }
 
 void PluginEditionWidget::handleHttpResponseInformationsList(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     if(response.status()==200)
     {      
         Wt::Json::Value result ;
@@ -1022,7 +1116,8 @@ void PluginEditionWidget::handleHttpResponseInformationsList(boost::system::erro
 
 void PluginEditionWidget::handleHttpResponseSearchParameters(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+     Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     if(response.status()==200)
     {      
         Wt::Json::Value result ;
@@ -1071,7 +1166,8 @@ void PluginEditionWidget::handleHttpResponseSearchParameters(boost::system::erro
 
 void PluginEditionWidget::handleHttpResponseSourceList(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     sourceSelectionBox->clear();
     mapSourceId.clear();
     int idx = 0;
@@ -1109,17 +1205,21 @@ void PluginEditionWidget::handleHttpResponseSourceList(boost::system::error_code
          Wt::log("warning") << "fct handleHttpResponseSourceList" << response.body();
     }
     refresh1();
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
-    std::string urlAdd1 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
+    
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
+    std::string urlAdd2 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
     formJSON = "string";
-    client->get(urlAdd1); 
+    if(client1->get(urlAdd2))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    } 
 }
 
 void PluginEditionWidget::handleHttpResponseSearchList(boost::system::error_code err, const Wt::Http::Message& response)
 {
+    Wt::WApplication::instance()->resumeRendering();
     delete client1;
     searchSelectionBox->clear();
     mapSearchPeriode.clear();
@@ -1171,19 +1271,23 @@ void PluginEditionWidget::handleHttpResponseSearchList(boost::system::error_code
     {
          Wt::log("warning") << "fct handleHttpResponseSearchList" << response.body();
     }
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchTypeList, this, _1, _2));
-    std::string urlAdd1 = "http://" + host + ":" +port + "/addons/"+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +"/search_types?login=" 
-                        + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
-    client->get(urlAdd1);   
+    
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchTypeList, this, _1, _2));
+    std::string urlAdd2 = "http://" + host + ":" +port + "/addons/"+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +"/search_types?login=" 
+                    + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
+    if(client1->get(urlAdd2))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }  
 }
 
 
 
 void PluginEditionWidget::handleHttpResponseUnits(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering(); 
+    delete client1;
     int idx = 0;
     mapUnitIdSboxRow.clear();
     delete slmUnit;
@@ -1227,7 +1331,8 @@ void PluginEditionWidget::handleHttpResponseUnits(boost::system::error_code err,
 
 void PluginEditionWidget::handleHttpResponseAddInformation(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     if(response.status()==200)
     {             
         currentInformation++;
@@ -1249,7 +1354,8 @@ void PluginEditionWidget::handleHttpResponseAddInformation(boost::system::error_
 
 void PluginEditionWidget::handleHttpResponseAddSearch(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+      Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     if(response.status()==200)
     {      
         Wt::Json::Object result ;
@@ -1286,16 +1392,19 @@ void PluginEditionWidget::handleHttpResponseAddSearch(boost::system::error_code 
 
 void PluginEditionWidget::handleHttpResponseModifySource(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+     Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     if(response.status()==200)
-    {      
-        client = new Wt::Http::Client();
-        client->setTimeout(30);
-        client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
-        std::string urlAdd1 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
+    {    
+        client1 = new Wt::Http::Client();
+        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
+        std::string urlAdd2 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
                             + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
         formJSON = "string";
-        client->get(urlAdd1);  
+        if(client1->get(urlAdd2))
+        {
+            Wt::WApplication::instance()->deferRendering();
+        }  
     }
     else
     {
@@ -1305,7 +1414,8 @@ void PluginEditionWidget::handleHttpResponseModifySource(boost::system::error_co
 
 void PluginEditionWidget::handleHttpResponseModifySearch(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     if(response.status()==200)
     {      
         selectedSource();
@@ -1339,7 +1449,8 @@ void PluginEditionWidget::handleHttpResponseModifySearch(boost::system::error_co
 
 void PluginEditionWidget::handleHttpResponseAddSource(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     if(response.status()==200)
     {      
         buttonModifySource->enable();
@@ -1368,18 +1479,21 @@ void PluginEditionWidget::handleHttpResponseAddSource(boost::system::error_code 
     {
          Wt::log("warning") << "fct handleHttpResponseAddSource" << response.body();
     }
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
-    std::string urlAdd1 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
+    std::string urlAdd2 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
     formJSON = "string";
-    client->get(urlAdd1); 
+    if(client1->get(urlAdd2))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }  
 }
 
 void PluginEditionWidget::handleHttpResponseAddPlg(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     if(response.status()==200)
     {
         Wt::Json::Object result ;
@@ -1422,7 +1536,8 @@ void PluginEditionWidget::handleHttpResponseAddPlg(boost::system::error_code err
 
 void PluginEditionWidget::handleHttpResponseSeaTypeParameters(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     int idx = 0;
     for(unsigned idx1 = 0 ; idx1 < mapSeaTypeParameterNameSBoxRow.size() ; idx1++)
     {
@@ -1494,7 +1609,9 @@ void PluginEditionWidget::handleHttpResponseSeaTypeParameters(boost::system::err
 
 void PluginEditionWidget::handleHttpResponseAddonParameters(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+
+    delete client1;
     int idx = 0;
     
     for(unsigned idx = 0 ; idx < mapLEAddonParam.size() ; idx++)
@@ -1562,24 +1679,30 @@ void PluginEditionWidget::handleHttpResponseAddonParameters(boost::system::error
     {
          Wt::log("warning") << "fct handleHttpResponseAddonParameters" << response.body();
     }
+    
     if(createFormSourceState == "Modify")
     {
         client1 = new Wt::Http::Client();
-        client1->setTimeout(30);
+
         client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchList, this, _1, _2));
         std::string urlAdd1 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                               "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + "/searches?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
-        client1->get(urlAdd1);
+        if(client1->get(urlAdd1))
+        {
+            Wt::WApplication::instance()->deferRendering();
+        }
     }
     else
-    {    
-        client = new Wt::Http::Client();
-        client->setTimeout(30);
-        client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchTypeList, this, _1, _2));
-        std::string urlAdd1 = "http://" + host + ":" +port + "/addons/"+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +"/search_types?login=" 
+    {
+        client1 = new Wt::Http::Client();
+        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchTypeList, this, _1, _2));
+        std::string urlAdd2 = "http://" + host + ":" +port + "/addons/"+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +"/search_types?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
-        client->get(urlAdd1);   
+        if(client1->get(urlAdd2))
+        {
+            Wt::WApplication::instance()->deferRendering();
+        }
     }
      createFormSourceState = "";
      refresh1();
@@ -1587,7 +1710,9 @@ void PluginEditionWidget::handleHttpResponseAddonParameters(boost::system::error
 
 void PluginEditionWidget::handleHttpResponsePlgList(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+
+    delete client1;
     pluginSelectionBox->clear();
     mapPluginsIdSboxRow.clear();
     mapPluginsDescrition.clear();
@@ -1630,17 +1755,21 @@ void PluginEditionWidget::handleHttpResponsePlgList(boost::system::error_code er
     {
          Wt::log("warning") << "fct handleHttpResponsePlgList" << response.body();
     }
-    client = new Wt::Http::Client();
-    client->setTimeout(30);
-    client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddonList, this, _1, _2));
-    std::string urlAdd = "http://" + host + ":" +port + "/addons?login=" 
-                        + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
-    client->get(urlAdd);  
+    
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddonList, this, _1, _2));
+    std::string urlAdd1("http://" + host + ":" +port + "/addons?login=" 
+                        + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
+    if(client1->get(urlAdd1))
+    {
+         Wt::WApplication::instance()->deferRendering();
+    } 
 }
 
 void PluginEditionWidget::handleHttpResponseAddonList(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     this->mapAddonsIdSboxRow.clear();
     comboAddon->clear();
     comboAddon->setModel(slmAddons);
@@ -1683,7 +1812,8 @@ void PluginEditionWidget::handleHttpResponseAddonList(boost::system::error_code 
 
 void PluginEditionWidget::handleHttpResponseSearchTypeList(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     int idx = 0;
     comboSeaType->clear();
 
@@ -1729,7 +1859,8 @@ void PluginEditionWidget::handleHttpResponseSearchTypeList(boost::system::error_
 
 void PluginEditionWidget::handleHttpResponsePlgJSON(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;    
     if (response.status() == 200)
     {
         if(formJSON == "string")
@@ -1740,8 +1871,12 @@ void PluginEditionWidget::handleHttpResponsePlgJSON(boost::system::error_code er
         }
         else
         {
-            std::ofstream fileJSON; 
-            fileJSON.open( boost::lexical_cast<std::string>(pluginSelectionBox->currentText()) + ".json", std::ios::out);
+            char *tmpname = strdup("/tmp/echoes-tmp-plugin-fileXXXXXX");
+            int mkstempRes = mkstemp(tmpname);
+            Wt::log("debug") << "[AssetManagementWidget] " << "Res temp file creation : " << mkstempRes;
+    
+            std::ofstream fileJSON(tmpname); 
+            //fileJSON.open( boost::lexical_cast<std::string>(pluginSelectionBox->currentText()) + ".json", std::ios::out);
             fileJSON << "/*\n\
  * Linux - System\n\
  * \n\
@@ -1751,6 +1886,23 @@ void PluginEditionWidget::handleHttpResponsePlgJSON(boost::system::error_code er
  */\n\n";
             fileJSON << response.body();
             fileJSON.close();
+            
+            
+           
+    
+            std::string pluginNameSpacesReplaced = pluginSelectionBox->currentText().toUTF8();
+            boost::replace_all(pluginNameSpacesReplaced, " ", "_");
+
+            // creating resource to send to the client
+            Wt::WFileResource *res = new Wt::WFileResource();
+            res->setFileName(tmpname);
+            
+            res->suggestFileName("ea-plugin_" + pluginNameSpacesReplaced + ".json",Wt::WResource::Attachment);
+            res->setMimeType("application/x-json");
+
+            createJSONAnchor->setLink(res);
+            
+            createJSONAnchor->enable();
         }
     }
     else
@@ -1762,7 +1914,8 @@ void PluginEditionWidget::handleHttpResponsePlgJSON(boost::system::error_code er
 
 void PluginEditionWidget::handleHttpResponseDeletePlg(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     if (response.status() == 204)
     {
         resetSearch();
@@ -1770,57 +1923,63 @@ void PluginEditionWidget::handleHttpResponseDeletePlg(boost::system::error_code 
         pluginSelectionBox->setCurrentIndex(-1);
         plgDescEdit->setText("");
         plgNameEdit->setText("");
-        client = new Wt::Http::Client();
-        client->setTimeout(30);
-        client->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgList, this, _1, _2));
+        
+        client1 = new Wt::Http::Client();
+        client1->setTimeout(30);
+        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgList, this, _1, _2));
         std::string urlAdd("http://" + host + ":" +port + "/plugins?login=" + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
-
-        client->get(urlAdd);
+       
+        if(client1->get(urlAdd))
+        {
+            Wt::WApplication::instance()->deferRendering();
+        }
       
     }
     else if (response.status() == 409)
     {
-       Wt::WMessageBox::show("Error", response.body() ,Wt::Ok);
+       Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body() ,Wt::Ok);
     }
     else
     {
-        Wt::WMessageBox::show("Error", response.body() ,Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body() ,Wt::Ok);
          Wt::log("warning") << "fct handleHttpResponseDeletePlg" << response.body();
     }
 }
 
 void PluginEditionWidget::handleHttpResponseDeleteSource(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
     if (response.status() == 204)
     {
         selectedPlugin();
     }
     else if (response.status() == 409) 
     {
-       Wt::WMessageBox::show("Error", response.body() ,Wt::Ok);
+       Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body() ,Wt::Ok);
     }
     else
     {
-        Wt::WMessageBox::show("Error", response.body() ,Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body() ,Wt::Ok);
          Wt::log("warning") << "fct handleHttpResponseDeleteSource" << response.body();
     }
 }
 
 void PluginEditionWidget::handleHttpResponseDeleteSearch(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    delete client;
+    Wt::WApplication::instance()->resumeRendering();  
+    delete client1;
     if (response.status() == 204)
     {
         selectedSource();
     }
     else if (response.status() == 409)
     {
-        Wt::WMessageBox::show("Error", response.body() ,Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body() ,Wt::Ok);
     }
     else
     {
-        Wt::WMessageBox::show("Error", response.body() ,Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body() ,Wt::Ok);
          Wt::log("warning") << "[ERROR] : fct handleHttpResponseDeleteSearch" << response.body();
     }
 }

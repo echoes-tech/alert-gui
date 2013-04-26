@@ -74,10 +74,10 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         std::string host;
         std::string port;
         
-        Wt::Http::Client *client;
         Wt::Http::Client *client1;
         Session *session;    
         
+        void displayButtonCreateJSON();
         void formatValue(std::string& value, int nbBackslash) const;
         
         void selectedPlugin();
@@ -85,16 +85,16 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         void selectedSearch();
         void createUI();
         void createTableInformation();
-        bool validatePlugin();
+        bool validatePlugin(std::string &badField);
         void addPlugin();
         void deletePlugin();
         void resetSource();
-        bool validateSource();
+        bool validateSource(std::string &badField);
         void addSource();
         void modifySource();
         void deleteSource();
         void resetSearch();
-        bool validateSearch();
+        bool validateSearch(std::string &badField);
         void addSearch();
         void modifySearch();
         void deleteSearch();
@@ -120,6 +120,8 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         
         Wt::WPushButton *buttonModifySource;
         Wt::WPushButton *buttonModifySearch;
+        Wt::WPushButton *createJSONButton;
+        Wt::WAnchor *createJSONAnchor;
         
         //partie add Plugin
         Wt::WSelectionBox *pluginSelectionBox;

@@ -34,6 +34,7 @@ public:
     void getMedias(boost::system::error_code err, const Wt::Http::Message& response);
     void getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
     void getInformations(boost::system::error_code err, const Wt::Http::Message& response);
+    void getAliases(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
 private:
     Session * session;
     bool created_;
@@ -57,7 +58,7 @@ private:
     std::map<int,long long> mapIdPlugins;
     std::map<int,Wt::WLineEdit*> mapEditPlugins;
     
-    std::map<int,InformationId> mapIdInformations;
+    std::map<int,Wt::Json::Object> mapIdInformations;
     std::map<int,Wt::WLineEdit*> mapEditInformations;
     
     Wt::WContainerWidget *assetsContainer;
@@ -85,7 +86,8 @@ private:
     void fillPluginSelector();
     
     void createAssetsWidgets();
-    void createInformationsWidgets();
+    
+    void fillAssetsFields();
     
     
 

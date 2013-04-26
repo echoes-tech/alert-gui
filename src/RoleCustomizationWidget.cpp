@@ -71,10 +71,13 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session)
     
     fillMediaSelector();
     fillRoleSelector();
+    
+    mediasComboBox->setCurrentIndex(0);
+    rolesComboBox->setCurrentIndex(0);
+    
     fillPluginSelector();
     
     createAssetsWidgets();
-    createInformationsWidgets();
 }
 
 RoleCustomizationWidget::RoleCustomizationWidget(const RoleCustomizationWidget& orig)
@@ -188,6 +191,8 @@ void RoleCustomizationWidget::selectMedia()
 void RoleCustomizationWidget::selectRole()
 {
     
+    
+    
 }
 
 void RoleCustomizationWidget::fillMediaSelector()
@@ -252,22 +257,6 @@ void RoleCustomizationWidget::createAssetsWidgets()
     } 
 }
 
-void RoleCustomizationWidget::createInformationsWidgets()
-{
-    std::string urlToCall1 = this->getApiUrl() + "/plugins/1/informations" + this->getCredentials();
-    std::string urlToCall2 = this->getApiUrl() + "/plugins/2/informations" + this->getCredentials();
-    std::string urlToCall3 = this->getApiUrl() + "/plugins/3/informations" + this->getCredentials();
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::getInformations, this, _1, _2));
-    
-    if (client->get(urlToCall1))
-    {
-      Wt::WApplication::instance()->deferRendering();
-    } 
-//    client->get(urlToCall2);
-//    client->get(urlToCall3);
-}
-
 void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt::Http::Message& response)
 {
     Wt::WApplication::instance()->resumeRendering();
@@ -308,6 +297,8 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
                 row->addWidget(saveButton);
                 assetsContainer->addWidget(row);
                 idx++;
+                
+                fillAssetsFields();
             }
         }
         catch (Wt::Json::ParseError const& e)
@@ -431,8 +422,8 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
                 
                 Wt::WLineEdit *lineEdit = new Wt::WLineEdit();
                 lineEdit->setStyleClass("span3");
-                mapEditPlugins[idx] = lineEdit;
-                mapIdPlugins[idx] = tmp.get("id");
+                mapEditInformations[idx] = lineEdit;
+                mapIdInformations[idx] = tmp.get("id");;
                 
                 Wt::WPushButton *saveButton = new Wt::WPushButton();
                 saveButton->setText("ToTrSave");
@@ -459,5 +450,68 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
     else
     {
          Wt::log("warning") << "fct handleHttpResponse" << response.body();
+    }
+}
+
+void RoleCustomizationWidget::fillAssetsFields()
+{
+    
+    for(std::map<int,long long>::const_iterator i = mapIdAssets.begin() ; i != mapIdAssets.end() ; i ++)
+    {
+        std::string urlToCall = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string>(i->second)
+                + "/" + "aliases";
+        Wt::Http::Client *client = new Wt::Http::Client(this);
+        client->done().connect(boost::bind(&RoleCustomizationWidget::getAliases, this, _1, _2, mapEditAssets[i->first]));
+
+        std::string apiAddress = urlToCall + this->getCredentials();
+        
+        apiAddress += "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
+                +"&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
+
+        std::cout << "address to call : " << apiAddress << std::endl;
+
+        if (client->get(apiAddress))
+        {
+            Wt::WApplication::instance()->deferRendering();
+        } 
+    }
+}
+
+void RoleCustomizationWidget::getAliases(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit)
+{
+    Wt::WApplication::instance()->resumeRendering();
+    int idx = 0;
+    
+    if (response.status() >= 200 && response.status() < 400)
+    {
+        Wt::Json::Value result ;
+        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+        try
+        {                  
+            Wt::Json::parse(response.body(), result);
+            result1 = result;
+              //descriptif
+            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+            {
+                Wt::Json::Object tmp = (*idx1);
+                std::string res = tmp.get("alias");
+                edit->setText(res);
+                idx++;
+            }
+        }
+        catch (Wt::Json::ParseError const& e)
+        {
+            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+        }
+
+        catch (Wt::Json::TypeException const& e)
+        {
+            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+        }          
+    }
+    else
+    {
+        edit->setText(response.body()) ;
+        Wt::log("warning") << "fct handleHttpResponse" << response.body();
     }
 }

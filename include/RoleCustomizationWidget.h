@@ -34,7 +34,9 @@ public:
     void getMedias(boost::system::error_code err, const Wt::Http::Message& response);
     void getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
     void getInformations(boost::system::error_code err, const Wt::Http::Message& response);
-    void getAliases(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
+    void getAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
+    void putAssetAlias(int idx);
+    void resPutAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
 private:
     Session * session;
     bool created_;
@@ -88,6 +90,9 @@ private:
     void createAssetsWidgets();
     
     void fillAssetsFields();
+    
+    bool mediasSet;
+    bool rolesSet;
     
     
 

@@ -67,17 +67,19 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session)
             "&token=" + session->user()->token.toUTF8());
     
     
+    mediasSet = false;
+    rolesSet = false;
+    
     bindWidgets();
     
     fillMediaSelector();
     fillRoleSelector();
     
-    mediasComboBox->setCurrentIndex(0);
-    rolesComboBox->setCurrentIndex(0);
     
+
     fillPluginSelector();
     
-    createAssetsWidgets();
+//    createAssetsWidgets();
 }
 
 RoleCustomizationWidget::RoleCustomizationWidget(const RoleCustomizationWidget& orig)
@@ -140,7 +142,13 @@ void RoleCustomizationWidget::getRoles(boost::system::error_code err, const Wt::
         catch (Wt::Json::TypeException const& e)
         {
             Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-        }          
+        }
+        rolesComboBox->setCurrentIndex(0);
+        rolesSet = true;
+        if (mediasSet)
+        {
+            createAssetsWidgets();
+        }
     }
     else
     {
@@ -291,6 +299,7 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
                 saveButton->setText("ToTrSave");
                 saveButton->setStyleClass("span2");
                 saveButton->addStyleClass("btn-info");
+                saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putAssetAlias, this, idx));
                 
                 row->addWidget(labelAsset);
                 row->addWidget(lineEditAsset);
@@ -348,7 +357,13 @@ void RoleCustomizationWidget::getMedias(boost::system::error_code err, const Wt:
         catch (Wt::Json::TypeException const& e)
         {
             Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-        }          
+        }
+        mediasComboBox->setCurrentIndex(0);
+        mediasSet = true;
+        if (rolesSet)
+        {
+            createAssetsWidgets();
+        }
     }
     else
     {
@@ -453,6 +468,33 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
     }
 }
 
+void RoleCustomizationWidget::putAssetAlias(int idx)
+{
+    std::string urlToCall = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string>(mapIdAssets[idx])
+                + "/" + "alias";
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutAssetAlias, this, _1, _2, mapEditAssets[idx]));
+
+    std::string apiAddress = urlToCall + this->getCredentials();
+
+    std::string strMessage = "{\n"
+            "\"alias\" : {\n\
+            \"role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
+            +"\",\n"
+            "\"media\" : \""+ boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
+            +"\",\n"
+            "\"value\" : \""+ boost::lexical_cast<std::string>(mapEditAssets[idx]->text()) +"\"\n}\n"
+            "}\n";
+    
+    Wt::Http::Message message;
+    message.addBodyText(strMessage);
+
+    if (client->put(apiAddress, message))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    } 
+}
+
 void RoleCustomizationWidget::fillAssetsFields()
 {
     
@@ -461,7 +503,7 @@ void RoleCustomizationWidget::fillAssetsFields()
         std::string urlToCall = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string>(i->second)
                 + "/" + "aliases";
         Wt::Http::Client *client = new Wt::Http::Client(this);
-        client->done().connect(boost::bind(&RoleCustomizationWidget::getAliases, this, _1, _2, mapEditAssets[i->first]));
+        client->done().connect(boost::bind(&RoleCustomizationWidget::getAssetAlias, this, _1, _2, mapEditAssets[i->first]));
 
         std::string apiAddress = urlToCall + this->getCredentials();
         
@@ -477,27 +519,21 @@ void RoleCustomizationWidget::fillAssetsFields()
     }
 }
 
-void RoleCustomizationWidget::getAliases(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit)
+void RoleCustomizationWidget::getAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit)
 {
     Wt::WApplication::instance()->resumeRendering();
-    int idx = 0;
     
     if (response.status() >= 200 && response.status() < 400)
     {
         Wt::Json::Value result ;
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+        Wt::Json::Object& result1 = Wt::Json::Object::Empty;
         try
         {                  
             Wt::Json::parse(response.body(), result);
             result1 = result;
-              //descriptif
-            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-            {
-                Wt::Json::Object tmp = (*idx1);
-                std::string res = tmp.get("alias");
-                edit->setText(res);
-                idx++;
-            }
+            std::string res = result1.get("alias");
+            edit->setText(res);
+
         }
         catch (Wt::Json::ParseError const& e)
         {
@@ -511,7 +547,25 @@ void RoleCustomizationWidget::getAliases(boost::system::error_code err, const Wt
     }
     else
     {
-        edit->setText(response.body()) ;
+        Wt::Json::Value result ;
+        Wt::Json::Object& result1 = Wt::Json::Object::Empty;
+        try
+        {                  
+            Wt::Json::parse(response.body(), result);
+            result1 = result;
+            std::string res = result1.get("message");
+            edit->setText(res);
+        }
+        catch (Wt::Json::ParseError const& e)
+        {
+            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+        }
         Wt::log("warning") << "fct handleHttpResponse" << response.body();
     }
+}
+
+void RoleCustomizationWidget::resPutAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit)
+{
+    Wt::WApplication::instance()->resumeRendering();
+    Wt::log("warning") << response.body();
 }

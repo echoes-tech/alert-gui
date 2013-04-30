@@ -12,12 +12,13 @@
 #include <Wt/WContainerWidget>
 #include <Wt/WIOService>
 
-#include <tools/ApiCaller.h>
-
 #include <Wt/Json/Array>
 #include <Wt/Json/Object>
 #include <Wt/Json/Parser>
 #include <Wt/Json/Value>
+
+#include <Wt/Http/Client>
+
 #include<pthread.h>
 
 
@@ -34,8 +35,9 @@ public:
     void getMedias(boost::system::error_code err, const Wt::Http::Message& response);
     void getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
     void getInformations(boost::system::error_code err, const Wt::Http::Message& response);
-    void getAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
+    void getAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
     void putAssetAlias(int idx);
+    void putInformationAlias(int idx);
     void resPutAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
 private:
     Session * session;
@@ -90,6 +92,7 @@ private:
     void createAssetsWidgets();
     
     void fillAssetsFields();
+    void fillInformationsFields();
     
     bool mediasSet;
     bool rolesSet;

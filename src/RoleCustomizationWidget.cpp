@@ -444,12 +444,15 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
                 saveButton->setText("ToTrSave");
                 saveButton->setStyleClass("span2");
                 saveButton->addStyleClass("btn-info");
+                saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putInformationAlias, this, idx));
                 
                 row->addWidget(label);
                 row->addWidget(lineEdit);
                 row->addWidget(saveButton);
                 informationsContainer->addWidget(row);
                 idx++;
+                
+                fillInformationsFields();
             }
         }
         catch (Wt::Json::ParseError const& e)
@@ -495,15 +498,42 @@ void RoleCustomizationWidget::putAssetAlias(int idx)
     } 
 }
 
+void RoleCustomizationWidget::putInformationAlias(int idx)
+{
+    std::string urlToCall = this->getApiUrl() + "/informations/" + boost::lexical_cast<std::string>(mapEditInformations[idx])
+                + "/" + "alias";
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutAssetAlias, this, _1, _2, mapEditInformations[idx]));
+
+    std::string apiAddress = urlToCall + this->getCredentials();
+
+    std::string strMessage = "{\n"
+            "\"alias\" : {\n\
+            \"role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
+            +"\",\n"
+            "\"media\" : \""+ boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
+            +"\",\n"
+            "\"value\" : \""+ boost::lexical_cast<std::string>(mapEditInformations[idx]->text()) +"\"\n}\n"
+            "}\n";
+    
+    Wt::Http::Message message;
+    message.addBodyText(strMessage);
+
+    if (client->put(apiAddress, message))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    } 
+}
+
 void RoleCustomizationWidget::fillAssetsFields()
 {
     
     for(std::map<int,long long>::const_iterator i = mapIdAssets.begin() ; i != mapIdAssets.end() ; i ++)
     {
         std::string urlToCall = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string>(i->second)
-                + "/" + "aliases";
+                + "/" + "alias";
         Wt::Http::Client *client = new Wt::Http::Client(this);
-        client->done().connect(boost::bind(&RoleCustomizationWidget::getAssetAlias, this, _1, _2, mapEditAssets[i->first]));
+        client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, mapEditAssets[i->first]));
 
         std::string apiAddress = urlToCall + this->getCredentials();
         
@@ -519,7 +549,32 @@ void RoleCustomizationWidget::fillAssetsFields()
     }
 }
 
-void RoleCustomizationWidget::getAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit)
+void RoleCustomizationWidget::fillInformationsFields()
+{
+    for(std::map<int,Wt::Json::Object>::const_iterator i = mapIdInformations.begin() ; i != mapIdInformations.end() ; i ++)
+    {
+        //ToDo : http://127.0.0.1:8081/plugins/1/sources/1/searches/1/inf_values/1/units/1/alias?login=thomas.saquet@echoes-tech.com&password=147258369aA&role=1&media=1
+        std::string urlToCall = this->getApiUrl() + "/informations/" + boost::lexical_cast<std::string>(i->second)
+                + "/" + "aliases";
+        Wt::Http::Client *client = new Wt::Http::Client(this);
+        client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, mapEditInformations[i->first]));
+
+        std::string apiAddress = urlToCall + this->getCredentials();
+        
+        apiAddress += "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
+                +"&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
+
+        std::cout << "address to call : " << apiAddress << std::endl;
+
+        if (client->get(apiAddress))
+        {
+            Wt::WApplication::instance()->deferRendering();
+        } 
+    }
+}
+
+
+void RoleCustomizationWidget::getAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit)
 {
     Wt::WApplication::instance()->resumeRendering();
     

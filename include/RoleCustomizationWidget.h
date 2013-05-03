@@ -38,7 +38,10 @@ public:
     void getAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
     void putAssetAlias(int idx);
     void putInformationAlias(int idx);
+    void putPluginAlias();
     void resPutAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
+    void resPutPluginAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
+    
 private:
     Session * session;
     bool created_;

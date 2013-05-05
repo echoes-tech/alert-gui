@@ -34,13 +34,16 @@ public:
     void getAssets(boost::system::error_code err, const Wt::Http::Message& response);
     void getMedias(boost::system::error_code err, const Wt::Http::Message& response);
     void getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
+    void getCriteria(boost::system::error_code err, const Wt::Http::Message& response, int idForInfMap, Wt::WContainerWidget *row);
     void getInformations(boost::system::error_code err, const Wt::Http::Message& response);
     void getAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
     void putAssetAlias(int idx);
     void putInformationAlias(int idx);
+    void putCriterionAlias(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit);
     void putPluginAlias();
     void resPutAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
     void resPutPluginAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
+    void resPutCritAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
     
 private:
     Session * session;
@@ -58,15 +61,16 @@ private:
     
     Wt::WComboBox *pluginsComboBox;
     std::map<int,long long> mapIdPluginsComboBox;
+    std::map<int,Wt::WLineEdit*> mapEditPlugins;
     
     std::map<int,long long> mapIdAssets;
     std::map<int,Wt::WLineEdit*> mapEditAssets;
     
-    std::map<int,long long> mapIdPlugins;
-    std::map<int,Wt::WLineEdit*> mapEditPlugins;
+    std::map<int,std::map<long long,Wt::WLineEdit*>> mapEditInformationCriteria;
     
     std::map<int,Wt::Json::Object> mapIdInformations;
     std::map<int,Wt::WLineEdit*> mapEditInformations;
+    std::map<int,Wt::WContainerWidget*> mapRowCriteriaInformations;
     
     Wt::WContainerWidget *assetsContainer;
     Wt::WContainerWidget *pluginsContainer;
@@ -88,14 +92,16 @@ private:
     void selectRole();
     void selectPlugin();
     
+    void createAssetsWidgets();
+    void createCriteriaWidgets();
+    
     void fillMediaSelector();
     void fillRoleSelector();
     void fillPluginSelector();
     
-    void createAssetsWidgets();
-    
     void fillAssetsFields();
     void fillInformationsFields();
+    void fillCriteriaFields(int idForInfMap, std::map<long long, Wt::WLineEdit*> mapIdCritEdit);
     
     bool mediasSet;
     bool rolesSet;

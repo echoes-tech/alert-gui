@@ -7,9 +7,11 @@
 
 #include "AlertEditionWidget.h"
 
-AlertEditionWidget::AlertEditionWidget()
+AlertEditionWidget::AlertEditionWidget(const std::string &apiUrl)
 : Wt::WTemplateFormView(Wt::WString::tr("Alert.alert.Edition.template"))
 {
+    setApiUrl(apiUrl);
+
     created_ = false;
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("alert",false);
@@ -723,9 +725,6 @@ void AlertEditionWidget::addMedia()
     
     deleteButton->clicked().connect(boost::bind(&AlertEditionWidget::deleteMedia,this,tableMediaDestination->elementAt(row,4)));
     
-    
-    
-    
     AlertMediaSpecialization *ams = new AlertMediaSpecialization();
     Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr;
     try
@@ -791,75 +790,11 @@ bool AlertEditionWidget::validate()
 
 void AlertEditionWidget::addAlert()
 {
-    Wt::WApplication *app = Wt::WApplication::instance();
-    
     if (((serverSelectionBox->currentIndex() == -1) || (applicationSelectionBox->currentIndex() == -1) || (informationSelectionBox->currentIndex() == -1)))
     {
         Wt::WMessageBox::show(tr("Alert.alert.information-missing-title"),tr("Alert.alert.information-missing"),Wt::Ok);
         return;
     }
-    
-//    try
-//    {
-//        Wt::Dbo::Transaction transaction(*session);
-//        
-//        
-//        Wt::Dbo::collection<Wt::Dbo::ptr<AlertValue> > avaPtrCollec = session->find<AlertValue>().where("\"SEA_ID\" = ?")
-//                                                        .bind(mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()])
-//                                                        .where("\"SRC_ID\" = ?")
-//                                                        .bind(mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()])
-//                                                        .where("\"PLG_ID_PLG_ID\" = ?")
-//                                                        .bind(mapInformationPlgIdSboxRow[informationSelectionBox->currentIndex()])
-//                                                        .where("\"INF_VALUE_NUM\" = ?")
-//                                                        .bind(mapInformationIvnSboxRow[informationSelectionBox->currentIndex()])
-//                                                        .where("\"INU_ID_INU_ID\" = ?")
-//                                                        .bind(mapInformationInuIdSboxRow[informationSelectionBox->currentIndex()]);
-//        
-//        if (avaPtrCollec.size() > 0)
-//        {
-//            std::string inString = "(";
-//            for (Wt::Dbo::collection<Wt::Dbo::ptr<AlertValue> >::const_iterator i = avaPtrCollec.begin(); i != avaPtrCollec.end(); i++) 
-//            {
-//                Wt::log("debug") << " [Class:AlertEditionWidget] " << " - " << " For ava list : " << (*i).id();
-//                inString += boost::lexical_cast<std::string,long long>((*i).id()) + ",";
-//                i->flush();
-//            }
-//            inString.replace(inString.size()-1, 1, "");
-//            inString += ")";
-//            
-//            
-//            std::string queryStr = "SELECT ale FROM \"T_ALERT_ALE\" ale WHERE "
-//                                    " \"ALE_ID\" IN"
-//                                    "("
-//                                        "SELECT \"T_ALERT_ALE_ALE_ID\" FROM \"TJ_AST_ALE\" WHERE \"T_ASSET_AST_AST_ID\" = " 
-//                                        + boost::lexical_cast<std::string>(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]) +
-//                                    ")"
-//                                    "AND ale.\"ALE_DELETE\" IS NULL "
-//                                    "AND \"ALE_AVA_AVA_ID\" IN" + inString;
-//            
-//            Wt::Dbo::Query<Wt::Dbo::ptr<Alert> > queryRes = session->query<Wt::Dbo::ptr<Alert> >(queryStr);
-//            
-//            Wt::Dbo::collection<Wt::Dbo::ptr<Alert> > alerts = queryRes.resultList();
-//            
-//            if (alerts.size() > 0)
-//            {
-//                Wt::log("info") << "[AlertEditionWidget] " << "alert exists";
-//                Wt::WMessageBox::show(tr("Alert.alert.alert-already-exists-title"),tr("Alert.alert.alert-already-exists"),Wt::Ok);
-//                return;
-//            }
-//            
-//        }
-//        transaction.commit();
-//        
-//    }
-//    catch (Wt::Dbo::Exception e)
-//    {
-//        Wt::log("error") << "[AlertEditionWidget] " << e.what();
-//        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
-//        return;
-//    }
-    
-    
     
     if (tableMediaDestination->rowCount() < 4)
     {
@@ -874,55 +809,39 @@ void AlertEditionWidget::addAlert()
         update();
         return;
     }
+
+    Wt::WString json = "{\n";
+    std::string apiAddress = _apiUrl + "/alerts/";
+    Wt::Http::Client *client = new Wt::Http::Client(this);
     
-    Alert *alert = new Alert();
-    AlertValue *ava = new AlertValue();
-    Wt::WString name = serverSelectionBox->currentText() + " - " + applicationSelectionBox->currentText() + " - " + informationSelectionBox->currentText();
     try
     {
         Wt::Dbo::Transaction transaction(*session);
-        
-        
-        Wt::Dbo::ptr<Information2> infoPtr = session->find<Information2>().where("\"SEA_ID\" = ?")
-                                                        .bind(mapInformationSeaIdSboxRow[informationSelectionBox->currentIndex()])
-                                                        .where("\"SRC_ID\" = ?")
-                                                        .bind(mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()])
-                                                        .where("\"PLG_ID_PLG_ID\" = ?")
-                                                        .bind(mapInformationPlgIdSboxRow[informationSelectionBox->currentIndex()])
-                                                        .where("\"INF_VALUE_NUM\" = ?")
-                                                        .bind(mapInformationIvnSboxRow[informationSelectionBox->currentIndex()])
-                                                        .where("\"INU_ID_INU_ID\" = ?")
-                                                        .bind(mapInformationInuIdSboxRow[informationSelectionBox->currentIndex()]);
-//        
-        
-//        Wt::log("info") << "SEA_ID : " << mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()];
-//        Wt::log("info") << "SEA_ID : " << mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()];
-        Wt::Dbo::ptr<AlertCriteria> critPtr = session->find<AlertCriteria>().where("\"ACR_ID\" = ?").bind(mapAlertCriteriaIdSboxRow[comboAlertCrit->currentIndex()]);
-        ava->information = infoPtr;
-        updateModelField(model_,AlertEditionModel::ThresholdValue);
 
-        
+        json += "\t\"name\": \"" + serverSelectionBox->currentText() + " - " + applicationSelectionBox->currentText() + " - " + informationSelectionBox->currentText() + "\",\n"
+                "\t\"alert_value\": \"";
+
         if (comboInformationUnit->currentIndex() != -1)
         {
             Wt::Dbo::ptr<InformationUnit> ptrUnit = session->find<InformationUnit>().where("\"INU_ID\" = ?")
                         .bind(mapInformationUnitCombo[0]);
-            
+
             if (ptrUnit.get()->unitType.id() == Enums::text)
             {
-                ava->value = model_->valueText(model_->ThresholdValue);
+                json += model_->valueText(model_->ThresholdValue);
             }
             else if (ptrUnit.get()->unitType.id() == Enums::number)
             {
                 if (comboInformationUnit->currentIndex() == 0)
                 {
-                    ava->value = model_->valueText(model_->ThresholdValue);
+                    json += model_->valueText(model_->ThresholdValue);
                 }
                 else
                 {
-                    Wt::Dbo::ptr<InformationSubUnit> ptrSubUnit = session->find<InformationSubUnit>().where("\"ISU_ID\" = ?")
-                            .bind(mapInformationUnitCombo[comboInformationUnit->currentIndex()]);
-                    float factorValue = boost::lexical_cast<float>(model_->valueText(model_->ThresholdValue)) * ptrSubUnit.get()->factor;
-                    ava->value = boost::lexical_cast<std::string>(factorValue);
+                    Wt::Dbo::ptr<InformationSubUnit> isuPtr = session->find<InformationSubUnit>()
+                            .where("\"ISU_ID\" = ?").bind(mapInformationUnitCombo[comboInformationUnit->currentIndex()]);
+                    float factorValue = boost::lexical_cast<float>(model_->valueText(model_->ThresholdValue)) * isuPtr->factor;
+                    json += boost::lexical_cast<std::string>(factorValue);
                 }
             }
             else
@@ -935,42 +854,40 @@ void AlertEditionWidget::addAlert()
         {
             Wt::WMessageBox::show(tr("Alert.alert.choose-unit-title"),tr("Alert.alert.choose-unit"),Wt::Ok);
         }
-        
-        
-        
-        ava->alertCriteria = critPtr;
-        
-        
-        ava->keyValue = model_->valueText(model_->ThresholdValueKey);
-        
-        //asset
-        Wt::Dbo::ptr<Asset> assetPtr = session->find<Asset>().where("\"AST_ID\" = ?").bind(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]);
-        ava->asset = assetPtr;
-        
-        Wt::log("info") << critPtr.get()->name;
-        Wt::Dbo::ptr<AlertValue> avaPtr = session->add<AlertValue>(ava);   
-        
-        alert->alertValue = avaPtr;
-        alert->threadSleep = 0;
-        alert->creaDate = Wt::WDateTime::currentDateTime();
-        alert->name = name;
 
-        
-        
-        
-        Wt::Dbo::ptr<Alert> alePtr = session->add<Alert>(alert);
-        alePtr.flush();
-//        alePtr.modify()->assets.insert(assetPtr);
-        
-        for (std::map<int,long long>::const_iterator i = mapAlertMediaSpecializationIdTableView.begin(); i != mapAlertMediaSpecializationIdTableView.end(); ++i)
+        json += "\",\n"
+                "\t\"thread_sleep\": 0,\n"
+                "\t\"key_value\": \"" + model_->valueText(model_->ThresholdValueKey) +"\",\n"
+                "\t\"ast_id\": " + boost::lexical_cast<std::string>(mapAssetIdSboxRow[serverSelectionBox->currentIndex()]) + ",\n"
+                "\t\"sea_id\": " + boost::lexical_cast<std::string>(mapInformationSeaIdSboxRow[informationSelectionBox->currentIndex()]) + ",\n"
+                "\t\"src_id\": " + boost::lexical_cast<std::string>(mapInformationSrcIdSboxRow[informationSelectionBox->currentIndex()]) + ",\n"
+                "\t\"plg_id\": " + boost::lexical_cast<std::string>(mapInformationPlgIdSboxRow[informationSelectionBox->currentIndex()]) + ",\n"
+                "\t\"inf_value_num\": " + boost::lexical_cast<std::string>(mapInformationIvnSboxRow[informationSelectionBox->currentIndex()]) + ",\n"
+                "\t\"inu_id\": " + boost::lexical_cast<std::string>(mapInformationInuIdSboxRow[informationSelectionBox->currentIndex()]) + ",\n"
+                "\t\"acr_id\": " + boost::lexical_cast<std::string>(mapAlertCriteriaIdSboxRow[comboAlertCrit->currentIndex()]) + ",\n"
+                "\t\"ams_id\": [";
+
+        unsigned idx = 1;
+        Wt::log("debug") << "[Alert Edition Widget] Number of ams: " << mapAlertMediaSpecializationIdTableView.size();
+        for (std::map<int,long long>::const_iterator it = mapAlertMediaSpecializationIdTableView.begin(); it != mapAlertMediaSpecializationIdTableView.end(); ++it)
         {
-            Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr = session->find<AlertMediaSpecialization>().where("\"AMS_ID\" = ?").bind(i->second);
-            amsPtr.modify()->alert = alePtr;
+            json += boost::lexical_cast<std::string>(it->second);
+
+            if(idx++ < mapAlertMediaSpecializationIdTableView.size())
+            {
+                json += ", ";
+            }
         }
+
+        json += "]\n"
+                "}";
+        
+        updateModelField(model_,AlertEditionModel::ThresholdValue);
+
+        client->done().connect(boost::bind(&AlertEditionWidget::postAlert, this, _1, _2));
+
+        apiAddress += "?login=" + session->user()->eMail.toUTF8() + "&token=" + session->user()->token.toUTF8();
         transaction.commit();
-        
-        
-        UserActionManagement::registerUserAction(Enums::add,Constants::T_ALERT_ALE,alePtr.id());
     }
     catch (Wt::Dbo::Exception e)
     {
@@ -978,12 +895,75 @@ void AlertEditionWidget::addAlert()
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
         return;
     }
+
+    Wt::log("debug") << "[AlertEditionWidget] address to call : " << apiAddress;
     
-    app->root()->widget(0)->refresh();
+    Wt::Http::Message message;
+    message.setHeader("Content-Type", "application/json; charset=utf-8");
+    message.addBodyText(json.toUTF8());
+    
+    if (client->post(apiAddress, message))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+
+    created_ = false;
+    model_->reset();
+    update();
+    comboAlertCrit->setCurrentIndex(0);
+    
+    Wt::WApplication::instance()->root()->widget(0)->refresh();
+}
+
+	
+
+void AlertEditionWidget::postAlert(boost::system::error_code err, const Wt::Http::Message& response)
+{
+    Wt::WApplication::instance()->resumeRendering();
+
+    if (!err)
+    {
+        if(response.status() == 201)
+        {
+            try
+            {
+                Wt::Json::Object result;
+                Wt::Json::parse(response.body(), result);
+                
+                long long aleID = result.get("id");
+
+                Wt::WMessageBox::show(tr("Alert.alert.alert-created-title"),tr("Alert.alert.alert-created"),Wt::Ok);
+
+                UserActionManagement::registerUserAction(Enums::add, Constants::T_ALERT_ALE, aleID);
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+            }
+        }
+        else
+        {
+            Wt::log("error") << "[Alert Edition Widget] " << response.body();
+            Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+        }
+    }
+    else
+    {
+        Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+    }
+
+    Wt::WApplication::instance()->root()->widget(0)->refresh();
     
     try
     {
-        Wt::Dbo::Transaction transaction2(*session);
+        Wt::Dbo::Transaction transaction(*session);
         
         std::string qryString = "DELETE FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" ams "
                                 " WHERE \"AMS_ALE_ALE_ID\" IS NULL"
@@ -995,26 +975,16 @@ void AlertEditionWidget::addAlert()
 //            i->remove();
 //        }
         
-        transaction2.commit();
+        transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
     {
-        Wt::log("error") << "[AlertEditionWidget] " << e.what();
+        Wt::log("error") << "[Alert Edition Widget] " << e.what();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
         return;
     }
-    
-    Wt::WMessageBox::show(tr("Alert.alert.alert-created-title"),tr("Alert.alert.alert-created"),Wt::Ok);
-    
-    created_ = false;
-    model_->reset();
-    update();
-    comboAlertCrit->setCurrentIndex(0);
-    
-    
-    
-    app->root()->widget(0)->refresh();
 }
+
 
 void AlertEditionWidget::close()
 {
@@ -1025,3 +995,15 @@ bool AlertEditionWidget::isCreated()
 {
     return this->created_;
 }
+
+void AlertEditionWidget::setApiUrl(std::string apiUrl)
+{
+    _apiUrl = apiUrl;
+    return;
+}
+
+std::string AlertEditionWidget::getApiUrl() const
+{
+    return _apiUrl;
+}
+

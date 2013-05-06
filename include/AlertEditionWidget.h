@@ -40,6 +40,9 @@
 #include <memory>
 #include <Wt/WTableView>
 
+#include <Wt/Json/Parser>
+#include <Wt/Json/Object>
+
 class AlertEditionWidget : public Wt::WTemplateFormView
 {
 public:
@@ -47,7 +50,7 @@ public:
    *
    * Creates a new authentication.
    */
-  AlertEditionWidget();
+  AlertEditionWidget(const std::string &apiUrl);
 
   /*! \brief Sets the registration model.
    */
@@ -146,8 +149,9 @@ public:
 
   bool isCreated();
 
-protected:
-  /*! \brief Validates the current information.
+  std::string getApiUrl() const;
+
+protected:  /*! \brief Validates the current information.
    *
    * The default implementation simply calls
    * RegistrationModel::validate() on the model.
@@ -157,6 +161,7 @@ protected:
    */
   virtual bool validate();
 
+  void postAlert(boost::system::error_code err, const Wt::Http::Message& response);
 
   /*! \brief Closes the registration widget.
    *
@@ -172,12 +177,14 @@ protected:
 private:
   AlertEditionModel *model_;
   Session * session;
+  std::string _apiUrl;
 
   bool created_;
   
   Wt::WGroupBox *organizationContainer;
   Wt::WButtonGroup *organizationGroup;
 
+  void setApiUrl(std::string apiUrl);
 };
 
 

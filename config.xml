@@ -470,17 +470,19 @@
 
 	    <property name="smtp-host">hermes.gayuxweb.fr</property>
 	    <property name="smtp-port">25</property>
-        <property name="auth-mail-sender-name">ECHOES Alert</property>
-        <property name="auth-mail-sender-address">noreply-auth@echoes-tech.com</property>
-        
-        <property name="db-host">172.16.3.202</property>
-        <!--<property name="db-host">92.243.5.246</property>-->
-        <property name="db-port">5432</property>
-        <property name="db-name">echoes</property>
-        <property name="db-user">echoes</property>
-        <property name="db-password">toto</property>
-        
-        <property name="css-to-load">bootstrap.min.css</property>
+            <property name="auth-mail-sender-name">ECHOES Alert</property>
+            <property name="auth-mail-sender-address">noreply-auth@echoes-tech.com</property>
+
+            <property name="db-host">172.16.3.202</property>
+            <property name="db-port">5432</property>
+            <property name="db-name">echoes</property>
+            <property name="db-user">echoes</property>
+            <property name="db-password">toto</property>
+
+            <property name="api-host">127.0.0.1</property>
+            <property name="api-port">8081</property>
+
+            <property name="css-to-load">bootstrap.min.css</property>
         
 	</properties>
 

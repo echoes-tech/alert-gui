@@ -44,7 +44,7 @@ class MainWidget : public Wt::WContainerWidget
 {
 public:
 
-  MainWidget(Session *session);
+  MainWidget(Session *session, const std::string &apiUrl);
   void doActionMenu(int index = -1, Enums::EMenuRoot menuRoot = Enums::main);
   
   Wt::WMenu *getMenu();
@@ -56,6 +56,8 @@ public:
   AlertEditionWidget *aew;
   void createUI();
   virtual void refresh();
+  std::string getApiUrl() const;
+
 protected:
     
   virtual void close();
@@ -96,6 +98,7 @@ protected:
 
 private:
   Session * session;
+  std::string _apiUrl;
  
   bool created_;
   
@@ -110,7 +113,8 @@ private:
   Wt::WMenu *menu;
   Wt::WMenu *alertSubmenu;
   Wt::WMenu *accountSubmenu;
-  
+
+  void setApiUrl(std::string _apiUrl);
 };
 
 

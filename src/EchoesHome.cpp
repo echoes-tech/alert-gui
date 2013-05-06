@@ -1,33 +1,63 @@
+/* 
+ * ECHOES Home
+ * @author ECHOES Technologies (TSA)
+ * @date 15/11/2012
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
+ * 
+ */
+
 #include "EchoesHome.h"
+
+using namespace std;
 
 /**
 Class EchoesHome : étend la classe WContainerWidget.
-*/
-EchoesHome::EchoesHome(Wt::WContainerWidget *parent): 
-    Wt::WContainerWidget(parent),
-    adminPageTabs(0),
-    monitoringPage(0)
-    {
-        initSession();
-        initAuth();
-        initHeader();
-        initMainPageWidget();
-        processEnvironment();
-    }
+ */
+EchoesHome::EchoesHome(Wt::WContainerWidget *parent) : Wt::WContainerWidget(parent), adminPageTabs(0), monitoringPage(0)
+{
+    initSession();
+
+    string apiHost = "", apiPort = "";
+    Wt::WApplication::readConfigurationProperty("api-host", apiHost);
+    Wt::WApplication::readConfigurationProperty("api-port", apiPort);
+#ifdef NDEBUG
+    setApiUrl("https://" + apiHost + ":" + apiPort);
+#else
+    setApiUrl("http://" + apiHost + ":" + apiPort);
+#endif
+    
+    initAuth();
+    initHeader();
+    initMainPageWidget();
+    processEnvironment();
+}
 
 Session* EchoesHome::getSession()
 {
     return this->session;
 }
 
+void EchoesHome::setApiUrl(string apiUrl) {
+    _apiUrl = apiUrl;
+    return;
+}
+
+string EchoesHome::getApiUrl() const {
+    return _apiUrl;
+}
 
 void EchoesHome::initSession()
 {
-    std::string dbHost = "127.0.0.1";
-    std::string dbPort = "5432";
-    std::string dbName = "echoes";
-    std::string dbUser = "echoes";
-    std::string dbPassword = "toto";
+    string dbHost = "127.0.0.1";
+    string dbPort = "5432";
+    string dbName = "echoes";
+    string dbUser = "echoes";
+    string dbPassword = "toto";
     Wt::WApplication::readConfigurationProperty("db-host", dbHost);
     Wt::WApplication::readConfigurationProperty("db-port", dbPort);
     Wt::WApplication::readConfigurationProperty("db-name", dbName);
@@ -76,7 +106,7 @@ Wt::WContainerWidget* EchoesHome::initMonitoringWidget()
 
 void EchoesHome::initMainPageWidget()
 {
-    this->mainPageWidget = new MainWidget(this->session);
+    this->mainPageWidget = new MainWidget(this->session, _apiUrl);
     this->mainPageWidget->hide();
     this->addWidget(this->mainPageWidget->getSideBarContainer());
     this->addWidget(this->mainPageWidget);
@@ -125,14 +155,14 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     return res;
 }
 
-void EchoesHome::handleInternalPath(const std::string &internalPath)
+void EchoesHome::handleInternalPath(const string &internalPath)
 {
     if (this->session->login().loggedIn()) 
     {
-        std::vector<std::string> internalPathSplitResult;
-        std::vector<std::string> internalPathWithoutBlank;
+        vector<string> internalPathSplitResult;
+        vector<string> internalPathWithoutBlank;
         boost::split(internalPathSplitResult, internalPath, boost::is_any_of("/"), boost::token_compress_on);
-        for (std::vector<std::string>::const_iterator i = internalPathSplitResult.begin() ; i != internalPathSplitResult.end() ; i++)
+        for (vector<string>::const_iterator i = internalPathSplitResult.begin() ; i != internalPathSplitResult.end() ; i++)
         {
             if (i->compare("") != 0)
             {
@@ -147,7 +177,7 @@ void EchoesHome::handleInternalPath(const std::string &internalPath)
         {
             for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
             {
-    //            std::string test = i->value();
+    //            string test = i->value();
                 if (!boost::starts_with(i->value(), "submenu_"))
                 {
                     if (internalPathWithoutBlank[0].compare(i->value()) == 0)

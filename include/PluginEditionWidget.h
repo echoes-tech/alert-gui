@@ -38,7 +38,7 @@ class PluginEditionWidget : public Wt::WTemplateFormView
 {
     public:
     
-        PluginEditionWidget(Session *session);
+        PluginEditionWidget(Session *session, const std::string &apiUrl);
         ~PluginEditionWidget();
         void handleHttpResponsePlgList(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseAddPlg(boost::system::error_code err, const Wt::Http::Message& response);
@@ -65,17 +65,17 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         
         
         void handleHttpResponsePlgJSON(boost::system::error_code err, const Wt::Http::Message& response);
-        
+
+        std::string getApiUrl() const;
+
     private:
         Wt::WFormModel *formPlugin;
         void refresh1();
         void updateData();
         
-        std::string host;
-        std::string port;
-        
         Wt::Http::Client *client1;
-        Session *session;    
+        Session *session;   
+        std::string _apiUrl;
         
         void displayButtonCreateJSON();
         void formatValue(std::string& value, int nbBackslash) const;
@@ -191,7 +191,8 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         std::string createFormSearchState;
         std::string formJSON;
         std::string strJSON;
-        
+
+        void setApiUrl(std::string apiUrl);
 };
 #endif	/* PLUGINEDITIONWIDGET_H */
 

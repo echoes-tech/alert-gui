@@ -7,11 +7,12 @@
 
 #include "MainWidget.h"
 
-MainWidget::MainWidget(Session *session)
+MainWidget::MainWidget(Session *session, const std::string &apiUrl)
 : Wt::WContainerWidget()
 {
     created_ = false;
     this->session = session;
+    setApiUrl(apiUrl);
 //    Wt::WApplication *app = Wt::WApplication::instance();
 //    app->messageResourceBundle().use("test",false);     
     
@@ -205,7 +206,7 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         }
         case Enums::EPageType::PLUGIN:
         {
-            pew = new PluginEditionWidget(this->session);
+            pew = new PluginEditionWidget(this->session, _apiUrl);
             break;
         }
         default:
@@ -220,7 +221,7 @@ void MainWidget::createAlertPage(Enums::EAlertSubmenu enumSAL)
     {
         case Enums::EAlertSubmenu::ALERT:
         {
-            aew = new AlertEditionWidget();
+            aew = new AlertEditionWidget(_apiUrl);
             try
             {
                 Wt::Dbo::Transaction transaction(*(this->session));
@@ -578,4 +579,15 @@ void MainWidget::close()
 void MainWidget::refresh()
 {
     this->amw->refresh();
+}
+
+void MainWidget::setApiUrl(std::string apiUrl)
+{
+    _apiUrl = apiUrl;
+    return;
+}
+
+std::string MainWidget::getApiUrl() const
+{
+    return _apiUrl;
 }

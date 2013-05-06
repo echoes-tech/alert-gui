@@ -9,17 +9,17 @@
 
 Wt::Json::Array Wt::Json::Array::Empty;
 
-PluginEditionWidget::PluginEditionWidget(Session* session)
+PluginEditionWidget::PluginEditionWidget(Session* session, const std::string &apiUrl)
 : Wt::WTemplateFormView(Wt::WString::tr("Alert.plugins.Edition.template"))
 {
     this->session = session;
+    setApiUrl(apiUrl);
+
     if(this->session->user().id() != -1)
     {
         Wt::WApplication *app = Wt::WApplication::instance();
             app->enableUpdates(true);
         app->messageResourceBundle().use("plugin",false);
-        host = "127.0.0.1";
-        port = "8080";
         searchToken();
         createUI();  
     }
@@ -101,7 +101,7 @@ void PluginEditionWidget::createUI()
     
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgList, this, _1, _2));
-    std::string urlAdd("http://" + host + ":" + port + "/plugins?login=" 
+    std::string urlAdd(_apiUrl + "/plugins?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
     if(client1->get(urlAdd))
     {
@@ -242,7 +242,7 @@ void PluginEditionWidget::createJSON()
     {
         client1 = new Wt::Http::Client();
         client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
-        std::string urlAdd2 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
+        std::string urlAdd2 = _apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
                             + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
         if(client1->get(urlAdd2))
         {
@@ -259,7 +259,7 @@ void PluginEditionWidget::createTableUnit()
 {
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseUnits, this, _1, _2));
-    std::string urlAdd("http://" + host + ":" +port + "/units?login=" 
+    std::string urlAdd(_apiUrl + "/units?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
 
     if(client1->get(urlAdd))
@@ -281,7 +281,7 @@ void PluginEditionWidget::createFormSearchParameters()
     
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSeaTypeParameters, this, _1, _2));
-    std::string urlAdd("http://" + host + ":" +port + "/search_types/" + boost::lexical_cast<std::string>(mapSeaTypeIdSboxRow[comboSeaType->currentIndex()]) +"/parameters?login=" 
+    std::string urlAdd(_apiUrl + "/search_types/" + boost::lexical_cast<std::string>(mapSeaTypeIdSboxRow[comboSeaType->currentIndex()]) +"/parameters?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
 
     if(client1->get(urlAdd))
@@ -303,7 +303,7 @@ void PluginEditionWidget::createFormSourceParameters()
     }
     client1 = new Wt::Http::Client();
    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddonParameters, this, _1, _2));
-    std::string urlAdd("http://" + host + ":" +port + "/addons/" + boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +"/parameters?login=" 
+    std::string urlAdd(_apiUrl + "/addons/" + boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +"/parameters?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
     if(client1->get(urlAdd))
     {
@@ -356,7 +356,7 @@ void PluginEditionWidget::addPlugin()
 
         Wt::Http::Message message;
         message.addBodyText(messAdd);
-        std::string urlAdd("http://" + host + ":" +port + "/plugins?login=" 
+        std::string urlAdd(_apiUrl + "/plugins?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
         
         if(client1->post(urlAdd ,message))
@@ -420,7 +420,7 @@ void PluginEditionWidget::addSource()
 
             Wt::Http::Message message;
             message.addBodyText(messAdd);
-            std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/sources?login=" 
+            std::string urlAdd(_apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/sources?login=" 
                             + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
             if(client1->post(urlAdd ,message))
             {
@@ -535,7 +535,7 @@ void PluginEditionWidget::addSearch()
 
             Wt::Http::Message message;
             message.addBodyText(messAdd);
-            std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
+            std::string urlAdd(_apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                                "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + "/searches/?login=" 
                             + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
             
@@ -568,7 +568,7 @@ void PluginEditionWidget::deletePlugin(int pluginId)
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeletePlg, this, _1, _2));
     Wt::Http::Message message;
     message.addBodyText("");
-    std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginId]) +
+    std::string urlAdd(_apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginId]) +
                        "?login=" + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
     if(client1->deleteRequest(urlAdd ,message))
     {
@@ -611,7 +611,7 @@ void PluginEditionWidget::modifySource()
 
         Wt::Http::Message message;
         message.addBodyText(messAdd);
-        std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
+        std::string urlAdd(_apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                         "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + "/parameters?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
         if(client1->post(urlAdd ,message))
@@ -636,7 +636,7 @@ void PluginEditionWidget::deleteSource()
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeleteSource, this, _1, _2));
     Wt::Http::Message message;
     message.addBodyText("");
-    std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
+    std::string urlAdd(_apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                        "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) +
                        "?login=" + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
     if(client1->deleteRequest(urlAdd ,message))
@@ -681,7 +681,7 @@ void PluginEditionWidget::modifySearch()
 
             Wt::Http::Message message;
             message.addBodyText(messAdd);
-            std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
+            std::string urlAdd(_apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                                "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + 
                                "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]) +  "/?login=" 
                             + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
@@ -715,7 +715,7 @@ void PluginEditionWidget::deleteSearch()
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeleteSearch, this, _1, _2));
     Wt::Http::Message message;
     message.addBodyText("");
-    std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
+    std::string urlAdd(_apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                        "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + 
                        "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]) + 
                        "?login=" + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
@@ -752,7 +752,7 @@ void PluginEditionWidget::addInformation()
 
     Wt::Http::Message message;
     message.addBodyText(messAdd);
-    std::string urlAdd("http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
+    std::string urlAdd(_apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                        "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + 
                        "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]/*searchId*/) + "/informations/?login=" 
                     + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
@@ -822,7 +822,7 @@ void PluginEditionWidget::createTableInformation()
         client1 = new Wt::Http::Client();
         client1->setTimeout(30);
         client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseInformationsList, this, _1, _2));
-        std::string urlAdd1 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
+        std::string urlAdd1 = _apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                               "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + 
                               "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]) + "/informations/?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
@@ -923,7 +923,7 @@ void PluginEditionWidget::selectedPlugin()
     
      client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSourceList, this, _1, _2));
-    std::string urlAdd1 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/sources/?login=" 
+    std::string urlAdd1 = _apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/sources/?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
     if(client1->get(urlAdd1))
     {
@@ -1054,7 +1054,7 @@ void PluginEditionWidget::completFormSearch()
 {
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchParameters, this, _1, _2));
-    std::string urlAdd1 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
+    std::string urlAdd1 = _apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                           "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + 
                           "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]) + "/parameters/?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
@@ -1213,7 +1213,7 @@ void PluginEditionWidget::handleHttpResponseSourceList(boost::system::error_code
     
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
-    std::string urlAdd2 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
+    std::string urlAdd2 = _apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
     formJSON = "string";
     if(client1->get(urlAdd2))
@@ -1279,7 +1279,7 @@ void PluginEditionWidget::handleHttpResponseSearchList(boost::system::error_code
     
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchTypeList, this, _1, _2));
-    std::string urlAdd2 = "http://" + host + ":" +port + "/addons/"+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +"/search_types?login=" 
+    std::string urlAdd2 = _apiUrl + "/addons/"+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +"/search_types?login=" 
                     + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
     if(client1->get(urlAdd2))
     {
@@ -1403,7 +1403,7 @@ void PluginEditionWidget::handleHttpResponseModifySource(boost::system::error_co
     {    
         client1 = new Wt::Http::Client();
         client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
-        std::string urlAdd2 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
+        std::string urlAdd2 = _apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
                             + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
         formJSON = "string";
         if(client1->get(urlAdd2))
@@ -1486,7 +1486,7 @@ void PluginEditionWidget::handleHttpResponseAddSource(boost::system::error_code 
     }
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
-    std::string urlAdd2 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
+    std::string urlAdd2 = _apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + "/?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
     formJSON = "string";
     if(client1->get(urlAdd2))
@@ -1700,7 +1700,7 @@ void PluginEditionWidget::handleHttpResponseAddonParameters(boost::system::error
         client1 = new Wt::Http::Client();
 
         client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchList, this, _1, _2));
-        std::string urlAdd1 = "http://" + host + ":" +port + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
+        std::string urlAdd1 = _apiUrl + "/plugins/" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]) + 
                               "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()]) + "/searches?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
         if(client1->get(urlAdd1))
@@ -1712,7 +1712,7 @@ void PluginEditionWidget::handleHttpResponseAddonParameters(boost::system::error
     {
         client1 = new Wt::Http::Client();
         client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchTypeList, this, _1, _2));
-        std::string urlAdd2 = "http://" + host + ":" +port + "/addons/"+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +"/search_types?login=" 
+        std::string urlAdd2 = _apiUrl + "/addons/"+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) +"/search_types?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8();
         if(client1->get(urlAdd2))
         {
@@ -1793,7 +1793,7 @@ void PluginEditionWidget::handleHttpResponsePlgList(boost::system::error_code er
     
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddonList, this, _1, _2));
-    std::string urlAdd1("http://" + host + ":" +port + "/addons?login=" 
+    std::string urlAdd1(_apiUrl + "/addons?login=" 
                         + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
     if(client1->get(urlAdd1))
     {
@@ -1963,7 +1963,7 @@ void PluginEditionWidget::handleHttpResponseDeletePlg(boost::system::error_code 
         client1 = new Wt::Http::Client();
         client1->setTimeout(30);
         client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgList, this, _1, _2));
-        std::string urlAdd("http://" + host + ":" +port + "/plugins?login=" + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
+        std::string urlAdd(_apiUrl + "/plugins?login=" + session->user()->eMail.toUTF8() + "&token=" + token.toUTF8());
        
         if(client1->get(urlAdd))
         {
@@ -2063,3 +2063,15 @@ void PluginEditionWidget::formatValue(std::string &value, int nbBackslash) const
         }
     }
 }
+
+void PluginEditionWidget::setApiUrl(std::string apiUrl)
+{
+    _apiUrl = apiUrl;
+    return;
+}
+
+std::string PluginEditionWidget::getApiUrl() const
+{
+    return _apiUrl;
+}
+

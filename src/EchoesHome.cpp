@@ -38,7 +38,11 @@ void EchoesHome::concatApiUrl()
     string apiHost = "", apiPort = "";
     Wt::WApplication::readConfigurationProperty("api-host", apiHost);
     Wt::WApplication::readConfigurationProperty("api-port", apiPort);
+#ifdef NDEBUG
     setApiUrl("https://" + apiHost + ":" + apiPort);
+#else
+    setApiUrl("http://" + apiHost + ":" + apiPort);
+#endif
 }
 
 void EchoesHome::setApiUrl(string apiUrl) {

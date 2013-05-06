@@ -309,7 +309,7 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
         }
         case Enums::EAccountSubmenu::ROLE:
         {
-            rcw = new RoleCustomizationWidget(session);
+            rcw = new RoleCustomizationWidget(session, _apiUrl);
             break;
         }
         default:

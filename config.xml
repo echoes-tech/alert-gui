@@ -481,9 +481,7 @@
 
             <property name="api-host">127.0.0.1</property>
             <property name="api-port">8081</property>
-
-        <property name="api-url">http://127.0.0.1:8081</property>
-        
+       
 	</properties>
 
     </application-settings>

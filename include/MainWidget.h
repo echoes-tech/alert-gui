@@ -90,6 +90,7 @@ protected:
   OptionManagementWidget *omw;
   AlertEditionModel *aem;
   AlertListWidget *alw;
+  RoleCustomizationWidget *rcw;
   
   UserEditionModel *uem;
   UserEditionWidget *uew;

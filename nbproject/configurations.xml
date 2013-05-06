@@ -43,15 +43,6 @@
         <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
           <itemPath>include/MainWidget.h</itemPath>
         </logicalFolder>
-        <logicalFolder name="enum" displayName="enum" projectFiles="true">
-          <itemPath>include/enum/base.hpp</itemPath>
-          <itemPath>include/enum/bitfield.hpp</itemPath>
-          <itemPath>include/enum/iterator.hpp</itemPath>
-          <itemPath>include/enum/macros.hpp</itemPath>
-        </logicalFolder>
-        <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
-          <itemPath>include/MainWidget.h</itemPath>
-        </logicalFolder>
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>include/MonitoringWidget.h</itemPath>
         </logicalFolder>
@@ -88,6 +79,8 @@
       <itemPath>global_fr.xml</itemPath>
       <itemPath>options.xml</itemPath>
       <itemPath>options_fr.xml</itemPath>
+      <itemPath>plugin.xml</itemPath>
+      <itemPath>plugin_fr.xml</itemPath>
       <itemPath>role-customization.xml</itemPath>
       <itemPath>role-customization_fr.xml</itemPath>
       <itemPath>user.xml</itemPath>
@@ -125,9 +118,6 @@
           <itemPath>src/Auth/LostPasswordWidgetAlert.cpp</itemPath>
           <itemPath>src/Auth/RegistrationModelAlert.cpp</itemPath>
           <itemPath>src/Auth/RegistrationWidgetAlert.cpp</itemPath>
-        </logicalFolder>
-        <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
-          <itemPath>src/MainWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
           <itemPath>src/MainWidget.cpp</itemPath>
@@ -191,6 +181,9 @@
             <linkerLibLibItem>boost_signals</linkerLibLibItem>
             <linkerLibLibItem>boost_system</linkerLibLibItem>
             <linkerLibLibItem>boost_random</linkerLibLibItem>
+            <linkerLibLibItem>pthread</linkerLibLibItem>
+            <linkerLibLibItem>stdc++</linkerLibLibItem>
+            <linkerLibLibItem>m</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -257,6 +250,10 @@
       </item>
       <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
@@ -307,6 +304,10 @@
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
@@ -349,6 +350,10 @@
       <item path="src/OptionManagementModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -464,6 +469,10 @@
       </item>
       <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
@@ -514,6 +523,10 @@
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
@@ -556,6 +569,10 @@
       <item path="src/OptionManagementModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>

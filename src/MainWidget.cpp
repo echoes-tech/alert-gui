@@ -307,6 +307,11 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
 
             break;
         }
+        case Enums::EAccountSubmenu::ROLE:
+        {
+            rcw = new RoleCustomizationWidget(session);
+            break;
+        }
         default:
             break;
     }
@@ -504,6 +509,11 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                     this->contentFluid->addWidget(uew);
                     break;
                 }
+                case Enums::EAccountSubmenu::ROLE:
+                {
+                    this->contentFluid->addWidget(rcw);
+                    break;
+                }  
             }
         }
         

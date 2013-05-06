@@ -17,14 +17,7 @@ public:
     OptionManagementWidget(OptionManagementModel *model, Session *session);
     virtual ~OptionManagementWidget();
 protected:
-  /*! \brief Validates the current information.
-   *
-   * The default implementation simply calls
-   * RegistrationModel::validate() on the model.
-   *
-   * You may want to reimplement this method if you've added other
-   * information to the registration form that need validation.
-   */
+
   virtual bool validate();
 
 
@@ -34,7 +27,7 @@ protected:
   virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
   
   
-  void saveOptions();
+//  void saveOptions();
   
 
 private:

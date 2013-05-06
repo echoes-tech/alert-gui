@@ -484,6 +484,8 @@
 
             <property name="css-to-load">bootstrap.min.css</property>
         
+        <property name="api-url">http://127.0.0.1:8081</property>
+        
 	</properties>
 
     </application-settings>

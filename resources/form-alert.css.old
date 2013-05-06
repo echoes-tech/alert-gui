@@ -1,0 +1,142 @@
+.Alert-form {
+    margin: 0 auto;
+    width: 98%;
+    padding: 0% 1%;
+    float:left;
+}
+
+.Alert-form h2 {
+    font-size: 130%;
+    font-weight: bold;
+    padding: 0px;
+    margin: 4px 0px;
+    letter-spacing: inherit;
+    line-height: inherit;
+    color: inherit;
+    background: inherit;
+}
+
+.Alert-form h3 {
+    font-size: 100%;
+    font-weight: bold;
+    margin: 8px 0px;
+}
+
+.Alert-form p {
+    font-size: 85%;
+    color: #666666;
+    margin-bottom: 1.5em;
+    border-bottom: solid 1px #b7ddf2;
+    float:left;
+    padding-bottom: 0.5em;
+    width: 100%;
+}
+
+.Alert-form label {
+    display: block;
+    font-weight: bold;
+    text-align: left;
+    width: 14em;
+    float: left;
+    clear: left;
+    line-height: 110%;
+}
+
+.Alert-form .Alert-info {
+    color: #666666;
+    display: block;
+    font-size: 85%;
+    width: 16.47em;
+    font-weight: normal;
+    text-align: left;
+}
+
+.Alert-form .Alert-fields input {
+    float: left;
+    padding: 5px 2px;
+    border: solid 1px #aacfe4;
+    font-size: 90%;
+    width: 14em;
+    margin-top: 1em;
+}
+
+.Alert-form .Alert-fields input[type="checkbox"] {
+    margin-top: 1em;
+    width: auto;
+}
+
+.Alert-form .Alert-fields select {
+    margin-top: 1em;
+    width: 14em;
+    float: left;
+    margin-bottom: 1em;
+    padding: 5px 2px;
+    font-size: 90%;
+}
+
+.Alert-form .Alert-fields {
+    margin-left:3%;
+    margin-right:3%;
+}
+
+.Alert-form .Alert-fields hr {
+    margin-top: 1em;
+    width: 100%;
+    float: left;
+    margin: 0.5em 0.5em 1.4em 0.7em;
+   
+}
+
+.Alert-buttons {
+    clear: both;
+    text-align: center;
+    margin: 0.5em 0;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    float: left;  
+}
+
+.Alert-form .Alert-buttons span {
+    text-decoration: underline;
+    cursor: pointer; cursor: hand;
+}
+
+.Alert-form .Alert-sbox select {
+    
+    width: 25em;
+}
+
+.Alert-form .Alert-error {
+    color: black;
+}
+
+.Alert-form .Alert-col-right {
+    margin-left: 29em;
+    padding-left: 2em;
+    border-left: solid 1px #b7ddf2;
+}
+
+.float-left {
+    float: left;
+}
+
+.clear {
+    clear: both;
+}
+
+.no-margin {
+    margin: 0px;
+}
+
+.one-field-large {
+    width: 30em;
+    margin-top: 2%;
+}
+
+.small-input input {
+    width: 4em;
+}

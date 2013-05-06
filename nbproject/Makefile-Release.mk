@@ -51,8 +51,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/MonitoringWidget.o \
 	${OBJECTDIR}/src/OptionManagementModel.o \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
-	${OBJECTDIR}/src/PluginEditionModel.o \
-	${OBJECTDIR}/src/PluginEditionWidget.o \
+	${OBJECTDIR}/src/RoleCustomizationWidget.o \
 	${OBJECTDIR}/src/UserActionManagement.o \
 	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/src/UserEditionWidget.o

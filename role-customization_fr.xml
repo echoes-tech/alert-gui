@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+  	<message id="Alert.admin.role-tab">Rôles</message>
+	<message id="Alert.role.role-customization-info">Cette page vous permet de personnaliser les alertes</message>
+    <message id="Alert.admin.plugin-select">Sélectionner un plugin ci-dessus</message>
+</messages>

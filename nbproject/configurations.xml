@@ -43,6 +43,15 @@
         <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
           <itemPath>include/MainWidget.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="enum" displayName="enum" projectFiles="true">
+          <itemPath>include/enum/base.hpp</itemPath>
+          <itemPath>include/enum/bitfield.hpp</itemPath>
+          <itemPath>include/enum/iterator.hpp</itemPath>
+          <itemPath>include/enum/macros.hpp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
+          <itemPath>include/MainWidget.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>include/MonitoringWidget.h</itemPath>
         </logicalFolder>
@@ -57,6 +66,7 @@
         </logicalFolder>
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
+        <itemPath>include/RoleCustomizationWidget.h</itemPath>
         <itemPath>include/enum.hpp</itemPath>
       </logicalFolder>
       <itemPath>include/Enums.h</itemPath>
@@ -67,7 +77,6 @@
                    projectFiles="true">
       <itemPath>alert-list.xml</itemPath>
       <itemPath>alert-list_fr.xml</itemPath>
-      <itemPath>resources/alert.css</itemPath>
       <itemPath>alert.xml</itemPath>
       <itemPath>alert_fr.xml</itemPath>
       <itemPath>asset.xml</itemPath>
@@ -75,16 +84,12 @@
       <itemPath>auth.xml</itemPath>
       <itemPath>auth_fr.xml</itemPath>
       <itemPath>config.xml</itemPath>
-      <itemPath>resources/form-alert.css</itemPath>
-      <itemPath>resources/form-probe.css</itemPath>
-      <itemPath>resources/form-user.css</itemPath>
-      <itemPath>resources/form.css</itemPath>
       <itemPath>global.xml</itemPath>
       <itemPath>global_fr.xml</itemPath>
       <itemPath>options.xml</itemPath>
       <itemPath>options_fr.xml</itemPath>
-      <itemPath>plugin.xml</itemPath>
-      <itemPath>plugin_fr.xml</itemPath>
+      <itemPath>role-customization.xml</itemPath>
+      <itemPath>role-customization_fr.xml</itemPath>
       <itemPath>user.xml</itemPath>
       <itemPath>user_fr.xml</itemPath>
     </logicalFolder>
@@ -124,11 +129,15 @@
         <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
           <itemPath>src/MainWidget.cpp</itemPath>
         </logicalFolder>
+        <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
+          <itemPath>src/MainWidget.cpp</itemPath>
+        </logicalFolder>
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>src/MonitoringWidget.cpp</itemPath>
         </logicalFolder>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
+        <itemPath>src/RoleCustomizationWidget.cpp</itemPath>
         <itemPath>src/UserActionManagement.cpp</itemPath>
       </logicalFolder>
       <itemPath>main.cpp</itemPath>
@@ -248,9 +257,7 @@
       </item>
       <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
+      <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -300,19 +307,9 @@
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
+      <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/alert.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-alert.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-probe.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-user.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form.css" ex="false" tool="3" flavor2="0">
+      <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/AlertEditionModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -353,9 +350,7 @@
       </item>
       <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -469,9 +464,7 @@
       </item>
       <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
+      <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -521,19 +514,9 @@
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
+      <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/alert.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-alert.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-probe.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form-user.css" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/form.css" ex="false" tool="3" flavor2="0">
+      <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/AlertEditionModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -574,9 +557,7 @@
       </item>
       <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>

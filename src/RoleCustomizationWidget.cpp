@@ -35,27 +35,38 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session)
     assetsContainer = new Wt::WContainerWidget(this);
     assetsContainer->setStyleClass("container-fluid");
     pluginsContainer = new Wt::WContainerWidget(this);
-    pluginsContainer->setStyleClass("container-fluid");
+    pluginsContainer->setStyleClass("container-fluid no-padding");
     informationsContainer = new Wt::WContainerWidget(this);
-    informationsContainer->setStyleClass("container-fluid");
+    informationsContainer->setStyleClass("container-fluid no-padding");
         
     
     pluginRow = new Wt::WContainerWidget(this);
     pluginRow->setStyleClass("row-fluid");
+    
+    Wt::WContainerWidget *pluginNameContainer = new Wt::WContainerWidget();
     pluginName = new Wt::WText(this);
-    pluginName->setText("ToTr TBD");
-    pluginName->setStyleClass("span2");
+    pluginName->setText(tr("Alert.admin.plugin-select"));
+    pluginNameContainer->setStyleClass("span2");
+    pluginNameContainer->addWidget(pluginName);
+    
+    Wt::WContainerWidget *pluginEditLineContainer = new Wt::WContainerWidget();
     pluginEditLine = new Wt::WLineEdit(this);
-    pluginEditLine->setStyleClass("span3");
+    pluginEditLineContainer->setStyleClass("span3");
+    pluginEditLineContainer->addWidget(pluginEditLine);
+    
+    Wt::WContainerWidget *pluginSaveButtonContainer = new Wt::WContainerWidget();
     pluginSaveButton = new Wt::WPushButton(this);
-    pluginSaveButton->setText("ToTrSave");
-    pluginSaveButton->setStyleClass("span2");
+    pluginSaveButton->setTextFormat(Wt::XHTMLUnsafeText);
+    pluginSaveButton->setText("<i class='icon-white icon-ok-sign'></i>");
+    pluginSaveButton->setStyleClass("span1");
     pluginSaveButton->addStyleClass("btn-info");
     pluginSaveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putPluginAlias, this));
+    pluginSaveButtonContainer->addWidget(pluginSaveButton);
     
-    pluginRow->addWidget(pluginName);
-    pluginRow->addWidget(pluginEditLine);
-    pluginRow->addWidget(pluginSaveButton);
+    
+    pluginRow->addWidget(pluginNameContainer);
+    pluginRow->addWidget(pluginEditLineContainer);
+    pluginRow->addWidget(pluginSaveButtonContainer);
     
     pluginsContainer->addWidget(pluginRow);
     
@@ -64,7 +75,7 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session)
     std::string apiUrl = "http://127.0.0.1:8081";
     Wt::WApplication::readConfigurationProperty("api-url", apiUrl);
     this->setApiUrl(apiUrl);
-    this->setCredentials("?login=thomas.saquet@echoes-tech.com"
+    this->setCredentials("?login=" + session->user()->eMail.toUTF8() +
             "&token=" + session->user()->token.toUTF8());
     
     
@@ -344,25 +355,33 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
                 Wt::WContainerWidget *row = new Wt::WContainerWidget();
                 row->setStyleClass("row-fluid");
                 Wt::Json::Object tmp = (*idx1);
+                
+                Wt::WContainerWidget *labelAssetContainer = new Wt::WContainerWidget();
+                labelAssetContainer->setStyleClass("span2");
                 Wt::WText *labelAsset = new Wt::WText();
                 labelAsset->setText(tmp.get("name"));
-                labelAsset->setStyleClass("span2");
+                labelAssetContainer->addWidget(labelAsset);
                 
-                
+                Wt::WContainerWidget *lineEditAssetContainer = new Wt::WContainerWidget();
+                lineEditAssetContainer->setStyleClass("span3");
                 Wt::WLineEdit *lineEditAsset = new Wt::WLineEdit();
-                lineEditAsset->setStyleClass("span3");
+                lineEditAssetContainer->addWidget(lineEditAsset);
                 mapIdAssets[idx] = tmp.get("id");
                 mapEditAssets[idx] = lineEditAsset;
                 
+                Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
                 Wt::WPushButton *saveButton = new Wt::WPushButton();
-                saveButton->setText("ToTrSave");
-                saveButton->setStyleClass("span2");
+                saveButton->setTextFormat(Wt::XHTMLUnsafeText);
+                saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
+                saveButton->setStyleClass("span1");
                 saveButton->addStyleClass("btn-info");
                 saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putAssetAlias, this, idx));
+                saveButtonContainer->addWidget(saveButton);
                 
-                row->addWidget(labelAsset);
-                row->addWidget(lineEditAsset);
-                row->addWidget(saveButton);
+                
+                row->addWidget(labelAssetContainer);
+                row->addWidget(lineEditAssetContainer);
+                row->addWidget(saveButtonContainer);
                 assetsContainer->addWidget(row);
                 idx++;
                 
@@ -491,25 +510,41 @@ void RoleCustomizationWidget::getCriteria(boost::system::error_code err, const W
             {
                 
                 Wt::Json::Object tmp = (*idx1);
+                
+                Wt::WContainerWidget *labelContainer = new Wt::WContainerWidget();
+                labelContainer->setStyleClass("span2");
                 Wt::WText *label = new Wt::WText();
-                label->setText(tmp.get("name"));
-                label->setStyleClass("span2");
+                label->setText(Wt::WString::tr("Alert.alert.operator." + (std::string)tmp.get("name")));
+                labelContainer->addWidget(label);
                 
                 
+                Wt::WContainerWidget *lineEditContainer = new Wt::WContainerWidget();
+                lineEditContainer->setStyleClass("span3");
                 Wt::WLineEdit *lineEdit = new Wt::WLineEdit();
-                lineEdit->setStyleClass("span3");
                 long long critId = tmp.get("id");
+                lineEditContainer->addWidget(lineEdit);
                 mapIdCritEdit[critId] = lineEdit;
                 
+                Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
                 Wt::WPushButton *saveButton = new Wt::WPushButton();
-                saveButton->setText("ToTrSaveCritAlias");
+                saveButton->setTextFormat(Wt::XHTMLUnsafeText);
+                saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
                 saveButton->setStyleClass("span1");
                 saveButton->addStyleClass("btn-info");
                 saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putCriterionAlias, this, idForInfMap, critId, lineEdit));
+                saveButtonContainer->addWidget(saveButton);
                 
-                row->addWidget(label);
-                row->addWidget(lineEdit);
-                row->addWidget(saveButton);
+                row->addWidget(labelContainer);
+                row->addWidget(lineEditContainer);
+                row->addWidget(saveButtonContainer);
+                
+                if ((idx > 0) && (idx%2 == 1))
+                {
+                    Wt::WText *changeRow = new Wt::WText();
+                    changeRow->setTextFormat(Wt::XHTMLUnsafeText);
+                    changeRow->setText("</div><div class='row-fluid'>");
+                    row->addWidget(changeRow);
+                }
                 
                 idx++;
             }
@@ -544,30 +579,61 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
             Wt::Json::parse(response.body(), result);
             result1 = result;
               //descriptif
+            
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
             {
+                Wt::Json::Object tmp = (*idx1);
+                
+                Wt::WText *infoBoxOpen = new Wt::WText();
+                infoBoxOpen->setTextFormat(Wt::XHTMLUnsafeText);
+                infoBoxOpen->setText(
+                "</div>"
+                "<div class='widget-box'>"
+                "   <div class='widget-title'>"
+                "       <span class='icon'><i class='icon-th-list'></i></span>"
+                "       <h5>Information : " + (std::string)tmp.get("name") + "</h5>"
+                "   </div>"
+                "   <div class='widget-content'>"
+                "       <div class='container-fluid no-padding'>");
+
+                Wt::WText *infoBoxClose = new Wt::WText();
+                infoBoxClose->setTextFormat(Wt::XHTMLUnsafeText);
+                infoBoxClose->setText(
+                "       </div>"
+                "   </div>"
+                "</div>"
+                "<div>");
+                informationsContainer->addWidget(infoBoxOpen);
+                
                 Wt::WContainerWidget *row = new Wt::WContainerWidget();
                 row->setStyleClass("row-fluid");
-                Wt::Json::Object tmp = (*idx1);
+                
+                Wt::WContainerWidget *labelContainer = new Wt::WContainerWidget();
                 Wt::WText *label = new Wt::WText();
                 label->setText(tmp.get("name"));
-                label->setStyleClass("span2");
+                labelContainer->setStyleClass("span2");
+                labelContainer->addWidget(label);
                 
-                
+                Wt::WContainerWidget *lineEditContainer = new Wt::WContainerWidget();
                 Wt::WLineEdit *lineEdit = new Wt::WLineEdit();
-                lineEdit->setStyleClass("span3");
+                lineEditContainer->setStyleClass("span3");
+                lineEditContainer->addWidget(lineEdit);
+                
                 mapEditInformations[idx] = lineEdit;
                 mapIdInformations[idx] = tmp.get("id");
                 
+                Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
                 Wt::WPushButton *saveButton = new Wt::WPushButton();
-                saveButton->setText("ToTrSave");
-                saveButton->setStyleClass("span2");
+                saveButton->setTextFormat(Wt::XHTMLUnsafeText);
+                saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
+                saveButton->setStyleClass("span1");
                 saveButton->addStyleClass("btn-info");
                 saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putInformationAlias, this, idx));
+                saveButtonContainer->addWidget(saveButton);
                 
-                row->addWidget(label);
-                row->addWidget(lineEdit);
-                row->addWidget(saveButton);
+                row->addWidget(labelContainer);
+                row->addWidget(lineEditContainer);
+                row->addWidget(saveButtonContainer);
                 informationsContainer->addWidget(row);
                 
                 Wt::WContainerWidget *rowCriteria = new Wt::WContainerWidget();
@@ -576,6 +642,7 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
                 informationsContainer->addWidget(rowCriteria);
                 
                 idx++;
+                informationsContainer->addWidget(infoBoxClose);
             }
             fillInformationsFields();
             createCriteriaWidgets();

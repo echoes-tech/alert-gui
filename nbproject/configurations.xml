@@ -53,7 +53,6 @@
         </logicalFolder>
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
-        <itemPath>src/RoleCustomizationWidget.cpp</itemPath>
         <itemPath>include/RoleCustomizationWidget.h</itemPath>
         <itemPath>include/enum.hpp</itemPath>
       </logicalFolder>
@@ -118,6 +117,7 @@
         </logicalFolder>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
+        <itemPath>src/RoleCustomizationWidget.cpp</itemPath>
         <itemPath>src/UserActionManagement.cpp</itemPath>
       </logicalFolder>
       <itemPath>main.cpp</itemPath>

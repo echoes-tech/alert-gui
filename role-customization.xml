@@ -2,26 +2,53 @@
 <messages xmlns:if="Wt.WTemplate.conditions">
 	<message id="Alert.role.role-customization-info">In this page you can customize the alerts</message>
 	<message id="Alert.admin.role-tab">Roles</message>
+    <message id="Alert.role.plugin-select">Please select a plugin above</message>
+    <message id="Alert.role.role-label">Role</message>
+    <message id="Alert.role.media-label">Media</message>
 
 	<message id="Alert.role.customization.template">
 	    <br />
 	    <div class ="alert alert-info">${tr:Alert.role.role-customization-info}</div>
 	    
 	    
-        ${medias-combo-box}
-        ${roles-combo-box}
-        ${assets-container}
-        ${plugins-combo-box}
+        <div class="widget-box">
+            <div class="widget-title">
+                <span class="icon"><i class="icon-envelope"></i></span>
+                <h5>Choix du rôle et du media associé</h5>
+            </div>
+            <div class="widget-content">
+                <div class="container-fluid">
+                    <div class="row-fluid">
+                        <span class="span2">${tr:Alert.role.role-label}</span> <span class="span3">${roles-combo-box}</span>
+                    </div>
+                    <div class="row-fluid">
+                        <span class="span2">${tr:Alert.role.media-label}</span> <span class="span3">${medias-combo-box}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <br />
+        <div class="widget-box">
+            <div class="widget-title">
+                <span class="icon"><i class="icon-pencil"></i></span>
+                <h5>Définition des alias pour les serveurs</h5>
+            </div>
+            <div class="widget-content">
+                ${assets-container}
+            </div>
+        </div>
         
-
-        ${plugins-container}    
-        
-        <br />
-        
-        ${informations-container}
-        
+        <div class="widget-box">
+            <div class="widget-title">
+                <span class="icon"><i class="icon-pencil"></i></span>
+                <h5>Définition des alias pour les informations et les critères associés</h5>
+            </div>
+            <div class="widget-content">
+                ${plugins-combo-box}
+                ${plugins-container}
+                ${informations-container}
+            </div>
+        </div>
   
   	</message>
 </messages>

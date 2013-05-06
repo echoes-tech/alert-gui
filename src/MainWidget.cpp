@@ -93,22 +93,34 @@ void MainWidget::createUI()
        
     for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
     {
-//        Enums::EPageType *test;
-//        std::string strTest = test->value();
-        if (!boost::starts_with(i->value(), "submenu"))
+        //TODO: Change this temporary restriction with right integration
+        if(!boost::starts_with(i->value(), "plugin"))
         {
-            createMenuItem(*i,menu,getIconName(*i));
-            createPage(*i);
+    //        Enums::EPageType *test;
+    //        std::string strTest = test->value();
+            if (!boost::starts_with(i->value(), "submenu"))
+            {
+                createMenuItem(*i,menu,getIconName(*i));
+                createPage(*i);
+            }
+            else
+            {
+                createSubMenu(*i);
+    //            Wt::WMenuItem *item;
+    //            item->setAttributeValue("class", "submenu");
+    //            menu->items().back()->setAttributeValue("class", "submenu");
+    //            Wt::WText *iconHTML = new Wt::WText("</span><i class='icon icon-" + getIconName(*i) + "'></i><span>",Wt::XHTMLUnsafeText);
+    //            Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)menu->items().back()->widget(0);
+    //            anchorInsideMenu->insertWidget(0,iconHTML);
+            }
         }
         else
         {
-            createSubMenu(*i);
-//            Wt::WMenuItem *item;
-//            item->setAttributeValue("class", "submenu");
-//            menu->items().back()->setAttributeValue("class", "submenu");
-//            Wt::WText *iconHTML = new Wt::WText("</span><i class='icon icon-" + getIconName(*i) + "'></i><span>",Wt::XHTMLUnsafeText);
-//            Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)menu->items().back()->widget(0);
-//            anchorInsideMenu->insertWidget(0,iconHTML);
+            if (this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46)
+            {
+                createMenuItem(*i,menu,getIconName(*i));
+                createPage(*i);
+            }
         }
     }
     
@@ -206,7 +218,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         }
         case Enums::EPageType::PLUGIN:
         {
-            pew = new PluginEditionWidget(this->session, _apiUrl);
+            //TODO: Change this temporary restriction with right integration
+            if(this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46)
+            {
+                pew = new PluginEditionWidget(this->session, _apiUrl);
+            }
             break;
         }
         default:
@@ -438,7 +454,11 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 }
                 case Enums::EPageType::PLUGIN:
                 {
-                    this->contentFluid->addWidget(pew);
+                    //TODO: Change this temporary restriction with right integration
+                    if(this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46)
+                    {
+                        this->contentFluid->addWidget(pew);
+                    }
                     break;
                 }
                 default:
@@ -544,7 +564,11 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
         }
         case Enums::EPageType::PLUGIN:
         {
-            res = "pencil";
+            //TODO: Change this temporary restriction with right integration
+            if(this->session->user()->currentOrganization.id() == 1 || this->session->user()->currentOrganization.id() == 46)
+            {
+                res = "pencil";
+            }
             break;
         }
     }

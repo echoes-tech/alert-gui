@@ -21,16 +21,7 @@ Class EchoesHome : étend la classe WContainerWidget.
 EchoesHome::EchoesHome(Wt::WContainerWidget *parent) : Wt::WContainerWidget(parent), adminPageTabs(0), monitoringPage(0)
 {
     initSession();
-
-    string apiHost = "", apiPort = "";
-    Wt::WApplication::readConfigurationProperty("api-host", apiHost);
-    Wt::WApplication::readConfigurationProperty("api-port", apiPort);
-#ifdef NDEBUG
-    setApiUrl("https://" + apiHost + ":" + apiPort);
-#else
-    setApiUrl("http://" + apiHost + ":" + apiPort);
-#endif
-    
+    concatApiUrl();
     initAuth();
     initHeader();
     initMainPageWidget();
@@ -40,6 +31,14 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent) : Wt::WContainerWidget(pare
 Session* EchoesHome::getSession()
 {
     return this->session;
+}
+
+void EchoesHome::concatApiUrl()
+{
+    string apiHost = "", apiPort = "";
+    Wt::WApplication::readConfigurationProperty("api-host", apiHost);
+    Wt::WApplication::readConfigurationProperty("api-port", apiPort);
+    setApiUrl("https://" + apiHost + ":" + apiPort);
 }
 
 void EchoesHome::setApiUrl(string apiUrl) {

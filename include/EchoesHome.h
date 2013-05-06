@@ -51,6 +51,7 @@ class EchoesHome : public Wt::WContainerWidget
         Session *session;
         std::string _apiUrl;
 
+        void concatApiUrl();
         void setApiUrl(std::string apiUrl);
 
         void handleInternalPath(const std::string &internalPath);

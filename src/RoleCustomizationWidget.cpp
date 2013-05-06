@@ -41,7 +41,7 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session)
         
     
     pluginRow = new Wt::WContainerWidget(this);
-    pluginRow->setStyleClass("row-fluid");
+    pluginRow->setStyleClass("row-fluid control-group");
     
     Wt::WContainerWidget *pluginNameContainer = new Wt::WContainerWidget();
     pluginName = new Wt::WText(this);
@@ -51,7 +51,7 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session)
     
     Wt::WContainerWidget *pluginEditLineContainer = new Wt::WContainerWidget();
     pluginEditLine = new Wt::WLineEdit(this);
-    pluginEditLineContainer->setStyleClass("span3");
+    pluginEditLineContainer->setStyleClass("span3 control-group");
     pluginEditLineContainer->addWidget(pluginEditLine);
     
     Wt::WContainerWidget *pluginSaveButtonContainer = new Wt::WContainerWidget();
@@ -59,7 +59,7 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session)
     pluginSaveButton->setTextFormat(Wt::XHTMLUnsafeText);
     pluginSaveButton->setText("<i class='icon-white icon-ok-sign'></i>");
     pluginSaveButton->setStyleClass("span1");
-    pluginSaveButton->addStyleClass("btn-info");
+    pluginSaveButton->addStyleClass("btn-primary");
     pluginSaveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putPluginAlias, this));
     pluginSaveButtonContainer->addWidget(pluginSaveButton);
     
@@ -363,7 +363,7 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
                 labelAssetContainer->addWidget(labelAsset);
                 
                 Wt::WContainerWidget *lineEditAssetContainer = new Wt::WContainerWidget();
-                lineEditAssetContainer->setStyleClass("span3");
+                lineEditAssetContainer->setStyleClass("span3 control-group");
                 Wt::WLineEdit *lineEditAsset = new Wt::WLineEdit();
                 lineEditAssetContainer->addWidget(lineEditAsset);
                 mapIdAssets[idx] = tmp.get("id");
@@ -374,7 +374,7 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
                 saveButton->setTextFormat(Wt::XHTMLUnsafeText);
                 saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
                 saveButton->setStyleClass("span1");
-                saveButton->addStyleClass("btn-info");
+                saveButton->addStyleClass("btn-primary");
                 saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putAssetAlias, this, idx));
                 saveButtonContainer->addWidget(saveButton);
                 
@@ -519,24 +519,36 @@ void RoleCustomizationWidget::getCriteria(boost::system::error_code err, const W
                 
                 
                 Wt::WContainerWidget *lineEditContainer = new Wt::WContainerWidget();
-                lineEditContainer->setStyleClass("span3");
+                lineEditContainer->setStyleClass("span2 control-group");
                 Wt::WLineEdit *lineEdit = new Wt::WLineEdit();
                 long long critId = tmp.get("id");
                 lineEditContainer->addWidget(lineEdit);
                 mapIdCritEdit[critId] = lineEdit;
                 
                 Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
+                saveButtonContainer->setStyleClass("span1");
                 Wt::WPushButton *saveButton = new Wt::WPushButton();
                 saveButton->setTextFormat(Wt::XHTMLUnsafeText);
                 saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
-                saveButton->setStyleClass("span1");
-                saveButton->addStyleClass("btn-info");
+                saveButton->setStyleClass("span12");
+                saveButton->addStyleClass("btn-primary");
                 saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putCriterionAlias, this, idForInfMap, critId, lineEdit));
                 saveButtonContainer->addWidget(saveButton);
+                
+                Wt::WContainerWidget *exampleButtonContainer = new Wt::WContainerWidget();
+                exampleButtonContainer->setStyleClass("span1");
+                Wt::WPushButton *exampleButton = new Wt::WPushButton();
+                exampleButton->setTextFormat(Wt::XHTMLUnsafeText);
+                exampleButton->setText("<i class='icon-white icon-envelope'></i>");
+                exampleButton->setStyleClass("span12");
+                exampleButton->addStyleClass("btn-info");
+                exampleButton->clicked().connect(boost::bind(&RoleCustomizationWidget::displayMessageExample, this, idForInfMap, critId, lineEdit));
+                exampleButtonContainer->addWidget(exampleButton);
                 
                 row->addWidget(labelContainer);
                 row->addWidget(lineEditContainer);
                 row->addWidget(saveButtonContainer);
+                row->addWidget(exampleButtonContainer);
                 
                 if ((idx > 0) && (idx%2 == 1))
                 {
@@ -616,18 +628,19 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
                 
                 Wt::WContainerWidget *lineEditContainer = new Wt::WContainerWidget();
                 Wt::WLineEdit *lineEdit = new Wt::WLineEdit();
-                lineEditContainer->setStyleClass("span3");
+                lineEditContainer->setStyleClass("span2 control-group");
                 lineEditContainer->addWidget(lineEdit);
                 
                 mapEditInformations[idx] = lineEdit;
                 mapIdInformations[idx] = tmp.get("id");
                 
                 Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
+                saveButtonContainer->setStyleClass("span1");
                 Wt::WPushButton *saveButton = new Wt::WPushButton();
                 saveButton->setTextFormat(Wt::XHTMLUnsafeText);
                 saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
-                saveButton->setStyleClass("span1");
-                saveButton->addStyleClass("btn-info");
+                saveButton->setStyleClass("span12");
+                saveButton->addStyleClass("btn-primary");
                 saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putInformationAlias, this, idx));
                 saveButtonContainer->addWidget(saveButton);
                 
@@ -792,6 +805,18 @@ void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCri
     
 }
 
+void RoleCustomizationWidget::displayMessageExample(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit)
+{
+    std::string res = "Pour le role : " + rolesComboBox->currentText().toUTF8() + "<br />"
+            "Pour le media : " + mediasComboBox->currentText().toUTF8() + "<br />"
+            "L'alerte sera : <br />"
+            "Serveur %nom_serveur% : <br />"
+            "Information : " + mapEditInformations[idForInfMap]->text().toUTF8() + "<br />"
+            "Alerte : " + critEdit->text().toUTF8();
+    Wt::WString test(res);
+    Wt::WMessageBox::show("Exemple", test, Wt::Ok);
+}
+
 void RoleCustomizationWidget::fillAssetsFields()
 {
     
@@ -925,17 +950,20 @@ void RoleCustomizationWidget::getAlias(boost::system::error_code err, const Wt::
 void RoleCustomizationWidget::resPutAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit)
 {
     Wt::WApplication::instance()->resumeRendering();
+    doJavaScript("$('#" + boost::lexical_cast<std::string>(edit->parent()->id()) + "').toggleClass('success',true)");
     Wt::log("warning") << response.body();
 }
 
 void RoleCustomizationWidget::resPutPluginAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit)
 {
     Wt::WApplication::instance()->resumeRendering();
+    doJavaScript("$('#" + boost::lexical_cast<std::string>(edit->parent()->id()) + "').toggleClass('success',true)");
     Wt::log("warning") << response.body();
 }
 
 void RoleCustomizationWidget::resPutCritAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit)
 {
     Wt::WApplication::instance()->resumeRendering();
+    doJavaScript("$('#" + boost::lexical_cast<std::string>(edit->parent()->id()) + "').toggleClass('success',true)");
     Wt::log("warning") << response.body();
 }

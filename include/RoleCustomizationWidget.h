@@ -40,6 +40,7 @@ public:
     void putAssetAlias(int idx);
     void putInformationAlias(int idx);
     void putCriterionAlias(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit);
+    void displayMessageExample(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit);
     void putPluginAlias();
     void resPutAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
     void resPutPluginAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);

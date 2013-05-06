@@ -65,7 +65,7 @@
 	       Note: wthttpd always uses exactly one process
               -->
 	    <shared-process>
-	        <num-processes>1</num-processes>
+	        <num-processes>100</num-processes>
 	    </shared-process>
 
 	    <!-- Session tracking strategy.
@@ -127,7 +127,7 @@
 
                Path used by Wt to do session management.
 	      -->
-	    <run-directory>/tmp</run-directory>
+	    <run-directory>/var/run/wt</run-directory>
 
 	    <!-- Number of threads per process
 
@@ -146,7 +146,7 @@
 
                The default value is 1.
 	      -->
-	    <num-threads>4</num-threads>
+	    <num-threads>1</num-threads>
 
 	</connector-fcgi>
 
@@ -482,7 +482,6 @@
             <property name="api-host"><%= api_host %></property>
             <property name="api-port"><%= api_port %></property>
 
-            <property name="css-to-load">bootstrap.min.css</property>
 	</properties>
 
     </application-settings>

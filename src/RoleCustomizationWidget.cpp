@@ -7,7 +7,7 @@
 
 #include "RoleCustomizationWidget.h"
 
-RoleCustomizationWidget::RoleCustomizationWidget(Session *session) 
+RoleCustomizationWidget::RoleCustomizationWidget(Session *session, const std::string &apiUrl) 
 : Wt::WContainerWidget()
 {
     //init
@@ -69,16 +69,11 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session)
     pluginRow->addWidget(pluginSaveButtonContainer);
     
     pluginsContainer->addWidget(pluginRow);
-    
-    
-    
-    std::string apiUrl = "http://127.0.0.1:8081";
-    Wt::WApplication::readConfigurationProperty("api-url", apiUrl);
+
     this->setApiUrl(apiUrl);
     this->setCredentials("?login=" + session->user()->eMail.toUTF8() +
             "&token=" + session->user()->token.toUTF8());
-    
-    
+
     mediasSet = false;
     rolesSet = false;
     

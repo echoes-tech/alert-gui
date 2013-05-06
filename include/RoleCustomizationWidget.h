@@ -24,7 +24,7 @@
 
 class RoleCustomizationWidget : public Wt::WContainerWidget {
 public:
-    RoleCustomizationWidget(Session *session);
+    RoleCustomizationWidget(Session *session, const std::string &apiUrl);
     RoleCustomizationWidget(const RoleCustomizationWidget& orig);
     virtual ~RoleCustomizationWidget();
     std::string getApiUrl() const;

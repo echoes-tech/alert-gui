@@ -385,7 +385,7 @@
             <pElem>../dbo/include</pElem>
             <pElem>/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include</pElem>
           </incDir>
-          <commandLine>-std=c++0x</commandLine>
+          <commandLine>-DNDEBUG -std=c++0x</commandLine>
         </ccTool>
         <linkerTool>
           <linkerAddLib>

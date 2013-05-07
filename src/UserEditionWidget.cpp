@@ -262,9 +262,10 @@ void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medEnumId)
             Wt::Dbo::ptr<Media> media = session->find<Media>().where("\"MED_ID\" = ?").bind(medEnumId);
             
             MediaValue *mev = new MediaValue();
-            mev->user= ptrUser;
+            mev->user = ptrUser;
             mev->media = media;
             mev->value = mediaToAdd;
+            mev->isDefault = false;
             Wt::Dbo::ptr<MediaValue> ptrMev = session->add<MediaValue>(mev);
             ptrMev.flush();
             model_->setValidated(field,false);

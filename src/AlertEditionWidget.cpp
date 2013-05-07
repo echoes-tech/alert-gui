@@ -491,7 +491,8 @@ void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
             int idx = 0;
             for (Wt::Dbo::collection<Wt::Dbo::ptr<Information2> >::const_iterator k = infos.begin(); k != infos.end(); k++)
             {
-                slmInformation->insertString(idx,Wt::WString::tr("Alert.alert.information." + k->get()->name.toUTF8()));
+//                slmInformation->insertString(idx,Wt::WString::tr("Alert.alert.information." + k->get()->name.toUTF8()));
+                slmInformation->insertString(idx,k->get()->name.toUTF8());
                 
                 this->mapInformationSeaIdSboxRow[idx] = k->get()->pk.search.get()->pk.id;
                 this->mapInformationSrcIdSboxRow[idx] = k->get()->pk.search.get()->pk.source.get()->pk.id;

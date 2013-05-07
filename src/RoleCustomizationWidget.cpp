@@ -591,6 +591,13 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
             {
                 Wt::Json::Object tmp = (*idx1);
                 
+                // do not show "not to display" inf
+                bool display = tmp.get("display");
+                if (!display)
+                {
+                    continue;
+                }
+                
                 Wt::WText *infoBoxOpen = new Wt::WText();
                 infoBoxOpen->setTextFormat(Wt::XHTMLUnsafeText);
                 infoBoxOpen->setText(

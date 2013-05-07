@@ -100,6 +100,9 @@
   <message id="Alert.alert.unit.time_secs">Seconds</message>
   <message id="Alert.alert.unit.oct_secs">Octets / second</message>
   <message id="Alert.alert.unit.degrees">Degrees</message>
+  <message id="Alert.alert.unit.quantity">Amount</message>
+  <message id="Alert.alert.unit.quantity_by_sec">Amount by sec</message>
+  <message id="Alert.alert.unit.state">State</message>
   
   <message id="Alert.alert.sub-unit.ko_s">Ko / second</message>
   <message id="Alert.alert.sub-unit.mo_s">Mo / second</message>

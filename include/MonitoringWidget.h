@@ -57,10 +57,6 @@
 #include <boost/random/random_device.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 
-
-
-
-
 #include <Wt/WApplication>
 #include <Wt/WDate>
 #include <Wt/WEnvironment>
@@ -77,9 +73,6 @@
 #include <Wt/Chart/WCartesianChart>
 #include <Wt/Chart/WPieChart>
 
-
-
-
 class MonitoringWidget : public Wt::WContainerWidget
 {
 public:
@@ -92,8 +85,6 @@ protected:
 
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   void createUI();
-
-
 
 private:
   Session * session;

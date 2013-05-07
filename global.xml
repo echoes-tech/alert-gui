@@ -2,161 +2,261 @@
 <messages xmlns:if="Wt.WTemplate.conditions">
 
   <message id="welcome-text">
-    <p>Welcome on beta version of ECHOES Alert !</p>
+      
+    <h3>Welcome on ECHOES Alert !</h3>
     
-    <h2>Beta 3</h2>
-    <p>11/03/2012</p>
-    
-    <p>
-        <ul>
-            <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge to ask everything you need.</a></li>
-            <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Assistance forum.</a></li>         
-        </ul>
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon">
+                <i class="icon-fire"></i>
+            </span>	
+            <h5>Last news</h5>
+        </div>
         
-        <ul>
-            <li> [API] New Features
-                <ul>
-                    <li>RESTful compliant</li>
-                    <li>Packages management system</li>    
-                </ul>
-            </li>
-            <br />
-            <li> [Engine] New feature
-                <ul>
-                    <li>Alerts about textual pieces of information</li>
-                </ul>
-            </li>
-            <br />
-            <li> [GUI] Bugfixes
-                <ul>
-                    <li>Impossible to create alerts in some cases</li>
-                    <li>Impossible to link user and organisation in some cases</li>    
-                </ul>
-            </li>
-            <br />
-            <li> [Install script] Evolutions / New features
-                <ul>
-                    <li>Uses API</li>
-                    <li>Uses openssl binary instead of wget (use of PUT method)</li>
-                    <li>Help added</li>
-                </ul>
-            </li>
-            <br />
-            <li> [Probe] Bugfixes / New features
-                <ul>
-                    <li>Memory leaks deleted</li>
-                    <li>SNMP addon</li>
-                    <li>MySQL Addon</li>
-                    <li>Missing libraries for CentOS 5 added</li>
-                    <li>Bugfix library SNMP : multithreading</li>
-                </ul>
-            </li>
-            <br />
-            <li> [Deployment] New features
-                <ul>
-                    <li>Automatic deployment process</li>
-                    <li>New key process indicators about development</li>
-                </ul>
-            </li>
-            <br />
-            <li> <b>Major changes in next release (April ?)</b>
-                <ul>
-                    <li>Bootstrap theme engine integration</li>
-                    <li>Alerts about correlated pieces of information</li>
-                    <li>Alert customization depending on the user job</li>
-                    <li>All our resources will be implemented within the API</li>
-                    <li>New plugins</li>
-                </ul>
-            </li>
-            
-        </ul>
-    </p>
+        <div class="widget-content nopadding updates">
+            <div class="new-update clearfix">
+                <i class="icon-comment"></i>
+                <div class="update-done">
+                    <a title="" href="#"><strong>Tell us what you want about our product</strong></a>
+                    <ul>
+                        <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge to ask everything you need.</a></li>
+                        <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Assistance forum.</a></li>         
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="widget-content nopadding updates">
+            <div class="new-update clearfix">
+                <i class="icon-tasks"></i>
+                <div class="update-done">
+                    <a title="" href="#"><strong>Major changes in next release</strong></a>
+                    <ul>
+                        <li>Bootstrap theme engine integration</li>
+                        <li>Alerts about correlated pieces of information</li>
+                        <li>Alert customization depending on the user job</li>
+                        <li>All our resources will be implemented within the API</li>
+                        <li>New plugins</li>
+                    </ul>
+                </div>
+                <div class="update-date"><span class="update-day">??</span>apr</div>
+            </div>
+        </div>
+    </div>
     
-    <hr></hr>
-    
-    <h2>Beta 2</h2>
-    <p>16/01/2012</p>
-    <p>
-        Beta version opened all day.
-        <ul>
-            <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge to ask everything you need.</a></li>
-            <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Assistance forum.</a></li>         
-        </ul>
-        <ul>
-            <li>[ECHOES Alert] Various bugfixes</li>
-        </ul>
-    </p>
-    
-    <hr></hr>
-    
-    <h2>Beta</h2>
-    <p>18/12/2012</p>
-    <p>
-        Beta version opened every day between 2pm and 2am.
-        <ul>
-            <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge to ask everything you need.</a></li>
-            <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Assistance forum.</a></li>         
-        </ul>
-        <ul>
-            <li> [Engine] Stabilization : performances improved
-                <ul>
-                    <li>Alert processing</li>
-                    <li>Probe datas parsing</li>
-                    <li>History data storage</li>
-                </ul>
-            </li>
-            <li> [Engine] Robustness improvement</li>
-            <li> [Engine] Multiple datas management</li>
-            <li> [GUI] Possibility to add and delete a server</li>
-            <li> [GUI] Download of an automated installation script</li>
-            <li> [GUI] Possibility to delete alerts</li>
-            <li> [GUI] Unit displayed</li>
-            <li> [GUI] SMS quota management</li>
-        </ul>
-    </p>
-    
-    
-    <hr></hr>
-    <h2>Alpha</h2>
-    <p>05/10/2012</p>
-    <p>
-        <ul>
-            <li> [Engine] Bugfix : SMS were not always sent</li>
-            <li> [GUI] Bugfix : sometimes it was impossible to add an alert</li>
-            <li> [GUI] Bugfix : Random display problems (??label??)</li>
-        </ul>
-    </p>
+    <div class="widget-box">
+        <div class="widget-title">              
+            <span class="icon">
+                <i class="icon-ok"></i>
+            </span>	
+            <h5>Beta 3 - Changes</h5>
+        </div>
+                           
+        <div class="widget-content nopadding updates">
 
-    <p>25/09/2012</p>
-    <p>
-        <ul>
-            <li> [Engine] Alert calculation process bugfixes</li>
-            <li> [GUI] Interface stabilization</li>
-            <li> [GUI] Feedbacks during alert creation</li>
-            <li> [GUI] Alert set in the gui displayed ("Alert list" tab, to be refreshed manually)</li>
-            <li> [GUI] Sent alert history (Monitoring link, top right of the screen)</li>
-            <li> [GUI / Engine] SMS Quota (not visible, set to zero by default, recharged on demand)</li>
-        </ul>
-    </p>
 
-    <p>12/09/2012</p>
+            <div class="new-update clearfix">
+                <i class="icon-gift"></i>
+                <div class="update-done">										
+                    <a title="" href="#"><strong>[API] New Features</strong></a>
+                    <ul>
+                        <li>RESTful compliant</li>
+                        <li>Packages management system</li>    
+                    </ul>
+                </div>
+                <div class="update-date"><span class="update-day">13</span>mar</div>
 
-    <ul>
-        <li>Create an account (but it seems to be done)</li>
-        <li>Order you first probe</li>
-        <li>Define your alert medias (cell phones, mail addresses)</li>
-        <li>Define and activate your alerts about :
-            <ul>
-                <li>Memory usage (KB)</li>
-                <li>Load average</li>
-            </ul>
-        </li>
-    </ul>
+            </div>
 
-    <p>This product evolves almost every day.</p>
-    <p>We will keep you informed about the new features through this page.</p>
+            <div class="new-update clearfix">
+                <i class="icon-gift"></i>
+                <div class="update-alert">										
+                    <a title="" href="#"><strong>[Engine] New feature</strong></a>
+                    <ul>
+                        <li>Alerts about textual pieces of information</li>
+                    </ul>
+                </div>
 
-    <p>The ECHOES Alert team.</p>
+            </div>
+
+            <div class="new-update clearfix">
+                <i class="icon-wrench"></i>
+                <div class="update-done">
+                    <a title="" href="#"><strong>[GUI] Bugfixes</strong></a>
+                    <ul>
+                        <li>Impossible to create alerts in some cases</li>
+                        <li>Impossible to link user and organisation in some cases</li>    
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="new-update clearfix">
+                <i class="icon-gift"></i>
+                <div class="update-done">
+                    <a title="" href="#"><strong>[Install script] Evolutions / New features</strong></a>
+                    <ul>
+                        <li>Uses API</li>
+                        <li>Uses openssl binary instead of wget (use of PUT method)</li>
+                        <li>Help added</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="new-update clearfix">
+                <i class="icon-wrench"></i>
+                <div class="update-done">
+                    <a title="" href="#"><strong>[Probe] Bugfixes / New features</strong></a>
+                    <ul>
+                        <li>Memory leaks deleted</li>
+                        <li>SNMP addon</li>
+                        <li>MySQL Addon</li>
+                        <li>Missing libraries for CentOS 5 added</li>
+                        <li>Bugfix library SNMP : multithreading</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="new-update clearfix">
+                <i class="icon-gift"></i>
+                <div class="update-done">
+                    <a title="" href="#"><strong>[Deployment] New features</strong></a>
+                    <ul>
+                        <li>Automatic deployment process</li>
+                        <li>New key process indicators about development</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon">
+                <i class="icon-ok"></i>
+            </span>	
+            <h5>Beta 2 - Changes</h5>
+        </div>
+        
+        <div class="widget-content nopadding updates">
+        
+            <div class="new-update clearfix">
+                <i class="icon-wrench"></i>
+                <div class="update-done">
+                    <a title="" href="#"><strong>[ECHOES Alert] Bugfixes</strong></a>
+                    <ul>
+                    <li>Beta version opened all day</li>
+                    <li>Various bugfixes</li>
+                    </ul>
+                </div>
+                <div class="update-date"><span class="update-day">16</span>jan</div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon">
+                <i class="icon-ok"></i>
+            </span>	
+            <h5>Beta - Changes</h5>
+        </div>
+        <div class="widget-content nopadding updates">
+            <div class="new-update clearfix">
+                <i class="icon-wrench"></i>
+                <div class="update-done">
+                    <a title="" href="#"><strong>[ECHOES Alert] Bugfixes</strong></a>
+                    <ul>
+                    <li>Beta version opened every day between 2pm and 2am</li>
+                    <li>[Engine] Stabilization : performances improved
+                        <ul>
+                            <li>Alert processing</li>
+                            <li>Probe datas parsing</li>
+                            <li>History data storage</li>
+                        </ul>
+                    </li>
+                    <li>[Engine] Robustness improvement</li>
+                    <li>[Engine] Multiple datas management</li>
+                    <li>[GUI] Possibility to add and delete a server</li>
+                    <li>[GUI] Download of an automated installation script</li>
+                    <li>[GUI] Possibility to delete alerts</li>
+                    <li>[GUI] Unit displayed</li>
+                    <li>[GUI] SMS quota management</li>
+                    </ul>
+                </div>
+                <div class="update-date"><span class="update-day">18</span>dec 2012</div>
+
+            </div>
+        </div>
+    </div>
+      
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon">
+                <i class="icon-ok"></i>
+            </span>	
+            <h5>Alpha - Changes</h5>
+        </div>
+        <div class="widget-content nopadding updates">
+            <div class="new-update clearfix">
+                <i class="icon-wrench"></i>
+                <div class="update-done">
+                    <a title="" href="#"><strong>[ECHOES Alert] bugfixes</strong></a>
+                    <ul>
+                        <li> [Engine] Bugfix : SMS were not always sent</li>
+                        <li> [GUI] Bugfix : sometimes it was impossible to add an alert</li>
+                        <li> [GUI] Bugfix : Random display problems (??label??)</li>
+                    </ul>
+                </div>
+                <div class="update-date"><span class="update-day">05</span>oct 2012</div>
+
+            </div>
+        </div>
+        
+        <div class="widget-content nopadding updates">
+            <div class="new-update clearfix">
+                <i class="icon-wrench"></i>
+                <div class="update-done">
+                    <a title="" href="#"><strong>[ECHOES Alert] bugfixes</strong></a>
+                    <ul>
+                        <li> [Engine] Alert calculation process bugfixes</li>
+                        <li> [GUI] Interface stabilization</li>
+                        <li> [GUI] Feedbacks during alert creation</li>
+                        <li> [GUI] Alert set in the gui displayed ("Alert list" tab, to be refreshed manually)</li>
+                        <li> [GUI] Sent alert history (Monitoring link, top right of the screen)</li>
+                        <li> [GUI / Engine] SMS Quota (not visible, set to zero by default, recharged on demand)</li>
+                    </ul>
+                </div>
+                <div class="update-date"><span class="update-day">25</span>sep 2012</div>
+
+            </div>
+        </div>
+        
+        <div class="widget-content nopadding updates">
+            <div class="new-update clearfix">
+                <i class="icon-gift"></i>
+                <div class="update-done">
+                    <a title="" href="#"><strong>[ECHOES Alert] New features</strong></a>
+                    <ul>
+                        <li>Create an account (but it seems to be done)</li>
+                        <li>Order you first probe</li>
+                        <li>Define your alert medias (cell phones, mail addresses)</li>
+                        <li>Define and activate your alerts about :
+                            <ul>
+                                <li>Memory usage (KB)</li>
+                                <li>Load average</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="update-date"><span class="update-day">12</span>sep 2012</div>
+
+            </div>
+        </div>
+    </div>
   </message>
     
     
@@ -166,12 +266,17 @@
   <message id="Alert.admin.alert-list-tab">Alerts list</message>
   <message id="Alert.admin.users-tab">Users</message>
   <message id="Alert.admin.medias-tab">Medias</message><message id="Alert.admin.welcome-tab">Welcome</message>
-  <message id="Alert.admin.asset-tab">Servers</message>
+  <message id="Alert.admin.assets-tab">Servers</message>
+  <message id="Alert.admin.alerts-tab">Alerts definition</message>
   <message id="Alert.admin.alert-creation-tab">Alert creation</message>
-  <message id="Alert.admin.alert-list-tab">Alerts list</message>
+  <message id="Alert.admin.alerts_list-tab">Alerts list</message>
   <message id="Alert.admin.users-tab">Users</message>
   <message id="Alert.admin.medias-tab">Medias</message>
+  <message id="Alert.admin.submenu_alerts-tab">Alerts Management</message>
+  <message id="Alert.admin.submenu_accounts-tab">Account options</message>
+  <message id="Alert.admin.plugins-tab">Plugins creation</message>
   
+  <message id="Alert.admin.home">Home</message>
   <message id="Alert.admin.title">Administration</message>
   <message id="Alert.monitoring.title">Monitoring</message>
   
@@ -179,5 +284,7 @@
   <message id="Alert.admin.options-tab">Options</message>
   <message id="Alert.global.database-error-title">Database error</message>
   <message id="Alert.global.database-error">Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
+  
+  <message id="Alert.global.action">Actions</message>
 
 </messages>

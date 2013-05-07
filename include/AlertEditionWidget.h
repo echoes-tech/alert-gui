@@ -26,7 +26,7 @@
 #include "Wt/WText"
 
 #include <Wt/WComboBox>
-#include <Wt/WSelectionBox>
+#include <Wt/WComboBox>
 #include <Wt/WStringListModel>
 #include <Wt/Dbo/Query>
 #include <Wt/WSpinBox>
@@ -40,6 +40,9 @@
 #include <memory>
 #include <Wt/WTableView>
 
+#include <Wt/Json/Parser>
+#include <Wt/Json/Object>
+
 class AlertEditionWidget : public Wt::WTemplateFormView
 {
 public:
@@ -47,7 +50,7 @@ public:
    *
    * Creates a new authentication.
    */
-  AlertEditionWidget();
+  AlertEditionWidget(const std::string &apiUrl);
 
   /*! \brief Sets the registration model.
    */
@@ -85,9 +88,9 @@ public:
   
   // maps needed to keep the link to the base
   std::map <int,long long> mapAssetIdSboxRow;
-  Wt::WSelectionBox *serverSelectionBox;
+  Wt::WComboBox *serverSelectionBox;
   std::map<int,long long> mapPluginIdSboxRow;
-  Wt::WSelectionBox *applicationSelectionBox;
+  Wt::WComboBox *applicationSelectionBox;
   // five maps to keep each primary key element without keeping a dbo ptr open out of a transaction + pos_key_value
   std::map<int,long long> mapInformationSeaIdSboxRow;
   std::map<int,long long> mapInformationSrcIdSboxRow;
@@ -96,12 +99,13 @@ public:
   std::map<int,long long> mapInformationInuIdSboxRow;
   std::map<int,int> mapInformationPkvSboxRow;
 //  std::map<int,long long> mapInformatioInuIdSboxRow;
-  Wt::WSelectionBox *informationSelectionBox;
+  Wt::WComboBox *informationSelectionBox;
   
   std::map<int,long long> mapInformationUnitCombo;
   
   // list of media where the alerts are sent
-  Wt::WTableView *userMediaDestinationTableView;
+//  Wt::WTableView *userMediaDestinationTableView;
+  Wt::WTable *tableMediaDestination;
   std::map<int,long long> mapAlertMediaSpecializationIdTableView;
   
   Wt::WComboBox *comboAlertCrit;
@@ -109,11 +113,13 @@ public:
   Wt::WComboBox *comboInformationUnit;
   
   std::map<int,long long> mapUserIdSboxRow;
-  Wt::WSelectionBox *userSelectionBox;
+  Wt::WComboBox *userSelectionBox;
   std::map<int,long long> mapMediaIdSboxRow;
-  Wt::WSelectionBox *mediaSelectionBox;
+  Wt::WComboBox *mediaSelectionBox;
   std::map<int,long long> mapMediaValueIdSboxRow;
-  Wt::WSelectionBox *mediaValueSelectionBox;
+  Wt::WComboBox *mediaValueSelectionBox;
+  
+  Wt::WLineEdit *snoozeEdit;
   
   std::map<int,long long> mapAlertCriteriaIdSboxRow;
   
@@ -137,14 +143,15 @@ public:
   
   
   void addMedia();
-  void deleteMedia();
+  void deleteMedia(Wt::WTableCell *cell);
   
   void addAlert();
 
   bool isCreated();
 
-protected:
-  /*! \brief Validates the current information.
+  std::string getApiUrl() const;
+
+protected:  /*! \brief Validates the current information.
    *
    * The default implementation simply calls
    * RegistrationModel::validate() on the model.
@@ -154,6 +161,7 @@ protected:
    */
   virtual bool validate();
 
+  void postAlert(boost::system::error_code err, const Wt::Http::Message& response);
 
   /*! \brief Closes the registration widget.
    *
@@ -169,12 +177,14 @@ protected:
 private:
   AlertEditionModel *model_;
   Session * session;
+  std::string _apiUrl;
 
   bool created_;
   
   Wt::WGroupBox *organizationContainer;
   Wt::WButtonGroup *organizationGroup;
 
+  void setApiUrl(std::string apiUrl);
 };
 
 

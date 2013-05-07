@@ -6,14 +6,16 @@
   <message id="Alert.asset.asset-form-title">Serveurs</message>
   <message id="Alert.asset.asset-form-info">Sur cette page vous pouvez ajouter des serveurs à surveiller et récupérer les scripts de configuration correspondant.</message>
   
-  <message id="Alert.asset.asset-name-label">Serveur</message>
-  <message id="Alert.asset.asset-name-info">Serveur à surveiller.</message>
+  <message id="Alert.asset.asset-name-label">Serveur à ajouter : </message>
+  <message id="Alert.asset.asset-name-info">Nom invalide</message>
   
   <message id="Alert.asset.add-asset-button">Ajouter un serveur</message>
 
   <message id="Alert.asset.add-asset-form">Vos serveurs</message>
+  <message id="Alert.asset.asset-name">Nom du serveur</message>
+  <message id="Alert.asset.asset-action">Actions</message>
   
-  <message id="Alert.asset.download-script">Télécharger</message>
+  <message id="Alert.asset.download-script">Télécharger le script d'installation</message>
   <message id="Alert.asset.delete-asset">Supprimer ce serveur</message>
 
   <message id="Alert.asset.asset-form-title">Serveurs</message>

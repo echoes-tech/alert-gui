@@ -1,3 +1,16 @@
+/* 
+ * Header of ECHOES Home
+ * @author ECHOES Technologies (TSA)
+ * @date 15/11/2012
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
+ * 
+ */
+
 #ifndef ECHOESHOME_H_
 #define ECHOESHOME_H_
 
@@ -25,65 +38,56 @@
 #include <Wt/WTableView>
 #include <Wt/WTable>
 
+
 class EchoesHome : public Wt::WContainerWidget 
 {
-public:
+    public:
 
-    EchoesHome(Wt::WContainerWidget *parent = 0);
-    Session *getSession();
-private:
-    Session *session;
-    void openUserEdition();
-    void tabSelected();
-    void handleInternalPath(const std::string &internalPath);
-    
-    Wt::Auth::AuthWidget *authWidget;
-    Wt::Auth::AuthModel *authModel;
-    Wt::WText *title;
-    Wt::WContainerWidget *topContainer;
-    Wt::WHBoxLayout *topBoxLoggedInLayout;
-    Wt::WVBoxLayout *topBoxLoggedOutLayout;
-    Wt::WVBoxLayout *topRightLayout;
-    Wt::WStackedWidget *mainStack;
-//    Wt::WLabel *admin_;
-    Wt::WTabWidget *adminPageTabs;
-    Wt::WContainerWidget *monitoringPage;
-    Wt::WContainerWidget *links;
-    Wt::WHBoxLayout *linksLayout;
-    Wt::WAnchor *adminAnchor;
-    Wt::WAnchor *monitoringAnchor;
-    
-    AlertListWidget *alertGroupBox;
-    
-    UserEditionModel *uem;
-    UserEditionWidget *uew;
+        EchoesHome(Wt::WContainerWidget *parent = 0);
+        Session *getSession();
+        std::string getApiUrl() const;
 
-    AlertEditionModel *aem;
-    AlertEditionWidget *aew;
-    
-    AssetManagementModel *amm;
-    AssetManagementWidget *amw;
-    
-    OptionManagementModel *omm;
-    OptionManagementWidget *omw;
-    
-    
-    
-    void initAuth();
-    void initHeader();
-    void initMainStack();
-    void setLinks();
-    void onAuthEvent();
-    void showAdmin();
-    void showMonitoring();
-    void resizeContainers(bool loggedIn);
-    
-    Wt::WContainerWidget *initMonitoringWidget();
-    Wt::WTabWidget* initAdminWidget();
-    
-    virtual void refresh();
-    
+    private:
+        Session *session;
+        std::string _apiUrl;
 
+        void concatApiUrl();
+        void setApiUrl(std::string apiUrl);
+
+        void handleInternalPath(const std::string &internalPath);
+
+        Wt::Auth::AuthWidget *authWidget;
+        Wt::Auth::AuthModel *authModel;
+        Wt::WText *title;
+    //    Wt::WContainerWidget *topContainer;
+        Wt::WHBoxLayout *topBoxLoggedInLayout;
+        Wt::WVBoxLayout *topBoxLoggedOutLayout;
+        Wt::WVBoxLayout *topRightLayout;
+        Wt::WStackedWidget *mainStack;
+    //    Wt::WLabel *admin_;
+        Wt::WTabWidget *adminPageTabs;
+        Wt::WContainerWidget *monitoringPage;
+        MainWidget *mainPageWidget;
+        Wt::WContainerWidget *links;
+        Wt::WHBoxLayout *linksLayout;
+        Wt::WAnchor *adminAnchor;
+        Wt::WAnchor *monitoringAnchor;
+
+        Wt::WAnchor *testAnchor;
+
+        void initSession();
+        void initAuth();
+        void initHeader();
+        void processEnvironment();
+
+        void onAuthEvent();
+        void showPage(int page, Enums::EMenuRoot menuRoot = Enums::main);
+
+        Wt::WContainerWidget *initMonitoringWidget();
+        Wt::WTabWidget* initAdminWidget();
+        void initMainPageWidget();
+
+        virtual void refresh();
 };
 
 #endif // ECHOESHOME_H_

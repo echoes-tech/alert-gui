@@ -27,10 +27,14 @@
 #include "OptionManagementModel.h"
 #include "OptionManagementWidget.h"
 #include "MonitoringWidget.h"
+#include "RoleCustomizationWidget.h"
+#include "MainWidget.h"
 #include "EchoesHome.h"
+#include "PluginEditionWidget.h"
 
 #endif	/* GLOBALINCLUDEFILE_H */
 
+class PluginEditionWidget;
 class AlertEditionWidget;
 class UserEditionWidget;
 class AlertListWidget;
@@ -40,6 +44,8 @@ class AssetManagementModel;
 class OptionManagementWidget;
 class OptionManagementModel;
 class AlertEditionModel;
+class RoleCustomizationWidget;
+class MainWidget;
 class EchoesHome;
 class UserActionManagement;
 class AuthWidget;

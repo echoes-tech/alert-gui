@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="84">
+<configurationDescriptor version="88">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
@@ -20,6 +20,10 @@
           <itemPath>include/OptionManagementModel.h</itemPath>
           <itemPath>include/OptionManagementWidget.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
+          <itemPath>include/PluginEditionModel.h</itemPath>
+          <itemPath>include/PluginEditionWidget.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>include/UserEditionModel.h</itemPath>
           <itemPath>include/UserEditionWidget.h</itemPath>
@@ -29,6 +33,15 @@
           <itemPath>include/Auth/LostPasswordWidgetAlert.h</itemPath>
           <itemPath>include/Auth/RegistrationModelAlert.h</itemPath>
           <itemPath>include/Auth/RegistrationWidgetAlert.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="enum" displayName="enum" projectFiles="true">
+          <itemPath>include/enum/base.hpp</itemPath>
+          <itemPath>include/enum/bitfield.hpp</itemPath>
+          <itemPath>include/enum/iterator.hpp</itemPath>
+          <itemPath>include/enum/macros.hpp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
+          <itemPath>include/MainWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>include/MonitoringWidget.h</itemPath>
@@ -44,6 +57,8 @@
         </logicalFolder>
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
+        <itemPath>include/RoleCustomizationWidget.h</itemPath>
+        <itemPath>include/enum.hpp</itemPath>
       </logicalFolder>
       <itemPath>include/Enums.h</itemPath>
       <itemPath>include/UserActionManagement.h</itemPath>
@@ -53,7 +68,6 @@
                    projectFiles="true">
       <itemPath>alert-list.xml</itemPath>
       <itemPath>alert-list_fr.xml</itemPath>
-      <itemPath>resources/alert.css</itemPath>
       <itemPath>alert.xml</itemPath>
       <itemPath>alert_fr.xml</itemPath>
       <itemPath>asset.xml</itemPath>
@@ -61,14 +75,14 @@
       <itemPath>auth.xml</itemPath>
       <itemPath>auth_fr.xml</itemPath>
       <itemPath>config.xml</itemPath>
-      <itemPath>resources/form-alert.css</itemPath>
-      <itemPath>resources/form-probe.css</itemPath>
-      <itemPath>resources/form-user.css</itemPath>
-      <itemPath>resources/form.css</itemPath>
       <itemPath>global.xml</itemPath>
       <itemPath>global_fr.xml</itemPath>
       <itemPath>options.xml</itemPath>
       <itemPath>options_fr.xml</itemPath>
+      <itemPath>plugin.xml</itemPath>
+      <itemPath>plugin_fr.xml</itemPath>
+      <itemPath>role-customization.xml</itemPath>
+      <itemPath>role-customization_fr.xml</itemPath>
       <itemPath>user.xml</itemPath>
       <itemPath>user_fr.xml</itemPath>
     </logicalFolder>
@@ -91,6 +105,10 @@
           <itemPath>src/OptionManagementModel.cpp</itemPath>
           <itemPath>src/OptionManagementWidget.cpp</itemPath>
         </logicalFolder>
+        <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
+          <itemPath>src/PluginEditionModel.cpp</itemPath>
+          <itemPath>src/PluginEditionWidget.cpp</itemPath>
+        </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>src/UserEditionModel.cpp</itemPath>
           <itemPath>src/UserEditionWidget.cpp</itemPath>
@@ -101,11 +119,15 @@
           <itemPath>src/Auth/RegistrationModelAlert.cpp</itemPath>
           <itemPath>src/Auth/RegistrationWidgetAlert.cpp</itemPath>
         </logicalFolder>
+        <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
+          <itemPath>src/MainWidget.cpp</itemPath>
+        </logicalFolder>
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>src/MonitoringWidget.cpp</itemPath>
         </logicalFolder>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
+        <itemPath>src/RoleCustomizationWidget.cpp</itemPath>
         <itemPath>src/UserActionManagement.cpp</itemPath>
       </logicalFolder>
       <itemPath>main.cpp</itemPath>
@@ -132,6 +154,8 @@
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
         <ccTool>
@@ -140,7 +164,6 @@
           <incDir>
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>
-            <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/include</pElem>
           </incDir>
           <commandLine>-pedantic</commandLine>
           <warningLevel>2</warningLevel>
@@ -148,7 +171,6 @@
         <linkerTool>
           <linkerAddLib>
             <pElem>../dbo/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
-            <pElem>/var/lib/jenkins/jobs/ea-dbo/workspace/default/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>dbo</linkerLibLibItem>
@@ -159,14 +181,199 @@
             <linkerLibLibItem>boost_signals</linkerLibLibItem>
             <linkerLibLibItem>boost_system</linkerLibLibItem>
             <linkerLibLibItem>boost_random</linkerLibLibItem>
+            <linkerLibLibItem>pthread</linkerLibLibItem>
+            <linkerLibLibItem>stdc++</linkerLibLibItem>
+            <linkerLibLibItem>m</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="alert-list.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="alert-list_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="alert.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="alert_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="asset.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="asset_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="auth.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="auth_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="config.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="global.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="global_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AlertEditionModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AlertEditionWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AlertListWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AssetManagementModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Auth/LostPasswordWidgetAlert.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/Auth/RegistrationModelAlert.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/Auth/RegistrationWidgetAlert.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/AuthWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/EchoesHome.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Enums.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/GlobalIncludeFile.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/MainWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/MonitoringWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/OptionManagementModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/UserEditionModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/UserEditionWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/base.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/bitfield.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/iterator.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/macros.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/license.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/manual.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_iterators.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_print.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_utils.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_xhtml.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="options.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AlertEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AlertEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AlertListWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AssetManagementModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Auth/LostPasswordWidgetAlert.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/Auth/RegistrationModelAlert.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/Auth/RegistrationWidgetAlert.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/AuthWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/EchoesHome.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Enums.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MainWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MonitoringWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/OptionManagementModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="user.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="user_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
         <ccTool>
@@ -176,17 +383,17 @@
           <incDir>
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>
-            <pElem>/var/lib/jenkins/jobs/ea-dbo-master/workspace/include</pElem>
+            <pElem>/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include</pElem>
           </incDir>
-          <commandLine>-std=c++0x</commandLine>
-          <warningLevel>2</warningLevel>
+          <commandLine>-DNDEBUG -std=c++0x</commandLine>
         </ccTool>
         <linkerTool>
           <linkerAddLib>
             <pElem>../dbo/dist/Release_SharedObject/GNU-Linux-x86</pElem>
-            <pElem>/var/lib/jenkins/jobs/ea-dbo-master/workspace/default/dist/Release_SharedObject/GNU-Linux-x86</pElem>
+            <pElem>/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/default/dist/Release_SharedObject/GNU-Linux-x86</pElem>
           </linkerAddLib>
           <stripSymbols>true</stripSymbols>
+          <commandlineTool>g++-4.4</commandlineTool>
           <linkerLibItems>
             <linkerLibLibItem>wt</linkerLibLibItem>
             <linkerLibLibItem>wtdbopostgres</linkerLibLibItem>
@@ -199,6 +406,186 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="alert-list.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="alert-list_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="alert.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="alert_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="asset.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="asset_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="auth.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="auth_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="config.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="global.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="global_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AlertEditionModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AlertEditionWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AlertListWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AssetManagementModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Auth/LostPasswordWidgetAlert.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/Auth/RegistrationModelAlert.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/Auth/RegistrationWidgetAlert.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/AuthWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/EchoesHome.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Enums.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/GlobalIncludeFile.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/MainWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/MonitoringWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/OptionManagementModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/UserEditionModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/UserEditionWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/base.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/bitfield.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/iterator.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/macros.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/license.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/manual.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_iterators.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_print.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_utils.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_xhtml.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="options.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AlertEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AlertEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AlertListWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AssetManagementModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Auth/LostPasswordWidgetAlert.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/Auth/RegistrationModelAlert.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/Auth/RegistrationWidgetAlert.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/AuthWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/EchoesHome.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Enums.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MainWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MonitoringWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/OptionManagementModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="user.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="user_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>

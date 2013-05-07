@@ -8,6 +8,9 @@
 #ifndef ENUMS_H
 #define	ENUMS_H
 
+#include "enum.hpp"
+#include <string.h>
+
 class Enums {
 public:
     Enums();
@@ -38,6 +41,34 @@ public:
         quotaAsset = 1,
         quotaSms = 2
     };
+    
+    enum EMenuRoot
+    {
+        main,
+        alerts,
+        accounts
+    };
+    
+    BOOST_ENUM_VALUES(EPageType, const char*,
+    (WELCOME)("welcome")
+    (ASSET)("assets")
+    (SUBMENU_ALERT)("submenu_alerts")
+    (SUBMENU_ACCOUNT)("submenu_accounts")
+    (PLUGIN)("plugins")
+    )
+    
+    BOOST_ENUM_VALUES(EAlertSubmenu, const char*,
+    (ALERT)("alerts")
+    (ALERT_LIST)("alerts_list")
+    )
+
+//    (USER)("users")
+    
+    BOOST_ENUM_VALUES(EAccountSubmenu, const char*,
+    (OPTION)("options")
+    (MEDIA)("medias")
+    (ROLE)("role")
+    )
 private:
 
 };

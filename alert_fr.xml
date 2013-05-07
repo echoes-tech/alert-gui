@@ -3,6 +3,7 @@
 
   <!-- AlertWidget -->
 
+  <message id="Alert.alert.information-table-title">Information sur laquelle porte l'alerte</message>
   <message id="Alert.alert.alert-form-title">Alertes</message>
   <message id="Alert.alert.alert-form-info">Cette page vous donne la possibilité de créer une alerte</message>
 
@@ -57,6 +58,8 @@
   <message id="Alert.alert.operator.ne">Différent </message>
   <message id="Alert.alert.operator.ge">Supérieur ou égal</message>
   <message id="Alert.alert.operator.gt">Supérieur</message>
+  
+  <message id="Alert.alert.media-destination-table">Destinataires de l'alerte</message>
   
   <message id="Alert.alert.user">Utilisateur</message>
   <message id="Alert.alert.media">Média</message>

@@ -56,28 +56,24 @@ void OptionManagementWidget::createUI()
     {
         Wt::log("info") << "Debug : before transaction";
         Wt::Dbo::Transaction transaction(*this->session);
-        Wt::Dbo::ptr<User> tempUser = session->find<User>().where("\"USR_ID\" = ?").bind(session->user().id());
         Wt::log("info") << "Debug : user found";
         int smsQuotaValue = 0;
-        if (tempUser)
+         
+        Wt::Dbo::ptr<PackOption> ptrPackOption = session->find<PackOption>()
+                .where("\"POP_PCK_PCK_ID\" = ?").bind(this->session->user()->currentOrganization.get()->pack.id())
+                .where("\"POP_OPT_OPT_ID\" = ?").bind(Enums::quotaSms)
+                .limit(1);
+        if (ptrPackOption.get())
         {
-            Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
-            Wt::Dbo::ptr<PackOption> ptrPackOption = session->find<PackOption>()
-                    .where("\"POP_PCK_PCK_ID\" = ?").bind(tempOrga.get()->pack.id())
-                    .where("\"POP_OPT_OPT_ID\" = ?").bind(Enums::quotaSms)
-                    .limit(1);
-            if (ptrPackOption.get())
+            Wt::Dbo::ptr<OptionValue> ptrOptionValue = session->find<OptionValue>().where("\"OPT_ID_OPT_ID\" = ?").bind(ptrPackOption.get()->pk.option.id())
+                                                            .where("\"ORG_ID_ORG_ID\" = ?").bind(this->session->user()->currentOrganization.id())
+                                                            .limit(1);
+            if (ptrOptionValue.get())
             {
-                Wt::Dbo::ptr<OptionValue> ptrOptionValue = session->find<OptionValue>().where("\"OPT_ID_OPT_ID\" = ?").bind(ptrPackOption.get()->pk.option.id())
-                                                                .where("\"ORG_ID_ORG_ID\" = ?").bind(tempOrga.id())
-                                                                .limit(1);
-                if (ptrOptionValue.get())
-                {
-                    smsQuotaValue = boost::lexical_cast<int>(ptrOptionValue.get()->value);
-                }
+                smsQuotaValue = boost::lexical_cast<int>(ptrOptionValue.get()->value);
             }
-
         }
+            
         transaction.commit();
         model_->setValue(model_->smsQuota,boost::any(smsQuotaValue));
         model_->setReadOnly(model_->smsQuota,true);
@@ -110,7 +106,10 @@ Wt::WFormWidget *OptionManagementWidget::createFormWidget(Wt::WFormModel::Field 
     
     if (field == OptionManagementModel::smsAsk)
     {
-        Wt::WPushButton *button = new Wt::WPushButton(tr("Alert.option.ask-sms-button"));
+        Wt::WPushButton *button = new Wt::WPushButton();
+        button->setAttributeValue("class","btn btn-info");
+        button->setTextFormat(Wt::XHTMLUnsafeText);
+        button->setText("<i class='icon-shopping-cart icon-white'></i> " + tr("Alert.option.ask-sms-button"));
         button->clicked().connect(boost::bind(&OptionManagementWidget::askSms, this));
         result = button;
     }

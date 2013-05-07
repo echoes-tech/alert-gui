@@ -30,19 +30,6 @@
 
 #include <memory>
 
-/*! \class RegistrationWidget Wt/Auth/RegistrationWidget
- *  \brief A registration widget.
- *
- * This implements a widget which allows a new user to register.  The
- * widget renders the <tt>"Wt.Auth.template.registration"</tt>
- * template. and uses a RegistrationModel for the actual registration
- * logic.
- *
- * Typically, you may want to specialize this widget to ask for other
- * information.
- *
- * \ingroup auth
- */
 class UserEditionWidget : public Wt::WTemplateFormView
 {
 public:
@@ -81,19 +68,21 @@ public:
    */
   void update();
   
-  Wt::WSelectionBox *mediaEmailSelectionBox;
-  Wt::WSelectionBox *mediaSmsSelectionBox;
+  Wt::WTable *emailsTable;
+  Wt::WTable *smsTable;
+  Wt::WLineEdit *emailEdit;
+  Wt::WLineEdit *smsEdit;
   
-  Wt::WStringListModel *getMediasForCurrentUser(int mediaType);
+  void createMediaTable(int medEnumId);
+  
+  std::map<long long, Wt::WString> getMediasForCurrentUser(int mediaType);
   
   
-  void addMedia(Wt::WFormModel::Field field, int medId, Wt::WSelectionBox *sBox);
-  void deleteMedia(int medId, Wt::WSelectionBox *sBox);
+  void addMedia(Wt::WFormModel::Field field, int medId);
+  void deleteMedia(int medEnumId, long long medId, Wt::WTableCell * cell);
   
   void addEmail();
-  void deleteEmail();
   void addSms();
-  void deleteSms();
 
 protected:
   /*! \brief Validates the current information.

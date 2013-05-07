@@ -22,7 +22,6 @@ void AssetManagementWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
 {
     if (!created_)
     {
-//        update();
         created_ = true;
     }
 
@@ -38,69 +37,83 @@ void AssetManagementWidget::createUI()
     mainForm->bindWidget("asset-name", createFormWidget(AssetManagementModel::AssetName));
     
     Wt::WPushButton *addAssetButton = new Wt::WPushButton(tr("Alert.asset.add-asset-button"));
+    addAssetButton->setAttributeValue("class","btn btn-info");
     mainForm->bindWidget("add-asset-button", addAssetButton);
     addAssetButton->clicked().connect(boost::bind(&AssetManagementWidget::addAsset, this));
+    
 
     mainForm->updateModel(model_);
     mainForm->refresh();
     // Table where the links / buttons are added
     Wt::WTable *linksTable = new Wt::WTable();
+    linksTable->addStyleClass("table");
+    linksTable->addStyleClass("table-bordered");
+    linksTable->addStyleClass("table-striped");
     
     int row = 0;
 
-    linksTable->setStyleClass("table-list");
     
-    linksTable->setHeaderCount(1,Wt::Horizontal);
+    linksTable->setHeaderCount(2,Wt::Horizontal);
+    linksTable->elementAt(row, 0)->setColumnSpan(2);
+    linksTable->columnAt(1)->setStyleClass("asset-action-width");
     
-    
-    linksTable->elementAt(row, 0)->setColumnSpan(3);
-    new Wt::WText(tr("Alert.asset.add-asset-form"),linksTable->elementAt(row, 0));
-    
+    Wt::WText *tableTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-hdd'></i></span><h5>"+ tr("Alert.asset.add-asset-form") + "</h5></div>",linksTable->elementAt(row, 0));
+    linksTable->elementAt(row, 0)->setPadding(*(new Wt::WLength("0px")));
+    tableTitle->setTextFormat(Wt::XHTMLUnsafeText);
+    ++row;
+    new Wt::WText(tr("Alert.asset.asset-name"),linksTable->elementAt(row, 0));
+    new Wt::WText(tr("Alert.asset.asset-action"),linksTable->elementAt(row, 1));
+         
     try
     {
         Wt::log("info") << "Debug : before transaction";
         Wt::Dbo::Transaction transaction(*this->session);
-        //TODO : don't understand why the two lines below are needed, clean this
-        Wt::Dbo::ptr<User> tempUser = session->find<User>().where("\"USR_ID\" = ?").bind(session->user().id());
-        Wt::log("info") << "Debug : user found";
-        if (tempUser)
+        std::string queryString =  "select ast from \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN" 
+                                    " ("
+                                    "    SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" WHERE \"PRB_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(session->user()->currentOrganization.id()) +
+                                    ")"
+                                    " AND \"AST_DELETE\" IS NULL";
+        Wt::log("info") << "Debug : " << queryString ;
+        Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > resQuery = session->query<Wt::Dbo::ptr<Asset> >(queryString);
+
+        Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > listAssets = resQuery.resultList();
+        for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = listAssets.begin(); i != listAssets.end(); ++i) 
         {
-            Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
-    //        Wt::log("info") << "Debug : " << session->user().get()->currentOrganization.id();
-            std::string queryString =  "select ast from \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN" 
-                                        " ("
-                                        "    SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" WHERE \"PRB_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(tempUser->currentOrganization.id()) +
-                                        ")"
-                                        " AND \"AST_DELETE\" IS NULL";
-            Wt::log("info") << "Debug : " << queryString ;
-            Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > resQuery = session->query<Wt::Dbo::ptr<Asset> >(queryString);
-
-            Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > listAssets = resQuery.resultList();
-            for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = listAssets.begin(); i != listAssets.end(); ++i) 
+            ++row;
+            Wt::WFileResource *file = generateScript(i->id(),i->get()->name);
+            if (file == NULL)
             {
-                ++row;
-                Wt::WFileResource *file = generateScript(i->id(),i->get()->name);
-                if (file == NULL)
-                {
-                    new Wt::WLabel(Wt::WString::tr("Alert.asset.file-not-generated"),linksTable->elementAt(row, 1));
-                    new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
+                new Wt::WLabel(Wt::WString::tr("Alert.asset.file-not-generated"),linksTable->elementAt(row, 1));
+                new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
 
-                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 2));
-                    delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
-                }
-                else
-                {
-                    Wt::WAnchor *anchor = new Wt::WAnchor(file,tr("Alert.asset.download-script"),linksTable->elementAt(row, 1));
-                    anchor->setTarget(Wt::TargetNewWindow);
-                    anchor->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this,file->fileName()));
+                Wt::WPushButton *delButton = new Wt::WPushButton("", linksTable->elementAt(row, 1));
+                delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
+            }
+            else
+            {
+                Wt::WAnchor *anchor = new Wt::WAnchor(file,"",linksTable->elementAt(row, 1));
+                anchor->setTextFormat(Wt::XHTMLUnsafeText);
+                anchor->setText("<i class='icon-download icon-white'></i> " + tr("Alert.asset.download-script"));
+                anchor->addStyleClass("btn");
+                anchor->addStyleClass("btn-info");
+                anchor->setTarget(Wt::TargetNewWindow);
+                anchor->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this,file->fileName()));
 
-                    new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
+                new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
 
-                    Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 2));
-                    delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
-                }
+                Wt::WText *nbspText = new Wt::WText("&nbsp;", linksTable->elementAt(row, 1));
+                nbspText->setTextFormat(Wt::XHTMLUnsafeText);
+
+                Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 1));
+                delButton->setAttributeValue("class","btn btn-danger");
+
+                delButton->setTextFormat(Wt::XHTMLUnsafeText);
+                delButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.asset.delete-asset"));
+
+                delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
             }
         }
+        
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
@@ -108,8 +121,6 @@ void AssetManagementWidget::createUI()
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("1"),Wt::Ok);
         Wt::log("error") << "[AssetManagementWidget] " << e.what();
     }
-    
-    
      
     
     Wt::WVBoxLayout *mainVerticalLayout = new Wt::WVBoxLayout();
@@ -119,10 +130,6 @@ void AssetManagementWidget::createUI()
       
     topHorizontalLayout->addWidget(mainForm);
     bottomHorizontalLayout->addWidget(linksTable);
-    
-    // empty container to reduce table width which is linked to the container
-    Wt::WContainerWidget *emptyContainer = new Wt::WContainerWidget();
-    bottomHorizontalLayout->addWidget(emptyContainer);
     
     mainVerticalLayout->addLayout(topHorizontalLayout);
     mainVerticalLayout->addLayout(bottomHorizontalLayout);
@@ -151,6 +158,8 @@ Wt::WFormWidget *AssetManagementWidget::createFormWidget(Wt::WFormModel::Field f
 
 void AssetManagementWidget::addAsset()
 {
+    doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "').toggleClass('error',false)");
+    doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "-hint').hide()");
     try
     {
         Wt::Dbo::Transaction transaction(*session);
@@ -181,7 +190,9 @@ void AssetManagementWidget::addAsset()
         }
         else
         {
-            Wt::WMessageBox::show(tr("Alert.asset.asset-name-invalid"),tr("Alert.asset.asset-name-invalid"),Wt::Ok);
+            mainForm->updateModelField(model_, AssetManagementModel::AssetName);
+            doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "').toggleClass('error')");
+            doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "-hint').show()");
         }
         transaction.commit();  
     }
@@ -225,7 +236,6 @@ void AssetManagementWidget::deleteAsset(long long id)
         return;
     }
             
-//    refresh();
     created_ = false;
     model_->reset();
     createUI();
@@ -245,16 +255,16 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WStrin
     std::string scriptCustomPart = "";
     try
     {
-        Wt::Dbo::ptr<User> tempUser = this->session->find<User>().where("\"USR_ID\" = ?").bind(this->session->user().id());
-        scriptCustomPart = "\nLOGIN=\"" + tempUser->eMail.toUTF8() + "\"\n" 
+        scriptCustomPart = "\nLOGIN=\"" + this->session->user()->eMail.toUTF8() + "\"\n" 
         + "ASSET_ID=" + boost::lexical_cast<std::string, long long>(i) + "\n"
-        + "TOKEN=\"" + tempUser->currentOrganization.get()->token.toUTF8() + "\"\n";
+        + "TOKEN=\"" + this->session->user()->currentOrganization.get()->token.toUTF8() + "\"\n";
     }
     catch (Wt::Dbo::Exception e)
     {
         Wt::log("error") << "[AssetManagementWidget] " << e.what();
         return NULL;
     }
+
     
     // full script to send
     std::string contentToSend = disclaimerString + scriptCustomPart + bodyString;

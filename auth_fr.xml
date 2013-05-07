@@ -72,7 +72,7 @@
   </message>
   <message id="Wt.Auth.password">Mot de passe</message>
   <message id="Wt.Auth.password-info">Saisissez votre mot de passe</message>
-  <message id="Wt.Auth.remember-me">Se souvenir de moi</message>
+  <message id="Wt.Auth.remember-me">Se souvenir de moi (2 semaines)</message>
   <message id="Wt.Auth.remember-me-info.days">
     Rester connecté {1} jours
   </message>

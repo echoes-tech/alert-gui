@@ -51,11 +51,12 @@ void AuthWidget::init()
     dialog_ = 0;
     messageBox_ = 0;
 
-    addFunction("id", WT_TEMPLATE_FUNCTION(id));
-    addFunction("tr", WT_TEMPLATE_FUNCTION(tr));
+//    addFunction("id", WT_TEMPLATE_FUNCTION(id));
+//    addFunction("tr", WT_TEMPLATE_FUNCTION(tr));
 
     
 //    app->builtinLocalizedStrings().useBuiltin(skeletons::Auth_xml1);
+//     app->theme()->apply(this, this, AuthWidgets);
 }
 
 void AuthWidget::setModel(AuthModel *model)
@@ -334,6 +335,8 @@ void AuthWidget::updatePasswordLoginView()
         if (!login)
         {
             login = new WPushButton(tr("Wt.Auth.login"));
+            login->addStyleClass("btn");
+            login->addStyleClass("btn-inverse");
             login->clicked().connect(this, &AuthWidget::attemptPasswordLogin);
             bindWidget("login", login);
 
@@ -341,9 +344,12 @@ void AuthWidget::updatePasswordLoginView()
 
             if (model_->baseAuth()->emailVerificationEnabled())
             {
-                WText *text = new WText(tr("Wt.Auth.lost-password"));
-                text->clicked().connect(this, &AuthWidget::handleLostPassword);
-                bindWidget("lost-password", text);
+                WAnchor *anchor = new WAnchor();
+                anchor->setText(tr("Wt.Auth.lost-password"));
+                anchor->addStyleClass("flip-link");
+                anchor->setId("to-recover");
+                anchor->clicked().connect(this, &AuthWidget::handleLostPassword);
+                bindWidget("lost-password", anchor);
             }
             else
                 bindEmpty("lost-password");
@@ -356,11 +362,14 @@ void AuthWidget::updatePasswordLoginView()
                     w = new WAnchor
                             (WLink(WLink::InternalPath, basePath_ + "register"),
                              tr("Wt.Auth.register"));
+                    w->addStyleClass("flip-link");
                 }
                 else
                 {
-                    w = new WText(tr("Wt.Auth.register"));
+                    w = new WAnchor();
+                    ((WAnchor*)w)->setText(tr("Wt.Auth.register"));
                     w->clicked().connect(this, &AuthWidget::registerNewUser);
+                    w->addStyleClass("flip-link");
                 }
 
                 bindWidget("register", w);
@@ -467,12 +476,40 @@ void AuthWidget::createLoggedInView()
 {
     setTemplateText(tr("Wt.Auth.template.logged-in"));
 
-    bindString("user-name", login_.user().identity(Identity::LoginName));
+//    bindString("user-name", login_.user().identity(Identity::LoginName));
 
     WPushButton *logout = new WPushButton(tr("Wt.Auth.logout"));
     logout->clicked().connect(this, &AuthWidget::logout);
 
-    bindWidget("logout", logout);
+//    bindWidget("logout", logout);
+    
+    
+    WContainerWidget *menuContainer = new WContainerWidget();
+    menuContainer->setId("user-nav");
+    menuContainer->setAttributeValue("class","navbar navbar-inverse");
+    WMenu *menu = new WMenu(menuContainer);
+    
+    
+    menu->setAttributeValue("class","nav btn-group");
+    
+//    WMenuItem *alertMenuItem = new WMenuItem("Alertes");
+////    logoutMenuItem->clicked().connect(this, &AuthWidget::logout);
+//    alertMenuItem->setAttributeValue("class","btn btn-inverse");
+//    
+//    WText *alertCount = new WText("5");
+//    alertCount->setAttributeValue("class","label label-important");
+//    WAnchor *anchorTemp = (WAnchor*)alertMenuItem->widget(0);
+//    anchorTemp->addWidget(alertCount);
+    
+    WMenuItem *logoutMenuItem = new WMenuItem(tr("Wt.Auth.logout"));
+//    newMenuItem->setAttributeValue("name",boost::lexical_cast<std::string>(enumPT.index()));
+    logoutMenuItem->clicked().connect(this, &AuthWidget::logout);
+    logoutMenuItem->setAttributeValue("class","btn btn-inverse");
+    
+//    menu->addItem(alertMenuItem);
+    menu->addItem(logoutMenuItem);
+    
+    bindWidget("menu",menuContainer);
 }
 
 void AuthWidget::processEnvironment()
@@ -505,7 +542,7 @@ void AuthWidget::processEnvironment()
             login_.login(result.user());
         }
 
-        WApplication::instance()->setInternalPath("/");
+//        WApplication::instance()->setInternalPath("/");
 
         return;
     }

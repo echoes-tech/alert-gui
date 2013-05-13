@@ -84,6 +84,8 @@
       <itemPath>plugin_fr.xml</itemPath>
       <itemPath>role-customization.xml</itemPath>
       <itemPath>role-customization_fr.xml</itemPath>
+      <itemPath>summary.xml</itemPath>
+      <itemPath>summary_fr.xml</itemPath>
       <itemPath>user.xml</itemPath>
       <itemPath>user_fr.xml</itemPath>
     </logicalFolder>
@@ -369,6 +371,10 @@
       </item>
       <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="summary.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="summary_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="user.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="user_fr.xml" ex="false" tool="3" flavor2="0">
@@ -591,6 +597,10 @@
       <item path="src/UserEditionModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="summary.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="summary_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="user.xml" ex="false" tool="3" flavor2="0">
       </item>

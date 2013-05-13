@@ -65,6 +65,7 @@
   <message id="Alert.alert.media">Média</message>
   <message id="Alert.alert.media-value">Valeur</message>
   <message id="Alert.alert.snooze">Snooze</message>
+  <message id="Alert.alert.role">Rôle</message>
   
   <message id="Alert.alert.information-missing-title">Information manquante</message>
   <message id="Alert.alert.information-missing">Vous n'avez pas spécifié sur quelle information porte l'alerte</message>

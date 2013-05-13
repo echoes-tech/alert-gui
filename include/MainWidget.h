@@ -95,7 +95,7 @@ protected:
   UserEditionModel *uem;
   UserEditionWidget *uew;
   
-  Wt::WText *wcw;
+  Wt::WContainerWidget *wcw;
 
 private:
   Session * session;

@@ -54,6 +54,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/PluginEditionModel.o \
 	${OBJECTDIR}/src/PluginEditionWidget.o \
 	${OBJECTDIR}/src/RoleCustomizationWidget.o \
+	${OBJECTDIR}/src/SummaryBoard.o \
 	${OBJECTDIR}/src/UserActionManagement.o \
 	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/src/UserEditionWidget.o
@@ -177,6 +178,11 @@ ${OBJECTDIR}/src/RoleCustomizationWidget.o: src/RoleCustomizationWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -DNDEBUG -std=c++0x -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/RoleCustomizationWidget.o src/RoleCustomizationWidget.cpp
+
+${OBJECTDIR}/src/SummaryBoard.o: src/SummaryBoard.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -DNDEBUG -std=c++0x -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/SummaryBoard.o src/SummaryBoard.cpp
 
 ${OBJECTDIR}/src/UserActionManagement.o: src/UserActionManagement.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

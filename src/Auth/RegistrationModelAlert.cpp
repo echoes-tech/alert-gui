@@ -33,17 +33,17 @@ void RegistrationModelAlert::reset()
 {
     Wt::Auth::RegistrationModel::reset();
 
-    this->addField(OrganizationTypeCompanyField, Wt::WString::tr("Wt.Auth.organization-type-company-info"));
-    this->addField(OrganizationTypeIndividualField, Wt::WString::tr("Wt.Auth.organization-type-individual-info"));
-    this->addField(OrganizationTypeAssociationField, Wt::WString::tr("Wt.Auth.organization-type-association-info"));
-    
-    this->addField(OrganizationNameField, Wt::WString::tr("Wt.Auth.organization-name-info"));
+//    this->addField(OrganizationTypeCompanyField, Wt::WString::tr("Wt.Auth.organization-type-company-info"));
+//    this->addField(OrganizationTypeIndividualField, Wt::WString::tr("Wt.Auth.organization-type-individual-info"));
+//    this->addField(OrganizationTypeAssociationField, Wt::WString::tr("Wt.Auth.organization-type-association-info"));
+//    
+//    this->addField(OrganizationNameField, Wt::WString::tr("Wt.Auth.organization-name-info"));
     
     this->addField(FirstNameField, Wt::WString::tr("Wt.Auth.first-name-info"));
     
     this->addField(LastNameField, Wt::WString::tr("Wt.Auth.last-name-info"));
  
-    this->addField(TestField, Wt::WString::tr("test"));
+//    this->addField(TestField, Wt::WString::tr("test"));
 
 }
 

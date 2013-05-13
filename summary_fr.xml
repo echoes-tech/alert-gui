@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+	
+    <message id="Alert.summary.alerts-sent">Alertes envoyées</message>
+    <message id="Alert.summary.alert-date">Date</message>
+    <message id="Alert.summary.alert-media">Destinataire</message>
+    <message id="Alert.summary.alert-name">Nom de l'alerte</message>
+    
+	<message id="Alert.summary.board.template">
+	    
+	    <h3>Bienvenue sur ECHOES Alert !</h3>  
+        
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span6">
+                    ${alerts-sent}
+                </div>
+                <div class="span6">
+                    ${welcome}
+                </div>
+            </div>
+        </div>
+  	</message>
+</messages>

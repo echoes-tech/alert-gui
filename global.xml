@@ -2,9 +2,8 @@
 <messages xmlns:if="Wt.WTemplate.conditions">
 
   <message id="welcome-text">
-      
-    <h3>Welcome on ECHOES Alert !</h3>
     
+      
     <div class="widget-box">
         <div class="widget-title">
             <span class="icon">
@@ -31,14 +30,59 @@
                 <div class="update-done">
                     <a title="" href="#"><strong>Major changes in next release</strong></a>
                     <ul>
-                        <li>Bootstrap theme engine integration</li>
-                        <li>Alerts about correlated pieces of information</li>
-                        <li>Alert customization depending on the user job</li>
-                        <li>All our resources will be implemented within the API</li>
+                        <li>Full alert customization</li>
+                        <li>Correlation</li>
                         <li>New plugins</li>
                     </ul>
                 </div>
-                <div class="update-date"><span class="update-day">??</span>apr</div>
+                <div class="update-date"><span class="update-day">??</span>jun</div>
+            </div>
+        </div>
+    </div>    
+    
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon">
+                <i class="icon-ok"></i>
+            </span>	
+            <h5>RC1 - Changes</h5>
+        </div>
+        
+        <div class="widget-content nopadding updates">
+        
+            <div class="new-update clearfix">
+                <i class="icon-wrench"></i>
+                <div class="update-gift">
+                    <a title="" href="#"><strong>[GUI] New Features</strong></a>
+                    <ul>
+                        <li>Boostrap theme engine integrated</li>
+                        <li>Alert customization</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="new-update clearfix">
+                <i class="icon-gift"></i>
+                <div class="update-done">										
+                    <a title="" href="#"><strong>[API] New Features</strong></a>
+                    <ul>
+                        <li>All our resources are accessible through API</li>
+                    </ul>
+                </div>
+                <div class="update-date"><span class="update-day">13</span>may</div>
+
+            </div>
+
+            <div class="new-update clearfix">
+                <i class="icon-gift"></i>
+                <div class="update-alert">										
+                    <a title="" href="#"><strong>[Engine] New features</strong></a>
+                    <ul>
+                        <li>Correlation engine</li>
+                    </ul>
+                </div>
+
             </div>
         </div>
     </div>

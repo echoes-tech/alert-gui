@@ -6,6 +6,7 @@
  */
 
 #include "MainWidget.h"
+#include "SummaryBoard.h"
 
 MainWidget::MainWidget(Session *session, const std::string &apiUrl)
 : Wt::WContainerWidget()
@@ -213,7 +214,8 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         }
         case Enums::EPageType::WELCOME:
         {
-            wcw = new Wt::WText(tr("welcome-text"));
+//            wcw = new Wt::WText(tr("welcome-text"));
+            wcw = new SummaryBoard(this->session);
             break;
         }
         case Enums::EPageType::PLUGIN:

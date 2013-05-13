@@ -501,13 +501,24 @@ void AuthWidget::createLoggedInView()
 //    WAnchor *anchorTemp = (WAnchor*)alertMenuItem->widget(0);
 //    anchorTemp->addWidget(alertCount);
     
+    
     WMenuItem *logoutMenuItem = new WMenuItem(tr("Wt.Auth.logout"));
 //    newMenuItem->setAttributeValue("name",boost::lexical_cast<std::string>(enumPT.index()));
     logoutMenuItem->clicked().connect(this, &AuthWidget::logout);
     logoutMenuItem->setAttributeValue("class","btn btn-inverse");
     
 //    menu->addItem(alertMenuItem);
+    
+    WMenuItem *userNameMenuItem = new WMenuItem(login_.user().email());
+    userNameMenuItem->setAttributeValue("class","label label-inverse active");
+    userNameMenuItem->setAttributeValue("style","top:4px");
+    
+    menu->addItem(userNameMenuItem);
+    
     menu->addItem(logoutMenuItem);
+    
+    
+    
     
     bindWidget("menu",menuContainer);
 }

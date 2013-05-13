@@ -30,61 +30,71 @@ void MonitoringWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
 
 void MonitoringWidget::createUI()
 {
-//    this->mainStack->addWidget(this);
     
-//    Wt::WTable *alertsSentTable = new Wt::WTable(this);
-//    alertsSentTable->addStyleClass("table");
-//    alertsSentTable->addStyleClass("table-bordered");
-//    alertsSentTable->addStyleClass("table-striped");
-//
-//    int row = 0;
-//    int col = 0;
-//
-//    alertsSentTable->setHeaderCount(1, Wt::Horizontal);
-//
-//    alertsSentTable->elementAt(row, col)->setColumnSpan(8);
-//    alertsSentTable->elementAt(row, col)->setContentAlignment(Wt::AlignTop | Wt::AlignCenter);
-//    alertsSentTable->elementAt(row, col)->setPadding(5);
-//    
-//    new Wt::WText(tr("Alert.alert-list.alert-form"), alertsSentTable->elementAt(row, 0));
-//
-//    row = 1;
-//    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-name"), alertsSentTable->elementAt(row, col));
-//    new Wt::WText(Wt::WString::tr("Alert.alert-list.criteria-name"), alertsSentTable->elementAt(row, ++col));
-//    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-value"), alertsSentTable->elementAt(row, ++col));
-//    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-unit"), alertsSentTable->elementAt(row, ++col));
-//    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-key-value"), alertsSentTable->elementAt(row, ++col));
-//    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-media"), alertsSentTable->elementAt(row, ++col));
-//    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-snooze"), alertsSentTable->elementAt(row, ++col));
-//    new Wt::WText(Wt::WString::tr("Alert.alert-list.alert-actions"), alertsSentTable->elementAt(row, ++col));
+    Wt::WTable *alertsSentTable = new Wt::WTable(this);
+    alertsSentTable->addStyleClass("table");
+    alertsSentTable->addStyleClass("table-bordered");
+    alertsSentTable->addStyleClass("table-striped");
+    alertsSentTable->addStyleClass("table-striped widget-box");
+
+    int row = 0;
+    int col = 0;
+
+    alertsSentTable->setHeaderCount(2, Wt::Horizontal);
+
+    alertsSentTable->elementAt(row, col)->setColumnSpan(3);
+    alertsSentTable->elementAt(row, col)->setContentAlignment(Wt::AlignTop | Wt::AlignCenter);
+    alertsSentTable->elementAt(row, col)->setPadding(5);
+    
+    new Wt::WText(tr("Alert.summary.alerts-sent"), alertsSentTable->elementAt(row, 0));
+
+    row = 1;
+    new Wt::WText(Wt::WString::tr("Alert.summary.alert-date"), alertsSentTable->elementAt(row, col));
+    new Wt::WText(Wt::WString::tr("Alert.summary.alert-name"), alertsSentTable->elementAt(row, ++col));
+    new Wt::WText(Wt::WString::tr("Alert.summary.alert-media"), alertsSentTable->elementAt(row, ++col));
 
     
-    
-    Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > > *qm = new Wt::Dbo::QueryModel<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> > >();
-    
-    
-    Wt::WTableView *tview = new Wt::WTableView(this);
     try
     {
         Wt::Dbo::Transaction transaction(*(this->session));
-        //TODO : don't understand why the two lines below are needed, clean this
-        Wt::Dbo::ptr<User> tempUser = this->session->find<User>().where("\"USR_ID\" = ?").bind(this->session->user().id());
-        Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
         std::string queryString = "SELECT ale, mev, atr FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_VALUE_MEV\" mev "
             " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
-            " AND ale.\"ALE_DELETE\" IS NULL "
+//            " AND ale.\"ALE_DELETE\" IS NULL "
             " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
             " AND mev.\"MEV_USR_USR_ID\" IN"
             "("
-                "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user().get()->currentOrganization.id()) + ""
-            ")";
+                "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user()->currentOrganization.id()) + ""
+            ")"
+            " LIMIT 20"
+                ;
         Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding> q = this->session->query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding>(queryString);
-        qm->setQuery(q, false);
-        qm->addColumn("ATR_SEND_DATE", "Date", Wt::ItemIsSelectable);
-        qm->addColumn("ALE_NAME", "Name", Wt::ItemIsSelectable);
-        qm->addColumn("MEV_VALUE", "Value", Wt::ItemIsSelectable);
         
-        tview->setModel(qm);
+        
+        Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Alert>,
+                Wt::Dbo::ptr<MediaValue>,
+                Wt::Dbo::ptr<AlertTracking>>> listTuples = q.resultList();
+        
+        if (listTuples.size() > 0)
+        {
+            for (Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Alert>,
+                Wt::Dbo::ptr<MediaValue>,
+                Wt::Dbo::ptr<AlertTracking>>>::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i)
+            {
+                row++;
+
+                int colNum = 0;
+                
+                
+                new Wt::WText(i->get<2>()->sendDate.toString(), alertsSentTable->elementAt(row, colNum));
+                alertsSentTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
+                
+                new Wt::WText(i->get<0>()->name, alertsSentTable->elementAt(row, ++colNum));
+
+                new Wt::WText(i->get<1>()->value, alertsSentTable->elementAt(row, ++colNum));
+                alertsSentTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
+            }
+        }
+        
     }  
     catch (Wt::Dbo::Exception e)
     {

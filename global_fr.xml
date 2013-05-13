@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
 
-  <message id="welcome-text"><h3>Bienvenue sur ECHOES Alert !</h3>
-  
-    
+  <message id="welcome-text">
   
   <div class="widget-box">
         <div class="widget-title">

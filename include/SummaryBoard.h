@@ -10,6 +10,8 @@
 
 #include "GlobalIncludeFile.h"
 
+#include "Wt/WTemplate"
+
 class SummaryBoard  : public Wt::WContainerWidget {
 public:
     SummaryBoard(Session *session);
@@ -17,6 +19,8 @@ public:
     virtual ~SummaryBoard();
 private:
     Session *session;
+    
+    Wt::WTemplate *mainTemplate;
     
     Wt::WText *welcomeText;
     Wt::WContainerWidget *alertSentWidget;

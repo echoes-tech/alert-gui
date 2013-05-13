@@ -188,9 +188,11 @@ void AlertEditionWidget::update()
         userSelectionBox = new Wt::WComboBox();
         mediaSelectionBox = new Wt::WComboBox();
         mediaValueSelectionBox = new Wt::WComboBox();
-        
+        userRoleSelectionBox = new Wt::WComboBox();
 
         this->updateUserSelectionBox(this->userId);
+        this->updateUserRoleSelectionBox(this->userId);
+        
         userSelectionBox->clicked().connect(boost::bind(&AlertEditionWidget::updateMediaSBFromUserSB, this));
         
 
@@ -206,15 +208,17 @@ void AlertEditionWidget::update()
 
         
         
-        Wt::WStandardItemModel *sim = new Wt::WStandardItemModel(0, 4, this);
+        Wt::WStandardItemModel *sim = new Wt::WStandardItemModel(0, 5, this);
         const std::string userTitle = Wt::WString::tr("Alert.alert.user").toUTF8();
+        const std::string userRoleTitle = Wt::WString::tr("Alert.alert.role").toUTF8();
         const std::string mediaTitle = Wt::WString::tr("Alert.alert.media").toUTF8();
         const std::string valueTitle = Wt::WString::tr("Alert.alert.media-value").toUTF8();
         const std::string snoozeTitle = Wt::WString::tr("Alert.alert.snooze").toUTF8();
         sim->setHeaderData(0,boost::any(userTitle));
-        sim->setHeaderData(1,boost::any(mediaTitle));
-        sim->setHeaderData(2,boost::any(valueTitle));
-        sim->setHeaderData(3,boost::any(snoozeTitle));
+        sim->setHeaderData(1,boost::any(userRoleTitle));
+        sim->setHeaderData(2,boost::any(mediaTitle));
+        sim->setHeaderData(3,boost::any(valueTitle));
+        sim->setHeaderData(4,boost::any(snoozeTitle));
         
        
         tableMediaDestination = new Wt::WTable();
@@ -226,7 +230,7 @@ void AlertEditionWidget::update()
 
         // header 1
         int row = 0;
-        tableMediaDestination->elementAt(row, 0)->setColumnSpan(5);
+        tableMediaDestination->elementAt(row, 0)->setColumnSpan(6);
 
         Wt::WText *tableTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-envelope'></i></span><h5>"+ tr("Alert.alert.media-destination-table") + "</h5></div>",tableMediaDestination->elementAt(row, 0));
         tableTitle->setTextFormat(Wt::XHTMLUnsafeText);
@@ -235,28 +239,30 @@ void AlertEditionWidget::update()
         // header 2
         ++row;
         new Wt::WText(tr("Alert.alert.user"),tableMediaDestination->elementAt(row, 0));
-        new Wt::WText(tr("Alert.alert.media"),tableMediaDestination->elementAt(row, 1));
-        new Wt::WText(tr("Alert.alert.media-value"),tableMediaDestination->elementAt(row, 2));
-        new Wt::WText(tr("Alert.alert.snooze"),tableMediaDestination->elementAt(row, 3));
-        new Wt::WText(tr("Alert.global.action"),tableMediaDestination->elementAt(row, 4));
+        new Wt::WText(tr("Alert.alert.role"),tableMediaDestination->elementAt(row, 1));
+        new Wt::WText(tr("Alert.alert.media"),tableMediaDestination->elementAt(row, 2));
+        new Wt::WText(tr("Alert.alert.media-value"),tableMediaDestination->elementAt(row, 3));
+        new Wt::WText(tr("Alert.alert.snooze"),tableMediaDestination->elementAt(row, 4));
+        new Wt::WText(tr("Alert.global.action"),tableMediaDestination->elementAt(row, 5));
         
         // first line
         ++row;
         tableMediaDestination->elementAt(row,0)->addWidget(userSelectionBox);
-        tableMediaDestination->elementAt(row,1)->addWidget(mediaSelectionBox);
-        tableMediaDestination->elementAt(row,2)->addWidget(mediaValueSelectionBox);
+        tableMediaDestination->elementAt(row,1)->addWidget(userRoleSelectionBox);
+        tableMediaDestination->elementAt(row,2)->addWidget(mediaSelectionBox);
+        tableMediaDestination->elementAt(row,3)->addWidget(mediaValueSelectionBox);
         
         snoozeEdit = new Wt::WLineEdit();
         snoozeEdit->changed().connect(boost::bind(&AlertEditionWidget::checkSnoozeValue, this));
         
-        tableMediaDestination->elementAt(row,3)->addWidget(snoozeEdit);
+        tableMediaDestination->elementAt(row,4)->addWidget(snoozeEdit);
         
         Wt::WPushButton *createAlertButton = new Wt::WPushButton(tr("Alert.alert.edition.add-button"));
         createAlertButton->setStyleClass("btn btn-primary");
         bindWidget("create-alert-button", createAlertButton);
         createAlertButton->clicked().connect(this,&AlertEditionWidget::addAlert);
         
-        tableMediaDestination->elementAt(row,4)->addWidget(addButtonMedia);
+        tableMediaDestination->elementAt(row,5)->addWidget(addButtonMedia);
         
         
         
@@ -429,6 +435,44 @@ void AlertEditionWidget::updateUserSelectionBox(int userId)
         }
         userSelectionBox->setModel(slmUser);
 }
+
+void AlertEditionWidget::updateUserRoleSelectionBox(int userId)
+{
+    Wt::WStringListModel *slmUserRole = new Wt::WStringListModel;
+        Wt::Dbo::collection<Wt::Dbo::ptr<UserRole> > userRoles;
+        Wt::Dbo::Query<Wt::Dbo::ptr<UserRole> > queryUserRole;
+        std::string queryString =  ""
+                "SELECT role FROM \"T_USER_ROLE_URO\" role "
+                "WHERE \"URO_ORG_ORG_ID\" = ?";
+        
+        // hosts list
+        try
+        {
+            Wt::Dbo::Transaction transaction(*session);
+            
+            
+            queryUserRole = session->query<Wt::Dbo::ptr<UserRole> >(queryString).bind(session->user()->currentOrganization.id());
+            userRoles = queryUserRole.resultList();
+            
+            int idx = 0;
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<UserRole> >::const_iterator i = userRoles.begin(); i != userRoles.end(); ++i)
+            {
+                slmUserRole->insertString(idx,(*i).get()->name);
+                long long idRole = (*i).id();
+                this->mapRoleIdSBox[idx] = idRole;
+                idx++;
+            }
+            transaction.commit();
+        }
+        catch (Wt::Dbo::Exception e)
+        {
+            Wt::log("error") << "[AlertEditionWidget] " << e.what();
+            Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+            return;
+        }
+        userRoleSelectionBox->setModel(slmUserRole);
+}
+
 
 
 void AlertEditionWidget::updateServerSelectionBox(int serverId)
@@ -719,10 +763,11 @@ void AlertEditionWidget::addMedia()
 
     tableMediaDestination->insertRow(row);
     tableMediaDestination->elementAt(row,0)->addWidget(new Wt::WText(userSelectionBox->currentText()));
-    tableMediaDestination->elementAt(row,1)->addWidget(new Wt::WText(mediaSelectionBox->currentText()));
-    tableMediaDestination->elementAt(row,2)->addWidget(new Wt::WText(mediaValueSelectionBox->currentText()));
-    tableMediaDestination->elementAt(row,3)->addWidget(new Wt::WText(snoozeEdit->text()));
-    tableMediaDestination->elementAt(row,4)->addWidget(deleteButton);
+    tableMediaDestination->elementAt(row,1)->addWidget(new Wt::WText(userRoleSelectionBox->currentText()));
+    tableMediaDestination->elementAt(row,2)->addWidget(new Wt::WText(mediaSelectionBox->currentText()));
+    tableMediaDestination->elementAt(row,3)->addWidget(new Wt::WText(mediaValueSelectionBox->currentText()));
+    tableMediaDestination->elementAt(row,4)->addWidget(new Wt::WText(snoozeEdit->text()));
+    tableMediaDestination->elementAt(row,5)->addWidget(deleteButton);
     
     deleteButton->clicked().connect(boost::bind(&AlertEditionWidget::deleteMedia,this,tableMediaDestination->elementAt(row,4)));
     
@@ -866,6 +911,7 @@ void AlertEditionWidget::addAlert()
                 "\t\"inf_value_num\": " + boost::lexical_cast<std::string>(mapInformationIvnSboxRow[informationSelectionBox->currentIndex()]) + ",\n"
                 "\t\"inu_id\": " + boost::lexical_cast<std::string>(mapInformationInuIdSboxRow[informationSelectionBox->currentIndex()]) + ",\n"
                 "\t\"acr_id\": " + boost::lexical_cast<std::string>(mapAlertCriteriaIdSboxRow[comboAlertCrit->currentIndex()]) + ",\n"
+                "\t\"uro_id\": " + boost::lexical_cast<std::string>(mapRoleIdSBox[userRoleSelectionBox->currentIndex()]) + ",\n"
                 "\t\"ams_id\": [";
 
         unsigned idx = 1;

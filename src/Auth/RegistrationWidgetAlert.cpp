@@ -54,24 +54,24 @@ void RegistrationWidgetAlert::registerUserDetails(Wt::Auth::User& user)
     Organization *org = new Organization();
 
     Wt::Dbo::ptr<OrganizationType> type;
-    bool bCompagny = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeCompanyField));
-    if (bCompagny)
-    {
-        type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Company);
-        org->name = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField);
-    }
-    bool bIndividual = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeIndividualField));
-    if (bIndividual)
-    {
-        type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Individual);
-        org->name = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->LastNameField);
-    }
-    bool bAssociation = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeAssociationField));
-    if (bAssociation)
-    {
-        type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Association);
-        org->name = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField);
-    }
+//    bool bCompagny = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeCompanyField));
+//    if (bCompagny)
+//    {
+//        type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Company);
+//        org->name = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField);
+//    }
+//    bool bIndividual = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeIndividualField));
+//    if (bIndividual)
+//    {
+//        type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Individual);
+//        org->name = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->LastNameField);
+//    }
+//    bool bAssociation = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeAssociationField));
+//    if (bAssociation)
+//    {
+//        type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Association);
+//        org->name = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField);
+//    }
 
     //triche
     type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Individual);
@@ -211,36 +211,36 @@ void RegistrationWidgetAlert::checkLastName()
 
 void RegistrationWidgetAlert::checkOrganization()
 {
-    updateModelField(model(), RegistrationModelAlert::OrganizationTypeCompanyField);
-    updateModelField(model(), RegistrationModelAlert::OrganizationTypeIndividualField);
-    updateModelField(model(), RegistrationModelAlert::OrganizationTypeAssociationField);
-    updateModelField(model(), RegistrationModelAlert::OrganizationNameField);  
+//    updateModelField(model(), RegistrationModelAlert::OrganizationTypeCompanyField);
+//    updateModelField(model(), RegistrationModelAlert::OrganizationTypeIndividualField);
+//    updateModelField(model(), RegistrationModelAlert::OrganizationTypeAssociationField);
+//    updateModelField(model(), RegistrationModelAlert::OrganizationNameField);  
     
     //template<typename T> T any_cast(any & operand);
     
-    bool bCompagny = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeCompanyField));
-    if (bCompagny)
-    {
-        reinterpret_cast<RegistrationModelAlert*>(model())->setRegistrationType(RegistrationModelAlert::Company);
-        model()->setReadOnly(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField,false);
-    }
-    bool bIndividual = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeIndividualField));
-    if (bIndividual)
-    {
-        reinterpret_cast<RegistrationModelAlert*>(model())->setRegistrationType(RegistrationModelAlert::Individual);
-        model()->setReadOnly(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField,true);
-        
-        const std::string emptyString="";
-        model()->setValue(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField,boost::any(emptyString));
-    }
-    bool bAssociation = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeAssociationField));
-    if (bAssociation)
-    {
-        reinterpret_cast<RegistrationModelAlert*>(model())->setRegistrationType(RegistrationModelAlert::Association);
-        reinterpret_cast<RegistrationModelAlert*>(model())->setReadOnly(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField,false);
-    }
-    model()->validateField(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField);
-    model()->setValidated(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField, false);
+//    bool bCompagny = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeCompanyField));
+//    if (bCompagny)
+//    {
+//        reinterpret_cast<RegistrationModelAlert*>(model())->setRegistrationType(RegistrationModelAlert::Company);
+//        model()->setReadOnly(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField,false);
+//    }
+//    bool bIndividual = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeIndividualField));
+//    if (bIndividual)
+//    {
+//        reinterpret_cast<RegistrationModelAlert*>(model())->setRegistrationType(RegistrationModelAlert::Individual);
+//        model()->setReadOnly(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField,true);
+//        
+//        const std::string emptyString="";
+//        model()->setValue(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField,boost::any(emptyString));
+//    }
+//    bool bAssociation = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeAssociationField));
+//    if (bAssociation)
+//    {
+//        reinterpret_cast<RegistrationModelAlert*>(model())->setRegistrationType(RegistrationModelAlert::Association);
+//        reinterpret_cast<RegistrationModelAlert*>(model())->setReadOnly(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField,false);
+//    }
+//    model()->validateField(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField);
+//    model()->setValidated(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationNameField, false);
     update();
 }
 

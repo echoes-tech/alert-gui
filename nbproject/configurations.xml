@@ -58,6 +58,7 @@
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
         <itemPath>include/RoleCustomizationWidget.h</itemPath>
+        <itemPath>include/SummaryBoard.h</itemPath>
         <itemPath>include/enum.hpp</itemPath>
       </logicalFolder>
       <itemPath>include/Enums.h</itemPath>
@@ -128,6 +129,7 @@
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
         <itemPath>src/RoleCustomizationWidget.cpp</itemPath>
+        <itemPath>src/SummaryBoard.cpp</itemPath>
         <itemPath>src/UserActionManagement.cpp</itemPath>
       </logicalFolder>
       <itemPath>main.cpp</itemPath>
@@ -256,6 +258,8 @@
       </item>
       <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserEditionModel.h" ex="false" tool="3" flavor2="0">
@@ -356,6 +360,8 @@
       <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -475,6 +481,8 @@
       </item>
       <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserEditionModel.h" ex="false" tool="3" flavor2="0">
@@ -575,6 +583,8 @@
       <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>

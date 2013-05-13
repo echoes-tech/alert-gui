@@ -118,6 +118,8 @@ public:
   Wt::WComboBox *mediaSelectionBox;
   std::map<int,long long> mapMediaValueIdSboxRow;
   Wt::WComboBox *mediaValueSelectionBox;
+  std::map<int,long long> mapRoleIdSBox;
+  Wt::WComboBox *userRoleSelectionBox;
   
   Wt::WLineEdit *snoozeEdit;
   
@@ -133,6 +135,7 @@ public:
   void updateMediaValueSelectionBox(int userId, int medId);
   void updateMediaSelectionBox(int userId);
   void updateUserSelectionBox(int userId);
+  void updateUserRoleSelectionBox(int userId);
   
   void updateServerSelectionBox(int serverId);
   void updateInformationSelectionBox(int pluginId);

@@ -11,6 +11,7 @@
             <h5>Dernières nouvelles</h5>
         </div>
         
+        
         <div class="widget-content nopadding updates">
             <div class="new-update clearfix">
                 <i class="icon-comment"></i>
@@ -29,16 +30,63 @@
                 <div class="update-done">
                     <a title="" href="#"><strong>Changements majeurs prochaine livraison</strong></a>
                     <ul>
-                    <li>Intégration du moteur de thèmes Bootstrap</li>
-                    <li>Ajout des alertes sur informations corrélées</li>
-                    <li>Personnalisation des alertes en fonction du métier</li>
-                    <li>Implémentation de l'ensemble de nos ressources dans l'API</li>
+                    <li>Personnalisation complète des alertes</li>
+                    <li>Corrélation</li>
                     <li>Nouveaux plugins</li>
                     </ul>
                 </div>
-                <div class="update-date"><span class="update-day">??</span>avr</div>
+                <div class="update-date"><span class="update-day">??</span>juin</div>
             </div>
         </div>
+    </div>
+    
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon">
+                <i class="icon-ok"></i>
+            </span>	
+            <h5>RC1 - Changements</h5>
+        </div>
+        
+        <div class="widget-content nopadding updates">
+        
+            <div class="new-update clearfix">
+                <i class="icon-wrench"></i>
+                <div class="update-alert">
+                    <a title="" href="#"><strong>[Interface utilisateur] Nouvelles fonctionnalités</strong></a>
+                    <ul>
+                        <li>Intégration du moteur de thèmes Bootstrap</li>
+                        <li>Personnalisation des alertes</li>
+                    </ul>
+                </div>
+                <div class="update-date"><span class="update-day">13</span>mai</div>
+
+            </div>
+
+            <div class="new-update clearfix">
+                <i class="icon-gift"></i>
+                <div class="update-done">										
+                    <a title="" href="#"><strong>[API] Nouvelles fonctionnalités</strong></a>
+                    <ul>
+                        <li>Toutes nos ressources sont désormais accessibles à travers l'API</li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+            <div class="new-update clearfix">
+                <i class="icon-gift"></i>
+                <div class="update-done">										
+                    <a title="" href="#"><strong>[Engine] Nouvelles fonctionnalités</strong></a>
+                    <ul>
+                        <li>Moteur de correlation</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        
     </div>
     
     <div class="widget-box">

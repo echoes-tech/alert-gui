@@ -60,11 +60,13 @@ void MonitoringWidget::createUI()
         std::string queryString = "SELECT ale, mev, atr FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_VALUE_MEV\" mev "
             " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
 //            " AND ale.\"ALE_DELETE\" IS NULL "
+            " AND atr.\"ATR_SEND_DATE\" IS NOT NULL"
             " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
             " AND mev.\"MEV_USR_USR_ID\" IN"
             "("
                 "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user()->currentOrganization.id()) + ""
             ")"
+            " ORDER BY atr.\"ATR_SEND_DATE\" DESC"
             " LIMIT 20"
                 ;
         Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding> q = this->session->query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding>(queryString);

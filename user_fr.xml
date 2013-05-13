@@ -24,6 +24,8 @@
   <message id="Alert.user.edition.string-tooshort">
     Trop court
   </message>
+
+  <message id="Alert.media.media-info">Sur cette page vous pouvez ajouter les médias utilisés pour envoyer les alertes.</message>
   
   <message id="Alert.user.edition.valid">Valide</message>
 </messages>

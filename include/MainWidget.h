@@ -54,9 +54,11 @@ public:
   
   
   AlertEditionWidget *aew;
+  void initMenus();
   void createUI();
   virtual void refresh();
   std::string getApiUrl() const;
+  void reset(Session *session);
 
 protected:
     
@@ -71,8 +73,6 @@ protected:
   void createContainerFluid();
   void updateContainerFluid(int type, Enums::EMenuRoot menuRoot = Enums::main);
   void createContentDiv();
-  
-  void doNothing();
   
   void createSubMenu(Enums::EPageType enumPT);
   void createPage(Enums::EPageType enumPT);
@@ -96,12 +96,13 @@ protected:
   UserEditionWidget *uew;
   
   Wt::WContainerWidget *wcw;
+  
 
 private:
   Session * session;
   std::string _apiUrl;
  
-  bool created_;
+  bool created_ = false;
   
   Wt::WText *titleText;
   Wt::WContainerWidget *sideBarContainer;
@@ -116,6 +117,7 @@ private:
   Wt::WMenu *accountSubmenu;
 
   void setApiUrl(std::string _apiUrl);
+  
 };
 
 

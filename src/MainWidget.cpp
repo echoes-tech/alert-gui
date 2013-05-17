@@ -11,38 +11,63 @@
 MainWidget::MainWidget(Session *session, const std::string &apiUrl)
 : Wt::WContainerWidget()
 {
+    setApiUrl(apiUrl);
+    
+    
+    contentContainer = new Wt::WContainerWidget(this);
+
+    sideBarContainer = new Wt::WContainerWidget();
+    
+    breadCrumbsContainer = new Wt::WContainerWidget(this);
+    
+    reset(session);
+}
+
+void MainWidget::reset(Session *session)
+{
+    delete breadCrumbsContainer;
+    sideBarContainer->clear();
+    contentContainer->clear();
+    titleText = new Wt::WText();
+    breadCrumbsContainer = new Wt::WContainerWidget(this);
+    breadCrumbsAnchor0 = new Wt::WAnchor("");
+    breadCrumbsAnchor1 = new Wt::WAnchor("");
+    breadCrumbsAnchor2 = new Wt::WAnchor("");
     created_ = false;
     this->session = session;
-    setApiUrl(apiUrl);
+    
 //    Wt::WApplication *app = Wt::WApplication::instance();
 //    app->messageResourceBundle().use("test",false);     
+    initMenus();
+    contentContainer->setId("content");
+
+    breadCrumbsContainer->setId("breadcrumb");
     
-    titleText = new Wt::WText();
     
-    sideBarContainer = new Wt::WContainerWidget();
+}
+
+void MainWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
+{
+//    if (!created_)
+//    {
+////        update();
+//        created_ = true;
+//    }
+
+    Wt::WContainerWidget::render(flags);
+}
+
+void MainWidget::initMenus()
+{
+    sideBarContainer->clear();
     sideBarContainer->setId("sidebar");
-    sideBarContainer->hide();
+//    sideBarContainer->hide();
     
     Wt::WAnchor *phoneMenuAnchor = new Wt::WAnchor("#");
     phoneMenuAnchor->setText("Menu");
     phoneMenuAnchor->setAttributeValue("class","visible-phone");
+    
     sideBarContainer->insertWidget(0,phoneMenuAnchor);
-    
-    contentContainer = new Wt::WContainerWidget(this);
-    contentContainer->setId("content");
-    
-    breadCrumbsContainer = new Wt::WContainerWidget(this);
-    breadCrumbsContainer->setId("breadcrumb");
-    
-    breadCrumbsAnchor0 = new Wt::WAnchor("");
-    breadCrumbsAnchor0->setAttributeValue("class","tip-bottom");
-    
-    breadCrumbsAnchor1 = new Wt::WAnchor("");
-    breadCrumbsAnchor1->setAttributeValue("class","tip-bottom");
-    
-    breadCrumbsAnchor2 = new Wt::WAnchor("");
-    breadCrumbsAnchor2->setAttributeValue("class","tip-bottom");
-    
     menu = new Wt::WMenu(sideBarContainer);
     menu->setInternalPathEnabled("/");
     
@@ -50,91 +75,55 @@ MainWidget::MainWidget(Session *session, const std::string &apiUrl)
     Enums::EPageType *enumPTAl = new Enums::EPageType(Enums::EPageType::SUBMENU_ALERT);
     alertSubmenu->setInternalPathEnabled("/" + boost::lexical_cast<std::string>(enumPTAl->value()) +  "/");
    
-//    sideBarContainer->widget(0)->setStyleClass("style_widget0");
-    
-    
-//    alertSubmenu->parent()->setStyleClass("style_parent");
-//    alertSubmenu->setStyleClass("style_objet");
-    
     accountSubmenu = new Wt::WMenu(sideBarContainer);
     Enums::EPageType *enumPTAc = new Enums::EPageType(Enums::EPageType::SUBMENU_ACCOUNT);
     accountSubmenu->setInternalPathEnabled("/" + boost::lexical_cast<std::string>(enumPTAc->value()) +  "/");
-    
-    
-    
-//    createUI();
-    
-
-    
 }
-
-void MainWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
-{
-    if (!created_)
-    {
-//        update();
-        created_ = true;
-    }
-
-    Wt::WContainerWidget::render(flags);
-}
+    
 
 void MainWidget::createUI()
 {
-    createContentDiv();
-    createContainerFluid();
-    
-//    const Wt::WLink *test = new Wt::WLink("");
-    breadCrumbsAnchor0->setTextFormat(Wt::XHTMLUnsafeText);
-    breadCrumbsAnchor0->setText("<i class='icon-home'></i>" + tr("Alert.admin.home"));
-//    breadCrumbsAnchor0->setLink(*test);
-    
-    breadCrumbsContainer->addWidget(breadCrumbsAnchor0);
-    
-       
-    for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
+    if (!created_)
     {
-        //TODO: Change this temporary restriction with right integration
-        if(!boost::starts_with(i->value(), "plugin"))
+        reset(session);
+        initMenus();
+        createContentDiv();
+        createContainerFluid();
+
+    //    const Wt::WLink *test = new Wt::WLink("");
+        breadCrumbsAnchor0->setTextFormat(Wt::XHTMLUnsafeText);
+        breadCrumbsAnchor0->setText("<i class='icon-home'></i>" + tr("Alert.admin.home"));
+    //    breadCrumbsAnchor0->setLink(*test);
+
+        breadCrumbsContainer->addWidget(breadCrumbsAnchor0);
+
+
+        for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
         {
-    //        Enums::EPageType *test;
-    //        std::string strTest = test->value();
-            if (!boost::starts_with(i->value(), "submenu"))
+            //TODO: Change this temporary restriction with right integration
+            if(!boost::starts_with(i->value(), "plugin"))
             {
-                createMenuItem(*i,menu,getIconName(*i));
-                createPage(*i);
+                if (!boost::starts_with(i->value(), "submenu"))
+                {
+                    createMenuItem(*i,menu,getIconName(*i));
+                    createPage(*i);
+                }
+                else
+                {
+                    createSubMenu(*i);
+                }
             }
             else
             {
-                createSubMenu(*i);
-    //            Wt::WMenuItem *item;
-    //            item->setAttributeValue("class", "submenu");
-    //            menu->items().back()->setAttributeValue("class", "submenu");
-    //            Wt::WText *iconHTML = new Wt::WText("</span><i class='icon icon-" + getIconName(*i) + "'></i><span>",Wt::XHTMLUnsafeText);
-    //            Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)menu->items().back()->widget(0);
-    //            anchorInsideMenu->insertWidget(0,iconHTML);
+                if (this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46)
+                {
+                    createMenuItem(*i,menu,getIconName(*i));
+                    createPage(*i);
+                }
             }
         }
-        else
-        {
-            if (this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46)
-            {
-                createMenuItem(*i,menu,getIconName(*i));
-                createPage(*i);
-            }
-        }
+        created_ = true;
     }
-    
-    
-//    if (menu->currentIndex() != -1)
-//    {
-//        menu->itemAt(menu->currentIndex())->select();
-//    }
-//    else 
-//    {
-//        menu->itemAt(0)->select();
-//    }
-
 }
 
 Wt::WContainerWidget * MainWidget::createContentHeader()
@@ -145,11 +134,6 @@ Wt::WContainerWidget * MainWidget::createContentHeader()
     layout->addWidget(titleText);
     res->setId("content-header");
     return res;
-}
-
-void MainWidget::doNothing()
-{
-    
 }
 
 void MainWidget::createSubMenu(Enums::EPageType enumPT)
@@ -542,11 +526,24 @@ void MainWidget::createContentDiv()
 
 void MainWidget::doActionMenu(int index, Enums::EMenuRoot menuRoot)
 {
-    menu->itemAt(index)->setFromInternalPath(Wt::WApplication::instance()->internalPath());
-    // ToDo open the menu if necessary
-    updateTitle(index,menuRoot);
-    updateBreadcrumbs(menuRoot);
-    updateContainerFluid(index,menuRoot);
+    if (index < menu->count())
+    {
+        menu->itemAt(index)->setFromInternalPath(Wt::WApplication::instance()->internalPath());
+        // ToDo open the menu if necessary
+        updateTitle(index,menuRoot);
+        updateBreadcrumbs(menuRoot);
+        updateContainerFluid(index,menuRoot);
+    }
+    else
+    {
+        Wt::WApplication::instance()->setInternalPath("/welcome",  false);
+        menu->itemAt(0)->setFromInternalPath("/welcome");
+        updateTitle(0,Enums::main);
+        updateBreadcrumbs(Enums::main);
+        updateContainerFluid(0,Enums::main);
+    }
+    
+    
 }
 
 std::string MainWidget::getIconName(Enums::EPageType enumPT)

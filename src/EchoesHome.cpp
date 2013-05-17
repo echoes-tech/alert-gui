@@ -87,6 +87,7 @@ void EchoesHome::initHeader()
 {
 //    Wt::WApplication *app = Wt::WApplication::instance();
     this->title = new Wt::WText(tr("echoes-alert-title"));
+    this->title->setInline(false);
     this->title->setId("header");
     this->title->hide();
 
@@ -97,14 +98,6 @@ void EchoesHome::initHeader()
 
     this->addWidget(this->title);
     
-}
-
-Wt::WContainerWidget* EchoesHome::initMonitoringWidget()
-{
-    MonitoringWidget *res = new MonitoringWidget(this->session);
-    this->mainStack->addWidget(res);
-    res->hide();
-    return res;
 }
 
 void EchoesHome::initMainPageWidget()
@@ -162,6 +155,7 @@ void EchoesHome::handleInternalPath(const string &internalPath)
 {
     if (this->session->login().loggedIn()) 
     {
+//        initMainPageWidget();
         vector<string> internalPathSplitResult;
         vector<string> internalPathWithoutBlank;
         boost::split(internalPathSplitResult, internalPath, boost::is_any_of("/"), boost::token_compress_on);
@@ -187,7 +181,17 @@ void EchoesHome::handleInternalPath(const string &internalPath)
                     {
                         if (this->mainPageWidget->getMenu()->currentIndex() != i->index())
                         {
-                            this->mainPageWidget->getMenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                            if(i->index() < this->mainPageWidget->getMenu()->count())
+                            {
+                                std::cout << this->mainPageWidget->getMenu()->count() << " <= ? " << i->index() << std::endl;
+                                this->mainPageWidget->getMenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                            }
+                            else
+                            {
+                                Wt::WApplication::instance()->setInternalPath("/welcome",  false);
+                                this->mainPageWidget->getMenu()->itemAt(0)->setFromInternalPath(internalPath);
+                            }
+                            
                         }
                         UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
                         showPage(i->index());
@@ -210,7 +214,15 @@ void EchoesHome::handleInternalPath(const string &internalPath)
                 {
                     if (this->mainPageWidget->getAlertSubmenu()->currentIndex() != i->index())
                     {
-                        this->mainPageWidget->getAlertSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                        if(i->index() < this->mainPageWidget->getAlertSubmenu()->count())
+                        {
+                            this->mainPageWidget->getAlertSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                        }
+                        else
+                        {
+                            Wt::WApplication::instance()->setInternalPath("/welcome",  false);
+                            this->mainPageWidget->getAlertSubmenu()->itemAt(0)->setFromInternalPath(internalPath);
+                        }
                     }
                     UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
                     showPage(i->index(), Enums::alerts);
@@ -226,7 +238,15 @@ void EchoesHome::handleInternalPath(const string &internalPath)
                     {
                         if (this->mainPageWidget->getAccountSubmenu()->currentIndex() != i->index())
                         {
-                            this->mainPageWidget->getAccountSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                            if(i->index() < this->mainPageWidget->getAccountSubmenu()->count())
+                            {
+                                this->mainPageWidget->getAccountSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
+                            }
+                            else
+                            {
+                                Wt::WApplication::instance()->setInternalPath("/welcome",  false);
+                                this->mainPageWidget->getAccountSubmenu()->itemAt(0)->setFromInternalPath(internalPath);
+                            }
                         }
                         UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
                         showPage(i->index(), Enums::accounts);
@@ -257,6 +277,10 @@ void EchoesHome::handleInternalPath(const string &internalPath)
         }
 
     }
+    else
+    {
+        Wt::WApplication::instance()->setInternalPath("/",  false);
+    }
 }
 
 
@@ -266,6 +290,7 @@ void EchoesHome::showPage(int type, Enums::EMenuRoot menuRoot)
     {
         this->mainPageWidget->show();
     }
+    
     this->mainPageWidget->doActionMenu(type,menuRoot);
 }
 
@@ -277,15 +302,18 @@ void EchoesHome::onAuthEvent()
         this->title->show();
         this->mainPageWidget->createUI();
         this->mainPageWidget->show();
-        this->mainPageWidget->getSideBarContainer()->show();
+//        this->mainPageWidget->getSideBarContainer()->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
     }
     else
     {
         UserActionManagement::registerUserAction(Enums::logout,"",0);
+        this->mainPageWidget->reset(session);
         this->mainPageWidget->hide();
-        this->mainPageWidget->getSideBarContainer()->hide();
+        
+//        this->mainPageWidget->getSideBarContainer()->hide();
         this->title->hide();
+        Wt::WApplication::instance()->setInternalPath("/",  false);
     }
 }
 
@@ -296,8 +324,16 @@ void EchoesHome::refresh()
     if (this->mainPageWidget->aew->isCreated())
     {
         this->mainPageWidget->aew->updateServerSelectionBox(this->session->user().id());
-    }else
+    }
+    else
     {
         this->mainPageWidget->aew->refresh();
     }
+}
+
+void EchoesHome::deleteContent()
+{
+//    this->alertGroupBox->refresh();
+    this->mainPageWidget->clear();
+    this->mainPageWidget->reset(session);
 }

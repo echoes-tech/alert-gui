@@ -83,11 +83,11 @@ class EchoesHome : public Wt::WContainerWidget
         void onAuthEvent();
         void showPage(int page, Enums::EMenuRoot menuRoot = Enums::main);
 
-        Wt::WContainerWidget *initMonitoringWidget();
         Wt::WTabWidget* initAdminWidget();
         void initMainPageWidget();
 
         virtual void refresh();
+        virtual void deleteContent();
 };
 
 #endif // ECHOESHOME_H_

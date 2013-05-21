@@ -102,7 +102,7 @@ private:
   Session * session;
   std::string _apiUrl;
  
-  bool created_ = false;
+  bool created_;
   
   Wt::WText *titleText;
   Wt::WContainerWidget *sideBarContainer;

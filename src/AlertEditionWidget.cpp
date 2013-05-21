@@ -958,8 +958,8 @@ void AlertEditionWidget::addAlert()
     model_->reset();
     update();
     comboAlertCrit->setCurrentIndex(0);
-    
-    Wt::WApplication::instance()->root()->widget(0)->refresh();
+    Wt::WApplication::instance()->refresh();
+//    Wt::WApplication::instance()->root()->widget(0)->refresh();
 }
 
 	

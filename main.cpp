@@ -27,12 +27,6 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
     app->messageResourceBundle().use("global",false);
     
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form.css");
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-alert.css");
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-user.css");
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "form-probe.css");
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "alert.css");
-    
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap-responsive.css");
     
@@ -50,9 +44,7 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/echoes-alert-custom.css");
        
-    
-    
-    
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/wt.css");
     
     
     

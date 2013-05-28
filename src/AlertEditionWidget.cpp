@@ -1054,3 +1054,9 @@ std::string AlertEditionWidget::getApiUrl() const
     return _apiUrl;
 }
 
+void AlertEditionWidget::refresh()
+{
+    created_ = false;
+    update();
+}
+

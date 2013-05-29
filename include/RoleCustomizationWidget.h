@@ -81,6 +81,7 @@ private:
     Wt::WText *pluginName;
     Wt::WLineEdit *pluginEditLine;
     Wt::WPushButton *pluginSaveButton;
+    Wt::WPushButton *pluginLoadButton;
     
     pthread_mutex_t callMutex;
     

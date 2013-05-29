@@ -5,6 +5,7 @@
     <message id="Alert.role.plugin-select">Please select a plugin above</message>
     <message id="Alert.role.role-label">Role</message>
     <message id="Alert.role.media-label">Media</message>
+    <message id="Alert.role.load">Load</message>
 
 	<message id="Alert.role.customization.template">
 	    <br />
@@ -44,7 +45,9 @@
                 <h5>Définition des alias pour les informations et les critères associés</h5>
             </div>
             <div class="widget-content">
-                ${plugins-combo-box}
+                <div class ="row-fluid">
+                    ${plugins-combo-box}${plugins-load-button}
+                </div>
                 ${plugins-container}
                 ${informations-container}
             </div>

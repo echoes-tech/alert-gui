@@ -46,7 +46,7 @@
   <message id="Alert.plugins.message-box-error">Error</message> 
   <message id="Alert.plugins.message-field">Field : "</message>
   <message id="Alert.plugins.message-is-bad-fills">" is not correctly fills.</message> 
-  <message id="Alert.plugins.message-cause">He should not be empty or should not include following character a single "\" or """.</message>
+  <message id="Alert.plugins.message-cause">He should not be empty or should not include following character """.</message>
   <message id="Alert.plugins.message-no-selected-plugin">You have not selected plugin</message>
   
   

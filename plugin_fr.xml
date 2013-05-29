@@ -47,7 +47,7 @@
   <message id="Alert.plugins.message-box-error">Erreur</message> 
   <message id="Alert.plugins.message-field">Le champ : "</message>
   <message id="Alert.plugins.message-is-bad-fills">" n'est pas correctement remplit.</message> 
-  <message id="Alert.plugins.message-cause">Il ne doit pas être vide et ne doit pas contenir les caractéres suivants un simple "\" ou """.</message>
+  <message id="Alert.plugins.message-cause">Il ne doit pas être vide et ne doit pas contenir le caractére suivant """.</message>
   <message id="Alert.plugins.message-no-selected-plugin">Vous n'avez pas séléctionné d'application</message>
   
 </messages>

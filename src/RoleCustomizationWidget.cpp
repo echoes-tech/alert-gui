@@ -29,8 +29,8 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session, const std::st
     
     pluginsComboBox = new Wt::WComboBox(this);
     //selected?
-    pluginsComboBox->clicked().connect(this, &RoleCustomizationWidget::selectPlugin);
-    
+//    pluginsComboBox->clicked().connect(this, &RoleCustomizationWidget::selectPlugin);
+//    Wt::WContainerWidget *pluginLoadButtonContainer = new Wt::WContainerWidget(this);
  
     assetsContainer = new Wt::WContainerWidget(this);
     assetsContainer->setStyleClass("container-fluid");
@@ -64,11 +64,20 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session, const std::st
     pluginSaveButtonContainer->addWidget(pluginSaveButton);
     
     
+    pluginLoadButton = new Wt::WPushButton(this);
+    pluginLoadButton->setTextFormat(Wt::XHTMLUnsafeText);
+    pluginLoadButton->setText("</ br><i class='icon-white icon-time'></i> " + tr("Alert.role.load"));
+    pluginLoadButton->setStyleClass("btn-success");
+    pluginLoadButton->clicked().connect(boost::bind(&RoleCustomizationWidget::selectPlugin, this));
+//    pluginLoadButtonContainer->addWidget(pluginLoadButton);
+//    pluginLoadButtonContainer->setStyleClass("row-fluid");
+    
     pluginRow->addWidget(pluginNameContainer);
     pluginRow->addWidget(pluginEditLineContainer);
     pluginRow->addWidget(pluginSaveButtonContainer);
     
     pluginsContainer->addWidget(pluginRow);
+    
 
     this->setApiUrl(apiUrl);
     this->setCredentials("?login=" + session->user()->eMail.toUTF8() +
@@ -105,6 +114,7 @@ void RoleCustomizationWidget::bindWidgets()
     mainTemplate->bindWidget("roles-combo-box",rolesComboBox);
     mainTemplate->bindWidget("assets-container",assetsContainer);
     
+    mainTemplate->bindWidget("plugins-load-button",pluginLoadButton);
     mainTemplate->bindWidget("plugins-combo-box",pluginsComboBox);
     mainTemplate->bindWidget("plugins-container",pluginsContainer);
     mainTemplate->bindWidget("informations-container",informationsContainer);
@@ -228,13 +238,13 @@ void RoleCustomizationWidget::selectPlugin()
 void RoleCustomizationWidget::selectMedia()
 {
     createAssetsWidgets();
-    selectPlugin();
+//    selectPlugin();
 }
 
 void RoleCustomizationWidget::selectRole()
 {
     createAssetsWidgets();
-    selectPlugin();
+//    selectPlugin();
 }
 
 void RoleCustomizationWidget::fillMediaSelector()

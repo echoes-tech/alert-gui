@@ -320,15 +320,17 @@ void EchoesHome::onAuthEvent()
 void EchoesHome::refresh()
 {
 //    this->alertGroupBox->refresh();
+//    this->mainPageWidget->refresh();
+//    if (this->mainPageWidget->aew->isCreated())
+//    {
+//        this->mainPageWidget->aew->updateServerSelectionBox(this->session->user().id());
+//    }
+//    else
+//    {
+//        this->mainPageWidget->aew->refresh();
+//    }
+//    this->mainPageWidget->clear();
     this->mainPageWidget->refresh();
-    if (this->mainPageWidget->aew->isCreated())
-    {
-        this->mainPageWidget->aew->updateServerSelectionBox(this->session->user().id());
-    }
-    else
-    {
-        this->mainPageWidget->aew->refresh();
-    }
 }
 
 void EchoesHome::deleteContent()

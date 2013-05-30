@@ -611,6 +611,8 @@ void MainWidget::close()
 
 void MainWidget::refresh()
 {
+//    this->aew->refresh();
+    this->alw->refresh();
     this->amw->refresh();
 }
 

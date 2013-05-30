@@ -61,7 +61,9 @@ void PluginEditionWidget::createUI()
     validatorInt = new Wt::WIntValidator(0, 10000); 
     validatorInt->setMandatory(true);
     //valide : les backslash doivent être par paire et les " ne sont pas autorisées (sinon crash de l'API ou du GUI suivant les cas lorsque l'on parse le JSON).
-    validatorRegExp = new Wt::WRegExpValidator("([\\\\]{2}|[^\\\\\"]+)*");
+    validatorRegExp = new Wt::WRegExpValidator("([^\"]+)*");
+//    validatorRegExp = new Wt::WRegExpValidator("(.+)*");
+    //    validatorRegExp = new Wt::WRegExpValidator("([\\\\]{2}|[^\\\\\"]+)*");
     validatorRegExp->setMandatory(true);
     
     // creation plugin
@@ -346,9 +348,9 @@ void PluginEditionWidget::addPlugin()
         
         //si il y a des backslash dans le nom
         std::string strTmp = boost::lexical_cast<std::string>(plgNameEdit->text()); 
-        formatValue(strTmp, 2);
+        formatValue(strTmp, 1);//
         std::string strTmp2 = boost::lexical_cast<std::string>(plgDescEdit->text()); 
-        formatValue(strTmp2, 2);
+        formatValue(strTmp2, 1);//
         std::string messAdd("{\n\
             \"plg_name\" : \""+ strTmp +"\",\n\
             \"plg_desc\" : \""+ strTmp2 +"\"\n\
@@ -413,7 +415,7 @@ void PluginEditionWidget::addSource()
             {
                 //au cas ou il y ait des backslash dans le nom
                 std::string strTmp = boost::lexical_cast<std::string>(mapAddonParameterValueSBoxRow[idx]);
-                formatValue(strTmp, 2);
+                formatValue(strTmp, 1);//
                 messAdd += ",\n\"" + boost::lexical_cast<std::string>(mapAddonParameterNameSBoxRow[idx]) + "\": \""+ strTmp +"\"";
             }
             messAdd += "\n}\n";
@@ -518,7 +520,7 @@ void PluginEditionWidget::addSearch()
                  //si il y a des backslash dans le nom
                 //////////////////////////////////
                 std::string strTmp = boost::lexical_cast<std::string>(mapSeaTypeParameterValueSBoxRow[idx]);
-                formatValue(strTmp, 2);
+                formatValue(strTmp, 1);//
                 messAdd += "\"" + boost::lexical_cast<std::string>(mapSeaTypeParameterNameSBoxRow[idx]) + "\": \""+ strTmp +"\",\n";
             }
             messAdd += "\"units\" : [\n";
@@ -600,7 +602,7 @@ void PluginEditionWidget::modifySource()
             //si il y a des backslash dans le nom
             //////////////////////////////////
             std::string strTmp = boost::lexical_cast<std::string>(mapAddonParameterValueSBoxRow[idx1]);
-            formatValue(strTmp, 2);
+            formatValue(strTmp, 1);//
             messAdd += "\t\"value\" : \"" + strTmp +"\"},\n";
         }
         if(mapAddonParameterIdSboxRow.size() > 0)
@@ -674,7 +676,7 @@ void PluginEditionWidget::modifySearch()
                  //si il y a des backslash dans le nom
                 //////////////////////////////////
                 std::string strTmp = boost::lexical_cast<std::string>(mapSeaTypeParameterValueSBoxRow[idx]);
-                formatValue(strTmp, 2);
+                formatValue(strTmp, 1);//
                 messAdd += "\"" + boost::lexical_cast<std::string>(mapSeaTypeParameterNameSBoxRow[idx]) + "\": \""+ strTmp +"\"\n";
             }
             messAdd += "}\n";
@@ -1032,7 +1034,7 @@ void PluginEditionWidget::completFormSource()
                      //au cas ou il y ait des backslash dans le nom
                     Wt::WString tmp2 = tmp1.get(boost::lexical_cast<std::string>(mapAddonParameterNameSBoxRow[idx]));
                     std::string strTmp = boost::lexical_cast<std::string>(tmp2);
-                    formatValue(strTmp, 1);
+//                    formatValue(strTmp, 1);
                     mapAddonParameterValueSBoxRow[idx] = strTmp;
                     mapLEAddonParam[mapAddonParameterNameSBoxRow[idx]]->setText(mapAddonParameterValueSBoxRow[idx]); 
                 }
@@ -1070,11 +1072,15 @@ void PluginEditionWidget::handleHttpResponseInformationsList(boost::system::erro
     delete client1;
     if(response.status()==200)
     {      
+//        formatValue(response.body(), 1);//-1
         Wt::Json::Value result ;
         Wt::Json::Array& result1 = Wt::Json::Array::Empty;
         try
-        {                  
-            Wt::Json::parse(response.body(), result);
+        {          
+            std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);
+//            Wt::Json::parse(response.body(), result);
             result1 = result;
 //            //descriptif
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
@@ -1125,11 +1131,15 @@ void PluginEditionWidget::handleHttpResponseSearchParameters(boost::system::erro
     delete client1;
     if(response.status()==200)
     {      
+//        formatValue(response.body(), 1);//-1
         Wt::Json::Value result ;
         Wt::Json::Array& result1 = Wt::Json::Array::Empty;
         try
-        {                  
-            Wt::Json::parse(response.body(), result);
+        {          
+            std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);
+//            Wt::Json::parse(response.body(), result);
             result1 = result;
 //            //descriptif
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
@@ -1145,7 +1155,7 @@ void PluginEditionWidget::handleHttpResponseSearchParameters(boost::system::erro
                          //au cas ou il y ait des backslash dans le nom
                         //////////////////////////////////
                         std::string strTmp = boost::lexical_cast<std::string>(paramValue);
-                        formatValue(strTmp, 1);
+//                        formatValue(strTmp, 1);
                         mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[i]]->setValidator(validatorRegExp);
                         mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[i]]->setText(strTmp);
                     }
@@ -1178,12 +1188,14 @@ void PluginEditionWidget::handleHttpResponseSourceList(boost::system::error_code
     int idx = 0;
     
     if(response.status()==200)
-    {      
+    {     
         Wt::Json::Value result ;
         Wt::Json::Array& result1 = Wt::Json::Array::Empty;
         try
         {                  
-            Wt::Json::parse(response.body(), result);
+            std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);
             result1 = result;
 //            //descriptif
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
@@ -1240,8 +1252,11 @@ void PluginEditionWidget::handleHttpResponseSearchList(boost::system::error_code
         Wt::Json::Value result ;
         Wt::Json::Array& result1 = Wt::Json::Array::Empty;
         try
-        {                  
-            Wt::Json::parse(response.body(), result);
+        {       
+            std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);
+//            Wt::Json::parse(response.body(), result);
             result1 = result;
 //            //descriptif
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
@@ -1303,8 +1318,11 @@ void PluginEditionWidget::handleHttpResponseUnits(boost::system::error_code err,
         Wt::Json::Value result ;
         Wt::Json::Array& result1 = Wt::Json::Array::Empty;
         try
-        {                  
-            Wt::Json::parse(response.body(), result);
+        {            
+            std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);
+//            Wt::Json::parse(response.body(), result);
             result1 = result;
 //            //descriptif
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
@@ -1339,7 +1357,7 @@ void PluginEditionWidget::handleHttpResponseAddInformation(boost::system::error_
     Wt::WApplication::instance()->resumeRendering();
     delete client1;
     if(response.status()==200)
-    {             
+    {      
         currentInformation++;
         if(currentInformation < boost::lexical_cast<int>(nbValueLE->text()))
         {
@@ -1365,8 +1383,11 @@ void PluginEditionWidget::handleHttpResponseAddSearch(boost::system::error_code 
     {      
         Wt::Json::Object result ;
         try
-        {                  
-            Wt::Json::parse(response.body(), result);
+        {              
+            std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);
+//            Wt::Json::parse(response.body(), result);
             //descriptif
             Wt::Json::Object result1 = result.get("id");
             mapSearchId[mapSearchId.size()] = result1.get("search_id");
@@ -1461,8 +1482,11 @@ void PluginEditionWidget::handleHttpResponseAddSource(boost::system::error_code 
         buttonModifySource->enable();
         Wt::Json::Object result ;
         try
-        {                  
-            Wt::Json::parse(response.body(), result);
+        {            
+            std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);
+//            Wt::Json::parse(response.body(), result);
             //descriptif
             Wt::Json::Object result1 = result.get("id");   
             mapSourceId[mapSourceId.size()] = result1.get("source_id");
@@ -1505,8 +1529,11 @@ void PluginEditionWidget::handleHttpResponseAddPlg(boost::system::error_code err
     {
         Wt::Json::Object result ;
         try
-        {                  
-            Wt::Json::parse(response.body(), result);
+        {         
+            std::string strTmp1 = response.body();
+                        formatValue(strTmp1, 1);//-1
+            Wt::Json::parse(strTmp1, result);
+//            Wt::Json::parse(response.body(), result);
             //descriptif
             
             long long pluginId = result.get("id");
@@ -1515,7 +1542,7 @@ void PluginEditionWidget::handleHttpResponseAddPlg(boost::system::error_code err
             
             //si il y a des backslash dans le nom
             std::string strTmp = boost::lexical_cast<std::string>(name);
-            formatValue(strTmp, 1);
+//            formatValue(strTmp, 1);
             pluginSelectionBox->addItem(strTmp);
             mapPluginsIdSboxRow[mapPluginsIdSboxRow.size()] = pluginId;
             pluginSelectionBox->setCurrentIndex(-1);//utile lorsqu'on crée le premier plugin sinon elle ne se selectionne pas automatiqement
@@ -1575,7 +1602,10 @@ void PluginEditionWidget::handleHttpResponseSeaTypeParameters(boost::system::err
         Wt::Json::Array& result1 = Wt::Json::Array::Empty;
         try
         {                  
-            Wt::Json::parse(response.body(), result);
+std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);
+//            Wt::Json::parse(response.body(), result);
             result1 = result;
 //            descriptif
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
@@ -1649,8 +1679,11 @@ void PluginEditionWidget::handleHttpResponseAddonParameters(boost::system::error
         Wt::Json::Value result ;
         Wt::Json::Array& result1 = Wt::Json::Array::Empty;
         try
-        {                  
-            Wt::Json::parse(response.body(), result);
+        {        
+std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);
+//            Wt::Json::parse(response.body(), result);
             result1 = result;
 //            //descriptif
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
@@ -1746,8 +1779,11 @@ void PluginEditionWidget::handleHttpResponsePlgList(boost::system::error_code er
         Wt::Json::Value result ;
         Wt::Json::Array& result1 = Wt::Json::Array::Empty;
         try
-        {                  
-            Wt::Json::parse(response.body(), result);
+        {      
+std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);          
+//            Wt::Json::parse(response.body(), result);
             result1 = result;
             //descriptif
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
@@ -1759,7 +1795,7 @@ void PluginEditionWidget::handleHttpResponsePlgList(boost::system::error_code er
                 
                 //si il y a des backslash dans le nom
                 std::string strTmp = boost::lexical_cast<std::string>(name); 
-                formatValue(strTmp, 1);
+//                formatValue(strTmp, 1);
                 pluginSelectionBox->addItem(strTmp);
                 mapPluginsIdSboxRow[idx] = pluginId;
                 mapPluginsDescrition[idx] = pluginDesc;
@@ -1816,8 +1852,11 @@ void PluginEditionWidget::handleHttpResponseAddonList(boost::system::error_code 
         Wt::Json::Value result ;
         Wt::Json::Array& result1 = Wt::Json::Array::Empty;
         try
-        {                  
-            Wt::Json::parse(response.body(), result);
+        {      
+std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);
+//            Wt::Json::parse(response.body(), result);
             result1 = result;
 //            descriptif
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
@@ -1860,8 +1899,11 @@ void PluginEditionWidget::handleHttpResponseSearchTypeList(boost::system::error_
         Wt::Json::Value result ;
         Wt::Json::Array& result1 = Wt::Json::Array::Empty;
         try
-        {                  
-            Wt::Json::parse(response.body(), result);
+        {              
+std::string strTmp = response.body();
+                        formatValue(strTmp, 1);//-1
+            Wt::Json::parse(strTmp, result);
+//            Wt::Json::parse(response.body(), result);
             result1 = result;
 //            //descriptif
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
@@ -1902,12 +1944,14 @@ void PluginEditionWidget::handleHttpResponsePlgJSON(boost::system::error_code er
     {
         if(formJSON == "string")
         {
-            strJSON = response.body();
+            strJSON = response.body(); 
+                        formatValue(strJSON, 1);//-1
             formJSON = "";
             createFormSourceParameters();
         }
         else
         {
+            
             char *tmpname = strdup("/tmp/echoes-tmp-plugin-fileXXXXXX");
             int mkstempRes = mkstemp(tmpname);
             Wt::log("debug") << "[AssetManagementWidget] " << "Res temp file creation : " << mkstempRes;

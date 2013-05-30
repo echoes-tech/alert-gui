@@ -106,6 +106,12 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(Wt::WFormModel::Field fiel
         result = new Wt::WLineEdit();
         result->changed().connect(boost::bind(&AlertEditionWidget::checkThresholdValue, this));
     }
+//    else if (field == AlertEditionModel::ValueExample)
+//    {
+//        result = new Wt::WLineEdit();
+//        result->setReadOnly(true);
+////        result->changed().connect(boost::bind(&AlertEditionWidget::checkThresholdValue, this));
+//    }
     else if (field == AlertEditionModel::Unit)
     {
         comboInformationUnit = new Wt::WComboBox();
@@ -650,6 +656,31 @@ void AlertEditionWidget::updateInformationDetails(int idx)
                 this->sp->addSuggestion(res,res);
 
             }
+            
+            
+//            std::string queryString2 = 
+//            "SELECT iva FROM \"T_INFORMATION_VALUE_IVA\" iva WHERE \"IVA_ID\" IN ( SELECT \"IVA_ID\" FROM"
+//            "("
+//            "SELECT DISTINCT ON (\"IVA_VALUE\") \"IVA_VALUE\", \"IVA_ID\" FROM"
+//            "(" "SELECT iva.\"IVA_VALUE\", iva.\"IVA_ID\" FROM \"T_INFORMATION_VALUE_IVA\" iva"
+//            " WHERE \"SEA_ID\" = " + boost::lexical_cast<std::string>(this->mapInformationSeaIdSboxRow[idx]) + 
+//            " AND \"SRC_ID\" = " + boost::lexical_cast<std::string>(this->mapInformationSrcIdSboxRow[idx]) + 
+//            " AND \"PLG_ID_PLG_ID\" = " + boost::lexical_cast<std::string>(this->mapInformationPlgIdSboxRow[idx]) + 
+//            " AND \"INF_VALUE_NUM\" = " + boost::lexical_cast<std::string>(this->mapInformationPkvSboxRow[idx]) + 
+//            " AND \"IVA_AST_AST_ID\" = " + boost::lexical_cast<std::string>(this->mapAssetIdSboxRow[serverSelectionBox->currentIndex()]) + " ORDER BY \"IVA_ID\" DESC LIMIT 50) sr"
+//            " AND \"IVA_STATE\" = 0) sr_sr"
+//            ");";
+//
+//
+////            std::string valueExample = "";
+//            Wt::Dbo::collection<Wt::Dbo::ptr<InformationValue> > collPtrIva = session->query<Wt::Dbo::ptr<InformationValue> >(queryString);
+//            for (Wt::Dbo::collection<Wt::Dbo::ptr<InformationValue> >::const_iterator k = collPtrIva.begin(); k != collPtrIva.end(); k++)
+//            {
+//                Wt::WString res = k->get()->value;
+//                this->sp->addSuggestion(res,res);
+//
+//            }
+
         }
         else
         {
@@ -1052,5 +1083,11 @@ void AlertEditionWidget::setApiUrl(std::string apiUrl)
 std::string AlertEditionWidget::getApiUrl() const
 {
     return _apiUrl;
+}
+
+void AlertEditionWidget::refresh()
+{
+    created_ = false;
+    update();
 }
 

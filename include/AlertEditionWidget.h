@@ -153,6 +153,8 @@ public:
   bool isCreated();
 
   std::string getApiUrl() const;
+  
+  virtual void refresh();
 
 protected:  /*! \brief Validates the current information.
    *
@@ -188,6 +190,7 @@ private:
   Wt::WButtonGroup *organizationGroup;
 
   void setApiUrl(std::string apiUrl);
+  
 };
 
 

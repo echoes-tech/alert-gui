@@ -28,7 +28,6 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session, const std::st
     rolesComboBox->clicked().connect(this, &RoleCustomizationWidget::selectRole);
     
     pluginsComboBox = new Wt::WComboBox(this);
-    pluginsComboBox->setStyleClass("span4");
     //selected?
 //    pluginsComboBox->clicked().connect(this, &RoleCustomizationWidget::selectPlugin);
 //    Wt::WContainerWidget *pluginLoadButtonContainer = new Wt::WContainerWidget(this);
@@ -68,9 +67,7 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session, const std::st
     pluginLoadButton = new Wt::WPushButton(this);
     pluginLoadButton->setTextFormat(Wt::XHTMLUnsafeText);
     pluginLoadButton->setText("</ br><i class='icon-white icon-time'></i> " + tr("Alert.role.load"));
-    pluginLoadButton->setStyleClass("span1");
-    pluginLoadButton->setStyleClass("offset7");
-    pluginLoadButton->addStyleClass("btn-success");
+    pluginLoadButton->setStyleClass("btn-success");
     pluginLoadButton->clicked().connect(boost::bind(&RoleCustomizationWidget::selectPlugin, this));
 //    pluginLoadButtonContainer->addWidget(pluginLoadButton);
 //    pluginLoadButtonContainer->setStyleClass("row-fluid");

@@ -46,7 +46,13 @@
             </div>
             <div class="widget-content">
                 <div class ="row-fluid">
-                    ${plugins-combo-box}${plugins-load-button}
+                    <div class="span3">
+                        ${plugins-combo-box}
+                    </div>
+                    <div class="span8 no-padding"></div>
+                    <div class="span1">
+                        ${plugins-load-button}
+                    </div>
                 </div>
                 ${plugins-container}
                 ${informations-container}

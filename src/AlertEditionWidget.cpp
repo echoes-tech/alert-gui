@@ -106,6 +106,12 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(Wt::WFormModel::Field fiel
         result = new Wt::WLineEdit();
         result->changed().connect(boost::bind(&AlertEditionWidget::checkThresholdValue, this));
     }
+    else if (field == AlertEditionModel::ThresholdValueExemple)
+    {
+        result = new Wt::WLineEdit();
+        result->setReadOnly(true);
+//        result->changed().connect(boost::bind(&AlertEditionWidget::checkThresholdValue, this));
+    }
     else if (field == AlertEditionModel::Unit)
     {
         comboInformationUnit = new Wt::WComboBox();

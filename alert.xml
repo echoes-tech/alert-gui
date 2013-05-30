@@ -186,10 +186,10 @@
                                 <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.alert.information-info}"></i>
                             </div> 
                         </div>
+                        
                         <div class="row-fluid"> 
-                            <div class="span8">    
-                            </div>
-                            <div class="span1">
+
+                            <div class="span1 offset8">
                                 <br />
                                 ${threshold-value-key-label}
                             </div>
@@ -197,6 +197,20 @@
                                 <br />
                                 ${threshold-value-key}
                                 <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.alert.threshold-value-key-info}"></i>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="row-fluid"> 
+
+                            <div class="span1 offset8">
+                                <br />
+                                ${threshold-value-exemple-label}
+                            </div>
+                            <div class="span3">
+                                <br />
+                                ${threshold-value-exemple}
+                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.alert.threshold-value-exemple-info}"></i>
                             </div>
                             
                         </div>

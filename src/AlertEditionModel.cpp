@@ -10,6 +10,7 @@
 const Wt::WFormModel::Field AlertEditionModel::ThresholdOperator = "threshold-operator";
 const Wt::WFormModel::Field AlertEditionModel::ThresholdValueKey = "threshold-value-key";
 const Wt::WFormModel::Field AlertEditionModel::ThresholdValue = "threshold-value";
+const Wt::WFormModel::Field AlertEditionModel::ThresholdValueExemple = "threshold-value-exemple";
 const Wt::WFormModel::Field AlertEditionModel::Unit = "information-unit";
 
 AlertEditionModel::AlertEditionModel(User *user) : WFormModel()
@@ -46,6 +47,7 @@ void AlertEditionModel::reset()
     addField(ThresholdOperator, Wt::WString::tr("Alert.alert.threshold-operator-info"));
     addField(ThresholdValueKey, Wt::WString::tr("Alert.alert.threshold-value-key-info"));
     addField(ThresholdValue, Wt::WString::tr("Alert.alert.threshold-value-info"));
+    addField(ThresholdValueExemple, Wt::WString::tr("Alert.alert.threshold-value-exemple-info"));
     addField(Unit, Wt::WString::tr("Alert.alert.information-unit-info"));
 }
 

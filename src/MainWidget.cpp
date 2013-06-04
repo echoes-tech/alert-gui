@@ -115,7 +115,7 @@ void MainWidget::createUI()
             }
             else
             {
-                if (this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46)
+                if (this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46 || this->session->user()->currentOrganization.id() == 51 || this->session->user()->currentOrganization.id() == 52)
                 {
                     createMenuItem(*i,menu,getIconName(*i));
                     createPage(*i);
@@ -205,7 +205,7 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         case Enums::EPageType::PLUGIN:
         {
             //TODO: Change this temporary restriction with right integration
-            if(this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46)
+            if(this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46 || this->session->user()->currentOrganization.id() == 51 || this->session->user()->currentOrganization.id() == 52)
             {
                 pew = new PluginEditionWidget(this->session, _apiUrl);
             }
@@ -446,7 +446,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::PLUGIN:
                 {
                     //TODO: Change this temporary restriction with right integration
-                    if(this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46)
+                    if(this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46 || this->session->user()->currentOrganization.id() == 51 || this->session->user()->currentOrganization.id() == 52)
                     {
                         this->contentFluid->addWidget(pew);
                     }
@@ -574,7 +574,7 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::PLUGIN:
         {
             //TODO: Change this temporary restriction with right integration
-            if(this->session->user()->currentOrganization.id() == 1 || this->session->user()->currentOrganization.id() == 46)
+            if(this->session->user()->currentOrganization.id() == 1 || this->session->user()->currentOrganization.id() == 46 || this->session->user()->currentOrganization.id() == 51 || this->session->user()->currentOrganization.id() == 52)
             {
                 res = "pencil";
             }

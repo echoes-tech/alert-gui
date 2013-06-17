@@ -169,9 +169,10 @@ void OptionManagementWidget::fillRoleSelector()
 {
     std::string urlToCall = this->getApiUrl() + "/roles";
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::getRoles, this, _1, _2));
+    client->done().connect(boost::bind(&OptionManagementWidget::getRoles, this, _1, _2));
 
-    std::string apiAddress = urlToCall + this->getCredentials();
+    std::string apiAddress = urlToCall;
+//    + this->getCredentials();
 
     std::cout << "address to call : " << apiAddress << std::endl;
     
@@ -183,40 +184,40 @@ void OptionManagementWidget::fillRoleSelector()
 
 void OptionManagementWidget::getRoles(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    Wt::WApplication::instance()->resumeRendering();
-    int idx = 0;
-    role->clear();
-    
-    if (response.status() >= 200 && response.status() < 400)
-    {
-        Wt::Json::Value result ;
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-        try
-        {                  
-            Wt::Json::parse(response.body(), result);
-            result1 = result;
-              //descriptif
-            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-            {
-                Wt::Json::Object tmp = (*idx1);
-                pluginsComboBox->addItem(tmp.get("name"));
-                mapIdPluginsComboBox[idx] = tmp.get("id");
-                idx++;
-            }
-        }
-        catch (Wt::Json::ParseError const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
-        }
-
-        catch (Wt::Json::TypeException const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-        }          
-    }
-    else
-    {
-         Wt::log("warning") << "fct handleHttpResponse" << response.body();
-    }
+//    Wt::WApplication::instance()->resumeRendering();
+//    int idx = 0;
+//    role->clear();
+//    
+//    if (response.status() >= 200 && response.status() < 400)
+//    {
+//        Wt::Json::Value result ;
+//        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+//        try
+//        {                  
+//            Wt::Json::parse(response.body(), result);
+//            result1 = result;
+//              //descriptif
+//            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+//            {
+//                Wt::Json::Object tmp = (*idx1);
+//                pluginsComboBox->addItem(tmp.get("name"));
+//                mapIdPluginsComboBox[idx] = tmp.get("id");
+//                idx++;
+//            }
+//        }
+//        catch (Wt::Json::ParseError const& e)
+//        {
+//            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+//        }
+//
+//        catch (Wt::Json::TypeException const& e)
+//        {
+//            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+//        }          
+//    }
+//    else
+//    {
+//         Wt::log("warning") << "fct handleHttpResponse" << response.body();
+//    }
 }
 

@@ -26,6 +26,7 @@ MainWidget::MainWidget(Session *session, const std::string &apiUrl)
 void MainWidget::reset(Session *session)
 {
     delete breadCrumbsContainer;
+    // voir si utile, refait dans initMenus()
     sideBarContainer->clear();
     contentContainer->clear();
     titleText = new Wt::WText();
@@ -37,7 +38,8 @@ void MainWidget::reset(Session *session)
     this->session = session;
     
 //    Wt::WApplication *app = Wt::WApplication::instance();
-//    app->messageResourceBundle().use("test",false);     
+//    app->messageResourceBundle().use("test",false);  
+    // Todo : check, sans doute inutile
     initMenus();
     contentContainer->setId("content");
 
@@ -46,6 +48,8 @@ void MainWidget::reset(Session *session)
     
 }
 
+
+// Peut-être à supprimer maintenant qu'on ne surcharge plus la méthode
 void MainWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
 {
 //    if (!created_)
@@ -304,7 +308,7 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
 
 }
 
-// ToDo : temlate ?
+// ToDo : template ?
 void MainWidget::updateTitle(int index, Enums::EMenuRoot menuRoot)
 {
     switch (menuRoot)

@@ -37,6 +37,7 @@ void AssetManagementWidget::createUI()
     mainForm->bindWidget("asset-name", createFormWidget(AssetManagementModel::AssetName));
     
     Wt::WPushButton *addAssetButton = new Wt::WPushButton(tr("Alert.asset.add-asset-button"));
+    // Todo : voir si la fonction dédiée fonctionne avec les dernières versions de Wt
     addAssetButton->setAttributeValue("class","btn btn-info");
     mainForm->bindWidget("add-asset-button", addAssetButton);
     addAssetButton->clicked().connect(boost::bind(&AssetManagementWidget::addAsset, this));

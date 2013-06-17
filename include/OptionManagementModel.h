@@ -18,6 +18,8 @@ public:
     
     static const Field smsQuota;
     static const Field smsAsk;
+    static const Field userRoleCombo;
+    static const Field userRoleButton;
     virtual bool validateField(Field field);
     virtual void reset();
     void modifyField(Field field, const Wt::WString& info);

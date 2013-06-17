@@ -126,6 +126,7 @@ void MainWidget::createMenuItem(C enumC, Wt::WMenu *submenu, std::string iconStr
 {
     Wt::WMenuItem *newMenuItem = new Wt::WMenuItem(tr(boost::lexical_cast<std::string>("Alert.admin.")+enumC.value()+boost::lexical_cast<std::string>("-tab")));
     
+    // Todo : renommer alertCount, voir comment indiquer la présence de sous-menus
     Wt::WText *alertCount = new Wt::WText("</span><i class='icon icon-" + iconStr + "'></i><span>",Wt::XHTMLUnsafeText);
 //    alertCount->setAttributeValue("class","label label-important");
     Wt::WAnchor *anchorTemp = (Wt::WAnchor*)newMenuItem->widget(0);

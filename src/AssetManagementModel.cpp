@@ -62,10 +62,11 @@ bool AssetManagementModel::validateField(Field field)
 
 Wt::WString AssetManagementModel::validateString(Wt::WString stringToValidate) const
 {
-        if (static_cast<int> (stringToValidate.toUTF8().length()) < 2)
-            return Wt::WString::tr("Alert.alert.string-tooshort").arg(2);
-        else
-            return Wt::WString::Empty;
+    // Todo : préciser le message d'erreur dans le xml
+    if (static_cast<int> (stringToValidate.toUTF8().length()) < 2)
+        return Wt::WString::tr("Alert.alert.string-tooshort").arg(2);
+    else
+        return Wt::WString::Empty;
 }
 
 Wt::WString AssetManagementModel::label(Field field) const

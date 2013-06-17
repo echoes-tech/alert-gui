@@ -91,7 +91,7 @@ void EchoesHome::initHeader()
     this->title->setId("header");
     this->title->hide();
 
-
+    // Todo : vérifier si les layouts sont toujours pertinents (loggué / déloggué) depuis bootstrap
     this->topBoxLoggedInLayout = new Wt::WHBoxLayout();
     this->topBoxLoggedOutLayout = new Wt::WVBoxLayout();
     this->topRightLayout = new Wt::WVBoxLayout();
@@ -104,8 +104,12 @@ void EchoesHome::initMainPageWidget()
 {
     this->mainPageWidget = new MainWidget(this->session, _apiUrl);
     this->mainPageWidget->hide();
+    // Why : besoin d'accéder à l'objet de l'extérieur pour gérer les affichages 
+    // dans le menu indépendemment du container central
     this->addWidget(this->mainPageWidget->getSideBarContainer());
     this->addWidget(this->mainPageWidget);
+    
+    // Todo : à déplacer
     Wt::WApplication::instance()->internalPathChanged().connect(this, &EchoesHome::handleInternalPath);
 }
 
@@ -114,6 +118,8 @@ void EchoesHome::processEnvironment()
     this->authWidget->processEnvironment();
 }
 
+
+// Todo : On s'en sert encore ??
 Wt::WTabWidget* EchoesHome::initAdminWidget()
 {
     // main widget
@@ -179,9 +185,9 @@ void EchoesHome::handleInternalPath(const string &internalPath)
                 {
                     if (internalPathWithoutBlank[0].compare(i->value()) == 0)
                     {
-                        if (this->mainPageWidget->getMenu()->currentIndex() != i->index())
+                        if ((unsigned)this->mainPageWidget->getMenu()->currentIndex() != i->index())
                         {
-                            if(i->index() < this->mainPageWidget->getMenu()->count())
+                            if(i->index() < (unsigned)this->mainPageWidget->getMenu()->count())
                             {
                                 std::cout << this->mainPageWidget->getMenu()->count() << " <= ? " << i->index() << std::endl;
                                 this->mainPageWidget->getMenu()->itemAt(i->index())->setFromInternalPath(internalPath);
@@ -212,9 +218,9 @@ void EchoesHome::handleInternalPath(const string &internalPath)
             {
                 if (internalPathWithoutBlank[1].compare(i->value()) == 0)
                 {
-                    if (this->mainPageWidget->getAlertSubmenu()->currentIndex() != i->index())
+                    if ((unsigned)this->mainPageWidget->getAlertSubmenu()->currentIndex() != i->index())
                     {
-                        if(i->index() < this->mainPageWidget->getAlertSubmenu()->count())
+                        if(i->index() < (unsigned)this->mainPageWidget->getAlertSubmenu()->count())
                         {
                             this->mainPageWidget->getAlertSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
                         }
@@ -236,9 +242,9 @@ void EchoesHome::handleInternalPath(const string &internalPath)
                 {
                     if (internalPathWithoutBlank[1].compare(i->value()) == 0)
                     {
-                        if (this->mainPageWidget->getAccountSubmenu()->currentIndex() != i->index())
+                        if ((unsigned)this->mainPageWidget->getAccountSubmenu()->currentIndex() != i->index())
                         {
-                            if(i->index() < this->mainPageWidget->getAccountSubmenu()->count())
+                            if(i->index() < (unsigned)this->mainPageWidget->getAccountSubmenu()->count())
                             {
                                 this->mainPageWidget->getAccountSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
                             }

@@ -26,20 +26,24 @@ protected:
 
   virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
   
-  
-//  void saveOptions();
-  
+  std::string getApiUrl() const;
 
 private:
   OptionManagementModel *model_;
   Session * session;
+  std::string apiUrl;
+  Wt::WComboBox roleComboBox;
 
   Wt::WTemplateFormView *mainForm;
   
   bool created_;
   
   void askSms();
+  void changeRole();
+  void fillRoleSelector();
+  void getRoles(boost::system::error_code err, const Wt::Http::Message& response);
   
+  void setApiUrl(std::string apiUrl);
   
 };
 

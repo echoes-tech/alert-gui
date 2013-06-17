@@ -959,6 +959,8 @@ void RoleCustomizationWidget::getAlias(boost::system::error_code err, const Wt::
     }
 }
 
+
+// Todo : gestion d'erreurs
 void RoleCustomizationWidget::resPutAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit)
 {
     Wt::WApplication::instance()->resumeRendering();

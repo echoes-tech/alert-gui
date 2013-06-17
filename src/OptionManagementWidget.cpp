@@ -22,6 +22,16 @@ OptionManagementWidget::~OptionManagementWidget()
 {
 }
 
+void OptionManagementWidget::setApiUrl(std::string apiUrl)
+{
+    this->apiUrl = apiUrl;
+}
+
+std::string OptionManagementWidget::getApiUrl() const
+{
+    return apiUrl;
+}
+
 void OptionManagementWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
 {
     if (!created_)
@@ -41,6 +51,8 @@ void OptionManagementWidget::createUI()
     // widgets of the template
     mainForm->bindWidget("sms-quota", createFormWidget(OptionManagementModel::smsQuota));
     mainForm->bindWidget("sms-ask", createFormWidget(OptionManagementModel::smsAsk));
+    mainForm->bindWidget("user-role-button", createFormWidget(OptionManagementModel::userRoleButton));
+    mainForm->bindWidget("user-role-combo", createFormWidget(OptionManagementModel::userRoleCombo));
 
     mainForm->updateModel(model_);
     mainForm->refresh();
@@ -103,8 +115,7 @@ Wt::WFormWidget *OptionManagementWidget::createFormWidget(Wt::WFormModel::Field 
         line->setEnabled(false);
         result = line;
     }
-    
-    if (field == OptionManagementModel::smsAsk)
+    else if (field == OptionManagementModel::smsAsk)
     {
         Wt::WPushButton *button = new Wt::WPushButton();
         button->setAttributeValue("class","btn btn-info");
@@ -112,6 +123,21 @@ Wt::WFormWidget *OptionManagementWidget::createFormWidget(Wt::WFormModel::Field 
         button->setText("<i class='icon-shopping-cart icon-white'></i> " + tr("Alert.option.ask-sms-button"));
         button->clicked().connect(boost::bind(&OptionManagementWidget::askSms, this));
         result = button;
+    }
+    else if (field == OptionManagementModel::userRoleButton)
+    {
+        Wt::WPushButton *button = new Wt::WPushButton();
+        button->setAttributeValue("class","btn btn-info");
+        button->setTextFormat(Wt::XHTMLUnsafeText);
+        button->setText("<i class='icon-th-large icon-white'></i> " + tr("Alert.option.user-role-button"));
+        button->clicked().connect(boost::bind(&OptionManagementWidget::changeRole, this));
+        result = button;
+    }
+    else if (field == OptionManagementModel::userRoleCombo)
+    {
+        Wt::WComboBox *combo = new Wt::WComboBox();
+        combo->addItem("Role");
+        result = combo;
     }
 
     return result;
@@ -133,3 +159,64 @@ void OptionManagementWidget::askSms()
     this->refresh();
     Wt::WMessageBox::show(tr("Alert.option.ask-sms-title"),tr("Alert.option.ask-sms"),Wt::Ok);
 }
+
+void OptionManagementWidget::changeRole()
+{
+    
+}
+
+void OptionManagementWidget::fillRoleSelector()
+{
+    std::string urlToCall = this->getApiUrl() + "/roles";
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&RoleCustomizationWidget::getRoles, this, _1, _2));
+
+    std::string apiAddress = urlToCall + this->getCredentials();
+
+    std::cout << "address to call : " << apiAddress << std::endl;
+    
+    if (client->get(apiAddress))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    } 
+}
+
+void OptionManagementWidget::getRoles(boost::system::error_code err, const Wt::Http::Message& response)
+{
+    Wt::WApplication::instance()->resumeRendering();
+    int idx = 0;
+    role->clear();
+    
+    if (response.status() >= 200 && response.status() < 400)
+    {
+        Wt::Json::Value result ;
+        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+        try
+        {                  
+            Wt::Json::parse(response.body(), result);
+            result1 = result;
+              //descriptif
+            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+            {
+                Wt::Json::Object tmp = (*idx1);
+                pluginsComboBox->addItem(tmp.get("name"));
+                mapIdPluginsComboBox[idx] = tmp.get("id");
+                idx++;
+            }
+        }
+        catch (Wt::Json::ParseError const& e)
+        {
+            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+        }
+
+        catch (Wt::Json::TypeException const& e)
+        {
+            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+        }          
+    }
+    else
+    {
+         Wt::log("warning") << "fct handleHttpResponse" << response.body();
+    }
+}
+

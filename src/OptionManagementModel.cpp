@@ -9,6 +9,8 @@
 
 const Wt::WFormModel::Field OptionManagementModel::smsQuota = "sms-quota";
 const Wt::WFormModel::Field OptionManagementModel::smsAsk = "sms-ask";
+const Wt::WFormModel::Field OptionManagementModel::userRoleCombo = "user-role-combo";
+const Wt::WFormModel::Field OptionManagementModel::userRoleButton = "user-role-button";
 
 OptionManagementModel::OptionManagementModel() : WFormModel()
 {
@@ -23,7 +25,6 @@ OptionManagementModel::~OptionManagementModel()
 void OptionManagementModel::reset()
 {
     WFormModel::reset();
-    addField(smsQuota, Wt::WString::tr("Alert.option.sms-quota-info"));
 }
 
 bool OptionManagementModel::isVisible(Field field) const

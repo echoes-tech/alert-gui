@@ -105,7 +105,7 @@
   <message id="Alert.alert.unit.quantity">Quantité</message>
   <message id="Alert.alert.unit.quantity_by_sec">Quantité par seconde</message>
   <message id="Alert.alert.unit.state">Etat</message>
-  
+  <message id="Alert.alert.unit.euros">Euros</message>
   
   <message id="Alert.alert.sub-unit.ko_s">Ko / seconde</message>
   <message id="Alert.alert.sub-unit.mo_s">Mo / seconde</message>

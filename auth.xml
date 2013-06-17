@@ -188,7 +188,7 @@
 	  
       <div class="form-actions">
           <span class="pull-left">${lost-password}</span> 
-          <span class="pull-right"><!--${register}-->${login}</span>
+          <span class="pull-right">${register}${login}</span>
           ${<if:remember-me>}
               <div class="clear"></div>
               <span class="pull-left">${remember-me}&nbsp;${tr:Wt.Auth.remember-me}</span> 

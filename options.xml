@@ -43,11 +43,24 @@
                                 <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.option.sms-quota-info}"></i>
                             </div>
 
-                            <div class="span1">${sms-quota}</div>
+                            <div class="span3">${sms-quota}</div>
 
-                            <div class="span3">${sms-ask}</div>
+                            <div class="span6">${sms-ask}</div>
                         </div>
                     </div>
+                    <div class="control-group">
+                        <div class="row-fluid">
+                            <div class="span2">
+                                ${tr:Alert.option.user-role-label}
+                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.option.user-role-info}"></i>
+                            </div>
+
+                            <div class="span3">${user-role-combo}</div>
+
+                            <div class="span6">${user-role-button}</div>
+                        </div>
+                    </div>
+                    
                      
                     
                 </div>					

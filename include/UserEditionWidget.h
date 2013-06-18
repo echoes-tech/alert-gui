@@ -30,6 +30,8 @@
 
 #include <memory>
 
+#include <Wt/WRandom>
+
 class UserEditionWidget : public Wt::WTemplateFormView
 {
 public:
@@ -60,6 +62,7 @@ public:
   
   void checkMediaEmail();
   void checkMediaSms();
+  void checkMediaMobileApp();
   
   /*! \brief Updates the user-interface.
    *
@@ -70,8 +73,10 @@ public:
   
   Wt::WTable *emailsTable;
   Wt::WTable *smsTable;
+  Wt::WTable *mobileappTable;
   Wt::WLineEdit *emailEdit;
   Wt::WLineEdit *smsEdit;
+  Wt::WLineEdit *mobileappEdit;
   
   void createMediaTable(int medEnumId);
   
@@ -81,6 +86,7 @@ public:
   void addMedia(Wt::WFormModel::Field field, int medId);
   void deleteMedia(int medEnumId, long long medId, Wt::WTableCell * cell);
   
+  void addMobileApp();
   void addEmail();
   void addSms();
 

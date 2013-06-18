@@ -19,7 +19,8 @@ public:
     enum EMedia
     {
         email = 1, 
-        sms = 2
+        sms = 2,
+        mobileapp = 3
     };
     enum EAction
     {

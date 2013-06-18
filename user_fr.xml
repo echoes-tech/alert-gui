@@ -9,6 +9,8 @@
     <message id="Alert.user.edition.media-email">Adresses e-mails utilisables pour recevoir des alertes</message>
     <message id="media-sms">Numéros de téléphone</message>
     <message id="Alert.user.edition.media-sms">Numéros de téléphone utilisables pour recevoir des SMS d'alertes</message>
+     <message id="media-mobileapp">Nom du mobile</message>
+    <message id="Alert.user.edition.media-mobileapp">Application mobile utilisable pour recevoir des alertes</message>
     
     <message id="Alert.user.edition.add-button">Ajouter</message>
     <message id="Alert.user.edition.delete-button">Supprimer</message>
@@ -26,6 +28,9 @@
   </message>
 
   <message id="Alert.media.media-info">Sur cette page vous pouvez ajouter les médias utilisés pour envoyer les alertes.</message>
+  
+  <message id="Alert.media.add-mobileapp-table">Application Mobile</message>
+  <message id="Alert.media.mobileapp-name">Nom du mobile</message>
   
   <message id="Alert.user.edition.valid">Valide</message>
 </messages>

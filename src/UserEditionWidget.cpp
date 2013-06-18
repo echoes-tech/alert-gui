@@ -93,10 +93,12 @@ Wt::WFormWidget *UserEditionWidget::createFormWidget(UserEditionModel::Field fie
         result = smsEdit;
         result->changed().connect(boost::bind(&UserEditionWidget::checkMediaSms, this));
     }
-//    else if (field == UserEditionModel::MediaMobileApp)
-//    {
-//        result = new Wt::WLineEdit();
-//    }
+    else if (field == UserEditionModel::MediaMobileApp)
+    {
+        mobileappEdit = new Wt::WLineEdit();
+        result = mobileappEdit;
+        result->changed().connect(boost::bind(&UserEditionWidget::checkMediaMobileApp, this));
+    }
 
     return result;
 }
@@ -117,6 +119,14 @@ void UserEditionWidget::checkMediaSms()
     update();
 }
 
+void UserEditionWidget::checkMediaMobileApp()
+{
+    updateModelField(model_, UserEditionModel::MediaMobileApp);
+    model_->validateField(UserEditionModel::MediaMobileApp);
+    model_->setValidated(UserEditionModel::MediaMobileApp, false);
+    update();
+}
+
 void UserEditionWidget::update()
 {
 
@@ -127,13 +137,15 @@ void UserEditionWidget::update()
 
         emailsTable = new Wt::WTable();
         smsTable = new Wt::WTable();
+        mobileappTable = new Wt::WTable();
         
         createMediaTable(Enums::email);
         createMediaTable(Enums::sms);
+        createMediaTable(Enums::mobileapp);
         
         bindWidget("email-table", emailsTable);
         bindWidget("sms-table", smsTable);
-        
+        bindWidget("mobileapp-table", mobileappTable);
 
         
         created_ = true;
@@ -159,6 +171,12 @@ void UserEditionWidget::createMediaTable(int medEnumId)
         {
             mediasTable = smsTable;
             desc = "sms";
+            break;
+        }
+        case Enums::mobileapp:
+        {
+            mediasTable = mobileappTable;
+            desc = "mobileapp";
             break;
         }
     }
@@ -219,6 +237,12 @@ void UserEditionWidget::createMediaTable(int medEnumId)
             addButton->clicked().connect(this, &UserEditionWidget::addSms);
             break;
         }
+        case Enums::mobileapp:
+        {
+            mediasTable->elementAt(row, 0)->addWidget(mobileappEdit);
+            addButton->clicked().connect(this, &UserEditionWidget::addMobileApp);
+            break;
+        }
     }
     
 }
@@ -266,6 +290,8 @@ void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medEnumId)
             mev->media = media;
             mev->value = mediaToAdd;
             mev->isDefault = false;
+            mev->isConfirmed = false;
+            mev->token = Wt::WRandom::generateId(25);
             Wt::Dbo::ptr<MediaValue> ptrMev = session->add<MediaValue>(mev);
             ptrMev.flush();
             model_->setValidated(field,false);
@@ -291,8 +317,21 @@ void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medEnumId)
                     deleteButton = new Wt::WPushButton(tr("Alert.user.edition.delete-button"),smsTable->elementAt(tableRow, 1));
                     break;
                 }
+                case Enums::mobileapp:
+                {
+                    tableRow = mobileappTable->rowCount() - 1;
+                    mobileappTable->insertRow(tableRow);
+                    new Wt::WText(mediaToAdd,mobileappTable->elementAt(tableRow, 0));
+                    deleteButton = new Wt::WPushButton(tr("Alert.user.edition.delete-button"),mobileappTable->elementAt(tableRow, 1));
+                    break;
+                }
             }
             
+            deleteButton->setTextFormat(Wt::XHTMLUnsafeText);
+            deleteButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.user.edition.delete-button"));
+            deleteButton->addStyleClass("btn");
+            deleteButton->addStyleClass("btn-danger");
+
             deleteButton->clicked().connect(boost::bind(&UserEditionWidget::deleteMedia,this,medEnumId,ptrMev.id(),smsTable->elementAt(tableRow, 1)));
             
             
@@ -371,9 +410,19 @@ void UserEditionWidget::deleteMedia(int medEnumId, long long medId, Wt::WTableCe
             smsTable->deleteRow(cell->row());
             break;
         }
+        case Enums::mobileapp:
+        {
+            mobileappTable->deleteRow(cell->row());
+            break;
+        }
     }
     
 //    render(Wt::RenderFull); 
+}
+
+void UserEditionWidget::addMobileApp()
+{
+    addMedia(model_->MediaMobileApp,Enums::mobileapp);
 }
 
 void UserEditionWidget::addEmail()

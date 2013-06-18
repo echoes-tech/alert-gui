@@ -63,7 +63,7 @@ void UserEditionModel::reset()
 
 bool UserEditionModel::isVisible(Field field) const
 {
-    if (field == MediaEMail || field == MediaSMS)
+    if (field == MediaEMail || field == MediaSMS || field == MediaMobileApp)
     {
         return true;
     }
@@ -82,7 +82,7 @@ bool UserEditionModel::validateField(Field field)
     bool valid = true;
     Wt::WString error;
 
-    if (field == MediaEMail || field == MediaSMS )
+    if (field == MediaEMail || field == MediaSMS || field == MediaMobileApp)
     {
         error = validateString(valueText(field));
 

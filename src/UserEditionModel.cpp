@@ -82,7 +82,7 @@ bool UserEditionModel::validateField(Field field)
     bool valid = true;
     Wt::WString error;
 
-    if (field == MediaEMail || field == MediaSMS)
+    if (field == MediaEMail || field == MediaSMS )
     {
         error = validateString(valueText(field));
 

@@ -80,7 +80,7 @@ void PluginEditionWidget::createUI()
 //    bindWidget("plugin-description-edit", plgDescEdit);
     plgDescEdit->setValidator(validatorRegExp);
 
-    Wt::WPushButton *addPlugin = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-plugin-button"));
+    Wt::WPushButton *addPlugin = new Wt::WPushButton("<span class='icon'><i class='glyphicon glyphicon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-plugin-button"));
     addPlugin->addStyleClass("btn");
     addPlugin->addStyleClass("btn-info");
     addPlugin->setTextFormat(Wt::XHTMLUnsafeText);
@@ -128,7 +128,7 @@ void PluginEditionWidget::createUI()
     tableSrcParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
     tableSrcParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
     
-    Wt::WPushButton *addSource = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-source-button"));  
+    Wt::WPushButton *addSource = new Wt::WPushButton("<span class='icon'><i class='glyphicon glyphicon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-source-button"));  
     addSource->addStyleClass("btn");
     addSource->addStyleClass("btn-info");
     addSource->setTextFormat(Wt::XHTMLUnsafeText);
@@ -142,7 +142,7 @@ void PluginEditionWidget::createUI()
     buttonModifySource->clicked().connect(this, &PluginEditionWidget::modifySource);
     bindWidget("plugin-modify-source-button", buttonModifySource);
     
-    Wt::WPushButton *deleteSource = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-source-button"));
+    Wt::WPushButton *deleteSource = new Wt::WPushButton("<span class='icon'><i class='glyphicon glyphicon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-source-button"));
     deleteSource->addStyleClass("btn");
     deleteSource->addStyleClass("btn-danger");
     deleteSource->setTextFormat(Wt::XHTMLUnsafeText);
@@ -194,7 +194,7 @@ void PluginEditionWidget::createUI()
     bindWidget("plugin-search-information-table", tableSeaUnit);
     slmUnit = new Wt::WStringListModel();
     
-    Wt::WPushButton *addSearch = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-search-and-information-button"));  
+    Wt::WPushButton *addSearch = new Wt::WPushButton("<span class='icon'><i class='glyphicon glyphicon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-search-and-information-button"));  
     addSearch->addStyleClass("btn");
     addSearch->addStyleClass("btn-info");
     addSearch->setTextFormat(Wt::XHTMLUnsafeText);
@@ -208,14 +208,14 @@ void PluginEditionWidget::createUI()
     buttonModifySearch->clicked().connect(this, &PluginEditionWidget::modifySearch);
     bindWidget("plugin-modify-search-button", buttonModifySearch);
     
-    Wt::WPushButton *deleteSearch = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-search-button"));
+    Wt::WPushButton *deleteSearch = new Wt::WPushButton("<span class='icon'><i class='glyphicon glyphicon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-search-button"));
     deleteSearch->addStyleClass("btn");
     deleteSearch->addStyleClass("btn-danger");
     deleteSearch->setTextFormat(Wt::XHTMLUnsafeText);
     deleteSearch->clicked().connect(this, &PluginEditionWidget::deleteSearch);
     bindWidget("plugin-delete-search-button", deleteSearch);
     
-    createJSONButton = new Wt::WPushButton("<i class='icon-download icon-white'></i> " + tr("Alert.plugins.create-JSON-button"));
+    createJSONButton = new Wt::WPushButton("<i class='glyphicon glyphicon-download icon-white'></i> " + tr("Alert.plugins.create-JSON-button"));
     createJSONButton->addStyleClass("btn");
     createJSONButton->addStyleClass("btn-primary");
     createJSONButton->setTextFormat(Wt::XHTMLUnsafeText);
@@ -223,7 +223,7 @@ void PluginEditionWidget::createUI()
     bindWidget("plugin-create-JSON-button", createJSONButton);
     
     createJSONAnchor = new Wt::WAnchor();
-    createJSONAnchor->setText("<i class='icon-download icon-white'></i> " + tr("Alert.plugins.create-JSON-anchor"));
+    createJSONAnchor->setText("<i class='glyphicon glyphicon-download icon-white'></i> " + tr("Alert.plugins.create-JSON-anchor"));
     createJSONAnchor->addStyleClass("btn");
     createJSONAnchor->addStyleClass("btn-primary");
     createJSONAnchor->setTextFormat(Wt::XHTMLUnsafeText);

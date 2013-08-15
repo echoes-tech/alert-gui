@@ -33,32 +33,32 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session, const std::st
 //    Wt::WContainerWidget *pluginLoadButtonContainer = new Wt::WContainerWidget(this);
  
     assetsContainer = new Wt::WContainerWidget(this);
-    assetsContainer->setStyleClass("container-fluid");
+    assetsContainer->setStyleClass("container");
     pluginsContainer = new Wt::WContainerWidget(this);
-    pluginsContainer->setStyleClass("container-fluid no-padding");
+    pluginsContainer->setStyleClass("container no-padding");
     informationsContainer = new Wt::WContainerWidget(this);
-    informationsContainer->setStyleClass("container-fluid no-padding");
+    informationsContainer->setStyleClass("container no-padding");
         
     
     pluginRow = new Wt::WContainerWidget(this);
-    pluginRow->setStyleClass("row-fluid control-group");
+    pluginRow->setStyleClass("row control-group");
     
     Wt::WContainerWidget *pluginNameContainer = new Wt::WContainerWidget();
     pluginName = new Wt::WText(this);
     pluginName->setText(tr("Alert.admin.plugin-select"));
-    pluginNameContainer->setStyleClass("span2");
+    pluginNameContainer->setStyleClass("col-lg-2");
     pluginNameContainer->addWidget(pluginName);
     
     Wt::WContainerWidget *pluginEditLineContainer = new Wt::WContainerWidget();
     pluginEditLine = new Wt::WLineEdit(this);
-    pluginEditLineContainer->setStyleClass("span3 control-group");
+    pluginEditLineContainer->setStyleClass("col-lg-3 control-group");
     pluginEditLineContainer->addWidget(pluginEditLine);
     
     Wt::WContainerWidget *pluginSaveButtonContainer = new Wt::WContainerWidget();
     pluginSaveButton = new Wt::WPushButton(this);
     pluginSaveButton->setTextFormat(Wt::XHTMLUnsafeText);
-    pluginSaveButton->setText("<i class='icon-white icon-ok-sign'></i>");
-    pluginSaveButton->setStyleClass("span1");
+    pluginSaveButton->setText("<i class='icon-white glyphicon glyphicon-ok-sign'></i>");
+    pluginSaveButton->setStyleClass("col-lg-1");
     pluginSaveButton->addStyleClass("btn-primary");
     pluginSaveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putPluginAlias, this));
     pluginSaveButtonContainer->addWidget(pluginSaveButton);
@@ -66,11 +66,11 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session, const std::st
     
     pluginLoadButton = new Wt::WPushButton(this);
     pluginLoadButton->setTextFormat(Wt::XHTMLUnsafeText);
-    pluginLoadButton->setText("</ br><i class='icon-white icon-time'></i> " + tr("Alert.role.load"));
+    pluginLoadButton->setText("</ br><i class='icon-white glyphicon glyphicon-time'></i> " + tr("Alert.role.load"));
     pluginLoadButton->setStyleClass("btn-success");
     pluginLoadButton->clicked().connect(boost::bind(&RoleCustomizationWidget::selectPlugin, this));
 //    pluginLoadButtonContainer->addWidget(pluginLoadButton);
-//    pluginLoadButtonContainer->setStyleClass("row-fluid");
+//    pluginLoadButtonContainer->setStyleClass("row");
     
     pluginRow->addWidget(pluginNameContainer);
     pluginRow->addWidget(pluginEditLineContainer);
@@ -358,17 +358,17 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
             {
                 Wt::WContainerWidget *row = new Wt::WContainerWidget();
-                row->setStyleClass("row-fluid");
+                row->setStyleClass("row");
                 Wt::Json::Object tmp = (*idx1);
                 
                 Wt::WContainerWidget *labelAssetContainer = new Wt::WContainerWidget();
-                labelAssetContainer->setStyleClass("span2");
+                labelAssetContainer->setStyleClass("col-lg-2");
                 Wt::WText *labelAsset = new Wt::WText();
                 labelAsset->setText(tmp.get("name"));
                 labelAssetContainer->addWidget(labelAsset);
                 
                 Wt::WContainerWidget *lineEditAssetContainer = new Wt::WContainerWidget();
-                lineEditAssetContainer->setStyleClass("span3 control-group");
+                lineEditAssetContainer->setStyleClass("col-lg-3 control-group");
                 Wt::WLineEdit *lineEditAsset = new Wt::WLineEdit();
                 lineEditAssetContainer->addWidget(lineEditAsset);
                 mapIdAssets[idx] = tmp.get("id");
@@ -377,8 +377,8 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
                 Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
                 Wt::WPushButton *saveButton = new Wt::WPushButton();
                 saveButton->setTextFormat(Wt::XHTMLUnsafeText);
-                saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
-                saveButton->setStyleClass("span1");
+                saveButton->setText("<i class='icon-white glyphicon glyphicon-ok-sign'></i>");
+                saveButton->setStyleClass("col-lg-1");
                 saveButton->addStyleClass("btn-primary");
                 saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putAssetAlias, this, idx));
                 saveButtonContainer->addWidget(saveButton);
@@ -517,35 +517,35 @@ void RoleCustomizationWidget::getCriteria(boost::system::error_code err, const W
                 Wt::Json::Object tmp = (*idx1);
                 
                 Wt::WContainerWidget *labelContainer = new Wt::WContainerWidget();
-                labelContainer->setStyleClass("span2");
+                labelContainer->setStyleClass("col-lg-2");
                 Wt::WText *label = new Wt::WText();
                 label->setText(Wt::WString::tr("Alert.alert.operator." + (std::string)tmp.get("name")));
                 labelContainer->addWidget(label);
                 
                 
                 Wt::WContainerWidget *lineEditContainer = new Wt::WContainerWidget();
-                lineEditContainer->setStyleClass("span2 control-group");
+                lineEditContainer->setStyleClass("col-lg-2 control-group");
                 Wt::WLineEdit *lineEdit = new Wt::WLineEdit();
                 long long critId = tmp.get("id");
                 lineEditContainer->addWidget(lineEdit);
                 mapIdCritEdit[critId] = lineEdit;
                 
                 Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
-                saveButtonContainer->setStyleClass("span1");
+                saveButtonContainer->setStyleClass("col-lg-1");
                 Wt::WPushButton *saveButton = new Wt::WPushButton();
                 saveButton->setTextFormat(Wt::XHTMLUnsafeText);
-                saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
-                saveButton->setStyleClass("span12");
+                saveButton->setText("<i class='icon-white glyphicon glyphicon-ok-sign'></i>");
+                saveButton->setStyleClass("col-lg-12");
                 saveButton->addStyleClass("btn-primary");
                 saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putCriterionAlias, this, idForInfMap, critId, lineEdit));
                 saveButtonContainer->addWidget(saveButton);
                 
                 Wt::WContainerWidget *exampleButtonContainer = new Wt::WContainerWidget();
-                exampleButtonContainer->setStyleClass("span1");
+                exampleButtonContainer->setStyleClass("col-lg-1");
                 Wt::WPushButton *exampleButton = new Wt::WPushButton();
                 exampleButton->setTextFormat(Wt::XHTMLUnsafeText);
-                exampleButton->setText("<i class='icon-white icon-envelope'></i>");
-                exampleButton->setStyleClass("span12");
+                exampleButton->setText("<i class='icon-white glyphicon glyphicon-envelope'></i>");
+                exampleButton->setStyleClass("col-lg-12");
                 exampleButton->addStyleClass("btn-info");
                 exampleButton->clicked().connect(boost::bind(&RoleCustomizationWidget::displayMessageExample, this, idForInfMap, critId, lineEdit));
                 exampleButtonContainer->addWidget(exampleButton);
@@ -559,7 +559,7 @@ void RoleCustomizationWidget::getCriteria(boost::system::error_code err, const W
                 {
                     Wt::WText *changeRow = new Wt::WText();
                     changeRow->setTextFormat(Wt::XHTMLUnsafeText);
-                    changeRow->setText("</div><div class='row-fluid'>");
+                    changeRow->setText("</div><div class='row'>");
                     row->addWidget(changeRow);
                 }
                 
@@ -614,11 +614,11 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
                 "</div>"
                 "<div class='widget-box'>"
                 "   <div class='widget-title'>"
-                "       <span class='icon'><i class='icon-th-list'></i></span>"
+                "       <span class='icon'><i class='glyphicon glyphicon-th-list'></i></span>"
                 "       <h5>Information : " + (std::string)tmp.get("name") + "</h5>"
                 "   </div>"
                 "   <div class='widget-content'>"
-                "       <div class='container-fluid no-padding'>");
+                "       <div class='container no-padding'>");
 
                 Wt::WText *infoBoxClose = new Wt::WText();
                 infoBoxClose->setTextFormat(Wt::XHTMLUnsafeText);
@@ -630,28 +630,28 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
                 informationsContainer->addWidget(infoBoxOpen);
                 
                 Wt::WContainerWidget *row = new Wt::WContainerWidget();
-                row->setStyleClass("row-fluid");
+                row->setStyleClass("row");
                 
                 Wt::WContainerWidget *labelContainer = new Wt::WContainerWidget();
                 Wt::WText *label = new Wt::WText();
                 label->setText(tmp.get("name"));
-                labelContainer->setStyleClass("span2");
+                labelContainer->setStyleClass("col-lg-2");
                 labelContainer->addWidget(label);
                 
                 Wt::WContainerWidget *lineEditContainer = new Wt::WContainerWidget();
                 Wt::WLineEdit *lineEdit = new Wt::WLineEdit();
-                lineEditContainer->setStyleClass("span2 control-group");
+                lineEditContainer->setStyleClass("col-lg-2 control-group");
                 lineEditContainer->addWidget(lineEdit);
                 
                 mapEditInformations[idx] = lineEdit;
                 mapIdInformations[idx] = tmp.get("id");
                 
                 Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
-                saveButtonContainer->setStyleClass("span1");
+                saveButtonContainer->setStyleClass("col-lg-1");
                 Wt::WPushButton *saveButton = new Wt::WPushButton();
                 saveButton->setTextFormat(Wt::XHTMLUnsafeText);
-                saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
-                saveButton->setStyleClass("span12");
+                saveButton->setText("<i class='icon-white glyphicon glyphicon-ok-sign'></i>");
+                saveButton->setStyleClass("col-lg-12");
                 saveButton->addStyleClass("btn-primary");
                 saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putInformationAlias, this, idx));
                 saveButtonContainer->addWidget(saveButton);
@@ -662,7 +662,7 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
                 informationsContainer->addWidget(row);
                 
                 Wt::WContainerWidget *rowCriteria = new Wt::WContainerWidget();
-                rowCriteria->setStyleClass("row-fluid");
+                rowCriteria->setStyleClass("row");
                 mapRowCriteriaInformations[idx] = rowCriteria;
                 informationsContainer->addWidget(rowCriteria);
                 

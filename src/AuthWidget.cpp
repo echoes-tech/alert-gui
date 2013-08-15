@@ -486,7 +486,7 @@ void AuthWidget::createLoggedInView()
     
     WContainerWidget *menuContainer = new WContainerWidget();
     menuContainer->setId("user-nav");
-    menuContainer->setAttributeValue("class","navbar navbar-inverse");
+    menuContainer->setAttributeValue("class","navbar-nav navbar-inverse");
     WMenu *menu = new WMenu(menuContainer);
     
     

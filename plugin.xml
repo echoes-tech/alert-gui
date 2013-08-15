@@ -58,26 +58,26 @@
       <div class ="alert alert-info">${tr:Alert.plugins.alert-form-info} </div>
 
 
-      <div class="row-fluid">
-            <div class="span12">
+      <div class="row">
+            <div class="col-lg-12">
                         <!--test-->
                 <div class="widget-box">
                      <div class="widget-title">
                          <span class="icon">
-                            <i class='icon-pencil'></i>
+                            <i class='glyphicon glyphicon-pencil'></i>
                         </span>
                         <h5>${tr:Alert.plugins.plugin-table-create-title}</h5>
                     </div> 
                     <div class="widget-content">
                          <!-- to disable the :first-child behaviour -->
-                        <div class="row-fluid" style="display:none"></div>
+                        <div class="row" style="display:none"></div>
                         
                         <!--plugin-->
-                        <div class="row-fluid">
+                        <div class="row">
  
-                            <div class="span12">                            
+                            <div class="col-lg-12">                            
                                 ${plugin-table-plugin-creation}
-<!--                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.name-info}"></i>-->
+<!--                                <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="${tr:Alert.plugins.name-info}"></i>-->
                             </div>
                         </div>
                     </div>
@@ -87,46 +87,46 @@
                         <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon">
-                            <i class='icon-pencil'></i>
+                            <i class='glyphicon glyphicon-pencil'></i>
                         </span>
                         <h5>${tr:Alert.plugins.plugin-table-title}</h5>
                     </div> 
                     <div class="widget-content">
-                        <div class="row-fluid">
-                            <div class="span1">    
+                        <div class="row">
+                            <div class="col-lg-1">    
                                 <label class="control-label">${tr:Alert.plugins.choice-label} </label>
                             </div>
-                            <div class="span3">
+                            <div class="col-lg-3">
                                 ${plugin-selection-box}
                             </div> 
                         </div>
 <!--                         to disable the :first-child behaviour 
-                        <div class="row-fluid" style="display:none"></div>
+                        <div class="row" style="display:none"></div>
                         
                         plugin
-                        <div class="row-fluid">
-                            <div class="span3">
+                        <div class="row">
+                            <div class="col-lg-3">
                                 ${plugin-selection-box}
                             </div> 
-                            <div class="span1">    
+                            <div class="col-lg-1">    
                                 <label class="control-label">${tr:Alert.plugins.name-label} </label>
                             </div>
-                            <div class="span2">                            
+                            <div class="col-lg-2">                            
                                 ${plugin-name-edit}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.name-info}"></i>
+                                <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="${tr:Alert.plugins.name-info}"></i>
                             </div>
-                            <div class="span1">
+                            <div class="col-lg-1">
                             </div>
-                             <div class="span1">    
+                             <div class="col-lg-1">    
                                 <label class="control-label">${tr:Alert.plugins.description-label} </label>
                             </div>
-                            <div class="span4">                            
+                            <div class="col-lg-4">                            
                                 ${plugin-description-edit}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.description-info}"></i>
+                                <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="${tr:Alert.plugins.description-info}"></i>
                             </div>
                         </div>
                         
-                        <div class="row-fluid">
+                        <div class="row">
                             <span class="controls">
                                 ${plugin-add-plugin-button}
                                 ${plugin-delete-plugin-button}
@@ -137,27 +137,27 @@
                         <div class="widget-box">
                             <div class="widget-title">
                                 <span class="icon">
-                                    <i class='icon-pencil'></i>
+                                    <i class='glyphicon glyphicon-pencil'></i>
                                 </span>
                                 <h5>${tr:Alert.plugins.source-table-title}</h5>
                             </div> 
                             <div class="widget-content">
-                                <div class="row-fluid" style="display:none"></div>
+                                <div class="row" style="display:none"></div>
                                 
-                                <div class="row-fluid">
-                                    <div class="span2">
+                                <div class="row">
+                                    <div class="col-lg-2">
                                         ${source-selection-box}
                                     </div>
-                                    <div class="span2">
+                                    <div class="col-lg-2">
                                         ${plugin-combo-addon}
-<!--                                        <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugin.combo-addon-info}"></i>-->
+<!--                                        <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="${tr:Alert.plugin.combo-addon-info}"></i>-->
                                     </div> 
-                                    <div class="span8">
+                                    <div class="col-lg-8">
                                         ${plugin-table-source-param}
                                     </div> 
                                 </div>
 
-                                <div class="row-fluid">
+                                <div class="row">
                                     <span class="controls">
                                         ${plugin-add-source-button}
                                         ${plugin-modify-source-button}
@@ -169,62 +169,62 @@
                                 <div class="widget-box">
                                 <div class="widget-title">
                                     <span class="icon">
-                                        <i class='icon-pencil'></i>
+                                        <i class='glyphicon glyphicon-pencil'></i>
                                     </span>
                                     <h5>${tr:Alert.plugins.search-table-title}</h5>
                                 </div> 
                                 <div class="widget-content">
                                     
-                                    <div class="row-fluid" style="display:none"></div>
-                                    <div class="row-fluid">
-                                        <div class="span2">
+                                    <div class="row" style="display:none"></div>
+                                    <div class="row">
+                                        <div class="col-lg-2">
                                             ${plugin-search-selection-box}
                                         </div>
-                                        <div class="span2">
+                                        <div class="col-lg-2">
                                             ${plugin-combo-search-type}
                                         </div>
-                                        <div class="span8">
+                                        <div class="col-lg-8">
                                             ${plugin-table-search-type-param}
                                         </div>
                                     </div>
-                                    <div class="row-fluid">
-                                        <div class="span1"> 
+                                    <div class="row">
+                                        <div class="col-lg-1"> 
                                             <label class="control-label">${tr:Alert.plugins.search-periode-label} </label>
                                         </div>
-                                        <div class="span1">
+                                        <div class="col-lg-1">
                                             ${plugin-search-periode}
                                         </div>
-                                        <div class="span1">
+                                        <div class="col-lg-1">
                                         </div>
-                                        <div class="span1">    
+                                        <div class="col-lg-1">    
                                             <label class="control-label">${tr:Alert.plugins.search-static-label} </label>
                                         </div>
-                                        <div class="span1">
+                                        <div class="col-lg-1">
                                             ${plugin-search-static}
                                         </div>
-                                        <div class="span1">
+                                        <div class="col-lg-1">
                                         </div>
-                                        <div class="span1">    
+                                        <div class="col-lg-1">    
                                             <label class="control-label">${tr:Alert.plugins.search-key-value} </label>
                                         </div>
-                                        <div class="span1">
+                                        <div class="col-lg-1">
                                             ${plugin-search-key-value}
                                         </div>
-                                        <div class="span1">
+                                        <div class="col-lg-1">
                                         </div>  
-                                        <div class="span1"> 
+                                        <div class="col-lg-1"> 
                                             <label class="control-label">${tr:Alert.plugins.search-nomber-value} </label>
                                         </div>
-                                        <div class="span1">
+                                        <div class="col-lg-1">
                                             ${plugin-search-nomber-value}
                                         </div>
                                     </div>
-                                    <div class="row-fluid">
-                                        <div class="span12">
+                                    <div class="row">
+                                        <div class="col-lg-12">
                                             ${plugin-search-information-table}
                                         </div>
                                     </div> 
-                                    <div class="row-fluid">
+                                    <div class="row">
                                         <span class="controls">
                                             ${plugin-add-search-information-button}
                                             ${plugin-modify-search-button}
@@ -237,11 +237,11 @@
                              </div>
                         </div>
                         
-                        <div class="row-fluid">
+                        <div class="row">
                             <div class="controls">
                                 ${plugin-create-JSON-button}
                                 ${plugin-create-JSON-anchor}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugin.create-JSON-anchor-info}"></i>
+                                <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="${tr:Alert.plugin.create-JSON-anchor-info}"></i>
                             </div>
                         </div>
                     </div>

@@ -37,10 +37,10 @@
             <div class = "clear"></div>
        
             <div id="asset-name" class="control-group">
-                <div class="row-fluid">
-                    <div class="span2">${tr:Alert.asset.asset-name-label}</div>
-                    <div class="span3">${asset-name}</div>
-                    <div class="span3">${add-asset-button}</div><span id="asset-name-hint" class="help-inline span3" style="display: none; ">${tr:Alert.asset.asset-name-info}</span>
+                <div class="row">
+                    <div class="col-lg-2">${tr:Alert.asset.asset-name-label}</div>
+                    <div class="col-lg-3">${asset-name}</div>
+                    <div class="col-lg-3">${add-asset-button}</div><span id="asset-name-hint" class="help-inline col-lg-3" style="display: none; ">${tr:Alert.asset.asset-name-info}</span>
                 </div>
             </div>
 

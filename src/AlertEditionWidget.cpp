@@ -210,7 +210,7 @@ void AlertEditionWidget::update()
         addButtonMedia->addStyleClass("btn");
         addButtonMedia->addStyleClass("btn-info");
         addButtonMedia->setTextFormat(Wt::XHTMLUnsafeText);
-        addButtonMedia->setText("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.alert.add-media-button"));
+        addButtonMedia->setText("<span class='icon'><i class='glyphicon glyphicon-plus icon-white'></i></span>&nbsp;" + tr("Alert.alert.add-media-button"));
 
         
         
@@ -238,7 +238,7 @@ void AlertEditionWidget::update()
         int row = 0;
         tableMediaDestination->elementAt(row, 0)->setColumnSpan(6);
 
-        Wt::WText *tableTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-envelope'></i></span><h5>"+ tr("Alert.alert.media-destination-table") + "</h5></div>",tableMediaDestination->elementAt(row, 0));
+        Wt::WText *tableTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='glyphicon glyphicon-envelope'></i></span><h5>"+ tr("Alert.alert.media-destination-table") + "</h5></div>",tableMediaDestination->elementAt(row, 0));
         tableTitle->setTextFormat(Wt::XHTMLUnsafeText);
         tableMediaDestination->elementAt(row, 0)->setPadding(*(new Wt::WLength("0px")));
         
@@ -790,7 +790,7 @@ void AlertEditionWidget::addMedia()
     deleteButton->addStyleClass("btn");
     deleteButton->addStyleClass("btn-danger");
     deleteButton->setTextFormat(Wt::XHTMLUnsafeText);
-    deleteButton->setText("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.alert.delete-media-button"));
+    deleteButton->setText("<span class='icon'><i class='glyphicon glyphicon-minus icon-white'></i></span>&nbsp;" + tr("Alert.alert.delete-media-button"));
 
     tableMediaDestination->insertRow(row);
     tableMediaDestination->elementAt(row,0)->addWidget(new Wt::WText(userSelectionBox->currentText()));

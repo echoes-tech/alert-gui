@@ -58,7 +58,7 @@ void AssetManagementWidget::createUI()
     linksTable->elementAt(row, 0)->setColumnSpan(2);
     linksTable->columnAt(1)->setStyleClass("asset-action-width");
     
-    Wt::WText *tableTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-hdd'></i></span><h5>"+ tr("Alert.asset.add-asset-form") + "</h5></div>",linksTable->elementAt(row, 0));
+    Wt::WText *tableTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='glyphicon glyphicon-hdd'></i></span><h5>"+ tr("Alert.asset.add-asset-form") + "</h5></div>",linksTable->elementAt(row, 0));
     linksTable->elementAt(row, 0)->setPadding(*(new Wt::WLength("0px")));
     tableTitle->setTextFormat(Wt::XHTMLUnsafeText);
     ++row;
@@ -94,7 +94,7 @@ void AssetManagementWidget::createUI()
             {
                 Wt::WAnchor *anchor = new Wt::WAnchor(file,"",linksTable->elementAt(row, 1));
                 anchor->setTextFormat(Wt::XHTMLUnsafeText);
-                anchor->setText("<i class='icon-download icon-white'></i> " + tr("Alert.asset.download-script"));
+                anchor->setText("<i class='glyphicon glyphicon-download icon-white'></i> " + tr("Alert.asset.download-script"));
                 anchor->addStyleClass("btn");
                 anchor->addStyleClass("btn-info");
                 anchor->setTarget(Wt::TargetNewWindow);
@@ -109,7 +109,7 @@ void AssetManagementWidget::createUI()
                 delButton->setAttributeValue("class","btn btn-danger");
 
                 delButton->setTextFormat(Wt::XHTMLUnsafeText);
-                delButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.asset.delete-asset"));
+                delButton->setText("<i class='glyphicon glyphicon-remove icon-white'></i> " + tr("Alert.asset.delete-asset"));
 
                 delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
             }

@@ -178,7 +178,7 @@ void AlertListWidget::createUI()
                     Wt::WPushButton *delButton = new Wt::WPushButton(alertsTable->elementAt(row, ++colNum));
                     delButton->setAttributeValue("class","btn btn-danger");
                     delButton->setTextFormat(Wt::XHTMLUnsafeText);
-                    delButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.alert-list.delete-alert"));
+                    delButton->setText("<i class='glyphicon glyphicon-remove icon-white'></i> " + tr("Alert.alert-list.delete-alert"));
                     delButton->clicked().connect(boost::bind(&AlertListWidget::deleteAlert, this, (i->get < 0 > ().id())));
 
                 }

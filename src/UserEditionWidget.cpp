@@ -192,7 +192,7 @@ void UserEditionWidget::createMediaTable(int medEnumId)
     mediasTable->elementAt(row, 0)->setColumnSpan(2);
     mediasTable->columnAt(1)->setStyleClass("asset-action-width");
 
-    Wt::WText *tableMediaTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-envelope'></i></span><h5>"+ tr("Alert.media.add-"+desc+"-table") + "</h5></div>",mediasTable->elementAt(row, 0));
+    Wt::WText *tableMediaTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='glyphicon glyphicon-envelope'></i></span><h5>"+ tr("Alert.media.add-"+desc+"-table") + "</h5></div>",mediasTable->elementAt(row, 0));
     mediasTable->elementAt(row, 0)->setPadding(*(new Wt::WLength("0px")));
     tableMediaTitle->setTextFormat(Wt::XHTMLUnsafeText);
     ++row;
@@ -209,7 +209,7 @@ void UserEditionWidget::createMediaTable(int medEnumId)
         new Wt::WText(i->second,mediasTable->elementAt(row, 0));
         Wt::WPushButton *deleteButton = new Wt::WPushButton(mediasTable->elementAt(row, 1));
         deleteButton->setTextFormat(Wt::XHTMLUnsafeText);
-        deleteButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.user.edition.delete-button"));
+        deleteButton->setText("<i class='glyphicon glyphicon-remove icon-white'></i> " + tr("Alert.user.edition.delete-button"));
         deleteButton->addStyleClass("btn");
         deleteButton->addStyleClass("btn-danger");
         deleteButton->clicked().connect(boost::bind(&UserEditionWidget::deleteMedia,this,medEnumId,i->first,mediasTable->elementAt(row, 1)));
@@ -218,7 +218,7 @@ void UserEditionWidget::createMediaTable(int medEnumId)
     ++row;
     Wt::WPushButton *addButton = new Wt::WPushButton(mediasTable->elementAt(row, 1));
     addButton->setTextFormat(Wt::XHTMLUnsafeText);
-    addButton->setText("<i class='icon-plus icon-white'></i> " + tr("Alert.user.edition.add-button"));
+    addButton->setText("<i class='glyphicon glyphicon-plus icon-white'></i> " + tr("Alert.user.edition.add-button"));
     addButton->addStyleClass("btn");
     addButton->addStyleClass("btn-info");
     
@@ -328,7 +328,7 @@ void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medEnumId)
             }
             
             deleteButton->setTextFormat(Wt::XHTMLUnsafeText);
-            deleteButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.user.edition.delete-button"));
+            deleteButton->setText("<i class='glyphicon glyphicon-remove icon-white'></i> " + tr("Alert.user.edition.delete-button"));
             deleteButton->addStyleClass("btn");
             deleteButton->addStyleClass("btn-danger");
 

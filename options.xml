@@ -24,40 +24,40 @@
     <div class ="alert alert-info">${tr:Alert.option.option-form-info}</div>
     
     
-    <div class="row-fluid">
-        <div class="span6">
+    <div class="row">
+        <div class="col-lg-6">
             <div class="widget-box">
                 <div class="widget-title">
                     <span class="icon">
-                        <i class="icon-edit"></i>									
+                        <i class="glyphicon glyphicon-edit"></i>									
                     </span>
                     <h5>${tr:Alert.option.option-table-title}</h5>
                 </div>
                 <div class="widget-content">
                     <div class="control-group">
                         <!-- to disable the :first-child behaviour -->
-                        <div class="row-fluid" style="display:none"></div>
-                        <div class="row-fluid">
-                            <div class="span2">
+                        <div class="row" style="display:none"></div>
+                        <div class="row">
+                            <div class="col-lg-2">
                                 ${tr:Alert.option.sms-quota-label}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.option.sms-quota-info}"></i>
+                                <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="${tr:Alert.option.sms-quota-info}"></i>
                             </div>
 
-                            <div class="span3">${sms-quota}</div>
+                            <div class="col-lg-3">${sms-quota}</div>
 
-                            <div class="span6">${sms-ask}</div>
+                            <div class="col-lg-6">${sms-ask}</div>
                         </div>
                     </div>
                     <div class="control-group">
-                        <div class="row-fluid">
-                            <div class="span2">
+                        <div class="row">
+                            <div class="col-lg-2">
                                 ${tr:Alert.option.user-role-label}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.option.user-role-info}"></i>
+                                <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="${tr:Alert.option.user-role-info}"></i>
                             </div>
 
-                            <div class="span3">${user-role-combo}</div>
+                            <div class="col-lg-3">${user-role-combo}</div>
 
-                            <div class="span6">${user-role-button}</div>
+                            <div class="col-lg-6">${user-role-button}</div>
                         </div>
                     </div>
                     

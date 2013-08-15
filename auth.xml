@@ -177,13 +177,13 @@
             ${user-name-info class="Wt-info"}
 	  </label>
       <div class="input-prepend">
-	  <span class="add-on"><i class="icon-user"></i></span>${user-name}
+	  <span class="add-on"><i class="glyphicon glyphicon-user"></i></span>${user-name}
       </div>
 	  <label for="${id:password}">${tr:Wt.Auth.password}
             ${password-info class="Wt-info"}
 	  </label>
-        <div class="input-prepend">
-            <span class="add-on"><i class="icon-lock"></i></span>${password}
+        <div class="input-group">
+            <span class="add-on"><i class="glyphicon glyphicon-lock"></i></span>${password}
         </div>
 	  
       <div class="form-actions">

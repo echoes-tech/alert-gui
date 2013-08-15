@@ -7,14 +7,14 @@
     <div class="widget-box">
         <div class="widget-title">
             <span class="icon">
-                <i class="icon-fire"></i>
+                <i class="glyphicon glyphicon-fire"></i>
             </span>	
             <h5>Last news</h5>
         </div>
         
         <div class="widget-content nopadding updates">
             <div class="new-update clearfix">
-                <i class="icon-comment"></i>
+                <i class="glyphicon glyphicon-comment"></i>
                 <div class="update-done">
                     <a title="" href="#"><strong>Tell us what you want about our product</strong></a>
                     <ul>
@@ -26,7 +26,7 @@
         </div>
         <div class="widget-content nopadding updates">
             <div class="new-update clearfix">
-                <i class="icon-tasks"></i>
+                <i class="glyphicon glyphicon-tasks"></i>
                 <div class="update-done">
                     <a title="" href="#"><strong>Major changes in next release</strong></a>
                     <ul>
@@ -43,7 +43,7 @@
     <div class="widget-box">
         <div class="widget-title">
             <span class="icon">
-                <i class="icon-ok"></i>
+                <i class="glyphicon glyphicon-ok"></i>
             </span>	
             <h5>RC1 - Changes</h5>
         </div>
@@ -51,7 +51,7 @@
         <div class="widget-content nopadding updates">
         
             <div class="new-update clearfix">
-                <i class="icon-wrench"></i>
+                <i class="glyphicon glyphicon-wrench"></i>
                 <div class="update-gift">
                     <a title="" href="#"><strong>[GUI] New Features</strong></a>
                     <ul>
@@ -63,7 +63,7 @@
             </div>
 
             <div class="new-update clearfix">
-                <i class="icon-gift"></i>
+                <i class="glyphicon glyphicon-gift"></i>
                 <div class="update-done">										
                     <a title="" href="#"><strong>[API] New Features</strong></a>
                     <ul>
@@ -75,7 +75,7 @@
             </div>
 
             <div class="new-update clearfix">
-                <i class="icon-gift"></i>
+                <i class="glyphicon glyphicon-gift"></i>
                 <div class="update-alert">										
                     <a title="" href="#"><strong>[Engine] New features</strong></a>
                     <ul>
@@ -90,7 +90,7 @@
     <div class="widget-box">
         <div class="widget-title">              
             <span class="icon">
-                <i class="icon-ok"></i>
+                <i class="glyphicon glyphicon-ok"></i>
             </span>	
             <h5>Beta 3 - Changes</h5>
         </div>
@@ -99,7 +99,7 @@
 
 
             <div class="new-update clearfix">
-                <i class="icon-gift"></i>
+                <i class="glyphicon glyphicon-gift"></i>
                 <div class="update-done">										
                     <a title="" href="#"><strong>[API] New Features</strong></a>
                     <ul>
@@ -112,7 +112,7 @@
             </div>
 
             <div class="new-update clearfix">
-                <i class="icon-gift"></i>
+                <i class="glyphicon glyphicon-gift"></i>
                 <div class="update-alert">										
                     <a title="" href="#"><strong>[Engine] New feature</strong></a>
                     <ul>
@@ -123,7 +123,7 @@
             </div>
 
             <div class="new-update clearfix">
-                <i class="icon-wrench"></i>
+                <i class="glyphicon glyphicon-wrench"></i>
                 <div class="update-done">
                     <a title="" href="#"><strong>[GUI] Bugfixes</strong></a>
                     <ul>
@@ -135,7 +135,7 @@
             </div>
 
             <div class="new-update clearfix">
-                <i class="icon-gift"></i>
+                <i class="glyphicon glyphicon-gift"></i>
                 <div class="update-done">
                     <a title="" href="#"><strong>[Install script] Evolutions / New features</strong></a>
                     <ul>
@@ -148,7 +148,7 @@
             </div>
 
             <div class="new-update clearfix">
-                <i class="icon-wrench"></i>
+                <i class="glyphicon glyphicon-wrench"></i>
                 <div class="update-done">
                     <a title="" href="#"><strong>[Probe] Bugfixes / New features</strong></a>
                     <ul>
@@ -163,7 +163,7 @@
             </div>
 
             <div class="new-update clearfix">
-                <i class="icon-gift"></i>
+                <i class="glyphicon glyphicon-gift"></i>
                 <div class="update-done">
                     <a title="" href="#"><strong>[Deployment] New features</strong></a>
                     <ul>
@@ -179,7 +179,7 @@
     <div class="widget-box">
         <div class="widget-title">
             <span class="icon">
-                <i class="icon-ok"></i>
+                <i class="glyphicon glyphicon-ok"></i>
             </span>	
             <h5>Beta 2 - Changes</h5>
         </div>
@@ -187,7 +187,7 @@
         <div class="widget-content nopadding updates">
         
             <div class="new-update clearfix">
-                <i class="icon-wrench"></i>
+                <i class="glyphicon glyphicon-wrench"></i>
                 <div class="update-done">
                     <a title="" href="#"><strong>[ECHOES Alert] Bugfixes</strong></a>
                     <ul>
@@ -204,13 +204,13 @@
     <div class="widget-box">
         <div class="widget-title">
             <span class="icon">
-                <i class="icon-ok"></i>
+                <i class="glyphicon glyphicon-ok"></i>
             </span>	
             <h5>Beta - Changes</h5>
         </div>
         <div class="widget-content nopadding updates">
             <div class="new-update clearfix">
-                <i class="icon-wrench"></i>
+                <i class="glyphicon glyphicon-wrench"></i>
                 <div class="update-done">
                     <a title="" href="#"><strong>[ECHOES Alert] Bugfixes</strong></a>
                     <ul>
@@ -240,13 +240,13 @@
     <div class="widget-box">
         <div class="widget-title">
             <span class="icon">
-                <i class="icon-ok"></i>
+                <i class="glyphicon glyphicon-ok"></i>
             </span>	
             <h5>Alpha - Changes</h5>
         </div>
         <div class="widget-content nopadding updates">
             <div class="new-update clearfix">
-                <i class="icon-wrench"></i>
+                <i class="glyphicon glyphicon-wrench"></i>
                 <div class="update-done">
                     <a title="" href="#"><strong>[ECHOES Alert] bugfixes</strong></a>
                     <ul>
@@ -262,7 +262,7 @@
         
         <div class="widget-content nopadding updates">
             <div class="new-update clearfix">
-                <i class="icon-wrench"></i>
+                <i class="glyphicon glyphicon-wrench"></i>
                 <div class="update-done">
                     <a title="" href="#"><strong>[ECHOES Alert] bugfixes</strong></a>
                     <ul>
@@ -281,7 +281,7 @@
         
         <div class="widget-content nopadding updates">
             <div class="new-update clearfix">
-                <i class="icon-gift"></i>
+                <i class="glyphicon glyphicon-gift"></i>
                 <div class="update-done">
                     <a title="" href="#"><strong>[ECHOES Alert] New features</strong></a>
                     <ul>

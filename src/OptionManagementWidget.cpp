@@ -120,7 +120,7 @@ Wt::WFormWidget *OptionManagementWidget::createFormWidget(Wt::WFormModel::Field 
         Wt::WPushButton *button = new Wt::WPushButton();
         button->setAttributeValue("class","btn btn-info");
         button->setTextFormat(Wt::XHTMLUnsafeText);
-        button->setText("<i class='icon-shopping-cart icon-white'></i> " + tr("Alert.option.ask-sms-button"));
+        button->setText("<i class='glyphicon glyphicon-shopping-cart icon-white'></i> " + tr("Alert.option.ask-sms-button"));
         button->clicked().connect(boost::bind(&OptionManagementWidget::askSms, this));
         result = button;
     }
@@ -129,7 +129,7 @@ Wt::WFormWidget *OptionManagementWidget::createFormWidget(Wt::WFormModel::Field 
         Wt::WPushButton *button = new Wt::WPushButton();
         button->setAttributeValue("class","btn btn-info");
         button->setTextFormat(Wt::XHTMLUnsafeText);
-        button->setText("<i class='icon-th-large icon-white'></i> " + tr("Alert.option.user-role-button"));
+        button->setText("<i class='glyphicon glyphicon-th-large icon-white'></i> " + tr("Alert.option.user-role-button"));
         button->clicked().connect(boost::bind(&OptionManagementWidget::changeRole, this));
         result = button;
     }

@@ -69,7 +69,7 @@ void MainWidget::initMenus()
     
     Wt::WAnchor *phoneMenuAnchor = new Wt::WAnchor("#");
     phoneMenuAnchor->setText("Menu");
-    phoneMenuAnchor->setAttributeValue("class","visible-phone");
+    phoneMenuAnchor->setAttributeValue("class","visible-sm");
     
     sideBarContainer->insertWidget(0,phoneMenuAnchor);
     menu = new Wt::WMenu(sideBarContainer);
@@ -96,7 +96,8 @@ void MainWidget::createUI()
 
     //    const Wt::WLink *test = new Wt::WLink("");
         breadCrumbsAnchor0->setTextFormat(Wt::XHTMLUnsafeText);
-        breadCrumbsAnchor0->setText("<i class='icon-home'></i>" + tr("Alert.admin.home"));
+        breadCrumbsAnchor0->setText("<i class='glyphicon glyphicon-home'></i>" + tr("Alert.admin.home"));
+        breadCrumbsAnchor0->addStyleClass("icon");
     //    breadCrumbsAnchor0->setLink(*test);
 
         breadCrumbsContainer->addWidget(breadCrumbsAnchor0);
@@ -174,7 +175,7 @@ void MainWidget::createSubMenu(Enums::EPageType enumPT)
             break;
     }
     itemMenu->setPathComponent(boost::lexical_cast<std::string>(enumPT.value()));
-    Wt::WText *iconHTML = new Wt::WText("</span><i class='icon icon-" + getIconName(enumPT) + "'></i><span>",Wt::XHTMLUnsafeText);
+    Wt::WText *iconHTML = new Wt::WText("<i class='glyphicon glyphicon-" + getIconName(enumPT) + "'> </i>",Wt::XHTMLUnsafeText);
     Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)itemMenu->widget(0);
     anchorInsideMenu->insertWidget(0,iconHTML);
     anchorInsideMenu->addWidget(labelHTML);
@@ -516,7 +517,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
 void MainWidget::createContainerFluid()
 {
     contentFluid = new Wt::WContainerWidget();
-    contentFluid->setStyleClass("container-fluid");
+//    contentFluid->setStyleClass("container");
     
     
     contentContainer->addWidget(contentFluid);

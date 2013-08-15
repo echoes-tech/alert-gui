@@ -1,11 +1,13 @@
 /**
  * Unicorn Admin Template
+ * Version 2.0.1
  * Diablo9983 -> diablo9983@gmail.com
 **/
+
 $(document).ready(function(){
 	
 	// === jQuery Peity === //
-	$.fn.peity.defaults.line = {
+	/*$.fn.peity.defaults.line = {
 		strokeWidth: 1,
 		delimeter: ",",
 		height: 24,
@@ -19,36 +21,56 @@ $(document).ready(function(){
 		max: null,
 		min: 0,
 		width: 50
-	};
-	$(".peity_line_good span").peity("line", {
-		colour: "#B1FFA9",
-		strokeColour: "#459D1C"
+	};*/
+	
+	$(".sparkline_line_good span").sparkline("html", {
+		type: "line",
+		fillColor: "#B1FFA9",
+		lineColor: "#459D1C",
+		width: "50",
+		height: "24"
 	});
-	$(".peity_line_bad span").peity("line", {
-		colour: "#FFC4C7",
-		strokeColour: "#BA1E20"
+	$(".sparkline_line_bad span").sparkline("html", {
+		type: "line",
+		fillColor: "#FFC4C7",
+		lineColor: "#BA1E20",
+		width: "50",
+		height: "24"
 	});	
-	$(".peity_line_neutral span").peity("line", {
-		colour: "#CCCCCC",
-		strokeColour: "#757575"
-	});
-	$(".peity_bar_good span").peity("bar", {
-		colour: "#459D1C"
-	});
-	$(".peity_bar_bad span").peity("bar", {
-		colour: "#BA1E20"
-	});	
-	$(".peity_bar_neutral span").peity("bar", {
-		colour: "#757575"
+	$(".sparkline_line_neutral span").sparkline("html", {
+		type: "line",
+		fillColor: "#CCCCCC",
+		lineColor: "#757575",
+		width: "50",
+		height: "24"
 	});
 	
+	$(".sparkline_bar_good span").sparkline('html',{
+		type: "bar",
+		barColor: "#459D1C",
+		barWidth: "5",
+		height: "24"
+	});
+	$(".sparkline_bar_bad span").sparkline('html',{
+		type: "bar",
+		barColor: "#BA1E20",
+		barWidth: "5",
+		height: "24"
+	});	
+	$(".sparkline_bar_neutral span").sparkline('html',{
+		type: "bar",
+		barColor: "#757575",
+		barWidth: "5",
+		height: "24"
+	});
+
 	// === jQeury Gritter, a growl-like notifications === //
-	/*$.gritter.add({
+	$.gritter.add({
 		title:	'Unread messages',
 		text:	'You have 9 unread messages.',
 		image: 	'img/demo/envelope.png',
 		sticky: false
-	});*/	
+	});	
 	$('#gritter-notify .normal').click(function(){
 		$.gritter.add({
 			title:	'Normal notification',

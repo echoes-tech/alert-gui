@@ -214,17 +214,11 @@ void AssetManagementWidget::deleteAsset(long long id)
     {
         Wt::Dbo::Transaction transaction(*session);
         Wt::Dbo::ptr<Asset>  ptrAsset = session->find<Asset>().where("\"AST_ID\" = ?").bind(id);
-        //FIXME: doesn't work, bug posted in Wt forge #1479
-        //ptrAsset.modify()->alerts.clear();
-        std::string executeString = "DELETE FROM \"T_ALERT_ALE\" USING \"TJ_AST_ALE\" " 
-                                    " WHERE \"TJ_AST_ALE\".\"T_ALERT_ALE_ALE_ID\" = \"T_ALERT_ALE\".\"ALE_ID\" " 
-                                    " AND \"TJ_AST_ALE\".\"T_ASSET_AST_AST_ID\" = " + boost::lexical_cast<std::string>(id);
+
+        const std::string executeString = "DELETE FROM \"TJ_AST_PLG\" " 
+                " WHERE \"TJ_AST_PLG\".\"T_ASSET_AST_AST_ID\" = " + boost::lexical_cast<std::string>(id);
         session->execute(executeString);
-        
-        executeString = "DELETE FROM \"TJ_AST_PLG\" " 
-                                    " WHERE \"TJ_AST_PLG\".\"T_ASSET_AST_AST_ID\" = " + boost::lexical_cast<std::string>(id);
-        session->execute(executeString);
-        
+
         ptrAsset.modify()->deleteTag = Wt::WDateTime::currentDateTime();
         UserActionManagement::registerUserAction(Enums::del,Constants::T_ASSET_AST,ptrAsset.id());
         transaction.commit();

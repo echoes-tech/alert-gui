@@ -34,6 +34,7 @@ void MainWidget::reset(Session *session)
     breadCrumbsAnchor0 = new Wt::WAnchor("");
     breadCrumbsAnchor1 = new Wt::WAnchor("");
     breadCrumbsAnchor2 = new Wt::WAnchor("");
+    breadCrumbsAnchor0->setRefInternalPath("/welcome");
     created_ = false;
     this->session = session;
     
@@ -382,18 +383,16 @@ void MainWidget::updateBreadcrumbs(Enums::EMenuRoot menuRoot)
         {
             case 1:
             {
-                const Wt::WLink *test = new Wt::WLink(internalPathWithoutBlank[i]);
                 breadCrumbsAnchor1->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<std::string>("-tab")));
-                breadCrumbsAnchor1->setLink(*test);
+                breadCrumbsAnchor1->setRefInternalPath("/" + internalPathWithoutBlank[i]);
                 this->breadCrumbsContainer->addWidget(breadCrumbsAnchor1);
                 breadCrumbsAnchor1->setAttributeValue("class", getBreadcrumbsClass(internalPathWithoutBlank.size(),1).c_str());
-                break;
+                 break;
             }
             case 2:
             {
-                const Wt::WLink *test = new Wt::WLink(internalPathWithoutBlank[i-1] + "/" + internalPathWithoutBlank[i]);
                 breadCrumbsAnchor2->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<std::string>("-tab")));
-                breadCrumbsAnchor2->setLink(*test);
+                breadCrumbsAnchor2->setRefInternalPath("/" + internalPathWithoutBlank[i-1] + "/" + internalPathWithoutBlank[i]);
                 this->breadCrumbsContainer->addWidget(breadCrumbsAnchor2);
                 breadCrumbsAnchor2->setAttributeValue("class", getBreadcrumbsClass(internalPathWithoutBlank.size(),2).c_str());
                 break;

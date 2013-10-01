@@ -7,194 +7,124 @@
 
 #include "AssetManagementWidget.h"
 
-AssetManagementWidget::AssetManagementWidget(AssetManagementModel *model, Session *session)
-: Wt::WContainerWidget()
+AssetManagementWidget::AssetManagementWidget()
+: CreatePageWidget("asset")
 {
-    model_ = model;
     created_ = false;
-    this->session = session;
-    Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use("asset",false);      
-    createUI();
 }
 
-void AssetManagementWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
+void    AssetManagementWidget::update()
 {
-    if (!created_)
+        if (!created_)
+        {
+            infoTable = this->createBodyTable();
+
+            createUI();            
+
+            bindWidget("resource-header", this->createHeaderTable());
+            bindWidget("resource-table", infoTable);
+
+            created_ = true;
+        }
+}
+
+void    AssetManagementWidget::createUI()
+{
+    std::vector<std::string>            titleHeader;
+
+    titleHeader.push_back("name");
+    titleHeader.push_back("name");
+    titleHeader.push_back("download-script");
+    this->addResourceInHeaderTable(titleHeader, 2);
+    addResourceInTable();
+}
+
+void    AssetManagementWidget::addResourceInTable()
+{
+    map_Type myTable;
+    Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+    Wt::Json::Object tmp;
+    Wt::Json::Array::const_iterator idx1;
+    std::vector<std::string> name;
+    std::vector<Wt::WInteractWidget*> linkButton;
+    Wt::WFileResource *file;
+    Wt::WString nameAsset = "";
+    long long i(0);
+
+    //gkr: Récupération des informations, grâce au renvois du JSON contenu dans result.
+    result1 = result;
+    for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
     {
-        created_ = true;
-    }
+        name.clear();
+        linkButton.clear();
+        //gkr: Add name Asset for row, and add id for sort.
+        tmp = (*idx1);
+        nameAsset = tmp.get("name");
+        i = tmp.get("id");
 
-    Wt::WContainerWidget::render(flags);
+        name.push_back("id:" + boost::lexical_cast<std::string, int>(i));
+        name.push_back(boost::lexical_cast<std::string, Wt::WString>(nameAsset));
+        name.push_back(boost::lexical_cast<std::string, Wt::WString>(nameAsset));
+        //gkr: Add button for row.
+        file = generateScript(boost::lexical_cast<long long>(i), nameAsset);
+
+        Wt::WAnchor *downloadButton = new Wt::WAnchor(file,"");
+        downloadButton->setAttributeValue("class","btn btn-info");
+        downloadButton->setTextFormat(Wt::XHTMLUnsafeText);
+        downloadButton->setText("<span class='input-group-btn'><i class='icon-download icon-white'></i></span>");
+        downloadButton->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this, file->fileName()));
+
+        linkButton.push_back(downloadButton);
+
+        myTable[name] = linkButton;
+    }
+    this->addColumnInTable(myTable);
 }
 
-void AssetManagementWidget::createUI()
+Wt::WValidator    *AssetManagementWidget::editValidator()
 {
-    // Top template
-    mainForm = new Wt::WTemplateFormView(Wt::WString::tr("Alert.Asset.Management.template"));    
-    
-    // widgets of the template
-    mainForm->bindWidget("asset-name", createFormWidget(AssetManagementModel::AssetName));
-    
-    Wt::WPushButton *addAssetButton = new Wt::WPushButton(tr("Alert.asset.add-asset-button"));
-    // Todo : voir si la fonction dédiée fonctionne avec les dernières versions de Wt
-    addAssetButton->setAttributeValue("class","btn btn-info");
-    mainForm->bindWidget("add-asset-button", addAssetButton);
-    addAssetButton->clicked().connect(boost::bind(&AssetManagementWidget::addAsset, this));
-    
+    Wt::WRegExpValidator *validator = 
+            new Wt::WRegExpValidator(REG_EXP);
+    validator->setMandatory(true);
+    return validator;
+}
 
-    mainForm->updateModel(model_);
-    mainForm->refresh();
-    // Table where the links / buttons are added
-    Wt::WTable *linksTable = new Wt::WTable();
-    linksTable->addStyleClass("table");
-    linksTable->addStyleClass("table-bordered");
-    linksTable->addStyleClass("table-striped");
-    
-    int row = 0;
-
-    
-    linksTable->setHeaderCount(2,Wt::Horizontal);
-    linksTable->elementAt(row, 0)->setColumnSpan(2);
-    linksTable->columnAt(1)->setStyleClass("asset-action-width");
-    
-    Wt::WText *tableTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-hdd'></i></span><h5>"+ tr("Alert.asset.add-asset-form") + "</h5></div>",linksTable->elementAt(row, 0));
-    linksTable->elementAt(row, 0)->setPadding(*(new Wt::WLength("0px")));
-    tableTitle->setTextFormat(Wt::XHTMLUnsafeText);
-    ++row;
-    new Wt::WText(tr("Alert.asset.asset-name"),linksTable->elementAt(row, 0));
-    new Wt::WText(tr("Alert.asset.asset-action"),linksTable->elementAt(row, 1));
-         
+void AssetManagementWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
+{
+    Wt::WLineEdit *test;
+    std::cout << "Resultat des entrées : " << std::endl;
+ 
+    for (std::vector<Wt::WInteractWidget*>::iterator i = argument.begin(); i != argument.end(); i++)
+    {
+        test = (Wt::WLineEdit*)(*i);
+        std::cout << test->text() << std::endl;
+    }
+    /*
+    doJavaScript("$('#" + boost::lexical_cast<std::string>(assetEdit->text()) + "').toggleClass('error',false)");
+    doJavaScript("$('#" + boost::lexical_cast<std::string>(assetEdit->text()) + "-hint').hide()");
     try
     {
-        Wt::log("info") << "Debug : before transaction";
-        Wt::Dbo::Transaction transaction(*this->session);
-        std::string queryString =  "select ast from \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN" 
-                                    " ("
-                                    "    SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" WHERE \"PRB_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(session->user()->currentOrganization.id()) +
-                                    ")"
-                                    " AND \"AST_DELETE\" IS NULL";
-        Wt::log("info") << "Debug : " << queryString ;
-        Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > resQuery = session->query<Wt::Dbo::ptr<Asset> >(queryString);
-
-        Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > listAssets = resQuery.resultList();
-        for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = listAssets.begin(); i != listAssets.end(); ++i) 
+        Wt::Dbo::Transaction transaction(*session_);
+        Probe *newProbe = new Probe();
+        Wt::Dbo::ptr<Probe> ptrNewProbe = session_->add<Probe>(newProbe);
+        ptrNewProbe.modify()->organization = session_->user().get()->currentOrganization;
+        ptrNewProbe.modify()->name = "Probe_" + session_->user().get()->lastName + "_" + assetEdit->text();
+            
+        Asset *newAsset = new Asset();
+            
+        Wt::Dbo::ptr<Asset> ptrNewAsset = session_->add<Asset>(newAsset);
+        ptrNewAsset.modify()->name = assetEdit->text();
+        ptrNewAsset.modify()->assetIsHost = true;
+        ptrNewAsset.modify()->probe = ptrNewProbe;
+        ptrNewAsset.modify()->organization = session_->user().get()->currentOrganization;
+            
+        //fixme : temporaire jusqu'à la gestion des plugins
+        Wt::Dbo::ptr<Plugin> plgSystem = session_->find<Plugin>().where("\"PLG_ID\" = ?").bind(1);
+        if (plgSystem)
         {
-            ++row;
-            Wt::WFileResource *file = generateScript(i->id(),i->get()->name);
-            if (file == NULL)
-            {
-                new Wt::WLabel(Wt::WString::tr("Alert.asset.file-not-generated"),linksTable->elementAt(row, 1));
-                new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
-
-                Wt::WPushButton *delButton = new Wt::WPushButton("", linksTable->elementAt(row, 1));
-                delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
-            }
-            else
-            {
-                Wt::WAnchor *anchor = new Wt::WAnchor(file,"",linksTable->elementAt(row, 1));
-                anchor->setTextFormat(Wt::XHTMLUnsafeText);
-                anchor->setText("<i class='icon-download icon-white'></i> " + tr("Alert.asset.download-script"));
-                anchor->addStyleClass("btn");
-                anchor->addStyleClass("btn-info");
-                anchor->setTarget(Wt::TargetNewWindow);
-                anchor->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this,file->fileName()));
-
-                new Wt::WLabel(i->get()->name,linksTable->elementAt(row, 0));
-
-                Wt::WText *nbspText = new Wt::WText("&nbsp;", linksTable->elementAt(row, 1));
-                nbspText->setTextFormat(Wt::XHTMLUnsafeText);
-
-                Wt::WPushButton *delButton = new Wt::WPushButton(tr("Alert.asset.delete-asset"), linksTable->elementAt(row, 1));
-                delButton->setAttributeValue("class","btn btn-danger");
-
-                delButton->setTextFormat(Wt::XHTMLUnsafeText);
-                delButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.asset.delete-asset"));
-
-                delButton->clicked().connect(boost::bind(&AssetManagementWidget::deleteAsset,this,i->id()));
-            }
+            ptrNewAsset.modify()->plugins.insert(plgSystem);
         }
-        
-        transaction.commit();
-    }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("1"),Wt::Ok);
-        Wt::log("error") << "[AssetManagementWidget] " << e.what();
-    }
-     
-    
-    Wt::WVBoxLayout *mainVerticalLayout = new Wt::WVBoxLayout();
-    Wt::WHBoxLayout *topHorizontalLayout = new Wt::WHBoxLayout();
-    Wt::WHBoxLayout *bottomHorizontalLayout = new Wt::WHBoxLayout();
-    
-      
-    topHorizontalLayout->addWidget(mainForm);
-    bottomHorizontalLayout->addWidget(linksTable);
-    
-    mainVerticalLayout->addLayout(topHorizontalLayout);
-    mainVerticalLayout->addLayout(bottomHorizontalLayout);
-    
-    this->setLayout(mainVerticalLayout);
-    
-}
-
-void AssetManagementWidget::downloadScript(std::string fileName)
-{
-    UserActionManagement::registerUserAction(Enums::download,fileName,0);
-}
-
-Wt::WFormWidget *AssetManagementWidget::createFormWidget(Wt::WFormModel::Field field)
-{
-    Wt::WFormWidget *result = 0;
-
-    if (field == AssetManagementModel::AssetName)
-    {
-        Wt::WLineEdit *line = new Wt::WLineEdit();
-        result = line;
-    }
-
-    return result;
-}
-
-void AssetManagementWidget::addAsset()
-{
-    doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "').toggleClass('error',false)");
-    doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "-hint').hide()");
-    try
-    {
-        Wt::Dbo::Transaction transaction(*session);
-        mainForm->updateModelField(model_, AssetManagementModel::AssetName);
-        if (model_->validateField(AssetManagementModel::AssetName))
-        {
-            Probe *newProbe = new Probe();
-            Wt::Dbo::ptr<Probe> ptrNewProbe = session->add<Probe>(newProbe);
-            ptrNewProbe.modify()->organization = session->user().get()->currentOrganization;
-            ptrNewProbe.modify()->name = "Probe_" + session->user().get()->lastName + "_" + model_->valueText(AssetManagementModel::AssetName);
-            
-            
-            Asset *newAsset = new Asset();
-            
-            Wt::Dbo::ptr<Asset> ptrNewAsset = session->add<Asset>(newAsset);
-            ptrNewAsset.modify()->name = model_->valueText(AssetManagementModel::AssetName);
-            ptrNewAsset.modify()->assetIsHost = true;
-            ptrNewAsset.modify()->probe = ptrNewProbe;
-            ptrNewAsset.modify()->organization = session->user().get()->currentOrganization;
-            
-            //fixme : temporaire jusqu'à la gestion des plugins
-            Wt::Dbo::ptr<Plugin> plgSystem = session->find<Plugin>().where("\"PLG_ID\" = ?").bind(1);
-            if (plgSystem)
-            {
-                ptrNewAsset.modify()->plugins.insert(plgSystem);
-            }
-            UserActionManagement::registerUserAction(Enums::add,Constants::T_ASSET_AST,ptrNewAsset.id());
-        }
-        else
-        {
-            mainForm->updateModelField(model_, AssetManagementModel::AssetName);
-            doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "').toggleClass('error')");
-            doJavaScript("$('#" + boost::lexical_cast<std::string>(AssetManagementModel::AssetName) + "-hint').show()");
-        }
+        UserActionManagement::registerUserAction(Enums::add,Constants::T_ASSET_AST,ptrNewAsset.id());
         transaction.commit();  
     }
     catch (Wt::Dbo::Exception e)
@@ -202,23 +132,21 @@ void AssetManagementWidget::addAsset()
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("2"),Wt::Ok);
         Wt::log("error") << "[AssetManagementWidget] " << e.what();
     }
+     * */
+    recoverListAsset();
     created_ = false;
-    model_->reset();
-    createUI();
-    Wt::WApplication *app = Wt::WApplication::instance();
-    app->root()->widget(0)->refresh();
 }
 
-void AssetManagementWidget::deleteAsset(long long id)
+void AssetManagementWidget::deleteResource(long long id)
 {
     try
     {
-        Wt::Dbo::Transaction transaction(*session);
-        Wt::Dbo::ptr<Asset>  ptrAsset = session->find<Asset>().where("\"AST_ID\" = ?").bind(id);
+        Wt::Dbo::Transaction transaction(*session_);
+        Wt::Dbo::ptr<Asset>  ptrAsset = session_->find<Asset>().where("\"AST_ID\" = ?").bind(id);
 
         const std::string executeString = "DELETE FROM \"TJ_AST_PLG\" " 
                 " WHERE \"TJ_AST_PLG\".\"T_ASSET_AST_AST_ID\" = " + boost::lexical_cast<std::string>(id);
-        session->execute(executeString);
+        session_->execute(executeString);
 
         ptrAsset.modify()->deleteTag = Wt::WDateTime::currentDateTime();
         UserActionManagement::registerUserAction(Enums::del,Constants::T_ASSET_AST,ptrAsset.id());
@@ -230,15 +158,62 @@ void AssetManagementWidget::deleteAsset(long long id)
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("3"),Wt::Ok);
         return;
     }
-            
+    recoverListAsset();
     created_ = false;
-    model_->reset();
-    createUI();
-    Wt::WApplication *app = Wt::WApplication::instance();
-    app->root()->widget(0)->refresh();
 }
 
+void AssetManagementWidget::getAsset(boost::system::error_code err, const Wt::Http::Message& response)
+{
+   Wt::WApplication::instance()->resumeRendering();
+   result = 0;
+    if (!err)
+    {
+        if(response.status() == 200)
+        {
+            try
+            {
+                Wt::Json::parse(response.body(), result);
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
+            }
+        }
+        else
+        {
+            std::cout << "vide" << std::endl;
+            Wt::log("error") << "[Alert Edition Widget] " << response.body();
+            Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "status",tr("Alert.alert.database-error"),Wt::Ok);
+        }
+    }
+    else
+    {
+        Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
+    }
+    update();
+}
 
+void    AssetManagementWidget::recoverListAsset()
+{
+    /**
+     ** Connection API
+     */
+        std::string apiAddress = this->getApiUrl() + "/assets";
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&AssetManagementWidget::getAsset, this, _1, _2));
+    apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
+    if (client->get(apiAddress))
+        Wt::WApplication::instance()->deferRendering();
+    else
+        std::cout << "Error Client Http" << std::endl;
+}
 
 Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WString assetName)
 {
@@ -250,9 +225,9 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WStrin
     std::string scriptCustomPart = "";
     try
     {
-        scriptCustomPart = "\nLOGIN=\"" + this->session->user()->eMail.toUTF8() + "\"\n" 
+        scriptCustomPart = "\nLOGIN=\"" + this->session_->user()->eMail.toUTF8() + "\"\n" 
         + "ASSET_ID=" + boost::lexical_cast<std::string, long long>(i) + "\n"
-        + "TOKEN=\"" + this->session->user()->currentOrganization.get()->token.toUTF8() + "\"\n";
+        + "TOKEN=\"" + this->session_->user()->currentOrganization.get()->token.toUTF8() + "\"\n";
     }
     catch (Wt::Dbo::Exception e)
     {
@@ -260,10 +235,8 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WStrin
         return NULL;
     }
 
-    
     // full script to send
     std::string contentToSend = disclaimerString + scriptCustomPart + bodyString;
-    
     
     // temp file
     char *tmpname = strdup("/tmp/echoes-tmp-fileXXXXXX");
@@ -272,7 +245,6 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WStrin
     std::ofstream f(tmpname);
     f << contentToSend;
     f.close();
-    
     
     std::string assetNameSpacesReplaced = assetName.toUTF8();
     boost::replace_all(assetNameSpacesReplaced, " ", "_");
@@ -305,14 +277,52 @@ std::string AssetManagementWidget::getStringFromFile(std::string resourcePath)
     return res;
 }
 
+void AssetManagementWidget::downloadScript(std::string fileName)
+{
+    UserActionManagement::registerUserAction(Enums::download,fileName,0);
+}
+
+void AssetManagementWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
+{
+    if (!created_)
+    {
+        update();
+    }
+    Wt::WTemplate::render(flags);
+}
+
 bool AssetManagementWidget::validate()
 {
     return model_->validate();
 }
 
+void    AssetManagementWidget::refresh()
+{
+        update();
+}
 
 void AssetManagementWidget::close()
 {
-    delete this;
+//    delete this;
+}
+
+void    AssetManagementWidget::setModel(AssetManagementModel *model)
+{
+    model_ = model;
+}
+
+void    AssetManagementWidget::setSession(Session *session)
+{
+    session_ = session;
+}
+
+void    AssetManagementWidget::setApiUrl(std::string apiUrl)
+{
+    apiUrl_ = apiUrl;
+}
+
+std::string   AssetManagementWidget::getApiUrl()
+{
+    return apiUrl_;
 }
 

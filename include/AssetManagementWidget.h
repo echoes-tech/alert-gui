@@ -10,62 +10,46 @@
 
 #include "GlobalIncludeFile.h"
 
-#include <Wt/WAnchor>
-#include <Wt/WApplication>
-#include <Wt/WContainerWidget>
+#include <Wt/WInteractWidget>
 #include <Wt/WDialog>
-#include <Wt/WImage>
+#include <Wt/WTableView>
+#include <Wt/WLengthValidator>
+#include <Wt/WContainerWidget>
+#include <Wt/WAnchor>
 #include <Wt/WLineEdit>
 #include <Wt/WPushButton>
 #include <Wt/WText>
-
-#include <Wt/WBreak>
-#include <Wt/WDatePicker>
-#include <Wt/WSelectionBox>
-#include <Wt/WIntValidator>
-#include <Wt/WTextArea>
-#include <Wt/WFileResource>
-
-#include <Wt/WComboBox>
-#include <Wt/WSelectionBox>
-#include <Wt/WStringListModel>
-#include <Wt/Dbo/Query>
-#include <Wt/WStandardItem>
-#include <Wt/WStandardItemModel>
-#include <Wt/Mail/Client>
-#include <Wt/Mail/Message>
-
-#include <Wt/WMessageBox>
-
-#include <Wt/WVBoxLayout>
-#include <Wt/WHBoxLayout>
 #include <Wt/WTable>
-#include <Wt/WTableCell>
-#include <Wt/WTableView>
 
-#include <Wt/Utils>
-#include <Wt/WLabel>
-
-#include <Wt/WGroupBox>
-#include <Wt/WButtonGroup>
-#include <Wt/WRadioButton>
-
-#include <memory>
-#include <iostream>
+// Ancier
+#include <Wt/Dbo/Query>
 #include <fstream>
 #include <boost/random.hpp>
 #include <boost/random/random_device.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 #include <boost/algorithm/string.hpp>
 
-class AssetManagementWidget : public Wt::WContainerWidget
+#include <Wt/Json/Value>
+
+#include <vector>
+#include <map>
+
+
+#include "CreatePageWidget.h"
+
+#define REG_EXP ("[^\\\\<>/.&;?!§,{}()*|]{1,255}")
+
+class CreatePageWidget;
+
+class AssetManagementWidget : 
+public CreatePageWidget 
 {
 public:
   /*! \brief Constructor
    *
    * Creates a new authentication.
    */
-  AssetManagementWidget(AssetManagementModel *model, Session *session);
+  AssetManagementWidget();
 
   /*! \brief Returns the registration model.
    *
@@ -75,7 +59,23 @@ public:
   AssetManagementModel *model() const { return model_; }
   
   long long userId;
+  void                  setModel(AssetManagementModel *model);
+  void                  setSession(Session *session);
+  void                  setApiUrl(std::string apiUrl);
+  std::string           getApiUrl();
+//  void  getAsset();
+  void                  getAsset(boost::system::error_code err, const Wt::Http::Message& response);
+void    refresh();
+void    recoverListAsset();
+void    addResourceInTable();
 
+
+
+Wt::Json::Value result;
+
+  Wt::WTable *corpTable;
+  std::string apiUrl_;
+  CreatePageWidget *AssetPage;
   
 protected:
   /*! \brief Validates the current information.
@@ -95,44 +95,45 @@ protected:
    */
   virtual void close();
 
+void    initPopup();
+    void        addResourceInPopup(Wt::WDialog *dialog_);
+
 
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   void createUI();
 
-  virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
   
-  
-  void addAsset();
-  void deleteAsset(long long id);
+  void addResource(std::vector<Wt::WInteractWidget*> argument);
+  void deleteResource(long long id);
   Wt::WFileResource *generateScript(long long i, Wt::WString assetName);
   std::string getStringFromFile(std::string resourcePath);
+  
+  
+  Wt::WContainerWidget  *infoHeader;
+  Wt::WContainerWidget  *infoTable;
+
+  Wt::WValidator    *editValidator();
+
 
 private:
-  AssetManagementModel *model_;
-  Session * session;
-
-  Wt::WTemplateFormView *mainForm;
   
-  bool created_;
+  //Wt::WDialog *dialog_;
   
-  void downloadScript(std::string fileName);
+  Wt::WLineEdit *saveEdit;
+
+  Wt::WTable            *saveTable; //supprimer
   
-  Wt::WContainerWidget *feedbackMessages_;
-
-  Wt::WLineEdit *nameEdit_;
-  Wt::WLineEdit *firstNameEdit_;
-
-  Wt::WComboBox *countryEdit_;
-  Wt::WComboBox *cityEdit_;
-
-  Wt::WDatePicker *birthDateEdit_;
-  Wt::WPushButton *childCountEdit_;
-  Wt::WLineEdit *weightEdit_;
-
-  Wt::WTextArea *remarksEdit_;
+  Wt::WLineEdit         *assetName; //link wit AssetName
   
+  bool                  created_;
+  AssetManagementModel  *model_;
+  Session               *session_;
+
+  void                  downloadScript(std::string fileName);
+  void                  update();
+
+  Wt::WLineEdit         *assetEdit;
 };
-
 
 
 #endif	/* ASSETMANAGEMENTWIDGET_H */

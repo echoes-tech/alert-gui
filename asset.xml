@@ -3,23 +3,37 @@
 
   <!-- Models -->
 
-  <message id="Alert.asset.asset-form-title">Servers</message>
-  <message id="Alert.asset.asset-form-info">On this page you can add the servers you need to monitor and get the scripts to configure them.</message>
+  <message id="Alert.asset.form-title">Servers</message>
+  <message id="Alert.asset.form-info">On this page you can add the servers you need to monitor and get the scripts to configure them.</message>
   
-  <message id="Alert.asset.asset-name-label">Server to add: </message>
-  <message id="Alert.asset.asset-name-info">Invalid name</message>
+  <message id="Alert.asset.name-label">Server to add: </message>
+  <message id="Alert.asset.invalid-name">Invalid name</message>
+  <message id="Alert.asset.invalid-name-info">
+      <h5>Invalid name :</h5>
+      <ul>
+          <li>Size Minimun : 1 </li>
+          <li>Size Maximum : 255</li>
+          <li> Not use : &lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</li>
+      </ul>
+  </message>
   
-  <message id="Alert.asset.add-asset-button">Add a server</message>
+  <message id="Alert.asset.add-button">Add a server</message>
 
-  <message id="Alert.asset.add-asset-form">Your servers</message>
+  <message id="Alert.asset.modif-button">Modif</message>
+  <message id="Alert.asset.delete-button">Delete</message>
+
+  <message id="Alert.asset.add-form">Your servers</message>
   
-  <message id="Alert.asset.asset-name">Asset name</message>
-  <message id="Alert.asset.asset-action">Actions</message>
+  <message id="Alert.asset.name">Asset name</message>
+  <message id="Alert.asset.action">Actions</message>
   
-  <message id="Alert.asset.download-script">Download</message>
+  <message id="Alert.asset.download-script">Download<br />Script</message>
+
   <message id="Alert.asset.delete-asset">Delete this server</message>
+  <message id="Alert.asset.modif-asset">Modifi this server</message>
+  <message id="Alert.asset.add-asset">Add this server</message>
 
-  <message id="Alert.asset.asset-name-invalid">Invalid</message>
+  <message id="Alert.asset.name-invalid">Invalid</message>
   <message id="Alert.asset.database-error-title">Database error</message>
   <message id="Alert.asset.database-error">Error : {1} | {2}</message>
   
@@ -29,32 +43,19 @@
   
   <!-- templates -->
 
-    <message id="Alert.Asset.Management.template">
+    <message id="Alert.asset.Management.template" >
         <br />
-        <div class="Probe-form">
-
-            <div class ="alert alert-info">${tr:Alert.asset.asset-form-info}</div>
-            <div class = "clear"></div>
-       
+            <div class ="alert alert-info">${tr:Alert.asset.form-info}</div> 
             <div id="asset-name" class="control-group">
                 <div class="row-fluid">
-                    <div class="span2">${tr:Alert.asset.asset-name-label}</div>
-                    <div class="span3">${asset-name}</div>
-                    <div class="span3">${add-asset-button}</div><span id="asset-name-hint" class="help-inline span3" style="display: none; ">${tr:Alert.asset.asset-name-info}</span>
+                <div id="info-header" class="widget-box" >
+                    ${resource-header}
+                    ${resource-table}
                 </div>
             </div>
-
+            </div>
             
-
-        </div>   
-         
-        
-        
-
-
-
     </message>
-
 
   
 

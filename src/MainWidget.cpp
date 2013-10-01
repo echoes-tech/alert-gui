@@ -190,14 +190,17 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             try
             {
                 Wt::Dbo::Transaction transaction(*(this->session));
+                amw = new AssetManagementWidget();
                 amm = new AssetManagementModel();
+                amw->setModel(amm);
+                amw->setSession(this->session);
+                amw->setApiUrl(_apiUrl);
                 transaction.commit();
             }
             catch (Wt::Dbo::Exception e)
             {
                 Wt::log("error") << e.what();
             }
-            amw = new AssetManagementWidget(amm,this->session);
             break;
         }
         case Enums::EPageType::WELCOME:
@@ -440,6 +443,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::ASSET:
                 {
                     this->contentFluid->addWidget(amw);
+                    amw->recoverListAsset();
                     break;
                 }
                 case Enums::EPageType::WELCOME:

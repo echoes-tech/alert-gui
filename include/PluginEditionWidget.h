@@ -8,7 +8,9 @@
 #ifndef PLUGINEDITIONWIDGET_H
 #define	PLUGINEDITIONWIDGET_H
 
-#include "GlobalIncludeFile.h"
+#include <fstream>
+
+#include <tools/Session.h>
 
 #include <Wt/Json/Array>
 #include <Wt/Json/Value>
@@ -32,6 +34,16 @@
 #include <Wt/WIOService>
 #include <Wt/WApplication>
 
+#include <Wt/WTemplateFormView>
+#include <Wt/WLineEdit>
+#include <Wt/WComboBox>
+#include <Wt/WSelectionBox>
+#include <Wt/WStringListModel>
+#include <Wt/WCheckBox>
+#include <Wt/WTableCell>
+#include <Wt/WAnchor>
+#include <Wt/WFileResource>
+#include <Wt/WServer>
 #include <boost/algorithm/string.hpp>
 
 class PluginEditionWidget : public Wt::WTemplateFormView 

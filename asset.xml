@@ -31,7 +31,7 @@
 
   <message id="Alert.asset.delete-asset">Delete this server</message>
   <message id="Alert.asset.modif-asset">Modifi this server</message>
-  <message id="Alert.asset.add-asset">Add this server</message>
+  <message id="Alert.asset.add-asset">Add server</message>
 
   <message id="Alert.asset.name-invalid">Invalid</message>
   <message id="Alert.asset.database-error-title">Database error</message>

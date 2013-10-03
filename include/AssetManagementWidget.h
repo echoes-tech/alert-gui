@@ -34,6 +34,9 @@
 #include <vector>
 #include <map>
 
+#include <Wt/Http/Message>
+
+#include <Wt/WInPlaceEdit>
 
 #include "CreatePageWidget.h"
 
@@ -69,6 +72,7 @@ void    refresh();
 void    recoverListAsset();
 void    addResourceInTable();
 
+void    addResourceInPopupTable();
 
 
 Wt::Json::Value result;
@@ -102,7 +106,7 @@ void    initPopup();
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   void createUI();
 
-  
+  void modifResource(std::vector<Wt::WInteractWidget*> argument, long long id);
   void addResource(std::vector<Wt::WInteractWidget*> argument);
   void deleteResource(long long id);
   Wt::WFileResource *generateScript(long long i, Wt::WString assetName);
@@ -112,8 +116,10 @@ void    initPopup();
   Wt::WContainerWidget  *infoHeader;
   Wt::WContainerWidget  *infoTable;
 
-  Wt::WValidator    *editValidator();
+  Wt::WValidator    *editValidator(int who);
 
+void    putAsset(boost::system::error_code err, const Wt::Http::Message& response);
+void    postAsset(boost::system::error_code err, const Wt::Http::Message& response);
 
 private:
   

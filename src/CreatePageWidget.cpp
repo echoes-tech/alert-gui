@@ -49,138 +49,6 @@ Wt::WContainerWidget    *CreatePageWidget::createHeaderTable()
     return headerTable;
 }
 
-void    CreatePageWidget::popupTable(Wt::WDialog *dialog_)
-{
-
-//    Wt::WMenuItem *tab = new Wt::WMenuItem();
-
-    Wt::WTabWidget *menu = new Wt::WTabWidget(dialog_->contents());
-    menu->addStyleClass("tabwidget");
-
-    Wt::WLineEdit *test = new Wt::WLineEdit("C'est la phrase de base");
-    test->enterPressed().connect(dialog_, &Wt::WDialog::accept);
-    
-    Wt::WTable *myTable = new Wt::WTable();
-    myTable->addStyleClass("table table-bordered table-striped table-hover data-table dataTable");
-    
-    Wt::WInPlaceEdit *ipe = new Wt::WInPlaceEdit("salut totu le monde", myTable->elementAt(0,0));
-    ipe->setButtonsEnabled(false);
-    ipe = new Wt::WInPlaceEdit("salut tout le monde 2", myTable->elementAt(0,1));
-    ipe->setButtonsEnabled(false);
-
-    menu->addTab(myTable, "ma première table", Wt::WTabWidget::PreLoading);
-
-    menu->addTab(test, "Introduction", Wt::WTabWidget::PreLoading);
-}
-
-void    CreatePageWidget::popupForAdd()
-{
-    std::vector<Wt::WInteractWidget*>   inputName;
-    Wt::WLineEdit                       *input;
-    std::string         check;
-    Wt::WText *error;
-    
-    //gkr: Init dialog popup
-    Wt::WDialog *dialog_ = new Wt::WDialog(tr("Alert." + nameResourcePage + ".add-" + nameResourcePage));
-    dialog_->setResizable(true);
-    dialog_->setClosable(true);
-            
-    for (std::vector<std::string>::iterator i = titleHeader_.begin(); i != titleHeader_.end(); i++)
-    {
-        new Wt::WText(*i, dialog_->contents());
-        input = new Wt::WLineEdit(dialog_->contents());
-        input->setValidator(editValidator());
-        input->enterPressed().connect(dialog_, &Wt::WDialog::accept);
-        input->setFocus();
-        inputName.push_back(input);
-    }
-    error =  new Wt::WText(tr("Alert.asset.invalid-name-info"), dialog_->contents());
-    error->hide();
-    
-//    if (popupTable_)
-        popupTable(dialog_);
-    
-    Wt::WPushButton *ok = new Wt::WPushButton("Ok", dialog_->contents());
-    ok->clicked().connect(dialog_, &Wt::WDialog::accept);    
-
-    Wt::WPushButton *annul = new Wt::WPushButton("Annuler", dialog_->contents()); //xml
-    annul->clicked().connect(dialog_, &Wt::WDialog::reject);
-    
-    dialog_->finished().connect(std::bind([=] () {
-        if (dialog_->result() == Wt::WDialog::Rejected)
-        {
-            return;
-        }
-        else
-        {
-            bool        boolean = true;
-            for (std::vector<Wt::WInteractWidget*>::const_iterator j = inputName.begin(); 
-                    j != inputName.end(); 
-                    j++)
-            {
-                if (((Wt::WLineEdit*)(*j))->validate() == Wt::WValidator::Invalid
-                        || ((Wt::WLineEdit*)(*j))->text().empty())
-                    // This is cast in LineEdit for use validate(), because in connect we can't write in variable 'j'.
-                    // Il a était caster en LineEdit pour utiliser validate(), parce qu'a l'utilisation de connecte on ne peut pas modifier la variable 'j'.
-                {
-                    ((Wt::WLineEdit*)(*j))->setAttributeValue("style", "border-color: #FF0000; box-shadow: 0 0 10px #FF0000;");
-                    ((Wt::WLineEdit*)(*j))->setFocus();
-                    error->show();
-                    boolean = false;
-                }
-                else
-                    ((Wt::WLineEdit*)(*j))->setAttributeValue("style", "");
-            }
-                if (!boolean)
-                {
-                    dialog_->show();
-                    return;
-                }
-        }
-        addResource(inputName);
-        return;
-    }));
-    dialog_->show();    
-}
-
-void    CreatePageWidget::popupForModif(std::vector<std::string> resources, long long id) 
-{
-    std::vector<std::string>::iterator          vectorString;
-    std::string                                 nameRessouce;
-    Wt::WDialog *dialog_ = new Wt::WDialog(tr("Alert." + nameResourcePage + "modif-" + nameResourcePage));  
-
-    for (vectorString = resources.begin(); vectorString != resources.end(); vectorString++)
-    {
-        nameRessouce = *vectorString;
-        if (!nameRessouce.compare(0, 3, "id:"))
-        {
-            if (id == atoll(nameRessouce.c_str() + 3))
-            {
-                vectorString++;
-                //        Wt::WText *text = new Wt::WText("Modif " + vectorString->data() + " : ", dialog_->contents());
-                Wt::WLineEdit *saveEdit = new Wt::WLineEdit(vectorString->data(), dialog_->contents());
-                saveEdit->setValidator(editValidator());
-                saveEdit->enterPressed().connect(dialog_, &Wt::WDialog::accept);
-            }
-        }
-    }
-    Wt::WPushButton *ok = new Wt::WPushButton("Ok", dialog_->contents());
-    ok->clicked().connect(dialog_, &Wt::WDialog::accept);
-
-    Wt::WPushButton *annul = new Wt::WPushButton("Annuler", dialog_->contents()); //xml
-    annul->clicked().connect(dialog_, &Wt::WDialog::reject);
-
-    dialog_->finished().connect(std::bind([=] () {
-        if (dialog_->result() == Wt::WDialog::Rejected)
-            return;
-        else if (assetEdit->validate() == Wt::WValidator::Valid)
-            std::cout << "Modification" << std::endl;
-            //            addResource(assetEdit);
-        else
-            return;
-    }));
-    dialog_->show(); 
-}
 
 Wt::WContainerWidget    *CreatePageWidget::createBodyTable()
 {
@@ -229,7 +97,7 @@ void    CreatePageWidget::addColumnInTable(map_Type myTable)
     map_Type::const_iterator                    i;
     std::vector<std::string>::const_iterator    vectorString;
     std::vector<Wt::WInteractWidget*>           linkButton;
-    std::vector<std::string>                    ressources;
+    std::vector<std::string>                    resources;
     std::string                                 nameRessouce;
     std::string                                 newName;
     Wt::WLabel                                  *newColumn;
@@ -240,11 +108,9 @@ void    CreatePageWidget::addColumnInTable(map_Type myTable)
         for (vectorString = i->first.begin(); vectorString != i->first.end(); vectorString++)
         {
             nameRessouce = *vectorString;
-            ressources.push_back(nameRessouce);
             if (nameRessouce.compare(0, 3, "id:"))
             {
-                if (i == myTable.begin())   // Pour remplir le nombre d'inputs dans l'ajouts d'une ressource.
-                    saveTitleHeader.push_back(new Wt::WLineEdit(nameRessouce));
+                resources.push_back(nameRessouce);
                 newName = nameRessouce;
                 if (nameRessouce.size() > SIZE_NAME_RESOURCE)
                 {
@@ -266,12 +132,11 @@ void    CreatePageWidget::addColumnInTable(map_Type myTable)
             mediaTable_->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
             mediaTable_->elementAt(rowTable, columnTable++)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
         }
-        addButtons(ressources, id);
+        addButtons(resources, id);
+        resources.clear();
         rowTable++;
         columnTable = 0;
     }
-    
-
 }
 
 void    CreatePageWidget::addButtons(std::vector<std::string> resources, long long id)
@@ -296,3 +161,164 @@ void    CreatePageWidget::addButtons(std::vector<std::string> resources, long lo
 }
 
 
+// POPUP :
+
+void    CreatePageWidget::popupForAdd()
+{
+    std::vector<Wt::WInteractWidget*>   inputName;
+    Wt::WLineEdit                       *input;
+    std::string         check;
+    Wt::WText *error;
+    int cpt(0);
+    
+    //gkr: Init dialog popup
+    Wt::WDialog *dialog_ = new Wt::WDialog(tr("Alert." + nameResourcePage + ".add-" + nameResourcePage));
+    dialog_->setResizable(true);
+    dialog_->setClosable(true);
+
+    for (std::vector<std::string>::iterator i = titleHeader_.begin(); i != titleHeader_.end(); i++)
+    {
+        new Wt::WText(*i, dialog_->contents());
+        input = new Wt::WLineEdit(dialog_->contents());
+        input->setValidator(editValidator(cpt));
+        input->enterPressed().connect(dialog_, &Wt::WDialog::accept);
+        input->setFocus();
+        inputName.push_back(input);
+    }
+
+    error = popupComplete(dialog_);
+    
+    dialog_->finished().connect(std::bind([=] () {
+        int check = popupCheck(inputName, dialog_);
+        if (check == 0)
+            addResource(inputName);
+        else if (check == 1)
+        {
+            error->show();
+            dialog_->show();
+        }
+        return;
+    }));
+    dialog_->show(); 
+}
+
+void    CreatePageWidget::popupForModif(std::vector<std::string> resources, long long id) 
+{
+    std::vector<Wt::WInteractWidget*>   inputName;
+    Wt::WDialog *dialog_ = new Wt::WDialog(tr("Alert." + nameResourcePage + ".modif-" + nameResourcePage));
+    Wt::WText   *error;
+    int cpt(0);
+    std::vector<std::string>::iterator i = titleHeader_.begin();
+    for (std::vector<std::string>::iterator vectorString = resources.begin(); vectorString != resources.end(); vectorString++)
+    {
+        new Wt::WText(*i, dialog_->contents());
+        Wt::WLineEdit *input = new Wt::WLineEdit(*vectorString, dialog_->contents());
+        input->setValidator(editValidator(cpt));
+        input->enterPressed().connect(dialog_, &Wt::WDialog::accept);
+        inputName.push_back(input);
+        i++;
+    }
+    
+    error = popupComplete(dialog_);
+
+    dialog_->finished().connect(std::bind([=] () {
+        int check = popupCheck(inputName, dialog_);
+        if (check == 0)
+            modifResource(inputName, id);
+        else if (check == 1)
+        {
+            error->show();
+            dialog_->show();
+        }
+        return;
+    }));
+    dialog_->show();
+}
+
+void    CreatePageWidget::popupAddTable(map_Type rst)
+{
+    popupTables.push_back(rst);
+}
+
+void    CreatePageWidget::popupAddTables(Wt::WDialog *dialog_)
+{
+    
+    Wt::WTabWidget *menu = new Wt::WTabWidget(dialog_->contents());
+    menu->addStyleClass("tabwidget");
+
+    Wt::WTable *myTable;
+    
+    for (std::vector<map_Type>::iterator j = popupTables.begin(); j != popupTables.end(); j++)
+    {
+        int column(0);
+        int row(0);
+        map_Type vectorMap = *j;
+        myTable = new Wt::WTable();
+        myTable->addStyleClass("table table-bordered table-striped table-hover data-table dataTable");
+        myTable->setHeaderCount(1,Wt::Horizontal);
+        for (map_Type::iterator mapMap = vectorMap.begin(); mapMap != vectorMap.end(); mapMap++)
+        {
+            for (std::vector<std::string>::const_iterator headerString = mapMap->first.begin(); headerString != mapMap->first.end(); headerString++)
+            {
+                std::string title = *headerString;                    std::cout << "info dans title : " << title.data() << std::endl;
+                    new Wt::WText(title.data(), myTable->elementAt(row++, column));
+                    for (std::vector<Wt::WInteractWidget*>::const_iterator resTable = mapMap->second.begin(); resTable != mapMap->second.end(); resTable++)
+                    {
+                        myTable->elementAt(row++, column)->addWidget(*resTable);
+                    }
+                }
+                row = 0;
+                column++;
+            }
+        menu->addTab(myTable, "ma table x", Wt::WTabWidget::PreLoading);
+    }
+    dialog_->contents()->addWidget(menu);
+    popupTables.clear();
+     
+}
+
+int    CreatePageWidget::popupCheck(std::vector<Wt::WInteractWidget*> inputName, Wt::WDialog *dialog_)
+{
+    int check = 2;
+    if (dialog_->result() == Wt::WDialog::Rejected)
+    {
+        return check;
+    }
+    else
+    {
+        check = 0;
+        for (std::vector<Wt::WInteractWidget*>::const_iterator j = inputName.begin(); 
+                j != inputName.end(); 
+                j++)
+        {
+            if (((Wt::WLineEdit*)(*j))->validate() == Wt::WValidator::Invalid
+                    || ((Wt::WLineEdit*)(*j))->text().empty())
+                    // This is cast in LineEdit for use validate(), because in connect we can't write in variable 'j'.
+                    // Il a était caster en LineEdit pour utiliser validate(), parce qu'a l'utilisation de connecte on ne peut pas modifier la variable 'j'.
+            {
+                ((Wt::WLineEdit*)(*j))->setAttributeValue("style", "border-color: #FF0000; box-shadow: 0 0 10px #FF0000;");
+                ((Wt::WLineEdit*)(*j))->setFocus();
+                check = 1;
+            }
+            else
+                ((Wt::WLineEdit*)(*j))->setAttributeValue("style", "");
+        }
+    }
+    return check;
+}
+
+Wt::WText    *CreatePageWidget::popupComplete(Wt::WDialog *dialog_)
+{
+    Wt::WText *error =  new Wt::WText(tr("Alert." + nameResourcePage + ".invalid-name-info"), dialog_->contents());
+    error->hide();
+
+    popupAddTables(dialog_);
+    
+    Wt::WPushButton *ok = new Wt::WPushButton("Ok", dialog_->contents());
+    ok->clicked().connect(dialog_, &Wt::WDialog::accept);    
+
+    Wt::WPushButton *annul = new Wt::WPushButton("Annuler", dialog_->contents()); //xml
+    annul->clicked().connect(dialog_, &Wt::WDialog::reject);
+    
+    return error;
+}

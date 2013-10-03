@@ -105,14 +105,14 @@ protected:
      * modifResource is call by
      * @param WLineEdit
      */
-    virtual void                modifResource(Wt::WLineEdit *saveEdit) {};
+    virtual void                modifResource(std::vector<Wt::WInteractWidget*> argument, long long id) {};
     /** gkr.\n
     * editValidator is call by popupForAdd(bool).
     * Overloading in child.
     * @return WValidator
     * All child of WValidator.
     */
-    virtual Wt::WValidator      *editValidator() {return (new Wt::WValidator());};
+    virtual Wt::WValidator      *editValidator(int who) {return (new Wt::WValidator());};
     /** gkr.\n
      * addResourceInHeaderTable is call by you.
      * addResourceInHeaderTable is call in child.
@@ -134,6 +134,8 @@ protected:
      */
     void                        addColumnInTable(map_Type myTable);
 
+    void    popupAddTable(map_Type rst);
+
     
 private:
     /** gkr.\n
@@ -152,12 +154,16 @@ private:
      **/
     void                        popupForAdd();
 
+    void                        popupAddTables(Wt::WDialog *dialog_);
 
-    void    popupTable(Wt::WDialog *dialog_);
+
+    int                         popupCheck(std::vector<Wt::WInteractWidget*> inputName, Wt::WDialog *dialog);
 
     
-    
-    std::vector<Wt::WInteractWidget*>    saveTitleHeader;
+    Wt::WText                   *popupComplete(Wt::WDialog *dialog);
+
+    std::vector<map_Type>       popupTables;
+
     std::vector<std::string>            titleHeader_;
     std::string                 nameResourcePage;
 //    Wt::WDialog                 *dialog_;

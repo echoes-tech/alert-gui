@@ -53,9 +53,19 @@ input[type="color"],
 	padding: 0px;
 }
 
+.no-padding-left
+{
+	padding-left: 0px;
+}
+
 .clear
 {
 	clear: both;
+}
+
+.template
+{
+	margin-left: 9px;
 }
 
 #content {
@@ -72,6 +82,7 @@ select {
   width: 90%;
   background-color: #ffffff;
   border: 1px solid #cccccc;
+  height: 30px;
 }
 
 #header h1 {

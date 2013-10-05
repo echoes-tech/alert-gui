@@ -42,6 +42,9 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
 //    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/select2.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.login.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.main.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/font-awesome.css");
+    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/icheck/all.css");
+    
     
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/echoes-alert-custom.css");
        
@@ -58,6 +61,7 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery-ui.custom.js");
     app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.jpanelmenu.js");
     app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.sparkline.js");
+    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.nicescroll.js");
     
     app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/bootstrap.js");
     

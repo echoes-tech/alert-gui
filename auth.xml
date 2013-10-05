@@ -164,36 +164,70 @@
       <div id="logo">
             <img src="/resources/themes/bootstrap/img/logo.png" alt=""></img>
        </div>
+
+
+		
     <div id="loginbox">
         <form id="loginform" class="form-vertical" action="index.html">
             
-      <h2>${tr:Wt.Auth.login-form-title}</h2>
+        <p>Enter username and password to continue.</p>
       <p>${tr:Wt.Auth.login-form-info}</p>
 
 	${<if:passwords>}
       
-          <label for="${id:user-name}">${user-name-label}
-          
-            ${user-name-info class="Wt-info"}
-	  </label>
-      <div class="input-prepend">
-	  <span class="add-on"><i class="glyphicon glyphicon-user"></i></span>${user-name}
+
+      
+      <div class="input-group input-sm">
+        <span class="input-group-addon"><i class="icon-user"></i></span>${user-name}
       </div>
-	  <label for="${id:password}">${tr:Wt.Auth.password}
-            ${password-info class="Wt-info"}
-	  </label>
-        <div class="input-group">
-            <span class="add-on"><i class="glyphicon glyphicon-lock"></i></span>${password}
-        </div>
+       
+	
+      <div class="input-group input-sm">
+        <span class="input-group-addon"><i class="icon-lock"></i></span>${password}
+      </div>
+
 	  
-      <div class="form-actions">
-          <span class="pull-left">${lost-password}</span> 
-          <span class="pull-right">${register}${login}</span>
-          ${<if:remember-me>}
-              <div class="clear"></div>
-              <span class="pull-left">${remember-me}&nbsp;${tr:Wt.Auth.remember-me}</span> 
-          ${</if:remember-me>}
+      <div class="form-actions clearfix">
+            <div class="pull-left">
+                ${register}
+            </div>
+            <div class="pull-right">
+                ${lost-password}
+            </div>
+            ${login}
+            
       </div>
+      
+      <div class="footer-login">
+        ${<if:remember-me>}
+                    <label class="">
+                        <div class="icheckbox_flat-blue" style="position: relative; ">
+                            <!--<input type="checkbox" name="checkboxes" style="position: absolute; opacity: 0; "></input> -->
+                            ${remember-me}
+                            <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background-color: rgb(255, 255, 255); border: 0px; opacity: 0; background-position: initial initial; background-repeat: initial initial; "></ins>
+                        </div> Unchcked
+                    </label>
+                    
+                    ${remember-me}&nbsp;${tr:Wt.Auth.remember-me}
+                
+                
+            ${</if:remember-me>}
+          <!--
+          <div class="pull-left text">
+            Login with
+        </div>
+        <div class="pull-right btn-social">
+            <a class="btn btn-facebook" href="#"><i class="icon-facebook"></i></a>
+            <a class="btn btn-twitter" href="#"><i class="icon-twitter"></i></a>
+            <a class="btn btn-google-plus" href="#"><i class="icon-google-plus"></i></a>
+        </div>
+        -->
+      </div>
+      
+      
+
+          
+
 	 ${</if:passwords>}
       </form>
 

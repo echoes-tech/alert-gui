@@ -112,17 +112,28 @@
         -->
         <!-- User-form-right -->
         <br /> 
-        <div class ="alert alert-info">${tr:Alert.media.media-info}</div>
-        <div class = "clear"></div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">${email-table}</div>
-                <div class="col-lg-6">${sms-table}</div>
-            </div>  
-            <div class="row">
-                <div class="col-lg-6">${mobileapp-table}</div>
-            </div>   
-        </div>
+        
+        
+						
+		
+        <div class="row">
+            
+            <div class="alert alert-info">${tr:Alert.media.media-info}</div>
+            <div class="col-xs-12 col-sm-6 col-lg-6">
+            
+                    ${email-table}
+                    
+      
+                    ${mobileapp-table}
+            </div>
+            
+            <div class="col-xs-12 col-sm-6 col-lg-6">
+        
+                    ${sms-table}
+      
+            </div>
+
+</div>
         
 
 <!--        <hr></hr>

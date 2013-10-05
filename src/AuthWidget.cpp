@@ -8,13 +8,6 @@
 #include "AuthWidget.h"
 
 
-
-
-//namespace skeletons
-//{
-//extern const char * Auth_xml1;
-//}
-
 namespace Wt
 {
 
@@ -305,6 +298,8 @@ WFormWidget *AuthWidget::createFormWidget(WFormModel::Field field)
     if (field == AuthModel::LoginNameField)
     {
         result = new WLineEdit();
+        result->addStyleClass("form-control");
+        result->setAttributeValue("placeholder",tr("Wt.Auth.email"));
         result->setFocus();
     }
     else if (field == AuthModel::PasswordField)
@@ -312,6 +307,8 @@ WFormWidget *AuthWidget::createFormWidget(WFormModel::Field field)
         WLineEdit *p = new WLineEdit();
         p->enterPressed().connect(this, &AuthWidget::attemptPasswordLogin);
         p->setEchoMode(WLineEdit::Password);
+        p->addStyleClass("form-control");
+        p->setAttributeValue("placeholder",tr("Wt.Auth.password"));
         result = p;
     }
     else if (field == AuthModel::RememberMeField)
@@ -335,8 +332,7 @@ void AuthWidget::updatePasswordLoginView()
         if (!login)
         {
             login = new WPushButton(tr("Wt.Auth.login"));
-            login->addStyleClass("btn");
-            login->addStyleClass("btn-inverse");
+            login->addStyleClass("btn btn-block btn-primary btn-default");
             login->clicked().connect(this, &AuthWidget::attemptPasswordLogin);
             bindWidget("login", login);
 
@@ -346,7 +342,7 @@ void AuthWidget::updatePasswordLoginView()
             {
                 WAnchor *anchor = new WAnchor();
                 anchor->setText(tr("Wt.Auth.lost-password"));
-                anchor->addStyleClass("flip-link");
+                anchor->addStyleClass("flip-link to-recover grey");
                 anchor->setId("to-recover");
                 anchor->clicked().connect(this, &AuthWidget::handleLostPassword);
                 bindWidget("lost-password", anchor);
@@ -362,14 +358,14 @@ void AuthWidget::updatePasswordLoginView()
                     w = new WAnchor
                             (WLink(WLink::InternalPath, basePath_ + "register"),
                              tr("Wt.Auth.register"));
-                    w->addStyleClass("flip-link");
+                    w->addStyleClass("flip-link to-register blue");
                 }
                 else
                 {
                     w = new WAnchor();
                     ((WAnchor*)w)->setText(tr("Wt.Auth.register"));
                     w->clicked().connect(this, &AuthWidget::registerNewUser);
-                    w->addStyleClass("flip-link");
+                    w->addStyleClass("flip-link to-register blue");
                 }
 
                 bindWidget("register", w);
@@ -492,26 +488,17 @@ void AuthWidget::createLoggedInView()
     
     menu->setAttributeValue("class","nav btn-group");
     
-//    WMenuItem *alertMenuItem = new WMenuItem("Alertes");
-////    logoutMenuItem->clicked().connect(this, &AuthWidget::logout);
-//    alertMenuItem->setAttributeValue("class","btn btn-inverse");
-//    
-//    WText *alertCount = new WText("5");
-//    alertCount->setAttributeValue("class","label label-important");
-//    WAnchor *anchorTemp = (WAnchor*)alertMenuItem->widget(0);
-//    anchorTemp->addWidget(alertCount);
-    
     
     WMenuItem *logoutMenuItem = new WMenuItem(tr("Wt.Auth.logout"));
 //    newMenuItem->setAttributeValue("name",boost::lexical_cast<std::string>(enumPT.index()));
     logoutMenuItem->clicked().connect(this, &AuthWidget::logout);
-    logoutMenuItem->setAttributeValue("class","btn btn-inverse");
+    logoutMenuItem->setAttributeValue("class","label label-inverse");
     
 //    menu->addItem(alertMenuItem);
     
     WMenuItem *userNameMenuItem = new WMenuItem(login_.user().email());
     userNameMenuItem->setAttributeValue("class","label label-inverse active");
-    userNameMenuItem->setAttributeValue("style","top:4px");
+//    userNameMenuItem->setAttributeValue("style","top:4px");
     
     menu->addItem(userNameMenuItem);
     

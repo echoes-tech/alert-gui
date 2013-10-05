@@ -1,0 +1,90 @@
+html,body {
+	height: 100%
+}
+
+.Wt-domRoot {
+	position: static;
+}
+
+.table-bordered {
+	border-collapse: collapse;
+}
+
+.widget-title-ea-table {
+	border-bottom: 0px;
+}
+
+.asset-action-width {
+	width: 460px;
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+  margin-bottom: 0px;
+}
+
+.cur-pointer
+{
+	cursor: help;
+}
+
+.no-margin
+{
+	margin: 0px;
+}
+
+.no-padding
+{
+	padding: 0px;
+}
+
+.no-padding-left
+{
+	padding-left: 0px;
+}
+
+.clear
+{
+	clear: both;
+}
+
+.template
+{
+	margin-left: 9px;
+}
+
+#content {
+	height: 100%;
+}
+
+input,
+textarea,
+.uneditable-input {
+  width: 90%;
+}
+
+select {
+  width: 90%;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  height: 30px
+}
+
+#header h1 {
+    background: url("../img/ea-logo.png") no-repeat scroll 0 0 transparent;
+}

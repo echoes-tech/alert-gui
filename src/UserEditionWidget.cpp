@@ -13,6 +13,7 @@ UserEditionWidget::UserEditionWidget()
     created_ = false;
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("user", false);
+    this->addStyleClass("template");
 }
 
 void UserEditionWidget::setModel(UserEditionModel *model)

@@ -1,6 +1,7 @@
 /**
  * Unicorn Admin Template
- * Version 2.0.1
+ * Version 2.1.0
+ * Version modified by TSA for ECHOES Technologies
  * Diablo9983 -> diablo9983@gmail.com
 **/
 $(document).ready(function(){
@@ -8,12 +9,19 @@ $(document).ready(function(){
 	var ul = $('#sidebar > ul');	
 	var ul2 = $('#sidebar li.open ul');
 
+    var initialized = false;
 	// === jPanelMenu === //
 	var jPM = $.jPanelMenu({
 	    menu: '#sidebar',
 	    trigger: '#menu-trigger'
 	});
 
+    $("html").niceScroll({
+		hideraildelay: 1,
+		zindex: 9999,
+		horizrailenabled: false
+	});
+    
 	// === Resize window related === //
 	$(window).resize(function()
 	{
@@ -29,6 +37,8 @@ $(document).ready(function(){
 			ul2.css({'display':'block'});
 			if(!$('html').hasClass('jPanelMenu')) {
 				jPM.on();
+                $('#jPanelMenu-menu').niceScroll();
+				$('#jPanelMenu-menu').getNiceScroll().resize();
 			}
 
 			if($(window).scrollTop() > 35) {
@@ -48,8 +58,9 @@ $(document).ready(function(){
 		{
 			ul.css({'display':'block'});
 			ul2.css({'display':'block'});
-			$('#user-nav > ul').css({width:'auto',margin:'0'});		}
-
+			$('#user-nav > ul').css({width:'auto',margin:'0'});		
+        }
+        $('html').getNiceScroll().resize();
 	});
 	
 	
@@ -66,6 +77,10 @@ $(document).ready(function(){
 			}
 		});
 		jPM.on();
+        $('#jPanelMenu-menu').niceScroll({
+			zindex: '9999'
+		});
+		$('#jPanelMenu-menu').getNiceScroll().resize();
 	}
 
 	if($(window).width() > 480)
@@ -110,6 +125,28 @@ $(document).ready(function(){
 			}
 			submenus_parents.removeClass('open');		
 			li.addClass('open');	
+		}
+        $('html').getNiceScroll().resize();
+	});
+    
+    $('.go-full-screen').click(function(){
+		backdrop = $('.white-backdrop');
+		wbox = $(this).parents('.widget-box');
+		/*if($('body > .white-backdrop').length <= 0) {
+			$('<div class="white-backdrop">').appendTo('body');
+		}*/
+		if(wbox.hasClass('widget-full-screen')) {
+			backdrop.fadeIn(200,function(){
+				wbox.removeClass('widget-full-screen',function(){
+					backdrop.fadeOut(200);
+				});
+			});
+		} else {
+			backdrop.fadeIn(200,function(){
+				wbox.addClass('widget-full-screen',function(){
+					backdrop.fadeOut(200);
+				});
+			});
 		}
 	});
 

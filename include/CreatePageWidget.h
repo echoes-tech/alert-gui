@@ -22,6 +22,8 @@
 #include <map>
 #include <string>
 #include <algorithm>
+#include <typeinfo>
+#include <string>
 // Lib c
 #include <stdlib.h>
 // Lib Witty
@@ -55,123 +57,88 @@
 #define SIZE_NAME_RESOURCE (15)
 
 /** gkr.\n
- * map &lsaquo; vector &lsaquo; string &rsaquo; , vector &lsaquo; WInteractWidget* &rsaquo; &rsaquo;
+ * vector &lsaquo; WInteractWidget* &rsaquo;
  */
-typedef std::map<std::vector<std::string>, std::vector<Wt::WInteractWidget*>> map_Type;
+typedef std::vector<Wt::WInteractWidget*> vector_type;
+
 
 class CreatePageWidget : 
 public Wt::WTemplateFormView
 {
 public:
 
-                                CreatePageWidget(std::string namePage);
-    virtual                     ~CreatePageWidget();
+                        CreatePageWidget(std::string namePage);
+    virtual             ~CreatePageWidget();
     
-    void                popupForModif(std::vector<std::string> resources, long long id);
+    virtual void        popupAddTables(Wt::WTabWidget *tabW) {};
+    virtual void        update();
+
+
+    void    setButtonModif(bool check);
+    void    setButtonSup(bool check);
+    void    setLocalTable(bool background);
+    void    setTypeButtonAdd(int check);
+    void    setResouceNumberAdd(int nbResource);
 
 protected:
-    /** gkr.\n
-     * createBodyTable is call by you.
-     * createBodyTable is call in child
-     * For init header table.
-     * @return WContainerWidget
-     * Bind this widget in child.
-     */
+
     Wt::WContainerWidget        *createHeaderTable();
-    /** gkr.\n
-     * createBodyTable is call by you.
-     * createBodyTable is call in child
-     * For init body table.
-     * @return WContainerWidget
-     * Bind this widget in child.
-     */
+
     Wt::WContainerWidget        *createBodyTable();
-    /** gkr.\n
-    * addResource is call by popupForAdd(bool)
-    * Whether name arg is validated.
-    * Overloading in child.
-    * @param WLineEdit
-    * Contains name arg.
-    */
-    virtual void                addResource(std::vector<Wt::WInteractWidget*> argument) {};
-    /** gkr.\n
-    * deleteResource is include in addButtons(long long).
-    * Overloading in child.
-    * @param long long
-    * ID of resource.
-    */
-    virtual void                deleteResource(long long id) {};
-    /** gkr.\n
-     * modifResource is call by
-     * @param WLineEdit
-     */
-    virtual void                modifResource(std::vector<Wt::WInteractWidget*> argument, long long id) {};
-    /** gkr.\n
-    * editValidator is call by popupForAdd(bool).
-    * Overloading in child.
-    * @return WValidator
-    * All child of WValidator.
-    */
+
+    virtual void                addResource(std::vector<Wt::WInteractWidget*> argument) {created_ = false;};
+
+    virtual void                deleteResource(long long id) {created_= false;};
+
+    virtual void                modifResource(std::vector<Wt::WInteractWidget*> argument, long long id) {created_ = false;};
+
     virtual Wt::WValidator      *editValidator(int who) {return (new Wt::WValidator());};
-    /** gkr.\n
-     * addResourceInHeaderTable is call by you.
-     * addResourceInHeaderTable is call in child.
-     * Fill in vector by resource for title table.
-     * addResourceInHeaderTable add modif and sup in header.
-     * @param vector &lsaquo; string &rsaquo;\n
-     * Same number resource for header than addColumnInTable map_Type
-     * @param int\n 
-     * Number of title no button.
-     */
-    void                        addResourceInHeaderTable(std::vector<std::string> titleHeader, int nb);
-    /** gkr.\n
-     * addColumnInTable is call by you.
-     * addColumnInTable is call in child.\n\n
-     * Fill in map_Type by resource for Table.
-     * addColumnInTable add modif and sup buttons in table.
-     * @param map_Type
-     * Same number resource for column than addResourceInHeaderTable vector.
-     */
-    void                        addColumnInTable(map_Type myTable);
 
-    void    popupAddTable(map_Type rst);
+    void                        addResourceInHeaderTable();
 
-    
+
+    virtual std::vector<std::string>    getHeaderTableTitle() {std::vector<std::string> res; return res;};
+    virtual std::vector<long long>                 getIdsTable() {std::vector<long long> res; return res;};
+    virtual vector_type     getResourceRowTable(long long id) {vector_type res; return res;};
+
+    void                addInputAdd(int rowBodyTable);
+
+    void    inputForAdd();
+    bool        checkInput();
+    void    checkAdd();
+    void    checkModif(long long id);
+
+    void                popupForModif(long long id);
+
+    void    inputForModif(long long id, int rowTable, int columnTable);
+
 private:
-    /** gkr.\n
-     * addButtons is call by addColumnInTable().
-     * addButtons add modif and delete buttons.
-     * @param std::vector &lsaquo; std::string &lsaquo; , long long
-     * resources and ID.
-     */
-    void                        addButtons(std::vector<std::string> resources, long long id);  
-    /** gkr.\n
-     * popupForAdd is call when user click in headerButton.
-     * popupForAdd call editValidator() ->
-     *      You Overloading this methode in child.
-     * @param WString
-     * For check in recursive, and add same name of last arg add.
-     **/
-    void                        popupForAdd();
 
-    void                        popupAddTables(Wt::WDialog *dialog_);
+    void                        addButtons(long long id, int rowTable, int columnTable);  
+
+    void                popupWindow();
 
 
     int                         popupCheck(std::vector<Wt::WInteractWidget*> inputName, Wt::WDialog *dialog);
 
     
+    void                        fillInTable();
+
+    
     Wt::WText                   *popupComplete(Wt::WDialog *dialog);
 
-    std::vector<map_Type>       popupTables;
-
-    std::vector<std::string>            titleHeader_;
     std::string                 nameResourcePage;
-//    Wt::WDialog                 *dialog_;
-    Wt::WTable                  *mediaTable_;
-    int                         columnTable;
-    int                         rowTable;
-    Wt::WLineEdit               *assetEdit;
-    bool                        popupTable_;
+
+
+    vector_type inputs_;
+     Wt::WTable *mediaTable_;
+    bool        created_;
+    bool        butModif_;
+    bool        butSup_;
+    bool        dial_;
+    int         butAdd_;
+    int         nbResource_;
+    Wt::WText *error_;
 };
 
 #endif	/* CREATEPAGEWIDGET_H */

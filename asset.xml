@@ -8,12 +8,13 @@
   
   <message id="Alert.asset.name-label">Server to add: </message>
   <message id="Alert.asset.invalid-name">Invalid name</message>
-  <message id="Alert.asset.invalid-name-info">
+  <message id="Alert.asset.invalid-name-info">Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</message>
+  <message id="Alert.asset.invalid-name-info2">
       <h5>Invalid name :</h5>
       <ul>
           <li>Size Minimun : 1 </li>
           <li>Size Maximum : 255</li>
-          <li> Not use : &lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</li>
+          <li> Not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</li>
       </ul>
   </message>
   
@@ -53,6 +54,7 @@
                     ${resource-table}
                 </div>
             </div>
+<!--            ${resource-test} -->
             </div>
             
     </message>

@@ -39,8 +39,9 @@
 #include <Wt/WInPlaceEdit>
 
 #include "CreatePageWidget.h"
+#include "ClassTest.h"
 
-#define REG_EXP ("[^\\\\<>/.&;?!§,{}()*|]{1,255}")
+#define REG_EXP ("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}")
 
 class CreatePageWidget;
 
@@ -52,7 +53,7 @@ public:
    *
    * Creates a new authentication.
    */
-  AssetManagementWidget();
+  AssetManagementWidget(Session *session, std::string apiUrl);
 
   /*! \brief Returns the registration model.
    *
@@ -61,26 +62,25 @@ public:
    */
   AssetManagementModel *model() const { return model_; }
   
+  void  popupAddTables(Wt::WTabWidget *tabW);
+
+  
   long long userId;
-  void                  setModel(AssetManagementModel *model);
   void                  setSession(Session *session);
   void                  setApiUrl(std::string apiUrl);
   std::string           getApiUrl();
-//  void  getAsset();
   void                  getAsset(boost::system::error_code err, const Wt::Http::Message& response);
-void    refresh();
 void    recoverListAsset();
-void    addResourceInTable();
 
-void    addResourceInPopupTable();
+std::vector<std::string> recoverTitles();
 
-
-Wt::Json::Value result;
+Wt::Json::Value result_;
 
   Wt::WTable *corpTable;
   std::string apiUrl_;
   CreatePageWidget *AssetPage;
-  
+  virtual void                  update();
+
 protected:
   /*! \brief Validates the current information.
    *
@@ -90,21 +90,14 @@ protected:
    * You may want to reimplement this method if you've added other
    * information to the registration form that need validation.
    */
-  virtual bool validate();
+ // virtual bool validate();
 
 
-  /*! \brief Closes the registration widget.
-   *
-   * The default implementation simply deletes the widget.
-   */
-  virtual void close();
 
 void    initPopup();
     void        addResourceInPopup(Wt::WDialog *dialog_);
 
 
-  virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
-  void createUI();
 
   void modifResource(std::vector<Wt::WInteractWidget*> argument, long long id);
   void addResource(std::vector<Wt::WInteractWidget*> argument);
@@ -123,7 +116,12 @@ void    postAsset(boost::system::error_code err, const Wt::Http::Message& respon
 
 private:
   
-  //Wt::WDialog *dialog_;
+    std::vector<long long>          getIdsTable();
+    std::vector<std::string>        getHeaderTableTitle();
+    vector_type     getResourceRowTable(long long id);
+
+    
+    
   
   Wt::WLineEdit *saveEdit;
 
@@ -132,11 +130,11 @@ private:
   Wt::WLineEdit         *assetName; //link wit AssetName
   
   bool                  created_;
+  bool                  newClass_;
   AssetManagementModel  *model_;
   Session               *session_;
 
   void                  downloadScript(std::string fileName);
-  void                  update();
 
   Wt::WLineEdit         *assetEdit;
 };

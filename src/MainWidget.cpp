@@ -190,11 +190,7 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             try
             {
                 Wt::Dbo::Transaction transaction(*(this->session));
-                amw = new AssetManagementWidget();
-                amm = new AssetManagementModel();
-                amw->setModel(amm);
-                amw->setSession(this->session);
-                amw->setApiUrl(_apiUrl);
+                amw = new AssetManagementWidget(this->session, this->_apiUrl);
                 transaction.commit();
             }
             catch (Wt::Dbo::Exception e)
@@ -621,7 +617,7 @@ void MainWidget::refresh()
 {
 //    this->aew->refresh();
     this->alw->refresh();
-    this->amw->refresh();
+//    this->amw->refresh();
 }
 
 void MainWidget::setApiUrl(std::string apiUrl)

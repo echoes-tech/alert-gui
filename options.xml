@@ -48,7 +48,7 @@
                             <div class="span6">${sms-ask}</div>
                         </div>
                     </div>
-                    <div class="control-group">
+                    <!--<div class="control-group">
                         <div class="row-fluid">
                             <div class="span2">
                                 ${tr:Alert.option.user-role-label}
@@ -59,7 +59,7 @@
 
                             <div class="span6">${user-role-button}</div>
                         </div>
-                    </div>
+                    </div>-->
                     
                      
                     

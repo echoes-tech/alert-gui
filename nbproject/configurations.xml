@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="88">
+<configurationDescriptor version="89">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
@@ -33,6 +33,7 @@
           <itemPath>include/Auth/LostPasswordWidgetAlert.h</itemPath>
           <itemPath>include/Auth/RegistrationModelAlert.h</itemPath>
           <itemPath>include/Auth/RegistrationWidgetAlert.h</itemPath>
+          <itemPath>include/UpdatePasswordWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="enum" displayName="enum" projectFiles="true">
           <itemPath>include/enum/base.hpp</itemPath>
@@ -121,6 +122,7 @@
           <itemPath>src/Auth/LostPasswordWidgetAlert.cpp</itemPath>
           <itemPath>src/Auth/RegistrationModelAlert.cpp</itemPath>
           <itemPath>src/Auth/RegistrationWidgetAlert.cpp</itemPath>
+          <itemPath>src/UpdatePasswordWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
           <itemPath>src/MainWidget.cpp</itemPath>
@@ -262,6 +264,8 @@
       </item>
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/UpdatePasswordWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserEditionModel.h" ex="false" tool="3" flavor2="0">
@@ -364,6 +368,8 @@
       <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UpdatePasswordWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -489,6 +495,8 @@
       </item>
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/UpdatePasswordWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserEditionModel.h" ex="false" tool="3" flavor2="0">
@@ -591,6 +599,8 @@
       <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UpdatePasswordWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>

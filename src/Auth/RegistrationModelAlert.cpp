@@ -169,34 +169,34 @@ bool RegistrationModelAlert::validateField(Field field)
 //        valid = error.empty();
         valid = true;
     }
-    else if (strcmp(field,FirstNameField) == 0)
-    {
-        std::string name = valueText(FirstNameField).toUTF8();
-        if (!name.empty())
-        {
-            if (static_cast<int> (name.length()) < 2)
-                error = Wt::WString::tr("Wt.Auth.first-name-invalid");
-        }
-        else
-        {
-            error = Wt::WString::tr("Wt.Auth.first-name-invalid");
-        }
-        valid = error.empty();
-    }
-    else if (strcmp(field,LastNameField) == 0)
-    {
-        std::string name = valueText(LastNameField).toUTF8();
-        if (!name.empty())
-        {
-            if (static_cast<int> (name.length()) < 2)
-                error = Wt::WString::tr("Wt.Auth.last-name-invalid");
-        }
-        else
-        {
-            error = Wt::WString::tr("Wt.Auth.last-name-invalid");
-        }
-        valid = error.empty();
-    }
+//    else if (strcmp(field,FirstNameField) == 0)
+//    {
+//        std::string name = valueText(FirstNameField).toUTF8();
+//        if (!name.empty())
+//        {
+//            if (static_cast<int> (name.length()) < 2)
+//                error = Wt::WString::tr("Wt.Auth.first-name-invalid");
+//        }
+//        else
+//        {
+//            error = Wt::WString::tr("Wt.Auth.first-name-invalid");
+//        }
+//        valid = error.empty();
+//    }
+//    else if (strcmp(field,LastNameField) == 0)
+//    {
+//        std::string name = valueText(LastNameField).toUTF8();
+//        if (!name.empty())
+//        {
+//            if (static_cast<int> (name.length()) < 2)
+//                error = Wt::WString::tr("Wt.Auth.last-name-invalid");
+//        }
+//        else
+//        {
+//            error = Wt::WString::tr("Wt.Auth.last-name-invalid");
+//        }
+//        valid = error.empty();
+//    }
     else
         return true;
 

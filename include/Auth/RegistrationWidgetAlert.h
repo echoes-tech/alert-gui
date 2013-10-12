@@ -10,7 +10,7 @@
 
 #include <Wt/WTemplateFormView>
 #include "tools/MainIncludeFile.h"
-#include "Auth/RegistrationModelAlert.h"
+#include "RegistrationModelAlert.h"
 #include "AuthWidget.h"
 #include "tools/Session.h"
 //#include "tools/SessionPool.h"

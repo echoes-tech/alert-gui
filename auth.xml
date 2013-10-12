@@ -176,15 +176,22 @@
 	${<if:passwords>}
       
 
+      <span class="control-group">
+        <span class="controls">
+            <div class="input-group input-sm">
+                <span class="input-group-addon"><i class="icon-user"></i></span>${user-name}
+            </div>
+        </span>
+
+      </span>
       
-      <div class="input-group input-sm">
-        <span class="input-group-addon"><i class="icon-user"></i></span>${user-name}
-      </div>
-       
-	
-      <div class="input-group input-sm">
-        <span class="input-group-addon"><i class="icon-lock"></i></span>${password}
-      </div>
+      <span class="control-group">
+        <span class="controls">
+            <div class="input-group input-sm">
+              <span class="input-group-addon"><i class="icon-lock"></i></span>${password}
+            </div>
+        </span>
+      </span>
 
 	  
       <div class="form-actions clearfix">
@@ -199,19 +206,7 @@
       </div>
       
       <div class="footer-login">
-        ${<if:remember-me>}
-                    <label class="">
-                        <div class="icheckbox_flat-blue" style="position: relative; ">
-                            <!--<input type="checkbox" name="checkboxes" style="position: absolute; opacity: 0; "></input> -->
-                            ${remember-me}
-                            <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background-color: rgb(255, 255, 255); border: 0px; opacity: 0; background-position: initial initial; background-repeat: initial initial; "></ins>
-                        </div> Unchcked
-                    </label>
-                    
-                    ${remember-me}&nbsp;${tr:Wt.Auth.remember-me}
-                
-                
-            ${</if:remember-me>}
+        
           <!--
           <div class="pull-left text">
             Login with
@@ -371,21 +366,33 @@
     </message>
 
     <message id="Wt.Auth.template.lost-password">
-        <div class="Wt-form Wt-auth-lost-password">
+        <div class="Wt-form form-vertical Wt-auth-lost-password" style="width: 600px;">
+            
             <h2>${tr:Wt.Auth.lost-password-form-title}</h2>
             <p>${tr:Wt.Auth.lost-password-form-info}</p>
 
-            <div class="Wt-fields">
-                <label for="${id:email}">${tr:Wt.Auth.email}
+                <label >
                     <span class="Wt-info">${tr:Wt.Auth.email-info}</span>
                 </label>
-                ${email}
-            </div>
 
-            <div class="Wt-buttons">
-                ${send-button} ${cancel-button}
+
+    <span class="control-group no-padding" >
+        <span class="controls">
+            <div class="input-group input-sm no-padding">
+                <span class="input-group-addon"><i class="icon-envelope"></i></span>${email}
             </div>
-        </div>
+        </span>
+
+      </span>
+
+        
+   
+           
+      <p>
+ 
+            </p>   
+        </div> 
+     
     </message>
 
     <message id="Wt.Auth.template.password-prompt">

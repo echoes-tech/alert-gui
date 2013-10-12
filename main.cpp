@@ -29,22 +29,17 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap-responsive.css");
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap-glyphicons.css");
+//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap-glyphicons.css");
     
     
 
-    //    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/colorpicker.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/jquery.gritter.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.grey.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/jquery-ui.css");
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/fullcalendar.css");
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/uniform.css");
-//    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/select2.css");
+
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.login.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/unicorn.main.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/font-awesome.css");
-    app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/icheck/all.css");
-    
     
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/echoes-alert-custom.css");
        
@@ -64,9 +59,11 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.nicescroll.js");
     
     app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/bootstrap.js");
+    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/echoes.bootstrap.custom.js");
     
     app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
     app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.interface.js");
+    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.login.js");
     
     
     new EchoesHome(app->root());

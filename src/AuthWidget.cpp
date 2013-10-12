@@ -44,12 +44,6 @@ void AuthWidget::init()
     dialog_ = 0;
     messageBox_ = 0;
 
-//    addFunction("id", WT_TEMPLATE_FUNCTION(id));
-//    addFunction("tr", WT_TEMPLATE_FUNCTION(tr));
-
-    
-//    app->builtinLocalizedStrings().useBuiltin(skeletons::Auth_xml1);
-//     app->theme()->apply(this, this, AuthWidgets);
 }
 
 void AuthWidget::setModel(AuthModel *model)
@@ -104,7 +98,7 @@ void AuthWidget::registerNewUser(const Identity& oauth)
     showDialog(tr("Wt.Auth.registration"), createRegistrationView(oauth));
 }
 
-WDialog *AuthWidget::showDialog(const WString& title, WWidget *contents)
+WDialog *AuthWidget::showDialog(const WString& title, WWidget *contents, WWidget *footer)
 {
     delete dialog_;
     dialog_ = 0;
@@ -115,6 +109,12 @@ WDialog *AuthWidget::showDialog(const WString& title, WWidget *contents)
         dialog_->contents()->addWidget(contents);
         dialog_->contents()->childrenChanged()
                 .connect(this, &AuthWidget::closeDialog);
+        
+        if (footer)
+        {
+            dialog_->footer()->addStyleClass("form-horizontal form-actions");
+            dialog_->footer()->addWidget(footer);
+        }
 
         if (!WApplication::instance()->environment().ajax())
         {
@@ -125,9 +125,12 @@ WDialog *AuthWidget::showDialog(const WString& title, WWidget *contents)
             dialog_->setMargin("-21em", Left); // .Wt-form width
             dialog_->setMargin("-200px", Top); // ???
         }
+      
 
         dialog_->show();
     }
+    
+    
 
     return dialog_;
 }
@@ -152,8 +155,6 @@ RegistrationModelAlert *AuthWidget::createRegistrationModel()
                                                       model_->users(),
                                                       login_, this);
     
-    std::cout << "taille dans le model pendant créa : " << result->fields().size() << std::endl;
-
     if (model_->passwordAuth())
         result->addPasswordAuth(model_->passwordAuth());
 
@@ -171,8 +172,6 @@ WWidget *AuthWidget::createRegistrationView(const Identity& id)
 
     if (id.isValid())
         registrationModel_->registerIdentified(id);
-    
-    std::cout << "taille à la création : " << registrationModel_->fields().size() << std::endl;
 
     RegistrationWidgetAlert *w = new RegistrationWidgetAlert(this);
     w->setModel(registrationModel_);
@@ -182,7 +181,11 @@ WWidget *AuthWidget::createRegistrationView(const Identity& id)
 
 void AuthWidget::handleLostPassword()
 {
-    showDialog(tr("Wt.Auth.lostpassword"), createLostPasswordView());
+    LostPasswordWidgetAlert *lpw = new LostPasswordWidgetAlert(model_->users(), *model_->baseAuth());
+    Wt::WContainerWidget *footer = new Wt::WContainerWidget();
+    footer->addWidget(lpw->getOkButton());
+    footer->addWidget(lpw->getCancelButton());
+    showDialog(tr("Wt.Auth.lostpassword"), lpw, footer);
 }
 
 WWidget *AuthWidget::createLostPasswordView()
@@ -300,6 +303,9 @@ WFormWidget *AuthWidget::createFormWidget(WFormModel::Field field)
         result = new WLineEdit();
         result->addStyleClass("form-control");
         result->setAttributeValue("placeholder",tr("Wt.Auth.email"));
+        result->setAttributeValue("for",AuthModel::LoginNameField);
+        Wt::WRegExpValidator *validator = new Wt::WRegExpValidator("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}");
+        result->setValidator(validator);
         result->setFocus();
     }
     else if (field == AuthModel::PasswordField)
@@ -313,7 +319,9 @@ WFormWidget *AuthWidget::createFormWidget(WFormModel::Field field)
     }
     else if (field == AuthModel::RememberMeField)
     {
-        result = new WCheckBox();
+        Wt::WCheckBox *chkBx = new WCheckBox();
+        chkBx->setChecked(true);
+        result = chkBx;
     }
 
     return result;
@@ -444,7 +452,9 @@ void AuthWidget::oAuthDone(OAuthProcess *oauth, const Identity& identity)
 
         User user = model_->baseAuth()->identifyUser(identity, model_->users());
         if (user.isValid())
+        {
             login_.login(user);
+        }
         else
             registerNewUser(identity);
 
@@ -463,7 +473,10 @@ void AuthWidget::attemptPasswordLogin()
     updateModel(model_);
 
     if (model_->validate())
+    {
+        model_->setValue(model_->RememberMeField,true);
         model_->login(login_);
+    }
     else
         updatePasswordLoginView();
 }
@@ -503,9 +516,7 @@ void AuthWidget::createLoggedInView()
     menu->addItem(userNameMenuItem);
     
     menu->addItem(logoutMenuItem);
-    
-    
-    
+        
     
     bindWidget("menu",menuContainer);
 }

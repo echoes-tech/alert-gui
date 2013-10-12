@@ -18,6 +18,7 @@
 #include <Wt/WMessageBox>
 
 #include <Wt/WTemplate>
+#include <Wt/WRegExpValidator>
 
 class AbstractUserDatabase;
 class AuthService;
@@ -29,6 +30,9 @@ public:
     LostPasswordWidgetAlert(Wt::Auth::AbstractUserDatabase& users,
             const Wt::Auth::AuthService& auth,
             Wt::WContainerWidget *parent = 0);
+    
+    Wt::WPushButton *getOkButton();
+    Wt::WPushButton *getCancelButton();
 
 protected:
     void send();
@@ -37,6 +41,8 @@ protected:
 private:
     Wt::Auth::AbstractUserDatabase& users_;
     const Wt::Auth::AuthService& baseAuth_;
+    Wt::WPushButton *okButton;
+    Wt::WPushButton *cancelButton;
 
 
     void deleteBox(Wt::WMessageBox *box);

@@ -29,15 +29,15 @@ $(document).ready(function(){
         register.css({'z-index':'200','opacity':'1','display':'block'});
     }
 
-	$('.flip-link.to-recover').click(function(){
+	$(document.body).on('click','.flip-link.to-recover',function(){
         switch_container(recover,login_register,183);
 	});
-	$('.flip-link.to-login').click(function(){
+	$(document.body).on('click','.flip-link.to-login',function(){
         switch_container(login,recover_register,255);
 	});
-    $('.flip-link.to-register').click(function(){
+	$(document.body).on('click','.flip-link.to-register',function(){
         switch_container(register,login_recover,280);
-    });
+    	});
 
     $('#loginform').submit(function(e){
         var thisForm = $(this); 
@@ -70,6 +70,8 @@ $(document).ready(function(){
         highlight_error($(this));
     });
 });
+
+
 
 function highlight_error(el) {
     if(el.val() == '') {

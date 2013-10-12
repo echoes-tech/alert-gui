@@ -12,22 +12,26 @@ LostPasswordWidgetAlert::LostPasswordWidgetAlert(Wt::Auth::AbstractUserDatabase&
 : WTemplate(Wt::WString::tr("Wt.Auth.template.lost-password"), parent),
 users_(users),
 baseAuth_(auth) {
-//    addFunction("id", WT_TEMPLATE_FUNCTION(id));
     addFunction("tr", &Functions::tr);
     addFunction("block", &Functions::block);
 
     Wt::WLineEdit *email = new Wt::WLineEdit();
     email->setFocus();
+    email->addStyleClass("form-control");
+    email->setAttributeValue("placeholder",tr("Wt.Auth.email"));
+    Wt::WRegExpValidator *validator = new Wt::WRegExpValidator("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}");
+    email->setValidator(validator);
 
-    Wt::WPushButton *okButton = new Wt::WPushButton(Wt::WString::tr("Wt.Auth.send"));
-    Wt::WPushButton *cancelButton = new Wt::WPushButton(Wt::WString::tr("Wt.WMessageBox.Cancel"));
+    this->okButton = new Wt::WPushButton(Wt::WString::tr("Wt.Auth.send"));
+    this->cancelButton = new Wt::WPushButton(Wt::WString::tr("Wt.WMessageBox.Cancel"));
 
     okButton->clicked().connect(this, &LostPasswordWidgetAlert::send);
     cancelButton->clicked().connect(this, &LostPasswordWidgetAlert::cancel);
 
     bindWidget("email", email);
-    bindWidget("send-button", okButton);
-    bindWidget("cancel-button", cancelButton);
+//    bindWidget("send-button", this->okButton);
+//    
+//    bindWidget("cancel-button", this->cancelButton);
 }
 
 void LostPasswordWidgetAlert::send() 
@@ -53,7 +57,7 @@ void LostPasswordWidgetAlert::send()
 
     Wt::WMessageBox * const box = new Wt::WMessageBox(Wt::WString::tr("Wt.Auth.lost-password"),
             Wt::WString::tr(msg),
-            Wt::NoIcon, Wt::Ok);
+            Wt::Information, Wt::Ok);
 
     box->buttonClicked().connect
             (boost::bind(&LostPasswordWidgetAlert::deleteBox, this, box));
@@ -68,4 +72,14 @@ void LostPasswordWidgetAlert::deleteBox(Wt::WMessageBox *box) {
 
 void LostPasswordWidgetAlert::cancel() {
     delete this;
+}
+
+Wt::WPushButton *LostPasswordWidgetAlert::getOkButton()
+{
+    return this->okButton;
+}
+
+Wt::WPushButton *LostPasswordWidgetAlert::getCancelButton()
+{
+    return this->cancelButton;
 }

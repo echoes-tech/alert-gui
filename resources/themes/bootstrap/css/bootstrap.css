@@ -5040,7 +5040,7 @@ body.modal-open,
   margin-right: 15px;
 }
 .modal {
-  display: none;
+  
   overflow: auto;
   overflow-y: scroll;
   position: fixed;

@@ -28,7 +28,7 @@
 #include "Wt/Auth/AuthModel"
 #include "Wt/Auth/AuthService"
 #include "Wt/Auth/PasswordPromptDialog"
-#include "Wt/Auth/UpdatePasswordWidget"
+#include "UpdatePasswordWidget.h"
 
 #include "Wt/Auth/OAuthService"
 
@@ -44,6 +44,7 @@
 #include "Wt/WPushButton"
 #include "Wt/WTemplate"
 #include "Wt/WText"
+#include "Wt/WRegExpValidator"
 #include "WebUtils.h"
 
 //#include "Login.h"
@@ -359,7 +360,7 @@ protected:
    *
    * When the central widget is deleted, it deletes the dialog.
    */
-  virtual WDialog *showDialog(const WString& title, WWidget *contents);
+  virtual WDialog *showDialog(const WString& title, WWidget *contents, WWidget *footer = 0);
 
   /*! \brief Creates a registration model.
    *

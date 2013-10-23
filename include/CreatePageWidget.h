@@ -50,6 +50,7 @@
 #include <Wt/WStackedWidget>
 
 #include <Wt/WInPlaceEdit>
+#include <Wt/WComboBox>
 
 /** gkr.\n
  * Max Size Name of resource
@@ -73,72 +74,58 @@ public:
     virtual void        popupAddTables(Wt::WTabWidget *tabW) {};
     virtual void        update();
 
-
-    void    setButtonModif(bool check);
-    void    setButtonSup(bool check);
-    void    setLocalTable(bool background);
-    void    setTypeButtonAdd(int check);
-    void    setResouceNumberAdd(int nbResource);
+    void                setButtonModif(bool check);
+    void                setButtonSup(bool check);
+    void                setLocalTable(bool background);
+    void                setTypeButtonAdd(int check);
+    void                setResouceNumberAdd(int nbResource);
 
 protected:
 
-    Wt::WContainerWidget        *createHeaderTable();
+    Wt::WContainerWidget                *createHeaderTable();
+    Wt::WContainerWidget                *createBodyTable();
+    Wt::WContainerWidget                *createFooterTable();
 
-    Wt::WContainerWidget        *createBodyTable();
-
-    virtual void                addResource(std::vector<Wt::WInteractWidget*> argument) {created_ = false;};
-
-    virtual void                deleteResource(long long id) {created_= false;};
-
-    virtual void                modifResource(std::vector<Wt::WInteractWidget*> argument, long long id) {created_ = false;};
-
-    virtual Wt::WValidator      *editValidator(int who) {return (new Wt::WValidator());};
-
-    void                        addResourceInHeaderTable();
-
+    virtual void                        addResource(std::vector<Wt::WInteractWidget*> argument) {created_ = false;};
+    virtual void                        deleteResource(long long id) {created_= false;};
+    virtual void                        modifResource(std::vector<Wt::WInteractWidget*> argument, long long id) {created_ = false;};
+    virtual Wt::WValidator              *editValidator(int who) {return (new Wt::WValidator());};
 
     virtual std::vector<std::string>    getHeaderTableTitle() {std::vector<std::string> res; return res;};
-    virtual std::vector<long long>                 getIdsTable() {std::vector<long long> res; return res;};
-    virtual vector_type     getResourceRowTable(long long id) {vector_type res; return res;};
-
-    void                addInputAdd(int rowBodyTable);
-
-    void    inputForAdd();
-    bool        checkInput();
-    void    checkAdd();
-    void    checkModif(long long id);
-
-    void                popupForModif(long long id);
-
-    void    inputForModif(long long id, int rowTable, int columnTable);
+    virtual std::vector<long long>      getIdsTable() {std::vector<long long> res; return res;};
+    virtual vector_type                 getResourceRowTable(long long id) {vector_type res; return res;};
 
 private:
 
-    void                        addButtons(long long id, int rowTable, int columnTable);  
+    void                addInputForAffix(int rowBodyTable);
+    void                showInputForAdd();
+    int                checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
+    void                checkAdd(std::vector<Wt::WText*> errorMessage);
+    void                checkModif(long long id, std::vector<Wt::WText*> errorMessage);
+    void                popupForModif(long long id);
+    void                inputForModif(long long id, int rowTable, int columnTable);
 
+    void                addResourceInHeaderTable();
+    void                addButtons(long long id, int rowTable, int columnTable);  
     void                popupWindow();
+    void                 popupCheck(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id);
+    void                fillInTable();
+    void                popupComplete(Wt::WDialog *dialog);
+    void                searchName(Wt::WLineEdit *arg);
 
+    void                resourceBeAff();
+    Wt::WComboBox       *getComboBox();
 
-    int                         popupCheck(std::vector<Wt::WInteractWidget*> inputName, Wt::WDialog *dialog);
-
-    
-    void                        fillInTable();
-
-    
-    Wt::WText                   *popupComplete(Wt::WDialog *dialog);
-
-    std::string                 nameResourcePage;
-
-
-    vector_type inputs_;
-     Wt::WTable *mediaTable_;
-    bool        created_;
-    bool        butModif_;
-    bool        butSup_;
-    bool        dial_;
-    int         butAdd_;
-    int         nbResource_;
-    Wt::WText *error_;
+    std::string         nameResourcePage;
+    vector_type         inputs_;
+    Wt::WTable          *mediaTable_;
+    bool                created_;
+    bool                butModif_;
+    bool                butSup_;
+    bool                dial_;
+    int                 butAdd_;
+    int                 nbResource_;
+    int                 nbAff_;
 };
 
 #endif	/* CREATEPAGEWIDGET_H */

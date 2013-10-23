@@ -64,7 +64,6 @@ public:
   
   void  popupAddTables(Wt::WTabWidget *tabW);
 
-  
   long long userId;
   void                  setSession(Session *session);
   void                  setApiUrl(std::string apiUrl);
@@ -106,9 +105,6 @@ void    initPopup();
   std::string getStringFromFile(std::string resourcePath);
   
   
-  Wt::WContainerWidget  *infoHeader;
-  Wt::WContainerWidget  *infoTable;
-
   Wt::WValidator    *editValidator(int who);
 
 void    putAsset(boost::system::error_code err, const Wt::Http::Message& response);

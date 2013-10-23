@@ -40,14 +40,15 @@ void    AssetManagementWidget::update()
 
 void  AssetManagementWidget::popupAddTables(Wt::WTabWidget *tabW)
 {
-    /*
        ClassTest *test = new ClassTest(session_, apiUrl_);
        tabW->addTab(test, "Classe Test 1", Wt::WTabWidget::PreLoading);
+       test->setButtonSup(false);
        test->setButtonModif(false);
        test->setLocalTable(false);
        test->setTypeButtonAdd(1);
        test->recoverListAsset();
-
+       test->setId("class1");
+       
       test = new ClassTest(session_, apiUrl_);
        tabW->addTab(test, "Classe Test 2", Wt::WTabWidget::LazyLoading);
        test->setButtonSup(true);
@@ -55,15 +56,15 @@ void  AssetManagementWidget::popupAddTables(Wt::WTabWidget *tabW)
        test->setLocalTable(false);
        test->setTypeButtonAdd(1);
        test->recoverListAsset();
-
+       test->setId("class2");
+       
        test = new ClassTest(session_, apiUrl_);
        tabW->addTab(test, "Classe Test 3", Wt::WTabWidget::PreLoading);
        test->setLocalTable(false);
        test->setTypeButtonAdd(1);
        test->recoverListAsset();
-       
-       tabW->resize(Wt::WLength(90, Wt::WLength::Unit::Percentage), Wt::WLength(90, Wt::WLength::Unit::Percentage));
-       */
+       test->setId("class3");
+
 }
 
 // GET INFO FOR MOTHER ---------------------------------------

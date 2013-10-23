@@ -77,3 +77,8 @@ select {
 #header h1 {
     background: url("../img/ea-logo.png") no-repeat scroll 0 0 transparent;
 }
+
+.modal-body
+{
+    max-height: inherit;
+}

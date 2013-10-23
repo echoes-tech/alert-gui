@@ -8,7 +8,7 @@
   
   <message id="Alert.asset.name-label">Server to add: </message>
   <message id="Alert.asset.invalid-name">Invalid name</message>
-  <message id="Alert.asset.invalid-name-info">Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</message>
+  <message id="Alert.asset.invalid-name-info">&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</message>
   <message id="Alert.asset.invalid-name-info2">
       <h5>Invalid name :</h5>
       <ul>
@@ -52,6 +52,7 @@
                 <div id="info-header" class="widget-box" >
                     ${resource-header}
                     ${resource-table}
+                    ${resource-footer}
                 </div>
             </div>
 <!--            ${resource-test} -->

@@ -108,6 +108,7 @@ void EchoesHome::initMainPageWidget()
     // dans le menu indépendemment du container central
     this->addWidget(this->mainPageWidget->getSideBarContainer());
     this->addWidget(this->mainPageWidget);
+    this->addWidget(this->mainPageWidget->getFooterContainer());
     
     // Todo : à déplacer
     Wt::WApplication::instance()->internalPathChanged().connect(this, &EchoesHome::handleInternalPath);

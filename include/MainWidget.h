@@ -51,11 +51,12 @@ public:
   Wt::WMenu *getAlertSubmenu();
   Wt::WMenu *getAccountSubmenu();
   Wt::WContainerWidget *getSideBarContainer();
-  
+  Wt::WContainerWidget *getFooterContainer();
   
   AlertEditionWidget *aew;
-  void initMenus();
-  void createUI();
+  void  initFooter(void);
+  void  initMenus();
+  void  createUI();
   virtual void refresh();
   std::string getApiUrl() const;
   void reset(Session *session);
@@ -106,6 +107,7 @@ private:
   
   Wt::WText *titleText;
   Wt::WContainerWidget *sideBarContainer;
+  Wt::WContainerWidget *footerContainer;
   Wt::WContainerWidget *contentContainer;
   Wt::WContainerWidget *contentFluid;
   Wt::WContainerWidget *breadCrumbsContainer;

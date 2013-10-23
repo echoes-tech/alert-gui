@@ -80,7 +80,7 @@ RoleCustomizationWidget::RoleCustomizationWidget(Session *session, const std::st
     
 
     this->setApiUrl(apiUrl);
-    this->setCredentials("?login=" + session->user()->eMail.toUTF8() +
+    this->setCredentials("?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8()) +
             "&token=" + session->user()->token.toUTF8());
 
     mediasSet = false;
@@ -450,7 +450,8 @@ void RoleCustomizationWidget::getMedias(boost::system::error_code err, const Wt:
     }
     else
     {
-         Wt::log("warning") << "fct handleHttpResponse" << response.body();
+         Wt::log("warning") << "fct handleHttpResponse " << "response status: " << response.status() << " Body : "<< response.body();
+         Wt::log("warning") << "Boost error code: " << err.message();
     }
 }
 

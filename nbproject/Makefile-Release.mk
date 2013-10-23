@@ -45,6 +45,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Auth/RegistrationModelAlert.o \
 	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
 	${OBJECTDIR}/src/AuthWidget.o \
+	${OBJECTDIR}/src/ClassTest.o \
+	${OBJECTDIR}/src/CreatePageWidget.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/Enums.o \
 	${OBJECTDIR}/src/MainWidget.o \
@@ -133,6 +135,16 @@ ${OBJECTDIR}/src/AuthWidget.o: src/AuthWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -DNDEBUG -std=c++0x -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AuthWidget.o src/AuthWidget.cpp
+
+${OBJECTDIR}/src/ClassTest.o: src/ClassTest.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -DNDEBUG -std=c++0x -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ClassTest.o src/ClassTest.cpp
+
+${OBJECTDIR}/src/CreatePageWidget.o: src/CreatePageWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -DNDEBUG -std=c++0x -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/CreatePageWidget.o src/CreatePageWidget.cpp
 
 ${OBJECTDIR}/src/EchoesHome.o: src/EchoesHome.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

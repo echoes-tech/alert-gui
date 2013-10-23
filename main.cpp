@@ -10,7 +10,8 @@
 #include "tools/SessionPool.h"
 #include <boost/thread.hpp>
 
-
+// This globale is version of web site.
+std::string      EchoesHome::version_g = "1.0.0 RC2";
 
 SessionPool* SessionPool::instance = 0;
 std::string SessionPool::credentials = "";
@@ -51,6 +52,7 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
     Wt::WBootstrapTheme *theme = new Wt::WBootstrapTheme();
 
+    theme->activeClass();
     app->setTheme(theme);
     
     app->requireJQuery(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/jquery.js");
@@ -61,8 +63,9 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
     app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/bootstrap.js");
     
-    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
+    
     app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.interface.js");
+    app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
     
 //    app->require("http://twitter.github.io/bootstrap/assets/js/application.js");
     

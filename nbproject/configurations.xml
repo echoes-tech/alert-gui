@@ -55,6 +55,8 @@
           <itemPath>include/rapidxml/rapidxml_utils.hpp</itemPath>
           <itemPath>include/rapidxml/rapidxml_xhtml.hpp</itemPath>
         </logicalFolder>
+        <itemPath>include/ClassTest.h</itemPath>
+        <itemPath>include/CreatePageWidget.h</itemPath>
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
         <itemPath>include/RoleCustomizationWidget.h</itemPath>
@@ -86,6 +88,7 @@
       <itemPath>role-customization_fr.xml</itemPath>
       <itemPath>summary.xml</itemPath>
       <itemPath>summary_fr.xml</itemPath>
+      <itemPath>test.xml</itemPath>
       <itemPath>user.xml</itemPath>
       <itemPath>user_fr.xml</itemPath>
     </logicalFolder>
@@ -128,6 +131,8 @@
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>src/MonitoringWidget.cpp</itemPath>
         </logicalFolder>
+        <itemPath>src/ClassTest.cpp</itemPath>
+        <itemPath>src/CreatePageWidget.cpp</itemPath>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
         <itemPath>src/RoleCustomizationWidget.cpp</itemPath>
@@ -240,6 +245,10 @@
       </item>
       <item path="include/AuthWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/ClassTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/CreatePageWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/EchoesHome.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Enums.h" ex="false" tool="3" flavor2="0">
@@ -345,6 +354,10 @@
       </item>
       <item path="src/AuthWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/ClassTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/CreatePageWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/EchoesHome.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Enums.cpp" ex="false" tool="1" flavor2="0">
@@ -374,6 +387,8 @@
       <item path="summary.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="summary_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="user.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -467,6 +482,10 @@
       </item>
       <item path="include/AuthWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/ClassTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/CreatePageWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/EchoesHome.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Enums.h" ex="false" tool="3" flavor2="0">
@@ -572,6 +591,10 @@
       </item>
       <item path="src/AuthWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/ClassTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/CreatePageWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/EchoesHome.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Enums.cpp" ex="false" tool="1" flavor2="0">
@@ -601,6 +624,8 @@
       <item path="summary.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="summary_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="user.xml" ex="false" tool="3" flavor2="0">
       </item>

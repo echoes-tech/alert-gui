@@ -1,79 +1,34 @@
 /* 
- * Asset Management Widget
- * @author ECHOES Technologies (TSA)
- * @date 14/08/2012
+ * File:   ClassTest.cpp
+ * Author: gkr
  * 
- * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
- * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
- * COMPANY AUTHORIZATION.
- * 
- * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
- * 
+ * Created on 23 octobre 2013, 14:24
  */
 
-#include "AssetManagementWidget.h"
+#include "ClassTest.h"
 
-AssetManagementWidget::AssetManagementWidget(Session *session, std::string apiUrl)
-: CreatePageWidget("asset")
+ClassTest::ClassTest(Session *session, std::string apiUrl)
+: CreatePageWidget("test")
 {
+    
     session_= session;
     apiUrl_ = apiUrl;
     created_ = false;
     newClass_ = false;
-
-    setButtonModif(true);
-    setButtonSup(true);
-    setTypeButtonAdd(0);
     setResourceNumberAdd(2);
-    setLocalTable(true);
 }
 
-void    AssetManagementWidget::update()
+
+void    ClassTest::update()
 {
     CreatePageWidget::update();
    if (!newClass_)
     {
-       /*
-        ClassTest *test = new ClassTest(session_, apiUrl_);
-        bindWidget("resource-test", test);
-        test->recoverListAsset();
-        newClass_ = true;
-        * */
+
     }
 }
 
-// TABLE FOR POPUP ------------------------------------------
-
-void  AssetManagementWidget::popupAddTables(Wt::WTabWidget *tabW)
-{
-    
-       ClassTest *test = new ClassTest(session_, apiUrl_);
-       tabW->addTab(test, "Classe Test 1", Wt::WTabWidget::PreLoading);
-       test->setButtonSup(false);
-       test->setButtonModif(false);
-       test->setLocalTable(false);
-       test->setTypeButtonAdd(1);
-       test->recoverListAsset();
-       
-      test = new ClassTest(session_, apiUrl_);
-       tabW->addTab(test, "Classe Test 2", Wt::WTabWidget::LazyLoading);
-       test->setButtonSup(true);
-       test->setButtonModif(true);
-       test->setLocalTable(false);
-       test->setTypeButtonAdd(1);
-       test->recoverListAsset();
-       
-       test = new ClassTest(session_, apiUrl_);
-       tabW->addTab(test, "Classe Test 3", Wt::WTabWidget::PreLoading);
-       test->setLocalTable(false);
-       test->setTypeButtonAdd(1);
-       test->recoverListAsset();
-
-}
-
-// GET INFO FOR MOTHER ---------------------------------------
-
-std::vector<std::string>        AssetManagementWidget::getHeaderTableTitle()
+std::vector<std::string>        ClassTest::getHeaderTableTitle()
 {
    std::vector<std::string>     title;
    title.push_back("name");
@@ -82,7 +37,7 @@ std::vector<std::string>        AssetManagementWidget::getHeaderTableTitle()
    return title;
 }
 
-std::vector<long long>          AssetManagementWidget::getIdsTable()
+std::vector<long long>          ClassTest::getIdsTable()
 {
     std::vector<long long>      ids;
 
@@ -99,7 +54,7 @@ std::vector<long long>          AssetManagementWidget::getIdsTable()
     return ids;
 }
 
-vector_type     AssetManagementWidget::getResourceRowTable(long long id)
+vector_type     ClassTest::getResourceRowTable(long long id)
 {
     vector_type    rowTable;
     Wt::Json::Array& result1 = Wt::Json::Array::Empty;
@@ -127,7 +82,7 @@ vector_type     AssetManagementWidget::getResourceRowTable(long long id)
             downloadButton->setAttributeValue("class","btn btn-info");
             downloadButton->setTextFormat(Wt::XHTMLUnsafeText);
             downloadButton->setText("<span class='input-group-btn'><i class='icon-download icon-white'></i></span>");
-            downloadButton->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this, file->fileName()));
+            downloadButton->clicked().connect(boost::bind(&ClassTest::downloadScript, this, file->fileName()));
             rowTable.push_back(downloadButton);
             return (rowTable);
         }
@@ -135,7 +90,7 @@ vector_type     AssetManagementWidget::getResourceRowTable(long long id)
     return rowTable;
 }
 
-Wt::WValidator    *AssetManagementWidget::editValidator(int who)
+Wt::WValidator    *ClassTest::editValidator(int who)
 {
     Wt::WRegExpValidator *validator = 
             new Wt::WRegExpValidator(REG_EXP);
@@ -145,29 +100,9 @@ Wt::WValidator    *AssetManagementWidget::editValidator(int who)
 
 // DB - ADD DEL MODIF ----------------------------------------
 
-void AssetManagementWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
+void ClassTest::addResource(std::vector<Wt::WInteractWidget*> argument)
 {
-/*    
-    Wt::WLineEdit *assetEdit;
-    std::string input;
-    Wt::Http::Message message;
-    std::vector<Wt::WInteractWidget*>::iterator i = argument.begin();
-    assetEdit = (Wt::WLineEdit*)(*i);
 
-    input = "{\n";
-    input += "\"name\" : \"" + boost::lexical_cast<std::string>(assetEdit->text()) + "\"\n";
-    input += "}\n";
-
-    std::string apiAddress = this->getApiUrl() + "/assets";
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&AssetManagementWidget::postAsset, this, _1, _2));
-    apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
-    message.addBodyText(input);
-    if (client->post(apiAddress, message))
-        Wt::WApplication::instance()->deferRendering();
-    else
-        std::cout << "Error Client Http" << std::endl;
-*/
     std::vector<Wt::WInteractWidget*>::iterator i = argument.begin();
     assetEdit = (Wt::WLineEdit*)(*i);
     doJavaScript("$('#" + boost::lexical_cast<std::string>(assetEdit->text()) + "').toggleClass('error',false)");
@@ -200,12 +135,12 @@ void AssetManagementWidget::addResource(std::vector<Wt::WInteractWidget*> argume
         catch (Wt::Dbo::Exception e)
         {
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("2"),Wt::Ok);
-        Wt::log("error") << "[AssetManagementWidget] " << e.what();
+        Wt::log("error") << "[ClassTest] " << e.what();
     }
     recoverListAsset();
 }
 
-void AssetManagementWidget::deleteResource(long long id)
+void ClassTest::deleteResource(long long id)
 {
     try
     {
@@ -222,7 +157,7 @@ void AssetManagementWidget::deleteResource(long long id)
     }
     catch (Wt::Dbo::Exception e)
     {
-        Wt::log("error") << "[AssetManagementWidget] [deleteAsset] " << e.what();
+        Wt::log("error") << "[ClassTest] [deleteAsset] " << e.what();
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("3"),Wt::Ok);
         return;
     }
@@ -230,7 +165,7 @@ void AssetManagementWidget::deleteResource(long long id)
     recoverListAsset();
 }
 
-void AssetManagementWidget::modifResource(std::vector<Wt::WInteractWidget*> argument, long long id)
+void ClassTest::modifResource(std::vector<Wt::WInteractWidget*> argument, long long id)
 {
     Wt::WLineEdit *test;
     std::cout << "Modif : Resultat des entrées : " << std::endl;
@@ -240,20 +175,11 @@ void AssetManagementWidget::modifResource(std::vector<Wt::WInteractWidget*> argu
         test = (Wt::WLineEdit*)(*i);
         std::cout << test->text() << std::endl;
     }
-/*
-    std::string apiAddress = this->getApiUrl() + "/assets";
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&AssetManagementWidget::putAsset, this, _1, _2));
-    apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
-    if (client->put(apiAddress))
-        Wt::WApplication::instance()->deferRendering();
-    else
-        std::cout << "Error Client Http" << std::endl;
-*/  
+
     recoverListAsset();
 }
 
-void AssetManagementWidget::close()
+void ClassTest::close()
 {
     delete this;
 }
@@ -261,7 +187,7 @@ void AssetManagementWidget::close()
 
 // DB GET INFO ------------------------------------------
 
-void AssetManagementWidget::getAsset(boost::system::error_code err, const Wt::Http::Message& response)
+void ClassTest::getAsset(boost::system::error_code err, const Wt::Http::Message& response)
 {
    Wt::WApplication::instance()->resumeRendering();
    result_ = 0;
@@ -300,15 +226,15 @@ void AssetManagementWidget::getAsset(boost::system::error_code err, const Wt::Ht
    update();
 }
 
-void    AssetManagementWidget::recoverListAsset()
+void    ClassTest::recoverListAsset()
 {
     /**
      ** Connection API
      */
     std::string apiAddress = this->getApiUrl() + "/assets";
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&AssetManagementWidget::getAsset, this, _1, _2));
-    apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
+    client->done().connect(boost::bind(&ClassTest::getAsset, this, _1, _2));
+    apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
     if (client->get(apiAddress))
     {
         Wt::WApplication::instance()->deferRendering();
@@ -318,7 +244,7 @@ void    AssetManagementWidget::recoverListAsset()
 }
 
 
-void    AssetManagementWidget::postAsset(boost::system::error_code err, const Wt::Http::Message& response)
+void    ClassTest::postAsset(boost::system::error_code err, const Wt::Http::Message& response)
 {
        Wt::WApplication::instance()->resumeRendering();
     Wt::Json::Value error;
@@ -355,7 +281,7 @@ void    AssetManagementWidget::postAsset(boost::system::error_code err, const Wt
     }
 }
 
-void AssetManagementWidget::putAsset(boost::system::error_code err, const Wt::Http::Message& response)
+void ClassTest::putAsset(boost::system::error_code err, const Wt::Http::Message& response)
 {
     Wt::WApplication::instance()->resumeRendering();
     Wt::Json::Value error;
@@ -394,7 +320,7 @@ void AssetManagementWidget::putAsset(boost::system::error_code err, const Wt::Ht
 
 // SCRIPT DOWNLOAD ---------------------------------------
 
-Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WString assetName)
+Wt::WFileResource *ClassTest::generateScript(long long i, Wt::WString assetName)
 {
     // static part of file
     std::string disclaimerString = getStringFromFile("resources/scripts/disclaimer");
@@ -410,7 +336,7 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WStrin
     }
     catch (Wt::Dbo::Exception e)
     {
-        Wt::log("error") << "[AssetManagementWidget] " << e.what();
+        Wt::log("error") << "[ClassTest] " << e.what();
         return NULL;
     }
 
@@ -420,7 +346,7 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WStrin
     // temp file
     char *tmpname = strdup("/tmp/echoes-tmp-fileXXXXXX");
     int mkstempRes = mkstemp(tmpname);
-    Wt::log("debug") << "[AssetManagementWidget] " << "Res temp file creation : " << mkstempRes;
+    Wt::log("debug") << "[ClassTest] " << "Res temp file creation : " << mkstempRes;
     std::ofstream f(tmpname);
     f << contentToSend;
     f.close();
@@ -436,7 +362,7 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WStrin
     return res;
 }
 
-std::string AssetManagementWidget::getStringFromFile(std::string resourcePath)
+std::string ClassTest::getStringFromFile(std::string resourcePath)
 {
     std::string filePath = Wt::WApplication::instance()->appRoot()+resourcePath;
     std::ifstream file(filePath.c_str());
@@ -456,24 +382,24 @@ std::string AssetManagementWidget::getStringFromFile(std::string resourcePath)
     return res;
 }
 
-void AssetManagementWidget::downloadScript(std::string fileName)
+void ClassTest::downloadScript(std::string fileName)
 {
     UserActionManagement::registerUserAction(Enums::download,fileName,0);
 }
 
 // ----------------------------------------------
 
-void    AssetManagementWidget::setSession(Session *session)
+void    ClassTest::setSession(Session *session)
 {
     session_ = session;
 }
 
-void    AssetManagementWidget::setApiUrl(std::string apiUrl)
+void    ClassTest::setApiUrl(std::string apiUrl)
 {
     apiUrl_ = apiUrl;
 }
 
-std::string   AssetManagementWidget::getApiUrl()
+std::string   ClassTest::getApiUrl()
 {
     return apiUrl_;
 }

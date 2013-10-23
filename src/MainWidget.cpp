@@ -17,6 +17,7 @@ MainWidget::MainWidget(Session *session, const std::string &apiUrl)
     contentContainer = new Wt::WContainerWidget(this);
 
     sideBarContainer = new Wt::WContainerWidget();
+    footerContainer = new Wt::WContainerWidget();
     
     breadCrumbsContainer = new Wt::WContainerWidget(this);
     
@@ -28,6 +29,7 @@ void MainWidget::reset(Session *session)
     delete breadCrumbsContainer;
     // voir si utile, refait dans initMenus()
     sideBarContainer->clear();
+    footerContainer->clear();
     contentContainer->clear();
     titleText = new Wt::WText();
     breadCrumbsContainer = new Wt::WContainerWidget(this);
@@ -41,8 +43,8 @@ void MainWidget::reset(Session *session)
 //    app->messageResourceBundle().use("test",false);  
     // Todo : check, sans doute inutile
     initMenus();
+    initFooter();
     contentContainer->setId("content");
-
     breadCrumbsContainer->setId("breadcrumb");
     
     
@@ -61,12 +63,12 @@ void MainWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
     Wt::WContainerWidget::render(flags);
 }
 
-void MainWidget::initMenus()
+void MainWidget::initMenus(void)
 {
     sideBarContainer->clear();
     sideBarContainer->setId("sidebar");
-//    sideBarContainer->hide();
-    
+    //    sideBarContainer->hide();
+        
     Wt::WAnchor *phoneMenuAnchor = new Wt::WAnchor("#");
     phoneMenuAnchor->setText("Menu");
     phoneMenuAnchor->setAttributeValue("class","visible-phone");
@@ -84,6 +86,17 @@ void MainWidget::initMenus()
     accountSubmenu->setInternalPathEnabled("/" + boost::lexical_cast<std::string>(enumPTAc->value()) +  "/");
 }
     
+void    MainWidget::initFooter(void)
+{
+    footerContainer->clear();
+    footerContainer->setId("footer");
+    Wt::WText   *footerText = new Wt::WText(tr("Footer.text.date") + " "
+                            + Wt::WDateTime::currentDateTime().toString("yyyy") + " "
+                            + tr("Footer.text") 
+                            + "<br />"
+                            + "Version " + EchoesHome::version_g);
+    footerContainer->insertWidget(0, footerText);
+}
 
 void MainWidget::createUI()
 {
@@ -176,6 +189,7 @@ void MainWidget::createSubMenu(Enums::EPageType enumPT)
     itemMenu->setPathComponent(boost::lexical_cast<std::string>(enumPT.value()));
     Wt::WText *iconHTML = new Wt::WText("</span><i class='icon icon-" + getIconName(enumPT) + "'></i><span>",Wt::XHTMLUnsafeText);
     Wt::WAnchor *anchorInsideMenu = (Wt::WAnchor*)itemMenu->widget(0);
+    anchorInsideMenu->clicked().preventPropagation(false);
     anchorInsideMenu->insertWidget(0,iconHTML);
     anchorInsideMenu->addWidget(labelHTML);
     itemMenu->addStyleClass("submenu",true);
@@ -606,6 +620,11 @@ Wt::WMenu * MainWidget::getAccountSubmenu()
 Wt::WContainerWidget * MainWidget::getSideBarContainer()
 {
     return this->sideBarContainer;
+}
+
+Wt::WContainerWidget * MainWidget::getFooterContainer()
+{
+    return this->footerContainer;
 }
 
 void MainWidget::close()

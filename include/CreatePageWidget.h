@@ -78,7 +78,7 @@ public:
     void                setButtonSup(bool check);
     void                setLocalTable(bool background);
     void                setTypeButtonAdd(int check);
-    void                setResouceNumberAdd(int nbResource);
+    void                setResourceNumberAdd(int nbResource);
 
 protected:
 

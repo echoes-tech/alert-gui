@@ -1,14 +1,25 @@
 /* 
- * File:   AssetManagementWidget.h
- * Author: tsa
- *
- * Created on 14 août 2012, 11:50
+ * Header of Asset Management Widget
+ * @author ECHOES Technologies (TSA)
+ * @date 14/08/2012
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
+ * 
  */
 
 #ifndef ASSETMANAGEMENTWIDGET_H
 #define	ASSETMANAGEMENTWIDGET_H
 
 #include "GlobalIncludeFile.h"
+
+#include <Wt/WButtonGroup>
+#include <Wt/WRadioButton>
+#include <Wt/WGroupBox>
+#include <Wt/WBreak>
 
 #include <Wt/WInteractWidget>
 #include <Wt/WDialog>
@@ -21,7 +32,7 @@
 #include <Wt/WText>
 #include <Wt/WTable>
 
-// Ancier
+// Ancien
 #include <Wt/Dbo/Query>
 #include <fstream>
 #include <boost/random.hpp>
@@ -71,7 +82,7 @@ public:
   void                  getAsset(boost::system::error_code err, const Wt::Http::Message& response);
 void    recoverListAsset();
 
-std::vector<std::string> recoverTitles();
+//std::vector<std::string> recoverTitles();
 
 Wt::Json::Value result_;
 
@@ -91,10 +102,24 @@ protected:
    */
  // virtual bool validate();
 
+    /*! \brief Validates the current information.                                                           
+     * 
+     * The default implementation simply calls
+     * RegistrationModel::validate() on the model.
+     * 
+     * You may want to reimplement this method if you've added other 
+     * information to the registration form that need validation.
+     */
+//    virtual bool validate();
+    /*! \brief Closes the registration widget. 
+     * 
+     * The default implementation simply deletes the widget.
+     */
+    virtual void close();
 
 
-void    initPopup();
-    void        addResourceInPopup(Wt::WDialog *dialog_);
+//void    initPopup();
+    //void        addResourceInPopup(Wt::WDialog *dialog_);
 
 
 

@@ -220,22 +220,38 @@ void AlertListWidget::createUI()
 
 void AlertListWidget::deleteAlert(long long id)
 {
-    try
-    {
-        Wt::Dbo::Transaction transaction(*session);
-        std::string queryStr = "SELECT ale FROM \"T_ALERT_ALE\" ale WHERE \"ALE_ID\" = ? FOR UPDATE";
-        Wt::Dbo::ptr<Alert> ptrAlert = session->query<Wt::Dbo::ptr<Alert > >(queryStr).bind(id).limit(1);
+    /**
+     ** Created Window for confirm delete this alert. 
+     **/
+    Wt::WMessageBox *result = new Wt::WMessageBox("Attention",
+            tr("Alert.alert-list.delete-alert-message"), Wt::Warning,
+            Wt::Yes | Wt::No);
+    // Edit Buttons
+    Wt::WPushButton *yes_ = result->button(Wt::Yes);
+    Wt::WPushButton *no_ = result->button(Wt::No);
+    // Init Buttons
+    yes_->clicked().connect(result, &Wt::WMessageBox::accept);
+    no_->clicked().connect(result, &Wt::WMessageBox::reject);
+    
+    if (result->exec() == Wt::WMessageBox::Accepted)
+        try
+        {
+            Wt::Dbo::Transaction transaction(*session);
+            std::string queryStr = "SELECT ale FROM \"T_ALERT_ALE\" ale WHERE \"ALE_ID\" = ? FOR UPDATE";
+            Wt::Dbo::ptr<Alert> ptrAlert = session->query<Wt::Dbo::ptr<Alert > >(queryStr).bind(id).limit(1);
         
-        ptrAlert.modify()->deleteTag = Wt::WDateTime::currentDateTime();
-        transaction.commit();
-        UserActionManagement::registerUserAction(Enums::del, Constants::T_ALERT_ALE, ptrAlert.id());
-    }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::log("error") << "[AlertListWidget] [deleteAlert] " << e.what();
-        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"), tr("Alert.alert.database-error"), Wt::Ok);
-    }
-    createUI();
+            ptrAlert.modify()->deleteTag = Wt::WDateTime::currentDateTime();
+            transaction.commit();
+            UserActionManagement::registerUserAction(Enums::del, Constants::T_ALERT_ALE, ptrAlert.id());
+        }
+        catch (Wt::Dbo::Exception e)
+        {
+            Wt::log("error") << "[AlertListWidget] [deleteAlert] " << e.what();
+            Wt::WMessageBox::show(tr("Alert.alert.database-error-title"), tr("Alert.alert.database-error"), Wt::Ok);
+        }
+    // For clear memory.
+   delete result;
+   createUI();
 }
 
 void AlertListWidget::refresh()

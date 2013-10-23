@@ -16,5 +16,6 @@
   <message id="Alert.alert-list.alert-snooze"><b>Snooze</b></message>
   
   <message id="Alert.alert-list.delete-alert">Delete</message>
-  
+
+  <message id="Alert.alert-list.delete-alert-message"><b>You are going to delete this alert, are you sure ?</b></message>
 </messages>

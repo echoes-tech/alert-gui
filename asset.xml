@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
 
-  <!-- Models -->
+    <!-- Models -->
 
   <message id="Alert.asset.form-title">Servers</message>
   <message id="Alert.asset.form-info">On this page you can add the servers you need to monitor and get the scripts to configure them.</message>
@@ -41,7 +41,7 @@
   <message id="Alert.asset.file-not-generated">
       <span style="color:red">The file as not been generated. Please contact us.</span>
   </message>
-  
+    
   <!-- templates -->
 
     <message id="Alert.asset.Management.template" >

@@ -16,7 +16,7 @@
             <div class="new-update clearfix">
                 <i class="icon-comment"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>Participez à l'évolution du produit</strong></a>
+                    <p><strong>Participez à l'évolution du produit</strong></p>
                     <ul>
                         <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge pour toutes vos demandes</a></li>
                         <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Forum d'entraide</a></li>         
@@ -28,7 +28,7 @@
             <div class="new-update clearfix">
                 <i class="icon-tasks"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>Changements majeurs prochaine livraison</strong></a>
+                    <p><strong>Changements majeurs prochaine livraison</strong></p>
                     <ul>
                     <li>Personnalisation complète des alertes</li>
                     <li>Corrélation</li>
@@ -53,7 +53,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-alert">
-                    <a title="" href="#"><strong>[Interface utilisateur] Nouvelles fonctionnalités</strong></a>
+                    <p><strong>[Interface utilisateur] Nouvelles fonctionnalités</strong></p>
                     <ul>
                         <li>Intégration du moteur de thèmes Bootstrap</li>
                         <li>Personnalisation des alertes</li>
@@ -66,7 +66,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">										
-                    <a title="" href="#"><strong>[API] Nouvelles fonctionnalités</strong></a>
+                    <p><strong>[API] Nouvelles fonctionnalités</strong></p>
                     <ul>
                         <li>Toutes nos ressources sont désormais accessibles à travers l'API</li>
                     </ul>
@@ -78,7 +78,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">										
-                    <a title="" href="#"><strong>[Engine] Nouvelles fonctionnalités</strong></a>
+                    <p><strong>[Engine] Nouvelles fonctionnalités</strong></p>
                     <ul>
                         <li>Moteur de correlation</li>
                     </ul>
@@ -103,7 +103,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">										
-                    <a title="" href="#"><strong>[API] Nouvelles fonctionnalités</strong></a>
+                    <p><strong>[API] Nouvelles fonctionnalités</strong></p>
                     <ul>
                     <li>Suivi des recommandations RESTful</li>
                     <li>Système de gestion des packages</li>    
@@ -116,7 +116,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-alert">										
-                    <a title="" href="#"><strong>[Moteur] Nouvelle fonctionnalité</strong></a>
+                    <p><strong>[Moteur] Nouvelle fonctionnalité</strong></p>
                     <ul>
                     <li>Alertes sur des informations textuelles</li>
                     </ul>
@@ -127,7 +127,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[Interface utilisateur] Correction de bugs</strong></a>
+                    <p><strong>[Interface utilisateur] Correction de bugs</strong></p>
                     <ul>
                     <li>Correction d'un bug qui empêchait la création d'alertes dans certains cas</li>
                     <li>Correction d'un bug qui empêchait la création du lien entre un utilisateur et son organisation dans certains cas</li>    
@@ -139,7 +139,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[Script d'installation] Evolutions / Nouvelles fonctionnalités</strong></a>
+                    <p><strong>[Script d'installation] Evolutions / Nouvelles fonctionnalités</strong></p>
                     <ul>
                     <li>Utilisation de l'API</li>
                     <li>Utilisation du client openssl à la place de wget (utilisation de la méthode PUT)</li>
@@ -152,7 +152,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[Probe] Corrections de bugs / Nouvelles fonctionnalités</strong></a>
+                    <p><strong>[Probe] Corrections de bugs / Nouvelles fonctionnalités</strong></p>
                     <ul>
                     <li>Suppression de fuites mémoire</li>
                     <li>Addon SNMP</li>
@@ -167,7 +167,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[Déploiement] Nouvelles fonctionnalités</strong></a>
+                    <p><strong>[Déploiement] Nouvelles fonctionnalités</strong></p>
                     <ul>
                     <li>Mise en place d'une procédure de déploiement automatisé</li>
                     <li>Mise en place d'indicateurs clés à propos du développement</li>
@@ -191,7 +191,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[ECHOES Alert] Corrections de bugs</strong></a>
+                    <p><strong>[ECHOES Alert] Corrections de bugs</strong></p>
                     <ul>
                     <li>Beta ouverte toute la journée</li>
                     <li>Divers bugs</li>
@@ -214,7 +214,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[ECHOES Alert] Corrections de bugs</strong></a>
+                    <p><strong>[ECHOES Alert] Corrections de bugs</strong></p>
                     <ul>
                     <li>Beta ouverte tous les jours de 14h à 2h</li>
                     <li>[Moteur] Stabilisation : amélioration des performances
@@ -250,7 +250,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[ECHOES Alert] Corrections de bugs</strong></a>
+                    <p><strong>[ECHOES Alert] Corrections de bugs</strong></p>
                     <ul>
                         <li> [Moteur] Correction du bug qui empêchait les SMS de partir dans certains cas</li>
                         <li> [Interface utilisateur] Correction d'un problème qui empêchait de créer une alerte </li>
@@ -266,7 +266,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[ECHOES Alert] Corrections de bugs</strong></a>
+                    <p><strong>[ECHOES Alert] Corrections de bugs</strong></p>
                     <ul>
                         <li> [Moteur] Correction de plusieurs problèmes dans le moteur de calcul d'alertes</li>
                         <li> [Interface utilisateur] Stabilisation de l'interface</li>
@@ -285,7 +285,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[ECHOES Alert] Nouvelles fonctionnalités</strong></a>
+                    <p><strong>[ECHOES Alert] Nouvelles fonctionnalités</strong></p>
                     <ul>
                         <li> S'inscrire (mais ceci est déjà fait visiblement)</li>
                         <li> Commander votre première sonde</li>

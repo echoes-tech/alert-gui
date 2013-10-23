@@ -84,6 +84,9 @@
   <message id="Alert.alert.database-error-title">Database error</message>
   <message id="Alert.alert.database-error">Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
   
+  <message id="Alert.alert.api-error-title">API error</message>
+  <message id="Alert.alert.api-error">API error. Try again later. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
+
   <message id="Alert.alert.alert-created-title">Alert created</message>
   <message id="Alert.alert.alert-created">Your alert was successfully created !</message>
   

@@ -35,6 +35,8 @@ CreatePageWidget::CreatePageWidget(std::string namePage)
 
 CreatePageWidget::~CreatePageWidget() { }
 
+// INIT Elements. ------------------------------------------------------
+
 void    CreatePageWidget::update()
 {
     if (!this->created_)
@@ -103,6 +105,8 @@ Wt::WContainerWidget    *CreatePageWidget::createFooterTable()
     return footerTable;
 }
 
+// Add Resouce For Elements -----------------------------------------------------------------
+
 void    CreatePageWidget::addResourceInHeaderTable()
 {
     int                         columnTable(0);
@@ -159,7 +163,7 @@ void    CreatePageWidget::fillInTable()
         addButtons(*j, rowBodyTable, columnTable);
         rowBodyTable++;
     }
-    if (this->butAdd_ == 1)
+    if (!this->dial_)
         addInputForAffix(rowBodyTable);
 }
 
@@ -193,12 +197,14 @@ void    CreatePageWidget::addButtons(long long id, int rowTable, int columnTable
 
 void            CreatePageWidget::addInputForAffix(int rowBodyTable)
 {
+    std::cout << "Add input For affix" << std::endl;
     std::vector<Wt::WText*> errorMessage;
     int columnTable(0);
     if (inputs_.size() > 0)
         inputs_.clear();
     for (int i = 0; i < this->nbResource_; ++i)
     {
+        std::cout << "Add Resource" << std::endl;
         Wt::WText *error = new Wt::WText(tr("Alert." + this->nameResourcePage + ".invalid-name-info"));
         error->hide();
         errorMessage.push_back(error);
@@ -227,23 +233,9 @@ void            CreatePageWidget::addInputForAffix(int rowBodyTable)
     inputs_.push_back(acceptButton);
 }
 
-void    CreatePageWidget::showInputForAdd()
-{
-    mediaTable_->rowAt(mediaTable_->rowCount() - 1)->show();
-    for (std::vector<Wt::WInteractWidget*>::const_iterator j = inputs_.begin(); 
-            j != inputs_.end(); 
-            j++)
-    {
-        Wt::WInteractWidget *widgetAdd = *j;
-        std::string nameRessouce("N2Wt9WLineEditE");
-        if (inputs_.begin() == j && nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
-            ((Wt::WLineEdit*)(*j))->setFocus();
-        ((Wt::WInteractWidget*)(*j))->show();
-    }
-}
-
 void    CreatePageWidget::inputForModif(long long id, int rowTable, int columnTable)
 {
+    std::cout << "inputForModif" << std::endl;
     std::vector<Wt::WText*> errorMessage;
     int column(0);
     int cpt(0);
@@ -252,8 +244,10 @@ void    CreatePageWidget::inputForModif(long long id, int rowTable, int columnTa
     {
         Wt::WInteractWidget *widgetAdd = *j;
         std::string nameRessouce("N2Wt5WTextE");
+        std::cout << "name : " << nameRessouce.compare(typeid(*widgetAdd).name()) << std::endl;
         if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
         {
+            std::cout << "Ca rentre les input" << std::endl;
             nameRessouce = boost::lexical_cast<std::string>(((Wt::WText*)(widgetAdd))->text());
             std::string newName = nameRessouce;
             if (nameRessouce.size() > SIZE_NAME_RESOURCE + SIZE_NAME_RESOURCE)
@@ -291,27 +285,85 @@ void    CreatePageWidget::inputForModif(long long id, int rowTable, int columnTa
     valideBut->clicked().connect(boost::bind(&CreatePageWidget::checkModif, this, id, errorMessage));
 }
 
+// Aff Input ----------------------------------------------------------------------
+
+void    CreatePageWidget::showInputForAdd()
+{
+    mediaTable_->rowAt(mediaTable_->rowCount() - 1)->show();
+    for (std::vector<Wt::WInteractWidget*>::const_iterator j = inputs_.begin(); 
+            j != inputs_.end(); 
+            j++)
+    {
+        Wt::WInteractWidget *widgetAdd = *j;
+        std::string nameRessouce("N2Wt9WLineEditE");
+        if (inputs_.begin() == j && nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
+            ((Wt::WLineEdit*)(*j))->setFocus();
+        ((Wt::WInteractWidget*)(*j))->show();
+    }
+}
+
+// Check input ----------------------------------------------
+
 void    CreatePageWidget::checkAdd(std::vector<Wt::WText*> errorMessage)
 {
     if (checkInput(inputs_, errorMessage) == 0)
     {
+        this->created_ = false;
         inputs_.pop_back();
         addResource(inputs_);
         inputs_.clear();
     }
-    else
-        this->created_ = false;
+//    else
+//        this->created_ = false;
 }
 
 void    CreatePageWidget::checkModif(long long id, std::vector<Wt::WText*> errorMessage)
 {
+    std::cout << "Checkmodif" << std::endl;
     if (checkInput(inputs_, errorMessage) == 0)
     {
+    std::cout << "Checkmodif OK" << std::endl;
         modifResource(inputs_, id);
         inputs_.clear();
     }    
     else
+    {
+        std::cout << "Checkmodif BAD" << std::endl;
         this->created_ = false;
+    }
+}
+
+int    CreatePageWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage)
+{
+    int check(0);
+
+    std::vector<Wt::WText*>::const_iterator i = errorMessage.begin(); 
+    for (std::vector<Wt::WInteractWidget*>::const_iterator j = inputName.begin(); 
+            j != inputName.end(); 
+            j++)
+    {
+        Wt::WInteractWidget *widgetAdd = *j;
+        std::string nameRessouce("N2Wt9WLineEditE");
+        if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
+        {
+            if (((Wt::WLineEdit*)(*j))->validate() == Wt::WValidator::Invalid
+                    || ((Wt::WLineEdit*)(*j))->text().empty())
+            {
+                ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-error");
+                ((Wt::WLineEdit*)(*j))->setWidth(Wt::WLength(20, Wt::WLength::Unit::Percentage));
+                ((Wt::WLineEdit*)(*j))->setFocus();
+                ((Wt::WText*)(*i))->show();
+                check = 1;
+            }
+            else
+            {
+                ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-success");
+                ((Wt::WText*)(*i))->hide();
+            }
+        }
+        i++;
+    }
+    return check;
 }
 
 // Function useful ----------------------------------------------
@@ -360,7 +412,6 @@ void     CreatePageWidget::searchName(Wt::WLineEdit *arg)
     std::cout << "Your search : " << arg->text() << std::endl;
 }
 
-
 // Set attribut for option. -------------------------------------
 
 void    CreatePageWidget::setButtonModif(bool check)
@@ -378,7 +429,7 @@ void    CreatePageWidget::setTypeButtonAdd(int check)
     this->butAdd_ = check;
 }
 
-void    CreatePageWidget::setResouceNumberAdd(int nbResource)
+void    CreatePageWidget::setResourceNumberAdd(int nbResource)
 {
     this->nbResource_ = nbResource;
 }
@@ -386,89 +437,6 @@ void    CreatePageWidget::setResouceNumberAdd(int nbResource)
 void    CreatePageWidget::setLocalTable(bool background)
 {
     this->dial_ = background;
-}
-
-// Check input ----------------------------------------------
-
-int    CreatePageWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage)
-{
-    int check(0);
-
-    std::vector<Wt::WText*>::const_iterator i = errorMessage.begin(); 
-    for (std::vector<Wt::WInteractWidget*>::const_iterator j = inputName.begin(); 
-            j != inputName.end(); 
-            j++)
-    {
-        Wt::WInteractWidget *widgetAdd = *j;
-        std::string nameRessouce("N2Wt9WLineEditE");
-        if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
-        {
-            if (((Wt::WLineEdit*)(*j))->validate() == Wt::WValidator::Invalid
-                    || ((Wt::WLineEdit*)(*j))->text().empty())
-            {
-                ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-error");
-                ((Wt::WLineEdit*)(*j))->setWidth(Wt::WLength(20, Wt::WLength::Unit::Percentage));
-                ((Wt::WLineEdit*)(*j))->setFocus();
-                ((Wt::WText*)(*i))->show();
-                check = 1;
-            }
-            else
-            {
-                ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-success");
-                ((Wt::WText*)(*i))->hide();
-            }
-        }
-        i++;
-    }
-//    this->created_ = false;
-    return check;
-}
-
-void    CreatePageWidget::popupCheck(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id)
-{
-    int check(0);
-    if (dialog->result() == Wt::WDialog::Rejected)
-    {
-        return;
-    }
-    else
-    {
-        check = checkInput(inputName, errorMessage);
-/*
-        check = 0;
-        std::vector<Wt::WText*>::const_iterator i = errorMessage.begin(); 
-        for (std::vector<Wt::WInteractWidget*>::const_iterator j = inputName.begin();
-                j != inputName.end(); 
-                j++)
-        {
-            if (((Wt::WLineEdit*)(*j))->validate() == Wt::WValidator::Invalid
-                    || ((Wt::WLineEdit*)(*j))->text().empty())
-                    // This is cast in LineEdit for use validate(), because in connect we can't write in variable 'j'.
-                    // Il a était caster en LineEdit pour utiliser validate(), parce qu'a l'utilisation de connecte on ne peut pas modifier la variable 'j'.
-            {
-                ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-error");
-                ((Wt::WLineEdit*)(*j))->setWidth(Wt::WLength(20, Wt::WLength::Unit::Percentage));
-                ((Wt::WLineEdit*)(*j))->setFocus();
-                ((Wt::WText*)(*i))->show();
-                check = 1;
-            }
-            else
-            {
-                ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-success");
-                ((Wt::WText*)(*i))->hide();
-            }
-            cpt++;
-           i++;
-        }
-*/
-    }
-    if (check == 0)
-        id >= 0 ? modifResource(inputName, id) : addResource(inputName);
-    else if (check == 1)
-    {
-        dialog->show();
-    }
-    return;
 }
 
 // POPUP : ----------------------------------------------------
@@ -590,6 +558,20 @@ void    CreatePageWidget::popupForModif(long long id)
     this->created_ = false;
 }
 
+void    CreatePageWidget::popupCheck(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id)
+{
+    int check(0);
+    if (dialog->result() == Wt::WDialog::Rejected)
+        return;
+    else
+        check = checkInput(inputName, errorMessage);
+    if (check == 0)
+        id >= 0 ? modifResource(inputName, id) : addResource(inputName);
+    else if (check == 1)
+        dialog->show();
+    return;
+}
+
 void    CreatePageWidget::popupComplete(Wt::WDialog *dialog)
 {
     dialog->setResizable(true);
@@ -607,11 +589,12 @@ void    CreatePageWidget::popupComplete(Wt::WDialog *dialog)
 
     new Wt::WText("\n", dialog->contents());
 
-    Wt::WTabWidget *tabW = new Wt::WTabWidget(dialog->contents());
+    Wt::WTabWidget *tabW = new Wt::WTabWidget();
     popupAddTables(tabW);
-    tabW->setHeight(250);
-    
-    
-    
+    if (tabW->count() > 0)
+    {
+        dialog->contents()->addWidget(tabW);
+        tabW->setHeight(250);
+    }    
 }
 

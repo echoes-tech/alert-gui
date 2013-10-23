@@ -12,6 +12,9 @@
   <message id="Alert.asset.add-asset-button">Ajouter un serveur</message>
 
   <message id="Alert.asset.add-asset-form">Vos serveurs</message>
+  
+  <message id="Alert.user.edition.asset-name">Serveur</message>
+  
   <message id="Alert.asset.asset-name">Nom du serveur</message>
   <message id="Alert.asset.asset-action">Actions</message>
   

@@ -964,7 +964,7 @@ void AlertEditionWidget::addAlert()
 
         client->done().connect(boost::bind(&AlertEditionWidget::postAlert, this, _1, _2));
 
-        apiAddress += "?login=" + session->user()->eMail.toUTF8() + "&token=" + session->user()->token.toUTF8();
+        apiAddress += "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8()) + "&token=" + session->user()->token.toUTF8();
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
@@ -1017,24 +1017,24 @@ void AlertEditionWidget::postAlert(boost::system::error_code err, const Wt::Http
             catch (Wt::Json::ParseError const& e)
             {
                 Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.alert.api-error-title"),tr("Alert.alert.api-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.alert.api-error-title"),tr("Alert.alert.api-error"),Wt::Ok);
             }
         }
         else
         {
             Wt::log("error") << "[Alert Edition Widget] " << response.body();
-            Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+            Wt::WMessageBox::show(tr("Alert.alert.api-error-title"),tr("Alert.alert.api-error"),Wt::Ok);
         }
     }
     else
     {
         Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.alert.api-error-title"),tr("Alert.alert.api-error"),Wt::Ok);
     }
 
     Wt::WApplication::instance()->root()->widget(0)->refresh();

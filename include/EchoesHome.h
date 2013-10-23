@@ -47,6 +47,9 @@ class EchoesHome : public Wt::WContainerWidget
         Session *getSession();
         std::string getApiUrl() const;
 
+        // This globale is version of web site. Init in main.c.
+        static std::string     version_g;
+        
     private:
         Session *session;
         std::string _apiUrl;

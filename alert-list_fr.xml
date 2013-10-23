@@ -19,4 +19,5 @@
   
   <message id="Alert.alert-list.delete-alert">Supprimer</message>
 
+  <message id="Alert.alert-list.delete-alert-message"><b>Vous allez supprimer cette alerte. Êtes vous sûr ?</b></message>
 </messages>

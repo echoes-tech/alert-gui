@@ -5,10 +5,15 @@
 
   <message id="Alert.test.form-title">Servers</message>
   <message id="Alert.test.form-info">On this page you can add the servers you need to monitor and get the scripts to configure them.</message>
-  
+    <message id="Alert.test.delete-message">
+      <span style="color:red"> Test Delete this server. Continue ?</span>
+  </message>
+
   <message id="Alert.test.name-label">Server to add: </message>
   <message id="Alert.test.invalid-name">Invalid name</message>
-  <message id="Alert.test.invalid-name-info">&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</message>
+  <message id="Alert.test.invalid-name-info">
+      <span style="color:red">&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</span>
+  </message>
   <message id="Alert.test.invalid-name-info2">
       <h5>Invalid name :</h5>
       <ul>

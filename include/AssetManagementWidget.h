@@ -125,10 +125,11 @@ protected:
 
   void modifResource(std::vector<Wt::WInteractWidget*> argument, long long id);
   void addResource(std::vector<Wt::WInteractWidget*> argument);
-  void deleteResource(long long id);
+  Wt::WDialog *deleteResource(long long id);
   Wt::WFileResource *generateScript(long long i, Wt::WString assetName);
   std::string getStringFromFile(std::string resourcePath);
   
+  void  closePopup();
   
   Wt::WValidator    *editValidator(int who);
 

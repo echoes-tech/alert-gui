@@ -52,6 +52,9 @@
 #include <Wt/WInPlaceEdit>
 #include <Wt/WComboBox>
 
+// Lib boost
+#include <boost/concept_check.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 /** gkr.\n
  * Max Size Name of resource
  */
@@ -70,14 +73,39 @@ public:
 
                         CreatePageWidget(std::string namePage);
     virtual             ~CreatePageWidget();
-    
+
+    /**
+     * This call for fill in popup (WDialog).\n
+     * tabW can 
+     * @param tabW
+     */
     virtual void        popupAddTables(Wt::WTabWidget *tabW) {};
     virtual void        update();
 
+    /**
+     * Add button modification.
+     * @param check \n
+     * True of false.
+     */
     void                setButtonModif(bool check);
+    /**
+     * Add button delete.
+     * @param check \n
+     * True or false.
+     */
     void                setButtonSup(bool check);
+    /**
+     * Table in window = True.\n
+     * Table in popup (WDialog) = False.
+     * @param background \n 
+     * True or False.
+     */
     void                setLocalTable(bool background);
-    void                setTypeButtonAdd(int check);
+    /**
+     * Set Number resource type WText.
+     * @param nbResource \n
+     * Number of resource WText.
+     */
     void                setResourceNumberAdd(int nbResource);
 
 protected:
@@ -87,9 +115,10 @@ protected:
     Wt::WContainerWidget                *createFooterTable();
 
     virtual void                        addResource(std::vector<Wt::WInteractWidget*> argument) {created_ = false;};
-    virtual void                        deleteResource(long long id) {created_= false;};
+    virtual Wt::WDialog             *deleteResource(long long id);
     virtual void                        modifResource(std::vector<Wt::WInteractWidget*> argument, long long id) {created_ = false;};
     virtual Wt::WValidator              *editValidator(int who) {return (new Wt::WValidator());};
+    virtual void                        closePopup() {};
 
     virtual std::vector<std::string>    getHeaderTableTitle() {std::vector<std::string> res; return res;};
     virtual std::vector<long long>      getIdsTable() {std::vector<long long> res; return res;};
@@ -101,7 +130,7 @@ private:
     void                showInputForAdd();
     int                checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
     void                checkAdd(std::vector<Wt::WText*> errorMessage);
-    void                checkModif(long long id, std::vector<Wt::WText*> errorMessage);
+    void                checkModif(vector_type inputs, long long id, std::vector<Wt::WText*> errorMessage);
     void                popupForModif(long long id);
     void                inputForModif(long long id, int rowTable, int columnTable);
 
@@ -113,6 +142,8 @@ private:
     void                popupComplete(Wt::WDialog *dialog);
     void                searchName(Wt::WLineEdit *arg);
 
+    void                buttonInDialogFooter(Wt::WDialog *dialog);
+
     void                resourceBeAff();
     Wt::WComboBox       *getComboBox();
 
@@ -123,7 +154,6 @@ private:
     bool                butModif_;
     bool                butSup_;
     bool                dial_;
-    int                 butAdd_;
     int                 nbResource_;
     int                 nbAff_;
 };

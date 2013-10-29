@@ -140,29 +140,38 @@ void ClassTest::addResource(std::vector<Wt::WInteractWidget*> argument)
     recoverListAsset();
 }
 
-void ClassTest::deleteResource(long long id)
+Wt::WDialog *ClassTest::deleteResource(long long id)
 {
-    try
-    {
-        Wt::Dbo::Transaction transaction(*session_);
-        Wt::Dbo::ptr<Asset>  ptrAsset = session_->find<Asset>().where("\"AST_ID\" = ?").bind(id);
+    Wt::WDialog *box = CreatePageWidget::deleteResource(id);
+    box->contents()->addWidget(new Wt::WText("</br> Class test"));
+    box->show();
+    box->finished().connect(std::bind([=] () {
+        if (box->result() == Wt::WDialog::Accepted)
+        {
+            try
+            {
+                Wt::Dbo::Transaction transaction(*session_);
+                Wt::Dbo::ptr<Asset>  ptrAsset = session_->find<Asset>().where("\"AST_ID\" = ?").bind(id);
 
-        const std::string executeString = "DELETE FROM \"TJ_AST_PLG\" " 
+                const std::string executeString = "DELETE FROM \"TJ_AST_PLG\" " 
                 " WHERE \"TJ_AST_PLG\".\"T_ASSET_AST_AST_ID\" = " + boost::lexical_cast<std::string>(id);
-        session_->execute(executeString);
+                session_->execute(executeString);
 
-        ptrAsset.modify()->deleteTag = Wt::WDateTime::currentDateTime();
-        UserActionManagement::registerUserAction(Enums::del,Constants::T_ASSET_AST,ptrAsset.id());
-        transaction.commit();
-    }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::log("error") << "[ClassTest] [deleteAsset] " << e.what();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("3"),Wt::Ok);
-        return;
-    }
-    CreatePageWidget::deleteResource(id);
-    recoverListAsset();
+                ptrAsset.modify()->deleteTag = Wt::WDateTime::currentDateTime();
+                UserActionManagement::registerUserAction(Enums::del,Constants::T_ASSET_AST,ptrAsset.id());
+                transaction.commit();
+            }
+            catch (Wt::Dbo::Exception e)
+            {
+                Wt::log("error") << "[ClassTest] [deleteAsset] " << e.what();
+                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("3"),Wt::Ok);
+                return box;
+            }
+            recoverListAsset();
+            return box;
+        }
+    }));
+    return box;
 }
 
 void ClassTest::modifResource(std::vector<Wt::WInteractWidget*> argument, long long id)

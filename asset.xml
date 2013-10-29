@@ -5,10 +5,15 @@
 
   <message id="Alert.asset.form-title">Servers</message>
   <message id="Alert.asset.form-info">On this page you can add the servers you need to monitor and get the scripts to configure them.</message>
-  
+  <message id="Alert.asset.delete-message">
+      <span style="color:red">Delete this server. Continue ?</span>
+  </message>
+
   <message id="Alert.asset.name-label">Server to add: </message>
   <message id="Alert.asset.invalid-name">Invalid name</message>
-  <message id="Alert.asset.invalid-name-info">&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</message>
+  <message id="Alert.asset.invalid-name-info">
+      <span style="color:red">&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</span>
+  </message>
   <message id="Alert.asset.invalid-name-info2">
       <h5>Invalid name :</h5>
       <ul>
@@ -41,7 +46,6 @@
   <message id="Alert.asset.file-not-generated">
       <span style="color:red">The file as not been generated. Please contact us.</span>
   </message>
-    
   <!-- templates -->
 
     <message id="Alert.asset.Management.template" >

@@ -29,6 +29,7 @@ CreatePageWidget::CreatePageWidget(std::string namePage)
     this->created_ = false;
     this->butModif_ = true;
     this->nbAff_ = 5;
+    this->nbAffBegin_ = 1;
     this->nbResource_ = 0;
 }
 
@@ -47,6 +48,7 @@ void    CreatePageWidget::update()
         this->created_ = true;
     }
     resourceBeAff();
+    paginatePage();
 }
 
 // gkr: Init header.
@@ -86,6 +88,8 @@ Wt::WContainerWidget    *CreatePageWidget::createBodyTable()
     mediaTable_->setHeaderCount(1,Wt::Horizontal);
     
     addResourceInHeaderTable();
+    if (resources_.size() > 0)
+        resources_.clear();
     fillInTable();
     
     return resourceTable;
@@ -93,14 +97,22 @@ Wt::WContainerWidget    *CreatePageWidget::createBodyTable()
 
 Wt::WContainerWidget    *CreatePageWidget::createFooterTable()
 {
+    if (butPaginate_.size() > 0)
+        butPaginate_.clear();
     Wt::WContainerWidget *footerTable = new Wt::WContainerWidget();
-    footerTable->addStyleClass("fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix");
+    footerTable->addStyleClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix");
     // revoir ui-toolbar quand css finit
     new Wt::WText("search : ", footerTable); //xml
 
     Wt::WLineEdit *search = new Wt::WLineEdit(footerTable);
     search->resize(Wt::WLength(100), Wt::WLength(15));
     search->enterPressed().connect(boost::bind(&CreatePageWidget::searchName, this, search));
+
+    Wt::WNavigationBar *navBar = new Wt::WNavigationBar(footerTable);
+//    test->setWidth(Wt::WLength(170));
+    navBar->addStyleClass("dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi ui-buttonset-multi paging_full_numbers ");
+    initPaginatePage(navBar);
+    
     return footerTable;
 }
 
@@ -159,6 +171,7 @@ void    CreatePageWidget::fillInTable()
                 columnTable++;
             }
         }
+        resources_.push_back(std::pair<int, Wt::WObject*>(0, mediaTable_->rowAt(rowBodyTable)));
         addButtons(*j, rowBodyTable, columnTable);
         rowBodyTable++;
     }
@@ -357,8 +370,69 @@ int    CreatePageWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName,
 
 // Function useful ----------------------------------------------
 
+void    CreatePageWidget::initPaginatePage(Wt::WNavigationBar *navBar)
+{
+//    int nbRow = resources_.size();
+    int nbRow = sizeAff();
+    if (nbAff_ == 0)
+        nbAff_ = nbRow;
+    if (nbRow > this->nbAff_)
+    {
+        Wt::WPushButton *butPaginate = new Wt::WPushButton("prev"); // XML
+        butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, -1));
+        butPaginate->addStyleClass("fg-button ui-button ui-state-default");
+        navBar->addWidget(butPaginate);
+
+        for (int rst(1); rst <= ((nbRow / this->nbAff_) + ((nbRow % this->nbAff_) > 0 ? 1 : 0)); rst++)
+        {
+            butPaginate = new Wt::WPushButton(boost::lexical_cast<std::string>(rst));
+            butPaginate->addStyleClass("fg-button ui-button ui-state-default");
+            butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, rst));
+            navBar->addWidget(butPaginate);
+            butPaginate_.push_back(butPaginate);
+        }
+        butPaginate = new Wt::WPushButton("next");  //XML
+        butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, -2));
+        butPaginate->addStyleClass("fg-button ui-button ui-state-default");
+        navBar->addWidget(butPaginate);
+    }
+}
+
+void    CreatePageWidget::paginatePage()
+{
+    int rst(0);
+    vector_type::iterator i;
+    for (i = butPaginate_.begin(); i != butPaginate_.end(); i++)
+        ((Wt::WPushButton*)(*i))->hide();
+    int nbRow = sizeAff();
+    if (this->nbAff_ == 0)
+        nbAff_ = nbRow;
+    if (nbRow > this->nbAff_)
+    {
+        rst = (nbRow / this->nbAff_) + ((nbRow % this->nbAff_) > 0 ? 1 : 0);
+    }
+    for (i = butPaginate_.begin(); rst > 0 && i != butPaginate_.end(); i++, rst--)
+    {
+        ((Wt::WPushButton*)(*i))->show();
+    }
+}
+
+void    CreatePageWidget::switchPage(int rst)
+{
+    if (rst == -1)
+        this->nbAffBegin_ = (this->nbAffBegin_ - this->nbAff_) >= 1 ? (this->nbAffBegin_ - this->nbAff_) : 1;
+    if (rst == -2)
+        this->nbAffBegin_ = (this->nbAffBegin_ + this->nbAff_) <= sizeAff() ? (this->nbAffBegin_ + this->nbAff_) : this->nbAffBegin_;
+    if (rst > 0)
+    {
+        this->nbAffBegin_ = (((this->nbAff_ * rst) - this->nbAff_) + 1);
+    }
+    update();
+}
+
 Wt::WComboBox   *CreatePageWidget::getComboBox()
 {
+    this->nbAff_ = 5;
     Wt::WComboBox *comboBox = new Wt::WComboBox();
     comboBox->addItem("5");
     comboBox->addItem("10");
@@ -373,6 +447,7 @@ Wt::WComboBox   *CreatePageWidget::getComboBox()
             this->nbAff_ = 0;
         else
             this->nbAff_ = atoi(comboBox->currentText().toUTF8().c_str());
+        this->nbAffBegin_ = 1;
         update();
     }));
     return comboBox;
@@ -381,55 +456,81 @@ Wt::WComboBox   *CreatePageWidget::getComboBox()
 void    CreatePageWidget::resourceBeAff()
 {
     int nb(0);
-    int nbMax = mediaTable_->rowCount();
+    int nbRow = sizeAff();
+
+    if (this->nbAffBegin_ > nbRow)
+        this->nbAffBegin_ -= this->nbAff_;
     if (this->nbAff_ == 0)
-        this->nbAff_ = nbMax;
-    while ((nb + 1) < nbMax)
     {
-        mediaTable_->rowAt(nb + 1)->hide();
-        nb++;
+        this->nbAff_ = nbRow;
+        this->nbAffBegin_ = 1;
     }
-    for (nb = 0; nb < this->nbAff_ && (nb + 1) < nbMax; nb++)
+    nb = 1;
+    for (vector_pair::iterator it = resources_.begin(); it != resources_.end(); it++)
     {
-        mediaTable_->rowAt(nb + 1)->show();
+        Wt::WTableRow *tableRow = (Wt::WTableRow *)it->second;
+        if ((int)it->first == 0)
+        {
+            if (nb >= this->nbAffBegin_ && nb <= (this->nbAff_ + this->nbAffBegin_ - 1))
+            {
+                tableRow->show();
+            }
+            else
+            {
+                tableRow->hide();
+            }
+            nb++;
+        }
+        else
+            tableRow->hide();
     }
-    
 }
 
 void     CreatePageWidget::searchName(Wt::WLineEdit *arg)
 {
-    int maxColumn = mediaTable_->columnCount();
-    int maxRow = mediaTable_->rowCount();
-
-    for (int i(1); i < maxRow; i++)
-        mediaTable_->rowAt(i)->show();
-    for (int i(1); i < maxRow; i++)
-    {
-        int j(0);
-        while (j < maxColumn && j < this->nbResource_)
+    int cpt(0);
+    bool check;
+    if (arg->text().empty())
+        for (vector_pair::iterator it = resources_.begin(); it != resources_.end(); it++)
+            it->first = 0;
+    else
+        for (vector_pair::iterator it = resources_.begin(); it != resources_.end(); it++)
         {
-            Wt::WText *text = (Wt::WText*)mediaTable_->elementAt(i, j)->widget(0);
-            std::string nameRessouce("PN2Wt5WTextE");
-            if (nameRessouce.compare(typeid(text).name()) == 0)
+            check = false;
+            Wt::WTableRow *tableRow = (Wt::WTableRow *)it->second;
+            for (int j(0); j < this->nbResource_; j++)
             {
-                nameRessouce.clear();
-                nameRessouce = boost::lexical_cast<std::string>(arg->text());
-                std::transform(nameRessouce.begin(), nameRessouce.end(), nameRessouce.begin(), ::tolower);
-                std::string argInTable = boost::lexical_cast<std::string>(text->text());
-                std::transform(argInTable.begin(), argInTable.end(), argInTable.begin(), ::tolower);
-                if (boost::contains(argInTable, nameRessouce) == false)
+                Wt::WText *text = (Wt::WText*)tableRow->elementAt(j)->widget(0);
+                std::string compareType("PN2Wt5WTextE");
+                if (compareType.compare(typeid(text).name()) == 0)
                 {
-                    mediaTable_->rowAt(i)->hide();
-                }
-                else
-                {
-                    std::cout << argInTable << " | est VRAI" << std::endl;
+                    std::string argSearch = boost::lexical_cast<std::string>(arg->text());
+                    std::transform(argSearch.begin(), argSearch.end(), argSearch.begin(), ::tolower);
+                    std::string argInTable = boost::lexical_cast<std::string>(text->text());
+                    std::transform(argInTable.begin(), argInTable.end(), argInTable.begin(), ::tolower);
+                    if (boost::contains(argInTable, argSearch) == true)
+                        check = true;
                 }
             }
-            j++;
+            if (check == true)
+                it->first = 0;
+            else
+                it->first = 1;
+            cpt++;
         }
+    update();
+}
+
+int     CreatePageWidget::sizeAff()
+{
+    int cpt(0);
+    
+    for (vector_pair::iterator it = resources_.begin(); it != resources_.end(); it++)
+    {
+        if (it->first == 0)
+            cpt++;
     }
-    std::cout << "Your search : " << arg->text() << std::endl;
+    return cpt;
 }
 
 Wt::WDialog    *CreatePageWidget::deleteResource(long long id)

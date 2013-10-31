@@ -117,7 +117,7 @@ vector_type     AssetManagementWidget::getResourceRowTable(long long id)
         if (i == id)
         {
             rowTable.push_back(new Wt::WText(boost::lexical_cast<std::string, Wt::WString>(nameAsset)));
-            rowTable.push_back(new Wt::WText(boost::lexical_cast<std::string, Wt::WString>(nameAsset)));
+            rowTable.push_back(new Wt::WText(boost::lexical_cast<std::string, long long>(i)));
 
             //gkr: Add button for row.
             file = generateScript(boost::lexical_cast<long long>(i), nameAsset);

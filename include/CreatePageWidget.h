@@ -55,6 +55,13 @@
 // Lib boost
 #include <boost/concept_check.hpp>
 #include <boost/algorithm/string/predicate.hpp>
+
+// Test
+#include <Wt/WButtonGroup>
+#include <Wt/WGroupBox>
+#include <Wt/WRadioButton>
+#include <Wt/WTableRow>
+#include <Wt/WNavigationBar>
 /** gkr.\n
  * Max Size Name of resource
  */
@@ -64,7 +71,10 @@
  * vector &lsaquo; WInteractWidget* &rsaquo;
  */
 typedef std::vector<Wt::WInteractWidget*> vector_type;
-
+/** gkr.\n
+ * vector &lsaquo; WObject* &rsaquo;
+ */
+typedef std::vector<std::pair<int, Wt::WObject*>> vector_pair;
 
 class CreatePageWidget : 
 public Wt::WTemplateFormView
@@ -146,9 +156,16 @@ private:
 
     void                resourceBeAff();
     Wt::WComboBox       *getComboBox();
+    void                initPaginatePage(Wt::WNavigationBar *navBar);
+    void                paginatePage();
+    int                 sizeAff();
+
+    void                switchPage(int rst);
 
     std::string         nameResourcePage;
     vector_type         inputs_;
+    vector_type         butPaginate_;
+    vector_pair       resources_;
     Wt::WTable          *mediaTable_;
     bool                created_;
     bool                butModif_;
@@ -156,6 +173,8 @@ private:
     bool                dial_;
     int                 nbResource_;
     int                 nbAff_;
+    int                 nbAffBegin_;
+    int                 nbAffResource_;
 };
 
 #endif	/* CREATEPAGEWIDGET_H */

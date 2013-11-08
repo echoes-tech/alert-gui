@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <!-- Information -->
+    <message id="Alert.media-user.nothing-sms">Sms</message>
+    <message id="Alert.media-user.nothing-mail">Mail</message>
+    <message id="Alert.media-user.nothing-app">App</message>
+
+    <message id="Alert.media-user.nothing-sms-text">Nothing Sms on db</message>
+    <message id="Alert.media-user.nothing-mail-text">Nothing Mail on db</message>
+    <message id="Alert.media-user.nothing-app-text">Nothing App on db</message>
+  
+    <message id="Alert.media-user.nothing-sms-button">Click for Add</message>
+    <message id="Alert.media-user.nothing-mail-button">Click for Add</message>
+    <message id="Alert.media-user.nothing-app-button">Click for Add</message>
+
+    <message id="Alert.media-user.add-form.sms">Your Sms</message>
+    <message id="Alert.media-user.add-form.app">Your App</message>
+    <message id="Alert.media-user.add-form.mail">Your Mail</message>
+  
+    <message id="Alert.media-user.name-sms">Num</message>
+    <message id="Alert.media-user.name-mail">Mail</message>
+    <message id="Alert.media-user.name-app">App</message>
+
+    <message id="Alert.media-user.invalid-name-mail">
+        <span style="color:red">Invalide num, usage : (+33/6 12345678)</span>
+    </message>
+    <message id="Alert.media-user.invalid-name-sms">
+        <span style="color:red">Invalide num, usage : (+33/6 12345678)</span>
+    </message>
+    <message id="Alert.media-user.invalid-name-app">
+        <span style="color:red">Invalide name ap</span>
+    </message>
+
+    <message id="Alert.media-user.delete-message">
+        <span style="color:red">Delete this Media. Continue ?</span>
+    </message>
+
+    <!-- Paginate -->
+    <message id="Alert.media-user.paginate-first">First</message>
+    <message id="Alert.media-user.paginate-prev">Prev</message>
+    <message id="Alert.media-user.paginate-next">Next</message>
+    <message id="Alert.media-user.paginate-last">Last</message>
+    <!-- /Paginate -->
+  <message id="Alert.media-user.button-cancel">Cancel</message>
+
+
+  <message id="Alert.media-user.search-bar">Search : </message>
+
+
+    <message id="Alert.media-user.name-label">Server to add: </message>
+    <message id="Alert.media-user.invalid-name">Invalid name</message>
+  
+    <message id="Alert.media-user.add-button">Add a Media</message>
+
+    <message id="Alert.media-user.modif-button">Modif</message>
+    <message id="Alert.media-user.delete-button">Delete</message>
+
+    <message id="Alert.media-user.name">media-user name</message>
+    <message id="Alert.media-user.action">Actions</message>
+
+  
+    <message id="Alert.media-user.delete-media-user">Delete this Media</message>
+    <message id="Alert.media-user.modif-media-user">Modifi this Media</message>
+    <message id="Alert.media-user.add-media-user">Add Media</message>
+
+    <message id="Alert.media-user.name-invalid">Invalid</message>
+    <message id="Alert.media-user.database-error-title">Database error</message>
+    <message id="Alert.media-user.database-error">Error : {1} | {2}</message>
+  
+    <message id="Alert.alert-list.delete-alerts-message">The following alerts will be deleted too:</message>
+    <message id="Alert.alert-list.delete-alert-message">The following alert will be deleted too:</message>
+
+    <!-- templates -->
+
+    <message id="Alert.media-user.Management.template" >
+            <div id="media-user-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-box" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>
+
+  
+
+</messages>

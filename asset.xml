@@ -1,39 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
 
-    <!-- Models -->
+    <!-- Paginate -->
+    <message id="Alert.asset.paginate-first">First</message>
+    <message id="Alert.asset.paginate-prev">Prev</message>
+    <message id="Alert.asset.paginate-next">Next</message>
+    <message id="Alert.asset.paginate-last">Last</message>
+
+    <!-- Info -->
+
+  <message id="Alert.asset.button-cancel">Cancel</message>
+
+  <message id="Alert.asset.search-bar">Search : </message>
 
   <message id="Alert.asset.form-title">Servers</message>
-  <message id="Alert.asset.form-info">On this page you can add the servers you need to monitor and get the scripts to configure them.</message>
+  <message id="Alert.asset.form-info">
+      On this page you can add the servers you need to monitor and get the scripts to configure them.
+  </message>
+  <message id="Alert.asset.nothing-asset">Asset</message>
+  <message id="Alert.asset.nothing-asset-text">Nothing Asset on db</message>
+  <message id="Alert.asset.nothing-asset-button">Click for Add</message>
+  <message id="Alert.asset.name-label">Server to add: </message>
+
+  <message id="Alert.asset.invalid-name">Invalid name</message>
+
   <message id="Alert.asset.delete-message">
       <span style="color:red">Delete this server. Continue ?</span>
   </message>
-
-  <message id="Alert.asset.name-label">Server to add: </message>
-  <message id="Alert.asset.invalid-name">Invalid name</message>
-  <message id="Alert.asset.invalid-name-info">
+  <message id="Alert.asset.invalid-name-asset">
       <span style="color:red">&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</span>
-  </message>
-  <message id="Alert.asset.invalid-name-info2">
-      <h5>Invalid name :</h5>
-      <ul>
-          <li>Size Minimun : 1 </li>
-          <li>Size Maximum : 255</li>
-          <li> Not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</li>
-      </ul>
   </message>
   
   <message id="Alert.asset.add-button">Add a server</message>
-
   <message id="Alert.asset.modif-button">Modif</message>
   <message id="Alert.asset.delete-button">Delete</message>
 
-  <message id="Alert.asset.add-form">Your servers</message>
+  <message id="Alert.asset.add-form.asset">Your servers</message>
   
-  <message id="Alert.asset.name">Asset name</message>
+  <message id="Alert.asset.name-asset">Asset name</message>
   <message id="Alert.asset.action">Actions</message>
   
-  <message id="Alert.asset.download-script">Download<br />Script</message>
+  <message id="Alert.asset.name-download-script">Download<br />Script</message>
 
   <message id="Alert.asset.delete-asset">Delete this server</message>
   <message id="Alert.asset.modif-asset">Modifi this server</message>
@@ -46,6 +53,8 @@
   <message id="Alert.asset.file-not-generated">
       <span style="color:red">The file as not been generated. Please contact us.</span>
   </message>
+  <message id="Alert.alert-list.delete-alerts-message">The following alerts will be deleted too:</message>
+  <message id="Alert.alert-list.delete-alert-message">The following alert will be deleted too:</message>
   <!-- templates -->
 
     <message id="Alert.asset.Management.template" >

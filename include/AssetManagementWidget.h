@@ -123,7 +123,7 @@ protected:
 
 
 
-  void modifResource(std::vector<Wt::WInteractWidget*> argument, long long id);
+  void modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
   void addResource(std::vector<Wt::WInteractWidget*> argument);
   Wt::WDialog *deleteResource(long long id);
   Wt::WFileResource *generateScript(long long i, Wt::WString assetName);
@@ -135,12 +135,16 @@ protected:
 
 void    putAsset(boost::system::error_code err, const Wt::Http::Message& response);
 void    postAsset(boost::system::error_code err, const Wt::Http::Message& response);
+void    postPlugin(boost::system::error_code err, const Wt::Http::Message& response);
+void    checkAlertsInAsset(boost::system::error_code err, const Wt::Http::Message& response, Wt::WDialog *box, long long id);
+void    deleteAsset(boost::system::error_code err, const Wt::Http::Message& response);
 
 private:
   
     std::vector<long long>          getIdsTable();
-    std::vector<std::string>        getHeaderTableTitle();
-    vector_type     getResourceRowTable(long long id);
+    std::vector<std::string>        getTitlesTableText();
+    std::vector<std::string>        getTitlesTableWidget();
+    vector_type                 getResourceRowTable(long long id);
 
     
     
@@ -159,6 +163,7 @@ private:
   void                  downloadScript(std::string fileName);
 
   Wt::WLineEdit         *assetEdit;
+  std::vector<long long> idsAlert_;
 };
 
 

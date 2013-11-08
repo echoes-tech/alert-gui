@@ -40,6 +40,10 @@
 #include <Wt/Chart/WCartesianChart>
 #include <Wt/Chart/WPieChart>
 
+#include "ClassTest.h"
+
+class ClassTest;
+
 class MainWidget : public Wt::WContainerWidget
 {
 public:
@@ -95,7 +99,7 @@ protected:
   
   UserEditionModel *uem;
   UserEditionWidget *uew;
-  
+  ClassTest     *ctw;
   Wt::WContainerWidget *wcw;
   
 

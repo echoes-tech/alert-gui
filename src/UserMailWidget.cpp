@@ -1,31 +1,29 @@
 /* 
- * File:   UserEditionWidget.cpp
- * Author: tsa
+ * File:   UserMailWidget.cpp
+ * Author: gkr
  * 
- * Created on 14 août 2012, 11:50
+ * Created on 6 novembre 2013, 17:49
  */
 
-#include "UserEditionWidget.h"
+#include "UserMailWidget.h"
 
-UserEditionWidget::UserEditionWidget(Session *session, std::string apiUrl, int type)
-: CreatePageWidget("media-user")
+UserMailWidget::UserMailWidget(Session *session, std::string apiUrl)
+: CreatePageWidget("media-mail")
 {
     this->session_= session;
     this->apiUrl_ = apiUrl;
     this->created_ = false;
     this->newClass_ = false;
-    this->type_ = type;
     
     this->result_ = Wt::Json::Value::Null;
 
     setButtonModif(true);
     setButtonSup(true);
     setLocalTable(true);
+
 }
 
-
-
-void    UserEditionWidget::update()
+void    UserMailWidget::update()
 {
     CreatePageWidget::update();
    if (!newClass_)
@@ -34,27 +32,22 @@ void    UserEditionWidget::update()
     }
 }
 
-void  UserEditionWidget::popupAddTables(Wt::WTabWidget *tabW) { }
+void  UserMailWidget::popupAddTables(Wt::WTabWidget *tabW) { }
 
-std::vector<std::string>        UserEditionWidget::getTitlesTableWidget()
+pair_type        UserMailWidget::getTitlesTableWidget()
 {
-    std::vector<std::string>    titleWidget;
+    pair_type   titleWidget;
     return titleWidget;
 }
 
-std::vector<std::string>        UserEditionWidget::getTitlesTableText()
+std::vector<std::string>        UserMailWidget::getTitlesTableText()
 {
    std::vector<std::string>     titleText;
-   if (type_ == 1)
-       titleText.push_back("mail");
-   else if (type_ == 2)
-       titleText.push_back("sms");
-   else if (type_ == 3)
-       titleText.push_back("app");
+   titleText.push_back("mail");
    return titleText;
 }
 
-std::vector<long long>          UserEditionWidget::getIdsTable()
+std::vector<long long>          UserMailWidget::getIdsTable()
 {
     std::vector<long long>      ids;
 
@@ -74,7 +67,7 @@ std::vector<long long>          UserEditionWidget::getIdsTable()
     return ids;
 }
 
-vector_type     UserEditionWidget::getResourceRowTable(long long id)
+vector_type     UserMailWidget::getResourceRowTable(long long id)
 {
     vector_type    rowTable;
     Wt::Json::Array& result1 = Wt::Json::Array::Empty;
@@ -101,23 +94,23 @@ vector_type     UserEditionWidget::getResourceRowTable(long long id)
 
 }
 
-Wt::WValidator    *UserEditionWidget::editValidator(int who)
+Wt::WValidator    *UserMailWidget::editValidator(int who)
 {
     Wt::WValidator *validator = 0;
     return validator;
 }
 
-void  UserEditionWidget::closePopup()
+void  UserMailWidget::closePopup()
 {
     recoverListAsset();
 }
 
-void    UserEditionWidget::recoverListAsset()
+void    UserMailWidget::recoverListAsset()
 {
 
-    std::string apiAddress = this->getApiUrl() + "/medias/" + boost::lexical_cast<std::string>(this->type_) + "/list-media";
+    std::string apiAddress = this->getApiUrl() + "/medias/1/list-media";
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&UserEditionWidget::getMedia, this, _1, _2));
+    client->done().connect(boost::bind(&UserMailWidget::getMail, this, _1, _2));
     apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
     if (client->get(apiAddress))
     {
@@ -129,7 +122,7 @@ void    UserEditionWidget::recoverListAsset()
 
 
 
-void UserEditionWidget::getMedia(boost::system::error_code err, const Wt::Http::Message& response)
+void UserMailWidget::getMail(boost::system::error_code err, const Wt::Http::Message& response)
 {
     Wt::WApplication::instance()->resumeRendering();
     result_ = 0;
@@ -171,7 +164,7 @@ void UserEditionWidget::getMedia(boost::system::error_code err, const Wt::Http::
    update();
 }
 
-void UserEditionWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
+void UserMailWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
 {
     std::vector<Wt::WInteractWidget*>::iterator i = argument.begin();
     Wt::WLineEdit *assetEdit = (Wt::WLineEdit*)(*i);
@@ -180,7 +173,7 @@ void UserEditionWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
     {
         Wt::Dbo::Transaction transaction(*this->session_);
         Wt::Dbo::ptr<User> ptrUser = this->session_->user();
-        Wt::Dbo::ptr<Media> media = this->session_->find<Media>().where("\"MED_ID\" = ?").bind(this->type_);
+        Wt::Dbo::ptr<Media> media = this->session_->find<Media>().where("\"MED_ID\" = ?").bind(1);
         MediaValue *mev = new MediaValue();
         mev->user = ptrUser;
         mev->media = media;
@@ -215,7 +208,7 @@ void UserEditionWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
     recoverListAsset();
 }
 
-Wt::WDialog *UserEditionWidget::deleteResource(long long id)
+Wt::WDialog *UserMailWidget::deleteResource(long long id)
 {
     Wt::WDialog *box = CreatePageWidget::deleteResource(id);
     box->show();
@@ -244,7 +237,7 @@ Wt::WDialog *UserEditionWidget::deleteResource(long long id)
             {
                 Wt::Dbo::Transaction transaction(*this->session_);
                 Wt::Dbo::ptr<MediaValue> mediaValue = this->session_->find<MediaValue>().where("\"MEV_ID\" = ?").bind(id)
-                                                                           .where("\"MEV_MED_MED_ID\" = ?").bind(this->type_)
+                                                                           .where("\"MEV_MED_MED_ID\" = ?").bind(1)
                                                                            .where("\"MEV_USR_USR_ID\" = ?").bind(this->session_->user().id());
                 
                 mediaValue.modify()->deleteTag = Wt::WDateTime::currentDateTime();
@@ -279,7 +272,7 @@ Wt::WDialog *UserEditionWidget::deleteResource(long long id)
     return box;
 }
 
-void UserEditionWidget::modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id)
+void UserMailWidget::modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id)
 {
     Wt::Http::Message message;
     
@@ -304,22 +297,22 @@ void UserEditionWidget::modifResource(std::vector<Wt::WInteractWidget*> argument
     recoverListAsset();
 }
 
-void UserEditionWidget::close()
+void UserMailWidget::close()
 {
     delete this;
 }
 
-void    UserEditionWidget::setSession(Session *session)
+void    UserMailWidget::setSession(Session *session)
 {
     session_ = session;
 }
 
-void    UserEditionWidget::setApiUrl(std::string apiUrl)
+void    UserMailWidget::setApiUrl(std::string apiUrl)
 {
     apiUrl_ = apiUrl;
 }
 
-std::string   UserEditionWidget::getApiUrl()
+std::string   UserMailWidget::getApiUrl()
 {
     return apiUrl_;
 }

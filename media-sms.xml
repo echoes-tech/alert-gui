@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <!-- Models -->
+
+  <message id="Alert.media-sms.form-title">Servers</message>
+  <message id="Alert.media-sms.form-info">On this page you can add the servers you need to monitor and get the scripts to configure them.</message>
+  <message id="Alert.media-sms.delete-message">
+      <span style="color:red">Delete this server. Continue ?</span>
+  </message>
+
+  <message id="Alert.media-sms.name-label">Server to add: </message>
+  <message id="Alert.media-sms.invalid-name">Invalid name</message>
+  <message id="Alert.media-sms.invalid-name-info">
+      <span style="color:red">pouet</span>
+  </message>
+  <message id="Alert.media-sms.invalid-name-info2">
+      <h5>Invalid name :</h5>
+      <ul>
+          <li>Size Minimun : 1 </li>
+          <li>Size Maximum : 255</li>
+          <li> Not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</li>
+      </ul>
+  </message>
+  
+  <message id="Alert.media-sms.add-button">Add a server</message>
+
+  <message id="Alert.media-sms.modif-button">Modif</message>
+  <message id="Alert.media-sms.delete-button">Delete</message>
+
+  <message id="Alert.media-sms.add-form">Your servers</message>
+  
+  <message id="Alert.media-sms.name">media-sms name</message>
+  <message id="Alert.media-sms.action">Actions</message>
+  <message id="Alert.media-sms.sms">Sms</message>
+  
+  <message id="Alert.media-sms.download-script">Download<br />Script</message>
+
+  <message id="Alert.media-sms.delete-media-sms">Delete this server</message>
+  <message id="Alert.media-sms.modif-media-sms">Modifi this server</message>
+  <message id="Alert.media-sms.add-media-sms">Add server</message>
+
+  <message id="Alert.media-sms.name-invalid">Invalid</message>
+  <message id="Alert.media-sms.database-error-title">Database error</message>
+  <message id="Alert.media-sms.database-error">Error : {1} | {2}</message>
+  
+  <message id="Alert.media-sms.file-not-generated">
+      <span style="color:red">The file as not been generated. Please contact us.</span>
+  </message>
+  <message id="Alert.alert-list.delete-alerts-message">The following alerts will be deleted too:</message>
+  <message id="Alert.alert-list.delete-alert-message">The following alert will be deleted too:</message>
+  <!-- templates -->
+
+    <message id="Alert.media-sms.Management.template" >
+        <br />
+            <div class ="alert alert-info">${tr:Alert.media-sms.form-info}</div> 
+            <div id="media-sms-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-box" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+<!--            ${resource-test} -->
+            </div>
+            
+    </message>
+
+  
+
+</messages>

@@ -3,8 +3,9 @@
 
     <!-- Models -->
 
-  <message id="Alert.test.form-title">Servers</message>
-  <message id="Alert.test.form-info">On this page you can add the servers you need to monitor and get the scripts to configure them.</message>
+
+  <message id="Alert.test.form-info">
+      On this page you can add the medias used to send alerts.</message>
     <message id="Alert.test.delete-message">
       <span style="color:red"> Test Delete this server. Continue ?</span>
   </message>
@@ -49,14 +50,16 @@
     
   <!-- templates -->
 
+<message id="Alert.test.Management.template" >
+    <br />
+      <div class ="alert alert-info">${tr:Alert.test.form-info} </div>
     <message id="Alert.test.Management.template" >
-            <div id="test-name" class="control-group row-fluid widget-box">
-                    ${resource-header}
+            <div id="test-name" class="">
                     ${resource-table}
-                    ${resource-footer}
             </div>
             
     </message>
+</message>
 
   
 

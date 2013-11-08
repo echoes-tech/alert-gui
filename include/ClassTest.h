@@ -44,79 +44,25 @@
 
 #include <Wt/WInPlaceEdit>
 
+#include <Wt/WMenuItem>
+
 #include "CreatePageWidget.h"
 
 class CreatePageWidget;
 
 class ClassTest : 
-public CreatePageWidget 
+public Wt::WContainerWidget 
 {
 public:
     ClassTest(Session *session, std::string apiUrl);
 
-  //void                          popupAddTables(Wt::WTabWidget *tabW);
-
-  void                          setSession(Session *session);
-  void                          setApiUrl(std::string apiUrl);
-  
-  std::string                   getApiUrl();
-  void                          getAsset(boost::system::error_code err, const Wt::Http::Message& response);
-  void                          recoverListAsset();
-
-  //std::vector<std::string>      recoverTitles();
-
-Wt::Json::Value                 result_;
-
-  Wt::WTable                    *corpTable;
-  std::string                   apiUrl_;
-  virtual void                  update();
-
+    void    initPage();
+    void    update();
 protected:
-//    virtual bool                validate();
-
-    virtual void                close();
-
-
-    //void                        initPopup();
-    //void                        addResourceInPopup(Wt::WDialog *dialog_);
-
-
-
-  void modifResource(std::vector<Wt::WInteractWidget*> argument, long long id);
-  void addResource(std::vector<Wt::WInteractWidget*> argument);
-  Wt::WDialog *deleteResource(long long id);
-  Wt::WFileResource *generateScript(long long i, Wt::WString assetName);
-  std::string getStringFromFile(std::string resourcePath);
-  
-  
-  Wt::WValidator    *editValidator(int who);
-
-void    putAsset(boost::system::error_code err, const Wt::Http::Message& response);
-void    postAsset(boost::system::error_code err, const Wt::Http::Message& response);
-
-private:
-  
-    std::vector<long long>          getIdsTable();
-    std::vector<std::string>        getHeaderTableTitle();
-    vector_type     getResourceRowTable(long long id);
-
-    
-    
-  
-  Wt::WLineEdit *saveEdit;
-
-  Wt::WTable            *saveTable; 
-  
-  Wt::WLineEdit         *assetName; 
-  
-  bool                  created_;
-  bool                  newClass_;
   Session               *session_;
+  std::string           apiUrl_;
+  bool                  newClass_;
 
-  void                  downloadScript(std::string fileName);
-
-  Wt::WLineEdit         *assetEdit;
-  
 };
 
 #endif	/* CLASSTEST_H */

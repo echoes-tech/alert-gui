@@ -1,29 +1,28 @@
 /* 
- * File:   UserEditionWidget.h
- * Author: tsa
+ * File:   UserAppWidget.h
+ * Author: gkr
  *
- * Created on 14 août 2012, 11:50
+ * Created on 6 novembre 2013, 18:04
  */
 
-#ifndef USEREDITIONWIDGET_H
-#define	USEREDITIONWIDGET_H
+#ifndef USERAPPWIDGET_H
+#define	USERAPPWIDGET_H
 
 #include <Wt/Json/Value>
 #include <Wt/Http/Message>
-#include <Wt/WRandom>
 
 #include "GlobalIncludeFile.h"
 #include "CreatePageWidget.h"
 
-class UserEditionWidget :
+class UserAppWidget :
 public CreatePageWidget
 {
 public:
-    UserEditionWidget(Session *session, std::string apiUrl, int type);
-
+    UserAppWidget(Session *session, std::string apiUrl);
+    
     void                        update();
     void                        popupAddTables(Wt::WTabWidget *tabW);
-    std::vector<std::string>    getTitlesTableWidget();
+    pair_type                   getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
     std::vector<long long>      getIdsTable();
     vector_type                 getResourceRowTable(long long id);
@@ -31,7 +30,7 @@ public:
     void                        closePopup();
     void                        recoverListAsset();
     
-    void                        getMedia(boost::system::error_code err, const Wt::Http::Message& response);
+    void                        getApp(boost::system::error_code err, const Wt::Http::Message& response);
 
     void                        addResource(std::vector<Wt::WInteractWidget*> argument);
     Wt::WDialog                 *deleteResource(long long id);
@@ -42,17 +41,15 @@ public:
     void                        setSession(Session *session);
     void                        setApiUrl(std::string apiUrl);
     std::string                 getApiUrl();
+
 private:
- 
-      bool                  created_;
+  bool                  created_;
   bool                  newClass_;
   Session               *session_;
   std::string           apiUrl_;
   Wt::Json::Value       result_;
-  int                   type_;  
+
 };
 
-
-
-#endif	/* USEREDITIONWIDGET_H */
+#endif	/* USERAPPWIDGET_H */
 

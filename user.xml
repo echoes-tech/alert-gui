@@ -49,6 +49,16 @@
     <message id="Alert.media.add-email-table">Emails</message>
     <message id="Alert.media.add-sms-table">SMS</message>
     <message id="Alert.media.add-mobileapp-table">Mobile App</message>
+ 
+    <message id="Alert.media.add-email-error">
+        <span style="color:#C31F1F"> Invalid email, usage : exemple@echoes.com</span>
+    </message>
+    <message id="Alert.media.add-sms-error">
+        <span style="color:#C31F1F"> Invalide number phone, usage : (+33)(0)612345678</span>
+    </message>
+    <message id="Alert.media.add-mobileapp-error">
+        <span style="color:#C31F1F">Invalide application mobile</span>
+    </message>
     
     <message id="Alert.media.email-name">Email address</message>
     <message id="Alert.media.sms-name">Phone number</message>

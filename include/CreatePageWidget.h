@@ -51,12 +51,15 @@
 
 #include <Wt/WInPlaceEdit>
 #include <Wt/WComboBox>
+#include <Wt/Json/Value>
+#include <Wt/WRegExpValidator>
 
 // Lib boost
 #include <boost/concept_check.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 
 // Test
+#include <Wt/WBoxLayout>
 #include <Wt/WButtonGroup>
 #include <Wt/WGroupBox>
 #include <Wt/WRadioButton>
@@ -65,16 +68,20 @@
 /** gkr.\n
  * Max Size Name of resource
  */
-#define SIZE_NAME_RESOURCE (15)
+#define SIZE_NAME_RESOURCE (40)
 
 /** gkr.\n
  * vector &lsaquo; WInteractWidget* &rsaquo;
  */
 typedef std::vector<Wt::WInteractWidget*> vector_type;
 /** gkr.\n
- * vector &lsaquo; WObject* &rsaquo;
+ * vector &lsaquo; pair &lsaquo; int, WObject* &rsaquo; &rsaquo;
  */
 typedef std::vector<std::pair<int, Wt::WObject*>> vector_pair;
+/** gkr.\n
+ * vector &lsaquo; pair &lsaquo; string, WLength &rsaquo; &rsaquo;
+ */
+typedef std::vector<std::pair<std::string, Wt::WLength>> pair_type;
 
 class CreatePageWidget : 
 public Wt::WTemplateFormView
@@ -117,6 +124,9 @@ public:
      * Number of resource WText.
      */
     void                setResourceNumberAdd(int nbResource);
+    void                setUpdate(bool update);
+    void                setNameSpecial(std::string nameResourcePageSpe);
+
 
 protected:
 
@@ -130,7 +140,8 @@ protected:
     virtual Wt::WValidator              *editValidator(int who) {return (new Wt::WValidator());};
     virtual void                        closePopup() {};
 
-    virtual std::vector<std::string>    getHeaderTableTitle() {std::vector<std::string> res; return res;};
+    virtual std::vector<std::string>    getTitlesTableText() {std::vector<std::string> res; return res;};
+    virtual std::vector<std::string>    getTitlesTableWidget() {std::vector<std::string> res; return res;};
     virtual std::vector<long long>      getIdsTable() {std::vector<long long> res; return res;};
     virtual vector_type                 getResourceRowTable(long long id) {vector_type res; return res;};
 
@@ -158,11 +169,14 @@ private:
     Wt::WComboBox       *getComboBox();
     void                initPaginatePage(Wt::WNavigationBar *navBar);
     void                paginatePage();
+    void                builtPaginate(Wt::WNavigationBar *navBar);
     int                 sizeAff();
 
     void                switchPage(int rst);
+    bool                checkResource();
 
     std::string         nameResourcePage;
+    std::string         nameResourcePageSpec_;
     vector_type         inputs_;
     vector_type         butPaginate_;
     vector_pair       resources_;
@@ -170,7 +184,8 @@ private:
     bool                created_;
     bool                butModif_;
     bool                butSup_;
-    bool                dial_;
+    bool                mainPage_;
+    bool                update_;
     int                 nbResource_;
     int                 nbAff_;
     int                 nbAffBegin_;

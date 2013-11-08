@@ -293,6 +293,19 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
 //        }
         case Enums::EAccountSubmenu::MEDIA:
         {
+            try
+            {
+                Wt::Dbo::Transaction transaction(*(this->session));
+                ctw = new ClassTest(this->session, this->_apiUrl);
+                transaction.commit();
+            }
+            catch (Wt::Dbo::Exception e)
+            {
+                Wt::log("error") << e.what();
+            }
+            break;
+
+            /*
            uew = new UserEditionWidget();
             try
             {
@@ -307,7 +320,7 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
             }
             uew->setModel(uem);
             uew->setSession(session); 
-
+            */
             break;
         }
         case Enums::EAccountSubmenu::ROLE:
@@ -510,7 +523,9 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 }
                 case Enums::EAccountSubmenu::MEDIA:
                 {
-                    this->contentFluid->addWidget(uew);
+                    this->contentFluid->addWidget(ctw);
+                    ctw->show();
+//                    this->contentFluid->addWidget(uew);
                     break;
                 }
                 case Enums::EAccountSubmenu::ROLE:

@@ -80,6 +80,7 @@
       <itemPath>config.xml</itemPath>
       <itemPath>global.xml</itemPath>
       <itemPath>global_fr.xml</itemPath>
+      <itemPath>media-user.xml</itemPath>
       <itemPath>options.xml</itemPath>
       <itemPath>options_fr.xml</itemPath>
       <itemPath>plugin.xml</itemPath>
@@ -314,6 +315,8 @@
             flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="media-user.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="options.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -551,6 +554,8 @@
             flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="media-user.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="options.xml" ex="false" tool="3" flavor2="0">
       </item>

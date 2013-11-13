@@ -45,7 +45,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Auth/RegistrationModelAlert.o \
 	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
 	${OBJECTDIR}/src/AuthWidget.o \
-	${OBJECTDIR}/src/ClassTest.o \
 	${OBJECTDIR}/src/CreatePageWidget.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/Enums.o \
@@ -55,6 +54,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
 	${OBJECTDIR}/src/PluginEditionModel.o \
 	${OBJECTDIR}/src/PluginEditionWidget.o \
+	${OBJECTDIR}/src/RecipientsWidget.o \
 	${OBJECTDIR}/src/RoleCustomizationWidget.o \
 	${OBJECTDIR}/src/SummaryBoard.o \
 	${OBJECTDIR}/src/UserActionManagement.o \
@@ -136,11 +136,6 @@ ${OBJECTDIR}/src/AuthWidget.o: src/AuthWidget.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AuthWidget.o src/AuthWidget.cpp
 
-${OBJECTDIR}/src/ClassTest.o: src/ClassTest.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ClassTest.o src/ClassTest.cpp
-
 ${OBJECTDIR}/src/CreatePageWidget.o: src/CreatePageWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -185,6 +180,11 @@ ${OBJECTDIR}/src/PluginEditionWidget.o: src/PluginEditionWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/PluginEditionWidget.o src/PluginEditionWidget.cpp
+
+${OBJECTDIR}/src/RecipientsWidget.o: src/RecipientsWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/RecipientsWidget.o src/RecipientsWidget.cpp
 
 ${OBJECTDIR}/src/RoleCustomizationWidget.o: src/RoleCustomizationWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

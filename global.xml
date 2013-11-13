@@ -306,6 +306,7 @@
     
   <message id="Alert.admin.welcome-tab">Welcome</message>
   <message id="Alert.admin.asset-tab">Servers</message>
+  <message id="Alert.admin.recipients-tab">Recipients</message>
   <message id="Alert.admin.alert-creation-tab">Alert creation</message>
   <message id="Alert.admin.alert-list-tab">Alerts list</message>
   <message id="Alert.admin.users-tab">Users</message>

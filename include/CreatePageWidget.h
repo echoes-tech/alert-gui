@@ -179,6 +179,7 @@ private:
     std::string         nameResourcePageSpec_;
     vector_type         inputs_;
     vector_type         butPaginate_;
+    vector_type         butPaginateExt_;
     vector_pair       resources_;
     Wt::WTable          *mediaTable_;
     bool                created_;

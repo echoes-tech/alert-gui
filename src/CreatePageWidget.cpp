@@ -69,7 +69,7 @@ void    CreatePageWidget::update()
             this->bindWidget("resource-table", table);
             this->bindWidget("resource-footer", new Wt::WText());
 
-            table->addStyleClass("table table-striped table-hover data-table dataTable");
+            table->addStyleClass("table table-striped table-hover data-table dataTable test");
 
             headerButton->clicked().connect(boost::bind(&CreatePageWidget::popupWindow, this));
             headerButton->setStyleClass("buttons btn");
@@ -137,6 +137,8 @@ Wt::WContainerWidget    *CreatePageWidget::createFooterTable()
 {
     if (butPaginate_.size() > 0)
         butPaginate_.clear();
+    if (butPaginateExt_.size() > 0)
+        butPaginateExt_.clear();
     Wt::WContainerWidget *footerTable = new Wt::WContainerWidget();
     footerTable->addStyleClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix");
     footerTable->setAttributeValue("style", "border-left: 0px solid; border-right: 0px solid;");
@@ -440,46 +442,43 @@ int    CreatePageWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName,
 
 void    CreatePageWidget::builtPaginate(Wt::WNavigationBar *navBar)
 {
-    for (int cpt(0); cpt < 9; cpt++)
+    Wt::WPushButton *butPaginate = new Wt::WPushButton();
+    butPaginate->addStyleClass("fg-button ui-button ui-state-default");
+    butPaginate->setText(tr("Alert." + this->nameResourcePage + ".paginate-first"));
+    butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, -1));
+    navBar->addWidget(butPaginate);
+    butPaginateExt_.push_back(butPaginate);
+    
+    butPaginate = new Wt::WPushButton();
+    butPaginate->addStyleClass("fg-button ui-button ui-state-default");
+    butPaginate->setText(tr("Alert." + this->nameResourcePage + ".paginate-prev"));
+    butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, -2));
+    navBar->addWidget(butPaginate);
+    butPaginateExt_.push_back(butPaginate);
+
+
+    for (int cpt(0); cpt < ((sizeAff() / this->nbAff_) + ((sizeAff() % this->nbAff_) > 0 ? 1 : 0)); cpt++)
     {
-        Wt::WPushButton *butPaginate = new Wt::WPushButton();
-        if (cpt != 4)
-            butPaginate->addStyleClass("fg-button ui-button ui-state-default");
+        butPaginate = new Wt::WPushButton(boost::lexical_cast<std::string>(cpt + 1));
+        butPaginate->setStyleClass("fg-button ui-button ui-state-default btn");
         navBar->addWidget(butPaginate);
         butPaginate_.push_back(butPaginate);
-        if (cpt == 0)
-            butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, 1));
-        else if (cpt < 4 && cpt != 0)
-            butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, -1));
-        else if (cpt > 4 && cpt != 8)
-            butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, -2));
-        else if (cpt == 8)
-            butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, 2));
-        else
-            butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, 0));
-        if (cpt == 0)
-            butPaginate->setText(tr("Alert."
-                    + this->nameResourcePage
-                    + ".paginate-first"));
-        else if (cpt == 1)
-            butPaginate->setText(tr("Alert."
-                    + this->nameResourcePage
-                    + ".paginate-prev"));
-        else if (cpt == 2)
-            butPaginate->setText("...");
-        else if (cpt == 4)
-            butPaginate->addStyleClass("btn-inverse");//fg-button ui-button ui-state-default ui-state-disabled
-        else if (cpt == 6)
-            butPaginate->setText("...");
-        else if (cpt == 7)
-            butPaginate->setText(tr("Alert."
-                    + this->nameResourcePage
-                    + ".paginate-next"));
-        else if (cpt == 8)
-            butPaginate->setText(tr("Alert."
-                    + this->nameResourcePage
-                    + ".paginate-last"));
     }
+    
+    
+    butPaginate = new Wt::WPushButton();
+    butPaginate->addStyleClass("fg-button ui-button ui-state-default");
+    butPaginate->setText(tr("Alert." + this->nameResourcePage + ".paginate-next"));
+    butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, -3));
+    navBar->addWidget(butPaginate);
+    butPaginateExt_.push_back(butPaginate);
+
+    butPaginate = new Wt::WPushButton();
+    butPaginate->addStyleClass("fg-button ui-button ui-state-default");
+    butPaginate->setText(tr("Alert." + this->nameResourcePage + ".paginate-last"));
+    butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, -4));
+    navBar->addWidget(butPaginate);
+    butPaginateExt_.push_back(butPaginate);
 }
 
 void    CreatePageWidget::initPaginatePage(Wt::WNavigationBar *navBar)
@@ -496,55 +495,101 @@ void    CreatePageWidget::initPaginatePage(Wt::WNavigationBar *navBar)
 void    CreatePageWidget::paginatePage()
 {
     int nbRow = sizeAff();
+    int cpt(0);
+    bool check = false;
     if (nbRow > this->nbAff_)
+        check = true;
+    
+    for (vector_type::iterator it = butPaginateExt_.begin(); it != butPaginateExt_.end(); it++)
     {
-        int cpt(0);
-        for (vector_type::iterator i = butPaginate_.begin(); i != butPaginate_.end(); i++)
+        if (check)
         {
-            if (((cpt == 0 || cpt == 1) && this->nbAffBegin_ > 1)
-                    || (cpt == 2 && (this->nbAffBegin_ - this->nbAff_) > 1)
-                    || (cpt == 6 && ((this->nbAff_ * 2) + this->nbAffBegin_ - 1) < nbRow)
-                    || ((cpt == 7 || cpt == 8) && (this->nbAff_ + this->nbAffBegin_ - 1) < nbRow))
+            if (cpt < 2 && this->nbAffBegin_ > 1)
+                ((Wt::WPushButton*)(*it))->setDisabled(false);
+            else if (cpt > 1 &&
+                    (nbRow + 1) > (this->nbAffBegin_ + this->nbAff_))
+                ((Wt::WPushButton*)(*it))->setDisabled(false);
+            else
+                ((Wt::WPushButton*)(*it))->setDisabled(true);
+            ((Wt::WPushButton*)(*it))->show();
+        }
+        else
+            ((Wt::WPushButton*)(*it))->hide();
+        cpt++;
+    }
+    cpt = 0;
+    int rst = (this->nbAffBegin_ / this->nbAff_);
+    for (vector_type::iterator i = butPaginate_.begin(); i != butPaginate_.end(); i++)
+    {
+        if (check)
+        {
+            ((Wt::WPushButton*)(*i))->setText(boost::lexical_cast<std::string>(cpt + 1));
+            ((Wt::WPushButton*)(*i))->setAttributeValue("style",
+                            "background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6)");
+            ((Wt::WPushButton*)(*i))->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, cpt));
+            if (cpt == rst)
+                ((Wt::WPushButton*)(*i))->setAttributeValue("style",
+                        "background-image: linear-gradient(#ffffff, #ffffff 25%, #CFCFCF)");
+            ((Wt::WPushButton*)(*i))->hide();
+            if (((nbRow / this->nbAff_) + ((nbRow % this->nbAff_) > 0 ? 1 : 0)) <= 5)
             {
-                ((Wt::WPushButton*)(*i))->enable();
-                ((Wt::WPushButton*)(*i))->show();                
-            }
-            else if ((cpt == 3 && this->nbAffBegin_ > 1)
-                    || cpt == 4
-                    || (cpt == 5 && (this->nbAff_ + this->nbAffBegin_ - 1) < nbRow))
-            {
-                int nbAdd = cpt == 5 ? 2 : cpt == 4 ? 1 : 0;
-                ((Wt::WPushButton*)(*i))->setText(boost::lexical_cast<std::string>((this->nbAffBegin_ / this->nbAff_) + nbAdd));
-                ((Wt::WPushButton*)(*i))->enable();
-                ((Wt::WPushButton*)(*i))->show();
+                if (cpt < ((nbRow / this->nbAff_) + ((nbRow % this->nbAff_) > 0 ? 1 : 0)))
+                    ((Wt::WPushButton*)(*i))->show();
             }
             else
             {
-                if (cpt == 2 || cpt == 3 || cpt == 5 || cpt == 6)
-                    ((Wt::WPushButton*)(*i))->hide();
-                ((Wt::WPushButton*)(*i))->disable();
+                if (rst <= 2 && (cpt - 2) <= 2)
+                {
+                    if ((cpt - 2) == 2)
+                        ((Wt::WPushButton*)(*i))->setText("...");
+                    ((Wt::WPushButton*)(*i))->show();
+                }
+                else if (((cpt + 3) == rst || (cpt + 4) == rst)
+                        && (cpt + 4) >= (int)(butPaginate_.size() - 1))
+                {
+                    if ((cpt + 4) == (int)(butPaginate_.size() - 1))
+                        ((Wt::WPushButton*)(*i))->setText("...");
+                    ((Wt::WPushButton*)(*i))->show();
+                }
+                else if ((cpt + 2) == rst)
+                {
+                    if ((cpt + 3) < (int)(butPaginate_.size() - 1) && cpt > 0)
+                        ((Wt::WPushButton*)(*i))->setText("...");
+                    ((Wt::WPushButton*)(*i))->show();
+                }
+                else if ((cpt - 2) > 2 && (cpt - 2) == rst)
+                {
+                    if ((cpt + 1) < (int)(butPaginate_.size()))
+                        ((Wt::WPushButton*)(*i))->setText("...");
+                    ((Wt::WPushButton*)(*i))->show();
+                }
+                else if (cpt + 1 != rst
+                        && cpt - 1 != rst
+                        && cpt != rst)
+                { /* Hide */ }
+                else
+                    ((Wt::WPushButton*)(*i))->show();
             }
-            cpt++;
         }
-    }
-    else
-        for (vector_type::iterator i = butPaginate_.begin(); i != butPaginate_.end(); i++)
-        {
+        else
             ((Wt::WPushButton*)(*i))->hide();
-        }
+        cpt++;
+    }
 }
 
 void    CreatePageWidget::switchPage(int rst)
 {
     int nbRow = sizeAff();
-    if (rst == -1)
-        this->nbAffBegin_ = (this->nbAffBegin_ - this->nbAff_) >= 1 ? (this->nbAffBegin_ - this->nbAff_) : 1;
-    if (rst == -2)
+    if (rst == -4)
+        this->nbAffBegin_ = (nbRow - (nbRow % this->nbAff_)) + 1;
+    else if (rst == -3)
         this->nbAffBegin_ = (this->nbAffBegin_ + this->nbAff_) <= nbRow ? (this->nbAffBegin_ + this->nbAff_) : this->nbAffBegin_;
-    if (rst == 1)
+    else if (rst == -2)
+        this->nbAffBegin_ = (this->nbAffBegin_ - this->nbAff_) >= 1 ? (this->nbAffBegin_ - this->nbAff_) : 1;
+    else if (rst == -1)
         this->nbAffBegin_ = 1;
-    if (rst == 2)
-        this->nbAffBegin_ = ((nbRow / this->nbAff_ > 0 ? this->nbAff_ : 1) * this->nbAff_);
+    else
+        this->nbAffBegin_ = (this->nbAff_ * rst) + 1;
     update();
 }
 

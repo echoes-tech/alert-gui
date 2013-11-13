@@ -40,9 +40,9 @@
 #include <Wt/Chart/WCartesianChart>
 #include <Wt/Chart/WPieChart>
 
-#include "ClassTest.h"
+#include "RecipientsWidget.h"
 
-class ClassTest;
+class RecipientsWidget;
 
 class MainWidget : public Wt::WContainerWidget
 {
@@ -99,7 +99,8 @@ protected:
   
   UserEditionModel *uem;
   UserEditionWidget *uew;
-  ClassTest     *ctw;
+  
+  RecipientsWidget *rpw;
   Wt::WContainerWidget *wcw;
   
 

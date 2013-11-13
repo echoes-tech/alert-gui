@@ -76,7 +76,7 @@
     <message id="Alert.media-user.Management.template" >
             <div id="media-user-name" class="control-group">
                 <div class="row-fluid">
-                <div id="info-header" class="widget-box" >
+                <div id="info-header" class="widget-pers" >
                     ${resource-header}
                     ${resource-table}
                     ${resource-footer}

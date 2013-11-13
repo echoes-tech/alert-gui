@@ -219,6 +219,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             wcw = new SummaryBoard(this->session);
             break;
         }
+        case Enums::EPageType::RECIPIENTS:
+        {
+            rpw = new RecipientsWidget(this->session, this->_apiUrl);
+            break;            
+        }
         case Enums::EPageType::PLUGIN:
         {
             //TODO: Change this temporary restriction with right integration
@@ -291,21 +296,9 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
 //            
 //            break;
 //        }
+        /*
         case Enums::EAccountSubmenu::MEDIA:
         {
-            try
-            {
-                Wt::Dbo::Transaction transaction(*(this->session));
-                ctw = new ClassTest(this->session, this->_apiUrl);
-                transaction.commit();
-            }
-            catch (Wt::Dbo::Exception e)
-            {
-                Wt::log("error") << e.what();
-            }
-            break;
-
-            /*
            uew = new UserEditionWidget();
             try
             {
@@ -320,9 +313,9 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
             }
             uew->setModel(uem);
             uew->setSession(session); 
-            */
             break;
         }
+    */
         case Enums::EAccountSubmenu::ROLE:
         {
             rcw = new RoleCustomizationWidget(session, _apiUrl);
@@ -474,6 +467,12 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                     this->contentFluid->addWidget(wcw);
                     break;
                 }
+                case Enums::EPageType::RECIPIENTS:
+                {
+                    this->contentFluid->addWidget(rpw);
+                    rpw->show();
+                    break;
+                }
                 case Enums::EPageType::PLUGIN:
                 {
                     //TODO: Change this temporary restriction with right integration
@@ -521,6 +520,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                     this->contentFluid->addWidget(omw);
                     break;
                 }
+                /*
                 case Enums::EAccountSubmenu::MEDIA:
                 {
                     this->contentFluid->addWidget(ctw);
@@ -528,6 +528,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
 //                    this->contentFluid->addWidget(uew);
                     break;
                 }
+                */
                 case Enums::EAccountSubmenu::ROLE:
                 {
                     this->contentFluid->addWidget(rcw);

@@ -96,7 +96,7 @@ bool    CreatePageWidget::checkResource()
 Wt::WContainerWidget    *CreatePageWidget::createHeaderTable()
 {
     Wt::WContainerWidget *headerTable = new Wt::WContainerWidget();
-    headerTable->addStyleClass("widget-title");
+    headerTable->addStyleClass("widget-title header-pers");
     new Wt::WText("<span class='icon'><i class='icon-tasks'></i></span><h5>"
     + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePageSpec_)
     + "</h5>", headerTable);
@@ -120,7 +120,7 @@ Wt::WContainerWidget    *CreatePageWidget::createBodyTable()
 {
     Wt::WContainerWidget *resourceTable = new Wt::WContainerWidget();
     // gkr: Init body of table
-    resourceTable->addStyleClass("widget-content nopadding DataTables_Table_0_wrapper dataTables_wrapper");
+    resourceTable->addStyleClass("widget-content nopadding DataTables_Table_0_wrapper dataTables_wrapper body-pers");
 
     mediaTable_ = new Wt::WTable(resourceTable);
     mediaTable_->addStyleClass("table table-bordered table-striped table-hover data-table dataTable");
@@ -140,8 +140,7 @@ Wt::WContainerWidget    *CreatePageWidget::createFooterTable()
     if (butPaginateExt_.size() > 0)
         butPaginateExt_.clear();
     Wt::WContainerWidget *footerTable = new Wt::WContainerWidget();
-    footerTable->addStyleClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix");
-    footerTable->setAttributeValue("style", "border-left: 0px solid; border-right: 0px solid;");
+    footerTable->addStyleClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix footer-pers");
     // revoir ui-toolbar quand css finit  
     new Wt::WText(tr("Alert." + this->nameResourcePage + ".search-bar")
             , footerTable);
@@ -699,7 +698,8 @@ Wt::WDialog    *CreatePageWidget::deleteResource(long long id)
 {
     Wt::WDialog *box = new Wt::WDialog("Attention");
 
-    box->contents()->addWidget(new Wt::WText(tr("Alert." + this->nameResourcePage + ".delete-message"))); // a voir xml
+    box->contents()->addWidget(new Wt::WText(tr("Alert." + this->nameResourcePage
+            + ".delete-" + this->nameResourcePageSpec_))); // a voir xml
     
     buttonInDialogFooter(box);
     this->created_ = false;
@@ -747,7 +747,7 @@ void    CreatePageWidget::popupWindow()
     std::vector<Wt::WText*> errorMessage;
 
     //gkr: Init dialog popup
-    Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + this->nameResourcePage + ".add-" + this->nameResourcePage));
+    Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + this->nameResourcePage + ".add-" + this->nameResourcePageSpec_));
     std::vector<std::string> titleHeader = getTitlesTableText();
     std::vector<std::string>::iterator i = titleHeader.begin();
     for (int j(0); j < this->nbResource_; j++)
@@ -797,7 +797,7 @@ void    CreatePageWidget::popupForModif(long long id)
     std::vector<Wt::WText*> errorMessage;
 
     //gkr: Init dialog popup
-    Wt::WDialog *dialogModif_ = new Wt::WDialog(tr("Alert." + this->nameResourcePage + ".add-" + this->nameResourcePage));
+    Wt::WDialog *dialogModif_ = new Wt::WDialog(tr("Alert." + this->nameResourcePage + ".modif-" + this->nameResourcePageSpec_));
 
     vector_type resourceTable = getResourceRowTable(id);
     std::vector<std::string> titleHeader = getTitlesTableText(); 

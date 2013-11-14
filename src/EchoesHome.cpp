@@ -190,6 +190,7 @@ void EchoesHome::handleInternalPath(const string &internalPath)
                         {
                             if(i->index() < (unsigned)this->mainPageWidget->getMenu()->count())
                             {
+                                // Toujours pertinent?
                                 std::cout << this->mainPageWidget->getMenu()->count() << " <= ? " << i->index() << std::endl;
                                 this->mainPageWidget->getMenu()->itemAt(i->index())->setFromInternalPath(internalPath);
                             }

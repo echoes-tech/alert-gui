@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <!-- Information -->
+    <message id="Alert.media-user.nothing-sms">Numéro de téléphone</message>
+    <message id="Alert.media-user.nothing-mail">Addresse Email</message>
+    <message id="Alert.media-user.nothing-app">Nom du mobile</message>
+
+    <message id="Alert.media-user.nothing-sms-text">Aucun Numéro de téléphone dans la bdd</message>
+    <message id="Alert.media-user.nothing-mail-text">Aucune Addresse Email dans la bdd</message>
+    <message id="Alert.media-user.nothing-app-text">Aucun Nom du mobile dans la bdd</message>
+  
+    <message id="Alert.media-user.nothing-sms-button">Clique pour ajouter</message>
+    <message id="Alert.media-user.nothing-mail-button">Clique pour ajouter</message>
+    <message id="Alert.media-user.nothing-app-button">Clique pour ajouter</message>
+
+    <message id="Alert.media-user.add-form.sms">Votre Numéro de téléphone</message>
+    <message id="Alert.media-user.add-form.app">Votre Nom du mobile</message>
+    <message id="Alert.media-user.add-form.mail">Votre Addresse Email</message>
+  
+    <message id="Alert.media-user.name-sms">Numéro de téléphone</message>
+    <message id="Alert.media-user.name-mail">Addresse Email</message>
+    <message id="Alert.media-user.name-app">Nom du mobile</message>
+
+    <message id="Alert.media-user.invalid-name-mail">
+        <span style="color:red">Invalide email, usage : exemple@echoes.com</span>
+    </message>
+    <message id="Alert.media-user.invalid-name-sms">
+        <span style="color:red">Invalide number phone, usage : (+33)(0)612345678</span>
+    </message>
+    <message id="Alert.media-user.invalid-name-app">
+        <span style="color:red">Invalide name application mobile</span>
+    </message>
+
+    <message id="Alert.media-user.delete-message">
+        <span style="color:red">Supprimer ce média. Continuee ?</span>
+    </message>
+
+    <!-- Paginate -->
+    <message id="Alert.media-user.paginate-first">Début</message>
+    <message id="Alert.media-user.paginate-prev">Préc</message>
+    <message id="Alert.media-user.paginate-next">Suiv</message>
+    <message id="Alert.media-user.paginate-last">Fin</message>
+    <!-- /Paginate -->
+  <message id="Alert.media-user.button-cancel">Annuler</message>
+
+
+  <message id="Alert.media-user.search-bar">Recherche : </message>
+
+
+    <message id="Alert.media-user.invalid-name">Nom invalide</message>
+  
+    <message id="Alert.media-user.add-button">Ajouter un Média</message>
+
+    <message id="Alert.media-user.modif-button">Modifier</message>
+    <message id="Alert.media-user.delete-button">Supprimer</message>
+
+    <message id="Alert.media-user.action">Actions</message>
+
+  
+    <message id="Alert.media-user.delete-sms">Supprimer ce Numéro de téléphone</message>
+    <message id="Alert.media-user.delete-mail">Supprimer cette Addresse Email</message>
+    <message id="Alert.media-user.delete-app">Supprimer ce Nom du mobile</message>
+
+    <message id="Alert.media-user.modif-sms">Modifier ce Numéro de téléphone</message>
+    <message id="Alert.media-user.modif-mail">Modifier cette Addresse Email</message>
+    <message id="Alert.media-user.modif-app">Modifier ce Nom du mobile</message>
+    
+    <message id="Alert.media-user.add-sms">Ajouter Numéro de téléphone</message>
+    <message id="Alert.media-user.add-mail">Ajouter Addresse Email</message>
+    <message id="Alert.media-user.add-app">Ajouter Nom du mobile</message>
+
+    <message id="Alert.media-user.name-invalid">Invalide</message>
+    <message id="Alert.media-user.database-error-title">Base de donnée, erreur</message>
+    <message id="Alert.media-user.database-error">Erreur : {1} | {2}</message>
+  
+    <message id="Alert.alert-list.delete-alerts-message">Le media suivant sera supprimer de:</message>
+    <message id="Alert.alert-list.delete-alert-message">Le media suivant sera supprimer de:</message>
+
+    <!-- templates -->
+
+    <message id="Alert.media-user.Management.template" >
+            <div id="media-user-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>
+
+  
+
+</messages>

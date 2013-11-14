@@ -62,13 +62,12 @@
             <div class ="alert alert-info">${tr:Alert.asset.form-info}</div> 
             <div id="asset-name" class="control-group">
                 <div class="row-fluid">
-                <div id="info-header" class="widget-pers"> <!-- widget-box -->
+                <div id="info-header" class="widget-pers">
                     ${resource-header}
                     ${resource-table}
                     ${resource-footer}
                 </div>
             </div>
-<!--            ${resource-test} -->
             </div>
             
     </message>

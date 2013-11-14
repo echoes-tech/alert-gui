@@ -600,6 +600,11 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
             res = "eye-open";
             break;
         }
+        case Enums::EPageType::RECIPIENTS:
+        {
+            res = "user"; //group
+            break;
+        }
         case Enums::EPageType::SUBMENU_ACCOUNT:
         {
             res = "user";

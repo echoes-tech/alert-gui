@@ -7,7 +7,7 @@
   <message id="Alert.recipients.form-info">
       Cette Page permet de rajouter des medias, ils sont utilisés pour envoyer des alertes.</message>
     <message id="Alert.recipients.delete-message">
-      <span style="color:red"> Supprimer ce serveur. Continuer ?</span>
+      <span style="color:red"> Supprimer ce media. Continuer ?</span>
   </message>
 
   <message id="Alert.recipients.name-label">Serveur à ajouter: </message>
@@ -33,20 +33,5 @@
   <message id="Alert.recipients.name-invalid">Invalide</message>
   <message id="Alert.recipients.database-error-title">Erreur de la base de donnée</message>
   <message id="Alert.recipients.database-error">Erreur : {1} | {2}</message>
-      
-  <!-- templates -->
-
-<message id="Alert.recipients.Management.template" >
-    <br />
-      <div class ="alert alert-info">${tr:Alert.recipients.form-info} </div>
-    <message id="Alert.recipients.Management.template" >
-            <div id="recipients-name" class="">
-                    ${resource-table}
-            </div>
-            
-    </message>
-</message>
-
-  
 
 </messages>

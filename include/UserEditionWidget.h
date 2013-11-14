@@ -39,17 +39,23 @@ public:
 
     void                        close();
     
+    
+    void                        deleteMedia(boost::system::error_code err, const Wt::Http::Message& response);
+    void                        postMedia(boost::system::error_code err, const Wt::Http::Message& response);
+    void                        putMedia(boost::system::error_code err, const Wt::Http::Message& response);
+
+private:
+ 
     void                        setSession(Session *session);
     void                        setApiUrl(std::string apiUrl);
     std::string                 getApiUrl();
-private:
- 
-      bool                  created_;
-  bool                  newClass_;
-  Session               *session_;
-  std::string           apiUrl_;
-  Wt::Json::Value       result_;
-  int                   type_;  
+
+    bool                  created_;
+    bool                  newClass_;
+    Session               *session_;
+    std::string           apiUrl_;
+    Wt::Json::Value       result_;
+    int                   type_;  
 };
 
 

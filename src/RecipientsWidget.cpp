@@ -29,14 +29,14 @@ void    RecipientsWidget::update()
        Wt::WTabWidget *tab = new Wt::WTabWidget();
        templat->bindWidget("resource-table", tab);
 
-       UserEditionWidget *uew = new UserEditionWidget(session_, apiUrl_, 2);
+       UserEditionWidget *uew = new UserEditionWidget(session_, apiUrl_, 1);
        uew->recoverListAsset();
        uew->setNameSpecial("mail");
        Wt::WMenuItem *tabMail = tab->addTab(uew, "Mail");
        tabMail->setStyleClass("recipients recipients-radius-left");
        tabMail->select();
 
-       uew = new UserEditionWidget(session_, apiUrl_, 1);
+       uew = new UserEditionWidget(session_, apiUrl_, 2);
        uew->recoverListAsset();
        uew->setNameSpecial("sms");
        tab->addTab(uew, "SMS")->setStyleClass("recipients recipients-radius-mid");

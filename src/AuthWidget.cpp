@@ -158,7 +158,7 @@ RegistrationModelAlert *AuthWidget::createRegistrationModel()
     RegistrationModelAlert *result = new RegistrationModelAlert(*model_->baseAuth(),
                                                       model_->users(),
                                                       login_, this);
-    
+    // Toujours pertinent?
     std::cout << "taille dans le model pendant créa : " << result->fields().size() << std::endl;
 
     if (model_->passwordAuth())
@@ -179,6 +179,7 @@ WWidget *AuthWidget::createRegistrationView(const Identity& id)
     if (id.isValid())
         registrationModel_->registerIdentified(id);
     
+    // Toujours pertinent?
     std::cout << "taille à la création : " << registrationModel_->fields().size() << std::endl;
 
     RegistrationWidgetAlert *w = new RegistrationWidgetAlert(this);

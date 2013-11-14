@@ -307,7 +307,7 @@
   </message>
     
   <message id="Alert.admin.welcome-tab">Bienvenue</message>
-  <message id="Alert.admin.recipients-tab">Destinataire</message>
+  <message id="Alert.admin.recipients-tab">Destinataires</message>
   <message id="Alert.admin.assets-tab">Serveurs</message>
   <message id="Alert.admin.alerts-tab">Définition des alertes</message>
   <message id="Alert.admin.alert-creation-tab">Création d'alerte</message>

@@ -1,52 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
 
-    <!-- Models -->
-
-
   <message id="Alert.recipients.form-info">
-      On this page you can add the medias used to send alerts.</message>
-    <message id="Alert.recipients.delete-message">
-      <span style="color:red"> Delete this server. Continue ?</span>
+      On this page you can add the medias used to send alerts.
   </message>
 
-  <message id="Alert.recipients.name-label">Server to add: </message>
   <message id="Alert.recipients.invalid-name">Invalid name</message>
-  <message id="Alert.recipients.invalid-name-info">
-      <span style="color:red">&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</span>
-  </message>
-  <message id="Alert.recipients.invalid-name-info2">
-      <h5>Invalid name :</h5>
-      <ul>
-          <li>Size Minimun : 1 </li>
-          <li>Size Maximum : 255</li>
-          <li> Not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</li>
-      </ul>
-  </message>
   
-  <message id="Alert.recipients.add-button">Add a server</message>
+  <message id="Alert.recipients.add-button">Add a media</message>
 
   <message id="Alert.recipients.modif-button">Modif</message>
   <message id="Alert.recipients.delete-button">Delete</message>
 
-  <message id="Alert.recipients.add-form">Your servers</message>
+  <message id="Alert.recipients.add-form">Your medias</message>
   
   <message id="Alert.recipients.name">recipients name</message>
   <message id="Alert.recipients.action">Actions</message>
   
-  <message id="Alert.recipients.download-script">Download<br />Script</message>
-
-  <message id="Alert.recipients.delete-recipients">Delete this server</message>
-  <message id="Alert.recipients.modif-recipients">Modifi this server</message>
-  <message id="Alert.recipients.add-recipients">Add server</message>
+  <message id="Alert.recipients.delete-recipients">Delete this media</message>
+  <message id="Alert.recipients.modif-recipients">Modifi this media</message>
+  <message id="Alert.recipients.add-recipients">Add media</message>
 
   <message id="Alert.recipients.name-invalid">Invalid</message>
   <message id="Alert.recipients.database-error-title">Database error</message>
   <message id="Alert.recipients.database-error">Error : {1} | {2}</message>
   
-  <message id="Alert.recipients.file-not-generated">
-      <span style="color:red">The file as not been generated. Please contact us.</span>
-  </message>
     
   <!-- templates -->
 

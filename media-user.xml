@@ -2,34 +2,34 @@
 <messages xmlns:if="Wt.WTemplate.conditions">
 
     <!-- Information -->
-    <message id="Alert.media-user.nothing-sms">Sms</message>
-    <message id="Alert.media-user.nothing-mail">Mail</message>
-    <message id="Alert.media-user.nothing-app">App</message>
+    <message id="Alert.media-user.nothing-sms">Phone number</message>
+    <message id="Alert.media-user.nothing-mail">Email address</message>
+    <message id="Alert.media-user.nothing-app">Mobile name</message>
 
-    <message id="Alert.media-user.nothing-sms-text">Nothing Sms on db</message>
-    <message id="Alert.media-user.nothing-mail-text">Nothing Mail on db</message>
-    <message id="Alert.media-user.nothing-app-text">Nothing App on db</message>
+    <message id="Alert.media-user.nothing-sms-text">Nothing Phone number on db</message>
+    <message id="Alert.media-user.nothing-mail-text">Nothing Email address on db</message>
+    <message id="Alert.media-user.nothing-app-text">Nothing Mobile name on db</message>
   
     <message id="Alert.media-user.nothing-sms-button">Click for Add</message>
     <message id="Alert.media-user.nothing-mail-button">Click for Add</message>
     <message id="Alert.media-user.nothing-app-button">Click for Add</message>
 
-    <message id="Alert.media-user.add-form.sms">Your Sms</message>
-    <message id="Alert.media-user.add-form.app">Your App</message>
-    <message id="Alert.media-user.add-form.mail">Your Mail</message>
+    <message id="Alert.media-user.add-form.sms">Your Phone number</message>
+    <message id="Alert.media-user.add-form.app">Your Mobile name</message>
+    <message id="Alert.media-user.add-form.mail">Your Email address</message>
   
-    <message id="Alert.media-user.name-sms">Num</message>
-    <message id="Alert.media-user.name-mail">Mail</message>
-    <message id="Alert.media-user.name-app">App</message>
+    <message id="Alert.media-user.name-sms">Phone number</message>
+    <message id="Alert.media-user.name-mail">Email address</message>
+    <message id="Alert.media-user.name-app">Mobile name</message>
 
     <message id="Alert.media-user.invalid-name-mail">
-        <span style="color:red">Invalide num, usage : (+33/6 12345678)</span>
+        <span style="color:red">Invalid email, usage : exemple@echoes.com</span>
     </message>
     <message id="Alert.media-user.invalid-name-sms">
-        <span style="color:red">Invalide num, usage : (+33/6 12345678)</span>
+        <span style="color:red">Invalid number phone, usage : (+33)(0)612345678</span>
     </message>
     <message id="Alert.media-user.invalid-name-app">
-        <span style="color:red">Invalide name ap</span>
+        <span style="color:red">Invalid name application mobile</span>
     </message>
 
     <message id="Alert.media-user.delete-message">
@@ -48,7 +48,6 @@
   <message id="Alert.media-user.search-bar">Search : </message>
 
 
-    <message id="Alert.media-user.name-label">Server to add: </message>
     <message id="Alert.media-user.invalid-name">Invalid name</message>
   
     <message id="Alert.media-user.add-button">Add a Media</message>
@@ -56,20 +55,27 @@
     <message id="Alert.media-user.modif-button">Modif</message>
     <message id="Alert.media-user.delete-button">Delete</message>
 
-    <message id="Alert.media-user.name">media-user name</message>
     <message id="Alert.media-user.action">Actions</message>
 
   
-    <message id="Alert.media-user.delete-media-user">Delete this Media</message>
-    <message id="Alert.media-user.modif-media-user">Modifi this Media</message>
-    <message id="Alert.media-user.add-media-user">Add Media</message>
+    <message id="Alert.media-user.delete-sms">Delete this Phone number</message>
+    <message id="Alert.media-user.delete-mail">Delete this Email address</message>
+    <message id="Alert.media-user.delete-app">Delete this Mobile name</message>
+
+    <message id="Alert.media-user.modif-sms">Modifi this Phone number</message>
+    <message id="Alert.media-user.modif-mail">Modifi this Email address</message>
+    <message id="Alert.media-user.modif-app">Modifi this Mobile name</message>
+    
+    <message id="Alert.media-user.add-sms">Add Phone number</message>
+    <message id="Alert.media-user.add-mail">Add Email address</message>
+    <message id="Alert.media-user.add-app">Add Mobile name</message>
 
     <message id="Alert.media-user.name-invalid">Invalid</message>
     <message id="Alert.media-user.database-error-title">Database error</message>
     <message id="Alert.media-user.database-error">Error : {1} | {2}</message>
   
-    <message id="Alert.alert-list.delete-alerts-message">The following alerts will be deleted too:</message>
-    <message id="Alert.alert-list.delete-alert-message">The following alert will be deleted too:</message>
+    <message id="Alert.alert-list.delete-alerts-message">The following media will be deleted too:</message>
+    <message id="Alert.alert-list.delete-alert-message">The following media will be deleted too:</message>
 
     <!-- templates -->
 

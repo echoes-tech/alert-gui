@@ -53,8 +53,8 @@ public:
     BOOST_ENUM_VALUES(EPageType, const char*,
     (WELCOME)("welcome")
     (ASSET)("assets")
-    (RECIPIENTS)("recipients")
     (SUBMENU_ALERT)("submenu_alerts")
+    (RECIPIENTS)("recipients")
     (SUBMENU_ACCOUNT)("submenu_accounts")
     (PLUGIN)("plugins")
     )

@@ -162,3 +162,24 @@ OB.ui-toolbar {border-radius: 0;}
     margin-bottom: 16px;
     clear: both;
 }
+
+.header-pers
+{
+    border-top: 1px solid #dddddd;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+}
+
+.body-pers
+{
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+}
+
+.footer-pers
+{
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    border-radius: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+}

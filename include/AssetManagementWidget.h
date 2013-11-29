@@ -73,13 +73,13 @@ public:
    */
   AssetManagementModel *model() const { return model_; }
   
-  void  popupAddTables(Wt::WTabWidget *tabW);
+  void  popupAddWidget(Wt::WDialog *dialog);
 
   long long userId;
   void                  setSession(Session *session);
   void                  setApiUrl(std::string apiUrl);
   std::string           getApiUrl();
-  void                  getAsset(boost::system::error_code err, const Wt::Http::Message& response);
+  void                  getAssets(boost::system::error_code err, const Wt::Http::Message& response);
 void    recoverListAsset();
 
 //std::vector<std::string> recoverTitles();
@@ -145,23 +145,16 @@ private:
     std::vector<std::string>        getTitlesTableText();
     std::vector<std::string>        getTitlesTableWidget();
     vector_type                 getResourceRowTable(long long id);
+  void                  downloadScript(std::string fileName);
 
     
     
   
-  Wt::WLineEdit *saveEdit;
-
-  Wt::WTable            *saveTable; //supprimer
-  
-  Wt::WLineEdit         *assetName; //link wit AssetName
-  
+  Wt::WLineEdit         *saveEdit;
   bool                  created_;
   bool                  newClass_;
   AssetManagementModel  *model_;
   Session               *session_;
-
-  void                  downloadScript(std::string fileName);
-
   Wt::WLineEdit         *assetEdit;
   std::vector<long long> idsAlert_;
 };

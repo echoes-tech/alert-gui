@@ -10,7 +10,7 @@
 RecipientsWidget::RecipientsWidget(Session *session, std::string apiUrl)
 {
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use("test",false);
+    app->messageResourceBundle().use("recipients",false);
     session_ = session;
     apiUrl_ = apiUrl;
     newClass_ = false;
@@ -23,7 +23,7 @@ void    RecipientsWidget::update()
     {
        this->clear();
        Wt::WTemplateFormView *templat =
-               new Wt::WTemplateFormView(Wt::WString::tr("Alert.test.Management.template"));
+               new Wt::WTemplateFormView(Wt::WString::tr("Alert.recipients.Management.template"));
        templat->addStyleClass("template");
        this->addWidget(templat);
        Wt::WTabWidget *tab = new Wt::WTabWidget();

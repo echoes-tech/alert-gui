@@ -1,8 +1,16 @@
 /* 
- * File:   MonitoringWidget.cpp
- * Author: tsa
+ * Gui MonitoringWidget.cpp
  * 
- * Created on 14 août 2012, 11:50
+ * @author ECHOES Technologies (TSA)
+ * 
+ * @date 14/08/2012
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
+ * 
  */
 
 #include "MainWidget.h"
@@ -224,6 +232,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             rpw = new RecipientsWidget(this->session, this->_apiUrl);
             break;            
         }
+        case Enums::EPageType::ALERTS:
+        {
+            atw = new AlertsWidget(this->session, this->_apiUrl);
+            break;            
+        }        
         case Enums::EPageType::PLUGIN:
         {
             //TODO: Change this temporary restriction with right integration
@@ -473,6 +486,12 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                     rpw->show();
                     break;
                 }
+                case Enums::EPageType::ALERTS:
+                {
+                    this->contentFluid->addWidget(atw);
+                    atw->recoverListAsset();
+                    break;
+                }
                 case Enums::EPageType::PLUGIN:
                 {
                     //TODO: Change this temporary restriction with right integration
@@ -603,6 +622,11 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::RECIPIENTS:
         {
             res = "user"; //group
+            break;
+        }
+        case Enums::EPageType::ALERTS:
+        {
+            res = "bell"; //group
             break;
         }
         case Enums::EPageType::SUBMENU_ACCOUNT:

@@ -96,8 +96,10 @@ public:
      * tabW can 
      * @param tabW
      */
-    virtual void        popupAddTables(Wt::WTabWidget *tabW) {};
+    virtual void        popupAddWidget(Wt::WDialog *dialog) {};
     virtual void        update();
+
+    virtual int         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
 
     /**
      * Add button modification.
@@ -135,7 +137,7 @@ protected:
     Wt::WContainerWidget                *createFooterTable();
 
     virtual void                        addResource(std::vector<Wt::WInteractWidget*> argument) {created_ = false;};
-    virtual Wt::WDialog             *deleteResource(long long id);
+    virtual Wt::WDialog                 *deleteResource(long long id);
     virtual void                        modifResource(std::vector<Wt::WInteractWidget*> argument, long long id) {created_ = false;};
     virtual Wt::WValidator              *editValidator(int who) {return (new Wt::WValidator());};
     virtual void                        closePopup() {};
@@ -145,11 +147,12 @@ protected:
     virtual std::vector<long long>      getIdsTable() {std::vector<long long> res; return res;};
     virtual vector_type                 getResourceRowTable(long long id) {vector_type res; return res;};
 
+    void                                buttonInDialogFooter(Wt::WDialog *dialog);
+    
 private:
 
     void                addInputForAffix(int rowBodyTable);
     void                showInputForAdd();
-    int                checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
     void                checkAdd(std::vector<Wt::WText*> errorMessage);
     void                checkModif(vector_type inputs, long long id, std::vector<Wt::WText*> errorMessage);
     void                popupForModif(long long id);
@@ -162,8 +165,6 @@ private:
     void                fillInTable();
     void                popupComplete(Wt::WDialog *dialog);
     void                searchName(Wt::WLineEdit *arg);
-
-    void                buttonInDialogFooter(Wt::WDialog *dialog);
 
     void                resourceBeAff();
     Wt::WComboBox       *getComboBox();

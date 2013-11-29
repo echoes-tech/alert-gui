@@ -41,8 +41,10 @@
 #include <Wt/Chart/WPieChart>
 
 #include "RecipientsWidget.h"
+#include "AlertsWidget.h"
 
 class RecipientsWidget;
+class AlertsWidget;
 
 class MainWidget : public Wt::WContainerWidget
 {
@@ -101,6 +103,8 @@ protected:
   UserEditionWidget *uew;
   
   RecipientsWidget *rpw;
+  AlertsWidget *atw;
+  
   Wt::WContainerWidget *wcw;
   
 

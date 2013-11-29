@@ -110,8 +110,8 @@ Wt::WContainerWidget    *CreatePageWidget::createHeaderTable()
     else if (!this->mainPage_) // gkr: Input is created in createBodyTable, showInputForAdd() is there just for show this.
         headerButton->clicked().connect(boost::bind(&CreatePageWidget::showInputForAdd, this));
 
-//    headerButton->setTextFormat(Wt::XHTMLUnsafeText);
-headerButton->setStyleClass("button-add btn");
+    //    headerButton->setTextFormat(Wt::XHTMLUnsafeText);
+    headerButton->setStyleClass("button-add btn");
     headerButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
     return headerTable;
 }
@@ -163,7 +163,7 @@ void    CreatePageWidget::addResourceInHeaderTable()
     int                         columnTable(0);
     std::vector<std::string>    titleName = getTitlesTableText();
     std::vector<std::string>    titleWidget = getTitlesTableWidget();
-    setResourceNumberAdd(titleWidget.size() > 0 ? titleWidget.size() : 1);
+    setResourceNumberAdd(titleName.size() > 0 ? titleName.size() : 1);
     std::vector<std::string>::iterator it;
     mediaTable_->elementAt(0, 0)->setAttributeValue("style", "border-left:0;");
     for (it = titleName.begin(); it != titleName.end(); it++)
@@ -313,13 +313,9 @@ void    CreatePageWidget::inputForModif(long long id, int rowTable, int columnTa
     std::vector<std::string>::iterator it = titleHeader.begin();
 
     vector_type resourceTable = getResourceRowTable(id);
-    for (vector_type::iterator j = resourceTable.begin(); j != resourceTable.end(); j++)
+    vector_type::iterator j;
+    for (j = resourceTable.begin(); j != resourceTable.end() && it != titleHeader.end(); j++)
     {
-        if (it == titleHeader.end())
-        {
-            std::cout << "Error : Too many title for header table" << std::endl;
-            return;
-        }
         Wt::WInteractWidget *widgetAdd = *j;
         std::string nameRessouce("N2Wt5WTextE");
         if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
@@ -350,9 +346,11 @@ void    CreatePageWidget::inputForModif(long long id, int rowTable, int columnTa
             mediaTable_->elementAt(rowTable, column++)->addWidget(error);
             
             it++;
+            cpt++;
         }
-        cpt++;
     }
+    if (it == titleHeader.end() && j != resourceTable.end())
+            std::cout << "Warning : Too many title for header table" << std::endl;
     mediaTable_->elementAt(rowTable, columnTable)->clear();
     mediaTable_->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
     mediaTable_->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
@@ -804,12 +802,9 @@ void    CreatePageWidget::popupForModif(long long id)
     std::vector<std::string>::iterator i = titleHeader.begin();
     
     int cpt(0);
-    for (vector_type::iterator j = resourceTable.begin(); j != resourceTable.end(); j++)
+    vector_type::iterator j;
+    for (j = resourceTable.begin(); j != resourceTable.end() && i != titleHeader.end(); j++)
     {
-        if (i == titleHeader.end())
-        {
-            std::cout << "Error : Too many title for header table (popupforModif" << std::endl;
-        }
         Wt::WInteractWidget *widgetAdd = *j;
         std::string nameRessouce("N2Wt5WTextE");
         if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
@@ -842,12 +837,13 @@ void    CreatePageWidget::popupForModif(long long id)
             error2->hide();
             errorMessage.push_back(error2);
             new Wt::WText("<br />", dialogModif_->contents());
-
+            i++;
+            cpt++;
         }
-        i++;
-        cpt++;
     }
-    
+    if (i == titleHeader.end() && j != resourceTable.end())
+        std::cout << "Warning : Too many title for header table (popupforModif" << std::endl;
+
     popupComplete(dialogModif_);
 
     dialogModif_->finished().connect(std::bind([=] () {
@@ -880,24 +876,15 @@ void    CreatePageWidget::popupComplete(Wt::WDialog *dialog)
     dialog->setResizable(true);
     dialog->setClosable(true);
 
-    buttonInDialogFooter(dialog);
-
     new Wt::WText("\n", dialog->contents());
+    popupAddWidget(dialog);   //Methode overload
 
-    Wt::WTabWidget *tabW = new Wt::WTabWidget();
-    popupAddTables(tabW);
-    if (tabW->count() > 0) 
-    {
-        dialog->contents()->addWidget(tabW);
-        dialog->resize(Wt::WLength(90, Wt::WLength::Unit::Percentage),
-                Wt::WLength(70, Wt::WLength::Unit::Percentage));
-        tabW->setHeight(250);
-    }
+    buttonInDialogFooter(dialog);
 }
 
 void    CreatePageWidget::buttonInDialogFooter(Wt::WDialog *dialog)
 {
-        Wt::WPushButton *ok = new Wt::WPushButton("Ok", dialog->footer());
+        Wt::WPushButton *ok = new Wt::WPushButton("Save", dialog->footer()); //xml
     ok->clicked().connect(dialog, &Wt::WDialog::accept);    
     ok->setAttributeValue("style", "margin-left:12px");
 

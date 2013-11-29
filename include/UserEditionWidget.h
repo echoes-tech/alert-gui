@@ -1,8 +1,17 @@
 /* 
- * File:   UserEditionWidget.h
- * Author: tsa
- *
- * Created on 14 août 2012, 11:50
+ * Gui UserEditionWidget.h
+ * 
+ * @author ECHOES Technologies (TSA)
+ * @author Guillaume KRIER
+ * 
+ * @date 15/11/2013
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
+ * 
  */
 
 #ifndef USEREDITIONWIDGET_H
@@ -22,7 +31,6 @@ public:
     UserEditionWidget(Session *session, std::string apiUrl, int type);
 
     void                        update();
-    void                        popupAddTables(Wt::WTabWidget *tabW);
     std::vector<std::string>    getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
     std::vector<long long>      getIdsTable();

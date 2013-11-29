@@ -41,7 +41,7 @@ void    AssetManagementWidget::update()
 
 // TABLE(S) FOR POPUP ------------------------------------------
 
-void  AssetManagementWidget::popupAddTables(Wt::WTabWidget *tabW)
+void  AssetManagementWidget::popupAddWidget(Wt::WDialog *dialog)
 {
 }
 
@@ -137,7 +137,7 @@ void    AssetManagementWidget::recoverListAsset()
     /* Connection API */
     std::string apiAddress = this->getApiUrl() + "/assets";
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&AssetManagementWidget::getAsset, this, _1, _2));
+    client->done().connect(boost::bind(&AssetManagementWidget::getAssets, this, _1, _2));
     apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
     if (client->get(apiAddress))
     {
@@ -328,7 +328,7 @@ void    AssetManagementWidget::checkAlertsInAsset(boost::system::error_code err,
 }
 
 
-void AssetManagementWidget::getAsset(boost::system::error_code err, const Wt::Http::Message& response)
+void AssetManagementWidget::getAssets(boost::system::error_code err, const Wt::Http::Message& response)
 {
    Wt::WApplication::instance()->resumeRendering();
    result_ = 0;

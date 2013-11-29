@@ -1,8 +1,17 @@
 /* 
- * File:   UserEditionWidget.cpp
- * Author: tsa
+ * Gui UserEditionWidget.cpp
  * 
- * Created on 14 août 2012, 11:50
+ * @author ECHOES Technologies (TSA)
+ * @author Guillaume KRIER
+ * 
+ * @date 15/11/2013
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
+ * 
  */
 
 #include "UserEditionWidget.h"
@@ -23,8 +32,6 @@ UserEditionWidget::UserEditionWidget(Session *session, std::string apiUrl, int t
     setLocalTable(true);
 }
 
-
-
 void    UserEditionWidget::update()
 {
     CreatePageWidget::update();
@@ -33,8 +40,6 @@ void    UserEditionWidget::update()
        newClass_ = true;
     }
 }
-
-void  UserEditionWidget::popupAddTables(Wt::WTabWidget *tabW) { }
 
 std::vector<std::string>        UserEditionWidget::getTitlesTableWidget()
 {
@@ -371,3 +376,5 @@ void UserEditionWidget::putMedia(boost::system::error_code err, const Wt::Http::
     }
         recoverListAsset();
 }
+
+

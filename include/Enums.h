@@ -55,6 +55,7 @@ public:
     (ASSET)("assets")
     (SUBMENU_ALERT)("submenu_alerts")
     (RECIPIENTS)("recipients")
+    (ALERTS)("alerts-test")
     (SUBMENU_ACCOUNT)("submenu_accounts")
     (PLUGIN)("plugins")
     )

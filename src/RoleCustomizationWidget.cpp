@@ -135,7 +135,6 @@ void RoleCustomizationWidget::getRoles(boost::system::error_code err, const Wt::
     Wt::WApplication::instance()->resumeRendering();
     int idx = 0;
     //ToDo: clear all I have to clean
-
     if (response.status() >= 200 && response.status() < 400)
     {
         Wt::Json::Value result ;

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <!-- Information -->
+    <message id="Alert.alerts-test.form-info">
+      This page gives you the possibility to create an alert.
+    </message>
+    <message id="Alert.alerts-test.nothing-alerts-test">Alerts</message>
+
+    <message id="Alert.alerts-test.nothing-alerts-test-text">Nothing Alerts on db</message>
+  
+    <message id="Alert.alerts-test.nothing-alerts-test-button">Click for Add</message>
+
+    <message id="Alert.alerts-test.add-form.alerts-test">Your Alerts</message>
+  
+    <message id="Alert.alerts-test.name-name">Name Alert</message>
+    <message id="Alert.alerts-test.name-nb-dest">Recipients number</message>
+    <message id="Alert.alerts-test.name-last-out">Last outbreak</message>
+    <message id="Alert.alerts-test.name-modif-dest">Modif recipients</message>
+
+    <message id="Alert.alerts-test.invalid-name-mail">
+        <span style="color:red">Invalid email, usage : exemple@echoes.com</span>
+    </message>
+    <message id="Alert.alerts-test.invalid-name-sms">
+        <span style="color:red">Invalid number phone, usage : (+33)(0)612345678</span>
+    </message>
+    <message id="Alert.alerts-test.invalid-name-app">
+        <span style="color:red">Invalid name application mobile</span>
+    </message>
+
+    <message id="Alert.alerts-test.delete-message">
+        <span style="color:red">Delete this Media. Continue ?</span>
+    </message>
+
+    <!-- Paginate -->
+    <message id="Alert.alerts-test.paginate-first">First</message>
+    <message id="Alert.alerts-test.paginate-prev">Prev</message>
+    <message id="Alert.alerts-test.paginate-next">Next</message>
+    <message id="Alert.alerts-test.paginate-last">Last</message>
+    <!-- /Paginate -->
+  <message id="Alert.alerts-test.button-cancel">Cancel</message>
+
+
+  <message id="Alert.alerts-test.search-bar">Search : </message>
+
+
+    <message id="Alert.alerts-test.invalid-name-name">
+        <span style="color:red"> Invalid name</span>
+    </message>
+  
+    <message id="Alert.alerts-test.add-button">Add a Media</message>
+
+    <message id="Alert.alerts-test.modif-button">Modif Alert</message>
+    <message id="Alert.alerts-test.delete-button">Delete</message>
+
+    <message id="Alert.alerts-test.action">Actions</message>
+
+  
+    <message id="Alert.alerts-test.delete-alerts-test">
+        <span style="color:red">Delete this Alert ?</span>
+    </message>
+
+    <message id="Alert.alerts-test.modif-alerts-test">Modifi this Alert</message>
+    
+    <message id="Alert.alerts-test.add-alerts-test">Add Alert</message>
+
+    <message id="Alert.alerts-test.name-invalid">Invalid</message>
+    <message id="Alert.alerts-test.database-error-title">Database error</message>
+    <message id="Alert.alerts-test.database-error">Error : {1} | {2}</message>
+  
+    <message id="Alert.alert-list.delete-alerts-message">The following media will be deleted too:</message>
+    <message id="Alert.alert-list.delete-alert-message">The following media will be deleted too:</message>
+
+    <!-- templates -->
+
+    <message id="Alert.alerts-test.Management.template" >
+            <div id="alerts-test-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>
+
+  
+
+</messages>

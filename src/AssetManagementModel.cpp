@@ -88,7 +88,7 @@ void AssetManagementModel::setValid(Field field)
     setValidation(field,Wt::WValidator::Result(Wt::WValidator::Valid,Wt::WString::tr("Alert.user.edition.valid")));
 }
 
-void AssetManagementModel::setSession(Session *session)
+void AssetManagementModel::setSession(Echoes::Dbo::Session *session)
 {
     this->session_ = session;
 }

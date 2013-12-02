@@ -19,13 +19,13 @@
         
 class AlertListWidget : public Wt::WContainerWidget {
 public:
-    AlertListWidget(Session *session);
+    AlertListWidget(Echoes::Dbo::Session *session);
     AlertListWidget(const AlertListWidget& orig);
     virtual ~AlertListWidget();
     
     virtual void refresh();
 private:
-    Session *session;
+    Echoes::Dbo::Session *session;
     void createUI();
     void deleteAlert(long long id);
     

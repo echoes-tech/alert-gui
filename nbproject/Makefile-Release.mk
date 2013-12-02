@@ -39,6 +39,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/AlertEditionModel.o \
 	${OBJECTDIR}/src/AlertEditionWidget.o \
 	${OBJECTDIR}/src/AlertListWidget.o \
+	${OBJECTDIR}/src/AlertsWidget.o \
+	${OBJECTDIR}/src/ApiManagement.o \
 	${OBJECTDIR}/src/AssetManagementModel.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
 	${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o \
@@ -105,6 +107,16 @@ ${OBJECTDIR}/src/AlertListWidget.o: src/AlertListWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -DNDEBUG -std=c++0x -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AlertListWidget.o src/AlertListWidget.cpp
+
+${OBJECTDIR}/src/AlertsWidget.o: src/AlertsWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -DNDEBUG -std=c++0x -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AlertsWidget.o src/AlertsWidget.cpp
+
+${OBJECTDIR}/src/ApiManagement.o: src/ApiManagement.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -DNDEBUG -std=c++0x -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ApiManagement.o src/ApiManagement.cpp
 
 ${OBJECTDIR}/src/AssetManagementModel.o: src/AssetManagementModel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

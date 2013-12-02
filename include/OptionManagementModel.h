@@ -24,9 +24,9 @@ public:
     virtual void reset();
     void modifyField(Field field, const Wt::WString& info);
 private:
-    Session *session;
+    Echoes::Dbo::Session *session;
     
-    void setView(User *user = NULL);
+    void setView(Echoes::Dbo::User *user = NULL);
     virtual bool isVisible(Field field) const;
     
 //    Wt::WString validateAssetName(Wt::WString stringToValidate) const;

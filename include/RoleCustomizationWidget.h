@@ -24,7 +24,7 @@
 
 class RoleCustomizationWidget : public Wt::WContainerWidget {
 public:
-    RoleCustomizationWidget(Session *session, const std::string &apiUrl);
+    RoleCustomizationWidget(Echoes::Dbo::Session *session, const std::string &apiUrl);
     RoleCustomizationWidget(const RoleCustomizationWidget& orig);
     virtual ~RoleCustomizationWidget();
     std::string getApiUrl() const;
@@ -47,7 +47,7 @@ public:
     void resPutCritAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
     
 private:
-    Session * session;
+    Echoes::Dbo::Session * session;
     bool created_;
     Wt::WTemplate *mainTemplate;
     std::string credentials;

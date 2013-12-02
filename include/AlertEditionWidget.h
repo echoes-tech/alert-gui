@@ -58,7 +58,7 @@ public:
   
   /*! \brief Sets the session.
    */
-  void setSession(Session *session);
+  void setSession(Echoes::Dbo::Session *session);
 
   /*! \brief Returns the registration model.
    *
@@ -181,7 +181,7 @@ protected:  /*! \brief Validates the current information.
 
 private:
   AlertEditionModel *model_;
-  Session * session;
+  Echoes::Dbo::Session * session;
   std::string _apiUrl;
 
   bool created_;

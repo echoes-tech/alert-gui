@@ -14,7 +14,7 @@
 
 class UserEditionModel : public Wt::WFormModel {
 public:
-    UserEditionModel(User *user);
+    UserEditionModel(Echoes::Dbo::User *user);
     virtual ~UserEditionModel();
     
     /*! \brief Enumeration for view
@@ -25,7 +25,7 @@ public:
         Creation
     };
     
-    User *user;
+    Echoes::Dbo::User *user;
     
     //! \brief Choose Password field
     static const Field FirstName;
@@ -40,12 +40,12 @@ public:
     static const Field MediaMobileApp;
     
     virtual bool validateField(Field field);
-    void setSession(Session *session);
+    void setSession(Echoes::Dbo::Session *session);
 private:
     view currentView;
-    Session *session;
+    Echoes::Dbo::Session *session;
     virtual void reset();
-    void setView(User *user = NULL);
+    void setView(Echoes::Dbo::User *user = NULL);
     virtual bool isVisible(Field field) const;
     
     Wt::WString validateString(Wt::WString stringToValidate) const;

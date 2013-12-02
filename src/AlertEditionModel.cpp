@@ -13,7 +13,7 @@ const Wt::WFormModel::Field AlertEditionModel::ThresholdValue = "threshold-value
 //const Wt::WFormModel::Field AlertEditionModel::ValueExample = "threshold-value-exemple";
 const Wt::WFormModel::Field AlertEditionModel::Unit = "information-unit";
 
-AlertEditionModel::AlertEditionModel(User *user) : WFormModel()
+AlertEditionModel::AlertEditionModel(Echoes::Dbo::User *user) : WFormModel()
 {
     this->user = user;
     setView(this->user);
@@ -24,7 +24,7 @@ AlertEditionModel::~AlertEditionModel()
 {
 }
 
-void AlertEditionModel::setView(User *user)
+void AlertEditionModel::setView(Echoes::Dbo::User *user)
 {
     if (user == NULL)
     {
@@ -200,7 +200,7 @@ void AlertEditionModel::modifyField(Field field, const Wt::WString& info)
     }
 }
 
-void AlertEditionModel::setSession(Session *session)
+void AlertEditionModel::setSession(Echoes::Dbo::Session *session)
 {
     this->session = session;
 }

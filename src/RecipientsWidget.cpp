@@ -7,7 +7,7 @@
 
 #include "RecipientsWidget.h"
 
-RecipientsWidget::RecipientsWidget(Session *session, std::string apiUrl)
+RecipientsWidget::RecipientsWidget(Echoes::Dbo::Session *session, std::string apiUrl)
 {
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("recipients",false);

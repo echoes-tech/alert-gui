@@ -7,7 +7,7 @@
 
 #include "ApiManagement.h"
 
-ApiManagement::ApiManagement(Session *session, std::string apiUrl)
+ApiManagement::ApiManagement(Echoes::Dbo::Session *session, std::string apiUrl)
 {
     apiUrl_ = apiUrl;
     session_ = session;
@@ -20,7 +20,7 @@ ApiManagement::~ApiManagement()
 */
 template <class classType>
 void    ApiManagement::callApi(void (classType::*pFunc)(boost::system::error_code err, const Wt::Http::Message& response),
-        std::string infoUrl, Session *session, std::string apiUrl)
+        std::string infoUrl, Echoes::Dbo::Session *session, std::string apiUrl)
 {
     Wt::Http::Client *client = new Wt::Http::Client();
     client->done().connect(boost::bind(pFunc, this, _1, _2));

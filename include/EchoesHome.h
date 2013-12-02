@@ -44,14 +44,14 @@ class EchoesHome : public Wt::WContainerWidget
     public:
 
         EchoesHome(Wt::WContainerWidget *parent = 0);
-        Session *getSession();
+        Echoes::Dbo::Session *getSession();
         std::string getApiUrl() const;
 
         // This globale is version of web site. Init in main.c.
         static std::string     version_g;
         
     private:
-        Session *session;
+        Echoes::Dbo::Session *session;
         std::string _apiUrl;
 
         void concatApiUrl();

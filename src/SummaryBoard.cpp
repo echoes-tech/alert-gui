@@ -7,7 +7,7 @@
 
 #include "SummaryBoard.h"
 
-SummaryBoard::SummaryBoard(Session *session)
+SummaryBoard::SummaryBoard(Echoes::Dbo::Session *session)
 : Wt::WContainerWidget()
 {
     created_ = false;

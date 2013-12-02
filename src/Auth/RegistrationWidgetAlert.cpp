@@ -46,14 +46,14 @@ void RegistrationWidgetAlert::render(Wt::WFlags<Wt::RenderFlag> flags)
 
 void RegistrationWidgetAlert::registerUserDetails(Wt::Auth::User& user)
 {
-    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->firstName = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->FirstNameField);
-    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->eMail = model()->valueText(model()->LoginNameField);
-    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->lastName = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->LastNameField);
-    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->token = reinterpret_cast<RegistrationModelAlert*>(model())->generateToken();
+    dynamic_cast<Echoes::Dbo::UserDatabase*>(user.database())->find(user).get()->user().modify()->firstName = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->FirstNameField);
+    dynamic_cast<Echoes::Dbo::UserDatabase*>(user.database())->find(user).get()->user().modify()->eMail = model()->valueText(model()->LoginNameField);
+    dynamic_cast<Echoes::Dbo::UserDatabase*>(user.database())->find(user).get()->user().modify()->lastName = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->LastNameField);
+    dynamic_cast<Echoes::Dbo::UserDatabase*>(user.database())->find(user).get()->user().modify()->token = reinterpret_cast<RegistrationModelAlert*>(model())->generateToken();
 
-    Organization *org = new Organization();
+    Echoes::Dbo::Organization *org = new Echoes::Dbo::Organization();
 
-    Wt::Dbo::ptr<OrganizationType> type;
+    Wt::Dbo::ptr<Echoes::Dbo::OrganizationType> type;
 //    bool bCompagny = boost::any_cast<bool>(model()->value(reinterpret_cast<RegistrationModelAlert*>(model())->OrganizationTypeCompanyField));
 //    if (bCompagny)
 //    {
@@ -74,45 +74,45 @@ void RegistrationWidgetAlert::registerUserDetails(Wt::Auth::User& user)
 //    }
 
     //triche
-    type = ((UserDatabase*)user.database())->session_.find<OrganizationType>().where("\"OTY_ID\" = ?").bind(OrganizationType::Individual);
+    type = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::OrganizationType>().where("\"OTY_ID\" = ?").bind(Echoes::Dbo::OrganizationType::Individual);
     org->name = model()->valueText(reinterpret_cast<RegistrationModelAlert*>(model())->LastNameField);
 
     org->organizationType = type;
     org->token = reinterpret_cast<RegistrationModelAlert*>(model())->generateToken();
 
-    Wt::Dbo::ptr<Organization> ptrOrg = ((UserDatabase*)user.database())->session_.add<Organization>(org);
+    Wt::Dbo::ptr<Echoes::Dbo::Organization> ptrOrg = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::Organization>(org);
 
-    //TODO : hardcoded, should be changed when the pack selection will be available
-    Wt::Dbo::ptr<Pack> ptrPack = ((UserDatabase*)user.database())->session_.find<Pack>().where("\"PCK_ID\" = ?").bind(1);
-    ptrOrg.modify()->pack = ptrPack;
-
-    OptionValue *optionValue = new OptionValue();
-
-    OptionValueId *opvId = new OptionValueId(ptrOrg,((UserDatabase*)user.database())->session_.find<Option>().where("\"OPT_ID\" = ?").bind(Enums::sms));
-    optionValue->pk.option = opvId->option;
-    optionValue->pk.organization = opvId->organization;
-    //FIXME : should be the default value found in the table POP
-    optionValue->value = "5";
-
-    Wt::Dbo::ptr<OptionValue> ptrOptionValue = ((UserDatabase*)user.database())->session_.add<OptionValue>(optionValue);
+    //FIXME
+//    //TODO : hardcoded, should be changed when the pack selection will be available
+//    Wt::Dbo::ptr<Echoes::Dbo::Pack> ptrPack = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::Pack>().where("\"PCK_ID\" = ?").bind(1);
+//    ptrOrg.modify()->pack = ptrPack;
+//
+//    OptionValue *optionValue = new OptionValue();
+//
+//    OptionValueId *opvId = new OptionValueId(ptrOrg,((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::Option>().where("\"OPT_ID\" = ?").bind(Enums::sms));
+//    optionValue->pk.option = opvId->option;
+//    optionValue->pk.organization = opvId->organization;
+//    //FIXME : should be the default value found in the table POP
+//    optionValue->value = "5";
+//
+//    Wt::Dbo::ptr<OptionValue> ptrOptionValue = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::OptionValue>(optionValue);
 
 
 //    Wt::Dbo::collection<Wt::Dbo::ptr<Organization> > colPtrOrg;
 //    colPtrOrg.insert(ptrOrg);
 
-    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->organizations.insert(ptrOrg);
-    dynamic_cast<UserDatabase*>(user.database())->find(user).get()->user().modify()->currentOrganization = ptrOrg;
+    dynamic_cast<Echoes::Dbo::UserDatabase*>(user.database())->find(user).get()->user().modify()->organization = ptrOrg;
 
-    EngOrg *engOrg = new EngOrg();
+    Echoes::Dbo::EngOrg *engOrg = new Echoes::Dbo::EngOrg();
     engOrg->pk.organization = ptrOrg;
     engOrg->token = reinterpret_cast<RegistrationModelAlert*>(model())->generateToken();
     
     //TODO : hardcoded, should be changed for multiple Engines
-    Wt::Dbo::ptr<Engine> enginePtr = ((UserDatabase*)user.database())->session_.find<Engine>().where("\"ENG_ID\" = ?").bind(1);
+    Wt::Dbo::ptr<Echoes::Dbo::Engine> enginePtr = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::Engine>().where("\"ENG_ID\" = ?").bind(1);
 
     engOrg->pk.engine = enginePtr;
     
-    Wt::Dbo::ptr<EngOrg> enoPtr = ((UserDatabase*)user.database())->session_.add<EngOrg>(engOrg);
+    Wt::Dbo::ptr<Echoes::Dbo::EngOrg> enoPtr = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::EngOrg>(engOrg);
     
 }
 

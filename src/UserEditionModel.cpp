@@ -18,7 +18,7 @@ const Wt::WFormModel::Field UserEditionModel::MediaEMail = "media-email";
 const Wt::WFormModel::Field UserEditionModel::MediaSMS = "media-sms";
 const Wt::WFormModel::Field UserEditionModel::MediaMobileApp = "media-mobileapp";
 
-UserEditionModel::UserEditionModel(User *user)
+UserEditionModel::UserEditionModel(Echoes::Dbo::User *user)
 {
     this->user = user;
     setView(this->user);
@@ -29,7 +29,7 @@ UserEditionModel::~UserEditionModel()
 {
 }
 
-void UserEditionModel::setView(User *user)
+void UserEditionModel::setView(Echoes::Dbo::User *user)
 {
     if (user == NULL)
     {
@@ -120,7 +120,7 @@ void UserEditionModel::setValid(Field field)
     setValidation(field,Wt::WValidator::Result(Wt::WValidator::Valid,Wt::WString::tr("Alert.user.edition.valid")));
 }
 
-void UserEditionModel::setSession(Session *session)
+void UserEditionModel::setSession(Echoes::Dbo::Session *session)
 {
     this->session = session;
 }

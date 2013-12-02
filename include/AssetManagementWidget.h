@@ -64,7 +64,7 @@ public:
    *
    * Creates a new authentication.
    */
-  AssetManagementWidget(Session *session, std::string apiUrl);
+  AssetManagementWidget(Echoes::Dbo::Session *session, std::string apiUrl);
 
   /*! \brief Returns the registration model.
    *
@@ -76,7 +76,7 @@ public:
   void  popupAddWidget(Wt::WDialog *dialog);
 
   long long userId;
-  void                  setSession(Session *session);
+  void                  setSession(Echoes::Dbo::Session *session);
   void                  setApiUrl(std::string apiUrl);
   std::string           getApiUrl();
   void                  getAssets(boost::system::error_code err, const Wt::Http::Message& response);
@@ -154,7 +154,7 @@ private:
   bool                  created_;
   bool                  newClass_;
   AssetManagementModel  *model_;
-  Session               *session_;
+  Echoes::Dbo::Session               *session_;
   Wt::WLineEdit         *assetEdit;
   std::vector<long long> idsAlert_;
 };

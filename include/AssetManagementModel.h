@@ -28,14 +28,14 @@ public:
     
     static const Field AssetName;
     
-    void setSession(Session *session);
+    void setSession(Echoes::Dbo::Session *session);
 
     virtual bool isVisible(Field field) const;
     virtual bool validateField(Field field);
 
 private:
 
-    Session *session_;
+    Echoes::Dbo::Session *session_;
 
     virtual void reset();
     

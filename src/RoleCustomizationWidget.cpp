@@ -7,7 +7,7 @@
 
 #include "RoleCustomizationWidget.h"
 
-RoleCustomizationWidget::RoleCustomizationWidget(Session *session, const std::string &apiUrl) 
+RoleCustomizationWidget::RoleCustomizationWidget(Echoes::Dbo::Session *session, const std::string &apiUrl) 
 : Wt::WContainerWidget()
 {
     //init

@@ -9,7 +9,7 @@
 
 Wt::Json::Array Wt::Json::Array::Empty;
 
-PluginEditionWidget::PluginEditionWidget(Session* session, const std::string &apiUrl)
+PluginEditionWidget::PluginEditionWidget(Echoes::Dbo::Session* session, const std::string &apiUrl)
 : Wt::WTemplateFormView(Wt::WString::tr("Alert.plugins.Edition.template"))
 {
     this->session = session;

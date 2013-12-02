@@ -30,18 +30,18 @@
 class ApiManagement
 {
 public:
-    ApiManagement(Session *session, std::string apiUrl);
+    ApiManagement(Echoes::Dbo::Session *session, std::string apiUrl);
 //    virtual ~ApiManagement();
     
     std::string     getApiUrl();
 
     template <class classType>
     void    callApi(void (classType::*pFunc)(boost::system::error_code err, const Wt::Http::Message& response),
-    std::string infoUrl, Session *session, std::string apiUrl);
+    std::string infoUrl, Echoes::Dbo::Session *session, std::string apiUrl);
 
 private:
 
-    Session               *session_;
+    Echoes::Dbo::Session               *session_;
     std::string           apiUrl_;
 };
 

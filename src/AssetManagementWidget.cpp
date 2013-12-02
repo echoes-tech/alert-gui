@@ -15,7 +15,7 @@
 
 #include "AssetManagementWidget.h"
 
-AssetManagementWidget::AssetManagementWidget(Session *session, std::string apiUrl)
+AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, std::string apiUrl)
 : CreatePageWidget("asset")
 {
     session_= session;
@@ -388,7 +388,7 @@ void    AssetManagementWidget::postAsset(boost::system::error_code err, const Wt
                 else
                 {
                     id = result.get("id");
-                    UserActionManagement::registerUserAction(Enums::add, Constants::T_ASSET_AST, boost::lexical_cast<long long>(id));
+                    UserActionManagement::registerUserAction(Enums::add, Echoes::Dbo::Constants::T_ASSET_AST, boost::lexical_cast<long long>(id));
                     
                     Wt::Http::Message messageAsset;
                     messageAsset.addBodyText("");
@@ -518,7 +518,7 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long i, Wt::WStrin
     {
         scriptCustomPart = "\nLOGIN=\"" + this->session_->user()->eMail.toUTF8() + "\"\n" 
         + "ASSET_ID=" + boost::lexical_cast<std::string, long long>(i) + "\n"
-        + "TOKEN=\"" + this->session_->user()->currentOrganization.get()->token.toUTF8() + "\"\n";
+        + "TOKEN=\"" + this->session_->user()->organization.get()->token.toUTF8() + "\"\n";
     }
     catch (Wt::Dbo::Exception e)
     {
@@ -575,7 +575,7 @@ void AssetManagementWidget::downloadScript(std::string fileName)
 
 // ----------------------------------------------
 
-void    AssetManagementWidget::setSession(Session *session)
+void    AssetManagementWidget::setSession(Echoes::Dbo::Session *session)
 {
     session_ = session;
 }

@@ -7,15 +7,11 @@
 #include <Wt/WBootstrapTheme>
 
 #include "GlobalIncludeFile.h"
-#include "tools/SessionPool.h"
+#include "tools/Session.h"
 #include <boost/thread.hpp>
 
 // This globale is version of web site.
 std::string      EchoesHome::version_g = "1.0.0 RC2";
-
-SessionPool* SessionPool::instance = 0;
-std::string SessionPool::credentials = "";
-boost::mutex SessionPool::mutex;
 
 //---------------------------------------------------------------------------
 
@@ -92,7 +88,7 @@ int main(int argc, char **argv)
         
         server.addEntryPoint(Wt::Application, createEchoesHomeApplication,"", "/favicon.ico");
         
-        Session::configureAuth();
+        Echoes::Dbo::Session::configureAuth();
         
         // démarrage du serveur en arrière plan
         if (server.start())

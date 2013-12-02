@@ -7,7 +7,7 @@
 
 #include "MonitoringWidget.h"
 
-MonitoringWidget::MonitoringWidget(Session *session)
+MonitoringWidget::MonitoringWidget(Echoes::Dbo::Session *session)
 : Wt::WContainerWidget()
 {
     created_ = false;
@@ -64,23 +64,23 @@ void MonitoringWidget::createUI()
             " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
             " AND mev.\"MEV_USR_USR_ID\" IN"
             "("
-                "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user()->currentOrganization.id()) + ""
+                "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user()->organization.id()) + ""
             ")"
             " ORDER BY atr.\"ATR_SEND_DATE\" DESC"
             " LIMIT 20"
                 ;
-        Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding> q = this->session->query<boost::tuple<Wt::Dbo::ptr<Alert>,Wt::Dbo::ptr<MediaValue>,Wt::Dbo::ptr<AlertTracking> >,Wt::Dbo::DynamicBinding>(queryString);
+        Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,Wt::Dbo::ptr<Echoes::Dbo::Media>,Wt::Dbo::ptr<Echoes::Dbo::AlertTracking> >,Wt::Dbo::DynamicBinding> q = this->session->query<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,Wt::Dbo::ptr<Echoes::Dbo::Media>,Wt::Dbo::ptr<Echoes::Dbo::AlertTracking> >,Wt::Dbo::DynamicBinding>(queryString);
         
         
-        Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Alert>,
-                Wt::Dbo::ptr<MediaValue>,
-                Wt::Dbo::ptr<AlertTracking>>> listTuples = q.resultList();
+        Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
+                Wt::Dbo::ptr<Echoes::Dbo::Media>,
+                Wt::Dbo::ptr<Echoes::Dbo::AlertTracking>>> listTuples = q.resultList();
         
         if (listTuples.size() > 0)
         {
-            for (Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Alert>,
-                Wt::Dbo::ptr<MediaValue>,
-                Wt::Dbo::ptr<AlertTracking>>>::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i)
+            for (Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
+                Wt::Dbo::ptr<Echoes::Dbo::Media>,
+                Wt::Dbo::ptr<Echoes::Dbo::AlertTracking>>>::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i)
             {
                 row++;
 

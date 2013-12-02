@@ -12,7 +12,7 @@
 
 class AlertEditionModel : public Wt::WFormModel {
 public:
-    AlertEditionModel(User *user);
+    AlertEditionModel(Echoes::Dbo::User *user);
     virtual ~AlertEditionModel();
     
     /*! \brief Enumeration for view
@@ -23,7 +23,7 @@ public:
         Creation
     };
     
-    User *user;
+    Echoes::Dbo::User *user;
     
     static const Field ThresholdOperator;
     static const Field ThresholdValueKey;
@@ -36,12 +36,12 @@ public:
     virtual void reset();
     
     void modifyField(Field field, const Wt::WString& info);
-    void setSession(Session *session);
+    void setSession(Echoes::Dbo::Session *session);
 private:
     view currentView;
-    Session *session;
+    Echoes::Dbo::Session *session;
     
-    void setView(User *user = NULL);
+    void setView(Echoes::Dbo::User *user = NULL);
     virtual bool isVisible(Field field) const;
     
     Wt::WString validateThresholdValue(Wt::WString stringToValidate) const;

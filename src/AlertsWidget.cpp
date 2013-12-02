@@ -16,7 +16,7 @@
 
 #include "AlertsWidget.h"
 
-AlertsWidget::AlertsWidget(Session *session, std::string apiUrl)
+AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, std::string apiUrl)
 : CreatePageWidget("alerts-test")
 {
     session_= session;
@@ -1122,7 +1122,7 @@ void AlertsWidget::close()
     delete this;
 }
 
-void    AlertsWidget::setSession(Session *session)
+void    AlertsWidget::setSession(Echoes::Dbo::Session *session)
 {
     session_ = session;
 }

@@ -77,7 +77,7 @@ class MonitoringWidget : public Wt::WContainerWidget
 {
 public:
 
-  MonitoringWidget(Session *session);
+  MonitoringWidget(Echoes::Dbo::Session *session);
 
 protected:
 
@@ -87,7 +87,7 @@ protected:
   void createUI();
 
 private:
-  Session * session;
+  Echoes::Dbo::Session * session;
  
   bool created_;
   

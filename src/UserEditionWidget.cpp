@@ -16,7 +16,7 @@
 
 #include "UserEditionWidget.h"
 
-UserEditionWidget::UserEditionWidget(Session *session, std::string apiUrl, int type)
+UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, std::string apiUrl, int type)
 : CreatePageWidget("media-user")
 {
     this->session_= session;
@@ -243,7 +243,7 @@ void UserEditionWidget::close()
     delete this;
 }
 
-void    UserEditionWidget::setSession(Session *session)
+void    UserEditionWidget::setSession(Echoes::Dbo::Session *session)
 {
     session_ = session;
 }

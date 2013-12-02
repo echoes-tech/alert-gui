@@ -7,7 +7,7 @@
 
 #include "OptionManagementWidget.h"
 
-OptionManagementWidget::OptionManagementWidget(OptionManagementModel *model, Session *session) 
+OptionManagementWidget::OptionManagementWidget(OptionManagementModel *model, Echoes::Dbo::Session *session) 
 : Wt::WContainerWidget()
 {
     model_ = model;
@@ -71,14 +71,14 @@ void OptionManagementWidget::createUI()
         Wt::log("info") << "Debug : user found";
         int smsQuotaValue = 0;
          
-        Wt::Dbo::ptr<PackOption> ptrPackOption = session->find<PackOption>()
-                .where("\"POP_PCK_PCK_ID\" = ?").bind(this->session->user()->currentOrganization.get()->pack.id())
-                .where("\"POP_OPT_OPT_ID\" = ?").bind(Enums::quotaSms)
+        Wt::Dbo::ptr<Echoes::Dbo::PackOption> ptrPackOption = session->find<Echoes::Dbo::PackOption>()
+                .where("\"POP_PCK_PCK_ID\" = ?").bind(this->session->user()->organization.get()->pack.id())
+                .where("\"POP_OPT_OPT_ID\" = ?").bind(Enums::EOption::quotaSms)
                 .limit(1);
         if (ptrPackOption.get())
         {
-            Wt::Dbo::ptr<OptionValue> ptrOptionValue = session->find<OptionValue>().where("\"OPT_ID_OPT_ID\" = ?").bind(ptrPackOption.get()->pk.option.id())
-                                                            .where("\"ORG_ID_ORG_ID\" = ?").bind(this->session->user()->currentOrganization.id())
+            Wt::Dbo::ptr<Echoes::Dbo::Option> ptrOptionValue = session->find<Echoes::Dbo::Option>().where("\"OPT_ID_OPT_ID\" = ?").bind(ptrPackOption.get()->pk.optionType.id())
+                                                            .where("\"ORG_ID_ORG_ID\" = ?").bind(this->session->user()->organization.id())
                                                             .limit(1);
             if (ptrOptionValue.get())
             {

@@ -16,7 +16,7 @@
 #include "MainWidget.h"
 #include "SummaryBoard.h"
 
-MainWidget::MainWidget(Session *session, const std::string &apiUrl)
+MainWidget::MainWidget(Echoes::Dbo::Session *session, const std::string &apiUrl)
 : Wt::WContainerWidget()
 {
     setApiUrl(apiUrl);
@@ -32,7 +32,7 @@ MainWidget::MainWidget(Session *session, const std::string &apiUrl)
     reset(session);
 }
 
-void MainWidget::reset(Session *session)
+void MainWidget::reset(Echoes::Dbo::Session *session)
 {
     delete breadCrumbsContainer;
     // voir si utile, refait dans initMenus()
@@ -140,7 +140,7 @@ void MainWidget::createUI()
             }
             else
             {
-                if (this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46 || this->session->user()->currentOrganization.id() == 51 || this->session->user()->currentOrganization.id() == 52)
+                if (this->session->user()->organization.id() ==  1 || this->session->user()->organization.id() == 46 || this->session->user()->organization.id() == 51 || this->session->user()->organization.id() == 52)
                 {
                     createMenuItem(*i,menu,getIconName(*i));
                     createPage(*i);
@@ -240,7 +240,7 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         case Enums::EPageType::PLUGIN:
         {
             //TODO: Change this temporary restriction with right integration
-            if(this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46 || this->session->user()->currentOrganization.id() == 51 || this->session->user()->currentOrganization.id() == 52)
+            if(this->session->user()->organization.id() ==  1 || this->session->user()->organization.id() == 46 || this->session->user()->organization.id() == 51 || this->session->user()->organization.id() == 52)
             {
                 pew = new PluginEditionWidget(this->session, _apiUrl);
             }
@@ -262,7 +262,7 @@ void MainWidget::createAlertPage(Enums::EAlertSubmenu enumSAL)
             try
             {
                 Wt::Dbo::Transaction transaction(*(this->session));
-                aem = new AlertEditionModel(const_cast<User *>(this->session->user().get()));
+                aem = new AlertEditionModel(const_cast<Echoes::Dbo::User *>(this->session->user().get()));
                 aem->setSession(session);
                 transaction.commit();
             }
@@ -495,7 +495,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::PLUGIN:
                 {
                     //TODO: Change this temporary restriction with right integration
-                    if(this->session->user()->currentOrganization.id() ==  1 || this->session->user()->currentOrganization.id() == 46 || this->session->user()->currentOrganization.id() == 51 || this->session->user()->currentOrganization.id() == 52)
+                    if(this->session->user()->organization.id() ==  1 || this->session->user()->organization.id() == 46 || this->session->user()->organization.id() == 51 || this->session->user()->organization.id() == 52)
                     {
                         this->contentFluid->addWidget(pew);
                     }
@@ -637,7 +637,7 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::PLUGIN:
         {
             //TODO: Change this temporary restriction with right integration
-            if(this->session->user()->currentOrganization.id() == 1 || this->session->user()->currentOrganization.id() == 46 || this->session->user()->currentOrganization.id() == 51 || this->session->user()->currentOrganization.id() == 52)
+            if(this->session->user()->organization.id() == 1 || this->session->user()->organization.id() == 46 || this->session->user()->organization.id() == 51 || this->session->user()->organization.id() == 52)
             {
                 res = "pencil";
             }

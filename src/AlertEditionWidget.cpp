@@ -36,7 +36,7 @@ void AlertEditionWidget::setModel(AlertEditionModel *model)
     model_ = model;
 }
 
-void AlertEditionWidget::setSession(Session *session)
+void AlertEditionWidget::setSession(Echoes::Dbo::Session *session)
 {
     this->session = session;
     this->userId = session->user().id();
@@ -64,16 +64,16 @@ Wt::WFormWidget *AlertEditionWidget::createFormWidget(Wt::WFormModel::Field fiel
         
         
         
-        Wt::Dbo::collection<Wt::Dbo::ptr<AlertCriteria> > alertCriterias;
+        Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::AlertCriteria> > alertCriterias;
 
         // mediaValues list
         try
         {
             Wt::Dbo::Transaction transaction(*session);
-            alertCriterias = session->find<AlertCriteria>();
+            alertCriterias = session->find<Echoes::Dbo::AlertCriteria>();
             int idx = 0;
             Wt::WString tempString;
-            for (Wt::Dbo::collection<Wt::Dbo::ptr<AlertCriteria> >::const_iterator i = alertCriterias.begin(); i != alertCriterias.end(); ++i)
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::AlertCriteria> >::const_iterator i = alertCriterias.begin(); i != alertCriterias.end(); ++i)
             {
                 tempString = "Alert.alert.operator." + (*i).get()->name;
                 slmOperators->insertString(idx,Wt::WString::tr(tempString.toUTF8()));
@@ -327,21 +327,21 @@ void AlertEditionWidget::updateInformationDetailsFromInformationSB()
 void AlertEditionWidget::updateMediaValueSelectionBox(int userId,int medId)
 {
     Wt::WStringListModel *slmMediaValue = new Wt::WStringListModel;
-    Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> > mediaValues;
-    Wt::Dbo::Query<Wt::Dbo::ptr<MediaValue> > queryMediaValue;
-    std::string queryString = "SELECT mev FROM \"T_MEDIA_VALUE_MEV\" mev "
-                                "WHERE \"MEV_MED_MED_ID\" = ? "
-                                "AND \"MEV_USR_USR_ID\" = ?";
+    Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Media> > mediaValues;
+    Wt::Dbo::Query<Wt::Dbo::ptr<Echoes::Dbo::Media> > queryMediaValue;
+    std::string queryString = "SELECT mev FROM \"T_MEDIA_MED\" mev "
+                                "WHERE \"MED_MTY_MTY_ID\" = ? "
+                                "AND \"MTY_USR_USR_ID\" = ?";
     
     // mediaValues list
     try
     {
         Wt::Dbo::Transaction transaction(*session);
-        queryMediaValue = session->query<Wt::Dbo::ptr<MediaValue> >(queryString).bind(medId).bind(userId);
+        queryMediaValue = session->query<Wt::Dbo::ptr<Echoes::Dbo::Media> >(queryString).bind(medId).bind(userId);
         mediaValues = queryMediaValue.resultList();
         int idx = 0;
         
-        for (Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> >::const_iterator i = mediaValues.begin(); i != mediaValues.end(); ++i)
+        for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Media> >::const_iterator i = mediaValues.begin(); i != mediaValues.end(); ++i)
         {
             slmMediaValue->insertString(idx,(*i).get()->value);
             long long idMediaValue = (*i).id();
@@ -363,8 +363,8 @@ void AlertEditionWidget::updateMediaValueSelectionBox(int userId,int medId)
 void AlertEditionWidget::updateMediaSelectionBox(int userId)
 {
     Wt::WStringListModel *slmMedia = new Wt::WStringListModel;
-    Wt::Dbo::collection<Wt::Dbo::ptr<Media> > medias;
-    Wt::Dbo::Query<Wt::Dbo::ptr<Media> > queryMedia;
+    Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::MediaType> > medias;
+    Wt::Dbo::Query<Wt::Dbo::ptr<Echoes::Dbo::MediaType> > queryMedia;
     std::string queryString = "SELECT med FROM \"T_MEDIA_MED\" med "
                                 "WHERE \"MED_ID\" IN "
                                 "("
@@ -375,11 +375,11 @@ void AlertEditionWidget::updateMediaSelectionBox(int userId)
     try
     {
         Wt::Dbo::Transaction transaction(*session);
-        queryMedia = session->query<Wt::Dbo::ptr<Media> >(queryString).bind(userId);
+        queryMedia = session->query<Wt::Dbo::ptr<Echoes::Dbo::MediaType> >(queryString).bind(userId);
         medias = queryMedia.resultList();
         
         int idx = 0;
-        for (Wt::Dbo::collection<Wt::Dbo::ptr<Media> >::const_iterator i = medias.begin(); i != medias.end(); ++i)
+        for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::MediaType> >::const_iterator i = medias.begin(); i != medias.end(); ++i)
         {
             slmMedia->insertString(idx,(*i).get()->name);
             long long idMedia = (*i).id();
@@ -404,8 +404,8 @@ void AlertEditionWidget::updateMediaSelectionBox(int userId)
 void AlertEditionWidget::updateUserSelectionBox(int userId)
 {
     Wt::WStringListModel *slmUser = new Wt::WStringListModel;
-        Wt::Dbo::collection<Wt::Dbo::ptr<User> > users;
-        Wt::Dbo::Query<Wt::Dbo::ptr<User> > queryUser;
+        Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::User> > users;
+        Wt::Dbo::Query<Wt::Dbo::ptr<Echoes::Dbo::User> > queryUser;
         std::string queryString =  "SELECT usr FROM \"T_USER_USR\" usr where \"USR_ID\" IN"
             "("
                 "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" where \"T_ORGANIZATION_ORG_ORG_ID\" IN "
@@ -420,11 +420,11 @@ void AlertEditionWidget::updateUserSelectionBox(int userId)
             Wt::Dbo::Transaction transaction(*session);
             
             
-            queryUser = session->query<Wt::Dbo::ptr<User> >(queryString).bind(userId);
+            queryUser = session->query<Wt::Dbo::ptr<Echoes::Dbo::User> >(queryString).bind(userId);
             users = queryUser.resultList();
             
             int idx = 0;
-            for (Wt::Dbo::collection<Wt::Dbo::ptr<User> >::const_iterator i = users.begin(); i != users.end(); ++i)
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::User> >::const_iterator i = users.begin(); i != users.end(); ++i)
             {
                 slmUser->insertString(idx,(*i).get()->firstName + " " + (*i).get()->lastName);
                 long long idUser = (*i).id();
@@ -445,8 +445,8 @@ void AlertEditionWidget::updateUserSelectionBox(int userId)
 void AlertEditionWidget::updateUserRoleSelectionBox(int userId)
 {
     Wt::WStringListModel *slmUserRole = new Wt::WStringListModel;
-        Wt::Dbo::collection<Wt::Dbo::ptr<UserRole> > userRoles;
-        Wt::Dbo::Query<Wt::Dbo::ptr<UserRole> > queryUserRole;
+        Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::UserRole> > userRoles;
+        Wt::Dbo::Query<Wt::Dbo::ptr<Echoes::Dbo::UserRole> > queryUserRole;
         std::string queryString =  ""
                 "SELECT role FROM \"T_USER_ROLE_URO\" role "
                 "WHERE \"URO_ORG_ORG_ID\" = ?";
@@ -457,11 +457,11 @@ void AlertEditionWidget::updateUserRoleSelectionBox(int userId)
             Wt::Dbo::Transaction transaction(*session);
             
             
-            queryUserRole = session->query<Wt::Dbo::ptr<UserRole> >(queryString).bind(session->user()->currentOrganization.id());
+            queryUserRole = session->query<Wt::Dbo::ptr<Echoes::Dbo::UserRole> >(queryString).bind(session->user()->organization.id());
             userRoles = queryUserRole.resultList();
             
             int idx = 0;
-            for (Wt::Dbo::collection<Wt::Dbo::ptr<UserRole> >::const_iterator i = userRoles.begin(); i != userRoles.end(); ++i)
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::UserRole> >::const_iterator i = userRoles.begin(); i != userRoles.end(); ++i)
             {
                 slmUserRole->insertString(idx,(*i).get()->name);
                 long long idRole = (*i).id();
@@ -484,8 +484,8 @@ void AlertEditionWidget::updateUserRoleSelectionBox(int userId)
 void AlertEditionWidget::updateServerSelectionBox(int serverId)
 {
     Wt::WStringListModel *slmServer = new Wt::WStringListModel;
-        Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > assets;
-        Wt::Dbo::Query<Wt::Dbo::ptr<Asset> > queryAsset;
+        Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Asset> > assets;
+        Wt::Dbo::Query<Wt::Dbo::ptr<Echoes::Dbo::Asset> > queryAsset;
         std::string queryString =  "SELECT ast FROM \"T_ASSET_AST\" ast where \"AST_PRB_PRB_ID\" IN"
             "("
                 "SELECT \"PRB_ID\" FROM \"T_PROBE_PRB\" where \"PRB_ORG_ORG_ID\" IN "
@@ -501,11 +501,11 @@ void AlertEditionWidget::updateServerSelectionBox(int serverId)
             Wt::Dbo::Transaction transaction(*session);
             
             
-            queryAsset = session->query<Wt::Dbo::ptr<Asset> >(queryString).bind(serverId);
+            queryAsset = session->query<Wt::Dbo::ptr<Echoes::Dbo::Asset> >(queryString).bind(serverId);
             assets = queryAsset.resultList();
             
             int idx = 0;
-            for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = assets.begin(); i != assets.end(); ++i)
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Asset> >::const_iterator i = assets.begin(); i != assets.end(); ++i)
             {
                 Wt::log("info") << (*i).get()->name;
                 slmServer->insertString(idx,(*i)->name);
@@ -527,29 +527,29 @@ void AlertEditionWidget::updateServerSelectionBox(int serverId)
 void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
 {
     Wt::log("info") << "[Plg Id] " << pluginId;
-        Wt::Dbo::Query<Wt::Dbo::ptr<Information2> > queryInformation;
+        Wt::Dbo::Query<Wt::Dbo::ptr<Echoes::Dbo::Information> > queryInformation;
         std::string queryStringInfos = "SELECT inf FROM \"T_INFORMATION_INF\" inf WHERE \"PLG_ID_PLG_ID\" = ? AND \"INF_DISPLAY\" = TRUE"; // AND \"SRC_ID\" IN (1,3)";
-        Wt::Dbo::collection<Wt::Dbo::ptr<Information2> > infos;
+        Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Information> > infos;
         Wt::WStringListModel *slmInformation = new Wt::WStringListModel;
         try
         {
             Wt::Dbo::Transaction transaction(*session);
-            queryInformation = session->query<Wt::Dbo::ptr<Information2> >(queryStringInfos).bind(pluginId).orderBy("\"SRC_ID\",\"INF_NAME\"");//.bind(session->user().id());
+            queryInformation = session->query<Wt::Dbo::ptr<Echoes::Dbo::Information> >(queryStringInfos).bind(pluginId).orderBy("\"SRC_ID\",\"INF_NAME\"");//.bind(session->user().id());
             infos = queryInformation.resultList();
            
         
             int idx = 0;
-            for (Wt::Dbo::collection<Wt::Dbo::ptr<Information2> >::const_iterator k = infos.begin(); k != infos.end(); k++)
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Information> >::const_iterator k = infos.begin(); k != infos.end(); k++)
             {
 //                slmInformation->insertString(idx,Wt::WString::tr("Alert.alert.information." + k->get()->name.toUTF8()));
                 slmInformation->insertString(idx,k->get()->name.toUTF8());
-                
-                this->mapInformationSeaIdSboxRow[idx] = k->get()->pk.search.get()->pk.id;
-                this->mapInformationSrcIdSboxRow[idx] = k->get()->pk.search.get()->pk.source.get()->pk.id;
-                this->mapInformationPlgIdSboxRow[idx] = k->get()->pk.search.get()->pk.source.get()->pk.plugin.id();
-                this->mapInformationIvnSboxRow[idx] = k->get()->pk.subSearchNumber;
-                this->mapInformationInuIdSboxRow[idx] = k->get()->pk.unit.id();
-                this->mapInformationPkvSboxRow[idx] = k->get()->pk.search.get()->pos_key_value;
+                // FIXME
+//                this->mapInformationSeaIdSboxRow[idx] = k->get()->pk.search.get()->pk.id;
+//                this->mapInformationSrcIdSboxRow[idx] = k->get()->pk.search.get()->pk.source.get()->pk.id;
+//                this->mapInformationPlgIdSboxRow[idx] = k->get()->pk.search.get()->pk.source.get()->pk.plugin.id();
+//                this->mapInformationIvnSboxRow[idx] = k->get()->pk.subSearchNumber;
+//                this->mapInformationInuIdSboxRow[idx] = k->get()->pk.unit.id();
+//                this->mapInformationPkvSboxRow[idx] = k->get()->pk.search.get()->pos_key_value;
 //                this->mapInformatioInuIdSboxRow[idx] = k->get()->pk.unit.id();
                 idx++;
             }
@@ -569,19 +569,19 @@ void AlertEditionWidget::updateInformationSelectionBox(int pluginId)
 void AlertEditionWidget::updateApplicationSelectionBox(int astId)
 {
     Wt::WStringListModel *slmApplication = new Wt::WStringListModel;
-    Wt::Dbo::collection<Wt::Dbo::ptr<Asset> > assets;
+    Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Asset> > assets;
     try
     {
         Wt::Dbo::Transaction transaction(*session);
-        assets = session->find<Asset>().where("\"AST_ID\" = ?").bind(astId).where("\"AST_DELETE\" IS NULL");
+        assets = session->find<Echoes::Dbo::Asset>().where("\"AST_ID\" = ?").bind(astId).where("\"AST_DELETE\" IS NULL");
 
 
         int idx = 0;
         long long idPlugin;
-        for (Wt::Dbo::collection<Wt::Dbo::ptr<Asset> >::const_iterator i = assets.begin(); i != assets.end(); ++i)
+        for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Asset> >::const_iterator i = assets.begin(); i != assets.end(); ++i)
         {
-            Wt::Dbo::collection<Wt::Dbo::ptr<Plugin> > plugins = (*i).get()->plugins;
-            for (Wt::Dbo::collection<Wt::Dbo::ptr<Plugin> >::const_iterator j = plugins.begin(); j != plugins.end(); ++j)
+            Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Plugin> > plugins = (*i).get()->plugins;
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Plugin> >::const_iterator j = plugins.begin(); j != plugins.end(); ++j)
             {
                 Wt::log("info") << "plugin : " << (*j).get()->name;
                 slmApplication->insertString(idx,(*j).get()->name);
@@ -619,7 +619,7 @@ void AlertEditionWidget::updateInformationDetails(int idx)
         {
             model_->setReadOnly(model_->ThresholdValueKey, false);
             model_->setValue(model_->ThresholdValueKey,boost::any(Wt::WString::Empty));
-            Wt::Dbo::ptr<Information2> ptrInfoKey = session->find<Information2>().where("\"SEA_ID\" = ?").bind(this->mapInformationSeaIdSboxRow[idx])
+            Wt::Dbo::ptr<Echoes::Dbo::Information> ptrInfoKey = session->find<Echoes::Dbo::Information>().where("\"SEA_ID\" = ?").bind(this->mapInformationSeaIdSboxRow[idx])
                                         .where("\"SRC_ID\" = ?").bind(this->mapInformationSrcIdSboxRow[idx])
                                         .where("\"PLG_ID_PLG_ID\" = ?").bind(this->mapInformationPlgIdSboxRow[idx])
                                         .where("\"INF_VALUE_NUM\" = ?").bind(this->mapInformationPkvSboxRow[idx])
@@ -649,8 +649,8 @@ void AlertEditionWidget::updateInformationDetails(int idx)
 
 
             std::string valueExample = "";
-            Wt::Dbo::collection<Wt::Dbo::ptr<InformationValue> > collPtrIva = session->query<Wt::Dbo::ptr<InformationValue> >(queryString);
-            for (Wt::Dbo::collection<Wt::Dbo::ptr<InformationValue> >::const_iterator k = collPtrIva.begin(); k != collPtrIva.end(); k++)
+            Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::InformationValue> > collPtrIva = session->query<Wt::Dbo::ptr<Echoes::Dbo::InformationValue> >(queryString);
+            for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::InformationValue> >::const_iterator k = collPtrIva.begin(); k != collPtrIva.end(); k++)
             {
                 Wt::WString res = k->get()->value;
                 this->sp->addSuggestion(res,res);
@@ -704,28 +704,29 @@ void AlertEditionWidget::updateInformationDetails(int idx)
                 
         Wt::Dbo::Transaction transaction(*session);
         // Units
-        Wt::log("info") << this->mapInformationInuIdSboxRow[idx];
-        Wt::Dbo::collection<Wt::Dbo::ptr<InformationSubUnit> > ptrInfoSubUnit = session->find<InformationSubUnit>().where("\"ISU_INU_INU_ID\" = ?").bind(this->mapInformationInuIdSboxRow[idx]);
-        Wt::Dbo::ptr<InformationUnit> ptrInfoUnit = session->find<InformationUnit>().where("\"INU_ID\" = ?").bind(this->mapInformationInuIdSboxRow[idx]);
-        
-        
-        Wt::WStringListModel *slmInformationSubUnits = new Wt::WStringListModel;
-        int idx = 0;
-        slmInformationSubUnits->insertString(idx,Wt::WString::tr("Alert.alert.unit." + ptrInfoUnit.get()->name.toUTF8()));
-        
-        mapInformationUnitCombo[idx]= ptrInfoUnit.id();
-        
-        idx++;
-        for (Wt::Dbo::collection<Wt::Dbo::ptr<InformationSubUnit> >::const_iterator k = ptrInfoSubUnit.begin(); k != ptrInfoSubUnit.end(); k++)
-        {
-            slmInformationSubUnits->insertString(idx,Wt::WString::tr("Alert.alert.sub-unit." + k->get()->name.toUTF8()));
-            mapInformationUnitCombo[idx] = k->id();
-            idx++;
-        }
-        comboInformationUnit->setModel(slmInformationSubUnits);
-        Wt::log("info") << "[AlertEditionWidget] " << slmInformationSubUnits->stringList()[0];
-        model_->setValue(model_->Unit,boost::any(slmInformationSubUnits->stringList()[0]));
-        update();
+        // FIXME
+//        Wt::log("info") << this->mapInformationInuIdSboxRow[idx];
+//        Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::InformationSubUnit> > ptrInfoSubUnit = session->find<Echoes::Dbo::InformationSubUnit>().where("\"ISU_INU_INU_ID\" = ?").bind(this->mapInformationInuIdSboxRow[idx]);
+//        Wt::Dbo::ptr<Echoes::Dbo::InformationUnit> ptrInfoUnit = session->find<InformationUnit>().where("\"INU_ID\" = ?").bind(this->mapInformationInuIdSboxRow[idx]);
+//        
+//        
+//        Wt::WStringListModel *slmInformationSubUnits = new Wt::WStringListModel;
+//        int idx = 0;
+//        slmInformationSubUnits->insertString(idx,Wt::WString::tr("Alert.alert.unit." + ptrInfoUnit.get()->name.toUTF8()));
+//        
+//        mapInformationUnitCombo[idx]= ptrInfoUnit.id();
+//        
+//        idx++;
+//        for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::InformationSubUnit> >::const_iterator k = ptrInfoSubUnit.begin(); k != ptrInfoSubUnit.end(); k++)
+//        {
+//            slmInformationSubUnits->insertString(idx,Wt::WString::tr("Alert.alert.sub-unit." + k->get()->name.toUTF8()));
+//            mapInformationUnitCombo[idx] = k->id();
+//            idx++;
+//        }
+//        comboInformationUnit->setModel(slmInformationSubUnits);
+//        Wt::log("info") << "[AlertEditionWidget] " << slmInformationSubUnits->stringList()[0];
+//        model_->setValue(model_->Unit,boost::any(slmInformationSubUnits->stringList()[0]));
+//        update();
 
         
         transaction.commit();
@@ -749,10 +750,10 @@ Wt::WStringListModel *AlertEditionWidget::getMediasForCurrentUser(int mediaType)
     try
     {
         Wt::Dbo::Transaction transaction(*session);
-        Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> > medias = session->find<MediaValue>().where("\"MEV_USR_USR_ID\" = ?").bind(session->user().id())
+        Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Media> > medias = session->find<Echoes::Dbo::Media>().where("\"MEV_USR_USR_ID\" = ?").bind(session->user().id())
                                                                                             .where("\"MEV_MED_MED_ID\" = ?").bind(mediaType);
         int idx = 0;
-        for (Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> >::const_iterator i = medias.begin(); i != medias.end(); ++i)
+        for (Wt::Dbo::collection<Wt::Dbo::ptr<Echoes::Dbo::Media> >::const_iterator i = medias.begin(); i != medias.end(); ++i)
         {
             res->insertString(idx,(*i)->value);
             idx++;
@@ -802,16 +803,16 @@ void AlertEditionWidget::addMedia()
     
     deleteButton->clicked().connect(boost::bind(&AlertEditionWidget::deleteMedia,this,tableMediaDestination->elementAt(row,4)));
     
-    AlertMediaSpecialization *ams = new AlertMediaSpecialization();
-    Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr;
+    Echoes::Dbo::AlertMediaSpecialization *ams = new Echoes::Dbo::AlertMediaSpecialization();
+    Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization> amsPtr;
     try
     {
         Wt::Dbo::Transaction transaction(*session);
-        Wt::Dbo::ptr<MediaValue> mevPtr = session->find<MediaValue>().where("\"MEV_ID\" = ?").bind(mapMediaValueIdSboxRow[mediaValueSelectionBox->currentIndex()]);
+        Wt::Dbo::ptr<Echoes::Dbo::Media> mevPtr = session->find<Echoes::Dbo::Media>().where("\"MEV_ID\" = ?").bind(mapMediaValueIdSboxRow[mediaValueSelectionBox->currentIndex()]);
         ams->snoozeDuration = boost::lexical_cast<int,Wt::WString>(snoozeValueToDisplay);
-        ams->mediaValue = mevPtr;
+        ams->media = mevPtr;
         ams->notifEndOfAlert = false;
-        amsPtr = session->add<AlertMediaSpecialization>(ams);
+        amsPtr = session->add<Echoes::Dbo::AlertMediaSpecialization>(ams);
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
@@ -822,16 +823,16 @@ void AlertEditionWidget::addMedia()
     }
 //    const Wt::WStandardItem *constItemUserMedia = itemUserMedia;
     mapAlertMediaSpecializationIdTableView[row] = amsPtr.id(); 
-    UserActionManagement::registerUserAction(Enums::add,Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,amsPtr.id());
+    UserActionManagement::registerUserAction(Enums::add,Echoes::Dbo::Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,amsPtr.id());
 }
 
 void AlertEditionWidget::deleteMedia(Wt::WTableCell *cell)
 {
     try
     {
-        UserActionManagement::registerUserAction(Enums::del,Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,mapAlertMediaSpecializationIdTableView[cell->row()]);
+        UserActionManagement::registerUserAction(Enums::del,Echoes::Dbo::Constants::T_ALERT_MEDIA_SPECIALIZATION_AMS,mapAlertMediaSpecializationIdTableView[cell->row()]);
         Wt::Dbo::Transaction transaction(*session);
-        Wt::Dbo::ptr<AlertMediaSpecialization> amsPtr = session->find<AlertMediaSpecialization>()
+        Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization> amsPtr = session->find<Echoes::Dbo::AlertMediaSpecialization>()
                                 .where("\"AMS_ID\" = ?").bind(mapAlertMediaSpecializationIdTableView[cell->row()]);
         amsPtr.remove();
         for (std::map<int,long long>::const_iterator i = mapAlertMediaSpecializationIdTableView.begin() ; i != mapAlertMediaSpecializationIdTableView.end(); ++i)
@@ -900,7 +901,7 @@ void AlertEditionWidget::addAlert()
 
         if (comboInformationUnit->currentIndex() != -1)
         {
-            Wt::Dbo::ptr<InformationUnit> ptrUnit = session->find<InformationUnit>().where("\"INU_ID\" = ?")
+            Wt::Dbo::ptr<Echoes::Dbo::InformationUnit> ptrUnit = session->find<Echoes::Dbo::InformationUnit>().where("\"INU_ID\" = ?")
                         .bind(mapInformationUnitCombo[0]);
 
             if (ptrUnit.get()->unitType.id() == Enums::text)
@@ -915,10 +916,11 @@ void AlertEditionWidget::addAlert()
                 }
                 else
                 {
-                    Wt::Dbo::ptr<InformationSubUnit> isuPtr = session->find<InformationSubUnit>()
-                            .where("\"ISU_ID\" = ?").bind(mapInformationUnitCombo[comboInformationUnit->currentIndex()]);
-                    float factorValue = boost::lexical_cast<float>(model_->valueText(model_->ThresholdValue)) * isuPtr->factor;
-                    json += boost::lexical_cast<std::string>(factorValue);
+                    //FIXME
+//                    Wt::Dbo::ptr<Echoes::Dbo::InformationSubUnit> isuPtr = session->find<Echoes::Dbo::InformationSubUnit>()
+//                            .where("\"ISU_ID\" = ?").bind(mapInformationUnitCombo[comboInformationUnit->currentIndex()]);
+//                    float factorValue = boost::lexical_cast<float>(model_->valueText(model_->ThresholdValue)) * isuPtr->factor;
+//                    json += boost::lexical_cast<std::string>(factorValue);
                 }
             }
             else
@@ -1012,7 +1014,7 @@ void AlertEditionWidget::postAlert(boost::system::error_code err, const Wt::Http
 
                 Wt::WMessageBox::show(tr("Alert.alert.alert-created-title"),tr("Alert.alert.alert-created"),Wt::Ok);
 
-                UserActionManagement::registerUserAction(Enums::add, Constants::T_ALERT_ALE, aleID);
+                UserActionManagement::registerUserAction(Enums::add, Echoes::Dbo::Constants::T_ALERT_ALE, aleID);
             }
             catch (Wt::Json::ParseError const& e)
             {

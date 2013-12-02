@@ -28,7 +28,7 @@ class UserEditionWidget :
 public CreatePageWidget
 {
 public:
-    UserEditionWidget(Session *session, std::string apiUrl, int type);
+    UserEditionWidget(Echoes::Dbo::Session *session, std::string apiUrl, int type);
 
     void                        update();
     std::vector<std::string>    getTitlesTableWidget();
@@ -54,13 +54,13 @@ public:
 
 private:
  
-    void                        setSession(Session *session);
+    void                        setSession(Echoes::Dbo::Session *session);
     void                        setApiUrl(std::string apiUrl);
     std::string                 getApiUrl();
 
     bool                  created_;
     bool                  newClass_;
-    Session               *session_;
+    Echoes::Dbo::Session               *session_;
     std::string           apiUrl_;
     Wt::Json::Value       result_;
     int                   type_;  

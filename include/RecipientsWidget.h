@@ -23,11 +23,11 @@ class RecipientsWidget :
 public Wt::WContainerWidget 
 {
 public:
-    RecipientsWidget(Session *session, std::string apiUrl);
+    RecipientsWidget(Echoes::Dbo::Session *session, std::string apiUrl);
 
     void    update();
 private:
-    Session               *session_;
+    Echoes::Dbo::Session               *session_;
     std::string           apiUrl_;
     bool                  newClass_;
 };

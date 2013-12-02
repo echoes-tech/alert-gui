@@ -54,12 +54,12 @@ class ClassTest :
 public Wt::WContainerWidget 
 {
 public:
-    ClassTest(Session *session, std::string apiUrl);
+    ClassTest(Echoes::Dbo::Session *session, std::string apiUrl);
 
     void    initPage();
     void    update();
 protected:
-  Session               *session_;
+  Echoes::Dbo::Session               *session_;
   std::string           apiUrl_;
   bool                  newClass_;
 

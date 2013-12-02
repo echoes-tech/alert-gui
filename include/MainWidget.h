@@ -50,7 +50,7 @@ class MainWidget : public Wt::WContainerWidget
 {
 public:
 
-  MainWidget(Session *session, const std::string &apiUrl);
+  MainWidget(Echoes::Dbo::Session *session, const std::string &apiUrl);
   void doActionMenu(int index = -1, Enums::EMenuRoot menuRoot = Enums::main);
   
   Wt::WMenu *getMenu();
@@ -65,7 +65,7 @@ public:
   void  createUI();
   virtual void refresh();
   std::string getApiUrl() const;
-  void reset(Session *session);
+  void reset(Echoes::Dbo::Session *session);
 
 protected:
     
@@ -109,7 +109,7 @@ protected:
   
 
 private:
-  Session * session;
+  Echoes::Dbo::Session * session;
   std::string _apiUrl;
  
   bool created_;

@@ -14,11 +14,11 @@
 
 class SummaryBoard  : public Wt::WContainerWidget {
 public:
-    SummaryBoard(Session *session);
+    SummaryBoard(Echoes::Dbo::Session *session);
     SummaryBoard(const SummaryBoard& orig);
     virtual ~SummaryBoard();
 private:
-    Session *session;
+    Echoes::Dbo::Session *session;
     
     Wt::WTemplate *mainTemplate;
     

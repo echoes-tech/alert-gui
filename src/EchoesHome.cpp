@@ -28,7 +28,7 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent) : Wt::WContainerWidget(pare
     processEnvironment();
 }
 
-Session* EchoesHome::getSession()
+Echoes::Dbo::Session* EchoesHome::getSession()
 {
     return this->session;
 }
@@ -66,16 +66,16 @@ void EchoesHome::initSession()
     Wt::WApplication::readConfigurationProperty("db-name", dbName);
     Wt::WApplication::readConfigurationProperty("db-user", dbUser);
     Wt::WApplication::readConfigurationProperty("db-password", dbPassword);
-    this->session = new Session("hostaddr=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " user=" + dbUser + " password=" + dbPassword);
+    this->session = new Echoes::Dbo::Session("hostaddr=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " user=" + dbUser + " password=" + dbPassword);
     this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
     
 }
 
 void EchoesHome::initAuth()
 {
-    this->authModel = new Wt::Auth::AuthModel(Session::auth(),this->session->users(), this);
-    this->authModel->addPasswordAuth(&Session::passwordAuth());
-    this->authModel->addOAuth(Session::oAuth());
+    this->authModel = new Wt::Auth::AuthModel(Echoes::Dbo::Session::auth(),this->session->users(), this);
+    this->authModel->addPasswordAuth(&Echoes::Dbo::Session::passwordAuth());
+    this->authModel->addOAuth(Echoes::Dbo::Session::oAuth());
 
     this->authWidget = new Wt::Auth::AuthWidget(this->session->login());
     this->authWidget->setModel(this->authModel);
@@ -132,13 +132,13 @@ Wt::WTabWidget* EchoesHome::initAdminWidget()
     //user list widget
     Wt::WGroupBox * usersGroupBox = new Wt::WGroupBox("Users list");
     
-    Wt::Dbo::QueryModel<Wt::Dbo::ptr<User> > *qm = new Wt::Dbo::QueryModel<Wt::Dbo::ptr<User> >();
+    Wt::Dbo::QueryModel<Wt::Dbo::ptr<Echoes::Dbo::User> > *qm = new Wt::Dbo::QueryModel<Wt::Dbo::ptr<Echoes::Dbo::User> >();
     
     Wt::WTableView *tview = new Wt::WTableView(usersGroupBox);
     try
     {
         Wt::Dbo::Transaction transaction(*(this->session));
-        Wt::Dbo::Query<Wt::Dbo::ptr<User>,Wt::Dbo::DynamicBinding> q = this->session->find<User,Wt::Dbo::DynamicBinding>().where("\"USR_ID\" = ?").bind(this->session->user().id());
+        Wt::Dbo::Query<Wt::Dbo::ptr<Echoes::Dbo::User>,Wt::Dbo::DynamicBinding> q = this->session->find<Echoes::Dbo::User,Wt::Dbo::DynamicBinding>().where("\"USR_ID\" = ?").bind(this->session->user().id());
         qm->setQuery(q, false);
         qm->addColumn("USR_LAST_NAME", "Last name", Wt::ItemIsEditable);
 //        qm->setColumnFlags(0,Wt::ItemIsUserCheckable);

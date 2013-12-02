@@ -50,7 +50,7 @@ class PluginEditionWidget : public Wt::WTemplateFormView
 {
     public:
     
-        PluginEditionWidget(Session *session, const std::string &apiUrl);
+        PluginEditionWidget(Echoes::Dbo::Session *session, const std::string &apiUrl);
         ~PluginEditionWidget();
         void handleHttpResponsePlgList(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseAddPlg(boost::system::error_code err, const Wt::Http::Message& response);
@@ -86,7 +86,7 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         void updateData();
         
         Wt::Http::Client *client1;
-        Session *session;   
+        Echoes::Dbo::Session *session;   
         std::string _apiUrl;
         
         void displayButtonCreateJSON();

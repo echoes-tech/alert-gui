@@ -14,7 +14,7 @@
 
 class OptionManagementWidget : public Wt::WContainerWidget {
 public:
-    OptionManagementWidget(OptionManagementModel *model, Session *session);
+    OptionManagementWidget(OptionManagementModel *model, Echoes::Dbo::Session *session);
     virtual ~OptionManagementWidget();
 protected:
 
@@ -30,7 +30,7 @@ protected:
 
 private:
   OptionManagementModel *model_;
-  Session * session;
+  Echoes::Dbo::Session * session;
   std::string apiUrl;
   Wt::WComboBox roleComboBox;
 

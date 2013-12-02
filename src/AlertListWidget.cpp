@@ -7,7 +7,7 @@
 
 #include "AlertListWidget.h"
 
-AlertListWidget::AlertListWidget(Session *session)
+AlertListWidget::AlertListWidget(Echoes::Dbo::Session *session)
 : Wt::WContainerWidget()
 {
     this->session = session;
@@ -70,10 +70,10 @@ void AlertListWidget::createUI()
     {
         Wt::Dbo::Transaction transaction(*this->session);
         //TODO : don't understand why the two lines below are needed, clean this
-        Wt::Dbo::ptr<User> tempUser = session->find<User > ().where("\"USR_ID\" = ?").bind(session->user().id());
+        Wt::Dbo::ptr<Echoes::Dbo::User> tempUser = session->find<Echoes::Dbo::User > ().where("\"USR_ID\" = ?").bind(session->user().id());
         if (tempUser)
         {
-            Wt::Dbo::ptr<Organization> tempOrga = tempUser->currentOrganization;
+            Wt::Dbo::ptr<Echoes::Dbo::Organization> tempOrga = tempUser->organization;
             std::string queryString = "SELECT ale, acr, ava, mev, ams, inu FROM \"T_ALERT_ALE\" ale,"
                     " \"T_ALERT_VALUE_AVA\" ava,"
                     " \"T_ALERT_CRITERIA_ACR\" acr,"
@@ -87,7 +87,7 @@ void AlertListWidget::createUI()
                     "SELECT \"MEV_ID\" FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_USR_USR_ID\" IN "
                     "("
                     "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = "
-                    + boost::lexical_cast<std::string > (this->session->user().get()->currentOrganization.id())
+                    + boost::lexical_cast<std::string > (this->session->user()->organization.id())
                     + ""
                     ")"
                     " )"
@@ -104,45 +104,45 @@ void AlertListWidget::createUI()
                     <
                     boost::tuple
                     <
-                    Wt::Dbo::ptr<Alert>,
-                    Wt::Dbo::ptr<AlertCriteria>,
-                    Wt::Dbo::ptr<AlertValue>,
-                    Wt::Dbo::ptr<MediaValue>,
-                    Wt::Dbo::ptr<AlertMediaSpecialization>,
-                    Wt::Dbo::ptr<InformationUnit>
+                    Wt::Dbo::ptr<Echoes::Dbo::Alert>,
+                    Wt::Dbo::ptr<Echoes::Dbo::AlertCriteria>,
+                    Wt::Dbo::ptr<Echoes::Dbo::AlertValue>,
+                    Wt::Dbo::ptr<Echoes::Dbo::Media>,
+                    Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization>,
+                    Wt::Dbo::ptr<Echoes::Dbo::InformationUnit>
                     >
                     , Wt::Dbo::DynamicBinding
                     > resQuery = this->session->query
                     <
                     boost::tuple
                     <
-                    Wt::Dbo::ptr<Alert>,
-                    Wt::Dbo::ptr<AlertCriteria>,
-                    Wt::Dbo::ptr<AlertValue>,
-                    Wt::Dbo::ptr<MediaValue>,
-                    Wt::Dbo::ptr<AlertMediaSpecialization>,
-                    Wt::Dbo::ptr<InformationUnit>
+                    Wt::Dbo::ptr<Echoes::Dbo::Alert>,
+                    Wt::Dbo::ptr<Echoes::Dbo::AlertCriteria>,
+                    Wt::Dbo::ptr<Echoes::Dbo::AlertValue>,
+                    Wt::Dbo::ptr<Echoes::Dbo::Media>,
+                    Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization>,
+                    Wt::Dbo::ptr<Echoes::Dbo::InformationUnit>
                     >, Wt::Dbo::DynamicBinding
                     > (queryString);
 
 
             Wt::Dbo::collection<boost::tuple<
-                    Wt::Dbo::ptr<Alert>,
-                    Wt::Dbo::ptr<AlertCriteria>,
-                    Wt::Dbo::ptr<AlertValue>,
-                    Wt::Dbo::ptr<MediaValue>,
-                    Wt::Dbo::ptr<AlertMediaSpecialization>,
-                    Wt::Dbo::ptr<InformationUnit> > > listTuples = resQuery.resultList();
+                    Wt::Dbo::ptr<Echoes::Dbo::Alert>,
+                    Wt::Dbo::ptr<Echoes::Dbo::AlertCriteria>,
+                    Wt::Dbo::ptr<Echoes::Dbo::AlertValue>,
+                    Wt::Dbo::ptr<Echoes::Dbo::Media>,
+                    Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization>,
+                    Wt::Dbo::ptr<Echoes::Dbo::InformationUnit> > > listTuples = resQuery.resultList();
             if (listTuples.size() > 0)
             {
                 noAlertText->hide();
                 for (Wt::Dbo::collection<boost::tuple<
-                        Wt::Dbo::ptr<Alert>,
-                        Wt::Dbo::ptr<AlertCriteria>,
-                        Wt::Dbo::ptr<AlertValue>,
-                        Wt::Dbo::ptr<MediaValue>,
-                        Wt::Dbo::ptr<AlertMediaSpecialization>,
-                        Wt::Dbo::ptr<InformationUnit> > >::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i)
+                        Wt::Dbo::ptr<Echoes::Dbo::Alert>,
+                        Wt::Dbo::ptr<Echoes::Dbo::AlertCriteria>,
+                        Wt::Dbo::ptr<Echoes::Dbo::AlertValue>,
+                        Wt::Dbo::ptr<Echoes::Dbo::Media>,
+                        Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization>,
+                        Wt::Dbo::ptr<Echoes::Dbo::InformationUnit> > >::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i)
                 {
                     row++;
                     //                    alertsTable->elementAt(row, 1)->setPadding(5, Wt::Left | Wt::Right);
@@ -238,11 +238,11 @@ void AlertListWidget::deleteAlert(long long id)
         {
             Wt::Dbo::Transaction transaction(*session);
             std::string queryStr = "SELECT ale FROM \"T_ALERT_ALE\" ale WHERE \"ALE_ID\" = ? FOR UPDATE";
-            Wt::Dbo::ptr<Alert> ptrAlert = session->query<Wt::Dbo::ptr<Alert > >(queryStr).bind(id).limit(1);
+            Wt::Dbo::ptr<Echoes::Dbo::Alert> ptrAlert = session->query<Wt::Dbo::ptr<Echoes::Dbo::Alert > >(queryStr).bind(id).limit(1);
         
             ptrAlert.modify()->deleteTag = Wt::WDateTime::currentDateTime();
             transaction.commit();
-            UserActionManagement::registerUserAction(Enums::del, Constants::T_ALERT_ALE, ptrAlert.id());
+            UserActionManagement::registerUserAction(Enums::del, Echoes::Dbo::Constants::T_ALERT_ALE, ptrAlert.id());
         }
         catch (Wt::Dbo::Exception e)
         {

@@ -16,7 +16,7 @@
   
     <message id="Alert.asset.nothing-asset">Serveur</message>
   <message id="Alert.asset.nothing-asset-text">Aucun serveur dans la db</message>
-  <message id="Alert.asset.nothing-asset-button">Clique pour ajouter</messag
+  <message id="Alert.asset.nothing-asset-button">Clique pour ajouter</message>
   
   <message id="Alert.asset.asset-name-label">Serveur à ajouter : </message>
   <message id="Alert.asset.asset-name-info">Nom invalide</message>

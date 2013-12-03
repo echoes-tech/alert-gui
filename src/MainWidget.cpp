@@ -30,6 +30,7 @@ MainWidget::MainWidget(Echoes::Dbo::Session *session, const std::string &apiUrl)
     breadCrumbsContainer = new Wt::WContainerWidget(this);
     
     reset(session);
+    
 }
 
 void MainWidget::reset(Echoes::Dbo::Session *session)
@@ -46,6 +47,17 @@ void MainWidget::reset(Echoes::Dbo::Session *session)
     breadCrumbsAnchor2 = new Wt::WAnchor("");
     created_ = false;
     this->session = session;
+    
+    try
+    {
+        Wt::Dbo::Transaction transaction(*(this->session));
+        const_cast<Echoes::Dbo::User *>(this->session->user().get());
+        transaction.commit();
+    }
+    catch (Wt::Dbo::Exception e)
+    {
+        Wt::log("error") << e.what();
+    }
     
 //    Wt::WApplication *app = Wt::WApplication::instance();
 //    app->messageResourceBundle().use("test",false);  
@@ -126,6 +138,7 @@ void MainWidget::createUI()
         for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
         {
             //TODO: Change this temporary restriction with right integration
+            
             if(!boost::starts_with(i->value(), "plugin"))
             {
                 if (!boost::starts_with(i->value(), "submenu"))
@@ -256,24 +269,25 @@ void MainWidget::createAlertPage(Enums::EAlertSubmenu enumSAL)
 {
     switch (enumSAL.index())
     {
-        case Enums::EAlertSubmenu::ALERT:
-        {
-            aew = new AlertEditionWidget(_apiUrl);
-            try
-            {
-                Wt::Dbo::Transaction transaction(*(this->session));
-                aem = new AlertEditionModel(const_cast<Echoes::Dbo::User *>(this->session->user().get()));
-                aem->setSession(session);
-                transaction.commit();
-            }
-            catch (Wt::Dbo::Exception e)
-            {
-                Wt::log("error") << e.what();
-            }
-            aew->setModel(aem);
-            aew->setSession(session);
-            break;
-        }
+//        case Enums::EAlertSubmenu::ALERT:
+//        {
+//            aew = new AlertEditionWidget(_apiUrl);
+//            try
+//            {
+//                Wt::Dbo::Transaction transaction(*(this->session));
+////                const_cast<Echoes::Dbo::User *>(this->session->user().get());
+////                aem = new AlertEditionModel(const_cast<Echoes::Dbo::User *>(this->session->user().get()));
+////                aem->setSession(session);
+//                transaction.commit();
+//            }
+//            catch (Wt::Dbo::Exception e)
+//            {
+//                Wt::log("error") << e.what();
+//            }
+////            aew->setModel(aem);
+////            aew->setSession(session);
+//            break;
+//        }
         default:
             break;
     }
@@ -505,11 +519,11 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
         {
             switch (type)
             {
-                case Enums::EAlertSubmenu::ALERT:
-                {
-                    this->contentFluid->addWidget(aew);
-                    break;
-                }
+//                case Enums::EAlertSubmenu::ALERT:
+//                {
+////                    this->contentFluid->addWidget(aew);
+//                    break;
+//                }
                 default:
                     break;
             }

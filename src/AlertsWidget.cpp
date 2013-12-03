@@ -1223,7 +1223,7 @@ void    AlertsWidget::recoverListAsset()
     */
     std::string apiAddress = this->getApiUrl() + "/alerts" + "?login=" 
             + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) 
-            + "&token=" + session_->user()->token.toUTF8();
+            + "&token=" + Wt::Utils::urlEncode(session_->user()->token.toUTF8());
     Wt::Http::Client *client1 = new Wt::Http::Client(this);
     client1->done().connect(boost::bind(&AlertsWidget::getAlerts, this, _1, _2));
     if (client1->get(apiAddress))
@@ -1234,7 +1234,7 @@ void    AlertsWidget::recoverListAsset()
 
     apiAddress = this->getApiUrl() + "/assets" + "?login="
             + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + session_->user()->token.toUTF8();
+            + "&token=" + Wt::Utils::urlEncode(session_->user()->token.toUTF8());
     Wt::Http::Client *client2 = new Wt::Http::Client(this);
     client2->done().connect(boost::bind(&AlertsWidget::getAssets, this, _1, _2));
     if (client2->get(apiAddress))
@@ -1260,12 +1260,12 @@ void AlertsWidget::getAlerts(boost::system::error_code err, const Wt::Http::Mess
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
+                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
             }
         }
@@ -1276,7 +1276,7 @@ void AlertsWidget::getAlerts(boost::system::error_code err, const Wt::Http::Mess
     }
     else
     {
-        Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
     }
    newClass_ = false;
@@ -1334,19 +1334,19 @@ void AlertsWidget::getAssets(boost::system::error_code err, const Wt::Http::Mess
             catch (Wt::Json::ParseError const& e)
             {
                 
-                Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
+                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
             }
         }
     }
     else
     {
-        Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
     }
    newClass_ = false;
@@ -1393,19 +1393,19 @@ void AlertsWidget::getPlugins(boost::system::error_code err, const Wt::Http::Mes
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
+                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
             }
         }
     }
     else
     {
-        Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
     }
    newClass_ = false;
@@ -1453,19 +1453,19 @@ void AlertsWidget::getPluginsForAsset(boost::system::error_code err, const Wt::H
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
+                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
             }
         }
     }
     else
     {
-        Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
     }
    newClass_ = false;
@@ -1509,19 +1509,19 @@ void AlertsWidget::getInformations(boost::system::error_code err, const Wt::Http
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
+                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
             }
         }
     }
     else
     {
-        Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
     }
    newClass_ = false;

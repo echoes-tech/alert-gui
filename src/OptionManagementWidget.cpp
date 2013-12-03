@@ -73,7 +73,7 @@ void OptionManagementWidget::createUI()
          
         Wt::Dbo::ptr<Echoes::Dbo::PackOption> ptrPackOption = session->find<Echoes::Dbo::PackOption>()
                 .where("\"POP_PCK_PCK_ID\" = ?").bind(this->session->user()->organization.get()->pack.id())
-                .where("\"POP_OPT_OPT_ID\" = ?").bind(Enums::EOption::quotaSms)
+                .where("\"POP_OTP_OTP_ID\" = ?").bind(Enums::EOption::quotaSms)
                 .limit(1);
         if (ptrPackOption.get())
         {

@@ -59,7 +59,7 @@ public:
   Wt::WContainerWidget *getSideBarContainer();
   Wt::WContainerWidget *getFooterContainer();
   
-  AlertEditionWidget *aew;
+//  AlertEditionWidget *aew;
   void  initFooter(void);
   void  initMenus();
   void  createUI();
@@ -95,8 +95,8 @@ protected:
   AssetManagementWidget *amw;
   OptionManagementModel *omm;
   OptionManagementWidget *omw;
-  AlertEditionModel *aem;
-  AlertListWidget *alw;
+//  AlertEditionModel *aem;
+//  AlertListWidget *alw;
   RoleCustomizationWidget *rcw;
   
   UserEditionModel *uem;

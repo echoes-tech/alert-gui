@@ -153,12 +153,12 @@ void UserEditionWidget::getMedia(boost::system::error_code err, const Wt::Http::
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::log("warning") << "[User Edition Widget] Problems parsing JSON: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
+                Wt::log("warning") << "[User Edition Widget] JSON Type Exception: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
             }
         }
@@ -169,7 +169,7 @@ void UserEditionWidget::getMedia(boost::system::error_code err, const Wt::Http::
     }
     else
     {
-        Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
+        Wt::log("error") << "[User Edition Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
     }
    newClass_ = false;
@@ -189,7 +189,7 @@ void UserEditionWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
     std::string apiAddress = this->getApiUrl() + "/medias/";
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&UserEditionWidget::postMedia, this, _1, _2));
-    apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
+    apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
     if (client->post(apiAddress, messageAsset))
         Wt::WApplication::instance()->deferRendering();
     else
@@ -208,7 +208,7 @@ Wt::WDialog *UserEditionWidget::deleteResource(long long id)
             std::string apiAddress = this->getApiUrl() + "/medias/" + boost::lexical_cast<std::string> (id);
             Wt::Http::Client *client = new Wt::Http::Client(this);
             client->done().connect(boost::bind(&UserEditionWidget::deleteMedia, this, _1, _2));
-            apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
+            apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
             if (client->deleteRequest(apiAddress, message))
                 Wt::WApplication::instance()->deferRendering();
             else
@@ -231,7 +231,7 @@ void UserEditionWidget::modifResource(std::vector<Wt::WInteractWidget*> argument
     std::string apiAddress = this->getApiUrl() + "/medias/" + boost::lexical_cast<std::string>(id);
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&UserEditionWidget::putMedia, this, _1, _2));
-    apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
+    apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
     if (client->put(apiAddress, message))
         Wt::WApplication::instance()->deferRendering();
     else
@@ -275,12 +275,12 @@ void    UserEditionWidget::deleteMedia(boost::system::error_code err, const Wt::
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::log("warning") << "[User Edition Widget] Problems parsing JSON: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
+                Wt::log("warning") << "[User Edition Widget] JSON Type Exception: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
             }
         }
@@ -290,13 +290,13 @@ void    UserEditionWidget::deleteMedia(boost::system::error_code err, const Wt::
         }
         else
         {
-            Wt::log("error") << "[Alert Edition Widget] " << response.body();
+            Wt::log("error") << "[User Edition Widget] " << response.body();
             Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "status",tr("Alert.alert.database-error"),Wt::Ok);
         }
     }
     else
     {
-        Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
+        Wt::log("error") << "[User Edition Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
     }
     recoverListAsset();
@@ -316,24 +316,24 @@ void    UserEditionWidget::postMedia(boost::system::error_code err, const Wt::Ht
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::log("warning") << "[User Edition Widget] Problems parsing JSON: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
+                Wt::log("warning") << "[User Edition Widget] JSON Type Exception: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
             }
         }
         else
         {
-            Wt::log("error") << "[Alert Edition Widget] " << response.body();
+            Wt::log("error") << "[User Edition Widget] " << response.body();
             Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "status",tr("Alert.alert.database-error"),Wt::Ok);
         }
     }
     else
     {
-        Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
+        Wt::log("error") << "[User Edition Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
     }
         recoverListAsset();
@@ -354,24 +354,24 @@ void UserEditionWidget::putMedia(boost::system::error_code err, const Wt::Http::
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::log("warning") << "[User Edition Widget] Problems parsing JSON: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Alert Edition Widget] JSON Type Exception: " << response.body();
+                Wt::log("warning") << "[User Edition Widget] JSON Type Exception: " << response.body();
                 Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
             }
         }
         else
         {
-            Wt::log("error") << "[Alert Edition Widget] " << response.body();
+            Wt::log("error") << "[User Edition Widget] " << response.body();
             Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "status",tr("Alert.alert.database-error"),Wt::Ok);
         }
     }
     else
     {
-        Wt::log("error") << "[Alert Edition Widget] Http::Client error: " << err.message();
+        Wt::log("error") << "[User Edition Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
     }
         recoverListAsset();

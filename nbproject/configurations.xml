@@ -5,13 +5,6 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="include" displayName="include" projectFiles="true">
-        <logicalFolder name="f5" displayName="AdminAlertListTab" projectFiles="true">
-          <itemPath>include/AlertListWidget.h</itemPath>
-        </logicalFolder>
-        <logicalFolder name="f3" displayName="AdminAlertTab" projectFiles="true">
-          <itemPath>include/AlertEditionModel.h</itemPath>
-          <itemPath>include/AlertEditionWidget.h</itemPath>
-        </logicalFolder>
         <logicalFolder name="f4" displayName="AdminAssetTab" projectFiles="true">
           <itemPath>include/AssetManagementModel.h</itemPath>
           <itemPath>include/AssetManagementWidget.h</itemPath>
@@ -102,13 +95,6 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="src" displayName="src" projectFiles="true">
-        <logicalFolder name="f5" displayName="AdminAlertListTab" projectFiles="true">
-          <itemPath>src/AlertListWidget.cpp</itemPath>
-        </logicalFolder>
-        <logicalFolder name="f3" displayName="AdminAlertTab" projectFiles="true">
-          <itemPath>src/AlertEditionModel.cpp</itemPath>
-          <itemPath>src/AlertEditionWidget.cpp</itemPath>
-        </logicalFolder>
         <logicalFolder name="f4" displayName="AdminAssetTab" projectFiles="true">
           <itemPath>src/AssetManagementModel.cpp</itemPath>
           <itemPath>src/AssetManagementWidget.cpp</itemPath>
@@ -228,12 +214,6 @@
       </item>
       <item path="global_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/AlertEditionModel.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/AlertEditionWidget.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/AlertListWidget.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/AlertsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/ApiManagement.h" ex="false" tool="3" flavor2="0">
@@ -348,12 +328,6 @@
       <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/AlertEditionModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/AlertEditionWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/AlertListWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AlertsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -481,12 +455,6 @@
       </item>
       <item path="global_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/AlertEditionModel.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/AlertEditionWidget.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/AlertListWidget.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/AlertsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/ApiManagement.h" ex="false" tool="3" flavor2="0">
@@ -601,12 +569,6 @@
       <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/AlertEditionModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/AlertEditionWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/AlertListWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AlertsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -56,46 +56,46 @@ void MonitoringWidget::createUI()
     
     try
     {
-        Wt::Dbo::Transaction transaction(*(this->session));
-        std::string queryString = "SELECT ale, mev, atr FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_VALUE_MEV\" mev "
-            " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
-//            " AND ale.\"ALE_DELETE\" IS NULL "
-            " AND atr.\"ATR_SEND_DATE\" IS NOT NULL"
-            " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
-            " AND mev.\"MEV_USR_USR_ID\" IN"
-            "("
-                "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user()->organization.id()) + ""
-            ")"
-            " ORDER BY atr.\"ATR_SEND_DATE\" DESC"
-            " LIMIT 20"
-                ;
-        Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,Wt::Dbo::ptr<Echoes::Dbo::Media>,Wt::Dbo::ptr<Echoes::Dbo::AlertTracking> >,Wt::Dbo::DynamicBinding> q = this->session->query<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,Wt::Dbo::ptr<Echoes::Dbo::Media>,Wt::Dbo::ptr<Echoes::Dbo::AlertTracking> >,Wt::Dbo::DynamicBinding>(queryString);
-        
-        
-        Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
-                Wt::Dbo::ptr<Echoes::Dbo::Media>,
-                Wt::Dbo::ptr<Echoes::Dbo::AlertTracking>>> listTuples = q.resultList();
-        
-        if (listTuples.size() > 0)
-        {
-            for (Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
-                Wt::Dbo::ptr<Echoes::Dbo::Media>,
-                Wt::Dbo::ptr<Echoes::Dbo::AlertTracking>>>::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i)
-            {
-                row++;
-
-                int colNum = 0;
-                
-                
-                new Wt::WText(i->get<2>()->sendDate.toString(), alertsSentTable->elementAt(row, colNum));
-                alertsSentTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
-                
-                new Wt::WText(i->get<0>()->name, alertsSentTable->elementAt(row, ++colNum));
-
-                new Wt::WText(i->get<1>()->value, alertsSentTable->elementAt(row, ++colNum));
-                alertsSentTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
-            }
-        }
+//        Wt::Dbo::Transaction transaction(*(this->session));
+//        std::string queryString = "SELECT ale, mev, atr FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_VALUE_MEV\" mev "
+//            " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
+////            " AND ale.\"ALE_DELETE\" IS NULL "
+//            " AND atr.\"ATR_SEND_DATE\" IS NOT NULL"
+//            " AND atr.\"ATR_MEV_MEV_ID\" = mev.\"MEV_ID\" "
+//            " AND mev.\"MEV_USR_USR_ID\" IN"
+//            "("
+//                "SELECT \"T_USER_USR_USR_ID\" FROM \"TJ_USR_ORG\" WHERE \"T_ORGANIZATION_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user()->organization.id()) + ""
+//            ")"
+//            " ORDER BY atr.\"ATR_SEND_DATE\" DESC"
+//            " LIMIT 20"
+//                ;
+//        Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,Wt::Dbo::ptr<Echoes::Dbo::Media>,Wt::Dbo::ptr<Echoes::Dbo::AlertTracking> >,Wt::Dbo::DynamicBinding> q = this->session->query<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,Wt::Dbo::ptr<Echoes::Dbo::Media>,Wt::Dbo::ptr<Echoes::Dbo::AlertTracking> >,Wt::Dbo::DynamicBinding>(queryString);
+//        
+//        
+//        Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
+//                Wt::Dbo::ptr<Echoes::Dbo::Media>,
+//                Wt::Dbo::ptr<Echoes::Dbo::AlertTracking>>> listTuples = q.resultList();
+//        
+//        if (listTuples.size() > 0)
+//        {
+//            for (Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
+//                Wt::Dbo::ptr<Echoes::Dbo::Media>,
+//                Wt::Dbo::ptr<Echoes::Dbo::AlertTracking>>>::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i)
+//            {
+//                row++;
+//
+//                int colNum = 0;
+//                
+//                
+//                new Wt::WText(i->get<2>()->sendDate.toString(), alertsSentTable->elementAt(row, colNum));
+//                alertsSentTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
+//                
+//                new Wt::WText(i->get<0>()->name, alertsSentTable->elementAt(row, ++colNum));
+//
+//                new Wt::WText(i->get<1>()->value, alertsSentTable->elementAt(row, ++colNum));
+//                alertsSentTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
+//            }
+//        }
         
     }  
     catch (Wt::Dbo::Exception e)

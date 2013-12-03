@@ -15,9 +15,9 @@ const Wt::WFormModel::Field AlertEditionModel::Unit = "information-unit";
 
 AlertEditionModel::AlertEditionModel(Echoes::Dbo::User *user) : WFormModel()
 {
-    this->user = user;
-    setView(this->user);
-    reset();
+//    this->user = user;
+//    setView(this->user);
+//    reset();
 }
 
 AlertEditionModel::~AlertEditionModel()

@@ -62,7 +62,6 @@ public:
     
     BOOST_ENUM_VALUES(EAlertSubmenu, const char*,
     (ALERT)("alerts")
-    (ALERT_LIST)("alerts_list")
     )
 
 //    (USER)("users")

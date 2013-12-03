@@ -274,11 +274,6 @@ void MainWidget::createAlertPage(Enums::EAlertSubmenu enumSAL)
             aew->setSession(session);
             break;
         }
-        case Enums::EAlertSubmenu::ALERT_LIST:
-        {
-            alw = new AlertListWidget(this->session);
-            break;
-        }
         default:
             break;
     }
@@ -515,11 +510,6 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                     this->contentFluid->addWidget(aew);
                     break;
                 }
-                case Enums::EAlertSubmenu::ALERT_LIST:
-                {
-                    this->contentFluid->addWidget(alw);
-                    break;
-                }
                 default:
                     break;
             }
@@ -680,7 +670,6 @@ void MainWidget::close()
 void MainWidget::refresh()
 {
 //    this->aew->refresh();
-    this->alw->refresh();
 //    this->amw->refresh();
 }
 

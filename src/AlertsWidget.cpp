@@ -140,15 +140,14 @@ void    AlertsWidget::popupPrecipient(long long id)
 
     tablePopup->elementAt(2, 0)->addWidget(new Wt::WText("Media: ")); //XML
     box = new Wt::WComboBox(tablePopup->elementAt(2, 1));
-    box->addItem("Medias");
-    box->addItem("SMS");
-    box->addItem("  0125252525");
-    box->addItem("  0125252525");
-    box->addItem("Mail");
-    box->addItem("  salut@salut.fr");
-    box->addItem("  salut@salut.fr");
-    box->addItem("  salut@salut.fr");
-    box->addItem("App");
+    box->addItem("<i>Medias</i>");
+    box->addItem("<i>SMS</i>");
+    box->addItem("0125252525");
+    box->addItem("0125252525");
+    box->addItem("<i>Mail</i>");
+    box->addItem("new.mail@exemple.fr");
+    box->addItem("echoes.tech@echoes-tech.com");
+    box->addItem("<i>App</i>");
     
     Wt::WTable *table = new Wt::WTable(tablePopup->elementAt(2, 2));
     
@@ -258,21 +257,22 @@ void    AlertsWidget::initBoxs(Wt::WTable *tableBox)
     pluginSelected_.clear();
     infoSelected_.clear();
 
-    idAsset_ = -1;
-    idPlugin_ = -1;
-    idInfo_ = -1;
+    idAll_.first.first = -1;
+    idAll_.first.second = -1;
+    idAll_.second.first = -1;
+    idAll_.second.second = -1;
 
     boxAsset->activated().connect(std::bind([=] () {
-        idAsset_ = recoverId(boxAsset, assets_);
-        if (idAsset_ >= 0)
+        idAll_.first.first = recoverId(boxAsset, assets_);
+        if (idAll_.first.first >= 0)
         {
-            selectAsset(idAsset_, boxAsset, boxPlugin, boxInfo);
+            selectAsset(idAll_.first.first, boxAsset, boxPlugin, boxInfo);
         }
         else
         {
             assetSelected_.clear();
-            idAsset_ = -1;
-            if (pluginSelected_.size() > 0 && infoSelected_.size() > 0)
+            idAll_.first.first = -1;
+            if (assetSelected_.size() > 0 && pluginSelected_.size() > 0)
             {}
             else if (pluginSelected_.size() > 0)
             {
@@ -296,15 +296,15 @@ void    AlertsWidget::initBoxs(Wt::WTable *tableBox)
     }));
 
    boxPlugin->activated().connect(std::bind([=] () {
-       idPlugin_ = recoverId(boxPlugin, plugins_);
-       if (idPlugin_ >= 0)
+       idAll_.first.second = recoverId(boxPlugin, plugins_);
+       if (idAll_.first.second >= 0)
        {
-           selectPlugin(idPlugin_, boxAsset, boxPlugin, boxInfo);
+           selectPlugin(idAll_.first.second, boxAsset, boxPlugin, boxInfo);
        }
        else
        {
            pluginSelected_.clear();
-           idPlugin_ = -1;
+           idAll_.first.second = -1;
            if (assetSelected_.size() > 0 && infoSelected_.size() > 0)
            {}
            else if (assetSelected_.size() > 0)
@@ -329,32 +329,45 @@ void    AlertsWidget::initBoxs(Wt::WTable *tableBox)
     }));
     
     boxInfo->activated().connect(std::bind([=] () {
-        errorsHide(errorText_);
-        errorsHide(errorBool_);
-        errorsHide(errorNumb_);
-        idInfo_ = recoverId(boxInfo, infos_);
-        showUnit(idInfo_);
-        if (idInfo_ >= 0)
+        compareBarOne_->hide();
+        compareBarTwo_->hide();
+        errorsHideOne(resourcesUnitOne);
+        errorsHideTwo(resourcesUnitTwo);
+        errorBool_->hide();
+        idAll_.second.first = recoverId(boxInfo, infos_);
+        showUnit(idAll_.second.first);
+        if (idAll_.second.first >= 0)
         {
-            selectInfo(idInfo_, boxInfo, boxPlugin, boxAsset);
+            if ((*unitsIds_.find(idAll_.second.first)).second == Enums::EInformationUnitType::text)
+                buttonAddOne_->show();
+            else
+                buttonAddOne_->hide();
+            if ((*unitsIds_.find(idAll_.second.first)).second == Enums::EInformationUnitType::number)
+                buttonAddTwo_->show();
+            else
+                buttonAddTwo_->hide();
+            
+            selectInfo(idAll_.second.first, boxInfo, boxPlugin, boxAsset);
         }
         else
         {
+            buttonAddOne_->hide();
+            buttonAddTwo_->hide();
             infoSelected_.clear();
-            idInfo_ = -1;
+            idAll_.second.first = -1;
             if (assetSelected_.size() > 0 && pluginSelected_.size() > 0)
             {}
-            else if (assetSelected_.size() > 0)
-            {
-                fillInBox(boxAsset, assets_);
-                long long id = recoverId(boxAsset, assets_);
-                selectAsset(id, boxAsset, boxPlugin, boxInfo);
-            }
             else if (pluginSelected_.size() > 0)
             {
                 fillInBox(boxPlugin, plugins_);
                 long long id = recoverId(boxPlugin, plugins_);
                 selectPlugin(id, boxAsset, boxPlugin, boxInfo);
+            }
+            else if (assetSelected_.size() > 0)
+            {
+                fillInBox(boxAsset, assets_);
+                long long id = recoverId(boxAsset, assets_);
+                selectAsset(id, boxAsset, boxPlugin, boxInfo);
             }
             else
             {
@@ -394,12 +407,12 @@ void    AlertsWidget::selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt:
 
 void    AlertsWidget::selectPlugin(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo)
 {
-    if (assetSelected_.size() == 0)
+    if (assetSelected_.size() >= 0)
     {
         boxInfo->clear();
         boxActived(boxInfo, infos_, pluginInfos_, id);
     }
-    if (infoSelected_.size() == 0)
+    if (infoSelected_.size() >= 0)
     {
         boxAsset->clear();
         boxActived(boxAsset, assets_, pluginAsset_, id);
@@ -522,33 +535,34 @@ VectorLong    AlertsWidget::boxActived(Wt::WSelectionBox *box, MultiMapPair info
 {
     VectorLong checkId;
     
-    MultiMapLongs::iterator it = compId.find(id);
-    for (long unsigned int cpt(0); cpt < compId.size(); cpt++)
+    for (MultiMapLongs::iterator it = compId.begin(); it != compId.end(); it++)
     {
-        for (MultiMapPair::iterator itP = infoInBox.begin(); itP != infoInBox.end(); itP++)
+        if ((*it).first == id)
         {
-            if ((*itP).second.first == (*it).second)
+            for (MultiMapPair::iterator itP = infoInBox.begin(); itP != infoInBox.end(); itP++)
             {
-                bool check(true);
-                for (VectorLong::iterator itV = checkId.begin(); itV != checkId.end(); itV++)
+                if ((*itP).second.first == (*it).second)
                 {
-                    if ((*itV) == (*itP).second.first)
-                        check = false;
-                }
-                if (check)
-                {
-                    for (VectorLong::iterator itI = index_.begin(); itI != index_.end(); itI++)
+                    bool check(true);
+                    for (VectorLong::iterator itV = checkId.begin(); itV != checkId.end(); itV++)
                     {
-                        if ((*itP).first == (*itI))
+                        if ((*itV) == (*itP).second.first)
+                            check = false;
+                    }
+                    if (check)
+                    {
+                        for (VectorLong::iterator itI = index_.begin(); itI != index_.end(); itI++)
                         {
-                            box->addItem((*itP).second.second);
-                            checkId.push_back((*itP).second.first);
+                            if ((*itP).first == (*itI))
+                            {
+                                box->addItem((*itP).second.second);
+                                checkId.push_back((*itP).second.first);
+                            }
                         }
                     }
                 }
             }
         }
-        it++;
     }
     return checkId;
 }
@@ -617,68 +631,90 @@ void    AlertsWidget::popupAddWidget(Wt::WDialog *dialog)
 
     new Wt::WText(Wt::WString::fromUTF8("<p>Criteres de comparaison</p>"), contain);  //XML est hide show
 
-    errorText_.clear();
-    errorNumb_.clear();
-    errorBool_.clear();
+    resourcesUnitOne.clear();
+    resourcesUnitTwo.clear();
 
-    textBox_.clear();
-    compBox_.clear();
-    sizeBox_.clear();
-    
     unitOne_.clear();
     unitTwo_.clear();
-    unitThree_.clear();
+    idUnitOne = 1;
+    idUnitTwo = 1;
+
+    Wt::WContainerWidget *compareWid = new Wt::WContainerWidget(contain);
+
+    compareBarOne_ = new Wt::WContainerWidget();
+    compareBarOne_->addStyleClass("widget-title");
+    compareBarTwo_ = new Wt::WContainerWidget();
+    compareBarTwo_->addStyleClass("widget-title");
     
-    createUnitOne(contain);
-    createUnitTwo(contain);
-    createUnitThree(contain);
+    buttonAddOne_ = new Wt::WPushButton("<i class='icon-plus'></i>");
+    buttonAddOne_->setTextFormat(Wt::XHTMLUnsafeText);
+    buttonAddOne_->hide();
+    buttonAddTwo_ = new Wt::WPushButton("<i class='icon-plus'></i>");
+    buttonAddTwo_->setTextFormat(Wt::XHTMLUnsafeText);
+    buttonAddTwo_->hide();
+
+    createUnitOne(compareWid);
+    createUnitTwo(compareWid);
+    createUnitThree(compareWid);
+
+    contain->addWidget(buttonAddOne_);
+    contain->addWidget(buttonAddTwo_);
+    contain->addWidget(compareBarOne_);
+    contain->addWidget(compareBarTwo_);
     
-//    compareBar(contain);
+    compareBarOne_->hide();
+    compareBarTwo_->hide();
+
+    buttonAddOne_->clicked().connect(std::bind([=] ()
+    {
+        saveLineEditOne_->show();
+        createUnitOne(compareWid)->show();
+        compareBarOne_->show();
+    }));
+
+    buttonAddTwo_->clicked().connect(std::bind([=] ()
+    {
+        saveLineEditTwo_->show();
+        createUnitTwo(compareWid)->show();
+        compareBarTwo_->show();
+    }));
+
+
 }
 
 // ------------------ Unit | critères de comparaison ------------------------------
 
 void    AlertsWidget::compareBar(Wt::WContainerWidget *contain)
 {
-    compareBar_ = new Wt::WContainerWidget(contain);
-    compareBar_->addStyleClass("widget-title");
-//    compareBar_->setWidth(750);
-    /*
-    new Wt::WText("Crit1 ", compareBar_);
-    Wt::WLineEdit *lineEdit = new Wt::WLineEdit(compareBar_);
-    lineEdit->setWidth(61);
-    new Wt::WText(" Crit2", compareBar_);
-    */
-//    compareBar_->hide();
+
 }
 
 void    AlertsWidget::showUnit(long long id)
 {
-    VectorWWidget::iterator it;
+    MapIntWWidget::iterator it;
     hideUnit();
     if (id > 0)
     {
         MultiMapLongs::iterator unit = unitsIds_.find(id);
         if ((*unit).second == Enums::EInformationUnitType::text)
         {
+           compareBarOne_->show();
             for (it = unitOne_.begin(); it != unitOne_.end(); it++)
             {
-                ((Wt::WTable*)(*it))->show();
+                ((Wt::WTable*)(*it).second)->show();
             }
         }
         else if ((*unit).second == Enums::EInformationUnitType::number)
         {
+            compareBarTwo_->show();
             for (it = unitTwo_.begin(); it != unitTwo_.end(); it++)
             {
-                ((Wt::WTable*)(*it))->show();
+                ((Wt::WTable*)(*it).second)->show();
             }
         }
         else if ((*unit).second == 3) //Enums::EInformationUnitType::boolean
         {
-            for (it = unitThree_.begin(); it != unitThree_.end(); it++)
-            {
-                ((Wt::WTable*)(*it))->show();
-            }
+            unitThree_->show();
         }
         else
             std::cout << "Error for show table unit" << std::endl;
@@ -687,57 +723,86 @@ void    AlertsWidget::showUnit(long long id)
 
 void    AlertsWidget::hideUnit()
 {
-    VectorWWidget::iterator it;
+    MapIntWWidget::iterator it;
     for (it = unitOne_.begin(); it != unitOne_.end(); it++)
     {
-        ((Wt::WTable*)(*it))->hide();
+        ((Wt::WTable*)(*it).second)->hide();
     }
     for (it = unitTwo_.begin(); it != unitTwo_.end(); it++)
     {
-        ((Wt::WTable*)(*it))->hide();
+        ((Wt::WTable*)(*it).second)->hide();
     }
-    for (it = unitThree_.begin(); it != unitThree_.end(); it++)
-    {
-        ((Wt::WTable*)(*it))->hide();
-    }
+    unitThree_->hide();
 }
 
 Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
 {
     Wt::WTable *table = new Wt::WTable(contain);
-
     Wt::WLineEdit *textEdit = new Wt::WLineEdit(table->elementAt(0, 1));
-    
-    textsEdit_.push_back(textEdit);
     
     Wt::WComboBox *comboBox = new Wt::WComboBox();
     comboBox->addItem("is equal");  //xml
-    comboBox->addItem("is not equal");//xml
-    comboBox->addItem("contains");//xml
-    comboBox->addItem("doesn't contain");//xml
-    comboBox->addItem("reg-exp");//xml
+    comboBox->addItem("is not equal"); //xml
+    comboBox->addItem("contains"); //xml
+    comboBox->addItem("doesn't contain"); //xml
+    comboBox->addItem("reg-exp"); //xml
     
-    textBox_.push_back(comboBox);
-
     table->elementAt(0, 0)->addWidget(comboBox);  
     table->hide();
     
-    unitOne_.push_back(table);
+    unitOne_[idUnitOne] = table;
 
-    Wt::WText *errorText = new Wt::WText("Invalide name", contain); //XML
+    Wt::WText *errorText = new Wt::WText("Invalide name", table->elementAt(1, 1)); //XML
     errorText->hide();
-    errorText_.push_back(errorText);
     
-    Wt::WPushButton *buttonAdd = new Wt::WPushButton("+", contain);
-    buttonAdd->clicked().connect(std::bind([=] ()
-    {
-        createUnitOne(contain)->show();
+    Wt::WText *text = new Wt::WText(comboBox->currentText());
+    compareBarOne_->addWidget(text);
+
+    Wt::WLineEdit *lineEditBar = new Wt::WLineEdit();
+    lineEditBar->setWidth(40);
+    lineEditBar->hide();
+    compareBarOne_->addWidget(lineEditBar);
+    
+    saveLineEditOne_ = lineEditBar;
+    
+    Wt::WPushButton *buttonValid = 
+            new Wt::WPushButton("<i class='icon-ok'></i>", table->elementAt(0, 2));
+    buttonValid->setStyleClass("btn-dark-warning");
+    buttonValid->setTextFormat(Wt::XHTMLUnsafeText);
+    buttonValid->clicked().connect(std::bind([=] () {
+        text->setText(comboBox->currentText() + " \"" + textEdit->text() + "\"");
+        buttonValid->setText("<i class='icon-ok'></i>");
     }));
-    buttonAdd->hide();
     textEdit->changed().connect(std::bind([=] ()
-    {
-       buttonAdd->show();
+    { text->setText(comboBox->currentText() + " \"" + textEdit->text() + "\""); }));
+    comboBox->changed().connect(std::bind([=] ()
+    { text->setText(comboBox->currentText() + " \"" + textEdit->text() + "\""); }));
+
+    Wt::WPushButton *buttonDel = 
+            new Wt::WPushButton("<i class='icon-remove icon-white'></i>", table->elementAt(0, 3));
+    buttonDel->setStyleClass("btn-danger");
+    buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
+    buttonDel->setId(boost::lexical_cast<std::string>(idUnitOne));
+    buttonDel->clicked().connect(std::bind([=] () {
+        MapUnitOne::iterator widUnit =
+                resourcesUnitOne.find(boost::lexical_cast<int, std::string>(buttonDel->id()));
+        (*widUnit).second.first.second->hide(); // errorText
+        resourcesUnitOne.erase(widUnit);
+
+        MapIntWWidget::iterator wid = 
+                unitOne_.find(boost::lexical_cast<int, std::string>(buttonDel->id()));
+        contain->removeWidget((*wid).second);
+        contain->refresh();
+        unitOne_.erase(wid);
+
+        compareBarOne_->removeWidget(text);
+        compareBarOne_->removeWidget(lineEditBar);
     }));
+
+    if (idUnitOne == 1)
+        buttonDel->hide();
+    resourcesUnitOne[idUnitOne++] = std::make_pair(std::make_pair(textEdit, errorText), comboBox);
+
     return table;
 }
 
@@ -747,55 +812,88 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
     Wt::WLineEdit *valeurEdit = new Wt::WLineEdit(table->elementAt(0, 0));
     valeurEdit->setValidator(editValidator(-2));
 
-    valuesEdit_.push_back(valeurEdit);
-    
-    Wt::WComboBox *comboBox = new Wt::WComboBox();
-    compBox_.push_back(comboBox);
-    comboBox->addItem("<");
-    comboBox->addItem("<=");
-    comboBox->addItem("==");
-    comboBox->addItem("!=");
-    comboBox->addItem(">=");
-    comboBox->addItem(">");
+    Wt::WComboBox *comboBox1 = new Wt::WComboBox();
+    comboBox1->addItem("<");
+    comboBox1->addItem("<=");
+    comboBox1->addItem("==");
+    comboBox1->addItem("!=");
+    comboBox1->addItem(">=");
+    comboBox1->addItem(">");
 
-    table->elementAt(0, 1)->addWidget(comboBox);
+    table->elementAt(0, 1)->addWidget(comboBox1);
     table->elementAt(0, 2)->addWidget(new Wt::WText("Info"));
     
-    comboBox = new Wt::WComboBox();
-    sizeBox_.push_back(comboBox);
-    comboBox->addItem("Kilo");//xml
-    comboBox->addItem("Mega");//xml
-    comboBox->addItem("Giga");//xml
+    Wt::WComboBox *comboBox2 = new Wt::WComboBox();
+    comboBox2->addItem("Kilo");//xml
+    comboBox2->addItem("Mega");//xml
+    comboBox2->addItem("Giga");//xml
 
-    table->elementAt(0, 3)->addWidget(comboBox);
+    table->elementAt(0, 3)->addWidget(comboBox2);
     
     table->hide();
 
-    unitTwo_.push_back(table);
+    unitTwo_[idUnitTwo] = table;
 
-    Wt::WText *errorNumb = new Wt::WText("Invalide number", contain); //XML
+    Wt::WText   *errorNumb = new Wt::WText("Invalide number", contain); //XML
     errorNumb->hide();
-    errorNumb_.push_back(errorNumb);
 
-    Wt::WPushButton *buttonAdd = new Wt::WPushButton("+", contain);
-    buttonAdd->clicked().connect(std::bind([=] ()
-    {
-        createUnitTwo(contain)->show();      
+    Wt::WText *text = new Wt::WText(comboBox1->currentText() + " \"\" " + comboBox2->currentText());
+    compareBarTwo_->addWidget(text);
+
+    Wt::WLineEdit *lineEditBar = new Wt::WLineEdit();
+    lineEditBar->setWidth(40);
+    lineEditBar->hide();
+    compareBarTwo_->addWidget(lineEditBar);
+    
+    saveLineEditTwo_ = lineEditBar;
+
+    Wt::WPushButton *buttonValid = 
+            new Wt::WPushButton("<i class='icon-ok'></i>", table->elementAt(0, 4));
+    buttonValid->setStyleClass("btn-dark-warning");
+    buttonValid->setTextFormat(Wt::XHTMLUnsafeText);
+    buttonValid->clicked().connect(std::bind([=] () {
+        text->setText(comboBox1->currentText() + " \"" + valeurEdit->text() + "\" " + comboBox2->currentText());
+        buttonValid->setText("<i class='icon-ok'></i>");
     }));
-    buttonAdd->hide();
     valeurEdit->changed().connect(std::bind([=] ()
-    {
-       buttonAdd->show();
+    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text() + "\" " + comboBox2->currentText()); }));
+    comboBox1->changed().connect(std::bind([=] ()
+    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text() + "\" " + comboBox2->currentText()); }));
+    comboBox2->changed().connect(std::bind([=] ()
+    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text() + "\" " + comboBox2->currentText()); }));
+
+    Wt::WPushButton *buttonDel = new Wt::WPushButton("<i class='icon-remove icon-white'></i>", table->elementAt(0, 5));
+    buttonDel->setStyleClass("btn-danger");
+    buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
+    buttonDel->setId(boost::lexical_cast<std::string>(idUnitTwo));
+    buttonDel->clicked().connect(std::bind([=] () {
+            MapUnitTwo::iterator widUnit =
+                    resourcesUnitTwo.find(boost::lexical_cast<int, std::string>(buttonDel->id()));
+            (*widUnit).second.first.second->hide(); // errorValue
+            resourcesUnitTwo.erase(widUnit);
+            
+            MapIntWWidget::iterator wid = 
+                    unitTwo_.find(boost::lexical_cast<int, std::string>(buttonDel->id()));
+            contain->removeWidget((*wid).second);
+            contain->refresh();
+            unitTwo_.erase(wid);
+
+            compareBarTwo_->removeWidget(text);
+            compareBarTwo_->removeWidget(lineEditBar);
     }));
+    
+    if (idUnitTwo == 1)
+        buttonDel->hide();
+    resourcesUnitTwo[idUnitTwo++] = std::make_pair(std::make_pair(valeurEdit, errorNumb), std::make_pair(comboBox1, comboBox2));
+
     return table;
 }
 
 void    AlertsWidget::createUnitThree(Wt::WContainerWidget *contain)
 {
     Wt::WTable *table = new Wt::WTable(contain);
-    Wt::WText *errorBool = new Wt::WText("choose boolean", contain); //XML
-    errorBool->hide();
-    errorBool_.push_back(errorBool);
+    errorBool_ = new Wt::WText("choose boolean", contain); //XML
+    errorBool_->hide();
 
     bool_ = -1;
     
@@ -806,8 +904,8 @@ void    AlertsWidget::createUnitThree(Wt::WContainerWidget *contain)
     button->setText("<span class='input-group-btn'><i class='icon-ok icon-white'></i></span>");
     button->clicked().connect(std::bind([=] () {
         bool_ = 0;
-        errorBool->setText("True");
-        errorBool->show();
+        errorBool_->setText("True");
+        errorBool_->show();
     }));
 
     table->elementAt(0, 1)->addWidget(new Wt::WText("False"));//xml
@@ -817,13 +915,13 @@ void    AlertsWidget::createUnitThree(Wt::WContainerWidget *contain)
     button->setText("<span class='input-group-btn'><i class='icon-remove icon-white'></i></span>");
     button->clicked().connect(std::bind([=] () {
         bool_ = 1;
-        errorBool->setText("False");
-        errorBool->show();
+        errorBool_->setText("False");
+        errorBool_->show();
     }));
 
     table->hide();
 
-    unitThree_.push_back(table);
+    unitThree_ = table;
 }
 
 // -------------------------------------------------------
@@ -855,11 +953,11 @@ void  AlertsWidget::closePopup()
 int     AlertsWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage)
 {    
     int checkAll = CreatePageWidget::checkInput(inputName, errorMessage);
-    if (idAsset_ < 0 || idPlugin_ < 0 || idInfo_ < 0)
+    if (idAll_.first.first < 0 || idAll_.first.second < 0 || idAll_.second.first < 0)
     {
-        idAsset_ < 0 ? errorAsset_->show() : errorAsset_->hide();
-        idPlugin_ < 0 ? errorPlugin_->show() : errorPlugin_->hide();
-        idInfo_ < 0 ? errorInfo_->show() : errorInfo_->hide();
+        idAll_.first.first < 0 ? errorAsset_->show() : errorAsset_->hide();
+        idAll_.first.second < 0 ? errorPlugin_->show() : errorPlugin_->hide();
+        idAll_.second.first < 0 ? errorInfo_->show() : errorInfo_->hide();
         checkAll = 1;
     }
     else
@@ -869,70 +967,61 @@ int     AlertsWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, st
         errorInfo_->hide();
     }
 
-    VectorLineEdit::iterator it;
-    MultiMapLongs::iterator unit = unitsIds_.find(idInfo_);
-    switch ((*unit).second)
+    switch ((*unitsIds_.find(idAll_.second.first)).second)
     {
+        errorsHideOne(resourcesUnitOne);
+        errorsHideTwo(resourcesUnitTwo);
+        errorBool_->hide();
         case Enums::EInformationUnitType::text :
-        {
-            errorsHide(errorNumb_);
-            errorsHide(errorBool_);
-            
-            for (it = textsEdit_.begin(); it != textsEdit_.end(); it++)
+        {            
+            for (MapUnitOne::iterator it = resourcesUnitOne.begin(); it != resourcesUnitOne.end(); it++)
             {
                 /* Mettre en place si validator sur l'input texte.
-                 if (((Wt::WLineEdit*)(*it))->validate() == Wt::WValidator::Invalid)
+                 if (((Wt::WLineEdit*)(*it).second.first.first)->validate() == Wt::WValidator::Invalid)
                 {
-                    errorsShow(errorText_);
+                    (*it).second.first.second.show();
                     checkAll = 1;
                     break;
                 }
              */
-                if (((Wt::WLineEdit*)(*it))->text().toUTF8().size() <= 0)
+                if (((Wt::WLineEdit*)(*it).second.first.first)->text().toUTF8().size() <= 0)
                 {
-                    errorsShow(errorText_);
+                    (*it).second.first.second->show();
                     checkAll = 1;
-                    break;
                 }
                 else
-                    errorsHide(errorText_);
+                    (*it).second.first.second->hide();
             }
             break;
         }
         case Enums::EInformationUnitType::number :
         {
-            errorsHide(errorText_);
-            errorsHide(errorBool_);
-            for (it = valuesEdit_.begin(); it != valuesEdit_.end(); it++)
+            for (MapUnitTwo::iterator it = resourcesUnitTwo.begin(); it != resourcesUnitTwo.end(); it++)
             {
-                 if (((Wt::WLineEdit*)(*it))->validate() == Wt::WValidator::Invalid)
+                if (((Wt::WLineEdit*)(*it).second.first.first)->validate() == Wt::WValidator::Invalid)
                 {
-                     errorsShow(errorNumb_);
-                     checkAll = 1;
-                     break;
-                }
-                if (((Wt::WLineEdit*)(*it))->text().toUTF8().size() <= 0)
-                {
-                    errorsShow(errorNumb_);
+                    (*it).second.first.second->show();
                     checkAll = 1;
-                    break;
+                }
+                else if (((Wt::WLineEdit*)(*it).second.first.first)->text().toUTF8().size() <= 0)
+                {
+                    (*it).second.first.second->show();
+                    checkAll = 1;
                 }
                 else
-                    errorsHide(errorNumb_);
+                    (*it).second.first.second->hide();
             }
             break;
         }
         case 3 : //Enums::EInformationUnitType::boolean
         {
-            errorsHide(errorNumb_);
-            errorsHide(errorText_);
             if (bool_ < 0)
             {
-                errorsShow(errorBool_);
+                errorBool_->show();
                 checkAll = 1;
             }
             else
-                errorsHide(errorBool_);
+                errorBool_->hide();
             break;
         }
     }
@@ -950,98 +1039,64 @@ void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
     {
         std::cout << ((Wt::WLineEdit*)(*it))->text() << std::endl;
     }
+
     std::cout << "Asset , plugin info : " << std::endl;
-    std::cout << "Id asset : " << idAsset_ << " name : ";
+    std::cout << "Id asset : " << idAll_.first.first << " name : ";
     for (MultiMapPair::iterator it = assets_.begin(); it != assets_.end(); it++)
     {
-        if ((*it).second.first == idAsset_)
+        if ((*it).second.first == idAll_.first.first)
             std::cout << (*it).second.second << std::endl;
     }
-    std::cout << "Id plugin : " << idPlugin_ << " name : ";
+    std::cout << "Id plugin : " << idAll_.first.second << " name : ";
     for (MultiMapPair::iterator it = plugins_.begin(); it != plugins_.end(); it++)
     {
-        if ((*it).second.first == idPlugin_)
+        if ((*it).second.first == idAll_.first.second)
             std::cout << (*it).second.second << std::endl;
     }
-    std::cout << "Id info : " << idInfo_ << " name : ";
+    std::cout << "Id info : " << idAll_.second.first << " name : ";
     for (MultiMapPair::iterator it = infos_.begin(); it != infos_.end(); it++)
     {
-        if ((*it).second.first == idInfo_)
+        if ((*it).second.first == idAll_.second.first)
             std::cout << (*it).second.second << std::endl;
     }
     
     std::cout << std::endl << "KEY ?" << std::endl;
     
     
-    std::cout << "Textbox size : " << textBox_.size() << std::endl;
-    VectorWWidget::iterator it;
-    VectorComboBox::iterator itV;
-    MultiMapLongs::iterator unit = unitsIds_.find(idInfo_);
-    switch ((*unit).second)
+    switch ((*unitsIds_.find(idAll_.second.first)).second)
     {
         case Enums::EInformationUnitType::text :
         {
-            for (it = unitOne_.begin(); it != unitOne_.end(); it++)
+            for (MapUnitOne::iterator itUnit = resourcesUnitOne.begin(); itUnit != resourcesUnitOne.end(); itUnit++)
             {
-                if (!((Wt::WTable*)(*it))->isHidden())
-                {
-                    for (itV = textBox_.begin(); itV != textBox_.end(); itV++)
-                    {
-                        std::cout
-                                << "comparaison : "
-                                << ((Wt::WComboBox*)(*itV))->currentText()
-                                << std::endl;
-                    }
-                    for (VectorLineEdit::iterator itL = textsEdit_.begin(); itL != textsEdit_.end(); itL++)
-                    {
-                        std::cout
-                                << "Text : "
-                                << ((Wt::WLineEdit*)(*itL))->text().toUTF8()
-                                << std::endl;
-                    }
-                }
+                std::cout
+                        << "input : " << (*itUnit).second.first.first->text().toUTF8() << std::endl
+                        << "Comp : " << (*itUnit).second.second->currentText().toUTF8() << std::endl;
             }
             break;
         }
         case Enums::EInformationUnitType::number :
         {
-            for (it = unitTwo_.begin(); it != unitTwo_.end(); it++)
+            for (MapUnitTwo::iterator itUnit = resourcesUnitTwo.begin(); itUnit != resourcesUnitTwo.end(); itUnit++)
             {
-                if (!((Wt::WTable*)(*it))->isHidden())
-                {
-                    for (itV = compBox_.begin(); itV != compBox_.end(); itV++)
-                    {
-                        std::cout << "comparaison : " << ((Wt::WComboBox*)(*itV))->currentText() << std::endl;
-                    }
-                    for (itV = sizeBox_.begin(); itV != sizeBox_.end(); itV++)
-                    {
-                        std::cout << " size :" << ((Wt::WComboBox*)(*itV))->currentText() << std::endl;
-                    }
-                    for (VectorLineEdit::iterator itL = valuesEdit_.begin(); itL != valuesEdit_.end(); itL++)
-                    {
-                        std::cout
-                                << "Number : "
-                                << ((Wt::WLineEdit*)(*itL))->text().toUTF8()
-                                << std::endl;
-                    }
-                }
+                std::cout
+                        << "input : " << (*itUnit).second.first.first->text().toUTF8() << std::endl
+                        << "Comp : " << (*itUnit).second.second.first->currentText().toUTF8() << std::endl
+                        << "size : " << (*itUnit).second.second.second->currentText().toUTF8() << std::endl;
             }
             break;
         }
         case 3 : //Enums::EInformationUnitType::boolean
         {
-            for (it = unitThree_.begin(); it != unitThree_.end(); it++)
+            if (!(unitThree_->isHidden()))
             {
-                if (!((Wt::WTable*)(*it))->isHidden())
-                {
-                        std::cout << "boolean : ";
-                        if (bool_ == 0)
-                            std::cout << "True" << std::endl;
-                        else if (bool_ == 1)
-                            std::cout << "False" << std::endl;
-                        else
-                            std::cout << "Bug" << std::endl;
-                }
+                std::cout << "boolean : ";
+                if (bool_ == 0)
+                    std::cout << "True" << std::endl;
+                else if (bool_ == 1)
+                    std::cout << "False" << std::endl;
+                else
+                    std::cout << "Bug" << std::endl;
             }
             break;
         }
@@ -1475,19 +1530,19 @@ void AlertsWidget::getInformations(boost::system::error_code err, const Wt::Http
 
 // Utility --------------------------------------------------------
 
-void    AlertsWidget::errorsShow(VectorText error)
+void    AlertsWidget::errorsHideOne(MapUnitOne error)
 {
-    for (VectorText::iterator it = error.begin(); it != error.end(); it++)
+    for (MapUnitOne::iterator it = error.begin(); it != error.end(); it++)
     {
-        ((Wt::WText*)(*it))->show();
+        ((Wt::WText*)(*it).second.first.second)->hide();
     }
 }
 
-void    AlertsWidget::errorsHide(VectorText error)
+void    AlertsWidget::errorsHideTwo(MapUnitTwo error)
 {
-    for (VectorText::iterator it = error.begin(); it != error.end(); it++)
+    for (MapUnitTwo::iterator it = error.begin(); it != error.end(); it++)
     {
-        ((Wt::WText*)(*it))->hide();
+        ((Wt::WText*)(*it).second.first.second)->hide();
     }
 }
 

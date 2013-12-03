@@ -37,17 +37,30 @@
 #include "ApiManagement.h"
 
 
+
+typedef std::pair<Wt::WComboBox*, Wt::WComboBox*> PairComboBox;
 typedef std::pair<long long, std::string>       Pair;
+typedef std::pair<long long, long long>         PairLong;
+typedef std::pair<Wt::WLineEdit*, Wt::WText*>     PairResource;
 
 typedef std::multimap<long long, Pair>          MultiMapPair;
 typedef std::multimap<long long, long long>     MultiMapLongs;
 
+typedef std::map<long long, std::pair<PairResource, Wt::WComboBox*>>    MapUnitOne;
+typedef std::map<long long, std::pair<PairResource, PairComboBox>>     MapUnitTwo;
+
+typedef std::map<int, Wt::WWidget *>            MapIntWWidget;
+typedef std::map<int, Wt::WLineEdit*>           MapIntLineEdit;
+typedef std::map<int, Wt::WText*>               MapIntText;
+
 typedef std::vector<long long>                  VectorLong;
 typedef std::vector<std::string>                VectorString;
-typedef std::vector<Wt::WWidget *>              VectorWWidget;
 typedef std::vector<Wt::WText*>                 VectorText;
 typedef std::vector<Wt::WComboBox*>             VectorComboBox;
-typedef std::vector<Wt::WLineEdit*>             VectorLineEdit;
+/** gkr.\n
+ * pair &lsaquo; pair &lsaquo; idAsset, idPlugin &rsaquo;, pair &lsaquo; idInfo, idKey &rsaquo; &rsaquo;
+ */
+typedef std::pair<PairLong, PairLong>           PairTwoPair;
 
 class AlertsWidget :
 public CreatePageWidget
@@ -118,8 +131,8 @@ private:
 
     void                        compareBar(Wt::WContainerWidget *contain);
     
-    void                        errorsShow(VectorText error);
-    void                        errorsHide(VectorText error);
+    void                        errorsHideOne(MapUnitOne error);
+    void                        errorsHideTwo(MapUnitTwo error);
 
     
     void aSupprimer(); // 
@@ -131,52 +144,56 @@ private:
     std::string         apiUrl_;
     Wt::Json::Value     alerts_;
     
-    MultiMapPair        assets_;
-    MultiMapPair        plugins_;
-    MultiMapPair        infos_;
+    MultiMapPair        assets_; // Assets infomations (<index <idAsset, nameAsset>>)
+    MultiMapPair        plugins_; // Plugins infomations (<index <idPlugin, namePlugin>>)
+    MultiMapPair        infos_; // Infos infomations (<index <idInfo, nameInfo>>)
     
-    MultiMapLongs       assetPlugins_;
-    MultiMapLongs       pluginInfos_;
-    MultiMapLongs       pluginAsset_;
-    MultiMapLongs       infoPlugin_;
+    MultiMapLongs       assetPlugins_; // nexus between Asset id and Plugins ids
+    MultiMapLongs       pluginInfos_; // nexus between Plugin id and Infos ids
+    MultiMapLongs       pluginAsset_; // nexus between Plugin id and Asset id
+    MultiMapLongs       infoPlugin_; // nexus between Info id and Plugin id
 
-    MultiMapLongs       unitsIds_;
+    MultiMapLongs       unitsIds_; // Link between Info and widgets compare. (text, number, bool)
 
     VectorLong          index_;
     
-    VectorWWidget       unitOne_;
-    VectorWWidget       unitTwo_;
-    VectorWWidget       unitThree_;
+    MapIntWWidget       unitOne_; // Text
+    MapIntWWidget       unitTwo_; // Number
+    Wt::WTable          *unitThree_; // Bool
     
-    VectorComboBox      textBox_;  //For check combo text
-    VectorComboBox      compBox_;  //For check combo number compare
-    VectorComboBox      sizeBox_;  //For check combo number size
-
     int                 bool_;  //for check button true/false
     
-    long long           idAsset_;
-    long long           idPlugin_;
-    long long           idInfo_;
+    /**
+     * pair &lsaquo; pair &lsaquo; idAsset, idPlugin &rsaquo;
+     * , pair &lsaquo; idInfo, idKey &rsaquo; &rsaquo;
+     */
+    PairTwoPair         idAll_;
     
-    std::string         assetSelected_;
-    std::string         pluginSelected_;
-    std::string         infoSelected_;
+    std::string         assetSelected_; // Name Asset selected
+    std::string         pluginSelected_; // Name Plugin selected
+    std::string         infoSelected_; // Name Info selected
 
-    VectorLineEdit       textsEdit_;
-    VectorLineEdit       valuesEdit_;
-
+    long long           idUnitOne; // html tag for widget Text
+    long long           idUnitTwo; // html tag for widget number
+    
+    MapUnitOne          resourcesUnitOne;
+    MapUnitTwo          resourcesUnitTwo;
+    
     //  Errors Messages ------
     Wt::WText           *errorAsset_;
     Wt::WText           *errorPlugin_; 
     Wt::WText           *errorInfo_;
     Wt::WText           *errorKey_;
-    
-    VectorText           errorText_;
-    VectorText           errorBool_;
-    VectorText           errorNumb_;
+
+    Wt::WText            *errorBool_;
     //  -------
     
-    Wt::WContainerWidget *compareBar_;
+    Wt::WContainerWidget *compareBarOne_;
+    Wt::WContainerWidget *compareBarTwo_;
+    Wt::WPushButton      *buttonAddOne_;
+    Wt::WPushButton      *buttonAddTwo_;
+    Wt::WLineEdit        *saveLineEditOne_;
+    Wt::WLineEdit        *saveLineEditTwo_;
 };
 
 #endif	/* ALERTSWIDGET_H */

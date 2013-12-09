@@ -38,7 +38,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/src/AlertsWidget.o \
 	${OBJECTDIR}/src/ApiManagement.o \
-	${OBJECTDIR}/src/AssetManagementModel.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
 	${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o \
 	${OBJECTDIR}/src/Auth/RegistrationModelAlert.o \
@@ -57,7 +56,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/RoleCustomizationWidget.o \
 	${OBJECTDIR}/src/SummaryBoard.o \
 	${OBJECTDIR}/src/UserActionManagement.o \
-	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/src/UserEditionWidget.o
 
 
@@ -99,11 +97,6 @@ ${OBJECTDIR}/src/ApiManagement.o: src/ApiManagement.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ApiManagement.o src/ApiManagement.cpp
-
-${OBJECTDIR}/src/AssetManagementModel.o: src/AssetManagementModel.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AssetManagementModel.o src/AssetManagementModel.cpp
 
 ${OBJECTDIR}/src/AssetManagementWidget.o: src/AssetManagementWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -194,11 +187,6 @@ ${OBJECTDIR}/src/UserActionManagement.o: src/UserActionManagement.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UserActionManagement.o src/UserActionManagement.cpp
-
-${OBJECTDIR}/src/UserEditionModel.o: src/UserEditionModel.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UserEditionModel.o src/UserEditionModel.cpp
 
 ${OBJECTDIR}/src/UserEditionWidget.o: src/UserEditionWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

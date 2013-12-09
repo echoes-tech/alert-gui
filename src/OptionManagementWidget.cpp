@@ -66,19 +66,18 @@ void OptionManagementWidget::createUI()
     this->setLayout(mainVerticalLayout);
     
     // Je n'ai pas pu essayer pas encore en place
-    std::string apiAddress = this->getApiUrl() + "/organizations/"
-            + boost::lexical_cast<std::string>(this->session->user()->organization.id())
-            + "/quota_sms"
+    std::string apiAddress = this->getApiUrl() + "/options/"
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8()) 
-            + "&token=" + Wt::Utils::urlEncode(session->user()->token.toUTF8());
+            + "&token=" + Wt::Utils::urlEncode(session->user()->token.toUTF8())
+            + "&type=" + boost::lexical_cast<std::string>(Echoes::Dbo::EOptionType::QUOTA_SMS);
     Wt::Http::Client *client1 = new Wt::Http::Client(this);
     client1->done().connect(boost::bind(&OptionManagementWidget::getQuota, this, _1, _2));
 
-    std::cout << "OptionManagementWidget : [GET] address to call : " << apiAddress << std::endl;
+    Wt::log("debug") << "OptionManagementWidget : [GET] address to call : " << apiAddress;
     if (client1->get(apiAddress))
         Wt::WApplication::instance()->deferRendering();
     else
-        std::cout << "Error Client Http" << std::endl;
+        Wt::log("error") << "Error Client Http";
     /*
     try
     {
@@ -201,12 +200,14 @@ void OptionManagementWidget::fillRoleSelector()
 
 //    + this->getCredentials();
 
-    std::cout << "[GET] address to call : " << apiAddress << std::endl;
+    Wt::log("debug") << "[GET] address to call : " << apiAddress;
     
     if (client->get(apiAddress))
     {
         Wt::WApplication::instance()->deferRendering();
-    } 
+    }
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void OptionManagementWidget::getQuota(boost::system::error_code err, const Wt::Http::Message& response)

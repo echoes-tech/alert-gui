@@ -32,7 +32,7 @@ public:
     
     void getRoles(boost::system::error_code err, const Wt::Http::Message& response);
     void getAssets(boost::system::error_code err, const Wt::Http::Message& response);
-    void getMedias(boost::system::error_code err, const Wt::Http::Message& response);
+//    void getMedias(boost::system::error_code err, const Wt::Http::Message& response);
     void getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
     void getCriteria(boost::system::error_code err, const Wt::Http::Message& response, int idForInfMap, Wt::WContainerWidget *row);
     void getInformations(boost::system::error_code err, const Wt::Http::Message& response);
@@ -69,7 +69,7 @@ private:
     
     std::map<int,std::map<long long,Wt::WLineEdit*>> mapEditInformationCriteria;
     
-    std::map<int,Wt::Json::Object> mapIdInformations;
+    std::map<int,long long> mapIdInformations;
     std::map<int,Wt::WLineEdit*> mapEditInformations;
     std::map<int,Wt::WContainerWidget*> mapRowCriteriaInformations;
     

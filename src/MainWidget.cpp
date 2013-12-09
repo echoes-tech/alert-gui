@@ -137,27 +137,14 @@ void MainWidget::createUI()
 
         for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
         {
-            //TODO: Change this temporary restriction with right integration
-            
-            if(!boost::starts_with(i->value(), "plugin"))
+            if (!boost::starts_with(i->value(), "submenu"))
             {
-                if (!boost::starts_with(i->value(), "submenu"))
-                {
-                    createMenuItem(*i,menu,getIconName(*i));
-                    createPage(*i);
-                }
-                else
-                {
-                    createSubMenu(*i);
-                }
+                createMenuItem(*i,menu,getIconName(*i));
+                createPage(*i);
             }
             else
             {
-                if (this->session->user()->organization.id() ==  1 || this->session->user()->organization.id() == 46 || this->session->user()->organization.id() == 51 || this->session->user()->organization.id() == 52)
-                {
-                    createMenuItem(*i,menu,getIconName(*i));
-                    createPage(*i);
-                }
+                createSubMenu(*i);
             }
         }
         created_ = true;
@@ -243,14 +230,7 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         }        
         case Enums::EPageType::PLUGIN:
         {
-            //TODO: Change this temporary restriction with right integration
-            if(this->session->user()->organization.id() ==  1
-                    || this->session->user()->organization.id() == 46
-                    || this->session->user()->organization.id() == 51
-                    || this->session->user()->organization.id() == 52)
-            {
-                pew = new PluginEditionWidget(this->session, _apiUrl);
-            }
+            pew = new PluginEditionWidget(this->session, _apiUrl);
             break;
         }
         default:
@@ -471,14 +451,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 }
                 case Enums::EPageType::PLUGIN:
                 {
-                    //TODO: Change this temporary restriction with right integration
-                    if(this->session->user()->organization.id() ==  1
-                            || this->session->user()->organization.id() == 46
-                            || this->session->user()->organization.id() == 51
-                            || this->session->user()->organization.id() == 52)
-                    {
-                        this->contentFluid->addWidget(pew);
-                    }
+                    this->contentFluid->addWidget(pew);
                     break;
                 }
                 default:
@@ -602,11 +575,7 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
         }
         case Enums::EPageType::PLUGIN:
         {
-            //TODO: Change this temporary restriction with right integration
-            if(this->session->user()->organization.id() == 1 || this->session->user()->organization.id() == 46 || this->session->user()->organization.id() == 51 || this->session->user()->organization.id() == 52)
-            {
-                res = "pencil";
-            }
+            res = "pencil";
             break;
         }
     }

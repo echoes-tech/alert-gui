@@ -110,11 +110,13 @@ void PluginEditionWidget::createUI()
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
     if(client1->get(urlAdd))
     {
          Wt::WApplication::instance()->deferRendering();
     }
+    else
+        Wt::log("error") << "Error Client Http";
  
     // creation source
     sourceSelectionBox = new Wt::WSelectionBox();
@@ -257,11 +259,13 @@ void PluginEditionWidget::createJSON()
                 + "&token=" + session->user()->token.toUTF8();
 
         
-        std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
         if(client1->get(urlAdd))
         {
             Wt::WApplication::instance()->deferRendering();
-        } 
+        }
+        else
+            Wt::log("error") << "Error Client Http";
     }
     else
     {
@@ -278,11 +282,13 @@ void PluginEditionWidget::createTableUnit()
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
     
-    std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
     if(client1->get(urlAdd))
     {
         Wt::WApplication::instance()->deferRendering();
     }
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void PluginEditionWidget::createFormSearchParameters()
@@ -305,11 +311,13 @@ void PluginEditionWidget::createFormSearchParameters()
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
     if(client1->get(urlAdd))
     {
         Wt::WApplication::instance()->deferRendering();
     }
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void PluginEditionWidget::createFormSourceParameters()
@@ -332,11 +340,13 @@ void PluginEditionWidget::createFormSourceParameters()
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
     if(client1->get(urlAdd))
     {
         Wt::WApplication::instance()->deferRendering();
     }
+    else
+        Wt::log("error") << "Error Client Http";
     
 }
 
@@ -389,12 +399,14 @@ void PluginEditionWidget::addPlugin()
                 + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                 + "&token=" + session->user()->token.toUTF8();        
         
-        std::cout << "PluginEditionWidget : [POST] address to call : " << urlAdd << std::endl;
+        Wt::log("debug") << "PluginEditionWidget : [POST] address to call : " << urlAdd;
 
         if(client1->post(urlAdd ,message))
         {
             Wt::WApplication::instance()->deferRendering();
         }
+        else
+            Wt::log("error") << "Error Client Http";
     }
     else
     {
@@ -459,12 +471,14 @@ void PluginEditionWidget::addSource()
                     + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                     + "&token=" + session->user()->token.toUTF8();
 
-            std::cout << "PluginEditionWidget : [POST] address to call : " << urlAdd << std::endl;
+            Wt::log("debug") << "PluginEditionWidget : [POST] address to call : " << urlAdd;
 
             if(client1->post(urlAdd ,message))
             {
                 Wt::WApplication::instance()->deferRendering();
             }
+            else
+                Wt::log("error") << "Error Client Http";
         }
         else
         {
@@ -582,12 +596,14 @@ void PluginEditionWidget::addSearch()
                     + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                     + "&token=" + session->user()->token.toUTF8();
 
-            std::cout << "PluginEditionWidget : [POST] address to call : " << urlAdd << std::endl;
+            Wt::log("debug") << "PluginEditionWidget : [POST] address to call : " << urlAdd;
             
             if(client1->post(urlAdd ,message))
             {
                 Wt::WApplication::instance()->deferRendering();
             }
+            else
+                Wt::log("error") << "Error Client Http";
 
         }
         else
@@ -619,12 +635,14 @@ void PluginEditionWidget::deletePlugin(int pluginId)
            + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
            + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [DELETE] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [DELETE] address to call : " << urlAdd;
 
     if(client1->deleteRequest(urlAdd ,message))
     {
         Wt::WApplication::instance()->deferRendering();
     }
+    else
+        Wt::log("error") << "Error Client Http";
     
 }
 
@@ -670,12 +688,14 @@ void PluginEditionWidget::modifySource()
                 + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                 + "&token=" + session->user()->token.toUTF8();
 
-        std::cout << "PluginEditionWidget : [DELETE] address to call : " << urlAdd << std::endl;
+        Wt::log("debug") << "PluginEditionWidget : [DELETE] address to call : " << urlAdd;
 
         if(client1->post(urlAdd ,message))
         {
             Wt::WApplication::instance()->deferRendering();
         }
+        else
+            Wt::log("error") << "Error Client Http";
     }
     else
     {
@@ -701,12 +721,14 @@ void PluginEditionWidget::deleteSource()
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [DELETE] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [DELETE] address to call : " << urlAdd;
 
     if(client1->deleteRequest(urlAdd ,message))
     {
         Wt::WApplication::instance()->deferRendering();
     }
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void PluginEditionWidget::modifySearch()
@@ -753,12 +775,14 @@ void PluginEditionWidget::modifySearch()
                     + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                     + "&token=" + session->user()->token.toUTF8();
 
-            std::cout << "PluginEditionWidget : [POST] address to call : " << urlAdd << std::endl;
+            Wt::log("debug") << "PluginEditionWidget : [POST] address to call : " << urlAdd;
 
             if(client1->post(urlAdd ,message))
             {
                 Wt::WApplication::instance()->deferRendering();
             }
+            else
+                Wt::log("error") << "Error Client Http";
 
         }
         else
@@ -792,13 +816,15 @@ void PluginEditionWidget::deleteSearch()
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [DELETE] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [DELETE] address to call : " << urlAdd;
 
     
     if(client1->deleteRequest(urlAdd ,message))
     {
         Wt::WApplication::instance()->deferRendering();    
     }
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void PluginEditionWidget::addInformation()
@@ -838,12 +864,14 @@ void PluginEditionWidget::addInformation()
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [POST] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [POST] address to call : " << urlAdd;
 
     if(client1->post(urlAdd ,message))
     {
         Wt::WApplication::instance()->deferRendering();
     }
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void PluginEditionWidget::createTableInformation()
@@ -915,11 +943,13 @@ void PluginEditionWidget::createTableInformation()
                 + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                 + "&token=" + session->user()->token.toUTF8();
 
-        std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
         if(client1->get(urlAdd))
         {
             Wt::WApplication::instance()->deferRendering();
         }
+        else
+            Wt::log("error") << "Error Client Http";
         tableInformationState = "";
     }
     refresh1();
@@ -1020,12 +1050,14 @@ void PluginEditionWidget::selectedPlugin()
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
 
     if(client1->get(urlAdd))
     {
         Wt::WApplication::instance()->deferRendering();
     }
+    else
+        Wt::log("error") << "Error Client Http";
        
 }
 
@@ -1160,12 +1192,14 @@ void PluginEditionWidget::completFormSearch()
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
     
     if(client1->get(urlAdd))
     {
         Wt::WApplication::instance()->deferRendering();
     }
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void PluginEditionWidget::handleHttpResponseInformationsList(boost::system::error_code err, const Wt::Http::Message& response)
@@ -1335,12 +1369,14 @@ void PluginEditionWidget::handleHttpResponseSourceList(boost::system::error_code
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
 
     if(client1->get(urlAdd))
     {
         Wt::WApplication::instance()->deferRendering();
-    } 
+    }
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void PluginEditionWidget::handleHttpResponseSearchList(boost::system::error_code err, const Wt::Http::Message& response)
@@ -1410,12 +1446,14 @@ void PluginEditionWidget::handleHttpResponseSearchList(boost::system::error_code
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
     
     if(client1->get(urlAdd))
     {
         Wt::WApplication::instance()->deferRendering();
     }  
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 
@@ -1548,11 +1586,13 @@ void PluginEditionWidget::handleHttpResponseModifySource(boost::system::error_co
                 + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                 + "&token=" + session->user()->token.toUTF8();
 
-        std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
         if(client1->get(urlAdd))
         {
             Wt::WApplication::instance()->deferRendering();
-        }  
+        }
+        else
+            Wt::log("error") << "Error Client Http";
     }
     else
     {
@@ -1640,12 +1680,14 @@ void PluginEditionWidget::handleHttpResponseAddSource(boost::system::error_code 
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
     
     if(client1->get(urlAdd))
     {
         Wt::WApplication::instance()->deferRendering();
-    }  
+    }
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void PluginEditionWidget::handleHttpResponseAddPlg(boost::system::error_code err, const Wt::Http::Message& response)
@@ -1872,12 +1914,14 @@ std::string strTmp = response.body();
                 + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                 + "&token=" + session->user()->token.toUTF8();
 
-        std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
 
         if(client1->get(urlAdd))
         {
             Wt::WApplication::instance()->deferRendering();
         }
+        else
+            Wt::log("error") << "Error Client Http";
     }
     else
     {
@@ -1890,12 +1934,14 @@ std::string strTmp = response.body();
                 + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                 + "&token=" + session->user()->token.toUTF8();
 
-        std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
 
         if(client1->get(urlAdd))
         {
             Wt::WApplication::instance()->deferRendering();
         }
+        else
+            Wt::log("error") << "Error Client Http";
     }
      createFormSourceState = "";
      refresh1();
@@ -1979,12 +2025,14 @@ std::string strTmp = response.body();
                 + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                 + "&token=" + session->user()->token.toUTF8();
 
-    std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
 
     if(client1->get(urlAdd))
     {
          Wt::WApplication::instance()->deferRendering();
     } 
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void PluginEditionWidget::handleHttpResponseAddonList(boost::system::error_code err, const Wt::Http::Message& response)
@@ -2162,12 +2210,14 @@ void PluginEditionWidget::handleHttpResponseDeletePlg(boost::system::error_code 
                 + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                 + "&token=" + session->user()->token.toUTF8();
 
-        std::cout << "PluginEditionWidget : [GET] address to call : " << urlAdd << std::endl;
+        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
 
         if(client1->get(urlAdd))
         {
             Wt::WApplication::instance()->deferRendering();
         }
+        else
+            Wt::log("error") << "Error Client Http";
       
     }
     else if (response.status() == 409)

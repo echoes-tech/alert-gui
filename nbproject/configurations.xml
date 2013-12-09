@@ -6,7 +6,6 @@
                    projectFiles="true">
       <logicalFolder name="include" displayName="include" projectFiles="true">
         <logicalFolder name="f4" displayName="AdminAssetTab" projectFiles="true">
-          <itemPath>include/AssetManagementModel.h</itemPath>
           <itemPath>include/AssetManagementWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f6" displayName="AdminOptionTab" projectFiles="true">
@@ -18,7 +17,6 @@
           <itemPath>include/PluginEditionWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
-          <itemPath>include/UserEditionModel.h</itemPath>
           <itemPath>include/UserEditionWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f2" displayName="Auth" projectFiles="true">
@@ -96,7 +94,6 @@
                    projectFiles="true">
       <logicalFolder name="src" displayName="src" projectFiles="true">
         <logicalFolder name="f4" displayName="AdminAssetTab" projectFiles="true">
-          <itemPath>src/AssetManagementModel.cpp</itemPath>
           <itemPath>src/AssetManagementWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f6" displayName="AdminOptionTab" projectFiles="true">
@@ -108,7 +105,6 @@
           <itemPath>src/PluginEditionWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
-          <itemPath>src/UserEditionModel.cpp</itemPath>
           <itemPath>src/UserEditionWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f2" displayName="Auth" projectFiles="true">
@@ -218,8 +214,6 @@
       </item>
       <item path="include/ApiManagement.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/AssetManagementModel.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Auth/LostPasswordWidgetAlert.h"
@@ -266,8 +260,6 @@
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/UserEditionModel.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserEditionWidget.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -333,8 +325,6 @@
       </item>
       <item path="src/ApiManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/AssetManagementModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Auth/LostPasswordWidgetAlert.cpp"
@@ -379,8 +369,6 @@
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/UserEditionModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -459,8 +447,6 @@
       </item>
       <item path="include/ApiManagement.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/AssetManagementModel.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Auth/LostPasswordWidgetAlert.h"
@@ -507,8 +493,6 @@
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/UserEditionModel.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserEditionWidget.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -574,8 +558,6 @@
       </item>
       <item path="src/ApiManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/AssetManagementModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Auth/LostPasswordWidgetAlert.cpp"
@@ -620,8 +602,6 @@
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/UserEditionModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>

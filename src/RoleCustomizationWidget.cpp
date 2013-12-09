@@ -206,21 +206,22 @@ void RoleCustomizationWidget::selectPlugin()
         Wt::Http::Client *client = new Wt::Http::Client(this);
         client->done().connect(boost::bind(&RoleCustomizationWidget::getInformations, this, _1, _2));
 
-        std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+        Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
         if (client->get(urlToCall))
         {
             Wt::WApplication::instance()->deferRendering();
-        } 
-        
+        }
+        else
+            Wt::log("error") << "Error Client Http";
         
         
         urlToCall = this->getApiUrl() 
                 + "/plugins/" + boost::lexical_cast<std::string>(pluginId)
                 + "/alias" + this->getCredentials()
-                + "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
-                + "&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
+                + "&user_role_id=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
+                + "&media_type_id=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
 
-        std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+        Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
 
         Wt::Http::Client *client2 = new Wt::Http::Client(this);
         client2->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, pluginEditLine));
@@ -228,6 +229,8 @@ void RoleCustomizationWidget::selectPlugin()
         {
             Wt::WApplication::instance()->deferRendering();
         }
+        else
+            Wt::log("error") << "Error Client Http";
     }
     
 }
@@ -246,17 +249,23 @@ void RoleCustomizationWidget::selectRole()
 
 void RoleCustomizationWidget::fillMediaSelector()
 {
-    std::string urlToCall = this->getApiUrl()
-            + "/medias" + this->getCredentials();
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::getMedias, this, _1, _2));
+    int idx = 0;
+    mediasComboBox->addItem("email");
+    mapIdMediasComboBox[idx] = Enums::EMedia::email;
+    idx++;
+    mediasComboBox->addItem("sms");
+    mapIdMediasComboBox[idx] = Enums::EMedia::sms;
+    idx++;
+    mediasComboBox->addItem("mobile");
+    mapIdMediasComboBox[idx] = Enums::EMedia::mobileapp;
 
-    std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
-    
-    if (client->get(urlToCall))
+    mediasComboBox->setCurrentIndex(0);
+    mediasSet = true;
+    if (rolesSet)
     {
-        Wt::WApplication::instance()->deferRendering();
-    } 
+        createAssetsWidgets();
+    }
+
 }
 
 void RoleCustomizationWidget::fillRoleSelector()
@@ -268,19 +277,21 @@ void RoleCustomizationWidget::fillRoleSelector()
     std::string urlToCall = this->getApiUrl()
             + "/roles" + this->getCredentials();
     
-    std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+    Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
     
     if (client->get(urlToCall))
     {
         Wt::WApplication::instance()->deferRendering();
     } 
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void RoleCustomizationWidget::fillPluginSelector()
 {
     std::string urlToCall = this->getApiUrl()
             + "/plugins" + this->getCredentials();
-    std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+    Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::getPlugins, this, _1, _2));
@@ -288,47 +299,48 @@ void RoleCustomizationWidget::fillPluginSelector()
     {
         Wt::WApplication::instance()->deferRendering();
     } 
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void RoleCustomizationWidget::createAssetsWidgets()
 {
     std::string urlToCall = this->getApiUrl()
             + "/assets" + this->getCredentials();
-    std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+    Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::getAssets, this, _1, _2));
     if (client->get(urlToCall))
     {
         Wt::WApplication::instance()->deferRendering();
-    } 
+    }
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void RoleCustomizationWidget::createCriteriaWidgets()
 {
     mapEditInformationCriteria.clear();
 //    unsigned int idx = 0;
-    for(std::map<int,Wt::Json::Object>::const_iterator i = mapIdInformations.begin() ; i != mapIdInformations.end() ; i ++)
+    for(std::map<int,long long>::const_iterator i = mapIdInformations.begin() ; i != mapIdInformations.end() ; i ++)
     {
-        Wt::Json::Object infIdJson = i->second;
         std::string urlToCall = this->getApiUrl() 
-                + "/plugins/" + boost::lexical_cast<std::string>((long long)infIdJson.get("plugin_id"))
-                + "/sources/" + boost::lexical_cast<std::string>((long long)infIdJson.get("source_id"))
-                + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
-                + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
-                + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
+                + "/informations/" + boost::lexical_cast<std::string>((long long)i->second)
                 + "/criteria";
         Wt::Http::Client *client = new Wt::Http::Client(this);
         client->done().connect(boost::bind(&RoleCustomizationWidget::getCriteria, this, _1, _2, i->first, mapRowCriteriaInformations[i->first]));
 
         std::string apiAddress = urlToCall + this->getCredentials();
 
-    std::cout << "RoleCustomizationWidget : [GET] address to call : " << apiAddress << std::endl;
+        Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << apiAddress;
 
         if (client->get(apiAddress))
         {
             Wt::WApplication::instance()->deferRendering();
-        } 
+        }
+        else
+            Wt::log("error") << "Error Client Http";
     }
     
 }
@@ -409,56 +421,56 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
     }
 }
 
-void RoleCustomizationWidget::getMedias(boost::system::error_code err, const Wt::Http::Message& response)
-{
-    Wt::WApplication::instance()->resumeRendering();
-    int idx = 0;
-    mediasComboBox->clear();
-
-    if (!err)
-    {
-        if (response.status() >= 200 && response.status() < 300)
-        {
-            Wt::Json::Value result ;
-            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-            try
-            {                  
-                Wt::Json::parse(response.body(), result);
-                result1 = result;
-                  //descriptif
-                for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-                {
-                    Wt::Json::Object tmp = (*idx1);
-                    mediasComboBox->addItem(tmp.get("name"));
-                    mapIdMediasComboBox[idx] = tmp.get("id");
-                    idx++;
-                }
-            }
-            catch (Wt::Json::ParseError const& e)
-            {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
-            }
-
-            catch (Wt::Json::TypeException const& e)
-            {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-            }
-            mediasComboBox->setCurrentIndex(0);
-            mediasSet = true;
-            if (rolesSet)
-            {
-                createAssetsWidgets();
-            }
-        }
-    }
-    else
-    {
-        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
-//         Wt::log("warning") << "fct handleHttpResponse " << "response status: " << response.status() << " Body : "<< response.body();
-//         Wt::log("warning") << "Boost error code: " << err.message();
-    }
-}
+//void RoleCustomizationWidget::getMedias(boost::system::error_code err, const Wt::Http::Message& response)
+//{
+//    Wt::WApplication::instance()->resumeRendering();
+//    int idx = 0;
+//    mediasComboBox->clear();
+//
+//    if (!err)
+//    {
+//        if (response.status() >= 200 && response.status() < 300)
+//        {
+//            Wt::Json::Value result ;
+//            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+//            try
+//            {                  
+//                Wt::Json::parse(response.body(), result);
+//                result1 = result;
+//                  //descriptif
+//                for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+//                {
+//                    Wt::Json::Object tmp = (*idx1);
+//                    mediasComboBox->addItem(tmp.get("name"));
+//                    mapIdMediasComboBox[idx] = tmp.get("id");
+//                    idx++;
+//                }
+//            }
+//            catch (Wt::Json::ParseError const& e)
+//            {
+//                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+//            }
+//
+//            catch (Wt::Json::TypeException const& e)
+//            {
+//                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+//            }
+//            mediasComboBox->setCurrentIndex(0);
+//            mediasSet = true;
+//            if (rolesSet)
+//            {
+//                createAssetsWidgets();
+//            }
+//        }
+//    }
+//    else
+//    {
+//        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+//        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
+////         Wt::log("warning") << "fct handleHttpResponse " << "response status: " << response.status() << " Body : "<< response.body();
+////         Wt::log("warning") << "Boost error code: " << err.message();
+//    }
+//}
 
 void RoleCustomizationWidget::getPlugins(boost::system::error_code err, const Wt::Http::Message& response)
 {
@@ -495,10 +507,14 @@ void RoleCustomizationWidget::getPlugins(boost::system::error_code err, const Wt
                 Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
             }          
         }
+        else
+        {
+            Wt::log("debug") << "[Role Customization Widget] no plugin";
+        }
     }
     else
     {
-        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::log("error") << "[Role Customization Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
 //         Wt::log("warning") << "fct handleHttpResponse" << response.body();
     }
@@ -730,7 +746,7 @@ void RoleCustomizationWidget::putAssetAlias(int idx)
     std::string urlToCall = this->getApiUrl()
             + "/assets/" + boost::lexical_cast<std::string>(mapIdAssets[idx])
             + "/alias"  + this->getCredentials();
-    std::cout << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall << std::endl;
+    Wt::log("debug") << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::resPutAssetAlias, this, _1, _2, mapEditAssets[idx]));
@@ -738,6 +754,8 @@ void RoleCustomizationWidget::putAssetAlias(int idx)
     {
         Wt::WApplication::instance()->deferRendering();
     } 
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void RoleCustomizationWidget::putPluginAlias()
@@ -757,7 +775,7 @@ void RoleCustomizationWidget::putPluginAlias()
     std::string urlToCall = this->getApiUrl()
             + "/plugins/" + boost::lexical_cast<std::string>(mapIdPluginsComboBox[pluginsComboBox->currentIndex()])
             + "/alias" + this->getCredentials();
-    std::cout << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall << std::endl;
+    Wt::log("debug") << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::resPutPluginAlias, this, _1, _2, pluginEditLine));
@@ -765,67 +783,56 @@ void RoleCustomizationWidget::putPluginAlias()
     {
         Wt::WApplication::instance()->deferRendering();
     } 
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 
 void RoleCustomizationWidget::putInformationAlias(int idx)
 {
-    Wt::Json::Object infIdJson = mapIdInformations[idx];
-
-    std::string strMessage = "{\n"
-            "\"alias\" : {\n\
-            \"role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
+    std::string strMessage = "{\n\
+            \"user_role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
             +"\",\n"
-            "\"media\" : \""+ boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
+            "\"media_type\" : \""+ boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
             +"\",\n"
             "\"value\" : \""+ boost::lexical_cast<std::string>(mapEditInformations[idx]->text()) +"\"\n}\n"
-            "}\n";
+            ;
     
     Wt::Http::Message message;
     message.addBodyText(strMessage);
 
     std::string urlToCall = this->getApiUrl()
-            + "/plugins/" + boost::lexical_cast<std::string>(mapIdPluginsComboBox[pluginsComboBox->currentIndex()])
-            + "/sources/" + boost::lexical_cast<std::string>((long long)infIdJson.get("source_id"))
-            + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
-            + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
-            + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
+            + "/informations/" + boost::lexical_cast<std::string>(mapIdInformations[idx])
             + "/alias" + this->getCredentials();
-    std::cout << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall << std::endl;
+    Wt::log("debug") << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::resPutAssetAlias, this, _1, _2, mapEditInformations[idx]));
     if (client->put(urlToCall, message))
     {
         Wt::WApplication::instance()->deferRendering();
-    } 
+    }
+    else
+        Wt::log("error") << "Error Client Http";
 }
 
 void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit)
 {
-    Wt::Json::Object infIdJson = mapIdInformations[idForInfMap];
- 
     std::string strMessage = "{\n"
-            "\"alias\" : {\n\
-            \"role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
+            "\"role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
             +"\",\n"
             "\"media\" : \""+ boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
             +"\",\n"
-            "\"value\" : \""+ boost::lexical_cast<std::string>(critEdit->text()) +"\"\n}\n"
-            "}\n";
+            "\"value\" : \""+ boost::lexical_cast<std::string>(critEdit->text()) +"\"\n}\n";
 
     Wt::Http::Message message;
     message.addBodyText(strMessage);
 
     std::string urlToCall = this->getApiUrl() 
-            + "/plugins/" + boost::lexical_cast<std::string>(mapIdPluginsComboBox[pluginsComboBox->currentIndex()])
-            + "/sources/" + boost::lexical_cast<std::string>((long long)infIdJson.get("source_id"))
-            + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
-            + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
-            + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
+            + "/informations/" + boost::lexical_cast<std::string>(mapIdInformations[idForInfMap])
             + "/criteria/" + boost::lexical_cast<std::string>(idCrit)
             + "/alias" + this->getCredentials();
-    std::cout << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall << std::endl;
+    Wt::log("debug") << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::resPutCritAlias, this, _1, _2, critEdit));
@@ -833,7 +840,8 @@ void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCri
     {
         Wt::WApplication::instance()->deferRendering();
     }
-    
+    else
+        Wt::log("error") << "Error Client Http";    
 }
 
 void RoleCustomizationWidget::displayMessageExample(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit)
@@ -856,9 +864,9 @@ void RoleCustomizationWidget::fillAssetsFields()
         std::string urlToCall = this->getApiUrl()
                 + "/assets/" + boost::lexical_cast<std::string>(i->second)
                 + "/alias" + this->getCredentials()
-                + "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
-                +"&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
-        std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+                + "&user_role_id=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
+                +"&media_type_id=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
+        Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
 
         Wt::Http::Client *client = new Wt::Http::Client(this);
         client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, mapEditAssets[i->first]));
@@ -866,6 +874,8 @@ void RoleCustomizationWidget::fillAssetsFields()
         {
             Wt::WApplication::instance()->deferRendering();
         } 
+        else
+            Wt::log("error") << "Error Client Http";
     }
 }
 
@@ -874,52 +884,46 @@ void RoleCustomizationWidget::fillCriteriaFields(int idForInfMap, std::map<long 
 
     for(std::map<long long, Wt::WLineEdit*>::const_iterator j = mapIdCritEdit.begin() ; j != mapIdCritEdit.end() ; j++)
     {
-        Wt::Json::Object infIdJson = mapIdInformations[idForInfMap];
         std::string urlToCall = this->getApiUrl() 
-                + "/plugins/" + boost::lexical_cast<std::string>((long long)infIdJson.get("plugin_id"))
-                + "/sources/" + boost::lexical_cast<std::string>((long long)infIdJson.get("source_id"))
-                + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
-                + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
-                + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
+                + "/informations/" + boost::lexical_cast<std::string>(mapIdInformations[idForInfMap])
                 + "/criteria/" + boost::lexical_cast<std::string>(j->first)
                 + "/alias" + this->getCredentials()
-                +"&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
-                +"&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
-        std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+                +"&user_role_id=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
+                +"&media_type_id=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
+        Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
 
         Wt::Http::Client *client = new Wt::Http::Client(this);
         client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, j->second));
         if (client->get(urlToCall))
         {
             Wt::WApplication::instance()->deferRendering();
-        } 
+        }
+        else
+            Wt::log("error") << "Error Client Http";
     }
 
 }
 
 void RoleCustomizationWidget::fillInformationsFields()
 {
-    for(std::map<int,Wt::Json::Object>::const_iterator i = mapIdInformations.begin() ; i != mapIdInformations.end() ; i ++)
+    for(std::map<int,long long>::const_iterator i = mapIdInformations.begin() ; i != mapIdInformations.end() ; i ++)
     {
-        Wt::Json::Object infIdJson = i->second;
         std::string urlToCall = this->getApiUrl() 
-                + "/plugins/" + boost::lexical_cast<std::string>((long long)infIdJson.get("plugin_id"))
-                + "/sources/" + boost::lexical_cast<std::string>((long long)infIdJson.get("source_id"))
-                + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
-                + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
-                + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
-                + "/alias" + this->getCredentials()
-                + "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
-                +"&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
+                + "/informations/" + boost::lexical_cast<std::string>(i->second)
+                + this->getCredentials()
+                + "&user_role_id=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
+                +"&media_type_id=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
 
-        std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+        Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
 
         Wt::Http::Client *client = new Wt::Http::Client(this);
         client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, mapEditInformations[i->first]));
         if (client->get(urlToCall))
         {
             Wt::WApplication::instance()->deferRendering();
-        } 
+        }
+        else
+            Wt::log("error") << "Error Client Http";
     }
 }
 

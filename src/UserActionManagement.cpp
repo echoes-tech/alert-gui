@@ -24,7 +24,7 @@ void UserActionManagement::registerUserAction(Enums::EAction enumAction, Wt::WSt
         Echoes::Dbo::Session *session = dynamic_cast<EchoesHome*>((app->root()->widget(0)))->getSession();
         Wt::Dbo::Transaction transaction(*session);
         
-        Wt::Dbo::ptr<Echoes::Dbo::UserAction> ptrUserAction = session->find<Echoes::Dbo::UserAction>().where("\"UAC_ID\" = ?").bind(enumAction);
+        Wt::Dbo::ptr<Echoes::Dbo::UserActionType> ptrUserAction = session->find<Echoes::Dbo::UserActionType>().where(QUOTE(TRIGRAM_USER_ACTION_TYPE ID)" = ?").bind(enumAction);
         
         Echoes::Dbo::UserHistoricalAction *userHistoricalAction = new Echoes::Dbo::UserHistoricalAction();
         userHistoricalAction->tableObject = tableObject;

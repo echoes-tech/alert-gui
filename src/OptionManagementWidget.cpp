@@ -93,11 +93,17 @@ void OptionManagementWidget::createUI()
                 .limit(1);
         if (ptrPackOption.get())
         {
+// HEAD
             Wt::Dbo::ptr<Echoes::Dbo::Option> ptrOptionValue = 
                     session->find<Echoes::Dbo::Option>().where("\"OPT_ID_OPT_ID\" = ?")
                     .bind(ptrPackOption.get()->pk.optionType.id())
                     .where("\"ORG_ID_ORG_ID\" = ?").bind(this->session->user()->organization.id())
                     .limit(1);
+// FIN HEAD
+            Wt::Dbo::ptr<Echoes::Dbo::Option> ptrOptionValue = session->find<Echoes::Dbo::Option>().where(QUOTE(TRIGRAM_OPTION SEP TRIGRAM_OPTION_TYPE SEP TRIGRAM_OPTION_TYPE ID)" = ?").bind(ptrPackOption.get()->pk.optionType.id())
+                                                            .where(QUOTE(TRIGRAM_OPTION SEP TRIGRAM_ORGANIZATION SEP TRIGRAM_ORGANIZATION ID)" = ?").bind(this->session->user()->organization.id())
+                                                            .limit(1);
+// FIN STASH
             if (ptrOptionValue.get())
             {
                 smsQuotaValue = boost::lexical_cast<int>(ptrOptionValue.get()->value);

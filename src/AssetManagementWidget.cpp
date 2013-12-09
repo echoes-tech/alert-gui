@@ -11,7 +11,7 @@
  * 
  */
 
-#include <Wt/WTheme>
+
 
 #include "AssetManagementWidget.h"
 
@@ -179,7 +179,7 @@ Wt::WDialog *AssetManagementWidget::deleteResource(long long id)
 {
     Wt::WDialog *box = CreatePageWidget::deleteResource(id);
     // a REVOIR !! Récupération des alerts par rapport a id de l'asset a sup
-        std::string apiAddress = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string> (id) + "/alerts/";
+    std::string apiAddress = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string> (id) + "/alerts/";
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&AssetManagementWidget::checkAlertsInAsset, this, _1, _2, box, id));
     apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
@@ -192,7 +192,6 @@ Wt::WDialog *AssetManagementWidget::deleteResource(long long id)
     box->finished().connect(std::bind([=] () {
         if (box->result() == Wt::WDialog::Accepted)
         {
-            /// PAS MIS EN PLACE DANS L'API
             Wt::Http::Message message;
             message.addBodyText("");
             std::string apiAddress = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string> (id)
@@ -247,34 +246,24 @@ void    AssetManagementWidget::deleteAsset(boost::system::error_code err, const 
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
-        if(response.status() == 200)
+        std::cout << response.status() << std::endl;
+        if(response.status() == Enums::EReturnCode::NO_CONTENT)
         {
-            try
+            if (response.body() != "")
             {
-                Wt::Json::Value result;
-                Wt::Json::parse(response.body(), result);
-            }
-            catch (Wt::Json::ParseError const& e)
-            {
-                Wt::log("warning") << "[Asset Management Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
-            }
-            catch (Wt::Json::TypeException const& e)
-            {
-                Wt::log("warning") << "[Asset Management Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
+                Wt::log("error") << "[Asset Management Widget] Response should be empty : " << response.body() << ".";
             }
         }
         else
         {
             Wt::log("error") << "[Asset Management Widget] " << response.body();
-            Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "status",tr("Alert.alert.database-error"),Wt::Ok);
+            Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "status",tr("Alert.asset.database-error"),Wt::Ok);
         }
     }
     else
     {
         Wt::log("error") << "[Asset Management Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "err",tr("Alert.asset.database-error"),Wt::Ok);
     }
     recoverListAsset();
 }
@@ -387,37 +376,13 @@ void    AssetManagementWidget::postAsset(boost::system::error_code err, const Wt
     Wt::WString id;
     if (!err)
     {
-        if(response.status() >= 200 && response.status() < 300)
+        if(response.status() == 201)
         {
             try
             {
                 Wt::Json::Value result;
                 Wt::Json::parse(response.body(), result);
-                Wt::Json::Object result1 = result;
-                if (result1.get("id").isNull())
-                {
-                    Wt::log("error") << "[Asset Management Widget] ID error";
-                    Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "status",tr("Alert.alert.database-error"),Wt::Ok);
-                }
-                else
-                {
-                    id = result1.get("id");
-                    UserActionManagement::registerUserAction(Enums::add, Echoes::Dbo::Constants::T_ASSET_AST, boost::lexical_cast<long long>(id));
-                    
-                    Wt::Http::Message messageAsset;
-                    messageAsset.addBodyText("");
-
-                    std::string apiAddress = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string> (id) + "/plugin/";
-                    apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
-
-                    Wt::Http::Client *client = new Wt::Http::Client(this);
-                    client->done().connect(boost::bind(&AssetManagementWidget::postPlugin, this, _1, _2));
-                    std::cout << "[POST] address to call : " << apiAddress << std::endl;
-                    if (client->post(apiAddress, messageAsset))
-                        Wt::WApplication::instance()->deferRendering();
-                    else
-                        std::cout << "Error Client Http" << std::endl;
-                }
+                // ToDo : check object
             }
             catch (Wt::Json::ParseError const& e)
             {

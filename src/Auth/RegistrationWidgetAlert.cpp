@@ -82,25 +82,28 @@ void RegistrationWidgetAlert::registerUserDetails(Wt::Auth::User& user)
 
     Wt::Dbo::ptr<Echoes::Dbo::Organization> ptrOrg = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::Organization>(org);
 
-    //FIXME
+    Echoes::Dbo::UserRole *role = new Echoes::Dbo::UserRole();
+    role->name = "default";
+    role->organization = ptrOrg;
+    
+    Wt::Dbo::ptr<Echoes::Dbo::UserRole> ptrRole = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::UserRole>(role);    
+    
+    dynamic_cast<Echoes::Dbo::UserDatabase*>(user.database())->find(user).get()->user().modify()->userRole = ptrRole;
+    
 //    //TODO : hardcoded, should be changed when the pack selection will be available
-//    Wt::Dbo::ptr<Echoes::Dbo::Pack> ptrPack = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::Pack>().where("\"PCK_ID\" = ?").bind(1);
-//    ptrOrg.modify()->pack = ptrPack;
-//
-//    OptionValue *optionValue = new OptionValue();
-//
-//    OptionValueId *opvId = new OptionValueId(ptrOrg,((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::Option>().where("\"OPT_ID\" = ?").bind(Enums::sms));
-//    optionValue->pk.option = opvId->option;
-//    optionValue->pk.organization = opvId->organization;
-//    //FIXME : should be the default value found in the table POP
-//    optionValue->value = "5";
-//
-//    Wt::Dbo::ptr<OptionValue> ptrOptionValue = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::OptionValue>(optionValue);
+    Wt::Dbo::ptr<Echoes::Dbo::Pack> ptrPack = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::Pack>().where(QUOTE(TRIGRAM_PACK ID)" = ?").bind(1);
+    ptrOrg.modify()->pack = ptrPack;
 
+    Wt::Dbo::ptr<Echoes::Dbo::OptionType> otyPtr = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::OptionType>().where(QUOTE(TRIGRAM_OPTION_TYPE ID)" = ?").bind(Echoes::Dbo::EOption::QUOTA_SMS);
 
-//    Wt::Dbo::collection<Wt::Dbo::ptr<Organization> > colPtrOrg;
-//    colPtrOrg.insert(ptrOrg);
+    Echoes::Dbo::Option *option = new Echoes::Dbo::Option();
+    option->optionType = otyPtr;
+    option->organization = ptrOrg;
+    //FIXME : should be the default value found in the table POP
+    option->value = "5";
+    Wt::Dbo::ptr<Echoes::Dbo::Option> ptrOpt = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::Option>(option);
 
+    
     dynamic_cast<Echoes::Dbo::UserDatabase*>(user.database())->find(user).get()->user().modify()->organization = ptrOrg;
 
     Echoes::Dbo::EngOrg *engOrg = new Echoes::Dbo::EngOrg();

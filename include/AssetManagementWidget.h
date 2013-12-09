@@ -31,6 +31,7 @@
 #include <Wt/WPushButton>
 #include <Wt/WText>
 #include <Wt/WTable>
+#include <Wt/WTheme>
 
 // Ancien
 #include <Wt/Dbo/Query>
@@ -48,6 +49,8 @@
 #include <Wt/Http/Message>
 
 #include <Wt/WInPlaceEdit>
+
+#include <tools/Enums.h>
 
 #include "CreatePageWidget.h"
 #include "ClassTest.h"
@@ -71,7 +74,7 @@ public:
    * This returns the model that is used by the widget to do the actual
    * registration.
    */
-  AssetManagementModel *model() const { return model_; }
+//  AssetManagementModel *model() const { return model_; }
   
   void  popupAddWidget(Wt::WDialog *dialog);
 
@@ -123,9 +126,9 @@ protected:
 
 
 
-  void modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
-  void addResource(std::vector<Wt::WInteractWidget*> argument);
-  Wt::WDialog *deleteResource(long long id);
+  virtual void modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
+  virtual void addResource(std::vector<Wt::WInteractWidget*> argument);
+  virtual Wt::WDialog *deleteResource(long long id);
   Wt::WFileResource *generateScript(long long i, Wt::WString assetName);
   std::string getStringFromFile(std::string resourcePath);
   
@@ -153,7 +156,7 @@ private:
   Wt::WLineEdit         *saveEdit;
   bool                  created_;
   bool                  newClass_;
-  AssetManagementModel  *model_;
+//  AssetManagementModel  *model_;
   Echoes::Dbo::Session               *session_;
   Wt::WLineEdit         *assetEdit;
   std::vector<long long> idsAlert_;

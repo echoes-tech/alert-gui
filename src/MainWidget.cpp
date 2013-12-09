@@ -450,16 +450,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::ASSET:
                 {
                     this->contentFluid->addWidget(amw);
-                    try
-                    {
-                       Wt::Dbo::Transaction transaction(*(this->session));
-                       amw->recoverListAsset();
-                       transaction.commit();
-                   }
-                   catch (Wt::Dbo::Exception e)
-                   {
-                       Wt::log("error") << e.what();
-                   }
+                    amw->recoverListAsset();
                     break;
                 }
                 case Enums::EPageType::WELCOME:

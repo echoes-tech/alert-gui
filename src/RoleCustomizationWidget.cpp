@@ -261,11 +261,12 @@ void RoleCustomizationWidget::fillMediaSelector()
 
 void RoleCustomizationWidget::fillRoleSelector()
 {
+
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::getRoles, this, _1, _2));
 
     std::string urlToCall = this->getApiUrl()
-            + "/organizations/roles" + this->getCredentials();
+            + "/roles" + this->getCredentials();
     
     std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
     

@@ -58,6 +58,8 @@
 #include <boost/concept_check.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 
+#include <Enums.h>
+
 // Test
 #include <Wt/WBoxLayout>
 #include <Wt/WButtonGroup>

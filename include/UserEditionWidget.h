@@ -24,6 +24,8 @@
 #include "GlobalIncludeFile.h"
 #include "CreatePageWidget.h"
 
+typedef std::map<long long, std::string>        MapLongString;
+
 class UserEditionWidget :
 public CreatePageWidget
 {
@@ -64,6 +66,7 @@ private:
     std::string           apiUrl_;
     Wt::Json::Value       result_;
     int                   type_;  
+    MapLongString    mediasTokens;
 };
 
 

@@ -91,7 +91,7 @@ protected:
   void createMenuItem(C enumC, Wt::WMenu *submenu, std::string iconStr);
  
   PluginEditionWidget *pew;
-  AssetManagementModel *amm;
+//  AssetManagementModel *amm;
   AssetManagementWidget *amw;
   OptionManagementModel *omm;
   OptionManagementWidget *omw;
@@ -99,7 +99,6 @@ protected:
 //  AlertListWidget *alw;
   RoleCustomizationWidget *rcw;
   
-  UserEditionModel *uem;
   UserEditionWidget *uew;
   
   RecipientsWidget *rpw;

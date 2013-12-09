@@ -384,7 +384,7 @@ void    AlertsWidget::selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt:
     boxPlugin->clear();
     VectorLong idsPlugins = boxActived(boxPlugin, plugins_, assetPlugins_, id);
     if (pluginSelected_.size() > 0 && selectItemBox(boxPlugin, pluginSelected_) == 1)
-        std::cout << "Problème pour définir l'index" << std::endl;
+        Wt::log("warning") << "Problem for index define";
     if (pluginSelected_.size() == 0)
     {
         boxInfo->clear();
@@ -398,7 +398,7 @@ void    AlertsWidget::selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt:
         else
            boxInfo->clear();
         if (infoSelected_.size() > 0 && selectItemBox(boxInfo, infoSelected_) == 1)
-            std::cout << "Problème pour définir l'index" << std::endl;
+            Wt::log("warning") << "Problem for index define";
     }
     cleanBox(boxAsset);
     cleanBox(boxPlugin);
@@ -418,9 +418,9 @@ void    AlertsWidget::selectPlugin(long long id, Wt::WSelectionBox *boxAsset, Wt
         boxActived(boxAsset, assets_, pluginAsset_, id);
     }
     if (assetSelected_.size() > 0 && selectItemBox(boxAsset, assetSelected_) == 1)
-        std::cout << "Problème pour définir l'index" << std::endl;
+        Wt::log("warning") << "Problem for index define";
     if (infoSelected_.size() > 0 && selectItemBox(boxInfo, infoSelected_) == 1)
-        std::cout << "Problème pour définir l'index" << std::endl;
+        Wt::log("warning") << "Problem for index define";
     cleanBox(boxAsset);
     cleanBox(boxPlugin);
     cleanBox(boxInfo);
@@ -431,7 +431,7 @@ void    AlertsWidget::selectInfo(long long id, Wt::WSelectionBox *boxInfo, Wt::W
     boxPlugin->clear();
     VectorLong idsPlugins = boxActived(boxPlugin, plugins_, infoPlugin_, id);
     if (pluginSelected_.size() > 0 && selectItemBox(boxPlugin, pluginSelected_) == 1)
-        std::cout << "Problème pour définir l'index" << std::endl;
+        Wt::log("warning") << "Problem for index define";
     if (pluginSelected_.size() == 0)
     {
         boxAsset->clear();
@@ -443,7 +443,7 @@ void    AlertsWidget::selectInfo(long long id, Wt::WSelectionBox *boxInfo, Wt::W
         else
             boxAsset->clear();
         if (assetSelected_.size() > 0 && selectItemBox(boxAsset, assetSelected_) == 1)
-            std::cout << "Problème pour définir l'index" << std::endl;
+            Wt::log("warning") << "Problem for index define";
     }
     cleanBox(boxAsset);
     cleanBox(boxPlugin);
@@ -1117,10 +1117,11 @@ void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&UserEditionWidget::postMedia, this, _1, _2));
     apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
+    Wt::log("debug") << "AlertsWidget : [POST] address to call : " << apiAddress;
     if (client->post(apiAddress, messageAsset))
         Wt::WApplication::instance()->deferRendering();
     else
-        std::cout << "Error Client Http" << std::endl;
+        Wt::log("error") << "Error Client Http";
     */
     recoverListAsset();
 }
@@ -1139,10 +1140,11 @@ Wt::WDialog *AlertsWidget::deleteResource(long long id)
             Wt::Http::Client *client = new Wt::Http::Client(this);
             client->done().connect(boost::bind(&UserEditionWidget::deleteMedia, this, _1, _2));
             apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
+    Wt::log("debug") << "AlertsWidget : [DELETE] address to call : " << apiAddress;
             if (client->deleteRequest(apiAddress, message))
                 Wt::WApplication::instance()->deferRendering();
             else
-                std::cout << "Error Client Http" << std::endl;
+        Wt::log("error") << "Error Client Http";
             */
         }
         return box;
@@ -1165,10 +1167,11 @@ void AlertsWidget::modifResource(std::vector<Wt::WInteractWidget*> arguments, lo
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&UserEditionWidget::putMedia, this, _1, _2));
     apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
+    Wt::log("debug") << "AlertsWidget : [PUT] address to call : " << apiAddress;
     if (client->put(apiAddress, message))
         Wt::WApplication::instance()->deferRendering();
     else
-        std::cout << "Error Client Http" << std::endl;
+        Wt::log("error") << "Error Client Http";
     */
 }
 
@@ -1216,31 +1219,38 @@ void    AlertsWidget::recoverListAsset()
             + "&token=" + session_->user()->token.toUTF8();
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&AlertsWidget::getPlugins, this, _1, _2));
+    Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
     if (client->get(apiAddress))
         Wt::WApplication::instance()->deferRendering();
     else
-        std::cout << "Error Client Http" << std::endl;
+        Wt::log("error") << "Error Client Http";
     */
     std::string apiAddress = this->getApiUrl() + "/alerts" + "?login=" 
             + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) 
             + "&token=" + Wt::Utils::urlEncode(session_->user()->token.toUTF8());
     Wt::Http::Client *client1 = new Wt::Http::Client(this);
     client1->done().connect(boost::bind(&AlertsWidget::getAlerts, this, _1, _2));
+
+    Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
     if (client1->get(apiAddress))
         Wt::WApplication::instance()->deferRendering();
     else
-        std::cout << "Error Client Http" << std::endl;
+        Wt::log("error") << "Error Client Http";
 
 
     apiAddress = this->getApiUrl() + "/assets" + "?login="
             + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + Wt::Utils::urlEncode(session_->user()->token.toUTF8());
+    
     Wt::Http::Client *client2 = new Wt::Http::Client(this);
     client2->done().connect(boost::bind(&AlertsWidget::getAssets, this, _1, _2));
+
+    Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
+
     if (client2->get(apiAddress))
         Wt::WApplication::instance()->deferRendering();
     else
-        std::cout << "Error Client Http" << std::endl;
+        Wt::log("error") << "Error Client Http";
 
 
 }
@@ -1252,7 +1262,7 @@ void AlertsWidget::getAlerts(boost::system::error_code err, const Wt::Http::Mess
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
-        if(response.status() == 200)
+        if(response.status() >= 200 && response.status() < 300)
         {
             try
             {
@@ -1290,7 +1300,7 @@ void AlertsWidget::getAssets(boost::system::error_code err, const Wt::Http::Mess
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
-        if(response.status() == 200)
+        if(response.status() >= 200 && response.status() < 300)
         {
             try
             {
@@ -1312,18 +1322,22 @@ void AlertsWidget::getAssets(boost::system::error_code err, const Wt::Http::Mess
 
                         Pair pair = std::make_pair(id, name.toUTF8());
                         assets_.insert(std::make_pair(index, pair));
-
+/*
                         std::string apiAddress = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string>(id)
                                 + "/plugins" + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
                                 + "&token=" + session_->user()->token.toUTF8();
                         Wt::Http::Client *client = new Wt::Http::Client(this);
                         client->done().connect(boost::bind(&AlertsWidget::getPluginsForAsset, this, _1, _2, id, index++));
+
+                        std::cout << "Alerts : [GET] address to call : " << apiAddress << std::endl;
+
                         if (client->get(apiAddress))
                         {
                             Wt::WApplication::instance()->deferRendering();
                         }
                         else
                             std::cout << "Error Client Http" << std::endl;
+*/
                     }
                 }
                 else
@@ -1439,16 +1453,20 @@ void AlertsWidget::getPluginsForAsset(boost::system::error_code err, const Wt::H
                             
                     Pair pair = std::make_pair(id, name.toUTF8());
                     plugins_.insert(std::make_pair(index, pair));
-
+/*
                     std::string apiAddress = this->getApiUrl() + "/plugins/" + boost::lexical_cast<std::string>(id)
                             + "/informations" + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
                             + "&token=" + session_->user()->token.toUTF8();
                     Wt::Http::Client *client = new Wt::Http::Client(this);
                     client->done().connect(boost::bind(&AlertsWidget::getInformations, this, _1, _2, id, index));
+
+                    std::cout << "Alerts : [GET] address to call : " << apiAddress << std::endl;
+
                     if (client->get(apiAddress))
                         Wt::WApplication::instance()->deferRendering();
                     else
                         std::cout << "Error Client Http" << std::endl;
+*/
                 }
             }
             catch (Wt::Json::ParseError const& e)

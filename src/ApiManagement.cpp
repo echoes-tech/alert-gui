@@ -29,6 +29,8 @@ void    ApiManagement::callApi(void (classType::*pFunc)(boost::system::error_cod
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
+    std::cout << "[GET] address to call : " << apiAddress << std::endl;
+
     if (client->get(apiAddress))
     {
         Wt::WApplication::instance()->deferRendering();

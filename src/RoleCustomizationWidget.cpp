@@ -135,42 +135,47 @@ void RoleCustomizationWidget::getRoles(boost::system::error_code err, const Wt::
     Wt::WApplication::instance()->resumeRendering();
     int idx = 0;
     //ToDo: clear all I have to clean
-    if (response.status() >= 200 && response.status() < 400)
+    if (!err)
     {
-        Wt::Json::Value result ;
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-        try
-        {                  
-            Wt::Json::parse(response.body(), result);
-            result1 = result;
-              //descriptif
-            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-            {
-                Wt::Json::Object tmp = (*idx1);
-                rolesComboBox->insertItem(idx,tmp.get("name"));
-                mapIdRolesComboBox[idx] = tmp.get("id");
-                idx++;
+        if (response.status() >= 200 && response.status() < 300)
+        {
+            Wt::Json::Value result ;
+            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+            try
+            {                  
+                Wt::Json::parse(response.body(), result);
+                result1 = result;
+                  //descriptif
+                for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+                {
+                    Wt::Json::Object tmp = (*idx1);
+                    rolesComboBox->insertItem(idx,tmp.get("name"));
+                    mapIdRolesComboBox[idx] = tmp.get("id");
+                    idx++;
+                }
             }
-        }
-        catch (Wt::Json::ParseError const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
-        }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+            }
 
-        catch (Wt::Json::TypeException const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-        }
-        rolesComboBox->setCurrentIndex(0);
-        rolesSet = true;
-        if (mediasSet)
-        {
-            createAssetsWidgets();
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+            }
+            rolesComboBox->setCurrentIndex(0);
+            rolesSet = true;
+            if (mediasSet)
+            {
+                createAssetsWidgets();
+            }
         }
     }
     else
     {
-         Wt::log("warning") << "fct handleHttpResponse" << response.body();
+//         Wt::log("warning") << "fct handleHttpResponse" << response.body();
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
     }
 }
 
@@ -193,43 +198,36 @@ void RoleCustomizationWidget::selectPlugin()
     {
         pluginName->setText(pluginsComboBox->currentText());
         long long pluginId = mapIdPluginsComboBox[pluginsComboBox->currentIndex()];
+        
         std::string urlToCall = this->getApiUrl() 
                 + "/plugins/" + boost::lexical_cast<std::string>(pluginId)
-                + "/informations";
+                + "/informations" + this->getCredentials();
+        
         Wt::Http::Client *client = new Wt::Http::Client(this);
         client->done().connect(boost::bind(&RoleCustomizationWidget::getInformations, this, _1, _2));
 
-        std::string apiAddress = urlToCall + this->getCredentials();
-
-        std::cout << "address to call : " << apiAddress << std::endl;
-
-        if (client->get(apiAddress))
+        std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+        if (client->get(urlToCall))
         {
             Wt::WApplication::instance()->deferRendering();
         } 
         
         
         
-        std::string urlToCall2 = this->getApiUrl() 
+        urlToCall = this->getApiUrl() 
                 + "/plugins/" + boost::lexical_cast<std::string>(pluginId)
-                + "/alias";
+                + "/alias" + this->getCredentials()
+                + "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
+                + "&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
+
+        std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+
         Wt::Http::Client *client2 = new Wt::Http::Client(this);
         client2->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, pluginEditLine));
-
-        std::string apiAddress2 = urlToCall2 + this->getCredentials();
-        
-        apiAddress2 += "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
-                +"&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
-
-        std::cout << "address to call : " << apiAddress << std::endl;
-
-        if (client2->get(apiAddress2))
+        if (client2->get(urlToCall))
         {
             Wt::WApplication::instance()->deferRendering();
-        } 
-        
-        
-        
+        }
     }
     
 }
@@ -248,15 +246,14 @@ void RoleCustomizationWidget::selectRole()
 
 void RoleCustomizationWidget::fillMediaSelector()
 {
-    std::string urlToCall = this->getApiUrl() + "/medias";
+    std::string urlToCall = this->getApiUrl()
+            + "/medias" + this->getCredentials();
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::getMedias, this, _1, _2));
 
-    std::string apiAddress = urlToCall + this->getCredentials();
-
-    std::cout << "address to call : " << apiAddress << std::endl;
+    std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
     
-    if (client->get(apiAddress))
+    if (client->get(urlToCall))
     {
         Wt::WApplication::instance()->deferRendering();
     } 
@@ -264,15 +261,15 @@ void RoleCustomizationWidget::fillMediaSelector()
 
 void RoleCustomizationWidget::fillRoleSelector()
 {
-    std::string urlToCall = this->getApiUrl() + "/organizations/roles";
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::getRoles, this, _1, _2));
 
-    std::string apiAddress = urlToCall + this->getCredentials();
-
-    std::cout << "address to call : " << apiAddress << std::endl;
+    std::string urlToCall = this->getApiUrl()
+            + "/organizations/roles" + this->getCredentials();
     
-    if (client->get(apiAddress))
+    std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+    
+    if (client->get(urlToCall))
     {
         Wt::WApplication::instance()->deferRendering();
     } 
@@ -280,14 +277,13 @@ void RoleCustomizationWidget::fillRoleSelector()
 
 void RoleCustomizationWidget::fillPluginSelector()
 {
-    std::string urlToCall = this->getApiUrl() + "/plugins";
+    std::string urlToCall = this->getApiUrl()
+            + "/plugins" + this->getCredentials();
+    std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::getPlugins, this, _1, _2));
-
-    std::string apiAddress = urlToCall + this->getCredentials();
-
-    std::cout << "address to call : " << apiAddress << std::endl;
-    if (client->get(apiAddress))
+    if (client->get(urlToCall))
     {
         Wt::WApplication::instance()->deferRendering();
     } 
@@ -295,14 +291,13 @@ void RoleCustomizationWidget::fillPluginSelector()
 
 void RoleCustomizationWidget::createAssetsWidgets()
 {
-    std::string urlToCall = this->getApiUrl() + "/assets";
+    std::string urlToCall = this->getApiUrl()
+            + "/assets" + this->getCredentials();
+    std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::getAssets, this, _1, _2));
-
-    std::string apiAddress = urlToCall + this->getCredentials();
-
-    std::cout << "address to call : " << apiAddress << std::endl;
-    if (client->get(apiAddress))
+    if (client->get(urlToCall))
     {
         Wt::WApplication::instance()->deferRendering();
     } 
@@ -327,7 +322,7 @@ void RoleCustomizationWidget::createCriteriaWidgets()
 
         std::string apiAddress = urlToCall + this->getCredentials();
 
-        std::cout << "address to call : " << apiAddress << std::endl;
+    std::cout << "RoleCustomizationWidget : [GET] address to call : " << apiAddress << std::endl;
 
         if (client->get(apiAddress))
         {
@@ -345,66 +340,71 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
     mapIdAssets.clear();
     mapEditAssets.clear();
     
-    if (response.status() >= 200 && response.status() < 400)
+    if (!err)
     {
-        Wt::Json::Value result ;
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-        try
-        {                  
-            Wt::Json::parse(response.body(), result);
-            result1 = result;
-              //descriptif
-            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-            {
-                Wt::WContainerWidget *row = new Wt::WContainerWidget();
-                row->setStyleClass("row-fluid");
-                Wt::Json::Object tmp = (*idx1);
-                
-                Wt::WContainerWidget *labelAssetContainer = new Wt::WContainerWidget();
-                labelAssetContainer->setStyleClass("span2");
-                Wt::WText *labelAsset = new Wt::WText();
-                labelAsset->setText(tmp.get("name"));
-                labelAssetContainer->addWidget(labelAsset);
-                
-                Wt::WContainerWidget *lineEditAssetContainer = new Wt::WContainerWidget();
-                lineEditAssetContainer->setStyleClass("span3 control-group");
-                Wt::WLineEdit *lineEditAsset = new Wt::WLineEdit();
-                lineEditAssetContainer->addWidget(lineEditAsset);
-                mapIdAssets[idx] = tmp.get("id");
-                mapEditAssets[idx] = lineEditAsset;
-                
-                Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
-                Wt::WPushButton *saveButton = new Wt::WPushButton();
-                saveButton->setTextFormat(Wt::XHTMLUnsafeText);
-                saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
-                saveButton->setStyleClass("span1");
-                saveButton->addStyleClass("btn-primary");
-                saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putAssetAlias, this, idx));
-                saveButtonContainer->addWidget(saveButton);
-                
-                
-                row->addWidget(labelAssetContainer);
-                row->addWidget(lineEditAssetContainer);
-                row->addWidget(saveButtonContainer);
-                assetsContainer->addWidget(row);
-                idx++;
-                
-                fillAssetsFields();
-            }
-        }
-        catch (Wt::Json::ParseError const& e)
+        if (response.status() >= 200 && response.status() < 300)
         {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
-        }
+            Wt::Json::Value result ;
+            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+            try
+            {                  
+                Wt::Json::parse(response.body(), result);
+                result1 = result;
+                  //descriptif
+                for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+                {
+                    Wt::WContainerWidget *row = new Wt::WContainerWidget();
+                    row->setStyleClass("row-fluid");
+                    Wt::Json::Object tmp = (*idx1);
 
-        catch (Wt::Json::TypeException const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-        }          
+                    Wt::WContainerWidget *labelAssetContainer = new Wt::WContainerWidget();
+                    labelAssetContainer->setStyleClass("span2");
+                    Wt::WText *labelAsset = new Wt::WText();
+                    labelAsset->setText(tmp.get("name"));
+                    labelAssetContainer->addWidget(labelAsset);
+
+                    Wt::WContainerWidget *lineEditAssetContainer = new Wt::WContainerWidget();
+                    lineEditAssetContainer->setStyleClass("span3 control-group");
+                    Wt::WLineEdit *lineEditAsset = new Wt::WLineEdit();
+                    lineEditAssetContainer->addWidget(lineEditAsset);
+                    mapIdAssets[idx] = tmp.get("id");
+                    mapEditAssets[idx] = lineEditAsset;
+
+                    Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
+                    Wt::WPushButton *saveButton = new Wt::WPushButton();
+                    saveButton->setTextFormat(Wt::XHTMLUnsafeText);
+                    saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
+                    saveButton->setStyleClass("span1");
+                    saveButton->addStyleClass("btn-primary");
+                    saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putAssetAlias, this, idx));
+                    saveButtonContainer->addWidget(saveButton);
+
+
+                    row->addWidget(labelAssetContainer);
+                    row->addWidget(lineEditAssetContainer);
+                    row->addWidget(saveButtonContainer);
+                    assetsContainer->addWidget(row);
+                    idx++;
+
+                    fillAssetsFields();
+                }
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+            }
+
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+            }          
+        }
     }
     else
     {
-         Wt::log("warning") << "fct handleHttpResponse" << response.body();
+//         Wt::log("warning") << "fct handleHttpResponse" << response.body();
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
     }
 }
 
@@ -413,44 +413,49 @@ void RoleCustomizationWidget::getMedias(boost::system::error_code err, const Wt:
     Wt::WApplication::instance()->resumeRendering();
     int idx = 0;
     mediasComboBox->clear();
-    
-    if (response.status() >= 200 && response.status() < 400)
-    {
-        Wt::Json::Value result ;
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-        try
-        {                  
-            Wt::Json::parse(response.body(), result);
-            result1 = result;
-              //descriptif
-            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-            {
-                Wt::Json::Object tmp = (*idx1);
-                mediasComboBox->addItem(tmp.get("name"));
-                mapIdMediasComboBox[idx] = tmp.get("id");
-                idx++;
-            }
-        }
-        catch (Wt::Json::ParseError const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
-        }
 
-        catch (Wt::Json::TypeException const& e)
+    if (!err)
+    {
+        if (response.status() >= 200 && response.status() < 300)
         {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-        }
-        mediasComboBox->setCurrentIndex(0);
-        mediasSet = true;
-        if (rolesSet)
-        {
-            createAssetsWidgets();
+            Wt::Json::Value result ;
+            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+            try
+            {                  
+                Wt::Json::parse(response.body(), result);
+                result1 = result;
+                  //descriptif
+                for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+                {
+                    Wt::Json::Object tmp = (*idx1);
+                    mediasComboBox->addItem(tmp.get("name"));
+                    mapIdMediasComboBox[idx] = tmp.get("id");
+                    idx++;
+                }
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+            }
+
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+            }
+            mediasComboBox->setCurrentIndex(0);
+            mediasSet = true;
+            if (rolesSet)
+            {
+                createAssetsWidgets();
+            }
         }
     }
     else
     {
-         Wt::log("warning") << "fct handleHttpResponse " << "response status: " << response.status() << " Body : "<< response.body();
-         Wt::log("warning") << "Boost error code: " << err.message();
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
+//         Wt::log("warning") << "fct handleHttpResponse " << "response status: " << response.status() << " Body : "<< response.body();
+//         Wt::log("warning") << "Boost error code: " << err.message();
     }
 }
 
@@ -460,36 +465,41 @@ void RoleCustomizationWidget::getPlugins(boost::system::error_code err, const Wt
     int idx = 0;
     pluginsComboBox->clear();
     
-    if (response.status() >= 200 && response.status() < 400)
+    if (!err)
     {
-        Wt::Json::Value result ;
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-        try
-        {                  
-            Wt::Json::parse(response.body(), result);
-            result1 = result;
-              //descriptif
-            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-            {
-                Wt::Json::Object tmp = (*idx1);
-                pluginsComboBox->addItem(tmp.get("name"));
-                mapIdPluginsComboBox[idx] = tmp.get("id");
-                idx++;
+        if (response.status() >= 200 && response.status() < 300)
+        {
+            Wt::Json::Value result ;
+            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+            try
+            {                  
+                Wt::Json::parse(response.body(), result);
+                result1 = result;
+                  //descriptif
+                for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+                {
+                    Wt::Json::Object tmp = (*idx1);
+                    pluginsComboBox->addItem(tmp.get("name"));
+                    mapIdPluginsComboBox[idx] = tmp.get("id");
+                    idx++;
+                }
             }
-        }
-        catch (Wt::Json::ParseError const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
-        }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+            }
 
-        catch (Wt::Json::TypeException const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-        }          
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+            }          
+        }
     }
     else
     {
-         Wt::log("warning") << "fct handleHttpResponse" << response.body();
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
+//         Wt::log("warning") << "fct handleHttpResponse" << response.body();
     }
 }
 
@@ -499,85 +509,93 @@ void RoleCustomizationWidget::getCriteria(boost::system::error_code err, const W
     int idx = 0;
     
     
-    if (response.status() >= 200 && response.status() < 400)
+    if (!err)
     {
-        Wt::Json::Value result ;
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-        
-        try
-        {                  
-            Wt::Json::parse(response.body(), result);
-            result1 = result;
-            
-            std::map<long long, Wt::WLineEdit*> mapIdCritEdit;
-              
-            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-            {
-                
-                Wt::Json::Object tmp = (*idx1);
-                
-                Wt::WContainerWidget *labelContainer = new Wt::WContainerWidget();
-                labelContainer->setStyleClass("span2");
-                Wt::WText *label = new Wt::WText();
-                label->setText(Wt::WString::tr("Alert.alert.operator." + (std::string)tmp.get("name")));
-                labelContainer->addWidget(label);
-                
-                
-                Wt::WContainerWidget *lineEditContainer = new Wt::WContainerWidget();
-                lineEditContainer->setStyleClass("span2 control-group");
-                Wt::WLineEdit *lineEdit = new Wt::WLineEdit();
-                long long critId = tmp.get("id");
-                lineEditContainer->addWidget(lineEdit);
-                mapIdCritEdit[critId] = lineEdit;
-                
-                Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
-                saveButtonContainer->setStyleClass("span1");
-                Wt::WPushButton *saveButton = new Wt::WPushButton();
-                saveButton->setTextFormat(Wt::XHTMLUnsafeText);
-                saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
-                saveButton->setStyleClass("span12");
-                saveButton->addStyleClass("btn-primary");
-                saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putCriterionAlias, this, idForInfMap, critId, lineEdit));
-                saveButtonContainer->addWidget(saveButton);
-                
-                Wt::WContainerWidget *exampleButtonContainer = new Wt::WContainerWidget();
-                exampleButtonContainer->setStyleClass("span1");
-                Wt::WPushButton *exampleButton = new Wt::WPushButton();
-                exampleButton->setTextFormat(Wt::XHTMLUnsafeText);
-                exampleButton->setText("<i class='icon-white icon-envelope'></i>");
-                exampleButton->setStyleClass("span12");
-                exampleButton->addStyleClass("btn-info");
-                exampleButton->clicked().connect(boost::bind(&RoleCustomizationWidget::displayMessageExample, this, idForInfMap, critId, lineEdit));
-                exampleButtonContainer->addWidget(exampleButton);
-                
-                row->addWidget(labelContainer);
-                row->addWidget(lineEditContainer);
-                row->addWidget(saveButtonContainer);
-                row->addWidget(exampleButtonContainer);
-                
-                if ((idx > 0) && (idx%2 == 1))
-                {
-                    Wt::WText *changeRow = new Wt::WText();
-                    changeRow->setTextFormat(Wt::XHTMLUnsafeText);
-                    changeRow->setText("</div><div class='row-fluid'>");
-                    row->addWidget(changeRow);
-                }
-                
-                idx++;
-            }
-            
-//            mapEditInformationCriteria[idForInfMap] = mapIdCritEdit;
-            fillCriteriaFields(idForInfMap, mapIdCritEdit);
-        }
-        catch (Wt::Json::ParseError const& e)
+        if (response.status() >= 200 && response.status() < 300)
         {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
-        }
+            Wt::Json::Value result ;
+            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
 
-        catch (Wt::Json::TypeException const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-        } 
+            try
+            {                  
+                Wt::Json::parse(response.body(), result);
+                result1 = result;
+
+                std::map<long long, Wt::WLineEdit*> mapIdCritEdit;
+
+                for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+                {
+
+                    Wt::Json::Object tmp = (*idx1);
+
+                    Wt::WContainerWidget *labelContainer = new Wt::WContainerWidget();
+                    labelContainer->setStyleClass("span2");
+                    Wt::WText *label = new Wt::WText();
+                    label->setText(Wt::WString::tr("Alert.alert.operator." + (std::string)tmp.get("name")));
+                    labelContainer->addWidget(label);
+
+
+                    Wt::WContainerWidget *lineEditContainer = new Wt::WContainerWidget();
+                    lineEditContainer->setStyleClass("span2 control-group");
+                    Wt::WLineEdit *lineEdit = new Wt::WLineEdit();
+                    long long critId = tmp.get("id");
+                    lineEditContainer->addWidget(lineEdit);
+                    mapIdCritEdit[critId] = lineEdit;
+
+                    Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
+                    saveButtonContainer->setStyleClass("span1");
+                    Wt::WPushButton *saveButton = new Wt::WPushButton();
+                    saveButton->setTextFormat(Wt::XHTMLUnsafeText);
+                    saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
+                    saveButton->setStyleClass("span12");
+                    saveButton->addStyleClass("btn-primary");
+                    saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putCriterionAlias, this, idForInfMap, critId, lineEdit));
+                    saveButtonContainer->addWidget(saveButton);
+
+                    Wt::WContainerWidget *exampleButtonContainer = new Wt::WContainerWidget();
+                    exampleButtonContainer->setStyleClass("span1");
+                    Wt::WPushButton *exampleButton = new Wt::WPushButton();
+                    exampleButton->setTextFormat(Wt::XHTMLUnsafeText);
+                    exampleButton->setText("<i class='icon-white icon-envelope'></i>");
+                    exampleButton->setStyleClass("span12");
+                    exampleButton->addStyleClass("btn-info");
+                    exampleButton->clicked().connect(boost::bind(&RoleCustomizationWidget::displayMessageExample, this, idForInfMap, critId, lineEdit));
+                    exampleButtonContainer->addWidget(exampleButton);
+
+                    row->addWidget(labelContainer);
+                    row->addWidget(lineEditContainer);
+                    row->addWidget(saveButtonContainer);
+                    row->addWidget(exampleButtonContainer);
+
+                    if ((idx > 0) && (idx%2 == 1))
+                    {
+                        Wt::WText *changeRow = new Wt::WText();
+                        changeRow->setTextFormat(Wt::XHTMLUnsafeText);
+                        changeRow->setText("</div><div class='row-fluid'>");
+                        row->addWidget(changeRow);
+                    }
+
+                    idx++;
+                }
+
+    //            mapEditInformationCriteria[idForInfMap] = mapIdCritEdit;
+                fillCriteriaFields(idForInfMap, mapIdCritEdit);
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+            }
+
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+            } 
+        }
+    }
+    else
+    {
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
     }
 }
 
@@ -587,117 +605,115 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
     int idx = 0;
     informationsContainer->clear();
     
-    if (response.status() >= 200 && response.status() < 400)
+    if (!err)
     {
-        Wt::Json::Value result ;
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-        try
-        {                  
-            Wt::Json::parse(response.body(), result);
-            result1 = result;
-              //descriptif
-            
-            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-            {
-                Wt::Json::Object tmp = (*idx1);
-                
-                // do not show "not to display" inf
-                bool display = tmp.get("display");
-                if (!display)
+        if (response.status() >= 200 && response.status() < 300)
+        {
+            Wt::Json::Value result ;
+            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+            try
+            {                  
+                Wt::Json::parse(response.body(), result);
+                result1 = result;
+                  //descriptif
+
+                for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
                 {
-                    continue;
+                    Wt::Json::Object tmp = (*idx1);
+
+                    // do not show "not to display" inf
+                    bool display = tmp.get("display");
+                    if (!display)
+                    {
+                        continue;
+                    }
+
+                    Wt::WText *infoBoxOpen = new Wt::WText();
+                    infoBoxOpen->setTextFormat(Wt::XHTMLUnsafeText);
+                    infoBoxOpen->setText(
+                    "</div>"
+                    "<div class='widget-box'>"
+                    "   <div class='widget-title'>"
+                    "       <span class='icon'><i class='icon-th-list'></i></span>"
+                    "       <h5>Information : " + (std::string)tmp.get("name") + "</h5>"
+                    "   </div>"
+                    "   <div class='widget-content'>"
+                    "       <div class='container-fluid no-padding'>");
+
+                    Wt::WText *infoBoxClose = new Wt::WText();
+                    infoBoxClose->setTextFormat(Wt::XHTMLUnsafeText);
+                    infoBoxClose->setText(
+                    "       </div>"
+                    "   </div>"
+                    "</div>"
+                    "<div>");
+                    informationsContainer->addWidget(infoBoxOpen);
+
+                    Wt::WContainerWidget *row = new Wt::WContainerWidget();
+                    row->setStyleClass("row-fluid");
+
+                    Wt::WContainerWidget *labelContainer = new Wt::WContainerWidget();
+                    Wt::WText *label = new Wt::WText();
+                    label->setText(tmp.get("name"));
+                    labelContainer->setStyleClass("span2");
+                    labelContainer->addWidget(label);
+
+                    Wt::WContainerWidget *lineEditContainer = new Wt::WContainerWidget();
+                    Wt::WLineEdit *lineEdit = new Wt::WLineEdit();
+                    lineEditContainer->setStyleClass("span2 control-group");
+                    lineEditContainer->addWidget(lineEdit);
+
+                    mapEditInformations[idx] = lineEdit;
+                    mapIdInformations[idx] = tmp.get("id");
+
+                    Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
+                    saveButtonContainer->setStyleClass("span1");
+                    Wt::WPushButton *saveButton = new Wt::WPushButton();
+                    saveButton->setTextFormat(Wt::XHTMLUnsafeText);
+                    saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
+                    saveButton->setStyleClass("span12");
+                    saveButton->addStyleClass("btn-primary");
+                    saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putInformationAlias, this, idx));
+                    saveButtonContainer->addWidget(saveButton);
+
+                    row->addWidget(labelContainer);
+                    row->addWidget(lineEditContainer);
+                    row->addWidget(saveButtonContainer);
+                    informationsContainer->addWidget(row);
+
+                    Wt::WContainerWidget *rowCriteria = new Wt::WContainerWidget();
+                    rowCriteria->setStyleClass("row-fluid");
+                    mapRowCriteriaInformations[idx] = rowCriteria;
+                    informationsContainer->addWidget(rowCriteria);
+
+                    idx++;
+                    informationsContainer->addWidget(infoBoxClose);
                 }
-                
-                Wt::WText *infoBoxOpen = new Wt::WText();
-                infoBoxOpen->setTextFormat(Wt::XHTMLUnsafeText);
-                infoBoxOpen->setText(
-                "</div>"
-                "<div class='widget-box'>"
-                "   <div class='widget-title'>"
-                "       <span class='icon'><i class='icon-th-list'></i></span>"
-                "       <h5>Information : " + (std::string)tmp.get("name") + "</h5>"
-                "   </div>"
-                "   <div class='widget-content'>"
-                "       <div class='container-fluid no-padding'>");
+                fillInformationsFields();
+                createCriteriaWidgets();
 
-                Wt::WText *infoBoxClose = new Wt::WText();
-                infoBoxClose->setTextFormat(Wt::XHTMLUnsafeText);
-                infoBoxClose->setText(
-                "       </div>"
-                "   </div>"
-                "</div>"
-                "<div>");
-                informationsContainer->addWidget(infoBoxOpen);
-                
-                Wt::WContainerWidget *row = new Wt::WContainerWidget();
-                row->setStyleClass("row-fluid");
-                
-                Wt::WContainerWidget *labelContainer = new Wt::WContainerWidget();
-                Wt::WText *label = new Wt::WText();
-                label->setText(tmp.get("name"));
-                labelContainer->setStyleClass("span2");
-                labelContainer->addWidget(label);
-                
-                Wt::WContainerWidget *lineEditContainer = new Wt::WContainerWidget();
-                Wt::WLineEdit *lineEdit = new Wt::WLineEdit();
-                lineEditContainer->setStyleClass("span2 control-group");
-                lineEditContainer->addWidget(lineEdit);
-                
-                mapEditInformations[idx] = lineEdit;
-                mapIdInformations[idx] = tmp.get("id");
-                
-                Wt::WContainerWidget *saveButtonContainer = new Wt::WContainerWidget();
-                saveButtonContainer->setStyleClass("span1");
-                Wt::WPushButton *saveButton = new Wt::WPushButton();
-                saveButton->setTextFormat(Wt::XHTMLUnsafeText);
-                saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
-                saveButton->setStyleClass("span12");
-                saveButton->addStyleClass("btn-primary");
-                saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putInformationAlias, this, idx));
-                saveButtonContainer->addWidget(saveButton);
-                
-                row->addWidget(labelContainer);
-                row->addWidget(lineEditContainer);
-                row->addWidget(saveButtonContainer);
-                informationsContainer->addWidget(row);
-                
-                Wt::WContainerWidget *rowCriteria = new Wt::WContainerWidget();
-                rowCriteria->setStyleClass("row-fluid");
-                mapRowCriteriaInformations[idx] = rowCriteria;
-                informationsContainer->addWidget(rowCriteria);
-                
-                idx++;
-                informationsContainer->addWidget(infoBoxClose);
             }
-            fillInformationsFields();
-            createCriteriaWidgets();
-            
-        }
-        catch (Wt::Json::ParseError const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
-        }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+            }
 
-        catch (Wt::Json::TypeException const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-        }          
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+            }          
+        }
     }
     else
     {
-         Wt::log("warning") << "fct handleHttpResponse" << response.body();
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
+//         Wt::log("warning") << "fct handleHttpResponse" << response.body();
     }
 }
 
 void RoleCustomizationWidget::putAssetAlias(int idx)
-{
-    std::string urlToCall = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string>(mapIdAssets[idx])
-                + "/" + "alias";
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutAssetAlias, this, _1, _2, mapEditAssets[idx]));
-
-    std::string apiAddress = urlToCall + this->getCredentials();
-
+{    
     std::string strMessage = "{\n"
             "\"alias\" : {\n\
             \"role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
@@ -710,7 +726,14 @@ void RoleCustomizationWidget::putAssetAlias(int idx)
     Wt::Http::Message message;
     message.addBodyText(strMessage);
 
-    if (client->put(apiAddress, message))
+    std::string urlToCall = this->getApiUrl()
+            + "/assets/" + boost::lexical_cast<std::string>(mapIdAssets[idx])
+            + "/alias"  + this->getCredentials();
+    std::cout << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall << std::endl;
+
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutAssetAlias, this, _1, _2, mapEditAssets[idx]));
+    if (client->put(urlToCall, message))
     {
         Wt::WApplication::instance()->deferRendering();
     } 
@@ -718,13 +741,6 @@ void RoleCustomizationWidget::putAssetAlias(int idx)
 
 void RoleCustomizationWidget::putPluginAlias()
 {
-    std::string urlToCall = this->getApiUrl() + "/plugins/" + boost::lexical_cast<std::string>(mapIdPluginsComboBox[pluginsComboBox->currentIndex()])
-                + "/" + "alias";
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutPluginAlias, this, _1, _2, pluginEditLine));
-
-    std::string apiAddress = urlToCall + this->getCredentials();
-
     std::string strMessage = "{\n"
             "\"alias\" : {\n\
             \"role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
@@ -737,7 +753,14 @@ void RoleCustomizationWidget::putPluginAlias()
     Wt::Http::Message message;
     message.addBodyText(strMessage);
 
-    if (client->put(apiAddress, message))
+    std::string urlToCall = this->getApiUrl()
+            + "/plugins/" + boost::lexical_cast<std::string>(mapIdPluginsComboBox[pluginsComboBox->currentIndex()])
+            + "/alias" + this->getCredentials();
+    std::cout << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall << std::endl;
+
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutPluginAlias, this, _1, _2, pluginEditLine));
+    if (client->put(urlToCall, message))
     {
         Wt::WApplication::instance()->deferRendering();
     } 
@@ -747,19 +770,6 @@ void RoleCustomizationWidget::putPluginAlias()
 void RoleCustomizationWidget::putInformationAlias(int idx)
 {
     Wt::Json::Object infIdJson = mapIdInformations[idx];
-    std::string urlToCall = this->getApiUrl() 
-            + "/plugins/" + boost::lexical_cast<std::string>(mapIdPluginsComboBox[pluginsComboBox->currentIndex()])
-            + "/sources/" + boost::lexical_cast<std::string>((long long)infIdJson.get("source_id"))
-            + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
-            + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
-            + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
-            + "/alias";
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutAssetAlias, this, _1, _2, mapEditInformations[idx]));
-
-    std::string apiAddress = urlToCall + this->getCredentials();
-    
-    std::cout << apiAddress << std::endl;
 
     std::string strMessage = "{\n"
             "\"alias\" : {\n\
@@ -773,7 +783,18 @@ void RoleCustomizationWidget::putInformationAlias(int idx)
     Wt::Http::Message message;
     message.addBodyText(strMessage);
 
-    if (client->put(apiAddress, message))
+    std::string urlToCall = this->getApiUrl()
+            + "/plugins/" + boost::lexical_cast<std::string>(mapIdPluginsComboBox[pluginsComboBox->currentIndex()])
+            + "/sources/" + boost::lexical_cast<std::string>((long long)infIdJson.get("source_id"))
+            + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
+            + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
+            + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
+            + "/alias" + this->getCredentials();
+    std::cout << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall << std::endl;
+
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutAssetAlias, this, _1, _2, mapEditInformations[idx]));
+    if (client->put(urlToCall, message))
     {
         Wt::WApplication::instance()->deferRendering();
     } 
@@ -783,21 +804,6 @@ void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCri
 {
     Wt::Json::Object infIdJson = mapIdInformations[idForInfMap];
  
-    std::string urlToCall = this->getApiUrl() 
-            + "/plugins/" + boost::lexical_cast<std::string>(mapIdPluginsComboBox[pluginsComboBox->currentIndex()])
-            + "/sources/" + boost::lexical_cast<std::string>((long long)infIdJson.get("source_id"))
-            + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
-            + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
-            + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
-            + "/criteria/" + boost::lexical_cast<std::string>(idCrit)
-            + "/alias";
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutCritAlias, this, _1, _2, critEdit));
-
-    std::string apiAddress = urlToCall + this->getCredentials();
-
-    std::cout << apiAddress << std::endl;
-
     std::string strMessage = "{\n"
             "\"alias\" : {\n\
             \"role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
@@ -810,7 +816,19 @@ void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCri
     Wt::Http::Message message;
     message.addBodyText(strMessage);
 
-    if (client->put(apiAddress, message))
+    std::string urlToCall = this->getApiUrl() 
+            + "/plugins/" + boost::lexical_cast<std::string>(mapIdPluginsComboBox[pluginsComboBox->currentIndex()])
+            + "/sources/" + boost::lexical_cast<std::string>((long long)infIdJson.get("source_id"))
+            + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
+            + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
+            + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
+            + "/criteria/" + boost::lexical_cast<std::string>(idCrit)
+            + "/alias" + this->getCredentials();
+    std::cout << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall << std::endl;
+
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutCritAlias, this, _1, _2, critEdit));
+    if (client->put(urlToCall, message))
     {
         Wt::WApplication::instance()->deferRendering();
     }
@@ -834,19 +852,16 @@ void RoleCustomizationWidget::fillAssetsFields()
     
     for(std::map<int,long long>::const_iterator i = mapIdAssets.begin() ; i != mapIdAssets.end() ; i ++)
     {
-        std::string urlToCall = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string>(i->second)
-                + "/" + "alias";
+        std::string urlToCall = this->getApiUrl()
+                + "/assets/" + boost::lexical_cast<std::string>(i->second)
+                + "/alias" + this->getCredentials()
+                + "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
+                +"&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
+        std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+
         Wt::Http::Client *client = new Wt::Http::Client(this);
         client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, mapEditAssets[i->first]));
-
-        std::string apiAddress = urlToCall + this->getCredentials();
-        
-        apiAddress += "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
-                +"&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
-
-        std::cout << "address to call : " << apiAddress << std::endl;
-
-        if (client->get(apiAddress))
+        if (client->get(urlToCall))
         {
             Wt::WApplication::instance()->deferRendering();
         } 
@@ -860,23 +875,20 @@ void RoleCustomizationWidget::fillCriteriaFields(int idForInfMap, std::map<long 
     {
         Wt::Json::Object infIdJson = mapIdInformations[idForInfMap];
         std::string urlToCall = this->getApiUrl() 
-            + "/plugins/" + boost::lexical_cast<std::string>((long long)infIdJson.get("plugin_id"))
-            + "/sources/" + boost::lexical_cast<std::string>((long long)infIdJson.get("source_id"))
-            + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
-            + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
-            + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
-            + "/criteria/" + boost::lexical_cast<std::string>(j->first)
-            + "/alias";
+                + "/plugins/" + boost::lexical_cast<std::string>((long long)infIdJson.get("plugin_id"))
+                + "/sources/" + boost::lexical_cast<std::string>((long long)infIdJson.get("source_id"))
+                + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
+                + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
+                + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
+                + "/criteria/" + boost::lexical_cast<std::string>(j->first)
+                + "/alias" + this->getCredentials()
+                +"&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
+                +"&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
+        std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
+
         Wt::Http::Client *client = new Wt::Http::Client(this);
         client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, j->second));
-        std::string apiAddress = urlToCall + this->getCredentials();
-
-        apiAddress += "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
-                +"&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
-
-        std::cout << "address to call : " << apiAddress << std::endl;
-
-        if (client->get(apiAddress))
+        if (client->get(urlToCall))
         {
             Wt::WApplication::instance()->deferRendering();
         } 
@@ -895,18 +907,15 @@ void RoleCustomizationWidget::fillInformationsFields()
                 + "/searches/" + boost::lexical_cast<std::string>((long long)infIdJson.get("search_id"))
                 + "/inf_values/" + boost::lexical_cast<std::string>((long long)infIdJson.get("sub_search_number"))
                 + "/units/" + boost::lexical_cast<std::string>((long long)infIdJson.get("unit_id"))
-                + "/alias";
-        Wt::Http::Client *client = new Wt::Http::Client(this);
-        client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, mapEditInformations[i->first]));
-
-        std::string apiAddress = urlToCall + this->getCredentials();
-        
-        apiAddress += "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
+                + "/alias" + this->getCredentials()
+                + "&role=" + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
                 +"&media=" + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
 
-        std::cout << "address to call : " << apiAddress << std::endl;
+        std::cout << "RoleCustomizationWidget : [GET] address to call : " << urlToCall << std::endl;
 
-        if (client->get(apiAddress))
+        Wt::Http::Client *client = new Wt::Http::Client(this);
+        client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, mapEditInformations[i->first]));
+        if (client->get(urlToCall))
         {
             Wt::WApplication::instance()->deferRendering();
         } 
@@ -918,44 +927,52 @@ void RoleCustomizationWidget::getAlias(boost::system::error_code err, const Wt::
 {
     Wt::WApplication::instance()->resumeRendering();
     
-    if (response.status() >= 200 && response.status() < 400)
+    if (!err)
     {
-        Wt::Json::Value result ;
-        Wt::Json::Object& result1 = Wt::Json::Object::Empty;
-        try
-        {                  
-            Wt::Json::parse(response.body(), result);
-            result1 = result;
-            std::string res = result1.get("alias");
-            edit->setText(res);
-
-        }
-        catch (Wt::Json::ParseError const& e)
+        if (response.status() >= 200 && response.status() < 300)
         {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
-        }
+            Wt::Json::Value result ;
+            Wt::Json::Object& result1 = Wt::Json::Object::Empty;
+            try
+            {                  
+                Wt::Json::parse(response.body(), result);
+                result1 = result;
+                std::string res = result1.get("alias");
+                edit->setText(res);
 
-        catch (Wt::Json::TypeException const& e)
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+            }
+
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+            }          
+        }
+        else
         {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-        }          
+            Wt::Json::Value result ;
+            Wt::Json::Object& result1 = Wt::Json::Object::Empty;
+            try
+            {                  
+                Wt::Json::parse(response.body(), result);
+                result1 = result;
+                std::string res = result1.get("message");
+                edit->setText(res);
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+            }
+    //        Wt::log("warning") << "fct handleHttpResponse" << response.body();
+        }
     }
     else
     {
-        Wt::Json::Value result ;
-        Wt::Json::Object& result1 = Wt::Json::Object::Empty;
-        try
-        {                  
-            Wt::Json::parse(response.body(), result);
-            result1 = result;
-            std::string res = result1.get("message");
-            edit->setText(res);
-        }
-        catch (Wt::Json::ParseError const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
-        }
-//        Wt::log("warning") << "fct handleHttpResponse" << response.body();
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
     }
 }
 
@@ -981,3 +998,5 @@ void RoleCustomizationWidget::resPutCritAlias(boost::system::error_code err, con
     doJavaScript("$('#" + boost::lexical_cast<std::string>(edit->parent()->id()) + "').toggleClass('success',true)");
     Wt::log("warning") << response.body();
 }
+
+

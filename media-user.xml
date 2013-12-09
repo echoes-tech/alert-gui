@@ -72,7 +72,7 @@
 
     <message id="Alert.media-user.name-invalid">Invalid</message>
     <message id="Alert.media-user.database-error-title">Database error</message>
-    <message id="Alert.media-user.database-error">Error : {1} | {2}</message>
+    <message id="Alert.media-user.database-error">Error Data Base</message>
   
     <message id="Alert.alert-list.delete-alerts-message">The following media will be deleted too:</message>
     <message id="Alert.alert-list.delete-alert-message">The following media will be deleted too:</message>

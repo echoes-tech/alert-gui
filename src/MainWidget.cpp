@@ -222,16 +222,7 @@ void MainWidget::createPage(Enums::EPageType enumPT)
     {
         case Enums::EPageType::ASSET:
         {
-            try
-            {
-                Wt::Dbo::Transaction transaction(*(this->session));
                 amw = new AssetManagementWidget(this->session, this->_apiUrl);
-                transaction.commit();
-            }
-            catch (Wt::Dbo::Exception e)
-            {
-                Wt::log("error") << e.what();
-            }
             break;
         }
         case Enums::EPageType::WELCOME:
@@ -253,7 +244,10 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         case Enums::EPageType::PLUGIN:
         {
             //TODO: Change this temporary restriction with right integration
-            if(this->session->user()->organization.id() ==  1 || this->session->user()->organization.id() == 46 || this->session->user()->organization.id() == 51 || this->session->user()->organization.id() == 52)
+            if(this->session->user()->organization.id() ==  1
+                    || this->session->user()->organization.id() == 46
+                    || this->session->user()->organization.id() == 51
+                    || this->session->user()->organization.id() == 52)
             {
                 pew = new PluginEditionWidget(this->session, _apiUrl);
             }
@@ -310,34 +304,9 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
             {
                 Wt::log("error") << e.what();
             }
-            omw = new OptionManagementWidget(omm,this->session);
+            omw = new OptionManagementWidget(omm, this->session, _apiUrl);
             break;
         }
-//        case Enums::EAccountSubmenu::USER:
-//        {
-//            
-//            break;
-//        }
-        /*
-        case Enums::EAccountSubmenu::MEDIA:
-        {
-           uew = new UserEditionWidget();
-            try
-            {
-                Wt::Dbo::Transaction transaction(*(this->session));
-                uem = new UserEditionModel(const_cast<User *>(this->session->user().get()));
-                uem->setSession(session);
-                transaction.commit();
-            }
-            catch (Wt::Dbo::Exception e)
-            {
-                Wt::log("error") << e.what();
-            }
-            uew->setModel(uem);
-            uew->setSession(session); 
-            break;
-        }
-    */
         case Enums::EAccountSubmenu::ROLE:
         {
             rcw = new RoleCustomizationWidget(session, _apiUrl);
@@ -481,7 +450,16 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::ASSET:
                 {
                     this->contentFluid->addWidget(amw);
-                    amw->recoverListAsset();
+                    try
+                    {
+                       Wt::Dbo::Transaction transaction(*(this->session));
+                       amw->recoverListAsset();
+                       transaction.commit();
+                   }
+                   catch (Wt::Dbo::Exception e)
+                   {
+                       Wt::log("error") << e.what();
+                   }
                     break;
                 }
                 case Enums::EPageType::WELCOME:
@@ -492,7 +470,6 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::RECIPIENTS:
                 {
                     this->contentFluid->addWidget(rpw);
-                    rpw->show();
                     break;
                 }
                 case Enums::EPageType::ALERTS:
@@ -504,7 +481,10 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::PLUGIN:
                 {
                     //TODO: Change this temporary restriction with right integration
-                    if(this->session->user()->organization.id() ==  1 || this->session->user()->organization.id() == 46 || this->session->user()->organization.id() == 51 || this->session->user()->organization.id() == 52)
+                    if(this->session->user()->organization.id() ==  1
+                            || this->session->user()->organization.id() == 46
+                            || this->session->user()->organization.id() == 51
+                            || this->session->user()->organization.id() == 52)
                     {
                         this->contentFluid->addWidget(pew);
                     }
@@ -543,15 +523,6 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                     this->contentFluid->addWidget(omw);
                     break;
                 }
-                /*
-                case Enums::EAccountSubmenu::MEDIA:
-                {
-                    this->contentFluid->addWidget(ctw);
-                    ctw->show();
-//                    this->contentFluid->addWidget(uew);
-                    break;
-                }
-                */
                 case Enums::EAccountSubmenu::ROLE:
                 {
                     this->contentFluid->addWidget(rcw);
@@ -618,11 +589,11 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
             res = "hdd";
             break;
         }
-        case Enums::EPageType::SUBMENU_ALERT:
-        {
-            res = "eye-open";
-            break;
-        }
+//        case Enums::EPageType::SUBMENU_ALERT:
+//        {
+//            res = "eye-open";
+//            break;
+//        }
         case Enums::EPageType::RECIPIENTS:
         {
             res = "user"; //group

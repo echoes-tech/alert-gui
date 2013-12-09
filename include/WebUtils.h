@@ -206,8 +206,7 @@ extern void split(SplitSet& tokens,
 // Replace all occurences of the 'from' char to the 'to' char in 'v'
 extern void replaceAll(std::string& v, char from, char to);
 
-extern WT_API std::string urlEncode(const std::string& url,
-				    const std::string& allowed);
+extern WT_API std::string urlEncode(const std::string& url); // gkr
 
 extern std::string dataUrlDecode(const std::string& url,
 				 std::vector<unsigned char> &data);

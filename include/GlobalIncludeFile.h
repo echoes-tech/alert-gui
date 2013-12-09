@@ -15,11 +15,8 @@
 
 #include "Auth/RegistrationModelAlert.h"
 #include "Auth/RegistrationWidgetAlert.h"
-#include "AssetManagementModel.h"
 #include "AssetManagementWidget.h"
-//#include "AlertEditionModel.h"
-//#include "AlertEditionWidget.h"
-#include "UserEditionModel.h"
+//#include "UserEditionModel.h"
 #include "UserEditionWidget.h"
 #include "AlertListWidget.h"
 #include "AuthWidget.h"
@@ -35,15 +32,12 @@
 #endif	/* GLOBALINCLUDEFILE_H */
 
 class PluginEditionWidget;
-//class AlertEditionWidget;
-//class UserEditionWidget;
 class AlertListWidget;
-class UserEditionModel;
+//class UserEditionModel;
 class AssetManagementWidget;
-class AssetManagementModel;
+//class AssetManagementModel;
 class OptionManagementWidget;
 class OptionManagementModel;
-//class AlertEditionModel;
 class RoleCustomizationWidget;
 class MainWidget;
 class EchoesHome;

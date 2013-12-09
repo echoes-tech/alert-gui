@@ -19,7 +19,7 @@
 
 //#include <Wt/WSelectionBox>
 
-    #include <Wt/WAnimation>
+#include <Wt/WAnimation>
 #include <Wt/WPanel>
 #include <Wt/WText>
 
@@ -82,6 +82,7 @@ public:
     void                        getPluginsForAsset(boost::system::error_code err, const Wt::Http::Message& response, long long idAsset, long long index);
     void                        getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
     void                        getInformations(boost::system::error_code err, const Wt::Http::Message& response, long long idPlugin, long long index);
+    void                        postMedia(boost::system::error_code err, const Wt::Http::Message& response);
 
     int                         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
 

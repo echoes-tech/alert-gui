@@ -1031,14 +1031,71 @@ int     AlertsWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, st
 void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
 {
 
+    
     std::cout << "ADD RESOURCE" << std::endl;
     
-    std::cout << "in argument : " << std::endl;
-    for (std::vector<Wt::WInteractWidget*>::iterator it = argument.begin();
-            it != argument.end(); it++)
+    std::string message;
+    std::string data = ((Wt::WLineEdit*)*argument.begin())->text().toUTF8();
+    boost::algorithm::to_lower(data);
+    message = "{\n\"name\": \"" + data + "\",\n";
+    
+//    message = "{\n\"name\": \"" + ((Wt::WLineEdit*)*argument.begin())->text().toUTF8() + "\",\n";
+
+    switch ((*unitsIds_.find(idAll_.second.first)).second)
     {
-        std::cout << ((Wt::WLineEdit*)(*it))->text() << std::endl;
+        case Enums::EInformationUnitType::text :
+        {
+            for (MapUnitOne::iterator itUnit = resourcesUnitOne.begin(); itUnit != resourcesUnitOne.end(); itUnit++)
+            {
+                message = "\"value\": \"" + (*itUnit).second.first.first->text().toUTF8() + "\",\n";
+                std::cout
+                        << "input : " << (*itUnit).second.first.first->text().toUTF8() << std::endl
+                        << "Comp : " << (*itUnit).second.second->currentText().toUTF8() << std::endl;
+            }
+            break;
+        }
+        case Enums::EInformationUnitType::number :
+        {
+            for (MapUnitTwo::iterator itUnit = resourcesUnitTwo.begin(); itUnit != resourcesUnitTwo.end(); itUnit++)
+            {
+                message = "\"value\": \"" + (*itUnit).second.first.first->text().toUTF8() + "\",\n";
+                std::cout
+                        << "input : " << (*itUnit).second.first.first->text().toUTF8() << std::endl
+                        << "Comp : " << (*itUnit).second.second.first->currentText().toUTF8() << std::endl
+                        << "size : " << (*itUnit).second.second.second->currentText().toUTF8() << std::endl;
+            }
+            break;
+        }
+        case 3 : //Enums::EInformationUnitType::boolean
+        {
+            if (!(unitThree_->isHidden()))
+            {
+                std::cout << "boolean : ";
+                if (bool_ == 0)
+                {
+                    message = "\"value\": \"true\",\n";
+                    std::cout << "True" << std::endl;
+                }
+                else if (bool_ == 1)
+                {
+                    message = "\"value\": \"false\",\n";
+                    std::cout << "False" << std::endl;
+                }
+                else
+                    std::cout << "Bug" << std::endl;
+            }
+            break;
+        }
     }
+
+    message = "\"thread_sleep\": 0,\n";
+
+//    message = "\"key_value\": ,\n";
+    
+    message = "\"information_data_id\": " + boost::lexical_cast<std::string>(idAll_.second.first) + ",\n";
+
+    message = "\"alert_criteria_id\": 0\n";
+
 
     std::cout << "Asset , plugin info : " << std::endl;
     std::cout << "Id asset : " << idAll_.first.first << " name : ";
@@ -1062,67 +1119,28 @@ void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
     
     std::cout << std::endl << "KEY ?" << std::endl;
     
+    message = "}\n";
     
-    switch ((*unitsIds_.find(idAll_.second.first)).second)
-    {
-        case Enums::EInformationUnitType::text :
-        {
-            for (MapUnitOne::iterator itUnit = resourcesUnitOne.begin(); itUnit != resourcesUnitOne.end(); itUnit++)
-            {
-                std::cout
-                        << "input : " << (*itUnit).second.first.first->text().toUTF8() << std::endl
-                        << "Comp : " << (*itUnit).second.second->currentText().toUTF8() << std::endl;
-            }
-            break;
-        }
-        case Enums::EInformationUnitType::number :
-        {
-            for (MapUnitTwo::iterator itUnit = resourcesUnitTwo.begin(); itUnit != resourcesUnitTwo.end(); itUnit++)
-            {
-                std::cout
-                        << "input : " << (*itUnit).second.first.first->text().toUTF8() << std::endl
-                        << "Comp : " << (*itUnit).second.second.first->currentText().toUTF8() << std::endl
-                        << "size : " << (*itUnit).second.second.second->currentText().toUTF8() << std::endl;
-            }
-            break;
-        }
-        case 3 : //Enums::EInformationUnitType::boolean
-        {
-            if (!(unitThree_->isHidden()))
-            {
-                std::cout << "boolean : ";
-                if (bool_ == 0)
-                    std::cout << "True" << std::endl;
-                else if (bool_ == 1)
-                    std::cout << "False" << std::endl;
-                else
-                    std::cout << "Bug" << std::endl;
-            }
-            break;
-        }
-    }
-    
-//    std::transform(data.begin(), data.end(), data.begin(), std::tolower);
 
     
 //    std::vector<Wt::WInteractWidget*>::iterator i = argument.begin();
 //    Wt::WLineEdit *assetEdit = (Wt::WLineEdit*)(*i);
 
-    /*
-    Wt::Http::Message messageAsset;
-    messageAsset.addBodyText("{\n\"med_id\": " + boost::lexical_cast<std::string>(this->type_) +
-            ",\n\"mev_value\": \"" + boost::lexical_cast<std::string>(assetEdit->text()) + "\"\n}");
-    
+    Wt::Http::Message messageAlert;
+    messageAlert.addBodyText(message);
+
     std::string apiAddress = this->getApiUrl() + "/medias/";
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&UserEditionWidget::postMedia, this, _1, _2));
+    client->done().connect(boost::bind(&AlertsWidget::postMedia, this, _1, _2));
     apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
+
     Wt::log("debug") << "AlertsWidget : [POST] address to call : " << apiAddress;
-    if (client->post(apiAddress, messageAsset))
+    Wt::log("debug") << "[POST] Message : " << messageAlert.body();
+
+    if (client->post(apiAddress, messageAlert))
         Wt::WApplication::instance()->deferRendering();
     else
         Wt::log("error") << "Error Client Http";
-    */
     recoverListAsset();
 }
 
@@ -1136,7 +1154,7 @@ Wt::WDialog *AlertsWidget::deleteResource(long long id)
             /*
             Wt::Http::Message message;
             message.addBodyText("");
-            std::string apiAddress = this->getApiUrl() + "/medias/" + boost::lexical_cast<std::string> (id);
+            std::string apiAddress = this->getApiUrl() + "/medias/" + boost::lexical_cast<std::string>(id);
             Wt::Http::Client *client = new Wt::Http::Client(this);
             client->done().connect(boost::bind(&UserEditionWidget::deleteMedia, this, _1, _2));
             apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
@@ -1404,6 +1422,40 @@ void AlertsWidget::getPlugins(boost::system::error_code err, const Wt::Http::Mes
                         std::cout << "Error Client Http" << std::endl;
                 }
                 */
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
+            }
+        }
+    }
+    else
+    {
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
+    }
+   newClass_ = false;
+   created_ = false;
+}
+
+void AlertsWidget::postMedia(boost::system::error_code err, const Wt::Http::Message& response)
+{    
+    Wt::WApplication::instance()->resumeRendering();
+    if (!err)
+    {
+        if(response.status() == 200)
+        {
+            try
+            {
+                Wt::Json::Value result;
+                Wt::Json::parse(response.body(), result);
+
             }
             catch (Wt::Json::ParseError const& e)
             {

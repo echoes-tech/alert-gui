@@ -7,6 +7,10 @@
     </message>
     <message id="Alert.alerts-test.nothing-alerts-test">Alerts</message>
 
+    <message id="Alert.alerts-test.test">
+        <b>Titre</b>
+    </message>
+
     <message id="Alert.alerts-test.nothing-alerts-test-text">Nothing Alerts on db</message>
   
     <message id="Alert.alerts-test.nothing-alerts-test-button">Click for Add</message>

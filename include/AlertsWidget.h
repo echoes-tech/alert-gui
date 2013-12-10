@@ -75,16 +75,23 @@ public:
     vector_type                 getResourceRowTable(long long id);
     Wt::WValidator              *editValidator(int who);
     void                        closePopup();
-    void                        recoverListAsset();
+    void                        recoverListAlert();
+    void                        recoverListRecipientAlias(long long userRoleId);
     
     void                        getAlerts(boost::system::error_code err, const Wt::Http::Message& response);
     void                        getAssets(boost::system::error_code err, const Wt::Http::Message& response);
+    void                        getUsersList(boost::system::error_code err, const Wt::Http::Message& response);
+    void                        getMedia(boost::system::error_code err, const Wt::Http::Message& response);
     void                        getPluginsForAsset(boost::system::error_code err, const Wt::Http::Message& response, long long idAsset, long long index);
     void                        getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
     void                        getInformations(boost::system::error_code err, const Wt::Http::Message& response, long long idPlugin, long long index);
+    void                        getAliasInfo(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
+    void                        getAliasAsset(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
+    void                        getAliasPlugin(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
     void                        postMedia(boost::system::error_code err, const Wt::Http::Message& response);
 
     int                         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
+    void                        checkPopupRecipients(std::string message);
 
     void                        addResource(std::vector<Wt::WInteractWidget*> argument);
     Wt::WDialog                 *deleteResource(long long id);
@@ -100,14 +107,16 @@ public:
     void                        modifRecip(long long id);
 
     void                        popupAddWidget(Wt::WDialog *dialog);
-    void                        popupPrecipient(long long id);
+    void                        popupRecipients(std::string message);
 
     
     long long                   recoverId(Wt::WSelectionBox *box, MultiMapPair infoInBox);
 
+    void                        postMediasCallApi(std::string message);
+
 private:
 
-    void                        initBoxs(Wt::WTable *tableBox);
+    void                        initBoxOne(Wt::WTable *tableBox);
 
     VectorLong                  boxActived(Wt::WSelectionBox *box, MultiMapPair infoInBox, MultiMapLongs compId, long long id);
     void                        fillInBox(Wt::WSelectionBox *box, MultiMapPair infoInBox);
@@ -130,8 +139,6 @@ private:
     void                        selectPlugin(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
     void                        selectInfo(long long id, Wt::WSelectionBox *boxInfo, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxAsset);
 
-    void                        compareBar(Wt::WContainerWidget *contain);
-    
     void                        errorsHideOne(MapUnitOne error);
     void                        errorsHideTwo(MapUnitTwo error);
 
@@ -144,6 +151,9 @@ private:
     Echoes::Dbo::Session             *session_;
     std::string         apiUrl_;
     Wt::Json::Value     alerts_;
+    Wt::Json::Value     medias_;
+    
+    MultiMapPair        userInfo_;
     
     MultiMapPair        assets_; // Assets infomations (<index <idAsset, nameAsset>>)
     MultiMapPair        plugins_; // Plugins infomations (<index <idPlugin, namePlugin>>)
@@ -163,7 +173,7 @@ private:
     Wt::WTable          *unitThree_; // Bool
     
     int                 bool_;  //for check button true/false
-    
+    int                 checkAll_;
     /**
      * pair &lsaquo; pair &lsaquo; idAsset, idPlugin &rsaquo;
      * , pair &lsaquo; idInfo, idKey &rsaquo; &rsaquo;

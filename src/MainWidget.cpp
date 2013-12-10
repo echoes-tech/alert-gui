@@ -209,7 +209,7 @@ void MainWidget::createPage(Enums::EPageType enumPT)
     {
         case Enums::EPageType::ASSET:
         {
-                amw = new AssetManagementWidget(this->session, this->_apiUrl);
+            amw = new AssetManagementWidget(this->session, this->_apiUrl);
             break;
         }
         case Enums::EPageType::WELCOME:
@@ -446,7 +446,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::ALERTS:
                 {
                     this->contentFluid->addWidget(atw);
-                    atw->recoverListAsset();
+                    atw->recoverListAlert();
                     break;
                 }
                 case Enums::EPageType::PLUGIN:

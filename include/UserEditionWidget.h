@@ -39,7 +39,7 @@ public:
     vector_type                 getResourceRowTable(long long id);
     Wt::WValidator              *editValidator(int who);
     void                        closePopup();
-    void                        recoverListAsset();
+    void                        recoverListMedia();
     
     void                        getMedia(boost::system::error_code err, const Wt::Http::Message& response);
 

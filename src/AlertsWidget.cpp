@@ -111,7 +111,15 @@ vector_type     AlertsWidget::getResourceRowTable(long long id)
                 button->setAttributeValue("class","btn btn-inverse");
                 button->setTextFormat(Wt::XHTMLUnsafeText);
                 button->setText("<span class='input-group-btn'><i class='icon-edit icon-white'></i></span>");
-                button->clicked().connect(boost::bind(&AlertsWidget::popupPrecipient, this, id));
+                button->clicked().connect(std::bind([=] ()
+                {
+                    
+                    std::cout << "Pas encore fait !" << std::endl;
+//                    popupRecipients(0);
+//                    saveLineEditOne_->show();
+//                    createUnitOne(compareWid)->show();
+//                    compareBarOne_->show();
+                }));
                 rowTable.push_back(button);
                 return (rowTable);
             }
@@ -121,12 +129,16 @@ vector_type     AlertsWidget::getResourceRowTable(long long id)
 
 }
 
-void    AlertsWidget::popupPrecipient(long long id)
+// Work popup Two---------------------------------------------------------------- |
+//                                                                                |
+//                                                                                v
+
+void    AlertsWidget::popupRecipients(std::string message)
 {
+    std::cout << "In popup popupRecipients" << std::endl;
     Wt::WDialog *dialog = new Wt::WDialog();
     dialog->setClosable(true);
     CreatePageWidget::buttonInDialogFooter(dialog);
-    
     
     Wt::WTable *tablePopup = new Wt::WTable(dialog->contents());
     tablePopup->elementAt(0, 0)->addWidget(new Wt::WText("Alert: "));
@@ -134,22 +146,36 @@ void    AlertsWidget::popupPrecipient(long long id)
     
     tablePopup->elementAt(1, 0)->addWidget(new Wt::WText("Destinataire: ")); //XML
     Wt::WComboBox *box = new Wt::WComboBox(tablePopup->elementAt(1, 1));
-    box->addItem("Romain Hinfray");
-    box->addItem("Florent Poinsaut");
-    box->addItem("Thomas Saquet");
 
+
+    for (MultiMapPair::iterator itU = userInfo_.begin(); itU != userInfo_.end(); itU++)
+    {
+        box->addItem((*itU).second.second);
+    }
+
+    box->activated().connect(std::bind([=] () {
+        std::cout << "current index : " << box->currentIndex() << std::endl;
+        recoverListRecipientAlias((*userInfo_.find(box->currentIndex())).second.first);
+    }));
+    
     tablePopup->elementAt(2, 0)->addWidget(new Wt::WText("Media: ")); //XML
     box = new Wt::WComboBox(tablePopup->elementAt(2, 1));
-    box->addItem("<i>Medias</i>");
-    box->addItem("<i>SMS</i>");
-    box->addItem("0125252525");
-    box->addItem("0125252525");
-    box->addItem("<i>Mail</i>");
-    box->addItem("new.mail@exemple.fr");
-    box->addItem("echoes.tech@echoes-tech.com");
-    box->addItem("<i>App</i>");
     
-    Wt::WTable *table = new Wt::WTable(tablePopup->elementAt(2, 2));
+    if (medias_.isNull() == false)
+    {
+        Wt::Json::Array& result1 = medias_;
+        Wt::Json::Object tmp;
+        Wt::Json::Array::const_iterator idx1;
+        Wt::WString value;
+        for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
+        {
+            tmp = (*idx1);
+            value = tmp.get("value");
+            box->addItem(value.toUTF8());
+        }
+    }
+    
+   Wt::WTable *table = new Wt::WTable(tablePopup->elementAt(2, 2));
     
     table->elementAt(0, 0)->addWidget(new Wt::WLineEdit());
     Wt::WComboBox *comboBox = new Wt::WComboBox();
@@ -165,13 +191,29 @@ void    AlertsWidget::popupPrecipient(long long id)
     tabPopup->addTab(new Wt::WTextArea("Your message error by sms"), "SMS", Wt::WTabWidget::PreLoading);
     tabPopup->addTab(new Wt::WTextArea("Your message error by app"), "APP", Wt::WTabWidget::PreLoading);
 //    tabPopup->setStyleClass("tabwidget");
+
+    std::cout << "avant finish" << std::endl;
+    dialog->finished().connect(std::bind([=] () {        
+        if (dialog->result() == Wt::WDialog::Rejected)
+        {
+            closePopup();
+            return;
+        }
+        checkPopupRecipients(message);
+        return;
+    }));
     dialog->show();
+    std::cout << "fin popuprecipient" << std::endl;
 }
+
+//                                                                                    ^
+//                                                                                    |
+// Work popup Two End --------------------------------------------------------------- |
+
+/// ///////////////////////////////////////////// ----
 
 void AlertsWidget::aSupprimer()
 {
-//    Pair pair = std::make_pair(42, "3");
-//    assets_.insert(std::make_pair(3, pair));
 
     std::cout << "A supprimer toujours la !!" << std::endl;
     std::cout << "A supprimer toujours la !!" << std::endl;
@@ -225,9 +267,10 @@ void AlertsWidget::aSupprimer()
     unitsIds_.insert(std::make_pair(44, 2));
 }
 
-// Work boxs -----------------------------------------------------------------
-
-void    AlertsWidget::initBoxs(Wt::WTable *tableBox)
+// Work popup One --------------------------------------------------------------- |
+//                                                                                |
+//                                                                                v
+void    AlertsWidget::initBoxOne(Wt::WTable *tableBox)
 {
     
     aSupprimer();
@@ -379,6 +422,8 @@ void    AlertsWidget::initBoxs(Wt::WTable *tableBox)
     }));
 }
 
+// Selected in selectionBox  ----------------
+
 void    AlertsWidget::selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo)
 {
     boxPlugin->clear();
@@ -450,6 +495,24 @@ void    AlertsWidget::selectInfo(long long id, Wt::WSelectionBox *boxInfo, Wt::W
     cleanBox(boxInfo);
 }
 
+int    AlertsWidget::selectItemBox(Wt::WSelectionBox *box, std::string select)
+{
+    Wt::WString rst = " ";
+    for (int cpt(0); cpt < box->count(); cpt++)
+    {
+        rst = box->itemText(cpt);
+        if (rst.toUTF8().compare(select) == 0)
+        {
+            std::set<int> selection;
+            selection.clear();
+            selection.insert(cpt);
+            box->setSelectedIndexes(selection);
+            return 0;
+        }
+    }
+    return 1;
+}
+
 void    AlertsWidget::cleanBox(Wt::WSelectionBox *box)
 {
     std::set<int> selection;
@@ -467,24 +530,6 @@ void    AlertsWidget::cleanBox(Wt::WSelectionBox *box)
         checkString.push_back(selected.toUTF8());
     }
 
-}
-
-int    AlertsWidget::selectItemBox(Wt::WSelectionBox *box, std::string select)
-{
-    Wt::WString rst = " ";
-    for (int cpt(0); cpt < box->count(); cpt++)
-    {
-        rst = box->itemText(cpt);
-        if (rst.toUTF8().compare(select) == 0)
-        {
-            std::set<int> selection;
-            selection.clear();
-            selection.insert(cpt);
-            box->setSelectedIndexes(selection);
-            return 0;
-        }
-    }
-    return 1;
 }
 
 void    AlertsWidget::fillInMultiMap()
@@ -605,12 +650,17 @@ void    AlertsWidget::fillInBox(Wt::WSelectionBox *box, MultiMapPair infoInBox)
     }
 }
 
-// ---------------------------------------------------
+// ------- init popup one -------
 
 void    AlertsWidget::popupAddWidget(Wt::WDialog *dialog)
 {
+    checkAll_ = 1;
     Wt::WPushButton *ButtonSC = new Wt::WPushButton("Save and continu", dialog->footer());
-    ButtonSC->clicked().connect(dialog, &Wt::WDialog::accept);    
+    ButtonSC->clicked().connect(std::bind([=] ()
+    {
+        checkAll_ = 0;
+        dialog->accept();
+    }));
 
     dialog->resize(Wt::WLength(750), Wt::WLength(500));
 
@@ -619,7 +669,7 @@ void    AlertsWidget::popupAddWidget(Wt::WDialog *dialog)
     
     Wt::WTable *tableBox = new Wt::WTable(contain);
             
-    initBoxs(tableBox);
+    initBoxOne(tableBox);
     errorAsset_ = new Wt::WText("Select asset", tableBox->elementAt(1, 0)); //XML
     errorPlugin_ = new Wt::WText("Select plugin", tableBox->elementAt(1, 1)); //XML
     errorInfo_ = new Wt::WText("Select info", tableBox->elementAt(1, 2)); //XML
@@ -682,12 +732,7 @@ void    AlertsWidget::popupAddWidget(Wt::WDialog *dialog)
 
 }
 
-// ------------------ Unit | critères de comparaison ------------------------------
-
-void    AlertsWidget::compareBar(Wt::WContainerWidget *contain)
-{
-
-}
+// ------------------ Unit ------------------------------
 
 void    AlertsWidget::showUnit(long long id)
 {
@@ -924,7 +969,10 @@ void    AlertsWidget::createUnitThree(Wt::WContainerWidget *contain)
     unitThree_ = table;
 }
 
-// -------------------------------------------------------
+//                                                                                    ^
+//                                                                                    |
+// Work popup One End --------------------------------------------------------------- |
+
 
 void    AlertsWidget::modifRecip(long long id)
 {
@@ -945,9 +993,12 @@ Wt::WValidator    *AlertsWidget::editValidator(int who)
     return validator;
 }
 
-void  AlertsWidget::closePopup()
+void     AlertsWidget::checkPopupRecipients(std::string message)
 {
-    recoverListAsset();
+    std::cout << "Check popup recipients" << std::endl;
+    //        message = "}\n";
+//        postMediasCallApi(message);
+        recoverListAlert();
 }
 
 int     AlertsWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage)
@@ -1025,16 +1076,16 @@ int     AlertsWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, st
             break;
         }
     }
+    checkAll = 0; // A RETITER 
     return checkAll;
 }
 
 void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
 {
-
-    
     std::cout << "ADD RESOURCE" << std::endl;
-    
+
     std::string message;
+/*
     std::string data = ((Wt::WLineEdit*)*argument.begin())->text().toUTF8();
     boost::algorithm::to_lower(data);
     message = "{\n\"name\": \"" + data + "\",\n";
@@ -1092,7 +1143,9 @@ void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
 
 //    message = "\"key_value\": ,\n";
     
-    message = "\"information_data_id\": " + boost::lexical_cast<std::string>(idAll_.second.first) + ",\n";
+    message ="\"asset_id\": " + boost::lexical_cast<std::string>(idAll_.first.first) + ",\n";
+    message ="\"plugin_id\": " + boost::lexical_cast<std::string>(idAll_.first.second) + ",\n";
+    message ="\"information_id\": " + boost::lexical_cast<std::string>(idAll_.second.first) + ",\n";
 
     message = "\"alert_criteria_id\": 0\n";
 
@@ -1119,13 +1172,196 @@ void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
     
     std::cout << std::endl << "KEY ?" << std::endl;
     
-    message = "}\n";
     
 
     
 //    std::vector<Wt::WInteractWidget*>::iterator i = argument.begin();
 //    Wt::WLineEdit *assetEdit = (Wt::WLineEdit*)(*i);
 
+*/
+    if (checkAll_ == 1)
+    {
+//        message = "}\n";
+//        postMediasCallApi(message);
+        std::cout << "CheckAll == 1" << std::endl;
+        recoverListAlert();
+    }
+    else
+    {
+//        recoverListRecipientAlias();
+        popupRecipients(message);
+    }
+}
+
+// Utility --------------------------------------------------------
+
+void  AlertsWidget::closePopup()
+{
+    recoverListAlert();
+}
+
+void    AlertsWidget::errorsHideOne(MapUnitOne error)
+{
+    for (MapUnitOne::iterator it = error.begin(); it != error.end(); it++)
+    {
+        ((Wt::WText*)(*it).second.first.second)->hide();
+    }
+}
+
+void    AlertsWidget::errorsHideTwo(MapUnitTwo error)
+{
+    for (MapUnitTwo::iterator it = error.begin(); it != error.end(); it++)
+    {
+        ((Wt::WText*)(*it).second.first.second)->hide();
+    }
+}
+
+
+void AlertsWidget::close()
+{
+    delete this;
+}
+
+void    AlertsWidget::setSession(Echoes::Dbo::Session *session)
+{
+    session_ = session;
+}
+
+void    AlertsWidget::setApiUrl(std::string apiUrl)
+{
+    apiUrl_ = apiUrl;
+}
+
+std::string   AlertsWidget::getApiUrl()
+{
+    return apiUrl_;
+}
+
+
+// API CALL AND RETURN --------------------------------------------------
+
+void    AlertsWidget::recoverListRecipientAlias(long long userRoleId)
+{
+    for (long long mediaType(1); mediaType <= 3; mediaType++)
+    {
+        std::string apiAddress = this->getApiUrl() + "/informations/"
+                + boost::lexical_cast<std::string>(idAll_.second.first) + "/alias"
+                + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) 
+                + "&token=" + session_->user()->token.toUTF8()
+                + "&user_role_id" + boost::lexical_cast<std::string>(userRoleId)
+                + "&media_type_id" + boost::lexical_cast<std::string>(mediaType);
+        Wt::Http::Client *client = new Wt::Http::Client(this);
+        client->done().connect(boost::bind(&AlertsWidget::getAliasInfo, this, _1, _2, userRoleId, mediaType));
+        Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
+        if (client->get(apiAddress))
+            Wt::WApplication::instance()->deferRendering();
+        else
+            Wt::log("error") << "Error Client Http";
+
+        apiAddress = this->getApiUrl() + "/assets/"
+                + boost::lexical_cast<std::string>(idAll_.first.first) + "/alias"
+                + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+                + "&token=" + session_->user()->token.toUTF8()
+                + "&user_role_id" + boost::lexical_cast<std::string>(userRoleId)
+                + "&media_type_id" + boost::lexical_cast<std::string>(mediaType);
+        Wt::Http::Client *client1 = new Wt::Http::Client(this);
+        client1->done().connect(boost::bind(&AlertsWidget::getAliasAsset, this, _1, _2, userRoleId, mediaType));
+        Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
+        if (client1->get(apiAddress))
+            Wt::WApplication::instance()->deferRendering();
+        else
+            Wt::log("error") << "Error Client Http";
+
+        apiAddress = this->getApiUrl() + "/plugins/"
+                + boost::lexical_cast<std::string>(idAll_.first.second) + "/alias"
+                + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+                + "&token=" + session_->user()->token.toUTF8()
+                + "&user_role_id" + boost::lexical_cast<std::string>(userRoleId)
+                + "&media_type_id" + boost::lexical_cast<std::string>(mediaType);
+        Wt::Http::Client *client2 = new Wt::Http::Client(this);
+        client2->done().connect(boost::bind(&AlertsWidget::getAliasPlugin, this, _1, _2, userRoleId, mediaType));
+        Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
+        if (client2->get(apiAddress))
+            Wt::WApplication::instance()->deferRendering();
+        else
+            Wt::log("error") << "Error Client Http";
+    }
+}
+
+void    AlertsWidget::recoverListAlert()
+{
+                 std::cout << "recoverListAlert CLEAR ALL" << std::endl;
+   alerts_ = 0;
+    medias_ = 0;
+    userInfo_.clear();
+    assets_.clear();
+    plugins_.clear();
+    infos_.clear();
+    assetPlugins_.clear();
+    pluginAsset_.clear();
+    pluginInfos_.clear();
+    infoPlugin_.clear();
+    unitsIds_.clear();
+
+    std::string apiAddress = this->getApiUrl() + "/alerts" + "?login=" 
+            + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) 
+            + "&token=" + session_->user()->token.toUTF8();
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&AlertsWidget::getAlerts, this, _1, _2));
+
+    Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
+    if (client->get(apiAddress))
+        Wt::WApplication::instance()->deferRendering();
+    else
+        Wt::log("error") << "Error Client Http";
+
+
+    apiAddress = this->getApiUrl() + "/assets" + "?login="
+            + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+            + "&token=" + session_->user()->token.toUTF8();
+    
+    Wt::Http::Client *client1 = new Wt::Http::Client(this);
+    client1->done().connect(boost::bind(&AlertsWidget::getAssets, this, _1, _2));
+
+    Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
+
+    if (client1->get(apiAddress))
+        Wt::WApplication::instance()->deferRendering();
+    else
+        Wt::log("error") << "Error Client Http";
+
+
+    apiAddress = this->getApiUrl() + "/users"
+            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+            + "&token=" + session_->user()->token.toUTF8();
+    
+    Wt::Http::Client *client2 = new Wt::Http::Client(this);
+    client2->done().connect(boost::bind(&AlertsWidget::getUsersList, this, _1, _2));
+
+    Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
+
+    if (client2->get(apiAddress))
+        Wt::WApplication::instance()->deferRendering();
+    else
+        Wt::log("error") << "Error Client Http";
+    
+    apiAddress = this->getApiUrl() + "/medias"
+            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+            + "&token=" + session_->user()->token.toUTF8();
+
+    Wt::Http::Client *client3 = new Wt::Http::Client(this);
+    client3->done().connect(boost::bind(&AlertsWidget::getMedia, this, _1, _2));
+    Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
+    if (client3->get(apiAddress))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+    else
+        Wt::log("error") << "Error Client Http";
+}
+
+void    AlertsWidget::postMediasCallApi(std::string message)
+{
     Wt::Http::Message messageAlert;
     messageAlert.addBodyText(message);
 
@@ -1141,7 +1377,7 @@ void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
         Wt::WApplication::instance()->deferRendering();
     else
         Wt::log("error") << "Error Client Http";
-    recoverListAsset();
+    
 }
 
 Wt::WDialog *AlertsWidget::deleteResource(long long id)
@@ -1193,90 +1429,11 @@ void AlertsWidget::modifResource(std::vector<Wt::WInteractWidget*> arguments, lo
     */
 }
 
-void AlertsWidget::close()
-{
-    delete this;
-}
-
-void    AlertsWidget::setSession(Echoes::Dbo::Session *session)
-{
-    session_ = session;
-}
-
-void    AlertsWidget::setApiUrl(std::string apiUrl)
-{
-    apiUrl_ = apiUrl;
-}
-
-std::string   AlertsWidget::getApiUrl()
-{
-    return apiUrl_;
-}
-
-
-// API CALL AND RETURN --------------------------------------------------
-
-void    AlertsWidget::recoverListAsset()
-{
-    alerts_ = 0;
-    std::cout << "CLEAR ALL " << std::endl;
-    assets_.clear();
-    plugins_.clear();
-    infos_.clear();
-    assetPlugins_.clear();
-    pluginAsset_.clear();
-    pluginInfos_.clear();
-    infoPlugin_.clear();
-    unitsIds_.clear();
-
-//    resultPlugins_.clear();
-
-    /*
-    std::cout << "Recoverlist Asset" << std::endl;
-    std::string apiAddress = this->getApiUrl() + "/plugins" + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + session_->user()->token.toUTF8();
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&AlertsWidget::getPlugins, this, _1, _2));
-    Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
-    if (client->get(apiAddress))
-        Wt::WApplication::instance()->deferRendering();
-    else
-        Wt::log("error") << "Error Client Http";
-    */
-    std::string apiAddress = this->getApiUrl() + "/alerts" + "?login=" 
-            + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) 
-            + "&token=" + Wt::Utils::urlEncode(session_->user()->token.toUTF8());
-    Wt::Http::Client *client1 = new Wt::Http::Client(this);
-    client1->done().connect(boost::bind(&AlertsWidget::getAlerts, this, _1, _2));
-
-    Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
-    if (client1->get(apiAddress))
-        Wt::WApplication::instance()->deferRendering();
-    else
-        Wt::log("error") << "Error Client Http";
-
-
-    apiAddress = this->getApiUrl() + "/assets" + "?login="
-            + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + Wt::Utils::urlEncode(session_->user()->token.toUTF8());
-    
-    Wt::Http::Client *client2 = new Wt::Http::Client(this);
-    client2->done().connect(boost::bind(&AlertsWidget::getAssets, this, _1, _2));
-
-    Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
-
-    if (client2->get(apiAddress))
-        Wt::WApplication::instance()->deferRendering();
-    else
-        Wt::log("error") << "Error Client Http";
-
-
-}
-
 // API RETURN INFOS ------------------------------------------
 
 void AlertsWidget::getAlerts(boost::system::error_code err, const Wt::Http::Message& response)
 {
+    std::cout << "Get Alerts" << std::endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -1315,6 +1472,7 @@ void AlertsWidget::getAlerts(boost::system::error_code err, const Wt::Http::Mess
 
 void AlertsWidget::getAssets(boost::system::error_code err, const Wt::Http::Message& response)
 {
+    std::cout << "Get Assets" << std::endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -1340,22 +1498,20 @@ void AlertsWidget::getAssets(boost::system::error_code err, const Wt::Http::Mess
 
                         Pair pair = std::make_pair(id, name.toUTF8());
                         assets_.insert(std::make_pair(index, pair));
-/*
                         std::string apiAddress = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string>(id)
                                 + "/plugins" + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
                                 + "&token=" + session_->user()->token.toUTF8();
                         Wt::Http::Client *client = new Wt::Http::Client(this);
                         client->done().connect(boost::bind(&AlertsWidget::getPluginsForAsset, this, _1, _2, id, index++));
 
-                        std::cout << "Alerts : [GET] address to call : " << apiAddress << std::endl;
+                        Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
 
                         if (client->get(apiAddress))
                         {
                             Wt::WApplication::instance()->deferRendering();
                         }
                         else
-                            std::cout << "Error Client Http" << std::endl;
-*/
+                            Wt::log("error") << "Error Client Http";
                     }
                 }
                 else
@@ -1385,8 +1541,95 @@ void AlertsWidget::getAssets(boost::system::error_code err, const Wt::Http::Mess
    created_ = false;
 }
 
+void AlertsWidget::getUsersList(boost::system::error_code err, const Wt::Http::Message& response)
+{
+    std::cout << "getUsersList : " << response.body() << std::endl;
+    Wt::WApplication::instance()->resumeRendering();
+    if (!err)
+    {
+        if(response.status() >= 200 && response.status() < 300)
+        {
+            try
+            {
+                Wt::Json::Object tmp;
+                Wt::Json::Array::const_iterator idx1;
+                Wt::Json::Value result;            
+                Wt::Json::parse(response.body(), result);
+                Wt::Json::Array& result1 = result;            
+                Wt::WString last_name;
+                Wt::WString first_name;
+                
+                int cpt(1);
+                for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
+                {
+                    tmp = (*idx1);
+                    first_name = tmp.get("first_name");
+                    last_name = tmp.get("last_name");
+                    userInfo_.insert(std::make_pair(cpt++, std::make_pair(tmp.get("id"), first_name.toUTF8() + " " + last_name.toUTF8())));
+                }
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
+            }
+        }
+    }
+    else
+    {
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
+    }
+   newClass_ = false;
+   created_ = false;
+}
+
+void AlertsWidget::getMedia(boost::system::error_code err, const Wt::Http::Message& response)
+{
+    std::cout << "getMedia : " << response.body() << std::endl;
+    Wt::WApplication::instance()->resumeRendering();
+    if (!err)
+    {
+        if(response.status() >= 200 && response.status() < 300)
+        {
+            try
+            {
+                Wt::Json::parse(response.body(), medias_);
+                std::cout << "Après Parse M: " << std::endl;
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[User Edition Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.media-user.database-error-title"),tr("Alert.media-user.database-error"),Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[User Edition Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.media-user.database-error-title") + "TypeException",tr("Alert.media-user.database-error"),Wt::Ok);
+            }
+        }
+        else
+        {
+            this->medias_ = Wt::Json::Value::Null;
+        }
+    }
+    else
+    {
+        Wt::log("error") << "[User Edition Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.media-user.database-error-title") + "err",tr("Alert.media-user.database-error"),Wt::Ok);
+    }
+   newClass_ = false;
+   created_ = false;
+}
+
 void AlertsWidget::getPlugins(boost::system::error_code err, const Wt::Http::Message& response)
 {    
+    std::cout << "Get Plugins" << std::endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -1394,34 +1637,30 @@ void AlertsWidget::getPlugins(boost::system::error_code err, const Wt::Http::Mes
         {
             try
             {
-                Wt::Json::Value result;
-/*
-                Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-                Wt::Json::Object tmp;
-                Wt::Json::Array::const_iterator idx1;
-                long long id;
-                Wt::WString name;
-                */
-                Wt::Json::parse(response.body(), result);
+//                Wt::Json::Value result;
+//                Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+//                Wt::Json::Object tmp;
+//                Wt::Json::Array::const_iterator idx1;
+//                long long id;
+//                Wt::WString name;
+//                Wt::Json::parse(response.body(), result);
 //                result1 = result;
-/*
-                for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
-                {
-                    tmp = (*idx1);
-                    id = tmp.get("id");
-                    name = tmp.get("name");
-                    resultPlugins_.push_back(std::make_pair(id, name.toUTF8()));
-                    std::string apiAddress = this->getApiUrl() + "/plugins/" + boost::lexical_cast<std::string>(id)
-                            + "/informations" + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-                            + "&token=" + session_->user()->token.toUTF8();
-                    Wt::Http::Client *client = new Wt::Http::Client(this);
-                    client->done().connect(boost::bind(&AlertsWidget::getInformations, this, _1, _2));
-                    if (client->get(apiAddress))
-                        Wt::WApplication::instance()->deferRendering();
-                    else
-                        std::cout << "Error Client Http" << std::endl;
-                }
-                */
+//                for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
+//                {
+//                    tmp = (*idx1);
+//                    id = tmp.get("id");
+//                    name = tmp.get("name");
+//                    resultPlugins_.push_back(std::make_pair(id, name.toUTF8()));
+//                    std::string apiAddress = this->getApiUrl() + "/plugins/" + boost::lexical_cast<std::string>(id)
+//                            + "/informations" + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+//                            + "&token=" + session_->user()->token.toUTF8();
+//                    Wt::Http::Client *client = new Wt::Http::Client(this);
+//                    client->done().connect(boost::bind(&AlertsWidget::getInformations, this, _1, _2));
+//                    if (client->get(apiAddress))
+//                        Wt::WApplication::instance()->deferRendering();
+//                    else
+//                        Wt::log("error") << "Error Client Http";
+//                }
             }
             catch (Wt::Json::ParseError const& e)
             {
@@ -1446,6 +1685,7 @@ void AlertsWidget::getPlugins(boost::system::error_code err, const Wt::Http::Mes
 
 void AlertsWidget::postMedia(boost::system::error_code err, const Wt::Http::Message& response)
 {    
+    std::cout << "post Media" << std::endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -1480,6 +1720,7 @@ void AlertsWidget::postMedia(boost::system::error_code err, const Wt::Http::Mess
 
 void AlertsWidget::getPluginsForAsset(boost::system::error_code err, const Wt::Http::Message& response, long long idAsset, long long index)
 {    
+    std::cout << "Get plugins for asset" << std::endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -1512,12 +1753,12 @@ void AlertsWidget::getPluginsForAsset(boost::system::error_code err, const Wt::H
                     Wt::Http::Client *client = new Wt::Http::Client(this);
                     client->done().connect(boost::bind(&AlertsWidget::getInformations, this, _1, _2, id, index));
 
-                    std::cout << "Alerts : [GET] address to call : " << apiAddress << std::endl;
+                    Wt::log("debug") << "Alerts : [GET] address to call : " << apiAddress;
 
                     if (client->get(apiAddress))
                         Wt::WApplication::instance()->deferRendering();
                     else
-                        std::cout << "Error Client Http" << std::endl;
+                        Wt::log("error") << "Error Client Http";
 */
                 }
             }
@@ -1544,6 +1785,7 @@ void AlertsWidget::getPluginsForAsset(boost::system::error_code err, const Wt::H
 
 void AlertsWidget::getInformations(boost::system::error_code err, const Wt::Http::Message& response, long long idPlugin, long long index)
 {
+    std::cout << "Get informations" << std::endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -1598,22 +1840,107 @@ void AlertsWidget::getInformations(boost::system::error_code err, const Wt::Http
    created_ = false;
 }
 
-// Utility --------------------------------------------------------
-
-void    AlertsWidget::errorsHideOne(MapUnitOne error)
+void AlertsWidget::getAliasInfo(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType)
 {
-    for (MapUnitOne::iterator it = error.begin(); it != error.end(); it++)
+    std::cout << response.status() << " get Alias Info : " << response.body() << std::endl;
+    Wt::WApplication::instance()->resumeRendering();
+    if (!err)
     {
-        ((Wt::WText*)(*it).second.first.second)->hide();
+        if(response.status() >= 200 && response.status() < 300)
+        {
+            try
+            {
+                Wt::Json::Value result;
+                Wt::Json::parse(response.body(), result);
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
+            }
+        }
     }
+    else
+    {
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
+    }
+   newClass_ = false;
+   created_ = false;
 }
 
-void    AlertsWidget::errorsHideTwo(MapUnitTwo error)
+void AlertsWidget::getAliasAsset(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType)
 {
-    for (MapUnitTwo::iterator it = error.begin(); it != error.end(); it++)
+        std::cout << response.status() << " get Alias Asset : " << response.body() << std::endl;
+    Wt::WApplication::instance()->resumeRendering();
+    if (!err)
     {
-        ((Wt::WText*)(*it).second.first.second)->hide();
+        if(response.status() >= 200 && response.status() < 300)
+        {
+            try
+            {
+                Wt::Json::Value result;
+                Wt::Json::parse(response.body(), result);
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
+            }
+        }
     }
+    else
+    {
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
+    }
+   newClass_ = false;
+   created_ = false;
+
+}
+
+void AlertsWidget::getAliasPlugin(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType)
+{
+        std::cout << response.status() << " get Alias Plugin : " << response.body() << std::endl;
+    Wt::WApplication::instance()->resumeRendering();
+    if (!err)
+    {
+        if(response.status() >= 200 && response.status() < 300)
+        {
+            try
+            {
+                Wt::Json::Value result;
+                Wt::Json::parse(response.body(), result);
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException",tr("Alert.alert.database-error"),Wt::Ok);
+            }
+        }
+    }
+    else
+    {
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err",tr("Alert.alert.database-error"),Wt::Ok);
+    }
+   newClass_ = false;
+   created_ = false;
 }
 
 

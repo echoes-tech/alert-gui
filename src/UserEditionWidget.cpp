@@ -122,10 +122,10 @@ Wt::WValidator *UserEditionWidget::editValidator(int who)
 
 void UserEditionWidget::closePopup()
 {
-    recoverListAsset();
+    recoverListMedia();
 }
 
-void UserEditionWidget::recoverListAsset()
+void    UserEditionWidget::recoverListMedia()
 {
     std::string apiAddress = this->getApiUrl() + "/medias"
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
@@ -300,7 +300,7 @@ void UserEditionWidget::deleteMedia(boost::system::error_code err, const Wt::Htt
         Wt::log("error") << "[User Edition Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.media-user.database-error-title"), tr("Alert.media-user.database-error"), Wt::Ok);
     }
-    recoverListAsset();
+    recoverListMedia();
 }
 
 void UserEditionWidget::postMedia(boost::system::error_code err, const Wt::Http::Message& response)
@@ -337,7 +337,7 @@ void UserEditionWidget::postMedia(boost::system::error_code err, const Wt::Http:
         Wt::log("error") << "[User Edition Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.media-user.database-error-title") + "err", tr("Alert.media-user.database-error"), Wt::Ok);
     }
-    recoverListAsset();
+    recoverListMedia();
 }
 
 void UserEditionWidget::putMedia(boost::system::error_code err, const Wt::Http::Message& response)
@@ -375,7 +375,7 @@ void UserEditionWidget::putMedia(boost::system::error_code err, const Wt::Http::
         Wt::log("error") << "[User Edition Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.media-user.database-error-title") + "err", tr("Alert.media-user.database-error"), Wt::Ok);
     }
-    recoverListAsset();
+    recoverListMedia();
 }
 
 

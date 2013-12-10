@@ -320,6 +320,126 @@ void PluginEditionWidget::createFormSearchParameters()
         Wt::log("error") << "Error Client Http";
 }
 
+
+
+//void PluginEditionWidget::createFormSourceParameters()
+//{
+//    
+//    
+//    for(unsigned idx = 0 ; idx < mapLEAddonParam.size() ; idx++)
+//    {
+//       delete mapLEAddonParam[mapAddonParameterNameSBoxRow[idx]];
+//    }
+//    
+//    mapAddonParameterIdSboxRow.clear();
+//    mapAddonParameterNameSBoxRow.clear();
+//    mapAddonParameterValueSBoxRow.clear();
+//    mapLEAddonParam.clear();
+//    tableSrcParam->clear();
+//    tableSrcParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
+//    tableSrcParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+//    
+//    string name = "";
+//    
+//    resetSearch();
+//    if(createFormSourceState != "Modify")
+//    {
+//        buttonModifySource->disable();
+//    }
+//    else
+//    {
+//        buttonModifySource->enable();
+//    }
+//    
+//    
+//    map<int,string> mapESourceParameterName;
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::PATH] = tr("Alert.plugins.path").toUTF8();
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::HOST] = tr("Alert.plugins.host").toUTF8();
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::USER] = tr("Alert.plugins.user").toUTF8();
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::PASSWD] = tr("Alert.plugins.passwd").toUTF8();
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::DB] = tr("Alert.plugins.db").toUTF8();
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::PORT] = tr("Alert.plugins.port").toUTF8();
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::COMMUNITY] = tr("Alert.plugins.community").toUTF8();
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::VERSION] = tr("Alert.plugins.version").toUTF8();
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::AUTH_PROTO] = tr("Alert.plugins.auth_proto").toUTF8();
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::AUTH_PATH] = tr("Alert.plugins.auth_path").toUTF8();
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::PRIV_PROTO] = tr("Alert.plugins.priv_proto").toUTF8();
+//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::PRIV_PATH] = tr("Alert.plugins.priv_path").toUTF8();
+//    
+//    
+//    for (int i = Echoes::Dbo::ESourceParameter::PATH ; i <= Echoes::Dbo::ESourceParameter::PRIV_PATH ; i++)
+//    {
+//        mapAddonParameterIdSboxRow[i] = i;
+//        name = mapESourceParameterName[i];
+//        mapAddonParameterNameSBoxRow[i] = name;
+//        
+//        mapLEAddonParam[name] = new Wt::WLineEdit();
+//        mapLEAddonParam[name]->setValidator(validatorRegExp);
+//    
+//        /////////////// Attention méthode qui ne marche que pour l'affichage dans le gui (en base le passwd sera en claire.
+//        if (i == Echoes::Dbo::ESourceParameter::PASSWD)
+//        {
+//            mapLEAddonParam[name]->setEchoMode(Wt::WLineEdit::Password);
+//        }
+//        /////////////// If temporaire
+//        tableSrcParam->elementAt(i, 0)->addWidget(new Wt::WText(name));
+//        tableSrcParam->elementAt(i, 1)->addWidget(mapLEAddonParam[name]);
+//    }
+//  
+//
+//  
+//    if(createFormSourceState == "Modify")
+//    {
+//        completFormSource();
+//    }
+//  
+//    if(createFormSourceState == "Modify")
+//    {
+//        client1 = new Wt::Http::Client();
+//
+//        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchList, this, _1, _2));
+//    
+//        std::string urlAdd = this->getApiUrl() + "/plugins/"
+//                + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
+//                + "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()])
+//                + "/searches"
+//                + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
+//                + "&token=" + session->user()->token.toUTF8();
+//
+//        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
+//
+//        if(client1->get(urlAdd))
+//        {
+//            Wt::WApplication::instance()->deferRendering();
+//        }
+//        else
+//            Wt::log("error") << "Error Client Http";
+//    }
+//    else
+//    {
+//        client1 = new Wt::Http::Client();
+//        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchTypeList, this, _1, _2));
+//    
+//        std::string urlAdd = this->getApiUrl() + "/addons/"
+//                + boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()])
+//                + "/search_types"
+//                + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
+//                + "&token=" + session->user()->token.toUTF8();
+//
+//        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
+//
+//        if(client1->get(urlAdd))
+//        {
+//            Wt::WApplication::instance()->deferRendering();
+//        }
+//        else
+//            Wt::log("error") << "Error Client Http";
+//    }
+//    createFormSourceState = "";
+//    refresh1();
+//    
+//}
+
 void PluginEditionWidget::createFormSourceParameters()
 {
     resetSearch();
@@ -333,12 +453,11 @@ void PluginEditionWidget::createFormSourceParameters()
     }
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddonParameters, this, _1, _2));
-
-    std::string urlAdd = this->getApiUrl() + "/addons/"
-            + boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()])
-            + "/parameters" 
+    
+    std::string urlAdd = this->getApiUrl() + "/sources/parameters"
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-            + "&token=" + session->user()->token.toUTF8();
+            + "&token=" + session->user()->token.toUTF8()
+            + "&addon_id=" + boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]);
 
     Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
     if(client1->get(urlAdd))
@@ -388,8 +507,8 @@ void PluginEditionWidget::addPlugin()
         std::string strTmp2 = boost::lexical_cast<std::string>(plgDescEdit->text()); 
         formatValue(strTmp2, 1);//
         std::string messAdd("{\n\
-            \"plg_name\" : \""+ strTmp +"\",\n\
-            \"plg_desc\" : \""+ strTmp2 +"\"\n\
+            \"name\" : \""+ strTmp +"\",\n\
+            \"desc\" : \""+ strTmp2 +"\"\n\
      }\n");
 
         Wt::Http::Message message;

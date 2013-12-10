@@ -46,7 +46,10 @@
 #include <Wt/WServer>
 #include <boost/algorithm/string.hpp>
 
+#include <tools/Enums.h>
+
 #include "WebUtils.h"
+
 
 class PluginEditionWidget : public Wt::WTemplateFormView 
 {

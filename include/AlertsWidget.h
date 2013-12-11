@@ -41,10 +41,14 @@
 typedef std::pair<Wt::WComboBox*, Wt::WComboBox*> PairComboBox;
 typedef std::pair<long long, std::string>       Pair;
 typedef std::pair<long long, long long>         PairLong;
+typedef std::pair<PairLong, std::string>         PairLongString;
 typedef std::pair<Wt::WLineEdit*, Wt::WText*>     PairResource;
+
+typedef std::multimap<long long, PairLongString>          MultiMapPairLPLS;
 
 typedef std::multimap<long long, Pair>          MultiMapPair;
 typedef std::multimap<long long, long long>     MultiMapLongs;
+typedef std::multimap<long long, std::string>     MultiMapLongString;
 
 typedef std::map<long long, std::pair<PairResource, Wt::WComboBox*>>    MapUnitOne;
 typedef std::map<long long, std::pair<PairResource, PairComboBox>>     MapUnitTwo;
@@ -79,19 +83,21 @@ public:
     void                        recoverListRecipientAlias(long long userRoleId);
     
     void                        getAlerts(boost::system::error_code err, const Wt::Http::Message& response);
+    void                        getCriterion(boost::system::error_code err, const Wt::Http::Message& response);
     void                        getAssets(boost::system::error_code err, const Wt::Http::Message& response);
     void                        getUsersList(boost::system::error_code err, const Wt::Http::Message& response);
     void                        getMedia(boost::system::error_code err, const Wt::Http::Message& response);
     void                        getPluginsForAsset(boost::system::error_code err, const Wt::Http::Message& response, long long idAsset, long long index);
-    void                        getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
     void                        getInformations(boost::system::error_code err, const Wt::Http::Message& response, long long idPlugin, long long index);
+    void                        getInformation(boost::system::error_code err, const Wt::Http::Message& response);
     void                        getAliasInfo(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
     void                        getAliasAsset(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
     void                        getAliasPlugin(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
-    void                        postMedia(boost::system::error_code err, const Wt::Http::Message& response);
+    void                        postAlert(boost::system::error_code err, const Wt::Http::Message& response);
+    void                        deleteAlert(boost::system::error_code err, const Wt::Http::Message& response);
 
     int                         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
-    void                        checkPopupRecipients(std::string message);
+    void                        checkPopupRecipients(std::string message, std::string time, int media);
 
     void                        addResource(std::vector<Wt::WInteractWidget*> argument);
     Wt::WDialog                 *deleteResource(long long id);
@@ -107,12 +113,12 @@ public:
     void                        modifRecip(long long id);
 
     void                        popupAddWidget(Wt::WDialog *dialog);
-    void                        popupRecipients(std::string message);
+    void                        popupRecipients(std::string nameAlert, std::string message);
 
     
     long long                   recoverId(Wt::WSelectionBox *box, MultiMapPair infoInBox);
 
-    void                        postMediasCallApi(std::string message);
+    void                        postAlertCallApi(std::string message);
 
 private:
 
@@ -142,7 +148,8 @@ private:
     void                        errorsHideOne(MapUnitOne error);
     void                        errorsHideTwo(MapUnitTwo error);
 
-    
+    void                        fillInTabMessage();
+
     void aSupprimer(); // 
 
     
@@ -151,10 +158,18 @@ private:
     Echoes::Dbo::Session             *session_;
     std::string         apiUrl_;
     Wt::Json::Value     alerts_;
-    Wt::Json::Value     medias_;
+    
+    int                 time_;
     
     MultiMapPair        userInfo_;
+    MultiMapPairLPLS        mediaInfo_;
+    Wt::WTabWidget      *tabMessage_;
+    std::string         messageMailForTab_;
+    std::string         messageSmsForTab_;
+    std::string         messageAppForTab_;
     
+    MultiMapLongString  criterions_;
+
     MultiMapPair        assets_; // Assets infomations (<index <idAsset, nameAsset>>)
     MultiMapPair        plugins_; // Plugins infomations (<index <idPlugin, namePlugin>>)
     MultiMapPair        infos_; // Infos infomations (<index <idInfo, nameInfo>>)

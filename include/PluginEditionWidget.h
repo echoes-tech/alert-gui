@@ -68,7 +68,7 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         void handleHttpResponseDeleteSource(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseSourceList(boost::system::error_code err, const Wt::Http::Message& response);
        
-        void handleHttpResponseSearchTypeList(boost::system::error_code err, const Wt::Http::Message& response);
+//        void handleHttpResponseSearchTypeList(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseSeaTypeParameters(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseAddSearch(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseModifySearch(boost::system::error_code err, const Wt::Http::Message& response);
@@ -76,9 +76,16 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         void handleHttpResponseSearchList(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseSearchParameters(boost::system::error_code err, const Wt::Http::Message& response);
         
-        void handleHttpResponseAddInformation(boost::system::error_code err, const Wt::Http::Message& response);
-        void handleHttpResponseInformationsList(boost::system::error_code err, const Wt::Http::Message& response);
-        void handleHttpResponseUnits(boost::system::error_code err, const Wt::Http::Message& response);
+        void handleHttpResponseFilTypeParameters(boost::system::error_code err, const Wt::Http::Message& response);
+        void handleHttpResponseAddFilter(boost::system::error_code err, const Wt::Http::Message& response);
+        void handleHttpResponseModifyFilter(boost::system::error_code err, const Wt::Http::Message& response);
+        void handleHttpResponseDeleteFilter(boost::system::error_code err, const Wt::Http::Message& response);
+        void handleHttpResponseFilterList(boost::system::error_code err, const Wt::Http::Message& response);
+        void handleHttpResponseFilterParameters(boost::system::error_code err, const Wt::Http::Message& response);
+        
+//        void handleHttpResponseAddInformation(boost::system::error_code err, const Wt::Http::Message& response);
+//        void handleHttpResponseInformationsList(boost::system::error_code err, const Wt::Http::Message& response);
+//        void handleHttpResponseUnits(boost::system::error_code err, const Wt::Http::Message& response);
         
         
         void handleHttpResponsePlgJSON(boost::system::error_code err, const Wt::Http::Message& response);
@@ -97,11 +104,15 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         void displayButtonCreateJSON();
         void formatValue(std::string& value, int nbBackslash) const;
         
+        void fillSearchTypeComboBox();
+        void fillFilterTypeComboBox();
+        
         void selectedPlugin();
         void selectedSource();
         void selectedSearch();
+        void selectedFilter();
         void createUI();
-        void createTableInformation();
+//        void createTableInformation();
         bool validatePlugin(std::string &badField);
         void addPlugin();
         void deletePlugin(int pluginId);
@@ -115,13 +126,20 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         void addSearch();
         void modifySearch();
         void deleteSearch();
+        void resetFilter();
+        bool validateFilter(std::string &badField);
+        void addFilter();
+        void modifyFilter();
+        void deleteFilter();
         void addInformation();
-        void createTableUnit();
+//        void createTableUnit();
         void updateStateLECalculateInformation();
         void createFormSourceParameters();
         void completFormSource(); 
         void createFormSearchParameters();
         void completFormSearch();
+        void createFormFilterParameters();
+        void completFormFilter();
         void addSrcParamValue();
             
         void createJSON();
@@ -137,6 +155,7 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         
         Wt::WPushButton *buttonModifySource;
         Wt::WPushButton *buttonModifySearch;
+        Wt::WPushButton *buttonModifyFilter;
         Wt::WPushButton *createJSONButton;
         Wt::WAnchor *createJSONAnchor;
         
@@ -166,11 +185,11 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         
         //partie add Search   
         Wt::WSelectionBox *searchSelectionBox;
-        Wt::WStringListModel *slmSeaType;
+        Wt::WStringListModel *slmSearchTypes;
         std::map<int,long long> mapSeaTypeIdSboxRow;
-        Wt::WComboBox *comboSeaType;
+        Wt::WComboBox *comboSearchType;
         
-        Wt::WTable *tableSeaTypeParam;
+        Wt::WTable *tableSeaParam;
         std::map<int,long long> mapSeaTypeParameterIdSboxRow;
         std::map<int,Wt::WString> mapSeaTypeParameterNameSBoxRow;
         std::map<int,Wt::WString> mapSeaTypeParameterValueSBoxRow;
@@ -178,26 +197,52 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         
         std::map<int, long long> mapSearchId;
         std::map<int, int> mapSearchPeriode;
-        std::map<int, bool> mapSearchStatic;
-        std::map<int, int> mapSearchPKValue;
-        std::map<int, int> mapSearchNbValue;
+//        std::map<int, bool> mapSearchStatic;
+//        std::map<int, int> mapSearchPKValue;
+//        std::map<int, int> mapSearchNbValue;
         std::map<int, long long> mapSearchSTYId;
         
         Wt::WLineEdit *periodeLE;
+
+        
+//        Wt::WTable *tableSeaUnit;
+        
+        
+        //partie add Filter   
+        Wt::WSelectionBox *filterSelectionBox;
+        Wt::WStringListModel *slmFilType;
+        std::map<int,long long> mapFilTypeIdSboxRow;
+        Wt::WComboBox *comboFilType;
+        
+        Wt::WTable *tableFilTypeParam;
+        std::map<int,long long> mapFilTypeParameterIdSboxRow;
+        std::map<int,Wt::WString> mapFilTypeParameterNameSBoxRow;
+        std::map<int,Wt::WString> mapFilTypeParameterValueSBoxRow;
+        std::map<Wt::WString,Wt::WLineEdit*> mapLEFilTypeParam;
+        
+        std::map<int, long long> mapFilterId;
+        std::map<int, bool> mapFilterStatic;
+        std::map<int, int> mapFilterPKValue;
+        std::map<int, int> mapFilterNbValue;
+        std::map<int, long long> mapFilterSTYId;
+        
+        
         Wt::WCheckBox *staticCB;
         Wt::WLineEdit *pKValueLE ;
         Wt::WLineEdit *nbValueLE;
         
-        Wt::WTable *tableSeaUnit;
+//        Wt::WTable *tableFilUnit;
+        
         std::map<int,Wt::WLineEdit*> mapLENameInformation;
         std::map<int,Wt::WCheckBox*> mapCBDisplayInformation;
         std::map<int,Wt::WCheckBox*> mapCBCalculateInformation;
         std::map<int,Wt::WLineEdit*> mapLECalculateInformation;
-        std::map<int,long long> mapUnitIdSboxRow;
-        std::map<int,Wt::WComboBox*> mapCBUnit;
-        Wt::WStringListModel *slmUnit;
+//        std::map<int,long long> mapUnitIdSboxRow;
+//        std::map<int,Wt::WComboBox*> mapCBUnit;
+//        Wt::WStringListModel *slmUnit;
         
         int searchId;
+        int filterId;
         int currentInformation;
 
         int status;
@@ -206,6 +251,7 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         std::string tableInformationState;
         std::string createFormSourceState;
         std::string createFormSearchState;
+        std::string createFormFilterState;
         std::string formJSON;
         std::string strJSON;
 

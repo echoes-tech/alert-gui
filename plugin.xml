@@ -165,77 +165,111 @@
                                     </span>
                                 </div>
                                 
-                                <!--search-->
-                                <div class="widget-box">
-                                <div class="widget-title">
-                                    <span class="icon">
-                                        <i class='icon-pencil'></i>
-                                    </span>
-                                    <h5>${tr:Alert.plugins.search-table-title}</h5>
-                                </div> 
-                                <div class="widget-content">
-                                    
-                                    <div class="row-fluid" style="display:none"></div>
-                                    <div class="row-fluid">
-                                        <div class="span2">
-                                            ${plugin-search-selection-box}
-                                        </div>
-                                        <div class="span2">
-                                            ${plugin-combo-search-type}
-                                        </div>
-                                        <div class="span8">
-                                            ${plugin-table-search-type-param}
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span1"> 
-                                            <label class="control-label">${tr:Alert.plugins.search-periode-label} </label>
-                                        </div>
-                                        <div class="span1">
-                                            ${plugin-search-periode}
-                                        </div>
-                                        <div class="span1">
-                                        </div>
-                                        <div class="span1">    
-                                            <label class="control-label">${tr:Alert.plugins.search-static-label} </label>
-                                        </div>
-                                        <div class="span1">
-                                            ${plugin-search-static}
-                                        </div>
-                                        <div class="span1">
-                                        </div>
-                                        <div class="span1">    
-                                            <label class="control-label">${tr:Alert.plugins.search-key-value} </label>
-                                        </div>
-                                        <div class="span1">
-                                            ${plugin-search-key-value}
-                                        </div>
-                                        <div class="span1">
-                                        </div>  
-                                        <div class="span1"> 
-                                            <label class="control-label">${tr:Alert.plugins.search-nomber-value} </label>
-                                        </div>
-                                        <div class="span1">
-                                            ${plugin-search-nomber-value}
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            ${plugin-search-information-table}
-                                        </div>
-                                    </div> 
-                                    <div class="row-fluid">
-                                        <span class="controls">
-                                            ${plugin-add-search-information-button}
-                                            ${plugin-modify-search-button}
-                                            ${plugin-delete-search-button}
-                                        </span>
-                                       
-                                        </div>
-                                     </div>
-                                </div>
+                                
                              </div>
                         </div>
+                        
+                        <!--search-->
+                        <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon">
+                                <i class='icon-pencil'></i>
+                            </span>
+                            <h5>${tr:Alert.plugins.search-table-title}</h5>
+                        </div> 
+                        <div class="widget-content">
+
+                            <div class="row-fluid" style="display:none"></div>
+                            <div class="row-fluid">
+                                <div class="span2">
+                                    ${plugin-search-selection-box}
+                                </div>
+                                <div class="span2">
+                                    ${plugin-combo-search-type}
+                                </div>
+                                <div class="span8">
+                                    ${plugin-table-search-param}
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span1"> 
+                                    <label class="control-label">${tr:Alert.plugins.search-periode-label} </label>
+                                </div>
+                                <div class="span1">
+                                    ${plugin-search-period}
+                                </div>
+
+                            </div>
+                            <div class="row-fluid">
+                                <span class="controls">
+                                    ${plugin-add-search-button}
+                                    ${plugin-modify-search-button}
+                                    ${plugin-delete-search-button}
+                                </span>
+
+                                </div>
+                             </div>
+
+
+
+
+                            
+
+
+                        </div>
+                        
+                        <!--filter-->
+                            <div class="widget-box">
+                            <div class="widget-title">
+                                <span class="icon">
+                                    <i class='icon-pencil'></i>
+                                </span>
+                                <h5>${tr:Alert.plugins.filter-table-title}</h5>
+                            </div> 
+                            <div class="widget-content">
+
+                                <div class="row-fluid" style="display:none"></div>
+                                <div class="row-fluid">
+                                    <div class="span2">
+                                        ${plugin-filter-selection-box}
+                                    </div>
+                                    <div class="span2">
+                                        ${plugin-combo-filter-type}
+                                    </div>
+                                    <div class="span8">
+                                        ${plugin-table-filter-type-param}
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span1">
+                                    </div>
+                                    <div class="span1">
+                                    </div>
+                                    <div class="span1">    
+                                        <label class="control-label">${tr:Alert.plugins.filter-key-value} </label>
+                                    </div>
+                                    <div class="span1">
+                                        ${plugin-filter-key-value}
+                                    </div>
+                                    <div class="span1">
+                                    </div>  
+                                    <div class="span1"> 
+                                        <label class="control-label">${tr:Alert.plugins.filter-nomber-value} </label>
+                                    </div>
+                                    <div class="span1">
+                                        ${plugin-filter-nomber-value}
+                                    </div>
+                                </div>
+                                 <div class="row-fluid">
+                                    <span class="controls">
+                                        ${plugin-add-filter-button}
+                                        ${plugin-modify-filter-button}
+                                        ${plugin-delete-filter-button}
+                                    </span>
+
+                                    </div>
+                                 </div>
+                            </div>
                         
                         <div class="row-fluid">
                             <div class="controls">

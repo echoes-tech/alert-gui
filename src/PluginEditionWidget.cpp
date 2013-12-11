@@ -11,6 +11,8 @@
 
 Wt::Json::Array Wt::Json::Array::Empty;
 
+using namespace std;
+
 PluginEditionWidget::PluginEditionWidget(Echoes::Dbo::Session* session, const std::string &apiUrl)
 : Wt::WTemplateFormView(Wt::WString::tr("Alert.plugins.Edition.template"))
 {
@@ -118,7 +120,7 @@ void PluginEditionWidget::createUI()
     else
         Wt::log("error") << "Error Client Http";
  
-    // creation source
+    // SOURCE
     sourceSelectionBox = new Wt::WSelectionBox();
     bindWidget("source-selection-box", sourceSelectionBox);
     sourceSelectionBox->clicked().connect(this, &PluginEditionWidget::selectedSource);
@@ -157,57 +159,30 @@ void PluginEditionWidget::createUI()
     deleteSource->clicked().connect(this, &PluginEditionWidget::deleteSource);
     bindWidget("plugin-delete-source-button", deleteSource);
     
-   // creation search
+    // SEARCH
     searchSelectionBox = new Wt::WSelectionBox();
-    searchSelectionBox->clicked().connect(this, &PluginEditionWidget::selectedSearch);
     bindWidget("plugin-search-selection-box", searchSelectionBox);
-    
-    comboSeaType = new Wt::WComboBox();
-    slmSeaType = new Wt::WStringListModel();
-    comboSeaType->setModel(slmSeaType);
-    comboSeaType->clicked().connect(this, &PluginEditionWidget::createFormSearchParameters);
-    bindWidget("plugin-combo-search-type", comboSeaType);
-    
-    tableSeaTypeParam = new Wt::WTable();
-    fixStyleTable(tableSeaTypeParam);
-    tableSeaTypeParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-    tableSeaTypeParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
-    bindWidget("plugin-table-search-type-param", tableSeaTypeParam);
-    
-    periodeLE = new Wt::WLineEdit();
-    periodeLE->setValidator(validatorInt);
-    bindWidget("plugin-search-periode", periodeLE);
-    
-    staticCB = new Wt::WCheckBox("Static");
-    bindWidget("plugin-search-static", staticCB);
- 
-    pKValueLE = new Wt::WLineEdit();
-    pKValueLE->setText("0");
-    pKValueLE->setValidator(validatorInt);
-    bindWidget("plugin-search-key-value", pKValueLE);
+    searchSelectionBox->clicked().connect(this, &PluginEditionWidget::selectedSearch);
 
-    nbValueLE = new Wt::WLineEdit();
-    nbValueLE->setValidator(validatorInt);
-    nbValueLE->changed().connect(this, &PluginEditionWidget::createTableUnit);
-    bindWidget("plugin-search-nomber-value", nbValueLE);
-        
-    tableSeaUnit = new Wt::WTable();
-    fixStyleTable(tableSeaUnit);
-    tableSeaUnit->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.value-number-title")));
-    tableSeaUnit->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.name-title")));
-    tableSeaUnit->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.plugins.unit-title")));
-    tableSeaUnit->elementAt(0, 3)->addWidget(new Wt::WText(tr("Alert.plugins.display-title")));
-    tableSeaUnit->elementAt(0, 4)->addWidget(new Wt::WText(tr("Alert.plugins.calculate-title")));
-    tableSeaUnit->elementAt(0, 5)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
-    bindWidget("plugin-search-information-table", tableSeaUnit);
-    slmUnit = new Wt::WStringListModel();
+    comboSearchType = new Wt::WComboBox();
+    slmSearchTypes = new Wt::WStringListModel();
+    comboSearchType->setModel(slmAddons);
+    comboSearchType->clicked().connect(this, &PluginEditionWidget::createFormSearchParameters);
+    bindWidget("plugin-combo-search-type", comboSearchType);
+ 
+    tableSeaParam = new Wt::WTable();
+    bindWidget("plugin-table-search-param", tableSeaParam);
+    fixStyleTable(tableSeaParam);
+     
+    tableSeaParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
+    tableSeaParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
     
-    Wt::WPushButton *addSearch = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-search-and-information-button"));  
+    Wt::WPushButton *addSearch = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-search-button"));  
     addSearch->addStyleClass("btn");
     addSearch->addStyleClass("btn-info");
     addSearch->setTextFormat(Wt::XHTMLUnsafeText);
     addSearch->clicked().connect(this, &PluginEditionWidget::addSearch);
-    bindWidget("plugin-add-search-information-button", addSearch);
+    bindWidget("plugin-add-search-button", addSearch);
     
     buttonModifySearch = new Wt::WPushButton( tr("Alert.plugins.modify-search-button"));
     buttonModifySearch->addStyleClass("btn");
@@ -223,6 +198,65 @@ void PluginEditionWidget::createUI()
     deleteSearch->clicked().connect(this, &PluginEditionWidget::deleteSearch);
     bindWidget("plugin-delete-search-button", deleteSearch);
     
+    // FILTER
+    filterSelectionBox = new Wt::WSelectionBox();
+    filterSelectionBox->clicked().connect(this, &PluginEditionWidget::selectedFilter);
+    bindWidget("plugin-filter-selection-box", filterSelectionBox);
+    
+    comboFilType = new Wt::WComboBox();
+    slmFilType = new Wt::WStringListModel();
+    comboFilType->setModel(slmFilType);
+    comboFilType->clicked().connect(this, &PluginEditionWidget::createFormFilterParameters);
+    bindWidget("plugin-combo-filter-type", comboFilType);
+    
+    tableFilTypeParam = new Wt::WTable();
+    fixStyleTable(tableFilTypeParam);
+    tableFilTypeParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
+    tableFilTypeParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+    bindWidget("plugin-table-filter-type-param", tableFilTypeParam);
+    
+    periodeLE = new Wt::WLineEdit();
+    periodeLE->setValidator(validatorInt);
+    bindWidget("plugin-search-period", periodeLE);
+    
+    staticCB = new Wt::WCheckBox("Static");
+    bindWidget("plugin-filter-static", staticCB);
+ 
+    pKValueLE = new Wt::WLineEdit();
+    pKValueLE->setText("0");
+    pKValueLE->setValidator(validatorInt);
+    bindWidget("plugin-filter-key-value", pKValueLE);
+
+    nbValueLE = new Wt::WLineEdit();
+    nbValueLE->setValidator(validatorInt);
+//    nbValueLE->changed().connect(this, &PluginEditionWidget::createTableUnit);
+    bindWidget("plugin-filter-nomber-value", nbValueLE);
+        
+    Wt::WPushButton *addFilter = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-filter-button"));  
+    addFilter->addStyleClass("btn");
+    addFilter->addStyleClass("btn-info");
+    addFilter->setTextFormat(Wt::XHTMLUnsafeText);
+    addFilter->clicked().connect(this, &PluginEditionWidget::addFilter);
+    bindWidget("plugin-add-filter-button", addFilter);
+    
+    buttonModifyFilter = new Wt::WPushButton( tr("Alert.plugins.modify-filter-button"));
+    buttonModifyFilter->addStyleClass("btn");
+    buttonModifyFilter->addStyleClass("btn-primary");
+    buttonModifyFilter->setTextFormat(Wt::XHTMLUnsafeText);
+    buttonModifyFilter->clicked().connect(this, &PluginEditionWidget::modifyFilter);
+    bindWidget("plugin-modify-filter-button", buttonModifyFilter);
+    
+    Wt::WPushButton *deleteFilter = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-filter-button"));
+    deleteFilter->addStyleClass("btn");
+    deleteFilter->addStyleClass("btn-danger");
+    deleteFilter->setTextFormat(Wt::XHTMLUnsafeText);
+    deleteFilter->clicked().connect(this, &PluginEditionWidget::deleteFilter);
+    bindWidget("plugin-delete-filter-button", deleteFilter);
+    
+    
+    
+    
+    // JSON BUTTONS
     createJSONButton = new Wt::WPushButton("<i class='icon-download icon-white'></i> " + tr("Alert.plugins.create-JSON-button"));
     createJSONButton->addStyleClass("btn");
     createJSONButton->addStyleClass("btn-primary");
@@ -273,23 +307,23 @@ void PluginEditionWidget::createJSON()
     }
 }
 
-void PluginEditionWidget::createTableUnit()
-{
-    client1 = new Wt::Http::Client();
-    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseUnits, this, _1, _2));
-
-    std::string urlAdd = this->getApiUrl() + "/units"
-            + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-            + "&token=" + session->user()->token.toUTF8();
-    
-    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
-    if(client1->get(urlAdd))
-    {
-        Wt::WApplication::instance()->deferRendering();
-    }
-    else
-        Wt::log("error") << "Error Client Http";
-}
+//void PluginEditionWidget::createTableUnit()
+//{
+//    client1 = new Wt::Http::Client();
+//    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseUnits, this, _1, _2));
+//
+//    std::string urlAdd = this->getApiUrl() + "/units"
+//            + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
+//            + "&token=" + session->user()->token.toUTF8();
+//    
+//    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
+//    if(client1->get(urlAdd))
+//    {
+//        Wt::WApplication::instance()->deferRendering();
+//    }
+//    else
+//        Wt::log("error") << "Error Client Http";
+//}
 
 void PluginEditionWidget::createFormSearchParameters()
 {
@@ -305,11 +339,10 @@ void PluginEditionWidget::createFormSearchParameters()
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSeaTypeParameters, this, _1, _2));
 
-    std::string urlAdd = this->getApiUrl() + "/search_types/"
-            + boost::lexical_cast<std::string>(mapSeaTypeIdSboxRow[comboSeaType->currentIndex()])
-            + "/parameters" 
+    std::string urlAdd = this->getApiUrl() + "/searches/parameters"
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-            + "&token=" + session->user()->token.toUTF8();
+            + "&token=" + session->user()->token.toUTF8()
+            + "&type_id=" + boost::lexical_cast<std::string>(mapSeaTypeIdSboxRow[comboSearchType->currentIndex()]);
 
     Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
     if(client1->get(urlAdd))
@@ -320,125 +353,35 @@ void PluginEditionWidget::createFormSearchParameters()
         Wt::log("error") << "Error Client Http";
 }
 
+void PluginEditionWidget::createFormFilterParameters()
+{
+    if(createFormFilterState == "Modify")
+    {
+        buttonModifyFilter->enable();
+    }
+    else
+    {
+        buttonModifyFilter->disable();
+    }
+    
+    client1 = new Wt::Http::Client();
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseFilTypeParameters, this, _1, _2));
 
+    std::string urlAdd = this->getApiUrl() + "/filters/parameters"
+            + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
+            + "&token=" + session->user()->token.toUTF8()
+            + "&type_id=" + boost::lexical_cast<string>(mapFilTypeIdSboxRow[comboFilType->currentIndex()]);
 
-//void PluginEditionWidget::createFormSourceParameters()
-//{
-//    
-//    
-//    for(unsigned idx = 0 ; idx < mapLEAddonParam.size() ; idx++)
-//    {
-//       delete mapLEAddonParam[mapAddonParameterNameSBoxRow[idx]];
-//    }
-//    
-//    mapAddonParameterIdSboxRow.clear();
-//    mapAddonParameterNameSBoxRow.clear();
-//    mapAddonParameterValueSBoxRow.clear();
-//    mapLEAddonParam.clear();
-//    tableSrcParam->clear();
-//    tableSrcParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-//    tableSrcParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
-//    
-//    string name = "";
-//    
-//    resetSearch();
-//    if(createFormSourceState != "Modify")
-//    {
-//        buttonModifySource->disable();
-//    }
-//    else
-//    {
-//        buttonModifySource->enable();
-//    }
-//    
-//    
-//    map<int,string> mapESourceParameterName;
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::PATH] = tr("Alert.plugins.path").toUTF8();
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::HOST] = tr("Alert.plugins.host").toUTF8();
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::USER] = tr("Alert.plugins.user").toUTF8();
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::PASSWD] = tr("Alert.plugins.passwd").toUTF8();
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::DB] = tr("Alert.plugins.db").toUTF8();
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::PORT] = tr("Alert.plugins.port").toUTF8();
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::COMMUNITY] = tr("Alert.plugins.community").toUTF8();
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::VERSION] = tr("Alert.plugins.version").toUTF8();
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::AUTH_PROTO] = tr("Alert.plugins.auth_proto").toUTF8();
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::AUTH_PATH] = tr("Alert.plugins.auth_path").toUTF8();
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::PRIV_PROTO] = tr("Alert.plugins.priv_proto").toUTF8();
-//    mapESourceParameterName[Echoes::Dbo::ESourceParameter::PRIV_PATH] = tr("Alert.plugins.priv_path").toUTF8();
-//    
-//    
-//    for (int i = Echoes::Dbo::ESourceParameter::PATH ; i <= Echoes::Dbo::ESourceParameter::PRIV_PATH ; i++)
-//    {
-//        mapAddonParameterIdSboxRow[i] = i;
-//        name = mapESourceParameterName[i];
-//        mapAddonParameterNameSBoxRow[i] = name;
-//        
-//        mapLEAddonParam[name] = new Wt::WLineEdit();
-//        mapLEAddonParam[name]->setValidator(validatorRegExp);
-//    
-//        /////////////// Attention méthode qui ne marche que pour l'affichage dans le gui (en base le passwd sera en claire.
-//        if (i == Echoes::Dbo::ESourceParameter::PASSWD)
-//        {
-//            mapLEAddonParam[name]->setEchoMode(Wt::WLineEdit::Password);
-//        }
-//        /////////////// If temporaire
-//        tableSrcParam->elementAt(i, 0)->addWidget(new Wt::WText(name));
-//        tableSrcParam->elementAt(i, 1)->addWidget(mapLEAddonParam[name]);
-//    }
-//  
-//
-//  
-//    if(createFormSourceState == "Modify")
-//    {
-//        completFormSource();
-//    }
-//  
-//    if(createFormSourceState == "Modify")
-//    {
-//        client1 = new Wt::Http::Client();
-//
-//        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchList, this, _1, _2));
-//    
-//        std::string urlAdd = this->getApiUrl() + "/plugins/"
-//                + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-//                + "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()])
-//                + "/searches"
-//                + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-//                + "&token=" + session->user()->token.toUTF8();
-//
-//        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
-//
-//        if(client1->get(urlAdd))
-//        {
-//            Wt::WApplication::instance()->deferRendering();
-//        }
-//        else
-//            Wt::log("error") << "Error Client Http";
-//    }
-//    else
-//    {
-//        client1 = new Wt::Http::Client();
-//        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchTypeList, this, _1, _2));
-//    
-//        std::string urlAdd = this->getApiUrl() + "/addons/"
-//                + boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()])
-//                + "/search_types"
-//                + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-//                + "&token=" + session->user()->token.toUTF8();
-//
-//        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
-//
-//        if(client1->get(urlAdd))
-//        {
-//            Wt::WApplication::instance()->deferRendering();
-//        }
-//        else
-//            Wt::log("error") << "Error Client Http";
-//    }
-//    createFormSourceState = "";
-//    refresh1();
-//    
-//}
+    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
+    if(client1->get(urlAdd))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+    else
+    {
+        Wt::log("error") << "Error Client Http";
+    }
+}
 
 void PluginEditionWidget::createFormSourceParameters()
 {
@@ -568,7 +511,8 @@ void PluginEditionWidget::addSource()
 
         client1 = new Wt::Http::Client();
         client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddSource, this, _1, _2));
-        std::string messAdd ="{\n\"addon_id\" : "+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]);
+        std::string messAdd ="{\n\"addon_id\": "+ boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()]) + ","
+                            + "\n\"plugin_id\": " + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]);
 
         if(mapAddonParameterNameSBoxRow.size() == mapAddonParameterValueSBoxRow.size())
         {
@@ -584,9 +528,7 @@ void PluginEditionWidget::addSource()
             Wt::Http::Message message;
             message.addBodyText(messAdd);
 
-            std::string urlAdd = this->getApiUrl() + "/plugins/"
-                    + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-                    + "/sources" 
+            string urlAdd = this->getApiUrl() + "/sources"
                     + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                     + "&token=" + session->user()->token.toUTF8();
 
@@ -620,19 +562,6 @@ bool PluginEditionWidget::validateSearch(std::string &badField)
     {
         return false;
     }
-    for(unsigned i = 0; i < mapLENameInformation.size(); i++)
-    {
-        if (mapLENameInformation[i]->validate() != Wt::WValidator::State::Valid)
-        {
-             badField = "Alert.plugins.name-title";
-             return false;
-        }
-        if(mapCBCalculateInformation[i]->isChecked() && mapLECalculateInformation[i]->validate() != Wt::WValidator::State::Valid)
-        {
-            badField = "Alert.plugins.calculate-title";
-             return false;
-        }
-    }
     for(unsigned i = 0; i < mapSeaTypeParameterNameSBoxRow.size(); i++)
     {
         if (mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[i]]->validate() != Wt::WValidator::State::Valid)
@@ -646,14 +575,45 @@ bool PluginEditionWidget::validateSearch(std::string &badField)
         badField = "Alert.plugins.search-periode-label";
          return false;
     }
+    
+    return true;
+}
+
+bool PluginEditionWidget::validateFilter(std::string &badField)
+{
+    if(sourceSelectionBox->currentIndex() == -1 || pluginSelectionBox->currentIndex() == -1 || searchSelectionBox->currentIndex() == -1)
+    {
+        return false;
+    }
+//    for(unsigned i = 0; i < mapLENameInformation.size(); i++)
+//    {
+//        if (mapLENameInformation[i]->validate() != Wt::WValidator::State::Valid)
+//        {
+//             badField = "Alert.plugins.name-title";
+//             return false;
+//        }
+//        if(mapCBCalculateInformation[i]->isChecked() && mapLECalculateInformation[i]->validate() != Wt::WValidator::State::Valid)
+//        {
+//            badField = "Alert.plugins.calculate-title";
+//             return false;
+//        }
+//    }
+    for(unsigned i = 0; i < mapFilTypeParameterNameSBoxRow.size(); i++)
+    {
+        if (mapLESeaTypeParam[mapFilTypeParameterNameSBoxRow[i]]->validate() != Wt::WValidator::State::Valid)
+        {
+            badField = "Alert.plugins.parameter-title";
+            return false;
+        }
+    }
     if(pKValueLE->validate() != Wt::WValidator::State::Valid)
     {
-        badField = "Alert.plugins.search-key-value";
+        badField = "Alert.plugins.filter-key-value";
          return false;
     }
     if(nbValueLE->validate() != Wt::WValidator::State::Valid)
     {
-        badField = "Alert.plugins.search-nomber-value";
+        badField = "Alert.plugins.filter-nomber-value";
          return false;
     }
     return true;
@@ -662,26 +622,22 @@ bool PluginEditionWidget::validateSearch(std::string &badField)
 void PluginEditionWidget::addSearch()
 {
     createJSONAnchor->disable();
-    std::string badField = "";
+    string badField = "";
     if(validateSearch(badField))
     {
-        for(int row = 1; row < tableSeaTypeParam->rowCount(); row ++)
+        for(int row = 1; row < tableSeaParam->rowCount(); row ++)
         {
             mapSeaTypeParameterValueSBoxRow[row-1] = mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[row - 1]]->text();
         }
-        std::string tmpBool;
-        if(boost::lexical_cast<int>(staticCB->isChecked()))
-            tmpBool = "true";
-        else
-            tmpBool = "false";
 
         client1 = new Wt::Http::Client();
         client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddSearch, this, _1, _2));
-        std::string messAdd ="{\n    \"sty_id\" : "+ boost::lexical_cast<std::string>(mapSeaTypeIdSboxRow[comboSeaType->currentIndex()]) +",\n\
-    \"sea_period\" : " + boost::lexical_cast<std::string>(periodeLE->text()) +",\n\
-    \"sea_is_static\" : " + tmpBool + ",\n\
-    \"pos_key_value\" : " + boost::lexical_cast<std::string>(pKValueLE->text()) +",\n\
-    \"nb_value\" : " + boost::lexical_cast<std::string>(nbValueLE->text()) +",\n";
+        string messAdd =
+                "{\n"
+                "\"source_id\" : "+ boost::lexical_cast<string>(mapSourceId[sourceSelectionBox->currentIndex()]) +",\n"
+                "\"type_id\" : "+ boost::lexical_cast<string>(mapSeaTypeIdSboxRow[comboSearchType->currentIndex()]) +",\n"
+                "\"period\" : " + boost::lexical_cast<string>(periodeLE->text()) + "\n";
+    
         if(mapSeaTypeParameterNameSBoxRow.size() == mapSeaTypeParameterValueSBoxRow.size())
         {
             for (long unsigned idx = 0; idx < mapSeaTypeParameterNameSBoxRow.size(); idx++)
@@ -691,27 +647,91 @@ void PluginEditionWidget::addSearch()
                 //////////////////////////////////
                 std::string strTmp = boost::lexical_cast<std::string>(mapSeaTypeParameterValueSBoxRow[idx]);
                 formatValue(strTmp, 1);//
-                messAdd += "\"" + boost::lexical_cast<std::string>(mapSeaTypeParameterNameSBoxRow[idx]) + "\": \""+ strTmp +"\",\n";
+                messAdd += "\"" + boost::lexical_cast<std::string>(mapSeaTypeParameterNameSBoxRow[idx]) + "\": \""+ strTmp;
+                if (idx != mapSeaTypeParameterNameSBoxRow.size() - 1)
+                {
+                    messAdd += "\",\n";
+                }
+                        
             }
-            messAdd += "\"units\" : [\n";
-            for (long unsigned idx1 = 0; idx1 < mapCBUnit.size(); idx1++)
-            {
-                messAdd += "\t{\"unit_id\" : " + boost::lexical_cast<std::string>(mapUnitIdSboxRow[mapCBUnit[idx1]->currentIndex()]) + ",\n\
-    \t\"val_num\" : " + boost::lexical_cast<std::string>(idx1 + 1) +"},\n";
-            }
-            if(mapCBUnit.size() > 0)
-            {
-            messAdd.replace(messAdd.size()-2, 1, "");
-            }
-            messAdd += "]\n}\n";
+
+            messAdd += "\n}\n";
 
             Wt::Http::Message message;
             message.addBodyText(messAdd);
             
-            std::string urlAdd = this->getApiUrl() + "/plugins/"
-                    + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-                    + "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()])
-                    + "/searches" 
+            std::string urlAdd = this->getApiUrl() + "/searches"
+                    + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
+                    + "&token=" + session->user()->token.toUTF8();
+
+            Wt::log("debug") << "PluginEditionWidget : [POST] address to call : " << urlAdd;
+            
+            if(client1->post(urlAdd ,message))
+            {
+                Wt::WApplication::instance()->deferRendering();
+            }
+            else
+            {
+                Wt::log("error") << "Error Client Http";
+            }
+
+        }
+        else
+        {
+            std::cerr << "[PluginEditionWidget] : mapSeaTypeParameterNameSBoxRow.size() =" << mapSeaTypeParameterNameSBoxRow.size() 
+                      <<" != mapSeaTypeParameterValueSBoxRow.size() =" << mapSeaTypeParameterValueSBoxRow.size() <<std::endl;
+        }
+    }
+    else
+    {
+         Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") + 
+                                tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
+                                tr("Alert.plugins.message-cause"),Wt::Ok);
+        std::cerr << "[addSearch] : Mal remplit"<< std::endl;
+    }
+}
+
+void PluginEditionWidget::addFilter()
+{
+    createJSONAnchor->disable();
+    std::string badField = "";
+    if(validateFilter(badField))
+    {
+        for(int row = 1; row < tableFilTypeParam->rowCount(); row ++)
+        {
+            mapFilTypeParameterValueSBoxRow[row-1] = mapLEFilTypeParam[mapFilTypeParameterNameSBoxRow[row - 1]]->text();
+        }
+        
+        client1 = new Wt::Http::Client();
+        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddFilter, this, _1, _2));
+        std::string messAdd =
+                "{\n"
+                "\"search_id\": " + boost::lexical_cast<std::string>(mapSeaTypeIdSboxRow[comboSearchType->currentIndex()]) + ",\n"
+                "\"type_id\" : " + boost::lexical_cast<std::string>(mapFilTypeIdSboxRow[comboFilType->currentIndex()]) + ",\n"
+                "\"position_key_value\" : " + boost::lexical_cast<std::string>(pKValueLE->text()) + ",\n"
+                "\"nb_value\" : " + boost::lexical_cast<std::string>(nbValueLE->text()) + ",\n";
+        
+        if(mapFilTypeParameterNameSBoxRow.size() == mapFilTypeParameterValueSBoxRow.size())
+        {
+            for (long unsigned idx = 0; idx < mapFilTypeParameterNameSBoxRow.size(); idx++)
+            {
+                
+                 //si il y a des backslash dans le nom
+                //////////////////////////////////
+                std::string strTmp = boost::lexical_cast<std::string>(mapFilTypeParameterValueSBoxRow[idx]);
+                formatValue(strTmp, 1);//
+                messAdd += "\"" + boost::lexical_cast<std::string>(mapFilTypeParameterNameSBoxRow[idx]) + "\": \""+ strTmp ;
+                if (idx != mapFilTypeParameterNameSBoxRow.size() - 1)
+                {
+                    messAdd +="\",\n";
+                }
+                
+            }
+            messAdd += "\n}\n";
+            Wt::Http::Message message;
+            message.addBodyText(messAdd);
+            
+            std::string urlAdd = this->getApiUrl() + "/filters"
                     + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
                     + "&token=" + session->user()->token.toUTF8();
 
@@ -727,9 +747,8 @@ void PluginEditionWidget::addSearch()
         }
         else
         {
-            std::cerr << "[PluginEditionWidget] : mapSeaTypeParameterNameSBoxRow.size() =" << mapSeaTypeParameterNameSBoxRow.size() 
-                      <<" != mapSeaTypeParameterValueSBoxRow.size() =" << mapSeaTypeParameterValueSBoxRow.size() <<std::endl;
-         //   std::cerr << "post message" << messAdd << std::endl;
+            std::cerr << "[PluginEditionWidget] : mapFilTypeParameterNameSBoxRow.size() =" << mapFilTypeParameterNameSBoxRow.size() 
+                      <<" != mapFilTypeParameterValueSBoxRow.size() =" << mapFilTypeParameterValueSBoxRow.size() <<std::endl;
         }
     }
     else
@@ -737,7 +756,7 @@ void PluginEditionWidget::addSearch()
          Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") + 
                                 tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
                                 tr("Alert.plugins.message-cause"),Wt::Ok);
-        std::cerr << "[addSearch] : Mal remplit"<< std::endl;
+        std::cerr << "[addFilter] : Mal rempli"<< std::endl;
     }
 }
 
@@ -855,7 +874,7 @@ void PluginEditionWidget::modifySearch()
     std::string badField = "";
     if(validateSearch(badField))
     {
-        for(int row = 1; row < tableSeaTypeParam->rowCount(); row ++)
+        for(int row = 1; row < tableSeaParam->rowCount(); row ++)
         {
             mapSeaTypeParameterValueSBoxRow[row-1] = mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[row - 1]]->text();
         }
@@ -920,6 +939,76 @@ void PluginEditionWidget::modifySearch()
     }
 }
 
+void PluginEditionWidget::modifyFilter()
+{
+//    std::string badField = "";
+//    if(validateSearch(badField))
+//    {
+//        for(int row = 1; row < tableSeaParam->rowCount(); row ++)
+//        {
+//            mapSeaTypeParameterValueSBoxRow[row-1] = mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[row - 1]]->text();
+//        }
+//        std::string tmpBool;
+//        if(boost::lexical_cast<int>(staticCB->isChecked()))
+//            tmpBool = "true";
+//        else
+//            tmpBool = "false";
+//
+//        client1 = new Wt::Http::Client();
+//        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseModifySearch, this, _1, _2));
+//        
+//        std::string messAdd ="{\n    \"sea_period\" : " + boost::lexical_cast<std::string>(periodeLE->text()) +",\n\
+//    \"sea_is_static\" : " + tmpBool + ",\n\
+//    \"pos_key_value\" : " + boost::lexical_cast<std::string>(pKValueLE->text()) +",\n";
+//        if(mapSeaTypeParameterNameSBoxRow.size() == mapSeaTypeParameterValueSBoxRow.size())
+//        {
+//            for (long unsigned idx = 0; idx < mapSeaTypeParameterNameSBoxRow.size(); idx++)
+//            {
+//                
+//                 //si il y a des backslash dans le nom
+//                //////////////////////////////////
+//                std::string strTmp = boost::lexical_cast<std::string>(mapSeaTypeParameterValueSBoxRow[idx]);
+//                formatValue(strTmp, 1);//
+//                messAdd += "\"" + boost::lexical_cast<std::string>(mapSeaTypeParameterNameSBoxRow[idx]) + "\": \""+ strTmp +"\"\n";
+//            }
+//            messAdd += "}\n";
+//
+//            Wt::Http::Message message;
+//            message.addBodyText(messAdd);
+//            
+//            std::string urlAdd = this->getApiUrl() + "/plugins/"
+//                    + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
+//                    + "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()])
+//                    + "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()])
+//                    + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
+//                    + "&token=" + session->user()->token.toUTF8();
+//
+//            Wt::log("debug") << "PluginEditionWidget : [POST] address to call : " << urlAdd;
+//
+//            if(client1->post(urlAdd ,message))
+//            {
+//                Wt::WApplication::instance()->deferRendering();
+//            }
+//            else
+//                Wt::log("error") << "Error Client Http";
+//
+//        }
+//        else
+//        {
+//            std::cerr << "[PluginEditionWidget] : mapSeaTypeParameterNameSBoxRow.size() =" << mapSeaTypeParameterNameSBoxRow.size() 
+//                      <<" != mapSeaTypeParameterValueSBoxRow.size() =" << mapSeaTypeParameterValueSBoxRow.size() <<std::endl;
+//       //     std::cerr << "post message" << messAdd << std::endl;
+//        }
+//    }
+//    else
+//    {
+//         Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") + 
+//                                tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
+//                                tr("Alert.plugins.message-cause"),Wt::Ok);
+//        std::cerr << "[addSource] : Mal remplit"<< std::endl;
+//    }
+}
+
 void PluginEditionWidget::deleteSearch()
 {
     createJSONAnchor->disable();
@@ -946,148 +1035,174 @@ void PluginEditionWidget::deleteSearch()
         Wt::log("error") << "Error Client Http";
 }
 
-void PluginEditionWidget::addInformation()
+void PluginEditionWidget::deleteFilter()
 {
-    std::string tmpBoolDisplay;
-    if(boost::lexical_cast<int>(mapCBDisplayInformation[currentInformation]->isChecked()))
-    {
-        tmpBoolDisplay = "true";
-    }
-    else
-    {
-        tmpBoolDisplay = "false";
-    }
-
-    
-    
+    createJSONAnchor->disable();
     client1 = new Wt::Http::Client();
-    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddInformation, this, _1, _2));
-    std::string messAdd ="{\n\"inf_name\" : \""+ boost::lexical_cast<std::string>(mapLENameInformation[currentInformation]->text()) +"\",\n\
-\"inf_display\" : "+ tmpBoolDisplay + ",\n";
-    if(boost::lexical_cast<int>(mapCBCalculateInformation[currentInformation]->isChecked()))
-    {
-        messAdd += "\"inf_calculate\" : \"" + boost::lexical_cast<std::string>(mapLECalculateInformation[currentInformation]->text()) +"\",\n"; 
-    }
-
-    messAdd += "\"inf_value_num\" : " + boost::lexical_cast<std::string>(currentInformation + 1) +"\n}\n";
-
+    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeleteFilter, this, _1, _2));
     Wt::Http::Message message;
-    message.addBodyText(messAdd);
-
+    message.addBodyText("");
     
-    std::string urlAdd = this->getApiUrl() + "/plugins/"
-            + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-            + "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()])
-            + "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]/*searchId*/)
-            + "/informations"  // /informations/
+    std::string urlAdd = this->getApiUrl() + "/filters/"
+            + boost::lexical_cast<std::string>(mapFilterId[filterSelectionBox->currentIndex()])
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
-    Wt::log("debug") << "PluginEditionWidget : [POST] address to call : " << urlAdd;
+    Wt::log("debug") << "PluginEditionWidget : [DELETE] address to call : " << urlAdd;
 
-    if(client1->post(urlAdd ,message))
+    
+    if(client1->deleteRequest(urlAdd ,message))
     {
-        Wt::WApplication::instance()->deferRendering();
+        Wt::WApplication::instance()->deferRendering();    
     }
     else
+    {
         Wt::log("error") << "Error Client Http";
-}
-
-void PluginEditionWidget::createTableInformation()
-{
-    for(unsigned idx = 0; idx<mapLENameInformation.size(); idx++)
-    {
-        delete mapLENameInformation[idx];
-        delete mapCBDisplayInformation[idx];
-        delete mapCBCalculateInformation[idx];
-        delete mapLECalculateInformation[idx];
-    }
-    tableSeaUnit->clear();
-    tableSeaUnit->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.value-number-title")));
-    tableSeaUnit->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.name-title")));
-    tableSeaUnit->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.plugins.unit-title")));
-    tableSeaUnit->elementAt(0, 3)->addWidget(new Wt::WText(tr("Alert.plugins.display-title")));
-    tableSeaUnit->elementAt(0, 4)->addWidget(new Wt::WText(tr("Alert.plugins.calculate-title")));
-    tableSeaUnit->elementAt(0, 5)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
-    fixStyleTable(tableSeaUnit);
-    mapCBUnit.clear();
-    mapLENameInformation.clear();
-    mapCBDisplayInformation.clear();
-    mapCBCalculateInformation.clear();
-    mapLECalculateInformation.clear();
-    
-    for (int idx=0 ; idx < boost::lexical_cast<int>(nbValueLE->text().toUTF8()); idx++)
-    {
-
-        mapCBUnit[idx] = new Wt::WComboBox(); 
-        mapCBUnit[idx]->setModel(slmUnit);
-
-        mapLENameInformation[idx] = new Wt::WLineEdit();
-        mapLENameInformation[idx]->setValidator(validatorRegExp);
-
-        mapCBDisplayInformation[idx] = new Wt::WCheckBox();
-
-        mapCBCalculateInformation[idx] = new Wt::WCheckBox();
-        mapCBCalculateInformation[idx]->clicked().connect(this, &PluginEditionWidget::updateStateLECalculateInformation);
-
-        mapLECalculateInformation[idx] = new Wt::WLineEdit();
-        mapLECalculateInformation[idx]->setValidator(validatorRegExp);
-        mapLECalculateInformation[idx]->hide();
-        
-        tableSeaUnit->elementAt(idx + 1, 0)
-            ->addWidget(new Wt::WText(boost::lexical_cast<std::string>(idx + 1)));
-        tableSeaUnit->elementAt(idx + 1, 1)
-            ->addWidget(mapLENameInformation[idx]);
-        tableSeaUnit->elementAt(idx + 1, 2)
-            ->addWidget(mapCBUnit[idx]);
-        tableSeaUnit->elementAt(idx + 1, 3)
-            ->addWidget(mapCBDisplayInformation[idx]);
-        tableSeaUnit->elementAt(idx + 1, 4)
-            ->addWidget(mapCBCalculateInformation[idx]);
-        tableSeaUnit->elementAt(idx + 1, 5)
-            ->addWidget(mapLECalculateInformation[idx]);
-
-    }
-    if(tableInformationState == "Modify")
-    {
-        client1 = new Wt::Http::Client();
-        client1->setTimeout(30);
-        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseInformationsList, this, _1, _2));
-        
-        std::string urlAdd = this->getApiUrl() + "/plugins/"
-                + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-                + "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()])
-                + "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()])
-                + "/informations"  // /informations/
-                + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-                + "&token=" + session->user()->token.toUTF8();
-
-        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
-        if(client1->get(urlAdd))
-        {
-            Wt::WApplication::instance()->deferRendering();
-        }
-        else
-            Wt::log("error") << "Error Client Http";
-        tableInformationState = "";
-    }
-    refresh1();
-}
-
-void PluginEditionWidget::updateStateLECalculateInformation()
-{
-    for(unsigned i=0; i<mapCBCalculateInformation.size(); i++)
-    {
-        if(mapCBCalculateInformation[i]->isChecked())
-        {
-            mapLECalculateInformation[i]->show();
-        }
-        else
-        {
-            mapLECalculateInformation[i]->hide();
-        }
     }
 }
+
+//void PluginEditionWidget::addInformation()
+//{
+//    std::string tmpBoolDisplay;
+//    if(boost::lexical_cast<int>(mapCBDisplayInformation[currentInformation]->isChecked()))
+//    {
+//        tmpBoolDisplay = "true";
+//    }
+//    else
+//    {
+//        tmpBoolDisplay = "false";
+//    }
+//
+//    
+//    
+//    client1 = new Wt::Http::Client();
+//    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddInformation, this, _1, _2));
+//    std::string messAdd ="{\n\"inf_name\" : \""+ boost::lexical_cast<std::string>(mapLENameInformation[currentInformation]->text()) +"\",\n\
+//      \"inf_display\" : "+ tmpBoolDisplay + ",\n";
+//    if(boost::lexical_cast<int>(mapCBCalculateInformation[currentInformation]->isChecked()))
+//    {
+//        messAdd += "\"inf_calculate\" : \"" + boost::lexical_cast<std::string>(mapLECalculateInformation[currentInformation]->text()) +"\",\n"; 
+//    }
+//
+//    messAdd += "\"inf_value_num\" : " + boost::lexical_cast<std::string>(currentInformation + 1) +"\n}\n";
+//
+//    Wt::Http::Message message;
+//    message.addBodyText(messAdd);
+//
+//    
+//    std::string urlAdd = this->getApiUrl() + "/plugins/"
+//            + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
+//            + "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()])
+//            + "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()]/*searchId*/)
+//            + "/informations"  // /informations/
+//            + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
+//            + "&token=" + session->user()->token.toUTF8();
+//
+//    Wt::log("debug") << "PluginEditionWidget : [POST] address to call : " << urlAdd;
+//
+//    if(client1->post(urlAdd ,message))
+//    {
+//        Wt::WApplication::instance()->deferRendering();
+//    }
+//    else
+//        Wt::log("error") << "Error Client Http";
+//}
+
+//void PluginEditionWidget::createTableInformation()
+//{
+//    for(unsigned idx = 0; idx<mapLENameInformation.size(); idx++)
+//    {
+//        delete mapLENameInformation[idx];
+//        delete mapCBDisplayInformation[idx];
+//        delete mapCBCalculateInformation[idx];
+//        delete mapLECalculateInformation[idx];
+//    }
+//    tableSeaUnit->clear();
+//    tableSeaUnit->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.value-number-title")));
+//    tableSeaUnit->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.name-title")));
+//    tableSeaUnit->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.plugins.unit-title")));
+//    tableSeaUnit->elementAt(0, 3)->addWidget(new Wt::WText(tr("Alert.plugins.display-title")));
+//    tableSeaUnit->elementAt(0, 4)->addWidget(new Wt::WText(tr("Alert.plugins.calculate-title")));
+//    tableSeaUnit->elementAt(0, 5)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+//    fixStyleTable(tableSeaUnit);
+//    mapCBUnit.clear();
+//    mapLENameInformation.clear();
+//    mapCBDisplayInformation.clear();
+//    mapCBCalculateInformation.clear();
+//    mapLECalculateInformation.clear();
+//    
+//    for (int idx=0 ; idx < boost::lexical_cast<int>(nbValueLE->text().toUTF8()); idx++)
+//    {
+//
+//        mapCBUnit[idx] = new Wt::WComboBox(); 
+//        mapCBUnit[idx]->setModel(slmUnit);
+//
+//        mapLENameInformation[idx] = new Wt::WLineEdit();
+//        mapLENameInformation[idx]->setValidator(validatorRegExp);
+//
+//        mapCBDisplayInformation[idx] = new Wt::WCheckBox();
+//
+//        mapCBCalculateInformation[idx] = new Wt::WCheckBox();
+//        mapCBCalculateInformation[idx]->clicked().connect(this, &PluginEditionWidget::updateStateLECalculateInformation);
+//
+//        mapLECalculateInformation[idx] = new Wt::WLineEdit();
+//        mapLECalculateInformation[idx]->setValidator(validatorRegExp);
+//        mapLECalculateInformation[idx]->hide();
+//        
+//        tableSeaUnit->elementAt(idx + 1, 0)
+//            ->addWidget(new Wt::WText(boost::lexical_cast<std::string>(idx + 1)));
+//        tableSeaUnit->elementAt(idx + 1, 1)
+//            ->addWidget(mapLENameInformation[idx]);
+//        tableSeaUnit->elementAt(idx + 1, 2)
+//            ->addWidget(mapCBUnit[idx]);
+//        tableSeaUnit->elementAt(idx + 1, 3)
+//            ->addWidget(mapCBDisplayInformation[idx]);
+//        tableSeaUnit->elementAt(idx + 1, 4)
+//            ->addWidget(mapCBCalculateInformation[idx]);
+//        tableSeaUnit->elementAt(idx + 1, 5)
+//            ->addWidget(mapLECalculateInformation[idx]);
+//
+//    }
+//    if(tableInformationState == "Modify")
+//    {
+//        client1 = new Wt::Http::Client();
+//        client1->setTimeout(30);
+//        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseInformationsList, this, _1, _2));
+//        
+//        std::string urlAdd = this->getApiUrl() + "/plugins/"
+//                + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
+//                + "/sources/" + boost::lexical_cast<std::string>(mapSourceId[sourceSelectionBox->currentIndex()])
+//                + "/searches/" + boost::lexical_cast<std::string>(mapSearchId[searchSelectionBox->currentIndex()])
+//                + "/informations"  // /informations/
+//                + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
+//                + "&token=" + session->user()->token.toUTF8();
+//
+//        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
+//        if(client1->get(urlAdd))
+//        {
+//            Wt::WApplication::instance()->deferRendering();
+//        }
+//        else
+//            Wt::log("error") << "Error Client Http";
+//        tableInformationState = "";
+//    }
+//    refresh1();
+//}
+
+//void PluginEditionWidget::updateStateLECalculateInformation()
+//{
+//    for(unsigned i=0; i<mapCBCalculateInformation.size(); i++)
+//    {
+//        if(mapCBCalculateInformation[i]->isChecked())
+//        {
+//            mapLECalculateInformation[i]->show();
+//        }
+//        else
+//        {
+//            mapLECalculateInformation[i]->hide();
+//        }
+//    }
+//}
 
 void PluginEditionWidget::resetSource()
 {
@@ -1111,7 +1226,7 @@ void PluginEditionWidget::resetSource()
 
 void PluginEditionWidget::resetSearch()
 {
-    comboSeaType->clear();
+    comboSearchType->clear();
     for(unsigned idx = 0 ; idx < mapSeaTypeParameterNameSBoxRow.size() ; idx++)
     {
        delete mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[idx]];
@@ -1121,35 +1236,35 @@ void PluginEditionWidget::resetSearch()
     mapSeaTypeParameterNameSBoxRow.clear();
     mapSeaTypeParameterValueSBoxRow.clear();
     mapLESeaTypeParam.clear();
-    tableSeaTypeParam->clear();
-    tableSeaTypeParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-    tableSeaTypeParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
-    fixStyleTable(tableSeaTypeParam);
+    tableSeaParam->clear();
+    tableSeaParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
+    tableSeaParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+    fixStyleTable(tableSeaParam);
     periodeLE->setText("");
     staticCB->setChecked(false);
     pKValueLE->setText("0");
     nbValueLE->setText("");
     
-      for(unsigned idx = 0; idx<mapLENameInformation.size(); idx++)
-    {
-        delete mapLENameInformation[idx];
-        delete mapCBDisplayInformation[idx];
-        delete mapCBCalculateInformation[idx];
-        delete mapLECalculateInformation[idx];
-    }
-    tableSeaUnit->clear();
-    tableSeaUnit->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.value-number-title")));
-    tableSeaUnit->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.name-title")));
-    tableSeaUnit->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.plugins.unit-title")));
-    tableSeaUnit->elementAt(0, 3)->addWidget(new Wt::WText(tr("Alert.plugins.display-title")));
-    tableSeaUnit->elementAt(0, 4)->addWidget(new Wt::WText(tr("Alert.plugins.calculate-title")));
-    tableSeaUnit->elementAt(0, 5)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
-    fixStyleTable(tableSeaUnit);
-    mapCBUnit.clear();
-    mapLENameInformation.clear();
-    mapCBDisplayInformation.clear();
-    mapCBCalculateInformation.clear();
-    mapLECalculateInformation.clear();
+//      for(unsigned idx = 0; idx<mapLENameInformation.size(); idx++)
+//    {
+//        delete mapLENameInformation[idx];
+//        delete mapCBDisplayInformation[idx];
+//        delete mapCBCalculateInformation[idx];
+//        delete mapLECalculateInformation[idx];
+//    }
+//    tableSeaUnit->clear();
+//    tableSeaUnit->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.value-number-title")));
+//    tableSeaUnit->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.name-title")));
+//    tableSeaUnit->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.plugins.unit-title")));
+//    tableSeaUnit->elementAt(0, 3)->addWidget(new Wt::WText(tr("Alert.plugins.display-title")));
+//    tableSeaUnit->elementAt(0, 4)->addWidget(new Wt::WText(tr("Alert.plugins.calculate-title")));
+//    tableSeaUnit->elementAt(0, 5)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+//    fixStyleTable(tableSeaUnit);
+//    mapCBUnit.clear();
+//    mapLENameInformation.clear();
+//    mapCBDisplayInformation.clear();
+//    mapCBCalculateInformation.clear();
+//    mapLECalculateInformation.clear();
 }
 
 void PluginEditionWidget::selectedPlugin()
@@ -1163,12 +1278,11 @@ void PluginEditionWidget::selectedPlugin()
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSourceList, this, _1, _2));
 
-    std::string urlAdd = this->getApiUrl() + "/plugins/"
-            + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-            + "/sources"
+    std::string urlAdd = this->getApiUrl() + "/sources/"
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-            + "&token=" + session->user()->token.toUTF8();
-
+            + "&token=" + session->user()->token.toUTF8()
+            + "&plugin_id=" + boost::lexical_cast<std::string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()]);
+    
     Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
 
     if(client1->get(urlAdd))
@@ -1198,7 +1312,8 @@ void PluginEditionWidget::selectedSource()
 
             if(sourceID == mapSourceId[sourceSelectionBox->currentIndex()])
             {
-                long long idAddon = tmp.get("idAddon");
+                Wt::Json::Object addonJson = tmp.get("addon");
+                long long idAddon = addonJson.get("id");
                 for(unsigned i=0 ; i<mapAddonsIdSboxRow.size(); i++)
                 {
                     if(idAddon == mapAddonsIdSboxRow[i])
@@ -1224,9 +1339,9 @@ void PluginEditionWidget::selectedSource()
 void PluginEditionWidget::selectedSearch()
 {
     periodeLE->setText(boost::lexical_cast<std::string>(mapSearchPeriode[searchSelectionBox->currentIndex()]));
-    staticCB->setChecked(mapSearchStatic[searchSelectionBox->currentIndex()]);
-    pKValueLE->setText(boost::lexical_cast<std::string>(mapSearchPKValue[searchSelectionBox->currentIndex()]));
-    nbValueLE->setText(boost::lexical_cast<std::string>(mapSearchNbValue[searchSelectionBox->currentIndex()]));
+//    staticCB->setChecked(mapSearchStatic[searchSelectionBox->currentIndex()]);
+//    pKValueLE->setText(boost::lexical_cast<std::string>(mapSearchPKValue[searchSelectionBox->currentIndex()]));
+//    nbValueLE->setText(boost::lexical_cast<std::string>(mapSearchNbValue[searchSelectionBox->currentIndex()]));
     for(unsigned i=0 ; i<mapSeaTypeIdSboxRow.size(); i++)
     {
         if(mapSearchSTYId[searchSelectionBox->currentIndex()] == mapSeaTypeIdSboxRow[i])
@@ -1236,7 +1351,7 @@ void PluginEditionWidget::selectedSearch()
             //if() pour eviter boucle infini au cas ou un addon ne soit pas relié (dans TJ_STY_ADO) a un search type 
             if(mapSeaTypeIdSboxRow[i] != 0)
             {
-                comboSeaType->setCurrentIndex(i); 
+                comboSearchType->setCurrentIndex(i); 
                 createFormSearchState = "Modify";
                 createFormSearchParameters();
                 break;
@@ -1254,6 +1369,34 @@ void PluginEditionWidget::selectedSearch()
                  i = mapSeaTypeIdSboxRow.size()*2;
             }
            // std::cerr << "test1";
+        }
+    }
+}
+
+void PluginEditionWidget::selectedFilter()
+{
+    for(unsigned i=0 ; i<mapFilTypeIdSboxRow.size(); i++)
+    {
+        if(mapFilterSTYId[filterSelectionBox->currentIndex()] == mapFilTypeIdSboxRow[i])
+        {
+            if(mapFilTypeIdSboxRow[i] != 0)
+            {
+                comboFilType->setCurrentIndex(i); 
+                createFormFilterState = "Modify";
+                createFormFilterParameters();
+                break;
+            }
+            else
+            {
+                i = mapFilTypeIdSboxRow.size()*2;
+            }
+        }
+        else 
+        {
+            if(mapFilTypeIdSboxRow[i] == 0)
+            {
+                 i = mapFilTypeIdSboxRow.size()*2;
+            }
         }
     }
 }
@@ -1321,64 +1464,64 @@ void PluginEditionWidget::completFormSearch()
         Wt::log("error") << "Error Client Http";
 }
 
-void PluginEditionWidget::handleHttpResponseInformationsList(boost::system::error_code err, const Wt::Http::Message& response)
-{
-    Wt::WApplication::instance()->resumeRendering();
-    delete client1;
-    if(response.status()==200)
-    {      
-//        formatValue(response.body(), 1);//-1
-        Wt::Json::Value result ;
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-        try
-        {          
-            std::string strTmp = response.body();
-                        formatValue(strTmp, 1);//-1
-            Wt::Json::parse(strTmp, result);
-//            Wt::Json::parse(response.body(), result);
-            result1 = result;
-//            //descriptif
-            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-            {
-                Wt::Json::Object tmp = (*idx1);
-                Wt::Json::Object tmp1 = tmp.get("id");
-                int valueNb = tmp1.get("sub_search_number");
-                if(valueNb>0 && valueNb<= boost::lexical_cast<int>(nbValueLE->text()))
-                {
-                    int unitId = tmp1.get("unit_id");
-                    for(unsigned i=0 ; i<mapUnitIdSboxRow.size(); i++)
-                    {
-                        if(unitId == mapUnitIdSboxRow[i])
-                        {
-                            mapCBUnit[valueNb-1]->setCurrentIndex(i);
-                        }
-                    }
-                    if(tmp.contains("calculate"))
-                    {
-                        mapCBCalculateInformation[valueNb-1]->setChecked();
-                        mapLECalculateInformation[valueNb-1]->setText(tmp.get("calculate"));
-                        mapLECalculateInformation[valueNb-1]->show();
-                    }
-                    mapLENameInformation[valueNb-1]->setText(tmp.get("name"));
-                    mapCBDisplayInformation[valueNb-1]->setChecked(tmp.get("display"));
-                }
-            }
-        }
-        catch (Wt::Json::ParseError const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponseInformationsList] Problems parsing JSON:" << response.body();
-        }
-        catch (Wt::Json::TypeException const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponseInformationsList] Problems parsing JSON.:" << response.body();
-        }   
-    }
-    else
-    {
-        Wt::log("warning") << "[ERROR] : fct handleHttpResponseInformationsList" << response.body();
-    }
-    refresh1();
-}
+//void PluginEditionWidget::handleHttpResponseInformationsList(boost::system::error_code err, const Wt::Http::Message& response)
+//{
+//    Wt::WApplication::instance()->resumeRendering();
+//    delete client1;
+//    if(response.status()==200)
+//    {      
+////        formatValue(response.body(), 1);//-1
+//        Wt::Json::Value result ;
+//        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+//        try
+//        {          
+//            std::string strTmp = response.body();
+//                        formatValue(strTmp, 1);//-1
+//            Wt::Json::parse(strTmp, result);
+////            Wt::Json::parse(response.body(), result);
+//            result1 = result;
+////            //descriptif
+//            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+//            {
+//                Wt::Json::Object tmp = (*idx1);
+//                Wt::Json::Object tmp1 = tmp.get("id");
+//                int valueNb = tmp1.get("sub_search_number");
+//                if(valueNb>0 && valueNb<= boost::lexical_cast<int>(nbValueLE->text()))
+//                {
+////                    int unitId = tmp1.get("unit_id");
+////                    for(unsigned i=0 ; i<mapUnitIdSboxRow.size(); i++)
+////                    {
+////                        if(unitId == mapUnitIdSboxRow[i])
+////                        {
+////                            mapCBUnit[valueNb-1]->setCurrentIndex(i);
+////                        }
+////                    }
+//                    if(tmp.contains("calculate"))
+//                    {
+//                        mapCBCalculateInformation[valueNb-1]->setChecked();
+//                        mapLECalculateInformation[valueNb-1]->setText(tmp.get("calculate"));
+//                        mapLECalculateInformation[valueNb-1]->show();
+//                    }
+//                    mapLENameInformation[valueNb-1]->setText(tmp.get("name"));
+//                    mapCBDisplayInformation[valueNb-1]->setChecked(tmp.get("display"));
+//                }
+//            }
+//        }
+//        catch (Wt::Json::ParseError const& e)
+//        {
+//            Wt::log("warning") << "[handleHttpResponseInformationsList] Problems parsing JSON:" << response.body();
+//        }
+//        catch (Wt::Json::TypeException const& e)
+//        {
+//            Wt::log("warning") << "[handleHttpResponseInformationsList] Problems parsing JSON.:" << response.body();
+//        }   
+//    }
+//    else
+//    {
+//        Wt::log("warning") << "[ERROR] : fct handleHttpResponseInformationsList" << response.body();
+//    }
+//    refresh1();
+//}
 
 void PluginEditionWidget::handleHttpResponseSearchParameters(boost::system::error_code err, const Wt::Http::Message& response)
 {
@@ -1416,8 +1559,8 @@ void PluginEditionWidget::handleHttpResponseSearchParameters(boost::system::erro
                     }
                 }
             }
-            tableInformationState = "Modify";
-            createTableUnit();
+//            tableInformationState = "Modify";
+//            createTableUnit();
         }
         catch (Wt::Json::ParseError const& e)
         {
@@ -1456,8 +1599,7 @@ void PluginEditionWidget::handleHttpResponseSourceList(boost::system::error_code
             for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
             {
                 Wt::Json::Object tmp = (*idx1);
-                Wt::Json::Object tmp1 = tmp.get("id");
-                long long sourceID = tmp1.get("source_id");
+                long long sourceID = tmp.get("id");
                 sourceSelectionBox->addItem("source " + boost::lexical_cast<std::string>(sourceID));
                 mapSourceId[idx] = sourceID;
                 idx ++;
@@ -1504,9 +1646,9 @@ void PluginEditionWidget::handleHttpResponseSearchList(boost::system::error_code
     delete client1;
     searchSelectionBox->clear();
     mapSearchPeriode.clear();
-    mapSearchStatic.clear();
-    mapSearchPKValue.clear();
-    mapSearchNbValue.clear();
+//    mapSearchStatic.clear();
+//    mapSearchPKValue.clear();
+//    mapSearchNbValue.clear();
     mapSearchSTYId.clear();
     mapSearchId.clear();
     int idx = 0;
@@ -1536,9 +1678,9 @@ void PluginEditionWidget::handleHttpResponseSearchList(boost::system::error_code
                 mapSearchId[idx] = seaID;
                 mapSearchPeriode[idx] = tmp.get("period");
 
-                mapSearchStatic[idx] = tmp.get("is_static");
-                mapSearchNbValue[idx] = tmp.get("nb_value");
-                mapSearchPKValue[idx] = tmp.get("pos_key_value");
+//                mapSearchStatic[idx] = tmp.get("is_static");
+//                mapSearchNbValue[idx] = tmp.get("nb_value");
+//                mapSearchPKValue[idx] = tmp.get("pos_key_value");
                 idx ++;
             }
         }
@@ -1556,97 +1698,81 @@ void PluginEditionWidget::handleHttpResponseSearchList(boost::system::error_code
          Wt::log("warning") << "fct handleHttpResponseSearchList" << response.body();
     }
     
-    client1 = new Wt::Http::Client();
-    client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchTypeList, this, _1, _2));
-    
-    std::string urlAdd = this->getApiUrl() + "/addons/"
-            + boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()])
-            + "/search_types" 
-            + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-            + "&token=" + session->user()->token.toUTF8();
-
-    Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
-    
-    if(client1->get(urlAdd))
-    {
-        Wt::WApplication::instance()->deferRendering();
-    }  
-    else
-        Wt::log("error") << "Error Client Http";
+    fillSearchTypeComboBox();
 }
 
 
 
-void PluginEditionWidget::handleHttpResponseUnits(boost::system::error_code err, const Wt::Http::Message& response)
-{
-    Wt::WApplication::instance()->resumeRendering(); 
-    delete client1;
-    int idx = 0;
-    mapUnitIdSboxRow.clear();
-    delete slmUnit;
-    slmUnit = new Wt::WStringListModel();
+//void PluginEditionWidget::handleHttpResponseUnits(boost::system::error_code err, const Wt::Http::Message& response)
+//{
+//    Wt::WApplication::instance()->resumeRendering(); 
+//    delete client1;
+//    int idx = 0;
+//    mapUnitIdSboxRow.clear();
+//    delete slmUnit;
+//    slmUnit = new Wt::WStringListModel();
+//
+//    if(response.status() == 200)
+//    {
+//        Wt::Json::Value result ;
+//        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+//        try
+//        {            
+//            std::string strTmp = response.body();
+//                        formatValue(strTmp, 1);//-1
+//            Wt::Json::parse(strTmp, result);
+////            Wt::Json::parse(response.body(), result);
+//            result1 = result;
+////            //descriptif
+//            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+//            {
+//                Wt::Json::Object tmp = (*idx1);
+//                long long unitId = tmp.get("id");
+//                Wt::WString name = tmp.get("name");
+//                mapUnitIdSboxRow[idx] = unitId;
+//                slmUnit->insertString(idx,name);
+//
+//                idx++;
+//            }
+////            createTableInformation();
+//        }
+//        catch (Wt::Json::ParseError const& e)
+//        {
+//            Wt::log("warning") << "[handleHttpResponseUnits] Problems parsing JSON:" << response.body();
+//        }
+//        catch (Wt::Json::TypeException const& e)
+//        {
+//            Wt::log("warning") << "[handleHttpResponseUnits] Problems parsing JSON.:" << response.body();
+//        }   
+//    }
+//    else
+//    {
+//        Wt::log("warning") << "[ERROR] : fct handleHttpResponseUnits" << response.body();
+//    }
+//}
 
-    if(response.status() == 200)
-    {
-        Wt::Json::Value result ;
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-        try
-        {            
-            std::string strTmp = response.body();
-                        formatValue(strTmp, 1);//-1
-            Wt::Json::parse(strTmp, result);
-//            Wt::Json::parse(response.body(), result);
-            result1 = result;
-//            //descriptif
-            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-            {
-                Wt::Json::Object tmp = (*idx1);
-                long long unitId = tmp.get("id");
-                Wt::WString name = tmp.get("name");
-                mapUnitIdSboxRow[idx] = unitId;
-                slmUnit->insertString(idx,name);
-
-                idx++;
-            }
-            createTableInformation();
-        }
-        catch (Wt::Json::ParseError const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponseUnits] Problems parsing JSON:" << response.body();
-        }
-        catch (Wt::Json::TypeException const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponseUnits] Problems parsing JSON.:" << response.body();
-        }   
-    }
-    else
-    {
-        Wt::log("warning") << "[ERROR] : fct handleHttpResponseUnits" << response.body();
-    }
-}
-
-void PluginEditionWidget::handleHttpResponseAddInformation(boost::system::error_code err, const Wt::Http::Message& response)
-{
-    Wt::WApplication::instance()->resumeRendering();
-    delete client1;
-    if(response.status()==200)
-    {      
-        currentInformation++;
-        if(currentInformation < boost::lexical_cast<int>(nbValueLE->text()))
-        {
-            addInformation();
-        }
-        else
-        {
-            refresh1();
-            selectedSource();
-        }
-    }
-    else
-    {
-         Wt::log("warning") << "fct handleHttpResponseAddInformation" << response.body();
-    }
-}
+//void PluginEditionWidget::handleHttpResponseAddInformation(boost::system::error_code err, const Wt::Http::Message& response)
+//{
+//    Wt::WApplication::instance()->resumeRendering();
+//    delete client1;
+//    if(response.status()==200)
+//    {      
+//        currentInformation++;
+//        if(currentInformation < boost::lexical_cast<int>(nbValueLE->text()))
+//        {
+//            addInformation();
+//        }
+//        else
+//        {
+//            refresh1();
+//            selectedSource();
+//        }
+//    }
+//    else
+//    {
+//         Wt::log("warning") << "fct handleHttpResponseAddInformation" << response.body();
+//    }
+//}
 
 void PluginEditionWidget::handleHttpResponseAddSearch(boost::system::error_code err, const Wt::Http::Message& response)
 {
@@ -1666,11 +1792,11 @@ void PluginEditionWidget::handleHttpResponseAddSearch(boost::system::error_code 
             mapSearchId[mapSearchId.size()] = result1.get("search_id");
             searchSelectionBox->addItem("search " + boost::lexical_cast<std::string>(mapSearchId[mapSearchId.size()-1]));
             searchSelectionBox->setCurrentIndex(mapSearchId.size()-1);
-            if(mapLENameInformation.size() > 0)
-            {
-                currentInformation = 0;
-                addInformation();
-            }
+//            if(mapLENameInformation.size() > 0)
+//            {
+//                currentInformation = 0;
+//                addInformation();
+//            }
         }
         catch (Wt::Json::ParseError const& e)
         {
@@ -1686,6 +1812,47 @@ void PluginEditionWidget::handleHttpResponseAddSearch(boost::system::error_code 
     {
          Wt::log("warning") << "fct handleHttpResponseAddSearch" << response.body();
     }
+    refresh1();
+}
+
+void PluginEditionWidget::handleHttpResponseAddFilter(boost::system::error_code err, const Wt::Http::Message& response)
+{
+      Wt::WApplication::instance()->resumeRendering();
+    delete client1;
+//    if(response.status()==200)
+//    {      
+//        Wt::Json::Object result ;
+//        try
+//        {              
+//            std::string strTmp = response.body();
+//                        formatValue(strTmp, 1);//-1
+//            Wt::Json::parse(strTmp, result);
+////            Wt::Json::parse(response.body(), result);
+//            //descriptif
+//            Wt::Json::Object result1 = result.get("id");
+//            mapSearchId[mapSearchId.size()] = result1.get("search_id");
+//            searchSelectionBox->addItem("search " + boost::lexical_cast<std::string>(mapSearchId[mapSearchId.size()-1]));
+//            searchSelectionBox->setCurrentIndex(mapSearchId.size()-1);
+////            if(mapLENameInformation.size() > 0)
+////            {
+////                currentInformation = 0;
+////                addInformation();
+////            }
+//        }
+//        catch (Wt::Json::ParseError const& e)
+//        {
+//            Wt::log("warning") << "[handleHttpResponseAddSearch] Problems parsing JSON:" << response.body();
+//        }
+//        catch (Wt::Json::TypeException const& e)
+//        {
+//            Wt::log("warning") << "[handleHttpResponseAddSearch] Problems parsing JSON.:" << response.body();
+//        }   
+//
+//    }
+//    else
+//    {
+//         Wt::log("warning") << "fct handleHttpResponseAddSearch" << response.body();
+//    }
     refresh1();
 }
 
@@ -1881,10 +2048,10 @@ void PluginEditionWidget::handleHttpResponseSeaTypeParameters(boost::system::err
     mapSeaTypeParameterNameSBoxRow.clear();
     mapSeaTypeParameterValueSBoxRow.clear();
     mapLESeaTypeParam.clear();
-    tableSeaTypeParam->clear();
-    tableSeaTypeParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-    tableSeaTypeParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
-    fixStyleTable(tableSeaTypeParam);
+    tableSeaParam->clear();
+    tableSeaParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
+    tableSeaParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+    fixStyleTable(tableSeaParam);
     
     if(response.status() == 200)
     {
@@ -1908,9 +2075,9 @@ std::string strTmp = response.body();
                 mapLESeaTypeParam[name] = new Wt::WLineEdit();
                // mapLESeaTypeParam[name]->setStyleClass("input-xxlarge");
                 mapLESeaTypeParam[name]->setValidator(validatorRegExp);
-                tableSeaTypeParam->elementAt(idx + 1, 0)
+                tableSeaParam->elementAt(idx + 1, 0)
                     ->addWidget(new Wt::WText(name));
-                tableSeaTypeParam->elementAt(idx + 1, 1)
+                tableSeaParam->elementAt(idx + 1, 1)
                     ->addWidget(mapLESeaTypeParam[name]);
        
                 idx++;
@@ -1933,14 +2100,90 @@ std::string strTmp = response.body();
     else if(response.status() == 404 && createFormSearchState == "Modify")
     {
         createFormSearchState = "";
-        tableInformationState = "Modify";
-        createTableUnit();
+//        tableInformationState = "Modify";
+//        createTableUnit();
     }
     else
     {
         Wt::log("warning") << "fct handleHttpResponseSeaTypeParameters" << response.body();
         createFormSearchState = "";
     }
+    refresh1();
+}
+
+void PluginEditionWidget::handleHttpResponseFilTypeParameters(boost::system::error_code err, const Wt::Http::Message& response)
+{
+    Wt::WApplication::instance()->resumeRendering();
+    delete client1;
+//    int idx = 0;
+//    for(unsigned idx1 = 0 ; idx1 < mapSeaTypeParameterNameSBoxRow.size() ; idx1++)
+//    {
+//       delete mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[idx1]];
+//    }
+//    mapSeaTypeParameterIdSboxRow.clear();
+//    mapSeaTypeParameterNameSBoxRow.clear();
+//    mapSeaTypeParameterValueSBoxRow.clear();
+//    mapLESeaTypeParam.clear();
+//    tableSeaParam->clear();
+//    tableSeaParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
+//    tableSeaParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+//    fixStyleTable(tableSeaParam);
+//    
+//    if(response.status() == 200)
+//    {
+//        Wt::Json::Value result ;
+//        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+//        try
+//        {                  
+//            std::string strTmp = response.body();
+//            formatValue(strTmp, 1);//-1
+//            Wt::Json::parse(strTmp, result);
+////            Wt::Json::parse(response.body(), result);
+//            result1 = result;
+////            descriptif
+//            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+//            {
+//                Wt::Json::Object tmp = (*idx1);
+//                long long parameterId = tmp.get("id");
+//                Wt::WString name = tmp.get("name");
+//                mapSeaTypeParameterIdSboxRow[idx] = parameterId;
+//                mapSeaTypeParameterNameSBoxRow[idx] = name;
+//                mapLESeaTypeParam[name] = new Wt::WLineEdit();
+//               // mapLESeaTypeParam[name]->setStyleClass("input-xxlarge");
+//                mapLESeaTypeParam[name]->setValidator(validatorRegExp);
+//                tableSeaParam->elementAt(idx + 1, 0)
+//                    ->addWidget(new Wt::WText(name));
+//                tableSeaParam->elementAt(idx + 1, 1)
+//                    ->addWidget(mapLESeaTypeParam[name]);
+//       
+//                idx++;
+//            }
+//            if(createFormSearchState == "Modify")
+//            {
+//                completFormSearch();
+//                createFormSearchState = "";
+//            }
+//        }
+//        catch (Wt::Json::ParseError const& e)
+//        {
+//            Wt::log("warning") << "[handleHttpResponseSeaTypeParameters] Problems parsing JSON:" << response.body();
+//        }
+//        catch (Wt::Json::TypeException const& e)
+//        {
+//            Wt::log("warning") << "[handleHttpResponseSeaTypeParameters] Problems parsing JSON.:" << response.body();
+//        }   
+//    }
+//    else if(response.status() == 404 && createFormSearchState == "Modify")
+//    {
+//        createFormSearchState = "";
+////        tableInformationState = "Modify";
+////        createTableUnit();
+//    }
+//    else
+//    {
+//        Wt::log("warning") << "fct handleHttpResponseSeaTypeParameters" << response.body();
+//        createFormSearchState = "";
+//    }
     refresh1();
 }
 
@@ -2044,23 +2287,7 @@ std::string strTmp = response.body();
     }
     else
     {
-        client1 = new Wt::Http::Client();
-        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchTypeList, this, _1, _2));
-    
-        std::string urlAdd = this->getApiUrl() + "/addons/"
-                + boost::lexical_cast<std::string>(mapAddonsIdSboxRow[comboAddon->currentIndex()])
-                + "/search_types"
-                + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-                + "&token=" + session->user()->token.toUTF8();
-
-        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
-
-        if(client1->get(urlAdd))
-        {
-            Wt::WApplication::instance()->deferRendering();
-        }
-        else
-            Wt::log("error") << "Error Client Http";
+        fillSearchTypeComboBox();
     }
      createFormSourceState = "";
      refresh1();
@@ -2201,54 +2428,28 @@ std::string strTmp = response.body();
     refresh1();
 }
 
-void PluginEditionWidget::handleHttpResponseSearchTypeList(boost::system::error_code err, const Wt::Http::Message& response)
+void PluginEditionWidget::fillSearchTypeComboBox()
 {
-    Wt::WApplication::instance()->resumeRendering();
-    delete client1;
+    comboSearchType->clear();
+    
     int idx = 0;
-    comboSeaType->clear();
-
     
-    if (response.status() == 200)
+    map<int,Wt::WString> mapESearchTypeName;
+    mapESearchTypeName[Echoes::Dbo::ESearchType::OID] = tr("Alert.plugins.oid");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_LINE] = tr("Alert.plugins.path_line");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH] = tr("Alert.plugins.path");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_LAST_LINE] = tr("Alert.plugins.path_last_line");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::QUERY] = tr("Alert.plugins.query");
+ 
+    for (int idx1 = Echoes::Dbo::ESearchType::OID ; idx1 <= Echoes::Dbo::ESearchType::QUERY ; idx1++)
     {
-        Wt::Json::Value result ;
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-        try
-        {              
-std::string strTmp = response.body();
-                        formatValue(strTmp, 1);//-1
-            Wt::Json::parse(strTmp, result);
-//            Wt::Json::parse(response.body(), result);
-            result1 = result;
-//            //descriptif
-            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-            {
-                Wt::Json::Object tmp = (*idx1);
-                long long seaTypeId = tmp.get("id");
-                Wt::WString name = tmp.get("name");
-
-                slmSeaType->insertString(idx,name);
-                this->mapSeaTypeIdSboxRow[idx] = seaTypeId;
-                idx++;
-            }
-        }
-        catch (Wt::Json::ParseError const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponseSearchTypeList] Problems parsing JSON:" << response.body();
-        }
-        catch (Wt::Json::TypeException const& e)
-        {
-            Wt::log("warning") << "[handleHttpResponseSearchTypeList] Problems parsing JSON.:" << response.body();
-        }          
+        slmSearchTypes->insertString(idx,mapESearchTypeName[idx1]);
+        this->mapSeaTypeIdSboxRow[idx] = idx1;
     }
-    else
-    {
-         Wt::log("warning") << "fct handleHttpResponseSearchTypeList" << response.body();
-    }
-    comboSeaType->setModel(slmSeaType);
-    comboSeaType->setCurrentIndex(0);
+    
+    comboSearchType->setModel(slmSearchTypes);
+    comboSearchType->setCurrentIndex(0);
     createFormSearchParameters();
-    
 }
 
 void PluginEditionWidget::handleHttpResponsePlgJSON(boost::system::error_code err, const Wt::Http::Message& response)
@@ -2336,7 +2537,9 @@ void PluginEditionWidget::handleHttpResponseDeletePlg(boost::system::error_code 
             Wt::WApplication::instance()->deferRendering();
         }
         else
+        {
             Wt::log("error") << "Error Client Http";
+        }
       
     }
     else if (response.status() == 409)
@@ -2388,6 +2591,24 @@ void PluginEditionWidget::handleHttpResponseDeleteSearch(boost::system::error_co
     }
 }
 
+void PluginEditionWidget::handleHttpResponseDeleteFilter(boost::system::error_code err, const Wt::Http::Message& response)
+{
+    Wt::WApplication::instance()->resumeRendering();  
+    delete client1;
+    if (response.status() == 204)
+    {
+        selectedSearch();
+    }
+    else if (response.status() == 409)
+    {
+        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body() ,Wt::Ok);
+    }
+    else
+    {
+        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body() ,Wt::Ok);
+         Wt::log("warning") << "[ERROR] : fct handleHttpResponseDeleteFilter" << response.body();
+    }
+}
 
 void PluginEditionWidget::searchToken()
 {

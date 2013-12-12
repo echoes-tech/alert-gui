@@ -50,7 +50,6 @@ void InformationsWidget::popupAddWidget(Wt::WDialog *dialog)
 std::vector<std::string> InformationsWidget::getTitlesTableWidget()
 {
     std::vector<std::string> titleWidget;
-    titleWidget.push_back("display");
     return titleWidget;
 }
 
@@ -58,8 +57,10 @@ std::vector<std::string> InformationsWidget::getTitlesTableText()
 {
     std::vector<std::string> titleText;
     titleText.push_back("name");
+    titleText.push_back("desc");
     titleText.push_back("calculate");
     titleText.push_back("information_unit");
+    titleText.push_back("display");
     return titleText;
 }
 
@@ -101,6 +102,7 @@ vector_type InformationsWidget::getResourceRowTable(long long id)
             if (i == id)
             {
                 Wt::WString name = "";
+                Wt::WString desc = "";
                 Wt::WString calculate = "";
                 Wt::Json::Object information_unit;
                 int information_unit_id = 0;
@@ -111,6 +113,10 @@ vector_type InformationsWidget::getResourceRowTable(long long id)
                 name = tmp.get("name");
                 rowTable.push_back(new Wt::WText(boost::lexical_cast<std::string, Wt::WString>(name)));
 
+                // Desc                
+                name = tmp.get("desc");
+                rowTable.push_back(new Wt::WText(boost::lexical_cast<std::string, Wt::WString>(desc)));
+                
                 // Calculate
                 calculate = tmp.get("calculate");
                 rowTable.push_back(new Wt::WText(boost::lexical_cast<std::string, Wt::WString>(calculate)));
@@ -119,13 +125,11 @@ vector_type InformationsWidget::getResourceRowTable(long long id)
                 information_unit = tmp.get("information_unit");
                 information_unit_id = information_unit.get("id");
                 rowTable.push_back(new Wt::WText(boost::lexical_cast<std::string>(information_unit_id)));
-
+                
                 // Display
                 display = tmp.get("display");
-                Wt::WCheckBox *displayCheckBox = new Wt::WCheckBox();
-                displayCheckBox->setChecked(display);
-                displayCheckBox->setDisabled(true);
-                rowTable.push_back(displayCheckBox);
+                rowTable.push_back(new Wt::WText(boost::lexical_cast<std::string>(display)));
+                
                 return (rowTable);
             }
         }
@@ -188,19 +192,24 @@ void InformationsWidget::recoverInformation(int id)
 void InformationsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
 {
     std::vector<Wt::WInteractWidget*>::iterator i = argument.begin();
-    Wt::WLineEdit *assetEdit = (Wt::WLineEdit*)(*i);
 
     // Post Information -------
     Wt::Http::Message messageInformation;
-    messageInformation.addBodyText("{\n\"name\" : \""
-                                   + boost::lexical_cast<std::string>(assetEdit->text()) + "\"\n}\n");
+    
+    messageInformation.addBodyText("{");
+    messageInformation.addBodyText("\n\"name\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+    messageInformation.addBodyText(",\n\"desc\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+    messageInformation.addBodyText(",\n\"calculate\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+    messageInformation.addBodyText(",\n\"unit_id\" : " + ((Wt::WLineEdit*)(*i++))->text().toUTF8());
+    messageInformation.addBodyText(",\n\"display\" : " + ((Wt::WLineEdit*)(*i++))->text().toUTF8());
+    messageInformation.addBodyText("\n}");
 
     std::string apiAddress = this->getApiUrl() + "/informations";
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&InformationsWidget::postInformation, this, _1, _2));
     apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
 
-    Wt::log("debug") << "InformationsWidget : [POST] address to call : " << apiAddress;
+    Wt::log("debug") << "InformationsWidget : [POST] address to call : " << apiAddress;    
 
     if (client->post(apiAddress, messageInformation))
         Wt::WApplication::instance()->deferRendering();
@@ -245,24 +254,32 @@ Wt::WDialog *InformationsWidget::deleteResource(long long id)
 
 void InformationsWidget::modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id)
 {
-    std::string messageString;
-
-    messageString = "{\n\"name\":\"" + boost::lexical_cast<std::string>(((Wt::WLineEdit*)(*arguments.begin()))->text()) + "\"\n}";
-
-    Wt::Http::Message message;
-    message.addBodyText(messageString);
-
-    std::string apiAddress = this->getApiUrl() + "/informations/" + boost::lexical_cast<std::string> (id)
-            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + session_->user()->token.toUTF8();
-
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&InformationsWidget::putInformation, this, _1, _2));
-    Wt::log("debug") << "InformationsWidget : [PUT] address to call : " << apiAddress;
-    if (client->put(apiAddress, message))
-        Wt::WApplication::instance()->deferRendering();
-    else
-        Wt::log("error") << "[InformationsWidget] Error Client Http";
+//    std::vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
+//    std::string messageString;
+//    
+//    messageString = ("{");
+//    messageString += ("\n\"name\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+//    messageString += (",\n\"desc\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+//    messageString += (",\n\"calculate\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+//    messageString += (",\n\"unit_id\" : " + ((Wt::WLineEdit*)(*i++))->text().toUTF8());
+//    messageString += (",\n\"display\" : " + ((Wt::WLineEdit*)(*i++))->text().toUTF8());
+//    messageString += ("\n}");
+//
+//    Wt::Http::Message message;
+//    message.addBodyText(messageString);
+//
+//    std::string apiAddress = this->getApiUrl() + "/informations/" + boost::lexical_cast<std::string> (id)
+//            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+//            + "&token=" + session_->user()->token.toUTF8();
+//
+//    Wt::Http::Client *client = new Wt::Http::Client(this);
+//    client->done().connect(boost::bind(&InformationsWidget::putInformation, this, _1, _2));
+//    Wt::log("error") << "InformationsWidget : [PUT] address to call : " << apiAddress;
+//    Wt::log("error") << "InformationsWidget : [POST] address to call : " << messageString;
+//    if (client->put(apiAddress, message))
+//        Wt::WApplication::instance()->deferRendering();
+//    else
+//        Wt::log("error") << "[InformationsWidget] Error Client Http";
 }
 
 void InformationsWidget::close()

@@ -1,57 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
-
-    <!-- Paginate -->
-    <message id="Alert.asset.paginate-first">Début</message>
-    <message id="Alert.asset.paginate-prev">Prec</message>
-    <message id="Alert.asset.paginate-next">Suiv</message>
-    <message id="Alert.asset.paginate-last">Fin</message>
-
-    <!-- Models -->
-      <message id="Alert.asset.button-cancel">Annuler</message>
-  <message id="Alert.asset.search-bar">Recherche : </message>
-
-  <message id="Alert.asset.asset-form-title">Serveurs</message>
-  <message id="Alert.asset.asset-form-info">Sur cette page vous pouvez ajouter des serveurs à surveiller et récupérer les scripts de configuration correspondant.</message>
-  
-    <message id="Alert.asset.nothing-asset">Serveur</message>
-  <message id="Alert.asset.nothing-asset-text">Aucun serveur dans la db</message>
-  <message id="Alert.asset.nothing-asset-button">Clique pour ajouter</message>
-  
-  <message id="Alert.asset.asset-name-label">Serveur à ajouter : </message>
-  <message id="Alert.asset.asset-name-info">Nom invalide</message>
-  
-  <message id="Alert.asset.add-asset-button">Ajouter un serveur</message>
-
-  <message id="Alert.asset.add-asset-form">Vos serveurs</message>
-  
-  <message id="Alert.user.edition.asset-name">Serveur</message>
-  
-  <message id="Alert.asset.asset-name">Nom du serveur</message>
-  <message id="Alert.asset.asset-action">Actions</message>
-  
-  <message id="Alert.asset.download-script">Télécharger le script d'installation</message>
-  <message id="Alert.asset.delete-asset">Supprimer ce serveur</message>
-
-  <message id="Alert.asset.asset-form-title">Serveurs</message>
     
-  <message id="Alert.asset.asset-name-invalid">Invalide</message>
-  <message id="Alert.asset.database-error-title">Erreur base de donnée</message>
-  <message id="Alert.asset.database-error">Erreur : {1} | {2}</message>
-  
-  <message id="Alert.asset.file-not-generated">
-      <span style="color:red">Le fichier n'a pas été généré. Contactez-nous s'il vous plait.</span>
+  <message id="Alert.information.form-info">
+      Sur cette page vous pouvez ajouter des informations.
   </message>
 
-  <message id="Alert.asset.delete-message">
-      <span style="color:red">Supprimer le serveur. Continuer ?</span>
-  </message>
-  <message id="Alert.asset.invalid-name-asset">
-      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</span>
-  </message>
-  
-  <message id="Alert.asset.add-button">Ajouter un serveur</message>
-  <message id="Alert.asset.modif-button">Modifier</message>
-  <message id="Alert.asset.delete-button">Supprimer</message>
+<!--    In table     -->
+    <!--nothing information-->
+    <message id="Alert.information.nothing-information">Informations</message>
+    <message id="Alert.information.nothing-information-text">
+      Aucune information enregistrée actuellement
+    </message>
+    <message id="Alert.information.nothing-button">Cliquer pour ajouter</message>
+    <!--header-->
+    <message id="Alert.information.add-form.information">Informations</message>
+    <!--body-->
+    <message id="Alert.information.name-name">Nom</message>
+    <message id="Alert.information.name-desc">Description</message>
+    <message id="Alert.information.name-calculate">Fonction de calcul</message>
+    <message id="Alert.information.name-information_unit">Unité de l'information</message>
+    <message id="Alert.information.name-display">Afficher</message>
+    <message id="Alert.information.modif-button">Modifier</message>
+    <message id="Alert.information.delete-button">Supprimer</message>
+    <!--footer-->
+    <message id="Alert.information.search-bar">Recherche : </message>
+        <!-- Paginate -->
+        <message id="Alert.information.paginate-first">Début</message>
+        <message id="Alert.information.paginate-prev">Préc</message>
+        <message id="Alert.information.paginate-next">Suiv</message>
+        <message id="Alert.information.paginate-last">Fin</message>
 
+<!--    In popup     -->
+    <message id="Alert.information.button-cancel">Annuler</message>
+    <message id="Alert.information.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.information.add-information">Ajouter une information</message>
+    <!--PUT-->
+    <message id="Alert.information.modif-information">Modifier cette information</message>
+    <!--DELETE-->
+    <message id="Alert.information.delete-information">Attention</message>
+    <message id="Alert.information.delete-information-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer une information
+        </span>
+    </message>
+    <message id="Alert.information.button-confirm">Confirmer</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.information.invalid-name-name">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  <message id="Alert.information.invalid-name-twice">
+      <span style="color:red">
+           Nom du information déjà existant.
+      </span>
+  </message>
+
+<!--    Error message     -->
+  <message id="Alert.information.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.information.database-error">
+    Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+
+<!--    Warning message     -->
 </messages>

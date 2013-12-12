@@ -183,3 +183,11 @@ OB.ui-toolbar {border-radius: 0;}
     border-radius: 0px;
     -webkit-border-bottom-left-radius: 0px;
 }
+
+#logo img {
+    width: 360px;
+}
+
+#logo {
+    padding: 20px 0px 0px 5px;
+}

@@ -76,7 +76,7 @@ public:
    */
 //  AssetManagementModel *model() const { return model_; }
   
-  void  popupAddWidget(Wt::WDialog *dialog);
+  void  popupAddWidget(Wt::WDialog *dialog, bool typeDial);
 
   long long userId;
   void                  setSession(Echoes::Dbo::Session *session);

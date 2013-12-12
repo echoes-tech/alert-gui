@@ -50,9 +50,7 @@ public:
 
     enum EMenuRoot
     {
-        main,
-        alerts,
-        accounts
+        main
     };
 
     enum EReturnCode
@@ -106,23 +104,18 @@ public:
     BOOST_ENUM_VALUES(EPageType, const char*,
                       (WELCOME) ("welcome")
                       (ASSET) ("assets")
-                      (SUBMENU_ALERT) ("submenu_alerts")
                       (RECIPIENTS) ("recipients")
                       (INFORMATIONS) ("informations")
-                      (ALERTS) ("alerts-test")
-                      (SUBMENU_ACCOUNT) ("submenu_accounts")
+                      (ALERTS) ("alerts")
                       (PLUGIN) ("plugins")
+                      (ROLE) ("role")
+                      (OPTIONS) ("options")
                       )
 
-    BOOST_ENUM_VALUES(EAlertSubmenu, const char*,
-                      (ALERT) ("alerts")
-                      )
-
-    //    (USER)("users")
 
     BOOST_ENUM_VALUES(EAccountSubmenu, const char*,
-                      (OPTION) ("options")
-                      (ROLE) ("role")
+                      
+                      
                       )
 private:
 

@@ -11,7 +11,8 @@
 #include <boost/thread.hpp>
 
 // This globale is version of web site.
-std::string      EchoesHome::version_g = "1.0.0 RC2";
+//std::string      EchoesHome::version_g = "1.0.0 RC2";
+std::string      EchoesHome::version_g = "1.0.0";
 
 //---------------------------------------------------------------------------
 

@@ -305,27 +305,13 @@
     
     
   <message id="Alert.admin.welcome-tab">Welcome</message>
-  <message id="Alert.admin.asset-tab">Servers</message>
   <message id="Alert.admin.recipients-tab">Recipients</message>
-  <message id="Alert.admin.alerts-test-tab">Alerts</message>
-  <message id="Alert.admin.alert-creation-tab">Alert creation</message>
-  <message id="Alert.admin.alert-list-tab">Alerts list</message>
-  <message id="Alert.admin.users-tab">Users</message>
-  <message id="Alert.admin.medias-tab">Medias</message><message id="Alert.admin.welcome-tab">Welcome</message>
   <message id="Alert.admin.assets-tab">Servers</message>
   <message id="Alert.admin.informations-tab">Informations</message>
-  <message id="Alert.admin.alerts-tab">Alerts definition</message>
-  <message id="Alert.admin.alert-creation-tab">Alert creation</message>
-  <message id="Alert.admin.alerts_list-tab">Alerts list</message>
-  <message id="Alert.admin.users-tab">Users</message>
-  <message id="Alert.admin.medias-tab">Medias</message>
-  <message id="Alert.admin.submenu_alerts-tab">Alerts Management</message>
-  <message id="Alert.admin.submenu_accounts-tab">Account options</message>
-  <message id="Alert.admin.plugins-tab">Plugins creation</message>
+  <message id="Alert.admin.alerts-tab">Alerts</message>
+  <message id="Alert.admin.plugins-tab">Applications</message>
   
   <message id="Alert.admin.home">Home</message>
-  <message id="Alert.admin.title">Administration</message>
-  <message id="Alert.monitoring.title">Monitoring</message>
   
   
   <message id="Alert.admin.options-tab">Options</message>

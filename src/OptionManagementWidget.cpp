@@ -220,10 +220,10 @@ void OptionManagementWidget::getQuota(boost::system::error_code err, const Wt::H
         {
             try
             {
-                Wt::Json::Value result;
-                Wt::Json::Object result1;
-                Wt::Json::parse(response.body(), result);
-                result1 = result;
+//                Wt::Json::Value result;
+//                Wt::Json::Object result1;
+//                Wt::Json::parse(response.body(), result);
+//                result1 = result;
                 // Pas tester :
                 /*
                 Wt::Json::Object tmp;

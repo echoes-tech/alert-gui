@@ -108,7 +108,7 @@
 <!--    Error message     -->
   <message id="Alert.alert.file-not-generated">
       <span style="color:red">
-          The file as not been generated. Please contact us.
+          The file has not been generated. Please contact us.
       </span>
   </message>
   <message id="Alert.alert.database-error-title">Database error</message>

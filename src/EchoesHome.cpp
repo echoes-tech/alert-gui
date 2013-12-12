@@ -214,60 +214,10 @@ void EchoesHome::handleInternalPath(const string &internalPath)
             }
             break;
         }
-        case 2:
-        {
-            for (Enums::EAlertSubmenu::const_iterator i = Enums::EAlertSubmenu::begin(); i != Enums::EAlertSubmenu::end(); ++i)
-            {
-                if (internalPathWithoutBlank[1].compare(i->value()) == 0)
-                {
-                    if ((unsigned)this->mainPageWidget->getAlertSubmenu()->currentIndex() != i->index())
-                    {
-                        if(i->index() < (unsigned)this->mainPageWidget->getAlertSubmenu()->count())
-                        {
-                            this->mainPageWidget->getAlertSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
-                        }
-                        else
-                        {
-                            Wt::WApplication::instance()->setInternalPath("/welcome",  false);
-                            this->mainPageWidget->getAlertSubmenu()->itemAt(0)->setFromInternalPath(internalPath);
-                        }
-                    }
-                    UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
-                    showPage(i->index(), Enums::alerts);
-                    displayed = true;
-                    break;
-                }
-            }
-            if (!displayed)
-            {
-                for (Enums::EAccountSubmenu::const_iterator i = Enums::EAccountSubmenu::begin(); i != Enums::EAccountSubmenu::end(); ++i)
-                {
-                    if (internalPathWithoutBlank[1].compare(i->value()) == 0)
-                    {
-                        if ((unsigned)this->mainPageWidget->getAccountSubmenu()->currentIndex() != i->index())
-                        {
-                            if(i->index() < (unsigned)this->mainPageWidget->getAccountSubmenu()->count())
-                            {
-                                this->mainPageWidget->getAccountSubmenu()->itemAt(i->index())->setFromInternalPath(internalPath);
-                            }
-                            else
-                            {
-                                Wt::WApplication::instance()->setInternalPath("/welcome",  false);
-                                this->mainPageWidget->getAccountSubmenu()->itemAt(0)->setFromInternalPath(internalPath);
-                            }
-                        }
-                        UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
-                        showPage(i->index(), Enums::accounts);
-                        displayed = true;
-                        break;
-                    }
-                }
-            }
-            break;
-        }
         default:
         {
-            
+            Wt::log("error") << "To many elements in the internal path";
+            break;
         }
         }
         

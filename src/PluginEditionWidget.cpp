@@ -251,6 +251,10 @@ void PluginEditionWidget::createUI()
     createJSONAnchor->disable();
     bindWidget("plugin-create-JSON-anchor", createJSONAnchor);
     
+    buttonModifySource->disable();
+    buttonModifySearch->disable();
+    buttonModifyFilter->disable();
+    
     // Once everything is created, plugin list update
     
     client1 = new Wt::Http::Client();
@@ -467,7 +471,8 @@ void PluginEditionWidget::createFormSearchParameters()
 {
     if (createFormSearchState == "Modify")
     {
-        buttonModifySearch->enable();
+//        buttonModifySearch->enable();
+        buttonModifySearch->disable();
     }
     else
     {
@@ -497,7 +502,8 @@ void PluginEditionWidget::createFormFilterParameters()
 {
     if (createFormFilterState == "Modify")
     {
-        buttonModifyFilter->enable();
+//        buttonModifyFilter->enable();
+        buttonModifyFilter->disable();
     }
     else
     {
@@ -533,7 +539,8 @@ void PluginEditionWidget::createFormSourceParameters()
     }
     else
     {
-        buttonModifySource->enable();
+//        buttonModifySource->enable();
+        buttonModifySource->disable();
     }
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddonList, this, _1, _2));
@@ -646,7 +653,7 @@ void PluginEditionWidget::addSource()
     string badField = "";
     if (validateSource(badField))
     {
-        buttonModifySource->enable();
+//        buttonModifySource->enable();
         for (int row = 1; row < tableSrcParam->rowCount(); row++)
         {
             mapAddonParameterValueSBoxRow[row - 1] = mapLEAddonParam[mapAddonParameterNameSBoxRow[row - 1]]->text();
@@ -999,9 +1006,8 @@ void PluginEditionWidget::deleteSource()
     Wt::Http::Message message;
     message.addBodyText("");
 
-    string urlAdd = this->getApiUrl() + "/plugins/"
-            + boost::lexical_cast<string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-            + "/sources/" + boost::lexical_cast<string>(mapSourceId[sourceSelectionBox->currentIndex()])
+    string urlAdd = this->getApiUrl() + "/sources/"
+            + boost::lexical_cast<string>(mapSourceId[sourceSelectionBox->currentIndex()])
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
@@ -1165,10 +1171,7 @@ void PluginEditionWidget::deleteSearch()
     Wt::Http::Message message;
     message.addBodyText("");
 
-    string urlAdd = this->getApiUrl() + "/plugins/"
-            + boost::lexical_cast<string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-            + "/sources/" + boost::lexical_cast<string>(mapSourceId[sourceSelectionBox->currentIndex()])
-            + "/searches/" + boost::lexical_cast<string>(mapSearchId[searchSelectionBox->currentIndex()])
+    string urlAdd = this->getApiUrl() + "/searches/" + boost::lexical_cast<string>(mapSearchId[searchSelectionBox->currentIndex()])
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
@@ -1180,7 +1183,9 @@ void PluginEditionWidget::deleteSearch()
         Wt::WApplication::instance()->deferRendering();
     }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 }
 
 void PluginEditionWidget::deleteFilter()
@@ -1379,6 +1384,9 @@ void PluginEditionWidget::selectedSearch()
 
 void PluginEditionWidget::selectedFilter()
 {
+    nbValueLE->setText(boost::lexical_cast<string>(mapFilterNbValue[filterSelectionBox->currentIndex()]));
+    pKValueLE->setText(boost::lexical_cast<string>(mapFilterPKValue[filterSelectionBox->currentIndex()]));
+    
     for (unsigned i = 0; i < mapFilTypeIdSboxRow.size(); i++)
     {
         if (mapFilterSTYId[filterSelectionBox->currentIndex()] == mapFilTypeIdSboxRow[i])
@@ -1692,6 +1700,8 @@ void PluginEditionWidget::handleHttpResponseFilterList(boost::system::error_code
 
                 filterSelectionBox->addItem("filter " + boost::lexical_cast<string>(filId));
                 mapFilterId[idx] = filId;
+                mapFilterNbValue[idx] = tmp.get("nb_value");
+                mapFilterPKValue[idx] = tmp.get("pos_key_value");
 
                 idx++;
             }
@@ -1855,7 +1865,7 @@ void PluginEditionWidget::handleHttpResponseAddSource(boost::system::error_code 
     delete client1;
     if (response.status() == 200)
     {
-        buttonModifySource->enable();
+//        buttonModifySource->enable();
         Wt::Json::Object result;
         try
         {

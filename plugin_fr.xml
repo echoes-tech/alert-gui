@@ -10,40 +10,55 @@
   <message id="Alert.plugins.delete-source-button">Supprimer une source</message>
   <message id="Alert.plugins.modify-source-button">Modifier une source</message>
 
-  <message id="Alert.plugins.add-search-and-information-button">Ajouter une recherche et ses informations</message> 
+  <message id="Alert.plugins.add-search-button">Ajouter une recherche</message> 
   <message id="Alert.plugins.delete-search-button">Supprimer une recherche</message>
   <message id="Alert.plugins.modify-search-button">Modifier une recherche</message>
   
+  <message id="Alert.plugins.add-filter-button">Ajouter un filtre</message> 
+  <message id="Alert.plugins.delete-filter-button">Supprimer un filtre</message>
+  <message id="Alert.plugins.modify-filter-button">Modifier un filtre</message>
+  
   <message id="Alert.plugins.create-JSON-button">Générer l'application</message>
   <message id="Alert.plugins.create-JSON-anchor">Télécharcher l'application</message>
-  <message id="Alert.plugin.create-JSON-anchor-info">Pour télécharger l'application, vous devez d'abords la générer</message>
+  <message id="Alert.plugin.create-JSON-anchor-info">Pour télécharger l'application, vous devez d'abord la générer</message>
   
-  <message id="Alert.plugins.alert-form-title">Alertes</message>
-  <message id="Alert.plugins.alert-form-info">Cette page vous donne la possibilité de créer une application</message>
+    <message id="Alert.plugins.alert-form-info">Cette page vous donne la possibilité de créer une application</message>
   <message id="Alert.plugins.plugin-table-create-title">Créer une application</message>
   <message id="Alert.plugins.plugin-table-title">Editer une application</message>
-  <message id="Alert.plugins.source-table-title">Editer une source pour l'application sélectionnée</message>
-  <message id="Alert.plugins.search-table-title">Editer une recherche et ses informations pour la source sélectionnée</message>
+  <message id="Alert.plugins.source-table-title">Editer une source pour l'application selectionnée</message>
+  <message id="Alert.plugins.search-table-title">Editer une recherche pour la source selectionnée</message>
+  <message id="Alert.plugins.filter-table-title">Editer un filtre pour la source selectionnée</message>
   
   <message id="Alert.plugins.name-label">Nom</message>
   <message id="Alert.plugins.choice-label">Application à editer</message>
-  <message id="Alert.plugins.description-label">Déscription</message> 
+  <message id="Alert.plugins.description-label">Description</message> 
   <message id="Alert.plugins.search-periode-label">Période</message> 
-  <message id="Alert.plugins.search-static-label">Est statique</message> 
-  <message id="Alert.plugins.search-key-value">Position de la valeur clé</message> 
-  <message id="Alert.plugins.search-nomber-value">Nombre de valeur</message> 
- 
-  <message id="Alert.plugins.value-number-title">Valeur numéros</message>
+  
   <message id="Alert.plugins.name-title">Nom</message> 
-  <message id="Alert.plugins.unit-title">Unité</message>
-  <message id="Alert.plugins.display-title">Est visible</message>
-  <message id="Alert.plugins.calculate-title">Est calculé</message>
   <message id="Alert.plugins.value-title">Valeur</message> 
-  <message id="Alert.plugins.parameter-title">Paramétre</message> 
-  <message id="Alert.plugins.description-title">Déscription</message> 
+  <message id="Alert.plugins.parameter-title">Paramètre</message> 
+  <message id="Alert.plugins.description-title">Description</message> 
   <message id="Alert.plugins.action-title">Action</message> 
   
+  <message id="Alert.plugins.filter-key-value">Position de la valeur clé</message> 
+  <message id="Alert.plugins.filter-nomber-value">Nombre de valeur(s)</message> 
   
+  <message id="Alert.plugins.filesystem">Système de fichier</message>
+  <message id="Alert.plugins.file">Fichier</message>
+  <message id="Alert.plugins.log">Journal</message>
+  <message id="Alert.plugins.odbc">Base de données (ODBC)</message>
+  <message id="Alert.plugins.snmp">SNMP</message>
+  
+  <message id="Alert.plugins.query">Requête</message>
+  <message id="Alert.plugins.path_last_line">Chemin : dernière ligne</message>
+  <message id="Alert.plugins.path">Chemin</message>
+  <message id="Alert.plugins.path_line">Chemin : ligne</message>
+  <message id="Alert.plugins.oid">OID</message>
+  
+  <message id="Alert.plugins.location">Emplacement</message>
+  <message id="Alert.plugins.regex">Expression régulière</message>
+  <message id="Alert.plugins.all">Tout</message>
+ 
   <message id="Alert.plugins.message-box-error">Erreur</message> 
   <message id="Alert.plugins.message-field">Le champ : "</message>
   <message id="Alert.plugins.message-is-bad-fills">" n'est pas correctement remplit.</message> 

@@ -56,7 +56,6 @@ public:
   void doActionMenu(int index = -1, Enums::EMenuRoot menuRoot = Enums::main);
   
   Wt::WMenu *getMenu();
-  Wt::WMenu *getAlertSubmenu();
   Wt::WMenu *getAccountSubmenu();
   Wt::WContainerWidget *getSideBarContainer();
   Wt::WContainerWidget *getFooterContainer();
@@ -86,7 +85,6 @@ protected:
   void createSubMenu(Enums::EPageType enumPT);
   void createPage(Enums::EPageType enumPT);
   std::string getIconName(Enums::EPageType enumPT);
-  void createAlertPage(Enums::EAlertSubmenu enumSAL);
   void createAccountPage(Enums::EAccountSubmenu enumSAC);
   
   template <class C>
@@ -126,7 +124,6 @@ private:
   Wt::WAnchor *breadCrumbsAnchor1;
   Wt::WAnchor *breadCrumbsAnchor2;
   Wt::WMenu *menu;
-  Wt::WMenu *alertSubmenu;
   Wt::WMenu *accountSubmenu;
 
   void setApiUrl(std::string _apiUrl);

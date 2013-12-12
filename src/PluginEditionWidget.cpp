@@ -1458,10 +1458,14 @@ void PluginEditionWidget::completFormFilter()
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseFilterParameters, this, _1, _2));
 
-    string urlAdd = this->getApiUrl() + "/filters/parameters"
+    string urlAdd = this->getApiUrl() + "/filters/"
+            + boost::lexical_cast<string>(mapFilterId[filterSelectionBox->currentIndex()])
+            + "/parameters"
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8()
-            + "&type_id=" + boost::lexical_cast<string>(mapFilTypeParameterIdSboxRow[comboFilType->currentIndex()]);
+            + "&plugin_id=" + boost::lexical_cast<string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
+            + "&source_id=" + boost::lexical_cast<string>(mapSourceId[sourceSelectionBox->currentIndex()])
+            + "&search_id=" + boost::lexical_cast<string>(mapSearchId[searchSelectionBox->currentIndex()]);
 
     Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
 
@@ -1552,54 +1556,53 @@ void PluginEditionWidget::handleHttpResponseFilterParameters(boost::system::erro
 {
     Wt::WApplication::instance()->resumeRendering();
     delete client1;
-//    if (response.status() == 200)
-//    {
-//        //        formatValue(response.body(), 1);//-1
-//        Wt::Json::Value result;
-//        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-//        try
-//        {
-//            string strTmp = response.body();
-//            formatValue(strTmp, 1); //-1
-//            Wt::Json::parse(strTmp, result);
-//            result1 = result;
-//            //            //descriptif
-//            for (Wt::Json::Array::const_iterator idx1 = result1.begin(); idx1 < result1.end(); idx1++)
-//            {
-////                Wt::Json::Object tmp = (*idx1);
-////                Wt::Json::Object tmp1 = tmp.get("id");
-////                long long seaParamID = tmp1.get("search_parameter_id");
-////                Wt::WString paramValue = tmp.get("value");
-////                for (unsigned i = 0; i < mapSeaTypeParameterIdSboxRow.size(); i++)
-////                {
-////                    if (seaParamID == mapSeaTypeParameterIdSboxRow[i])
-////                    {
-////                        //au cas ou il y ait des backslash dans le nom
-////                        //////////////////////////////////
-////                        string strTmp = boost::lexical_cast<string>(paramValue);
-////                        //                        formatValue(strTmp, 1);
-////                        mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[i]]->setValidator(validatorRegExp);
-////                        mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[i]]->setText(strTmp);
-////                    }
-////                }
-//            }
-//
-//        }
-//        catch (Wt::Json::ParseError const& e)
-//        {
-//            Wt::log("warning") << "[handleHttpResponseSearchParameters] " <<  e.what() << " " << response.body();
-//        }
-//        catch (Wt::Json::TypeException const& e)
-//        {
-//            Wt::log("warning") << "[handleHttpResponseSearchParameters] " <<  e.what() << " " << response.body();
-//        }
-//    }
-//    else
-//    {
-//        Wt::log("warning") << " fct handleHttpResponseSearchParameters" << response.body();
-//    }
-//    
+    if (response.status() == 200)
+    {
+        Wt::Json::Value result;
+        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+        try
+        {
+            string strTmp = response.body();
+            formatValue(strTmp, 1); //-1
+            Wt::Json::parse(strTmp, result);
+            result1 = result;
+            //            //descriptif
+            for (Wt::Json::Array::const_iterator idx1 = result1.begin(); idx1 < result1.end(); idx1++)
+            {
+                Wt::Json::Object tmp = (*idx1);
+                Wt::Json::Object tmp1 = tmp.get("id");
+                long long filParamID = tmp1.get("filter_parameter_id");
+                Wt::WString paramValue = tmp.get("value");
+                for (unsigned i = 0; i < mapFilTypeParameterIdSboxRow.size(); i++)
+                {
+                    if (filParamID == mapFilTypeParameterIdSboxRow[i])
+                    {
+                        //au cas ou il y ait des backslash dans le nom
+                        //////////////////////////////////
+                        string strTmp = boost::lexical_cast<string>(paramValue);
+                        //                        formatValue(strTmp, 1);
+                        mapLEFilTypeParam[mapFilTypeParameterNameSBoxRow[i]]->setValidator(validatorRegExp);
+                        mapLEFilTypeParam[mapFilTypeParameterNameSBoxRow[i]]->setText(strTmp);
+                    }
+                }
+            }
 
+        }
+        catch (Wt::Json::ParseError const& e)
+        {
+            Wt::log("warning") << "[handleHttpResponseFilterParameters] " <<  e.what() << " " << response.body();
+        }
+        catch (Wt::Json::TypeException const& e)
+        {
+            Wt::log("warning") << "[handleHttpResponseFilterParameters] " <<  e.what() << " " << response.body();
+        }
+    }
+    else
+    {
+        Wt::log("warning") << " fct handleHttpResponseFilterParameters" << response.body();
+    }
+    
+    refresh1();
 }
 
 
@@ -2237,28 +2240,7 @@ void PluginEditionWidget::handleHttpResponseAddonList(boost::system::error_code 
                 completFormSource();
                 createFormSourceState = "";
             }
-//            else
-//            {
-//                client1 = new Wt::Http::Client();
-//                client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchList, this, _1, _2));
-//
-//                string urlAdd = this->getApiUrl() + "/searches"
-//                        + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-//                        + "&token=" + session->user()->token.toUTF8()
-//                        + "&plugin_id=" + boost::lexical_cast<string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-//                        + "&source_id=" + boost::lexical_cast<string>(mapSourceId[sourceSelectionBox->currentIndex()]);
-//
-//                Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
-//
-//                if (client1->get(urlAdd))
-//                {
-//                    Wt::WApplication::instance()->deferRendering();
-//                }
-//                else
-//                {
-//                    Wt::log("error") << "Error Client Http";
-//                }
-//            }
+
 
         }
         catch (Wt::Json::ParseError const& e)
@@ -2275,38 +2257,6 @@ void PluginEditionWidget::handleHttpResponseAddonList(boost::system::error_code 
         Wt::log("warning") << "fct handleHttpResponseAddonParameters" << response.body();
     }
 
-//    if (createFormSourceState == "Modify")
-//    {
-//        client1 = new Wt::Http::Client();
-//
-//        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseSearchList, this, _1, _2));
-//
-//        string urlAdd = this->getApiUrl() + "/plugins/"
-//                + boost::lexical_cast<string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-//                + "/sources/" + boost::lexical_cast<string>(mapSourceId[sourceSelectionBox->currentIndex()])
-//                + "/searches"
-//                + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-//                + "&token=" + session->user()->token.toUTF8();
-//
-//        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
-//
-//        if (client1->get(urlAdd))
-//        {
-//            Wt::WApplication::instance()->deferRendering();
-//        }
-//        else
-//        {
-//            Wt::log("error") << "Error Client Http";
-//        }
-//    }
-//    else
-//    {
-//        fillSearchTypeComboBox();
-//    }
-//    createFormSourceState = "";
-    
-    
-        
     refresh1();
 }
 

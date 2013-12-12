@@ -36,7 +36,7 @@
     <message id="Alert.alert.add-title-box-info">Information</message>
     <message id="Alert.alert.add-title-box-key">Clef</message>
     <message id="Alert.alert.add-last-info">
-            <p>Dernière valeur reçue :&nbsp;</p>
+            Dernière valeur reçue :
     </message>
     <message id="Alert.alert.add-compare">
             <p>Critères de comparaison.</p>
@@ -44,7 +44,9 @@
     <message id="Alert.alert.button-save-continu">Enregistrer et continuer</message>
     <message id="Alert.alert.message-true">Vrai</message>
     <message id="Alert.alert.message-false">Faux</message>
-    <message id="Alert.alert.message-value">Valeur</message>
+    <message id="Alert.alert.message-value">
+        <p align="middle">Valeur</p>
+    </message>
     <!--PUT-->
     <message id="Alert.alert.modif-alert">Modifier cette alerte</message>
     <!--DELETE-->

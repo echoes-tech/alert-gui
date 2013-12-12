@@ -714,7 +714,8 @@ void    AlertsWidget::popupAddWidget(Wt::WDialog *dialog, bool typeDial)
     errorPlugin_->hide();
     errorInfo_->hide();
     
-    new Wt::WText(tr("Alert.alert.add-last-info") + "21/12/2012", contain);  //a revoir quand info
+    new Wt::WText(tr("Alert.alert.add-last-info"), contain);
+    new Wt::WText("21/12/2012", contain);  //a revoir quand info
 
     new Wt::WText(tr("Alert.alert.add-compare"), contain);  //hide show
 

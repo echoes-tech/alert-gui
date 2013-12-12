@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <!-- Paginate -->
+    <message id="Alert.information.paginate-first">First</message>
+    <message id="Alert.information.paginate-prev">Prev</message>
+    <message id="Alert.information.paginate-next">Next</message>
+    <message id="Alert.information.paginate-last">Last</message>
+
+    <!-- Info -->
+
+  <message id="Alert.information.button-cancel">Cancel</message>
+
+  <message id="Alert.information.search-bar">Search : </message>
+
+  <message id="Alert.information.form-title">Servers</message>
+  <message id="Alert.information.form-info">
+      On this page you can add the servers you need to monitor and get the scripts to configure them.
+  </message>
+  <message id="Alert.information.nothing-information">Information</message>
+  <message id="Alert.information.nothing-information-text">Nothing Information on db</message>
+  <message id="Alert.information.nothing-information-button">Click for Add</message>
+  <message id="Alert.information.name-label">Server to add: </message>
+
+  <message id="Alert.information.invalid-name">Invalid name</message>
+
+  <message id="Alert.information.delete-message">
+      <span style="color:red">Delete this server. Continue ?</span>
+  </message>
+  <message id="Alert.information.invalid-name-information">
+      <span style="color:red">&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</span>
+  </message>
+  
+  <message id="Alert.information.add-button">Add a server</message>
+  <message id="Alert.information.modif-button">Modif</message>
+  <message id="Alert.information.delete-button">Delete</message>
+
+  <message id="Alert.information.add-form.information">Your servers</message>
+  
+  <message id="Alert.information.name-information">Information name</message>
+  <message id="Alert.information.action">Actions</message>
+  
+  <message id="Alert.information.name-download-script">Download<br />Script</message>
+
+  <message id="Alert.information.delete-information">Delete this server</message>
+  <message id="Alert.information.modif-information">Modifi this server</message>
+  <message id="Alert.information.add-information">Add server</message>
+
+  <message id="Alert.information.name-invalid">Invalid</message>
+  <message id="Alert.information.database-error-title">Database error</message>
+  <message id="Alert.information.database-error">Error : {1} | {2}</message>
+  
+  <message id="Alert.information.file-not-generated">
+      <span style="color:red">The file as not been generated. Please contact us.</span>
+  </message>
+  <message id="Alert.alert-list.delete-alerts-message">The following alerts will be deleted too:</message>
+  <message id="Alert.alert-list.delete-alert-message">The following alert will be deleted too:</message>
+  <!-- templates -->
+
+    <message id="Alert.information.Management.template" >
+        <br />
+            <div class ="alert alert-info">${tr:Alert.information.form-info}</div> 
+            <div id="information-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers">
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>
+
+  
+
+</messages>

@@ -108,6 +108,7 @@ public:
                       (ASSET) ("assets")
                       (SUBMENU_ALERT) ("submenu_alerts")
                       (RECIPIENTS) ("recipients")
+                      (INFORMATIONS) ("informations")
                       (ALERTS) ("alerts-test")
                       (SUBMENU_ACCOUNT) ("submenu_accounts")
                       (PLUGIN) ("plugins")

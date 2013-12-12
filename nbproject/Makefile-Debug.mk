@@ -46,6 +46,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/CreatePageWidget.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/Enums.o \
+	${OBJECTDIR}/src/InformationsWidget.o \
 	${OBJECTDIR}/src/MainWidget.o \
 	${OBJECTDIR}/src/MonitoringWidget.o \
 	${OBJECTDIR}/src/OptionManagementModel.o \
@@ -137,6 +138,11 @@ ${OBJECTDIR}/src/Enums.o: src/Enums.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Enums.o src/Enums.cpp
+
+${OBJECTDIR}/src/InformationsWidget.o: src/InformationsWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/InformationsWidget.o src/InformationsWidget.cpp
 
 ${OBJECTDIR}/src/MainWidget.o: src/MainWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

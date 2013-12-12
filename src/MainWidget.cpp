@@ -223,6 +223,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             rpw = new RecipientsWidget(this->session, this->_apiUrl);
             break;            
         }
+        case Enums::EPageType::INFORMATIONS:
+        {
+            inw = new InformationsWidget(this->session, this->_apiUrl);
+            break;
+        }
         case Enums::EPageType::ALERTS:
         {
             atw = new AlertsWidget(this->session, this->_apiUrl);
@@ -443,6 +448,12 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                     this->contentFluid->addWidget(rpw);
                     break;
                 }
+                case Enums::EPageType::INFORMATIONS:
+                {
+                    this->contentFluid->addWidget(inw);
+                    inw->recoverListInformations();
+                    break;
+                }
                 case Enums::EPageType::ALERTS:
                 {
                     this->contentFluid->addWidget(atw);
@@ -561,6 +572,11 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::RECIPIENTS:
         {
             res = "user"; //group
+            break;
+        }
+        case Enums::EPageType::INFORMATIONS:
+        {
+            res = "bell"; //group
             break;
         }
         case Enums::EPageType::ALERTS:

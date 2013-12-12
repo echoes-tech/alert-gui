@@ -91,7 +91,6 @@ Wt::Json::Value result_;
 
   Wt::WTable *corpTable;
   std::string apiUrl_;
-  CreatePageWidget *AssetPage;
   virtual void                  update();
 
 protected:

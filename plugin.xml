@@ -100,38 +100,6 @@
                                 ${plugin-selection-box}
                             </div> 
                         </div>
-<!--                         to disable the :first-child behaviour 
-                        <div class="row-fluid" style="display:none"></div>
-                        
-                        plugin
-                        <div class="row-fluid">
-                            <div class="span3">
-                                ${plugin-selection-box}
-                            </div> 
-                            <div class="span1">    
-                                <label class="control-label">${tr:Alert.plugins.name-label} </label>
-                            </div>
-                            <div class="span2">                            
-                                ${plugin-name-edit}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.name-info}"></i>
-                            </div>
-                            <div class="span1">
-                            </div>
-                             <div class="span1">    
-                                <label class="control-label">${tr:Alert.plugins.description-label} </label>
-                            </div>
-                            <div class="span4">                            
-                                ${plugin-description-edit}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.description-info}"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="row-fluid">
-                            <span class="controls">
-                                ${plugin-add-plugin-button}
-                                ${plugin-delete-plugin-button}
-                            </span>
-                        </div>-->
                         
                         <!--source-->
                         <div class="widget-box">
@@ -150,7 +118,6 @@
                                     </div>
                                     <div class="span2">
                                         ${plugin-combo-addon}
-<!--                                        <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugin.combo-addon-info}"></i>-->
                                     </div> 
                                     <div class="span8">
                                         ${plugin-table-source-param}

@@ -104,6 +104,7 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         void displayButtonCreateJSON();
         void formatValue(std::string& value, int nbBackslash) const;
         
+        void fillAddonComboBox();
         void fillSearchTypeComboBox();
         void fillFilterTypeComboBox();
         

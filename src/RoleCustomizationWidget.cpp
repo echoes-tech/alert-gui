@@ -731,14 +731,15 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
 
 void RoleCustomizationWidget::putAssetAlias(int idx)
 {    
+    
     std::string strMessage = "{\n"
-            "\"alias\" : {\n\
-            \"role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
-            +"\",\n"
-            "\"media\" : \""+ boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
-            +"\",\n"
-            "\"value\" : \""+ boost::lexical_cast<std::string>(mapEditAssets[idx]->text()) +"\"\n}\n"
-            "}\n";
+            "\"user_role_id\" : "+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
+            +",\n"
+            "\"media_type_id\" : "+ boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
+            +",\n"
+            "\"value\" : \""+ boost::lexical_cast<std::string>(mapEditAssets[idx]->text()) +"\"\n}";
+    
+    std::cout << "Message : " << strMessage << std::endl;
     
     Wt::Http::Message message;
     message.addBodyText(strMessage);
@@ -755,19 +756,19 @@ void RoleCustomizationWidget::putAssetAlias(int idx)
         Wt::WApplication::instance()->deferRendering();
     } 
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 }
 
 void RoleCustomizationWidget::putPluginAlias()
 {
     std::string strMessage = "{\n"
-            "\"alias\" : {\n\
-            \"role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
-            +"\",\n"
-            "\"media\" : \""+ boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
-            +"\",\n"
-            "\"value\" : \""+ boost::lexical_cast<std::string>(pluginEditLine->text()) +"\"\n}\n"
-            "}\n";
+            "\"user_role_id\" : " + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
+            +",\n"
+            "\"media_type_id\" : " + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
+            +",\n"
+            "\"value\" : \"" + boost::lexical_cast<std::string>(pluginEditLine->text()) + "\"\n}";
     
     Wt::Http::Message message;
     message.addBodyText(strMessage);
@@ -790,14 +791,13 @@ void RoleCustomizationWidget::putPluginAlias()
 
 void RoleCustomizationWidget::putInformationAlias(int idx)
 {
-    std::string strMessage = "{\n\
-            \"user_role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
-            +"\",\n"
-            "\"media_type\" : \""+ boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
-            +"\",\n"
-            "\"value\" : \""+ boost::lexical_cast<std::string>(mapEditInformations[idx]->text()) +"\"\n}\n"
-            ;
-    
+    std::string strMessage = "{\n"
+            "\"user_role_id\" : " + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
+            +",\n"
+            "\"media_type_id\" : " + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
+            +",\n"
+            "\"value\" : \"" + boost::lexical_cast<std::string>(mapEditInformations[idx]->text()) +"\"\n}\n";
+      
     Wt::Http::Message message;
     message.addBodyText(strMessage);
 
@@ -819,12 +819,12 @@ void RoleCustomizationWidget::putInformationAlias(int idx)
 void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit)
 {
     std::string strMessage = "{\n"
-            "\"role\" : \""+ boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
-            +"\",\n"
-            "\"media\" : \""+ boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
-            +"\",\n"
-            "\"value\" : \""+ boost::lexical_cast<std::string>(critEdit->text()) +"\"\n}\n";
-
+            "\"user_role_id\" : " + boost::lexical_cast<std::string>(mapIdRolesComboBox[rolesComboBox->currentIndex()]) 
+            +",\n"
+            "\"media_type_id\" : " + boost::lexical_cast<std::string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]) 
+            +",\n"
+            "\"value\" : \"" + boost::lexical_cast<std::string>(critEdit->text()) +"\"\n}\n";
+     
     Wt::Http::Message message;
     message.addBodyText(strMessage);
 
@@ -836,7 +836,7 @@ void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCri
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&RoleCustomizationWidget::resPutCritAlias, this, _1, _2, critEdit));
-    if (client->put(urlToCall, message))
+    if (client->post(urlToCall, message))
     {
         Wt::WApplication::instance()->deferRendering();
     }

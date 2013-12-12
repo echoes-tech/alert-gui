@@ -5,8 +5,9 @@
 
 
   <message id="Alert.recipients.form-info">
-      Cette Page permet de rajouter des medias, ils sont utilisés pour envoyer des alertes.</message>
-    <message id="Alert.recipients.delete-message">
+      Cette page permet d'ajouter des médias, ils pourront être utilisés pour l'envoi des alertes.
+  </message>
+<!--    <message id="Alert.recipients.delete-message">
       <span style="color:red"> Supprimer ce media. Continuer ?</span>
   </message>
 
@@ -32,6 +33,6 @@
 
   <message id="Alert.recipients.name-invalid">Invalide</message>
   <message id="Alert.recipients.database-error-title">Erreur de la base de donnée</message>
-  <message id="Alert.recipients.database-error">Erreur : {1} | {2}</message>
+  <message id="Alert.recipients.database-error">Erreur : {1} | {2}</message>-->
 
 </messages>

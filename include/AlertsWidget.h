@@ -112,7 +112,7 @@ public:
 
     void                        modifRecip(long long id);
 
-    void                        popupAddWidget(Wt::WDialog *dialog);
+    void                        popupAddWidget(Wt::WDialog *dialog, bool typeDial);
     void                        popupRecipients(std::string nameAlert, std::string message);
 
     
@@ -166,7 +166,7 @@ private:
     Wt::WTabWidget      *tabMessage_;
     std::string         messageMailForTab_;
     std::string         messageSmsForTab_;
-    std::string         messageAppForTab_;
+    std::string         messagePushForTab_;
     
     MultiMapLongString  criterions_;
 
@@ -211,6 +211,8 @@ private:
     Wt::WText           *errorInfo_;
     Wt::WText           *errorKey_;
 
+    Wt::WLineEdit       *keyValue_;
+    
     Wt::WText            *errorBool_;
     //  -------
     

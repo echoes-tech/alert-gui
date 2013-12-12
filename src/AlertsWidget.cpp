@@ -17,7 +17,7 @@
 #include "AlertsWidget.h"
 
 AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, std::string apiUrl)
-: CreatePageWidget("alerts-test")
+: CreatePageWidget("alert")
 {
     session_= session;
     apiUrl_ = apiUrl;
@@ -134,18 +134,23 @@ void    AlertsWidget::popupRecipients(std::string nameAlert, std::string message
     Wt::WDialog *dialog = new Wt::WDialog();
     dialog->setClosable(true);
     CreatePageWidget::buttonInDialogFooter(dialog);
-    
+    dialog->resize(Wt::WLength(750), Wt::WLength(500));
     Wt::WTable *tablePopup = new Wt::WTable(dialog->contents());
-    tablePopup->elementAt(0, 0)->addWidget(new Wt::WText("Alert: "));
-    tablePopup->elementAt(0, 1)->addWidget(new Wt::WText(nameAlert));
+    tablePopup->elementAt(0, 0)->
+    addWidget(new Wt::WText(tr("Alert.alert.form.alert")));
+    tablePopup->elementAt(0, 1)->
+    addWidget(new Wt::WText(nameAlert));
     
-    tablePopup->elementAt(1, 0)->addWidget(new Wt::WText("Destinataire: ")); //XML
+    tablePopup->elementAt(1, 0)->
+    addWidget(new Wt::WText(tr("Alert.alert.form.rec")));
     Wt::WComboBox *boxUsers = new Wt::WComboBox(tablePopup->elementAt(1, 1));
 
-    tablePopup->elementAt(2, 0)->addWidget(new Wt::WText("Media: ")); //XML
+    tablePopup->elementAt(2, 0)->
+    addWidget(new Wt::WText(tr("Alert.alert.form.media")));
     Wt::WComboBox *boxMedias = new Wt::WComboBox(tablePopup->elementAt(2, 1));
 
-    tablePopup->elementAt(3, 0)->addWidget(new Wt::WText("Message: ")); //XML
+    tablePopup->elementAt(3, 0)->
+    addWidget(new Wt::WText(tr("Alert.alert.form.mess")));
     tablePopup->elementAt(3, 1)->addWidget(tabMessage_);
     
     for (MultiMapPair::iterator itU = userInfo_.begin(); itU != userInfo_.end(); itU++)
@@ -166,9 +171,11 @@ void    AlertsWidget::popupRecipients(std::string nameAlert, std::string message
     
     Wt::WLineEdit *time = new Wt::WLineEdit();
     time->setValidator(editValidator(-3));
-    table->elementAt(0, 0)->addWidget(time);
-    Wt::WText *error = new Wt::WText(tr("Alert.alert.invalid-name-name"));
-    table->elementAt(1, 0)->addWidget(error);
+    table->elementAt(0, 0)
+    ->addWidget(new Wt::WText(tr("Alert.alert.form.snooze")));
+    table->elementAt(0, 1)->addWidget(time);
+    Wt::WText *error = new Wt::WText(tr("Alert.alert.invalid-number"));
+    table->elementAt(1, 1)->addWidget(error);
     error->hide();
     Wt::WComboBox *comboBox = new Wt::WComboBox();
     
@@ -204,10 +211,13 @@ void    AlertsWidget::fillInTabMessage()
 {
     Wt::WTextArea *test1 = new Wt::WTextArea(messageMailForTab_);
     Wt::WTextArea *test2 = new Wt::WTextArea(messageSmsForTab_);
-    Wt::WTextArea *test3 = new Wt::WTextArea(messageAppForTab_);
-    tabMessage_->addTab(test1, "MAIL", Wt::WTabWidget::PreLoading); //XML
-    tabMessage_->addTab(test2, "SMS", Wt::WTabWidget::PreLoading); //XML
-    tabMessage_->addTab(test3, "APP", Wt::WTabWidget::PreLoading); //XML
+    Wt::WTextArea *test3 = new Wt::WTextArea(messagePushForTab_);
+    tabMessage_->addTab(test1, tr("Alert.alert.form.mail"),
+            Wt::WTabWidget::PreLoading);
+    tabMessage_->addTab(test2, tr("Alert.alert.form.sms"),
+            Wt::WTabWidget::PreLoading);
+    tabMessage_->addTab(test3, tr("Alert.alert.form.push"),
+            Wt::WTabWidget::PreLoading);
     
     test1->changed().connect(std::bind([=] () {        
         messageMailForTab_ = test1->text().toUTF8();
@@ -216,7 +226,7 @@ void    AlertsWidget::fillInTabMessage()
         messageSmsForTab_ = test2->text().toUTF8();
     }));
     test3->changed().connect(std::bind([=] () {        
-        messageAppForTab_ = test3->text().toUTF8();
+        messagePushForTab_ = test3->text().toUTF8();
     }));
 }
 
@@ -295,12 +305,14 @@ void    AlertsWidget::initBoxOne(Wt::WTable *tableBox)
     Wt::WSelectionBox *boxPlugin = new Wt::WSelectionBox(tableBox->elementAt(0, 1));
     Wt::WSelectionBox *boxInfo = new Wt::WSelectionBox(tableBox->elementAt(0, 2));
 
-    boxAsset->resize(Wt::WLength(250), Wt::WLength(150));
+    keyValue_ = new Wt::WLineEdit(tableBox->elementAt(0, 3));
+    
+    boxAsset->resize(Wt::WLength(200), Wt::WLength(150));
     boxAsset->setSelectionMode(Wt::ExtendedSelection);
     boxAsset->setSelectable(true);
     fillInBox(boxAsset, assets_);
     
-    boxPlugin->resize(Wt::WLength(250), Wt::WLength(150));
+    boxPlugin->resize(Wt::WLength(200), Wt::WLength(150));
     boxPlugin->setSelectionMode(Wt::ExtendedSelection);
     fillInBox(boxPlugin, plugins_);
 
@@ -666,12 +678,13 @@ void    AlertsWidget::fillInBox(Wt::WSelectionBox *box, MultiMapPair infoInBox)
 
 // ------- init popup one -------
 
-void    AlertsWidget::popupAddWidget(Wt::WDialog *dialog)
+void    AlertsWidget::popupAddWidget(Wt::WDialog *dialog, bool typeDial)
 {
     tabMessage_ = new Wt::WTabWidget();
+    tabMessage_->resize(Wt::WLength(300), Wt::WLength(200));
     recoverListRecipientAlias(this->session_->user().id());
     checkAll_ = 1;
-    Wt::WPushButton *ButtonSC = new Wt::WPushButton("Save and continu", dialog->footer());
+    Wt::WPushButton *ButtonSC = new Wt::WPushButton(tr("Alert.alert.button-save-continu"), dialog->footer());
     ButtonSC->clicked().connect(std::bind([=] ()
     {
         checkAll_ = 0;
@@ -681,21 +694,29 @@ void    AlertsWidget::popupAddWidget(Wt::WDialog *dialog)
     dialog->resize(Wt::WLength(750), Wt::WLength(500));
 
     Wt::WContainerWidget *contain = new Wt::WContainerWidget(dialog->contents());
-    new Wt::WText("Asset - Plugin - Info - Key", contain); // A REVOIR ET XML
-    
     Wt::WTable *tableBox = new Wt::WTable(contain);
-            
+    tableBox->elementAt(0, 0)
+    ->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-asset")));
+    tableBox->elementAt(0, 1)
+    ->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-plugin")));
+    tableBox->elementAt(0, 2)
+    ->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-info")));
+    tableBox->elementAt(0, 3)
+    ->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-key")));
     initBoxOne(tableBox);
-    errorAsset_ = new Wt::WText("Select asset", tableBox->elementAt(1, 0)); //XML
-    errorPlugin_ = new Wt::WText("Select plugin", tableBox->elementAt(1, 1)); //XML
-    errorInfo_ = new Wt::WText("Select info", tableBox->elementAt(1, 2)); //XML
+    errorAsset_ = new Wt::WText(tr("Alert.alert.invalid-select-asset"),
+            tableBox->elementAt(1, 0));
+    errorPlugin_ = new Wt::WText(tr("Alert.alert.invalid-select-plugin"),
+            tableBox->elementAt(1, 1));
+    errorInfo_ = new Wt::WText(tr("Alert.alert.invalid-select-info"),
+            tableBox->elementAt(1, 2));
     errorAsset_->hide();
     errorPlugin_->hide();
     errorInfo_->hide();
     
-    new Wt::WText(Wt::WString::fromUTF8("<p>Last info value : 21/12/2012</p>"), contain);  //XML est a revoir quand info
+    new Wt::WText(tr("Alert.alert.add-last-info") + "21/12/2012", contain);  //a revoir quand info
 
-    new Wt::WText(Wt::WString::fromUTF8("<p>Criteres de comparaison</p>"), contain);  //XML est hide show
+    new Wt::WText(tr("Alert.alert.add-compare"), contain);  //hide show
 
     resourcesUnitOne.clear();
     resourcesUnitTwo.clear();
@@ -802,7 +823,7 @@ Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
     Wt::WLineEdit *textEdit = new Wt::WLineEdit(table->elementAt(0, 1));
     
     Wt::WComboBox *comboBox = new Wt::WComboBox();
-    comboBox->addItem("is equal");  //xml
+    comboBox->addItem("==");  //xml
 //    comboBox->addItem("is not equal"); //xml
 //    comboBox->addItem("contains"); //xml
 //    comboBox->addItem("doesn't contain"); //xml
@@ -813,7 +834,8 @@ Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
     
     unitOne_[idUnitOne] = table;
 
-    Wt::WText *errorText = new Wt::WText("Invalide name", table->elementAt(1, 1)); //XML
+    Wt::WText *errorText = new Wt::WText(tr("Alert.alert.invalid-name-alert"),
+            table->elementAt(1, 1));
     errorText->hide();
     
     Wt::WText *text = new Wt::WText(comboBox->currentText());
@@ -870,7 +892,7 @@ Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
 Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
 {
     Wt::WTable *table = new Wt::WTable(contain);
-    Wt::WLineEdit *valeurEdit = new Wt::WLineEdit(table->elementAt(0, 0));
+    Wt::WLineEdit *valeurEdit = new Wt::WLineEdit(table->elementAt(0, 2));
     valeurEdit->setValidator(editValidator(-2));
 
     Wt::WComboBox *comboBox1 = new Wt::WComboBox();
@@ -882,12 +904,13 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
     comboBox1->addItem(">");
 
     table->elementAt(0, 1)->addWidget(comboBox1);
-    table->elementAt(0, 2)->addWidget(new Wt::WText("Info"));
+    table->elementAt(0, 0)
+    ->addWidget(new Wt::WText(tr("Alert.alert.message-value")));
     
     Wt::WComboBox *comboBox2 = new Wt::WComboBox();
-    comboBox2->addItem("Kilo");//xml
-    comboBox2->addItem("Mega");//xml
-    comboBox2->addItem("Giga");//xml
+    comboBox2->addItem("Ko");
+    comboBox2->addItem("Mo");
+    comboBox2->addItem("Go");
 
     table->elementAt(0, 3)->addWidget(comboBox2);
     
@@ -895,10 +918,12 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
 
     unitTwo_[idUnitTwo] = table;
 
-    Wt::WText   *errorNumb = new Wt::WText("Invalide number", contain); //XML
+    Wt::WText   *errorNumb = new Wt::WText(tr("Alert.alert.invalid-number"),
+            contain);
     errorNumb->hide();
 
-    Wt::WText *text = new Wt::WText(comboBox1->currentText() + " \"\" " + comboBox2->currentText());
+    Wt::WText *text = new Wt::WText(comboBox1->currentText()
+            + " \"\" " + comboBox2->currentText());
     compareBarTwo_->addWidget(text);
 
     Wt::WLineEdit *lineEditBar = new Wt::WLineEdit();
@@ -909,21 +934,28 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
     saveLineEditTwo_ = lineEditBar;
 
     Wt::WPushButton *buttonValid = 
-            new Wt::WPushButton("<i class='icon-ok'></i>", table->elementAt(0, 4));
+            new Wt::WPushButton("<i class='icon-ok'></i>",
+            table->elementAt(0, 4));
     buttonValid->setStyleClass("btn-dark-warning");
     buttonValid->setTextFormat(Wt::XHTMLUnsafeText);
     buttonValid->clicked().connect(std::bind([=] () {
-        text->setText(comboBox1->currentText() + " \"" + valeurEdit->text() + "\" " + comboBox2->currentText());
+        text->setText(comboBox1->currentText() + " \"" + valeurEdit->text()
+        + "\" " + comboBox2->currentText());
         buttonValid->setText("<i class='icon-ok'></i>");
     }));
     valeurEdit->changed().connect(std::bind([=] ()
-    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text() + "\" " + comboBox2->currentText()); }));
+    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text()
+    + "\" " + comboBox2->currentText()); }));
     comboBox1->changed().connect(std::bind([=] ()
-    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text() + "\" " + comboBox2->currentText()); }));
+    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text()
+    + "\" " + comboBox2->currentText()); }));
     comboBox2->changed().connect(std::bind([=] ()
-    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text() + "\" " + comboBox2->currentText()); }));
+    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text()
+    + "\" " + comboBox2->currentText()); }));
 
-    Wt::WPushButton *buttonDel = new Wt::WPushButton("<i class='icon-remove icon-white'></i>", table->elementAt(0, 5));
+    Wt::WPushButton *buttonDel =
+            new Wt::WPushButton("<i class='icon-remove icon-white'></i>",
+            table->elementAt(0, 5));
     buttonDel->setStyleClass("btn-danger");
     buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
     buttonDel->setId(boost::lexical_cast<std::string>(idUnitTwo));
@@ -953,30 +985,32 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
 void    AlertsWidget::createUnitThree(Wt::WContainerWidget *contain)
 {
     Wt::WTable *table = new Wt::WTable(contain);
-    errorBool_ = new Wt::WText("choose boolean", contain); //XML
+    errorBool_ = new Wt::WText(tr("Alert.alert.invalid-choose"), contain);
     errorBool_->hide();
 
     bool_ = -1;
     
-    table->elementAt(0, 0)->addWidget(new Wt::WText("True"));//xml
+    table->elementAt(0, 0)->
+    addWidget(new Wt::WText(tr("Alert.alert.message-true")));
     Wt::WPushButton *button = new Wt::WPushButton(table->elementAt(0, 0));
     button->setAttributeValue("class","btn btn-dark-green");
     button->setTextFormat(Wt::XHTMLUnsafeText);
     button->setText("<span class='input-group-btn'><i class='icon-ok icon-white'></i></span>");
     button->clicked().connect(std::bind([=] () {
         bool_ = 0;
-        errorBool_->setText("True");
+        errorBool_->setText(tr("Alert.alert.message-true"));
         errorBool_->show();
     }));
 
-    table->elementAt(0, 1)->addWidget(new Wt::WText("False"));//xml
+    table->elementAt(0, 1)->
+    addWidget(new Wt::WText(tr("Alert.alert.message-false")));
     button = new Wt::WPushButton(table->elementAt(0, 1));
     button->setAttributeValue("class","btn btn-danger");
     button->setTextFormat(Wt::XHTMLUnsafeText);
     button->setText("<span class='input-group-btn'><i class='icon-remove icon-white'></i></span>");
     button->clicked().connect(std::bind([=] () {
         bool_ = 1;
-        errorBool_->setText("False");
+        errorBool_->setText(tr("Alert.alert.message-false"));
         errorBool_->show();
     }));
 
@@ -1041,7 +1075,7 @@ void     AlertsWidget::checkPopupRecipients(std::string message, std::string tim
                 message += ",\n\"message\": \"" + messageSmsForTab_ + "\"\n}";
                 break;
             case Enums::EMedia::mobileapp :
-                message += ",\n\"message\": \"" + messageAppForTab_ + "\"\n}";
+                message += ",\n\"message\": \"" + messagePushForTab_ + "\"\n}";
                 break;
         }
 //    }
@@ -1187,7 +1221,7 @@ void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
 
     message += "\"thread_sleep\": 0,\n";
 
-    message += "\"key_value\": \"\",\n";
+    message += "\"key_value\": \"" + keyValue_->text().toUTF8() + "\",\n";
     
     message += "\"asset_id\": " + boost::lexical_cast<std::string>(idAll_.first.first) + ",\n";
     message += "\"plugin_id\": " + boost::lexical_cast<std::string>(idAll_.first.second) + ",\n";
@@ -1198,7 +1232,7 @@ void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
         message += "\"alert_media_specialization\":\n[\n{\n\"media_id\": "
                 + boost::lexical_cast<std::string>(1)
                 + ",\n\"snooze\": 0,\n\"message\": \""
-                + messageAppForTab_
+                + messagePushForTab_
                 + "\"\n}\n]\n}";
         
         postAlertCallApi(message);
@@ -1321,7 +1355,7 @@ void    AlertsWidget::recoverListAlert()
     unitsIds_.clear();
     messageMailForTab_.clear();
     messageSmsForTab_.clear();
-    messageAppForTab_.clear();
+    messagePushForTab_.clear();
 
     std::string apiAddress = this->getApiUrl() + "/alerts" + "?login=" 
             + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) 
@@ -1952,7 +1986,7 @@ void AlertsWidget::getAliasInfo(boost::system::error_code err, const Wt::Http::M
 //                        messageSmsForTab_ += message.toUTF8() + " ";
 //                        break;
 //                    case Enums::EMedia::mobileapp :
-//                        messageAppForTab_ += message.toUTF8() + " ";
+//                        messagePushForTab_ += message.toUTF8() + " ";
 //                        break;
 //                }
 //            }
@@ -2002,7 +2036,7 @@ void AlertsWidget::getAliasAsset(boost::system::error_code err, const Wt::Http::
 //                        messageSmsForTab_ += message.toUTF8() + " ";
 //                        break;
 //                    case Enums::EMedia::mobileapp :
-//                        messageAppForTab_ += message.toUTF8() + " ";
+//                        messagePushForTab_ += message.toUTF8() + " ";
 //                        break;
 //                }
 //            }
@@ -2053,7 +2087,7 @@ void AlertsWidget::getAliasPlugin(boost::system::error_code err, const Wt::Http:
 //                        messageSmsForTab_ += message.toUTF8() + " ";
 //                        break;
 //                    case Enums::EMedia::mobileapp :
-//                        messageAppForTab_ += message.toUTF8() + " ";
+//                        messagePushForTab_ += message.toUTF8() + " ";
 //                        break;
 //                }
 //            }

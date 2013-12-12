@@ -1,62 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
 
-    <!-- Paginate -->
-    <message id="Alert.asset.paginate-first">First</message>
-    <message id="Alert.asset.paginate-prev">Prev</message>
-    <message id="Alert.asset.paginate-next">Next</message>
-    <message id="Alert.asset.paginate-last">Last</message>
-
-    <!-- Info -->
-
-  <message id="Alert.asset.button-cancel">Cancel</message>
-
-  <message id="Alert.asset.search-bar">Search : </message>
-
-  <message id="Alert.asset.form-title">Servers</message>
-  <message id="Alert.asset.form-info">
+    <message id="Alert.asset.form-info">
       On this page you can add the servers you need to monitor and get the scripts to configure them.
-  </message>
-  <message id="Alert.asset.nothing-asset">Asset</message>
-  <message id="Alert.asset.nothing-asset-text">Nothing Asset on db</message>
-  <message id="Alert.asset.nothing-asset-button">Click for Add</message>
-  <message id="Alert.asset.name-label">Server to add: </message>
+    </message>
 
-  <message id="Alert.asset.invalid-name">Invalid name</message>
+<!--    In table     -->
+    <!--nothing asset-->
+    <message id="Alert.asset.nothing-asset">Asset</message>
+    <message id="Alert.asset.nothing-asset-text">Nothing Asset register</message>
+    <message id="Alert.asset.nothing-button">Click for Add</message>
+    <!--header-->
+    <message id="Alert.asset.add-form.asset">Servers</message>
+    <message id="Alert.asset.name-download-script">Download<br />Script</message>
+    <!--body-->
+    <message id="Alert.asset.name-asset">Asset name</message>
+    <message id="Alert.asset.modif-button">Modif</message>
+    <message id="Alert.asset.delete-button">Delete</message>
+    <!--footer-->
+    <message id="Alert.asset.search-bar">Search : </message>
+        <!-- Paginate -->
+        <message id="Alert.asset.paginate-first">First</message>
+        <message id="Alert.asset.paginate-prev">Prev</message>
+        <message id="Alert.asset.paginate-next">Next</message>
+        <message id="Alert.asset.paginate-last">Last</message>
 
-  <message id="Alert.asset.delete-message">
-      <span style="color:red">Delete this server. Continue ?</span>
-  </message>
+<!--    In popup     -->
+    <message id="Alert.asset.button-cancel">Cancel</message>
+    <message id="Alert.asset.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.asset.add-asset">Add server</message>
+    <!--PUT-->
+    <message id="Alert.asset.modif-asset">Modifi this server</message>
+    <!--DELETE-->
+    <message id="Alert.asset.delete-asset">Attention</message>
+    <message id="Alert.asset.delete-asset-message">
+        <span style="color:red">
+            You are about to delete a server
+        </span>
+    </message>
+    <message id="Alert.asset.button-confirm">Confirm</message>
+
+<!--    Invalid message     -->
   <message id="Alert.asset.invalid-name-asset">
-      <span style="color:red">&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</span>
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
   </message>
-  
-  <message id="Alert.asset.add-button">Add a server</message>
-  <message id="Alert.asset.modif-button">Modif</message>
-  <message id="Alert.asset.delete-button">Delete</message>
+  <message id="Alert.asset.invalid-name-twice">
+      <span style="color:red">
+          Please, you do not use the same name twice.
+      </span>
+  </message>
 
-  <message id="Alert.asset.add-form.asset">Your servers</message>
-  
-  <message id="Alert.asset.name-asset">Asset name</message>
-  <message id="Alert.asset.action">Actions</message>
-  
-  <message id="Alert.asset.name-download-script">Download<br />Script</message>
-
-  <message id="Alert.asset.delete-asset">Delete this server</message>
-  <message id="Alert.asset.modif-asset">Modifi this server</message>
-  <message id="Alert.asset.add-asset">Add server</message>
-
-  <message id="Alert.asset.name-invalid">Invalid</message>
-  <message id="Alert.asset.database-error-title">Database error</message>
-  <message id="Alert.asset.database-error">Error : {1} | {2}</message>
-  
+<!--    Error message     -->
   <message id="Alert.asset.file-not-generated">
-      <span style="color:red">The file as not been generated. Please contact us.</span>
+      <span style="color:red">
+          The file as not been generated. Please contact us.
+      </span>
   </message>
-  <message id="Alert.alert-list.delete-alerts-message">The following alerts will be deleted too:</message>
-  <message id="Alert.alert-list.delete-alert-message">The following alert will be deleted too:</message>
-  <!-- templates -->
+  <message id="Alert.asset.database-error-title">Database error</message>
+  <message id="Alert.asset.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+<!--    Warning message     -->
+  <message id="Alert.asset-list.delete-alerts-message">
+      Alerts link with asset.
+  </message>
+  <message id="Alert.asset-list.delete-alert-message">
+      Alert link with asset.
+  </message>
 
+<!-- templates -->
     <message id="Alert.asset.Management.template" >
         <br />
             <div class ="alert alert-info">${tr:Alert.asset.form-info}</div> 

@@ -2,10 +2,10 @@
 <messages xmlns:if="Wt.WTemplate.conditions">
 
   <message id="Alert.recipients.form-info">
-      On this page you can add the medias used to send alerts.
+      This page allows you to add media, they can be used for sending alerts.
   </message>
 
-  <message id="Alert.recipients.invalid-name">Invalid name</message>
+<!--  <message id="Alert.recipients.invalid-name">Invalid name</message>
   
   <message id="Alert.recipients.add-button">Add a media</message>
 
@@ -23,7 +23,7 @@
 
   <message id="Alert.recipients.name-invalid">Invalid</message>
   <message id="Alert.recipients.database-error-title">Database error</message>
-  <message id="Alert.recipients.database-error">Error : {1} | {2}</message>
+  <message id="Alert.recipients.database-error">Error : {1} | {2}</message>-->
   
     
   <!-- templates -->

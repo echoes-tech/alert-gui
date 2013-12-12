@@ -62,7 +62,7 @@ void    CreatePageWidget::update()
             new Wt::WText(tr("Alert." + this->nameResourcePage + ".nothing-" + this->nameResourcePageSpec_), table->elementAt(0, 0));
             new Wt::WText(tr("Alert." + this->nameResourcePage + ".nothing-" + this->nameResourcePageSpec_ + "-text"), table->elementAt(1, 0));
             Wt::WPushButton *headerButton =
-                    new Wt::WPushButton(tr("Alert." + this->nameResourcePage + ".nothing-" + this->nameResourcePageSpec_ + "-button")
+                    new Wt::WPushButton(tr("Alert." + this->nameResourcePage + ".nothing-button")
                     , table->elementAt(2, 0));
             
             this->bindWidget("resource-header", new Wt::WText());
@@ -401,8 +401,28 @@ void    CreatePageWidget::checkModif(vector_type inputs, long long id, std::vect
     }    
 }
 
+int    CreatePageWidget::checkName(std::string inputText, std::vector<long long> ids)
+{
+    for (std::vector<long long>::iterator j = ids.begin(); j != ids.end(); j++)
+    {
+        vector_type resourceRow = getResourceRowTable(*j);
+        for (vector_type::iterator k = resourceRow.begin(); k != resourceRow.end(); k++)
+        {
+            Wt::WInteractWidget *widgetAdd = *k;
+            std::string nameRessouce("N2Wt5WTextE");
+            if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
+            {
+                if (inputText.compare(((Wt::WText*)(*k))->text().toUTF8()) == 0)
+                    return 1;
+            }
+        }
+    }
+    return 0;
+}
+
 int    CreatePageWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage)
 {
+    std::vector<long long> ids = getIdsTable();
     int check(0);
 
     std::vector<Wt::WText*>::const_iterator i = errorMessage.begin(); 
@@ -422,6 +442,17 @@ int    CreatePageWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName,
                 ((Wt::WLineEdit*)(*j))->setFocus();
                 ((Wt::WText*)(*i))->show();
                 check = 1;
+            }
+            else if (checkName(((Wt::WLineEdit*)(*j))->text().toUTF8(), ids) == 1)
+            {
+                ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-error");
+                ((Wt::WLineEdit*)(*j))->setWidth(Wt::WLength(150));
+                ((Wt::WLineEdit*)(*j))->setFocus();
+                ((Wt::WText*)(*i))->setText(tr("Alert."
+                        + this->nameResourcePage + ".invalid-name-twice"));
+                ((Wt::WText*)(*i))->show();
+                check = 1;
+                
             }
             else
             {
@@ -694,12 +725,24 @@ int     CreatePageWidget::sizeAff()
 
 Wt::WDialog    *CreatePageWidget::deleteResource(long long id)
 {
-    Wt::WDialog *box = new Wt::WDialog("Attention");
+    Wt::WDialog *box = new Wt::WDialog(tr("Alert." + this->nameResourcePage
+            + ".delete-" + this->nameResourcePage));
 
     box->contents()->addWidget(new Wt::WText(tr("Alert." + this->nameResourcePage
-            + ".delete-" + this->nameResourcePageSpec_))); // a voir xml
+            + ".delete-" + this->nameResourcePageSpec_ + "-message")));
     
-    buttonInDialogFooter(box);
+    Wt::WPushButton *ok = new Wt::WPushButton(tr("Alert."
+            + this->nameResourcePage + ".button-confirm"),
+            box->footer());
+    ok->clicked().connect(box, &Wt::WDialog::accept);    
+    ok->setAttributeValue("style", "margin-left:12px");
+
+    Wt::WPushButton *annul = new Wt::WPushButton(tr("Alert."
+            + this->nameResourcePage + ".button-cancel"),
+            box->footer());
+    annul->clicked().connect(box, &Wt::WDialog::reject);
+    annul->setAttributeValue("style", "margin-left:12px;");
+
     this->created_ = false;
     return box;
 }
@@ -779,7 +822,7 @@ void    CreatePageWidget::popupWindow()
         i++;
     }
 
-    popupComplete(dialogAdd_);
+    popupComplete(dialogAdd_, true);
     
     dialogAdd_->finished().connect(std::bind([=] () {
         popupCheck(inputName, errorMessage, dialogAdd_, -1);
@@ -844,7 +887,7 @@ void    CreatePageWidget::popupForModif(long long id)
     if (i == titleHeader.end() && j != resourceTable.end())
         std::cout << "Warning : Too many title for header table (popupforModif" << std::endl;
 
-    popupComplete(dialogModif_);
+    popupComplete(dialogModif_, false);
 
     dialogModif_->finished().connect(std::bind([=] () {
         popupCheck(inputName, errorMessage, dialogModif_, id);
@@ -871,20 +914,22 @@ void    CreatePageWidget::popupCheck(std::vector<Wt::WInteractWidget*> inputName
     return;
 }
 
-void    CreatePageWidget::popupComplete(Wt::WDialog *dialog)
+void    CreatePageWidget::popupComplete(Wt::WDialog *dialog, bool typeDial)
 {
     dialog->setResizable(true);
     dialog->setClosable(true);
 
     new Wt::WText("\n", dialog->contents());
-    popupAddWidget(dialog);   //Methode overload
+    popupAddWidget(dialog, typeDial);   //Methode overload // typeDial True = Add, False = Modif
 
     buttonInDialogFooter(dialog);
 }
 
 void    CreatePageWidget::buttonInDialogFooter(Wt::WDialog *dialog)
 {
-        Wt::WPushButton *ok = new Wt::WPushButton("Save", dialog->footer()); //xml
+        Wt::WPushButton *ok = new Wt::WPushButton(tr("Alert."
+            + this->nameResourcePage + ".button-save"),
+                dialog->footer());
     ok->clicked().connect(dialog, &Wt::WDialog::accept);    
     ok->setAttributeValue("style", "margin-left:12px");
 

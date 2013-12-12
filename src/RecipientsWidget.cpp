@@ -43,8 +43,8 @@ void    RecipientsWidget::update()
 
        uew = new UserEditionWidget(session_, apiUrl_, 3);
        uew->recoverListMedia();
-       uew->setNameSpecial("app");
-       tab->addTab(uew, "App")->setStyleClass("recipients recipients-radius-right");
+       uew->setNameSpecial("push");
+       tab->addTab(uew, "Push")->setStyleClass("recipients recipients-radius-right");
        newClass_ = true;
     }
 }

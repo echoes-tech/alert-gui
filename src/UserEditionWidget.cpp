@@ -56,7 +56,7 @@ std::vector<std::string> UserEditionWidget::getTitlesTableText()
     else if (type_ == 2)
         titleText.push_back("sms");
     else if (type_ == 3)
-        titleText.push_back("app");
+        titleText.push_back("push");
     return titleText;
 }
 
@@ -114,9 +114,11 @@ Wt::WValidator *UserEditionWidget::editValidator(int who)
 {
     Wt::WRegExpValidator *validator = 0;
     if (type_ == 1)
-        validator = new Wt::WRegExpValidator("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}");
+        validator = new Wt::WRegExpValidator("[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$"); //[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}
     else if (type_ == 2)
-        validator = new Wt::WRegExpValidator("^(0|\\+33)[0-9]{9}");
+        validator = new Wt::WRegExpValidator("(0)[0-9]{9}");
+    else if (type_ == 3)
+        validator = new Wt::WRegExpValidator("[[a-zA-Z0-9.-]");
     return validator;
 }
 

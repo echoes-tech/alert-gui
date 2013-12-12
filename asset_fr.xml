@@ -1,57 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
-
-    <!-- Paginate -->
-    <message id="Alert.asset.paginate-first">Début</message>
-    <message id="Alert.asset.paginate-prev">Prec</message>
-    <message id="Alert.asset.paginate-next">Suiv</message>
-    <message id="Alert.asset.paginate-last">Fin</message>
-
-    <!-- Models -->
-      <message id="Alert.asset.button-cancel">Annuler</message>
-  <message id="Alert.asset.search-bar">Recherche : </message>
-
-  <message id="Alert.asset.asset-form-title">Serveurs</message>
-  <message id="Alert.asset.asset-form-info">Sur cette page vous pouvez ajouter des serveurs à surveiller et récupérer les scripts de configuration correspondant.</message>
-  
-    <message id="Alert.asset.nothing-asset">Serveur</message>
-  <message id="Alert.asset.nothing-asset-text">Aucun serveur dans la db</message>
-  <message id="Alert.asset.nothing-asset-button">Clique pour ajouter</message>
-  
-  <message id="Alert.asset.asset-name-label">Serveur à ajouter : </message>
-  <message id="Alert.asset.asset-name-info">Nom invalide</message>
-  
-  <message id="Alert.asset.add-asset-button">Ajouter un serveur</message>
-
-  <message id="Alert.asset.add-asset-form">Vos serveurs</message>
-  
-  <message id="Alert.user.edition.asset-name">Serveur</message>
-  
-  <message id="Alert.asset.asset-name">Nom du serveur</message>
-  <message id="Alert.asset.asset-action">Actions</message>
-  
-  <message id="Alert.asset.download-script">Télécharger le script d'installation</message>
-  <message id="Alert.asset.delete-asset">Supprimer ce serveur</message>
-
-  <message id="Alert.asset.asset-form-title">Serveurs</message>
     
-  <message id="Alert.asset.asset-name-invalid">Invalide</message>
+  <message id="Alert.asset.form-info">
+      Sur cette page vous pouvez ajouter des serveurs à surveiller et récupérer les scripts de configuration correspondant.
+  </message>
+
+<!--    In table     -->
+    <!--nothing asset-->
+    <message id="Alert.asset.nothing-asset">Serveurs</message>
+    <message id="Alert.asset.nothing-asset-text">
+      Aucun serveur enregistré actuellement
+    </message>
+    <message id="Alert.asset.nothing-button">Cliquer pour ajouter</message>
+    <!--header-->
+    <message id="Alert.asset.add-form.asset">Serveurs</message>
+    <message id="Alert.asset.name-download-script">
+        Télécharger<br />le script
+    </message>
+    <!--body-->
+    <message id="Alert.asset.name-asset">Nom de l'équipement</message>
+    <message id="Alert.asset.modif-button">Modifier</message>
+    <message id="Alert.asset.delete-button">Supprimer</message>
+    <!--footer-->
+    <message id="Alert.asset.search-bar">Recherche : </message>
+        <!-- Paginate -->
+        <message id="Alert.asset.paginate-first">Début</message>
+        <message id="Alert.asset.paginate-prev">Préc</message>
+        <message id="Alert.asset.paginate-next">Suiv</message>
+        <message id="Alert.asset.paginate-last">Fin</message>
+
+<!--    In popup     -->
+    <message id="Alert.asset.button-cancel">Annuler</message>
+    <message id="Alert.asset.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.asset.add-asset">Ajouter un serveur</message>
+    <!--PUT-->
+    <message id="Alert.asset.modif-asset">Modifier ce serveur</message>
+    <!--DELETE-->
+    <message id="Alert.asset.delete-asset">Attention</message>
+    <message id="Alert.asset.delete-asset-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer un serveur
+        </span>
+    </message>
+    <message id="Alert.asset.button-confirm">Confirmer</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.asset.invalid-name-name">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  <message id="Alert.asset.invalid-name-twice">
+      <span style="color:red">
+           Nom du serveur déjà existant.
+      </span>
+  </message>
+
+<!--    Error message     -->
   <message id="Alert.asset.database-error-title">Erreur base de donnée</message>
-  <message id="Alert.asset.database-error">Erreur : {1} | {2}</message>
-  
   <message id="Alert.asset.file-not-generated">
-      <span style="color:red">Le fichier n'a pas été généré. Contactez-nous s'il vous plait.</span>
+      <span style="color:red">
+          Le fichier n'a pas été généré. Contactez-nous s'il vous plait.
+      </span>
+  </message>
+  <message id="Alert.asset.database-error">
+    Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
   </message>
 
-  <message id="Alert.asset.delete-message">
-      <span style="color:red">Supprimer le serveur. Continuer ?</span>
-  </message>
-  <message id="Alert.asset.invalid-name-asset">
-      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</span>
-  </message>
-  
-  <message id="Alert.asset.add-button">Ajouter un serveur</message>
-  <message id="Alert.asset.modif-button">Modifier</message>
-  <message id="Alert.asset.delete-button">Supprimer</message>
-
+<!--    Warning message     -->
 </messages>

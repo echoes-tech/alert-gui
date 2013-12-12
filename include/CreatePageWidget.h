@@ -98,7 +98,7 @@ public:
      * tabW can 
      * @param tabW
      */
-    virtual void        popupAddWidget(Wt::WDialog *dialog) {};
+    virtual void        popupAddWidget(Wt::WDialog *dialog, bool typeDial) {};
     virtual void        update();
 
     virtual int         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
@@ -157,6 +157,7 @@ private:
     void                showInputForAdd();
     void                checkAdd(std::vector<Wt::WText*> errorMessage);
     void                checkModif(vector_type inputs, long long id, std::vector<Wt::WText*> errorMessage);
+    int                 checkName(std::string inputText, std::vector<long long> ids);
     void                popupForModif(long long id);
     void                inputForModif(long long id, int rowTable, int columnTable);
 
@@ -165,7 +166,7 @@ private:
     void                popupWindow();
     void                 popupCheck(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id);
     void                fillInTable();
-    void                popupComplete(Wt::WDialog *dialog);
+    void                popupComplete(Wt::WDialog *dialog, bool typeDial);
     void                searchName(Wt::WLineEdit *arg);
 
     void                resourceBeAff();

@@ -7,10 +7,9 @@
 
 <!--    In table     -->
     <!--nothing alert-->
+    
     <message id="Alert.alert.nothing-alert">Alertes</message>
-    <message id="Alert.alert.nothing-alert-text">
-      Aucune alerte enregistrée actuellement.
-    </message>
+    <message id="Alert.alert.nothing-alert-text">Aucune alerte enregistrée actuellement.</message>
     <message id="Alert.alert.nothing-button">Cliquer pour ajouter</message>
     <!--header-->
     <message id="Alert.alert.add-form.alert">Alertes</message>

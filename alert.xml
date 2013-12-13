@@ -8,16 +8,16 @@
 <!--    In table     -->
     <!--nothing alert-->
     <message id="Alert.alert.nothing-alert">Alerts</message>
-    <message id="Alert.alert.nothing-alert-text">Nothing alert register</message> 
-    <message id="Alert.alert.nothing-button">Click for Add</message>
+    <message id="Alert.alert.nothing-alert-text">No alert</message> 
+    <message id="Alert.alert.nothing-button">Click to Add</message>
     <!--header-->
     <message id="Alert.alert.add-form.alert">Alerts</message>
     <!--body-->
     <message id="Alert.alert.name-name">Alert name</message>
-    <message id="Alert.alert.modif-button">Modif</message>
+    <message id="Alert.alert.modif-button">Modify</message>
     <message id="Alert.alert.delete-button">Delete</message>
     <!--footer-->
-    <message id="Alert.alert.search-bar">Search : </message>
+    <message id="Alert.alert.search-bar">Search: </message>
         <!-- Paginate -->
         <message id="Alert.alert.paginate-first">First</message>
         <message id="Alert.alert.paginate-prev">Prev</message>
@@ -37,14 +37,14 @@
             <p>Last info value :&nbsp;</p>
     </message>
     <message id="Alert.alert.add-compare">
-            <p>Comparison criterions.</p>
+            <p>Compare criterion</p>
     </message>
-    <message id="Alert.alert.button-save-continu">Save and continu</message>
+    <message id="Alert.alert.button-save-continu">Save and continue</message>
     <message id="Alert.alert.message-true">True</message>
     <message id="Alert.alert.message-false">False</message>
     <message id="Alert.alert.message-value">Value</message>
     <!--PUT-->
-    <message id="Alert.alert.modif-alert">Modifi this alert</message>
+    <message id="Alert.alert.modif-alert">Modify this alert</message>
     <!--DELETE-->
     <message id="Alert.alert.delete-alert">Attention</message>
     <message id="Alert.alert.delete-alert-message">
@@ -76,7 +76,7 @@
   </message>
   <message id="Alert.alert.invalid-name-twice">
       <span style="color:red">
-          Please, you do not use the same name twice.
+          Please, do not use the same name twice
       </span>
   </message>
   <message id="Alert.alert.invalid-number">

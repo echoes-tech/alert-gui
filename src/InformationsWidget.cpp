@@ -400,6 +400,10 @@ void InformationsWidget::getInformations(boost::system::error_code err, const Wt
                 Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "TypeException", tr("Alert.alert.database-error"), Wt::Ok);
             }
         }
+        else if (response.status() == 404)
+        {
+            result_ = Wt::Json::Value::Null;
+        }
         else
         {
             result_ = Wt::Json::Value::Null;

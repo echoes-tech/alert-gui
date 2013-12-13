@@ -3,17 +3,18 @@
 
 <!--    In table     -->
     <!--nothing alert-->
-    <message id="Alert.media-user.nothing-sms">Numéros de téléphones</message>
+    <message id="Alert.media-user.nothing-sms">Numéros de téléphone</message>
     <message id="Alert.media-user.nothing-mail">Adresses e-mail</message>
     <message id="Alert.media-user.nothing-push">Noms des smartphones</message>
-    <message id="Alert.alert.nothing-sms-text">
+    
+    <message id="Alert.media-user.nothing-sms-text">
       Aucun numéro de téléphone enregistré actuellement.
     </message>
-    <message id="Alert.alert.nothing-mail-text">
+    <message id="Alert.media-user.nothing-mail-text">
       Aucune adresse e-mail enregistrée actuellement.
     </message>
-    <message id="Alert.alert.nothing-push-text">
-      Aucun nom de Smartphone enregistré actuellement.
+    <message id="Alert.media-user.nothing-push-text">
+      Aucun nom de smartphone enregistré actuellement.
     </message>
     <message id="Alert.media-user.nothing-button">
         Cliquer pour ajouter</message>

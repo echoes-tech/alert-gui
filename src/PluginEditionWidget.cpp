@@ -2315,6 +2315,7 @@ void PluginEditionWidget::fillSearchTypeComboBox()
     {
         slmSearchTypes->insertString(idx, mapESearchTypeName[idx1]);
         this->mapSeaTypeIdSboxRow[idx] = idx1;
+        idx++;
     }
 
     comboSearchType->setModel(slmSearchTypes);
@@ -2337,6 +2338,7 @@ void PluginEditionWidget::fillFilterTypeComboBox()
     {
         slmFilType->insertString(idx, mapEFilterTypeName[idx1]);
         this->mapFilTypeIdSboxRow[idx] = idx1;
+        idx++;
     }
 
     comboFilType->setModel(slmFilType);

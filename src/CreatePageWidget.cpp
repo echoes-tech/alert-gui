@@ -443,17 +443,17 @@ int    CreatePageWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName,
                 ((Wt::WText*)(*i))->show();
                 check = 1;
             }
-            else if (checkName(((Wt::WLineEdit*)(*j))->text().toUTF8(), ids) == 1)
-            {
-                ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-error");
-                ((Wt::WLineEdit*)(*j))->setWidth(Wt::WLength(150));
-                ((Wt::WLineEdit*)(*j))->setFocus();
-                ((Wt::WText*)(*i))->setText(tr("Alert."
-                        + this->nameResourcePage + ".invalid-name-twice"));
-                ((Wt::WText*)(*i))->show();
-                check = 1;
-                
-            }
+//            else if (checkName(((Wt::WLineEdit*)(*j))->text().toUTF8(), ids) == 1)
+//            {
+//                ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-error");
+//                ((Wt::WLineEdit*)(*j))->setWidth(Wt::WLength(150));
+//                ((Wt::WLineEdit*)(*j))->setFocus();
+//                ((Wt::WText*)(*i))->setText(tr("Alert."
+//                        + this->nameResourcePage + ".invalid-name-twice"));
+//                ((Wt::WText*)(*i))->show();
+//                check = 1;
+//                
+//            }
             else
             {
                 ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-success");

@@ -26,6 +26,11 @@
 #include <string>
 // Lib c
 #include <stdlib.h>
+// Lib boost
+#include <boost/concept_check.hpp>
+#include <boost/algorithm/string/predicate.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 // Lib Witty
 #include <Wt/WValidator>
 #include <Wt/WInteractWidget>
@@ -53,10 +58,8 @@
 #include <Wt/WComboBox>
 #include <Wt/Json/Value>
 #include <Wt/WRegExpValidator>
+#include <Wt/WBoxLayout>
 
-// Lib boost
-#include <boost/concept_check.hpp>
-#include <boost/algorithm/string/predicate.hpp>
 
 #include <Enums.h>
 
@@ -101,7 +104,6 @@ public:
     virtual void        popupAddWidget(Wt::WDialog *dialog, bool typeDial) {};
     virtual void        update();
 
-    virtual int         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
 
     /**
      * Add button modification.
@@ -150,6 +152,7 @@ protected:
     virtual vector_type                 getResourceRowTable(long long id) {vector_type res; return res;};
 
     void                                buttonInDialogFooter(Wt::WDialog *dialog);
+    virtual int                         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
     
 private:
 

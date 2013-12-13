@@ -308,6 +308,7 @@
   <message id="Alert.admin.recipients-tab">Recipients</message>
   <message id="Alert.admin.assets-tab">Servers</message>
   <message id="Alert.admin.informations-tab">Informations</message>
+  <message id="Alert.admin.association-tab">Associations</message>
   <message id="Alert.admin.alerts-tab">Alerts</message>
   <message id="Alert.admin.plugins-tab">Applications</message>
   

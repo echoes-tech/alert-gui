@@ -1754,6 +1754,7 @@ void AlertsWidget::getMedia(boost::system::error_code err, const Wt::Http::Messa
         Wt::log("error") << "[User Edition Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.media-user.database-error-title") + "err",tr("Alert.media-user.database-error"),Wt::Ok);
     }
+    
    newClass_ = false;
    created_ = false;
    update();

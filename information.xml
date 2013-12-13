@@ -7,9 +7,9 @@
 
 <!--    In table     -->
     <!--nothing information-->
-    <message id="Alert.information.nothing-information">Informatio</message>
+    <message id="Alert.information.nothing-information">Informatio,</message>
     <message id="Alert.information.nothing-information-text">Nothing Information register</message>
-    <message id="Alert.information.nothing-button">Click for Add</message>
+    <message id="Alert.information.nothing-button">Click to add</message>
     <!--header-->
     <message id="Alert.information.add-form.information">Informations</message>
     <!--body-->

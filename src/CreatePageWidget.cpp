@@ -14,8 +14,6 @@
  * 
  */
 
-#include <Wt/WBoxLayout>
-
 #include "CreatePageWidget.h"
 
 CreatePageWidget::CreatePageWidget(std::string namePage)
@@ -203,14 +201,41 @@ void    CreatePageWidget::fillInTable()
             std::string nameRessouce("N2Wt5WTextE");
             if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
             {
-                nameRessouce = boost::lexical_cast<std::string>(((Wt::WText*)(widgetAdd))->text());
+                nameRessouce = ((Wt::WText*)(widgetAdd))->text().toUTF8();
                 std::string newName = nameRessouce;
-                if (nameRessouce.size() > (unsigned int)(SIZE_NAME_RESOURCE / this->nbResource_))
+                if (newName.find('|') != std::string::npos)
                 {
-                    newName.resize(SIZE_NAME_RESOURCE / this->nbResource_);
-                    newName.resize(newName.size() + 3, '.');
+                    std::vector<std::string> dataline;
+                    boost::split(dataline, newName, boost::is_any_of("|"));
+                    newName.clear();
+                    nameRessouce.clear();
+                    for (std::vector<std::string>::iterator it = dataline.begin();
+                            it != dataline.end(); it++)
+                    {
+                        std::string resizeString = (*it);
+                        if (((std::string)(*it)).find('<') == std::string::npos)
+                        {
+                            nameRessouce += (*it) + "\n";
+                            if (resizeString.size() > (unsigned int)(SIZE_NAME_RESOURCE / this->nbResource_))
+                            {
+                                resizeString.resize(SIZE_NAME_RESOURCE / this->nbResource_);
+                                    resizeString.resize(resizeString.size() + 3, '.');
+                            }
+                        }
+                        newName += resizeString;
+                        resizeString.clear();
+                    }
+                }
+                else
+                {
+                    if (nameRessouce.size() > (unsigned int)(SIZE_NAME_RESOURCE / this->nbResource_))
+                    {
+                        newName.resize(SIZE_NAME_RESOURCE / this->nbResource_);
+                        newName.resize(newName.size() + 3, '.');
+                    }
                 }
                 Wt::WText *newColumn = new Wt::WText(newName, mediaTable_->elementAt(rowBodyTable, columnTable));  
+                newColumn->setTextFormat(Wt::TextFormat::XHTMLUnsafeText);
                 newColumn->setToolTip(nameRessouce);
                 columnTable++;
             }

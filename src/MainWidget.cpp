@@ -159,7 +159,6 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         }
         case Enums::EPageType::WELCOME:
         {
-//            wcw = new Wt::WText(tr("welcome-text"));
             wcw = new SummaryBoard(this->session);
             break;
         }
@@ -171,6 +170,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         case Enums::EPageType::INFORMATIONS:
         {
             inw = new InformationsWidget(this->session, this->_apiUrl);
+            break;
+        }
+        case Enums::EPageType::ASSOCIATION:
+        {
+            act = new Association(this->session, this->_apiUrl);
             break;
         }
         case Enums::EPageType::ALERTS:
@@ -320,15 +324,15 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
         {
             switch (type)
             {
+                case Enums::EPageType::WELCOME:
+                {
+                    this->contentFluid->addWidget(wcw);
+                    break;
+                }
                 case Enums::EPageType::ASSET:
                 {
                     this->contentFluid->addWidget(amw);
                     amw->recoverListAsset();
-                    break;
-                }
-                case Enums::EPageType::WELCOME:
-                {
-                    this->contentFluid->addWidget(wcw);
                     break;
                 }
                 case Enums::EPageType::RECIPIENTS:
@@ -340,6 +344,12 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 {
                     this->contentFluid->addWidget(inw);
                     inw->recoverListInformations();
+                    break;
+                }
+                case Enums::EPageType::ASSOCIATION:
+                {
+                    this->contentFluid->addWidget(act);
+                    act->recoverListAssociation();
                     break;
                 }
                 case Enums::EPageType::ALERTS:
@@ -435,6 +445,11 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::INFORMATIONS:
         {
             res = "eye-open"; 
+            break;
+        }
+        case Enums::EPageType::ASSOCIATION:
+        {
+            res = "refresh"; 
             break;
         }
         case Enums::EPageType::ALERTS:

@@ -16,7 +16,7 @@
         No email address registered</message>
     <message id="Alert.media-user.nothing-app-text">
         No smartphone registered</message>
-    <message id="Alert.media-user.nothing-button">Click for Add</message>
+    <message id="Alert.media-user.nothing-button">Click to Add</message>
     <!--header-->
     <message id="Alert.media-user.add-form.sms">Phones numbers</message>
     <message id="Alert.media-user.add-form.app">Smartphones names</message>

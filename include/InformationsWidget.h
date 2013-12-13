@@ -53,7 +53,6 @@
 #include <tools/Enums.h>
 
 #include "CreatePageWidget.h"
-#include "ClassTest.h"
 
 #define REG_EXP ("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}")
 

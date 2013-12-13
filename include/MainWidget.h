@@ -43,10 +43,12 @@
 #include "RecipientsWidget.h"
 #include "InformationsWidget.h"
 #include "AlertsWidget.h"
+#include "Association.h"
 
 class RecipientsWidget;
 class InformationsWidget;
 class AlertsWidget;
+class Association;
 
 class MainWidget : public Wt::WContainerWidget
 {
@@ -104,6 +106,7 @@ protected:
   RecipientsWidget *rpw;
   InformationsWidget *inw;
   AlertsWidget *atw;
+  Association *act;
   
   Wt::WContainerWidget *wcw;
   
@@ -134,7 +137,7 @@ private:
 template <class C>
 void MainWidget::createMenuItem(C enumC, Wt::WMenu *submenu, std::string iconStr)
 {
-    Wt::WMenuItem *newMenuItem = new Wt::WMenuItem(tr(boost::lexical_cast<std::string>("Alert.admin.")+enumC.value()+boost::lexical_cast<std::string>("-tab")));
+    Wt::WMenuItem *newMenuItem = new Wt::WMenuItem(tr("Alert.admin." + boost::lexical_cast<std::string>(enumC.value()) + "-tab"));
     
     // Todo : renommer alertCount, voir comment indiquer la présence de sous-menus
     Wt::WText *alertCount = new Wt::WText("</span><i class='icon icon-" + iconStr + "'></i><span>",Wt::XHTMLUnsafeText);

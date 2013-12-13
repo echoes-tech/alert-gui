@@ -1,18 +1,12 @@
 /* 
- * Header of Asset Management Widget
- * @author ECHOES Technologies (TSA)
- * @date 14/08/2012
- * 
- * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
- * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
- * COMPANY AUTHORIZATION.
- * 
- * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
- * 
+ * File:   Association.h
+ * Author: gkr
+ *
+ * Created on 13 décembre 2013, 12:04
  */
 
-#ifndef ASSETMANAGEMENTWIDGET_H
-#define	ASSETMANAGEMENTWIDGET_H
+#ifndef ASSOCIATION_H
+#define	ASSOCIATION_H
 
 #include "GlobalIncludeFile.h"
 
@@ -33,46 +27,27 @@
 #include <Wt/WTable>
 #include <Wt/WTheme>
 
-// Ancien
-#include <Wt/Dbo/Query>
-#include <fstream>
-#include <boost/random.hpp>
-#include <boost/random/random_device.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
-#include <boost/algorithm/string.hpp>
-
-#include <Wt/Json/Value>
-
-#include <vector>
-#include <map>
-
-#include <Wt/Http/Message>
-
-#include <Wt/WInPlaceEdit>
-
-#include <tools/Enums.h>
-
 #include "CreatePageWidget.h"
 
-#define REG_EXP ("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}")
+typedef std::map<long long, std::pair<long long, std::string>> MapLongString2;
 
 class CreatePageWidget;
 
-class AssetManagementWidget : 
-public CreatePageWidget 
+class Association : 
+public CreatePageWidget
 {
 public:
   /*! \brief Constructor
    *
-   * Creates a new page Asset.
+   * Creates a new page Association.
    */
-  AssetManagementWidget(Echoes::Dbo::Session *session, std::string apiUrl);
+  Association(Echoes::Dbo::Session *session, std::string apiUrl);
 
   /**
    * In this methode you can call API for recover resources. \n
    * She is call after initialization of this class.
    */
-  void          recoverListAsset();
+  void          recoverListAssociation();
 
 protected:
   /*! \brief Closes the registration widget. 
@@ -95,37 +70,35 @@ protected:
   virtual std::vector<std::string>      getTitlesTableText();
   virtual std::vector<std::string>      getTitlesTableWidget();
   virtual vector_type                   getResourceRowTable(long long id);
+  
+  virtual int checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
 
 private:
   /*
-   * Generate and get script (sonde) for asset.
-   */
-  Wt::WFileResource     *generateScript(long long i, Wt::WString assetName);
-  std::string           getStringFromFile(std::string resourcePath);
-  void                  downloadScript(std::string fileName);
-
-  /*
    * return API after call.
    */
-  void                  putAsset(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  postAsset(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  postPlugin(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  checkAlertsInAsset(boost::system::error_code err, const Wt::Http::Message& response, Wt::WDialog *box, long long id);
-  void                  deleteAsset(boost::system::error_code err, const Wt::Http::Message& response);
   void                  getAssets(boost::system::error_code err, const Wt::Http::Message& response);
+  void                  getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
+  void                  getInformations(boost::system::error_code err, const Wt::Http::Message& response);
+  
   void                  setSession(Echoes::Dbo::Session *session);
   void                  setApiUrl(std::string apiUrl);
-  
   std::string           getApiUrl();
   
+  
+  
+  MapLongString2                 assets_;
+  MapLongString2                 plugins_;
+  MapLongString2                 informations_;
+  long long                     idAsset_;
+  long long                     idPlugin_;
+  std::vector<long long>        idsInformations_;
   bool                          created_;
   bool                          newClass_;
   Echoes::Dbo::Session          *session_;
   std::vector<long long>        idsAlert_;
-  Wt::Json::Value               result_;
   std::string                   apiUrl_;
 };
 
-
-#endif	/* ASSETMANAGEMENTWIDGET_H */
+#endif	/* ASSOCIATION_H */
 

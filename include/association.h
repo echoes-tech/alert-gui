@@ -1,73 +1,21 @@
 /* 
- * Header of Asset Management Widget
- * @author ECHOES Technologies (TSA)
- * @date 14/08/2012
- * 
- * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
- * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
- * COMPANY AUTHORIZATION.
- * 
- * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
- * 
+ * File:   association.h
+ * Author: gkr
+ *
+ * Created on 13 décembre 2013, 11:33
  */
 
-#ifndef ASSETMANAGEMENTWIDGET_H
-#define	ASSETMANAGEMENTWIDGET_H
+#ifndef ASSOCIATION_H
+#define	ASSOCIATION_H
 
-#include "GlobalIncludeFile.h"
-
-#include <Wt/WButtonGroup>
-#include <Wt/WRadioButton>
-#include <Wt/WGroupBox>
-#include <Wt/WBreak>
-
-#include <Wt/WInteractWidget>
-#include <Wt/WDialog>
-#include <Wt/WTableView>
-#include <Wt/WLengthValidator>
-#include <Wt/WContainerWidget>
-#include <Wt/WAnchor>
-#include <Wt/WLineEdit>
-#include <Wt/WPushButton>
-#include <Wt/WText>
-#include <Wt/WTable>
-#include <Wt/WTheme>
-
-// Ancien
-#include <Wt/Dbo/Query>
-#include <fstream>
-#include <boost/random.hpp>
-#include <boost/random/random_device.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
-#include <boost/algorithm/string.hpp>
-
-#include <Wt/Json/Value>
-
-#include <vector>
-#include <map>
-
-#include <Wt/Http/Message>
-
-#include <Wt/WInPlaceEdit>
-
-#include <tools/Enums.h>
-
-#include "CreatePageWidget.h"
-
-#define REG_EXP ("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}")
-
-class CreatePageWidget;
-
-class AssetManagementWidget : 
-public CreatePageWidget 
-{
+class association {
 public:
+
   /*! \brief Constructor
    *
-   * Creates a new page Asset.
+   * Creates a new page association.
    */
-  AssetManagementWidget(Echoes::Dbo::Session *session, std::string apiUrl);
-
+  association(Echoes::Dbo::Session *session, std::string apiUrl);
   /**
    * In this methode you can call API for recover resources. \n
    * She is call after initialization of this class.
@@ -126,6 +74,5 @@ private:
   std::string                   apiUrl_;
 };
 
-
-#endif	/* ASSETMANAGEMENTWIDGET_H */
+#endif	/* ASSOCIATION_H */
 

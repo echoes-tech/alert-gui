@@ -9,7 +9,7 @@
     <!--nothing asset-->
     <message id="Alert.asset.nothing-asset">Asset</message>
     <message id="Alert.asset.nothing-asset-text">Nothing Asset register</message>
-    <message id="Alert.asset.nothing-button">Click for Add</message>
+    <message id="Alert.asset.nothing-button">Click to Add</message>
     <!--header-->
     <message id="Alert.asset.add-form.asset">Servers</message>
     <message id="Alert.asset.name-download-script">Download<br />Script</message>

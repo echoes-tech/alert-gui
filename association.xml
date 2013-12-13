@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <message id="Alert.association.form-info">
+      On this page you can add the association to link plugin, asset and information(s).
+    </message>
+
+<!--    In table     -->
+    <!--nothing association-->
+    <message id="Alert.association.nothing-association">Association</message>
+    <message id="Alert.association.nothing-association-text">Nothing Association register</message>
+    <message id="Alert.association.nothing-button">Click to Add</message>
+    <!--header-->
+    <message id="Alert.association.add-form.association">Association</message>
+    <message id="Alert.association.name-download-script">Download<br />Script</message>
+    <!--body-->
+    <message id="Alert.association.name-plugin">Plugins</message>
+    <message id="Alert.association.name-asset">Assets</message>
+    <message id="Alert.association.name-information">Informations</message>
+    <message id="Alert.association.modif-button">Modif</message>
+    <message id="Alert.association.delete-button">Delete</message>
+    <!--footer-->
+    <message id="Alert.association.search-bar">Search : </message>
+        <!-- Paginate -->
+        <message id="Alert.association.paginate-first">First</message>
+        <message id="Alert.association.paginate-prev">Prev</message>
+        <message id="Alert.association.paginate-next">Next</message>
+        <message id="Alert.association.paginate-last">Last</message>
+
+<!--    In popup     -->
+    <message id="Alert.association.button-cancel">Cancel</message>
+    <message id="Alert.association.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.association.add-association">Add Association</message>
+    <!--PUT-->
+    <message id="Alert.association.modif-association">Modifi this association</message>
+    <!--DELETE-->
+    <message id="Alert.association.delete-association">Attention</message>
+    <message id="Alert.association.delete-association-message">
+        <span style="color:red">
+            You are about to delete an association
+        </span>
+    </message>
+    <message id="Alert.association.button-confirm">Confirm</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.association.invalid-name-association">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  <message id="Alert.association.invalid-name-twice">
+      <span style="color:red">
+          Please, you do not use the same name twice.
+      </span>
+  </message>
+
+<!--    Error message     -->
+  <message id="Alert.association.database-error-title">Database error</message>
+  <message id="Alert.association.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+<!--    Warning message     -->
+
+<!-- templates -->
+    <message id="Alert.association.Management.template" >
+        <br />
+            <div class ="alert alert-info">${tr:Alert.association.form-info}</div> 
+            <div id="association-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers">
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>
+
+  
+
+</messages>

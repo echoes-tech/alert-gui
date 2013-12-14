@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/AlertsWidget.o \
 	${OBJECTDIR}/src/ApiManagement.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
+	${OBJECTDIR}/src/Association.o \
 	${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o \
 	${OBJECTDIR}/src/Auth/RegistrationModelAlert.o \
 	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
@@ -103,6 +104,11 @@ ${OBJECTDIR}/src/AssetManagementWidget.o: src/AssetManagementWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AssetManagementWidget.o src/AssetManagementWidget.cpp
+
+${OBJECTDIR}/src/Association.o: src/Association.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Association.o src/Association.cpp
 
 ${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o: src/Auth/LostPasswordWidgetAlert.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/Auth

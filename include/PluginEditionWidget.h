@@ -68,7 +68,6 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         void handleHttpResponseDeleteSource(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseSourceList(boost::system::error_code err, const Wt::Http::Message& response);
        
-//        void handleHttpResponseSearchTypeList(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseSeaTypeParameters(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseAddSearch(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseModifySearch(boost::system::error_code err, const Wt::Http::Message& response);
@@ -83,13 +82,6 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         void handleHttpResponseFilterList(boost::system::error_code err, const Wt::Http::Message& response);
         void handleHttpResponseFilterParameters(boost::system::error_code err, const Wt::Http::Message& response);
         
-//        void handleHttpResponseAddInformation(boost::system::error_code err, const Wt::Http::Message& response);
-//        void handleHttpResponseInformationsList(boost::system::error_code err, const Wt::Http::Message& response);
-//        void handleHttpResponseUnits(boost::system::error_code err, const Wt::Http::Message& response);
-        
-        
-        void handleHttpResponsePlgJSON(boost::system::error_code err, const Wt::Http::Message& response);
-
         std::string getApiUrl() const;
 
     private:
@@ -100,8 +92,7 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         Wt::Http::Client *client1;
         Echoes::Dbo::Session *session;   
         std::string _apiUrl;
-        
-        void displayButtonCreateJSON();
+
         void formatValue(std::string& value, int nbBackslash) const;
         
         void fillAddonComboBox();
@@ -142,8 +133,6 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         void createFormFilterParameters();
         void completFormFilter();
         void addSrcParamValue();
-            
-        void createJSON();
         
         void searchToken(); 
         void fixStyleTable(Wt::WTable *table);
@@ -157,8 +146,6 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         Wt::WPushButton *buttonModifySource;
         Wt::WPushButton *buttonModifySearch;
         Wt::WPushButton *buttonModifyFilter;
-        Wt::WPushButton *createJSONButton;
-        Wt::WAnchor *createJSONAnchor;
         
         //partie add Plugin
         Wt::WComboBox *pluginSelectionBox;
@@ -198,9 +185,7 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         
         std::map<int, long long> mapSearchId;
         std::map<int, int> mapSearchPeriode;
-//        std::map<int, bool> mapSearchStatic;
-//        std::map<int, int> mapSearchPKValue;
-//        std::map<int, int> mapSearchNbValue;
+
         std::map<int, long long> mapSearchSTYId;
         
         Wt::WLineEdit *periodeLE;
@@ -249,12 +234,9 @@ class PluginEditionWidget : public Wt::WTemplateFormView
         int status;
         
         // savoir si on créer le formSource en mode vierge ou completer (pour modifier une source existante)
-        std::string tableInformationState;
         std::string createFormSourceState;
         std::string createFormSearchState;
         std::string createFormFilterState;
-        std::string formJSON;
-        std::string strJSON;
 
         void setApiUrl(std::string apiUrl);
 };

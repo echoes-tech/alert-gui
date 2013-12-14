@@ -79,6 +79,8 @@ private:
    */
   void                  getAssets(boost::system::error_code err, const Wt::Http::Message& response);
   void                  getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
+  void                  getFilters(boost::system::error_code err, const Wt::Http::Message& response);
+  void                  getFilterParameterValues(boost::system::error_code err, const Wt::Http::Message& response);
   void                  getInformations(boost::system::error_code err, const Wt::Http::Message& response);
   
   void                  setSession(Echoes::Dbo::Session *session);
@@ -90,6 +92,9 @@ private:
   MapLongString2                 assets_;
   MapLongString2                 plugins_;
   MapLongString2                 informations_;
+  std::map<long long, Echoes::Dbo::FilterParameterValue*> filterParameterValues_;
+  std::map<long long, Wt::WComboBox*> filterInfosComboBox_;
+  std::map<long long, Wt::WComboBox*> filterAssetsComboBox_;
   long long                     idAsset_;
   long long                     idPlugin_;
   std::vector<long long>        idsInformations_;

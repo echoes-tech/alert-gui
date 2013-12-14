@@ -18,14 +18,11 @@
   <message id="Alert.plugins.delete-filter-button">Delete filter</message>
   <message id="Alert.plugins.modify-filter-button">Modify filter</message>
   
-  <message id="Alert.plugins.create-JSON-button">Generate plugin </message>
-  <message id="Alert.plugins.create-JSON-anchor">Download plugin</message>
-  <message id="Alert.plugin.create-JSON-anchor-info">To download plugin, you must first generate it</message>
-  
   <message id="Alert.plugins.plugin-table-create-title">Create plugin</message>
   <message id="Alert.plugins.plugin-table-title">Edit plugin</message>
   <message id="Alert.plugins.source-table-title">Edit source for selected plugin</message>
   <message id="Alert.plugins.search-table-title">Edit search for selected source</message>
+  <message id="Alert.plugins.filter-table-title">Edit filter for selected search</message>
   <message id="Alert.plugins.alert-form-title">Alerts</message>
   <message id="Alert.plugins.alert-form-info">On this page you can add a plugin</message>
   
@@ -254,13 +251,6 @@
                                  </div>
                             </div>
                         
-                        <div class="row-fluid">
-                            <div class="controls">
-                                ${plugin-create-JSON-button}
-                                ${plugin-create-JSON-anchor}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugin.create-JSON-anchor-info}"></i>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

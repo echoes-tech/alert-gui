@@ -48,6 +48,7 @@
         </logicalFolder>
         <itemPath>include/AlertsWidget.h</itemPath>
         <itemPath>include/ApiManagement.h</itemPath>
+        <itemPath>include/Association.h</itemPath>
         <itemPath>include/CreatePageWidget.h</itemPath>
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
@@ -124,6 +125,7 @@
         </logicalFolder>
         <itemPath>src/AlertsWidget.cpp</itemPath>
         <itemPath>src/ApiManagement.cpp</itemPath>
+        <itemPath>src/Association.cpp</itemPath>
         <itemPath>src/CreatePageWidget.cpp</itemPath>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
@@ -219,6 +221,8 @@
       <item path="include/ApiManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Association.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Auth/LostPasswordWidgetAlert.h"
             ex="false"
@@ -336,6 +340,8 @@
       <item path="src/ApiManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Association.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Auth/LostPasswordWidgetAlert.cpp"
             ex="false"
@@ -461,6 +467,8 @@
       </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/Association.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/Auth/LostPasswordWidgetAlert.h"
             ex="false"
             tool="3"
@@ -577,6 +585,8 @@
       <item path="src/ApiManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Association.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Auth/LostPasswordWidgetAlert.cpp"
             ex="false"

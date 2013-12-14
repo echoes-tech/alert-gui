@@ -9,8 +9,6 @@
 
 #include "PluginEditionWidget.h"
 
-Wt::Json::Array Wt::Json::Array::Empty;
-
 using namespace std;
 
 PluginEditionWidget::PluginEditionWidget(Echoes::Dbo::Session* session, const string &apiUrl)
@@ -233,24 +231,6 @@ void PluginEditionWidget::createUI()
     deleteFilter->clicked().connect(this, &PluginEditionWidget::deleteFilter);
     bindWidget("plugin-delete-filter-button", deleteFilter);
 
-    // JSON BUTTONS
-    createJSONButton = new Wt::WPushButton("<i class='icon-download icon-white'></i> " + tr("Alert.plugins.create-JSON-button"));
-    createJSONButton->addStyleClass("btn");
-    createJSONButton->addStyleClass("btn-primary");
-    createJSONButton->setTextFormat(Wt::XHTMLUnsafeText);
-    createJSONButton->clicked().connect(this, &PluginEditionWidget::createJSON);
-    bindWidget("plugin-create-JSON-button", createJSONButton);
-
-    createJSONAnchor = new Wt::WAnchor();
-    createJSONAnchor->setText("<i class='icon-download icon-white'></i> " + tr("Alert.plugins.create-JSON-anchor"));
-    createJSONAnchor->addStyleClass("btn");
-    createJSONAnchor->addStyleClass("btn-primary");
-    createJSONAnchor->setTextFormat(Wt::XHTMLUnsafeText);
-    createJSONAnchor->setTarget(Wt::TargetNewWindow);
-    createJSONAnchor->clicked().connect(this, &PluginEditionWidget::displayButtonCreateJSON);
-    createJSONAnchor->disable();
-    bindWidget("plugin-create-JSON-anchor", createJSONAnchor);
-    
     buttonModifySource->disable();
     buttonModifySearch->disable();
     buttonModifyFilter->disable();
@@ -355,7 +335,6 @@ void PluginEditionWidget::handleHttpResponsePlgList(boost::system::error_code er
 // Quand on selectionne un plugin
 void PluginEditionWidget::selectedPlugin()
 {
-    createJSONAnchor->disable();
 
     resetSource();
     resetSearch();
@@ -432,39 +411,6 @@ void PluginEditionWidget::handleHttpResponseSourceList(boost::system::error_code
     
     refresh1();
 
-}
-
-
-void PluginEditionWidget::displayButtonCreateJSON()
-{
-    createJSONAnchor->disable();
-}
-
-void PluginEditionWidget::createJSON()
-{
-    if (pluginSelectionBox->currentIndex() != -1)
-    {
-        client1 = new Wt::Http::Client();
-        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
-
-        string urlAdd = this->getApiUrl() + "/plugins/"
-                + boost::lexical_cast<string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-                + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-                + "&token=" + session->user()->token.toUTF8();
-
-
-        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
-        if (client1->get(urlAdd))
-        {
-            Wt::WApplication::instance()->deferRendering();
-        }
-        else
-            Wt::log("error") << "Error Client Http";
-    }
-    else
-    {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-no-selected-plugin"), Wt::Ok);
-    }
 }
 
 void PluginEditionWidget::createFormSearchParameters()
@@ -585,7 +531,6 @@ bool PluginEditionWidget::validatePlugin(string &badField)
 
 void PluginEditionWidget::addPlugin()
 {
-    createJSONAnchor->disable();
     string badField = "";
     resetSearch();
     resetSource();
@@ -649,7 +594,6 @@ bool PluginEditionWidget::validateSource(string &badField)
 
 void PluginEditionWidget::addSource()
 {
-    createJSONAnchor->disable();
     string badField = "";
     if (validateSource(badField))
     {
@@ -763,7 +707,6 @@ bool PluginEditionWidget::validateFilter(string &badField)
 
 void PluginEditionWidget::addSearch()
 {
-    createJSONAnchor->disable();
     string badField = "";
     if (validateSearch(badField))
     {
@@ -837,7 +780,6 @@ void PluginEditionWidget::addSearch()
 void PluginEditionWidget::addFilter()
 {
     cout << "STEP 0" << endl;
-    createJSONAnchor->disable();
     string badField = "";
     if (validateFilter(badField))
     {
@@ -913,7 +855,6 @@ void PluginEditionWidget::addFilter()
 
 void PluginEditionWidget::deletePlugin(int pluginId)
 {
-    createJSONAnchor->disable();
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeletePlg, this, _1, _2));
     Wt::Http::Message message;
@@ -939,7 +880,6 @@ void PluginEditionWidget::deletePlugin(int pluginId)
 
 void PluginEditionWidget::modifySource()
 {
-    createJSONAnchor->disable();
     string badField = "";
     if (validateSource(badField))
     {
@@ -999,8 +939,6 @@ void PluginEditionWidget::modifySource()
 
 void PluginEditionWidget::deleteSource()
 {
-    createJSONAnchor->disable();
-    createJSONAnchor->disable();
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeleteSource, this, _1, _2));
     Wt::Http::Message message;
@@ -1165,7 +1103,6 @@ void PluginEditionWidget::modifyFilter()
 
 void PluginEditionWidget::deleteSearch()
 {
-    createJSONAnchor->disable();
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeleteSearch, this, _1, _2));
     Wt::Http::Message message;
@@ -1190,7 +1127,6 @@ void PluginEditionWidget::deleteSearch()
 
 void PluginEditionWidget::deleteFilter()
 {
-    createJSONAnchor->disable();
     client1 = new Wt::Http::Client();
     client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseDeleteFilter, this, _1, _2));
     Wt::Http::Message message;
@@ -1291,7 +1227,7 @@ void PluginEditionWidget::selectedSource()
     {
         cout << "mapAddonParameterIdSboxRow" << mapAddonParameterIdSboxRow[comboAddon->currentIndex()] << endl;
         cout << "mapAddonsIdSboxRow" << mapAddonsIdSboxRow[i] << endl;
-        if (mapAddonParameterIdSboxRow[comboAddon->currentIndex()] == mapAddonsIdSboxRow[i])
+        if (mapAddonParameterIdSboxRow[sourceSelectionBox->currentIndex()] == mapAddonsIdSboxRow[i])
         {
             
             if (mapAddonsIdSboxRow[i] != 0)
@@ -1317,8 +1253,6 @@ void PluginEditionWidget::selectedSource()
             // cerr << "test1";
         }
     }
-    
-
     if (refreshSearches)
     {
         client1 = new Wt::Http::Client();
@@ -1341,7 +1275,6 @@ void PluginEditionWidget::selectedSource()
             Wt::log("error") << "Error Client Http";
         }
     }
-    
 }
 
 void PluginEditionWidget::selectedSearch()
@@ -1354,8 +1287,6 @@ void PluginEditionWidget::selectedSearch()
     {
         if (mapSearchSTYId[searchSelectionBox->currentIndex()] == mapSeaTypeIdSboxRow[i])
         {
-            //            cerr << mapSeaTypeIdSboxRow.size() << "\n i= "<< i << "\n\n";
-            //            cerr << mapSearchSTYId[searchSelectionBox->currentIndex()] << "\n i= "<< mapSeaTypeIdSboxRow[i] << "\n\n";
             //if() pour eviter boucle infini au cas ou un addon ne soit pas relié (dans TJ_STY_ADO) a un search type 
             if (mapSeaTypeIdSboxRow[i] != 0)
             {
@@ -1800,23 +1731,7 @@ void PluginEditionWidget::handleHttpResponseModifySource(boost::system::error_co
     delete client1;
     if (response.status() == 200)
     {
-        client1 = new Wt::Http::Client();
-        client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponsePlgJSON, this, _1, _2));
-
-        formJSON = "string";
-
-        string urlAdd = this->getApiUrl() + "/plugins/"
-                + boost::lexical_cast<string>(mapPluginsIdSboxRow[pluginSelectionBox->currentIndex()])
-                + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-                + "&token=" + session->user()->token.toUTF8();
-
-        Wt::log("debug") << "PluginEditionWidget : [GET] address to call : " << urlAdd;
-        if (client1->get(urlAdd))
-        {
-            Wt::WApplication::instance()->deferRendering();
-        }
-        else
-            Wt::log("error") << "Error Client Http";
+        
     }
     else
     {
@@ -2344,63 +2259,6 @@ void PluginEditionWidget::fillFilterTypeComboBox()
     comboFilType->setModel(slmFilType);
     comboFilType->setCurrentIndex(0);
     createFormFilterParameters();
-}
-
-void PluginEditionWidget::handleHttpResponsePlgJSON(boost::system::error_code err, const Wt::Http::Message& response)
-{
-    Wt::WApplication::instance()->resumeRendering();
-    delete client1;
-    if (response.status() == 200)
-    {
-        if (formJSON == "string")
-        {
-            strJSON = response.body();
-            formatValue(strJSON, 1); //-1
-            formJSON = "";
-            createFormSourceParameters();
-        }
-        else
-        {
-
-            char *tmpname = strdup("/tmp/echoes-tmp-plugin-fileXXXXXX");
-            int mkstempRes = mkstemp(tmpname);
-            Wt::log("debug") << "[AssetManagementWidget] " << "Res temp file creation : " << mkstempRes;
-
-            ofstream fileJSON(tmpname);
-            //fileJSON.open( boost::lexical_cast<string>(pluginSelectionBox->currentText()) + ".json", ios::out);
-            fileJSON << "/*\n\
- * " + pluginSelectionBox->currentText().toUTF8() + "\n\
- * \n\
- * Static file for ECHOES Alert Probe generated by ECHOES Alert API.\n\
- * DO NOT EDIT THIS FILE BY HAND WITHOUT SUPPORT AUTHORIZATION.\n\
- * \n\
- */\n\n";
-            fileJSON << response.body();
-            fileJSON.close();
-
-
-
-
-            string pluginNameSpacesReplaced = pluginSelectionBox->currentText().toUTF8();
-            boost::replace_all(pluginNameSpacesReplaced, " ", "_");
-
-            // creating resource to send to the client
-            Wt::WFileResource *res = new Wt::WFileResource();
-            res->setFileName(tmpname);
-
-            res->suggestFileName("ea-plugin_" + pluginNameSpacesReplaced + ".json", Wt::WResource::Attachment);
-            res->setMimeType("application/x-json");
-
-            createJSONAnchor->setLink(res);
-
-            createJSONAnchor->enable();
-        }
-    }
-    else
-    {
-        Wt::log("warning") << "fct handleHttpResponsePlgJSON" << response.body();
-    }
-    refresh1();
 }
 
 void PluginEditionWidget::handleHttpResponseDeletePlg(boost::system::error_code err, const Wt::Http::Message& response)

@@ -100,7 +100,7 @@ private:
   /*
    * Generate and get script (sonde) for asset.
    */
-  Wt::WFileResource     *generateScript(long long i, Wt::WString assetName);
+  Wt::WFileResource     *generateScript(long long astId, Wt::WString assetName);
   std::string           getStringFromFile(std::string resourcePath);
   void                  downloadScript(std::string fileName);
 
@@ -109,6 +109,7 @@ private:
    */
   void                  putAsset(boost::system::error_code err, const Wt::Http::Message& response);
   void                  postAsset(boost::system::error_code err, const Wt::Http::Message& response);
+  void                  postProbe(boost::system::error_code err, const Wt::Http::Message& response);
   void                  postPlugin(boost::system::error_code err, const Wt::Http::Message& response);
   void                  checkAlertsInAsset(boost::system::error_code err, const Wt::Http::Message& response, Wt::WDialog *box, long long id);
   void                  deleteAsset(boost::system::error_code err, const Wt::Http::Message& response);
@@ -118,12 +119,12 @@ private:
   
   std::string           getApiUrl();
   
-  bool                          created_;
-  bool                          newClass_;
-  Echoes::Dbo::Session          *session_;
-  std::vector<long long>        idsAlert_;
-  Wt::Json::Value               result_;
-  std::string                   apiUrl_;
+  bool                   created_;
+  bool                   newClass_;
+  Echoes::Dbo::Session   *session_;
+  std::vector<long long> idsAlert_;
+  Wt::Json::Value        result_;
+  std::string            apiUrl_;
 };
 
 

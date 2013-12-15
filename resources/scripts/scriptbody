@@ -1,5 +1,4 @@
 PASSWORD="Unknown"
-PROBE_ID=0
 
 API_HOST='alert-api.echoes-tech.com'
 API_PORT=443
@@ -169,7 +168,7 @@ put() {
   test_http_return $1 ${4}_header
 }
 
-probe_installation() {
+package_installation() {
   if [ $PKG_TYPE = 'deb' ]
   then
     if [ -x '/usr/bin/dpkg' ]
@@ -217,68 +216,62 @@ TMP_DIR=$(mktemp -d -t ea-probe-install-XXXXXXXXXX)
 cd $TMP_DIR
 
 # Update Asset
-put "/assets/$ASSET_ID" "login=$LOGIN_ENC&password=$PASSWORD_ENC" "{\"architecture\":\"$HOST_ARCH\",\"distribution\":{\"name\":\"$HOST_DISTRIB\",\"release\":\"$DISTRIB_RELEASE\"}}" asset_update_res
+put "/assets/$ASSET_ID" "login=$LOGIN_ENC&password=$PASSWORD_ENC" "{\"architecture\":\"$HOST_ARCH\",\"distribution\":\"$HOST_DISTRIB\",\"release\":\"$DISTRIB_RELEASE\"}" asset_update_res
 
-# Create a Probe for this Asset
-post "/assets/$ASSET_ID/probes" "login=$LOGIN_ENC&password=$PASSWORD_ENC" "" probe_creation_res
-
-PROBE_ID=$(grep '"id"' probe_creation_res | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1)
-PKG=$(grep '"filename"' probe_creation_res | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
-PKG_TYPE=$(echo $PKG | sed 's/.*\.\(.*\)$/\1/g')
-
-PKG_CONTENT_B64=$(cat probe_creation_res | tr -d '\r\n' | sed 's/.*content": "\(.*\)\",\s\+"version.*/\1/g')
-if [ -z $PKG_CONTENT_B64 ]
-then
-  echo "$ERR_INSTALL_MSG: this release of your Linux distribution is not yet supported."
-  echo "Please open a ticket on https://forge.echoes-tech.com/projects/echoes-alert/issues"
-  cd "$CURRENT_DIR"
-  rm -rf "$TMP_DIR"
-  exit 1
-fi
-echo $PKG_CONTENT_B64 | /usr/bin/base64 -d > $PKG
+# Get all packages
+get "/probes/$PROBE_ID/packages" "login=$LOGIN_ENC&password=$PASSWORD_ENC" json_packages
 
 echo "ECHOES Alert Probe downloaded."
 
-probe_installation
+exec 3<json_packages
+
+echo > json_package
+count=0
+
+while read line 0<&3
+do
+	occur_open=$(echo $line | grep -o '\[' | wc -l)	
+	occur_close=$(echo $line | grep -o '\]' | wc -l)
+	if [ $count = 0 ] && [ $((occur_open+occur_close)) != 0 ]
+	then
+		continue
+	fi
+	
+	echo $line >> json_package
+	occur_open=$(echo $line | grep -o '{' | wc -l)	
+	occur_close=$(echo $line | grep -o '}' | wc -l)
+	count=$((count+occur_open-occur_close))
+	
+	if [ $count = 0 ]
+	then
+		PKG=$(grep '"filename"' json_package | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
+		PKG_TYPE=$(echo $PKG | sed 's/.*\.\(.*\)$/\1/g')
+
+		PKG_CONTENT_B64=$(grep '"content"' json_package | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
+		if [ -z $PKG_CONTENT_B64 ]
+		then
+		  echo "$ERR_INSTALL_MSG: this release of your Linux distribution is not yet supported."
+		  echo "Please open a ticket on https://forge.echoes-tech.com/projects/echoes-alert/issues"
+		  cd "$CURRENT_DIR"
+		  rm -rf "$TMP_DIR"
+		  exit 1
+		fi
+		echo $PKG_CONTENT_B64 | /usr/bin/base64 -d > $PKG
+
+		package_installation
+	
+		echo > json_package
+	fi
+done
+
 echo "ECHOES Alert Probe installed."
 
-sed -i -e "s/\(probe_id=\).*/\1$PROBE_ID/" -e "s/\(token=\).*/\1$TOKEN/" $INSTALL_DIR/etc/probe.conf
-echo "ECHOES Alert Probe configured."
+# Get and copy informations file
+get "/probes/$PROBE_ID/json" "login=$LOGIN_ENC&password=$PASSWORD_ENC" informations.json
 
-get "/assets/$ASSET_ID/plugins" "login=$LOGIN_ENC&password=$PASSWORD_ENC" plugins_list_res
+cp informations.json $INSTALL_DIR/etc/
 
-mkdir plugins
-cd plugins
-
-plugin_id=""
-plugin_name=""
-
-check_plugin_id=true
-
-while read line
-do
-  if $check_plugin_id
-  then
-    plugin_id=$(echo $line | grep \"id\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1)
-  fi
-
-  if [ $plugin_id ]
-  then
-    check_plugin_id=false
-    plugin_name=$(echo $line | grep \"name\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/\"//g')
-    if [ $plugin_name ]
-    then
-      check_plugin_id=true
-      get "/plugins/$plugin_id" "login=$LOGIN_ENC&password=$PASSWORD_ENC" "$plugin_name"
-      sed -i -e "s/\(\"idAsset\": \).*/\1$ASSET_ID,/" "$plugin_name"
-      plugin_id=""
-      plugin_name=""
-    fi
-  fi
-done < ../plugins_list_res
-
-rm -f *_header *_tmp
-cp * $INSTALL_DIR/etc/plugins/
+echo "ECHOES Alert informations downloaded."
 
 cd "$CURRENT_DIR"
 rm -rf "$TMP_DIR"

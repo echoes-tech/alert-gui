@@ -80,22 +80,34 @@ private:
   void                  getAssets(boost::system::error_code err, const Wt::Http::Message& response);
   void                  getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
   void                  getFilters(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  getFilterParameterValues(boost::system::error_code err, const Wt::Http::Message& response);
+  void                  getFilterParameterValues(boost::system::error_code err, const Wt::Http::Message& response, long long filterId, Wt::Json::Object filJson);
   void                  getInformations(boost::system::error_code err, const Wt::Http::Message& response);
+  
+  void                  postAsset(boost::system::error_code err, const Wt::Http::Message& response);
   
   void                  setSession(Echoes::Dbo::Session *session);
   void                  setApiUrl(std::string apiUrl);
   std::string           getApiUrl();
   
-  
+    struct filterValuesStruct
+    {
+        long long filterId;
+        int filterType;
+        int nbValue;
+        long long searchId;
+        Wt::WString filterValue;
+    };
   
   MapLongString2                 assets_;
+  Wt::WStandardItemModel         *assetsModel;
   MapLongString2                 plugins_;
   MapLongString2                 informations_;
-  std::map<long long, Echoes::Dbo::FilterParameterValue*> filterParameterValues_;
+  Wt::WStandardItemModel         *informationsModel;
+  std::map<long long, filterValuesStruct> filterParameterValues_;
+  std::map<int, Wt::WCheckBox*>       filterCheckBox_;
   std::map<long long, Wt::WComboBox*> filterInfosComboBox_;
   std::map<long long, Wt::WComboBox*> filterAssetsComboBox_;
-  long long                     idAsset_;
+  long long                     idHost_;
   long long                     idPlugin_;
   std::vector<long long>        idsInformations_;
   bool                          created_;
@@ -103,6 +115,8 @@ private:
   Echoes::Dbo::Session          *session_;
   std::vector<long long>        idsAlert_;
   std::string                   apiUrl_;
+  
+  Wt::WTable *tableFilters;
 };
 
 #endif	/* ASSOCIATION_H */

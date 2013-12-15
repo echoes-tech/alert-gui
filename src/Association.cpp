@@ -40,7 +40,7 @@ void Association::popupAddWidget(Wt::WDialog *dialog, bool typeDial)
     idsInformations_.clear();
     idsInformations_.push_back((*informations_.begin()).second.first);
     idPlugin_ = (*plugins_.begin()).second.first;
-    idAsset_ = (*assets_.begin()).second.first;
+    idHost_ = (*assets_.begin()).second.first;
     dialog->contents()->clear();
     //    dialog = new Wt::WDialog();
     MapLongString2::iterator itA;
@@ -58,41 +58,58 @@ void Association::popupAddWidget(Wt::WDialog *dialog, bool typeDial)
 
     new Wt::WText("Host", dialog->contents());
     Wt::WComboBox *boxAssets = new Wt::WComboBox(dialog->contents());
-    for (itA = assets_.begin(); itA != assets_.end(); itA++)
-    {
-        boxAssets->addItem((*itA).second.second);
-    }
+    boxAssets->setModel(assetsModel);
+    boxAssets->setModelColumn(1);
+    
     boxAssets->changed().connect(bind([ = ] (){
-                                           idAsset_ = (*assets_.find(boxAssets->currentIndex())).second.first;
+        idHost_ = boost::lexical_cast<long long>(assetsModel->item(boxAssets->currentIndex(),0)->text().toUTF8());
     }));
-
     
     new Wt::WText("Filters", dialog->contents());
     
-    Wt::WTable *tableFilters = new Wt::WTable(dialog->contents());
+    tableFilters = new Wt::WTable(dialog->contents());
     tableFilters->setHeaderCount(1);
     tableFilters->setWidth("100%");
+    tableFilters->setStyleClass("table table-bordered table-striped table-hover data-table dataTable");
     
-    new Wt::WText("Id",tableFilters->elementAt(0, 0));
-    new Wt::WText("Pos Key Value",tableFilters->elementAt(0, 1));
-    new Wt::WText("Infos",tableFilters->elementAt(0, 2));
-    new Wt::WText("Assets",tableFilters->elementAt(0, 3));
+    int col = 0;
+    Wt::WCheckBox *cb = new Wt::WCheckBox();
+    tableFilters->elementAt(0, col++)->addWidget(cb);
+    new Wt::WText("Search id",tableFilters->elementAt(0, col++));
+    new Wt::WText("Filter id",tableFilters->elementAt(0, col++));
+    new Wt::WText("Filter type",tableFilters->elementAt(0, col++));
+    new Wt::WText("Filter Index",tableFilters->elementAt(0, col++));
+    new Wt::WText("Infos",tableFilters->elementAt(0, col++));
+    new Wt::WText("Assets",tableFilters->elementAt(0, col++));
+
     
-    int i = 1;
-    
-    map<long long, Echoes::Dbo::FilterParameterValue*>::iterator itF;
+    map<long long, filterValuesStruct>::iterator itF;
+    int row = 1;
     for (itF = filterParameterValues_.begin(); itF != filterParameterValues_.end(); itF++)
     {
-        new Wt::WText(boost::lexical_cast<string>((*itF).second->id),tableFilters->elementAt(i, 0));
-        new Wt::WText(boost::lexical_cast<string>((*itF).second->value),tableFilters->elementAt(i, 1));
-        
-        filterInfosComboBox_[i]= new Wt::WComboBox(tableFilters->elementAt(i, 2));
-        filterAssetsComboBox_[i]= new Wt::WComboBox(tableFilters->elementAt(i, 3));
-        
-        i++;
-        
-        
-        
+        for (int i = 1 ; i <= (*itF).second.nbValue ; i++)
+        {
+            col = 0;
+            
+            Wt::WCheckBox *cb1 = new Wt::WCheckBox();
+            cb1->setChecked(false);
+            filterCheckBox_[row]= cb1;
+            tableFilters->elementAt(row, col++)->addWidget(cb1);
+            new Wt::WText(boost::lexical_cast<string>((*itF).second.searchId),tableFilters->elementAt(row, col++));
+            new Wt::WText(boost::lexical_cast<string>((*itF).first),tableFilters->elementAt(row, col++));
+            new Wt::WText(boost::lexical_cast<string>((*itF).second.filterType),tableFilters->elementAt(row, col++));
+            new Wt::WText(boost::lexical_cast<string>(i),tableFilters->elementAt(row, col++));
+            filterInfosComboBox_[row] = new Wt::WComboBox(tableFilters->elementAt(row, col++));
+            filterInfosComboBox_[row]->setModel(informationsModel);
+            filterInfosComboBox_[row]->setModelColumn(1);
+
+            filterAssetsComboBox_[row] = new Wt::WComboBox(tableFilters->elementAt(row, col++));
+            filterAssetsComboBox_[row]->setModel(assetsModel);
+            filterAssetsComboBox_[row]->setModelColumn(1);
+            
+            row++;
+        }
+   
     }
  
     dialog->show();
@@ -288,7 +305,7 @@ void Association::recoverListAssociation()
 
 void Association::addResource(vector<Wt::WInteractWidget*> argument)
 {
-    cout << "Asset id : " << idAsset_ << endl;
+    cout << "Host id : " << idHost_ << endl;
     cout << "Plugin id : " << idPlugin_ << endl;
     cout << "informations ids : " << endl;
     for (vector<long long>::iterator it = idsInformations_.begin();
@@ -298,25 +315,109 @@ void Association::addResource(vector<Wt::WInteractWidget*> argument)
     }
     cout << endl << endl;
 
-    //    vector<Wt::WInteractWidget*>::iterator i = argument.begin();
-    //    Wt::WLineEdit *assetEdit = (Wt::WLineEdit*)(*i);
-    //    
-    //    // Post Asset -------
-    //    Wt::Http::Message messageAsset;
-    //    messageAsset.addBodyText("{\n\"name\" : \""
-    //    + boost::lexical_cast<string>(assetEdit->text()) + "\"\n}\n");
-    //
-    //    string apiAddress = this->getApiUrl() + "/assets";
-    //    Wt::Http::Client *client = new Wt::Http::Client(this);
-    //    client->done().connect(boost::bind(&Association::postAsset, this, _1, _2));
-    //    apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
-    //
-    //    Wt::log("debug") << "Association : [POST] address to call : " << apiAddress;
-    //
-    //    if (client->post(apiAddress, messageAsset))
-    //        Wt::WApplication::instance()->deferRendering();
-    //    else
-    //        Wt::log("error") << "Error Client Http";
+//                    tmp.get("asset_id"),
+//                    tmp.get("information_id"),
+//                    tmp.get("information_unit_id"),
+//                    tmp.get("filter_id"),
+//                    tmp.get("filter_field_index_id")
+                    
+            
+        // Post Asset -------
+        Wt::Http::Message messageAsset;
+        string message = "[\n";
+        bool coma = false;
+        for (int i = 1 ; i < tableFilters->rowCount() ; i++)
+        {
+            Wt::WCheckBox *tempCB = filterCheckBox_[i];
+            
+            if (tempCB->isChecked())
+            {
+                if (coma)
+                {
+                    message += ",";
+                }
+                else
+                {
+                    coma = true;
+                }
+                message += "{\n"
+                        "\"asset_id\": "
+                        + assetsModel->item(filterAssetsComboBox_[i]->currentIndex(),0)->text().toUTF8() +",\n"
+                        "\"information_id\": "
+                        + informationsModel->item(filterInfosComboBox_[i]->currentIndex(),0)->text().toUTF8() +",\n"
+                        "\"information_unit_id\": "
+                        + informationsModel->item(filterInfosComboBox_[i]->currentIndex(),2)->text().toUTF8() +",\n"
+                        "\"filter_id\": "
+                        + ((Wt::WText*)tableFilters->elementAt(i,2)->widget(0))->text().toUTF8() +",\n"
+                        "\"filter_field_index_id\": "
+                        + ((Wt::WText*)tableFilters->elementAt(i,4)->widget(0))->text().toUTF8() +"\n"
+                        "}";
+                
+            }
+        }
+        message += "]";
+                
+        messageAsset.addBodyText(message);
+    
+        string apiAddress = this->getApiUrl() + "/assets/"
+                            + boost::lexical_cast<string>(idHost_)
+                            + "/plugins"
+                            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) 
+                            + "&token=" + session_->user()->token.toUTF8();
+        Wt::Http::Client *client = new Wt::Http::Client(this);
+        client->done().connect(boost::bind(&Association::postAsset, this, _1, _2));
+        
+    
+        Wt::log("debug") << "Association : [POST] address to call : " << apiAddress;
+        Wt::log("debug") << "Association : message : " << message;
+    
+        if (client->post(apiAddress, messageAsset))
+        {
+            Wt::WApplication::instance()->deferRendering();
+        }
+        else
+        {
+            Wt::log("error") << "Error Client Http";
+        }
+}
+
+void Association::postAsset(boost::system::error_code err, const Wt::Http::Message& response)
+{
+    std::cout << "Reponse : " << std::endl << response.body() << std::endl;
+    Wt::WApplication::instance()->resumeRendering();
+    if (!err)
+    {
+        if (response.status() == 201)
+        {
+            try
+            {
+                Wt::Json::Value result;
+                Wt::Json::parse(response.body(), result);
+                // ToDo : check object
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[Associations Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.alert.database-error"), Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[Associations Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "TypeException", tr("Alert.alert.database-error"), Wt::Ok);
+            }
+        }
+        else
+        {
+            Wt::log("error") << "[Associations Widget] " << response.body();
+            Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "status", tr("Alert.alert.database-error"), Wt::Ok);
+        }
+    }
+    else
+    {
+        Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
+    }
+    
 }
 
 Wt::WDialog *Association::deleteResource(long long id)
@@ -401,11 +502,23 @@ void Association::getAssets(boost::system::error_code err, const Wt::Http::Messa
                 long long id;
                 Wt::WString name;
                 long long cpt(0);
+                assetsModel = new Wt::WStandardItemModel(0,2,this);
                 for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
                 {
                     tmp = (*idx1);
                     name = tmp.get("name");
                     id = tmp.get("id");
+
+
+                    Wt::WStandardItem *itemId = new Wt::WStandardItem();
+                    Wt::WStandardItem *itemName = new Wt::WStandardItem();
+                    itemId->setText(boost::lexical_cast<string>(id));
+                    itemName->setText(name);
+                    vector<Wt::WStandardItem*> rowVector;
+                    rowVector.push_back(itemId);
+                    rowVector.push_back(itemName);
+                    assetsModel->insertRow(cpt,rowVector);
+
                     assets_[cpt] = make_pair(id, name.toUTF8());
                     cpt++;
                 }
@@ -413,19 +526,19 @@ void Association::getAssets(boost::system::error_code err, const Wt::Http::Messa
             catch (Wt::Json::ParseError const& e)
             {
                 Wt::log("warning") << "[Associations Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning") << "[Associations Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
         }
     }
     else
     {
         Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
     }
     newClass_ = false;
     created_ = false;
@@ -460,19 +573,19 @@ void Association::getPlugins(boost::system::error_code err, const Wt::Http::Mess
             catch (Wt::Json::ParseError const& e)
             {
                 Wt::log("warning") << "[Associations Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning") << "[Associations Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
         }
     }
     else
     {
         Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
     }
     newClass_ = false;
     created_ = false;
@@ -493,8 +606,6 @@ void Association::getFilters(boost::system::error_code err, const Wt::Http::Mess
                 Wt::Json::parse(response.body(), result);
                 Wt::Json::Array& result1 = result;
                 long long id;
-                int posKeyValue;
-                int nbValue;
                 long long cpt(0);
                 for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
                 {
@@ -509,7 +620,7 @@ void Association::getFilters(boost::system::error_code err, const Wt::Http::Mess
                             + "&token=" + session_->user()->token.toUTF8();
                     Wt::log("debug") << "Association : [GET] address to call : " << apiAddress;
                     Wt::Http::Client *client = new Wt::Http::Client(this);
-                    client->done().connect(boost::bind(&Association::getFilterParameterValues, this, _1, _2));
+                    client->done().connect(boost::bind(&Association::getFilterParameterValues, this, _1, _2,id,tmp));
                     if (client->get(apiAddress))
                     {
                         Wt::WApplication::instance()->deferRendering();
@@ -519,36 +630,31 @@ void Association::getFilters(boost::system::error_code err, const Wt::Http::Mess
                         Wt::log("error") << "Error Client Http";
                     }
                     
-                    
-                    
-                    
-                    
-                    
                     cpt++;
                 }
             }
             catch (Wt::Json::ParseError const& e)
             {
                 Wt::log("warning") << "[Associations Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning") << "[Associations Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
         }
     }
     else
     {
         Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
     }
     newClass_ = false;
     created_ = false;
 }
 
-void Association::getFilterParameterValues(boost::system::error_code err, const Wt::Http::Message& response)
+void Association::getFilterParameterValues(boost::system::error_code err, const Wt::Http::Message& response, long long filterId, Wt::Json::Object filJson)
 {
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
@@ -559,50 +665,45 @@ void Association::getFilterParameterValues(boost::system::error_code err, const 
             {
                 Wt::Json::Array::const_iterator idx1;
                 Wt::Json::Object tmp;
-                Wt::Json::Object idObject;
                 Wt::Json::Value result;
                 Wt::Json::parse(response.body(), result);
                 Wt::Json::Array& result1 = result;
-                long long id;
-                long long filterId;
-                long long filterParameterId;
-                Wt::WString filterValue;
-                int posKeyValue;
-                int nbValue;
-                long long cpt(0);
+
+//                long long cpt(0);
                 for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
                 {
                     tmp = (*idx1);
-                    idObject = tmp.get("id");
-                    filterId = idObject.get("filter_id");
-                    filterParameterId = idObject.get("filter_parameter_id");
-                    filterValue = tmp.get("value");
+
+                    Wt::Json::Object tmpFilterType = filJson.get("filter_type");
+                    Wt::Json::Object tmpSearch = filJson.get("search");
+        
+                    filterParameterValues_[filterId] = {
+                        filJson.get("id"),
+                        tmpFilterType.get("id"),
+                        filJson.get("nb_value"),
+                        tmpSearch.get("id"),
+                        tmp.get("value")
+                    };
                     
-                    
-                    // Faire une struct.
-                    filterParameterValues_[cpt] = new Echoes::Dbo::FilterParameterValue();
-                    filterParameterValues_[cpt]->value = filterValue;
-                    filterParameterValues_[cpt]->id = filterParameterId;
-                    
-                    cpt++;
+                    break;
                 }
             }
             catch (Wt::Json::ParseError const& e)
             {
                 Wt::log("warning") << "[Associations Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning") << "[Associations Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
         }
     }
     else
     {
         Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
     }
     newClass_ = false;
     created_ = false;
@@ -624,32 +725,56 @@ void Association::getInformations(boost::system::error_code err, const Wt::Http:
                 Wt::Json::Array& result1 = result;
                 long long id;
                 Wt::WString name;
+                int informationDatas;
+                long long idUnit;
                 long long cpt(0);
+                informationsModel = new Wt::WStandardItemModel(0,3,this);
                 for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
                 {
                     tmp = (*idx1);
                     name = tmp.get("name");
                     id = tmp.get("id");
-                    informations_[cpt] = make_pair(id, name.toUTF8());
-                    cpt++;
+                    Wt::Json::Object infoUnit;
+                    infoUnit = tmp.get("information_unit");
+                    idUnit = infoUnit.get("id");
+                    informationDatas = tmp.get("information_datas");
+                    
+                    if (informationDatas == 0)
+                    {
+                        Wt::WStandardItem *itemId = new Wt::WStandardItem();
+                        Wt::WStandardItem *itemName = new Wt::WStandardItem();
+                        Wt::WStandardItem *itemUnitId = new Wt::WStandardItem();
+                        itemId->setText(boost::lexical_cast<string>(id));
+                        itemName->setText(name);
+                        itemUnitId->setText(boost::lexical_cast<string>(idUnit));
+                        vector<Wt::WStandardItem*> rowVector;
+                        rowVector.push_back(itemId);
+                        rowVector.push_back(itemName);
+                        rowVector.push_back(itemUnitId);
+                        informationsModel->insertRow(cpt,rowVector);
+
+
+                        informations_[cpt] = make_pair(id, name.toUTF8());
+                        cpt++;
+                    }
                 }
             }
             catch (Wt::Json::ParseError const& e)
             {
                 Wt::log("warning") << "[Associations Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning") << "[Associations Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
         }
     }
     else
     {
         Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
     }
     newClass_ = false;
     created_ = false;

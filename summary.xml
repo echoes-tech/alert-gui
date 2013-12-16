@@ -5,6 +5,7 @@
     <message id="Alert.summary.alert-date">Date</message>
     <message id="Alert.summary.alert-media">Recipient</message>
     <message id="Alert.summary.alert-name">Alert name</message>
+    <message id="Alert.summary.alert-message">Message sent</message>
     
 	<message id="Alert.summary.board.template">
 	    
@@ -12,12 +13,12 @@
         
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="span6">
+                <div class="span12">
                     ${alerts-sent}
                 </div>
-                <div class="span6">
+<!--                <div class="span6">
                     ${welcome}
-                </div>
+                </div>-->
             </div>
         </div>
   	</message>

@@ -11,12 +11,16 @@
     <message id="Alert.alert.nothing-alert">Alertes</message>
     <message id="Alert.alert.nothing-alert-text">Aucune alerte enregistrée actuellement.</message>
     <message id="Alert.alert.nothing-button">Cliquer pour ajouter</message>
+    <message id="Alert.alert.no-alert-sent">Jamais</message>
     <!--header-->
     <message id="Alert.alert.add-form.alert">Alertes</message>
     <!--body-->
     <message id="Alert.alert.name-name">Nom de l'alerte</message>
     <message id="Alert.alert.modif-button">Modifier</message>
     <message id="Alert.alert.delete-button">Supprimer</message>
+    <message id="Alert.alert.name-nb-dest">Nombre de destinataires</message>
+    <message id="Alert.alert.name-last-out">Dernier envoi</message>
+    <message id="Alert.alert.name-modif-dest">Modifier dest</message>
     <!--footer-->
     <message id="Alert.alert.search-bar">Recherche : </message>
         <!-- Paginate -->

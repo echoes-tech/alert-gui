@@ -168,12 +168,7 @@ vector_type Association::getResourceRowTable(long long id)
                 <il> info </il>
             </ul>
      */
-    Wt::WText *test =
-            new Wt::WText("<ul><li>|informationNuméro1|</li><li>|info2|</li><li>|informationNuméro3TrèsImportante|</li></ul>");
-    rowTable.push_back(new Wt::WText("Plugin"));
-    rowTable.push_back(new Wt::WText("Asset"));
-    rowTable.push_back(test);
-
+    
     //    Wt::Json::Array& result1 = Wt::Json::Array::Empty;
     //    Wt::Json::Object tmp;
     //    Wt::Json::Array::const_iterator idx1;

@@ -102,7 +102,7 @@ vector_type     AlertsWidget::getResourceRowTable(long long id)
                     info = Wt::WString::Empty;
                 else
                     info = tmp.get("last_attempt");
-                rowTable.push_back(new Wt::WText(info.toUTF8() == "Null" ? "Nothing" : info));  //xml
+                rowTable.push_back(new Wt::WText(info.toUTF8() == "Null" ? tr("Alert.alert.no-alert-sent").toUTF8() : info));  //xml
                 Wt::WPushButton *button = new Wt::WPushButton();
                 button->setAttributeValue("class","btn btn-inverse");
                 button->setTextFormat(Wt::XHTMLUnsafeText);

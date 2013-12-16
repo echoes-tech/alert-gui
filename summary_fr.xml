@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
 	
+    <message id="Alert.summary.welcome-message">Bienvenue sur ECHOES Alert !</message>
+    
     <message id="Alert.summary.alerts-sent">Alertes envoyées</message>
     <message id="Alert.summary.alert-date">Date</message>
     <message id="Alert.summary.alert-media">Destinataire</message>

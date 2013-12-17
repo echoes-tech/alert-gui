@@ -12,7 +12,7 @@
 	<message id="Alert.summary.board.template">
 	    
 	    <h3>${tr:Alert.summary.welcome-message} 
-            <img src="resources/themes/bootstrap/img/cassidian_logo.png" alt="Cassidian" style="float:right; width:200px; margin-right:1%"></img>
+            <img src="resources/themes/bootstrap/img/customer_logo.png" alt="" style="float:right; width:200px; margin-right:1%"></img>
             
         </h3>  
         

@@ -209,6 +209,8 @@ void    AlertsWidget::popupRecipients(std::string nameAlert, std::string message
 
 void    AlertsWidget::fillInTabMessage()
 {
+    //VIDER LES TABS
+    
     Wt::WTextArea *test1 = new Wt::WTextArea(messageMailForTab_);
     Wt::WTextArea *test2 = new Wt::WTextArea(messageSmsForTab_);
     Wt::WTextArea *test3 = new Wt::WTextArea(messagePushForTab_);
@@ -1735,6 +1737,12 @@ void AlertsWidget::getMedia(boost::system::error_code err, const Wt::Http::Messa
                     value = tmp.get("value");
                     obj = tmp.get("media_type");
                     mediaInfo_.insert(std::make_pair(cpt++, std::make_pair(std::make_pair(tmp.get("id"), obj.get("id")), value.toUTF8())));
+                    
+                    Wt::Json::Object user = tmp.get("user");
+                    
+                    
+                    idUserPositionMedia_.push_back(std::make_pair(user.get("id"),cpt));
+                    
                 }
             }
             catch (Wt::Json::ParseError const& e)

@@ -43,6 +43,8 @@ void    CreatePageWidget::update()
 {
     if (this->update_ == true)
     {
+        std::vector<std::string>    titleName = getTitlesTableText();
+        setResourceNumberAdd(titleName.size() > 0 ? titleName.size() : 1);
         if (this->nameResourcePageSpec_.empty() == true)
             this->nameResourcePageSpec_ = this->nameResourcePage;
         if (!this->created_ && checkResource())
@@ -161,7 +163,6 @@ void    CreatePageWidget::addResourceInHeaderTable()
     int                         columnTable(0);
     std::vector<std::string>    titleName = getTitlesTableText();
     std::vector<std::string>    titleWidget = getTitlesTableWidget();
-    setResourceNumberAdd(titleName.size() > 0 ? titleName.size() : 1);
     std::vector<std::string>::iterator it;
     mediaTable_->elementAt(0, 0)->setAttributeValue("style", "border-left:0;");
     for (it = titleName.begin(); it != titleName.end(); it++)

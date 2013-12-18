@@ -26,6 +26,7 @@
 #include <boost/system/error_code.hpp>
 
 #include "GlobalIncludeFile.h"
+#include "Association.h"
 
 class ApiManagement
 {
@@ -36,8 +37,7 @@ public:
     std::string     getApiUrl();
 
     template <class classType>
-    void    callApi(void (classType::*pFunc)(boost::system::error_code err, const Wt::Http::Message& response),
-    std::string infoUrl, Echoes::Dbo::Session *session, std::string apiUrl);
+    void    callApi(void (classType::*pFunc)(boost::system::error_code err, const Wt::Http::Message& response), std::string infoUrl);
 
 private:
 

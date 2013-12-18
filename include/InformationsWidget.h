@@ -68,12 +68,9 @@ public:
      */
     InformationsWidget(Echoes::Dbo::Session *session, std::string apiUrl);
 
-    void popupAddWidget(Wt::WDialog *dialog);
+    virtual void popupAddWidget(Wt::WDialog *dialog, long long id);
 
     long long userId;
-    void setSession(Echoes::Dbo::Session *session);
-    void setApiUrl(std::string apiUrl);
-    std::string getApiUrl();
     void getInformations(boost::system::error_code err, const Wt::Http::Message& response);
     void getInformation(boost::system::error_code err, const Wt::Http::Message& response);
     void recoverListInformations();

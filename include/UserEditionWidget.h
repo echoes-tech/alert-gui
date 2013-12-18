@@ -55,10 +55,6 @@ public:
     void                        putMedia(boost::system::error_code err, const Wt::Http::Message& response);
 
 private:
- 
-    void                        setSession(Echoes::Dbo::Session *session);
-    void                        setApiUrl(std::string apiUrl);
-    std::string                 getApiUrl();
 
     bool                  created_;
     bool                  newClass_;

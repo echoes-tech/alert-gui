@@ -112,7 +112,7 @@ public:
 
     void                        modifRecip(long long id);
 
-    void                        popupAddWidget(Wt::WDialog *dialog, bool typeDial);
+    void                        popupAddWidget(Wt::WDialog *dialog, long long id);
     void                        popupRecipients(std::string nameAlert, std::string message);
 
     
@@ -128,9 +128,6 @@ private:
     void                        fillInBox(Wt::WSelectionBox *box, MultiMapPair infoInBox);
 
 
-    void                        setSession(Echoes::Dbo::Session *session);
-    void                        setApiUrl(std::string apiUrl);
-    std::string                 getApiUrl();
     void                        fillInMultiMap();
     int                         selectItemBox(Wt::WSelectionBox *box, std::string select);
     void                        cleanBox(Wt::WSelectionBox *box);

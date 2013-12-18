@@ -17,7 +17,7 @@
 #include "UserEditionWidget.h"
 
 UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, std::string apiUrl, int type)
-: CreatePageWidget("media-user")
+: CreatePageWidget(session, apiUrl, "media-user")
 {
     this->session_ = session;
     this->apiUrl_ = apiUrl;
@@ -262,21 +262,6 @@ void UserEditionWidget::modifResource(std::vector<Wt::WInteractWidget*> argument
 void UserEditionWidget::close()
 {
     delete this;
-}
-
-void UserEditionWidget::setSession(Echoes::Dbo::Session *session)
-{
-    session_ = session;
-}
-
-void UserEditionWidget::setApiUrl(std::string apiUrl)
-{
-    apiUrl_ = apiUrl;
-}
-
-std::string UserEditionWidget::getApiUrl()
-{
-    return apiUrl_;
 }
 
 // API RETURN INFOS ------------------------------------------

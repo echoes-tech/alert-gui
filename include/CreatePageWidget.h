@@ -31,6 +31,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
+#include <boost/system/system_error.hpp>
 // Lib Witty
 #include <Wt/WValidator>
 #include <Wt/WInteractWidget>
@@ -56,20 +57,23 @@
 
 #include <Wt/WInPlaceEdit>
 #include <Wt/WComboBox>
-#include <Wt/Json/Value>
 #include <Wt/WRegExpValidator>
 #include <Wt/WBoxLayout>
+#include <Wt/WMessageBox>
+#include <Wt/WNavigationBar>
+
+#include <Wt/Http/Message>
+#include <Wt/Json/Parser>
+#include <Wt/Json/Value>
+#include <Wt/Http/Client>
+#include <Wt/Json/Array>
+#include <Wt/Json/Object>
 
 
 #include <Enums.h>
 
-// Test
-#include <Wt/WBoxLayout>
-#include <Wt/WButtonGroup>
-#include <Wt/WGroupBox>
-#include <Wt/WRadioButton>
-#include <Wt/WTableRow>
-#include <Wt/WNavigationBar>
+#include "WebUtils.h"
+#include "tools/Session.h"
 /** gkr.\n
  * Max Size Name of resource
  */
@@ -88,20 +92,29 @@ typedef std::vector<std::pair<int, Wt::WObject*>> vector_pair;
  */
 typedef std::vector<std::pair<std::string, Wt::WLength>> pair_type;
 
+typedef std::list<std::string> list_string;
+
+typedef std::list<list_string> lists_string;
+
+typedef std::vector<Wt::Json::Value> vector_Json;
+
+typedef std::vector<vector_Json> vectors_Json;
+
 class CreatePageWidget : 
 public Wt::WTemplateFormView
 {
 public:
 
-                        CreatePageWidget(std::string namePage);
+                        CreatePageWidget(Echoes::Dbo::Session *session, std::string apiUrl, std::string namePage);
     virtual             ~CreatePageWidget();
 
     /**
      * This call for fill in popup (WDialog).\n
      * tabW can 
+     * Methode overload // id == 0 Add || id > 0 Modif
      * @param tabW
      */
-    virtual void        popupAddWidget(Wt::WDialog *dialog, bool typeDial) {};
+    virtual void        popupAddWidget(Wt::WDialog *dialog, long long id) {};
     virtual void        update();
 
 
@@ -153,51 +166,61 @@ protected:
 
     void                                buttonInDialogFooter(Wt::WDialog *dialog);
     virtual int                         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
+
+    void                                setApiUrl(std::string apiUrl);
+    std::string                         getApiUrl();
+    
+    void                                recursiveGetResources(lists_string listUrl, vectors_Json jsonResource = vectors_Json(), Wt::Http::Client *client = new Wt::Http::Client());
+    virtual void                        handleJsonGet(vectors_Json jsonResources);
     
 private:
 
-    void                addInputForAffix(int rowBodyTable);
-    void                showInputForAdd();
-    void                checkAdd(std::vector<Wt::WText*> errorMessage);
-    void                checkModif(vector_type inputs, long long id, std::vector<Wt::WText*> errorMessage);
-    int                 checkName(std::string inputText, std::vector<long long> ids);
-    void                popupForModif(long long id);
-    void                inputForModif(long long id, int rowTable, int columnTable);
+    int                         handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,lists_string listUrl, vectors_Json jsonResource, Wt::Http::Client *client);
 
-    void                addResourceInHeaderTable();
-    void                addButtons(long long id, int rowTable, int columnTable);  
-    void                popupWindow();
-    void                 popupCheck(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id);
-    void                fillInTable();
-    void                popupComplete(Wt::WDialog *dialog, bool typeDial);
-    void                searchName(Wt::WLineEdit *arg);
+    void                        addInputForAffix(int rowBodyTable);
+    void                        showInputForAdd();
+    void                        checkAdd(std::vector<Wt::WText*> errorMessage);
+    void                        checkModif(vector_type inputs, long long id, std::vector<Wt::WText*> errorMessage);
+    int                         checkName(std::string inputText, std::vector<long long> ids);
+    void                        popupForModif(long long id);
+    void                        inputForModif(long long id, int rowTable, int columnTable);
 
-    void                resourceBeAff();
-    Wt::WComboBox       *getComboBox();
-    void                initPaginatePage(Wt::WNavigationBar *navBar);
-    void                paginatePage();
-    void                builtPaginate(Wt::WNavigationBar *navBar);
-    int                 sizeAff();
+    void                        addResourceInHeaderTable();
+    void                        addButtons(long long id, int rowTable, int columnTable);  
+    void                        popupWindow();
+    void                        popupCheck(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id);
+    void                        fillInTable();
+    void                        popupComplete(Wt::WDialog *dialog, long long id);
+    void                        searchName(Wt::WLineEdit *arg);
 
-    void                switchPage(int rst);
-    bool                checkResource();
+    void                        resourceBeAff();
+    Wt::WComboBox               *getComboBox();
+    void                        initPaginatePage(Wt::WNavigationBar *navBar);
+    void                        paginatePage();
+    void                        builtPaginate(Wt::WNavigationBar *navBar);
+    int                         sizeAff();
 
-    std::string         nameResourcePage;
-    std::string         nameResourcePageSpec_;
-    vector_type         inputs_;
-    vector_type         butPaginate_;
-    vector_type         butPaginateExt_;
-    vector_pair       resources_;
-    Wt::WTable          *mediaTable_;
-    bool                created_;
-    bool                butModif_;
-    bool                butSup_;
-    bool                mainPage_;
-    bool                update_;
-    int                 nbResource_;
-    int                 nbAff_;
-    int                 nbAffBegin_;
-    int                 nbAffResource_;
+    void                        switchPage(int rst);
+    bool                        checkResource();
+
+    Echoes::Dbo::Session        *session_;
+    std::string                 apiUrl_;
+    std::string                 nameResourcePage;
+    std::string                 nameResourcePageSpec_;
+    vector_type                 inputs_;
+    vector_type                 butPaginate_;
+    vector_type                 butPaginateExt_;
+    vector_pair                 resources_;
+    Wt::WTable                  *mediaTable_;
+    bool                        created_;
+    bool                        butModif_;
+    bool                        butSup_;
+    bool                        mainPage_;
+    bool                        update_;
+    int                         nbResource_;
+    int                         nbAff_;
+    int                         nbAffBegin_;
+    int                         nbAffResource_;
 };
 
 #endif	/* CREATEPAGEWIDGET_H */

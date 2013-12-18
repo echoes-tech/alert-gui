@@ -16,7 +16,6 @@
 #include "Auth/RegistrationModelAlert.h"
 #include "Auth/RegistrationWidgetAlert.h"
 #include "AssetManagementWidget.h"
-//#include "UserEditionModel.h"
 #include "UserEditionWidget.h"
 #include "AlertListWidget.h"
 #include "AuthWidget.h"
@@ -33,9 +32,7 @@
 
 class PluginEditionWidget;
 class AlertListWidget;
-//class UserEditionModel;
 class AssetManagementWidget;
-//class AssetManagementModel;
 class OptionManagementWidget;
 class OptionManagementModel;
 class RoleCustomizationWidget;

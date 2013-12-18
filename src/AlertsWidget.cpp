@@ -17,7 +17,7 @@
 #include "AlertsWidget.h"
 
 AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, std::string apiUrl)
-: CreatePageWidget("alert")
+: CreatePageWidget(session, apiUrl, "alert")
 {
     session_= session;
     apiUrl_ = apiUrl;
@@ -678,7 +678,7 @@ void    AlertsWidget::fillInBox(Wt::WSelectionBox *box, MultiMapPair infoInBox)
 
 // ------- init popup one -------
 
-void    AlertsWidget::popupAddWidget(Wt::WDialog *dialog, bool typeDial)
+void    AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
     tabMessage_ = new Wt::WTabWidget();
     tabMessage_->resize(Wt::WLength(300), Wt::WLength(200));
@@ -1275,22 +1275,6 @@ void AlertsWidget::close()
     delete this;
 }
 
-void    AlertsWidget::setSession(Echoes::Dbo::Session *session)
-{
-    session_ = session;
-}
-
-void    AlertsWidget::setApiUrl(std::string apiUrl)
-{
-    apiUrl_ = apiUrl;
-}
-
-std::string   AlertsWidget::getApiUrl()
-{
-    return apiUrl_;
-}
-
-
 // API CALL AND RETURN --------------------------------------------------
 
 void    AlertsWidget::recoverListRecipientAlias(long long userRoleId)
@@ -1440,9 +1424,6 @@ void    AlertsWidget::postAlertCallApi(std::string message)
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&AlertsWidget::postAlert, this, _1, _2));
-
-    std::cout << "AlertsWidget : [POST] address to call : " << apiAddress << std::endl;
-    std::cout << "[POST] Message : " << messageAlert.body() << std::endl;
 
     Wt::log("debug") << "AlertsWidget : [POST] address to call : " << apiAddress;
     Wt::log("debug") << "[POST] Message : " << messageAlert.body();

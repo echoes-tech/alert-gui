@@ -26,6 +26,7 @@ protected:
 
   virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
   
+  void setApiUrl(std::string apiUrl);
   std::string getApiUrl() const;
 
 private:
@@ -44,7 +45,6 @@ private:
   void getQuota(boost::system::error_code err, const Wt::Http::Message& response);
   void getRoles(boost::system::error_code err, const Wt::Http::Message& response);
   
-  void setApiUrl(std::string apiUrl);
   
 };
 

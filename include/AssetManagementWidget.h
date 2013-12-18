@@ -89,7 +89,7 @@ protected:
   virtual Wt::WDialog                   *deleteResource(long long id);
   
   virtual Wt::WValidator                *editValidator(int who);
-  virtual void                          popupAddWidget(Wt::WDialog *dialog, bool typeDial);
+  virtual void                          popupAddWidget(Wt::WDialog *dialog, long long id);
 
   virtual std::vector<long long>        getIdsTable();
   virtual std::vector<std::string>      getTitlesTableText();
@@ -114,10 +114,6 @@ private:
   void                  checkAlertsInAsset(boost::system::error_code err, const Wt::Http::Message& response, Wt::WDialog *box, long long id);
   void                  deleteAsset(boost::system::error_code err, const Wt::Http::Message& response);
   void                  getAssets(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  setSession(Echoes::Dbo::Session *session);
-  void                  setApiUrl(std::string apiUrl);
-  
-  std::string           getApiUrl();
   
   bool                   created_;
   bool                   newClass_;

@@ -19,15 +19,14 @@ ApiManagement::~ApiManagement()
 }
 */
 template <class classType>
-void    ApiManagement::callApi(void (classType::*pFunc)(boost::system::error_code err, const Wt::Http::Message& response),
-        std::string infoUrl, Echoes::Dbo::Session *session, std::string apiUrl)
+void    ApiManagement::callApi(void (classType::*pFunc)(boost::system::error_code err, const Wt::Http::Message& response), std::string infoUrl)
 {
     Wt::Http::Client *client = new Wt::Http::Client();
     client->done().connect(boost::bind(pFunc, this, _1, _2));
 
-    std::string apiAddress = apiUrl + infoUrl
-            + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
-            + "&token=" + session->user()->token.toUTF8();
+    std::string apiAddress = apiUrl_ + infoUrl
+            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+            + "&token=" + session_->user()->token.toUTF8();
 
     std::cout << "[GET] address to call : " << apiAddress << std::endl;
 

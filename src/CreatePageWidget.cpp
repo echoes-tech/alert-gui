@@ -16,13 +16,13 @@
 
 #include "CreatePageWidget.h"
 
-CreatePageWidget::CreatePageWidget(std::string namePage)
+CreatePageWidget::CreatePageWidget(Echoes::Dbo::Session *session, std::string apiUrl, std::string namePage)
 : Wt::WTemplateFormView(Wt::WString::tr("Alert." + namePage + ".Management.template"))
 {
     this->addStyleClass("template");
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use(namePage,false);
-    
+    app->messageResourceBundle().use(namePage, false);
+
     this->nameResourcePage = namePage;
     this->butSup_ = true;
     this->butModif_ = true;
@@ -33,16 +33,21 @@ CreatePageWidget::CreatePageWidget(std::string namePage)
     this->nbResource_ = 1;
     this->update_ = true;
     this->nameResourcePageSpec_ = "";
+    this->session_ = session;
+    setApiUrl(apiUrl);
 }
 
 CreatePageWidget::~CreatePageWidget() { }
 
 // INIT Elements. ------------------------------------------------------
 
-void    CreatePageWidget::update()
+void
+CreatePageWidget::update()
 {
     if (this->update_ == true)
     {
+        std::vector<std::string> titleName = getTitlesTableText();
+        setResourceNumberAdd(titleName.size() > 0 ? titleName.size() : 1);
         if (this->nameResourcePageSpec_.empty() == true)
             this->nameResourcePageSpec_ = this->nameResourcePage;
         if (!this->created_ && checkResource())
@@ -62,7 +67,7 @@ void    CreatePageWidget::update()
             Wt::WPushButton *headerButton =
                     new Wt::WPushButton(tr("Alert." + this->nameResourcePage + ".nothing-button")
                     , table->elementAt(2, 0));
-            
+
             this->bindWidget("resource-header", new Wt::WText());
             this->bindWidget("resource-table", table);
             this->bindWidget("resource-footer", new Wt::WText());
@@ -82,7 +87,8 @@ void    CreatePageWidget::update()
     }
 }
 
-bool    CreatePageWidget::checkResource()
+bool
+CreatePageWidget::checkResource()
 {
     if (getIdsTable().size() > 0)
         return true;
@@ -91,14 +97,16 @@ bool    CreatePageWidget::checkResource()
 }
 
 // gkr: Init header.
-Wt::WContainerWidget    *CreatePageWidget::createHeaderTable()
+
+Wt::WContainerWidget *
+CreatePageWidget::createHeaderTable()
 {
     Wt::WContainerWidget *headerTable = new Wt::WContainerWidget();
     headerTable->addStyleClass("widget-title header-pers");
     new Wt::WText("<span class='icon'><i class='icon-tasks'></i></span><h5>"
-    + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePageSpec_)
-    + "</h5>", headerTable);
-    
+            + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePageSpec_)
+            + "</h5>", headerTable);
+
     if (this->mainPage_) // gkr: whether class is not a dialog(popup).
         headerTable->addWidget(getComboBox());
 
@@ -114,7 +122,8 @@ Wt::WContainerWidget    *CreatePageWidget::createHeaderTable()
     return headerTable;
 }
 
-Wt::WContainerWidget    *CreatePageWidget::createBodyTable()
+Wt::WContainerWidget *
+CreatePageWidget::createBodyTable()
 {
     Wt::WContainerWidget *resourceTable = new Wt::WContainerWidget();
     // gkr: Init body of table
@@ -122,16 +131,17 @@ Wt::WContainerWidget    *CreatePageWidget::createBodyTable()
 
     mediaTable_ = new Wt::WTable(resourceTable);
     mediaTable_->addStyleClass("table table-bordered table-striped table-hover data-table dataTable");
-    mediaTable_->setHeaderCount(1,Wt::Horizontal);
+    mediaTable_->setHeaderCount(1, Wt::Horizontal);
     addResourceInHeaderTable();
     if (resources_.size() > 0)
         resources_.clear();
     fillInTable();
-    
+
     return resourceTable;
 }
 
-Wt::WContainerWidget    *CreatePageWidget::createFooterTable()
+Wt::WContainerWidget *
+CreatePageWidget::createFooterTable()
 {
     if (butPaginate_.size() > 0)
         butPaginate_.clear();
@@ -150,24 +160,24 @@ Wt::WContainerWidget    *CreatePageWidget::createFooterTable()
     Wt::WNavigationBar *navBar = new Wt::WNavigationBar(footerTable);
     navBar->addStyleClass("paginate-edit");
     initPaginatePage(navBar);
-    
+
     return footerTable;
 }
 
 // Add Resouce For Elements -----------------------------------------------------------------
 
-void    CreatePageWidget::addResourceInHeaderTable()
+void
+CreatePageWidget::addResourceInHeaderTable()
 {
-    int                         columnTable(0);
-    std::vector<std::string>    titleName = getTitlesTableText();
-    std::vector<std::string>    titleWidget = getTitlesTableWidget();
-    setResourceNumberAdd(titleName.size() > 0 ? titleName.size() : 1);
+    int columnTable(0);
+    std::vector<std::string> titleName = getTitlesTableText();
+    std::vector<std::string> titleWidget = getTitlesTableWidget();
     std::vector<std::string>::iterator it;
     mediaTable_->elementAt(0, 0)->setAttributeValue("style", "border-left:0;");
     for (it = titleName.begin(); it != titleName.end(); it++)
     {
         new Wt::WText(tr("Alert." + this->nameResourcePage + ".name-" + boost::lexical_cast<std::string>(*it)),
-                mediaTable_->elementAt(0, columnTable));        
+                mediaTable_->elementAt(0, columnTable));
         mediaTable_->elementAt(0, columnTable++)->addStyleClass(boost::lexical_cast<std::string>(*it), true);
     }
     for (it = titleWidget.begin(); it != titleWidget.end(); it++)
@@ -178,28 +188,29 @@ void    CreatePageWidget::addResourceInHeaderTable()
     }
     if (this->butModif_) // gkr: whether button Modif is true.
         new Wt::WText(tr("Alert." + this->nameResourcePage + ".modif-button"),
-                mediaTable_->elementAt(0, columnTable++));
+            mediaTable_->elementAt(0, columnTable++));
     if (this->butSup_) // gkr: whether button Sup(Delete) is true.
         new Wt::WText(tr("Alert." + this->nameResourcePage + ".delete-button"),
-                mediaTable_->elementAt(0, columnTable)); 
+            mediaTable_->elementAt(0, columnTable));
 }
 
-void    CreatePageWidget::fillInTable()
+void
+CreatePageWidget::fillInTable()
 {
-    std::vector<long long>      ids = getIdsTable();
-    int                         columnTable(0);
-    int                         rowBodyTable(1);
+    std::vector<long long> ids = getIdsTable();
+    int columnTable(0);
+    int rowBodyTable(1);
 
     for (std::vector<long long>::iterator j = ids.begin(); j != ids.end(); j++)
     {
         columnTable = 0;
-        mediaTable_->elementAt(rowBodyTable, columnTable)->setAttributeValue("style", "border-left:0;");    
+        mediaTable_->elementAt(rowBodyTable, columnTable)->setAttributeValue("style", "border-left:0;");
         vector_type resourceRow = getResourceRowTable(*j);
         for (vector_type::iterator k = resourceRow.begin(); k != resourceRow.end(); k++)
         {
             Wt::WInteractWidget *widgetAdd = *k;
             std::string nameRessouce("N2Wt5WTextE");
-            if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
+            if (nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
             {
                 nameRessouce = ((Wt::WText*)(widgetAdd))->text().toUTF8();
                 std::string newName = nameRessouce;
@@ -216,10 +227,10 @@ void    CreatePageWidget::fillInTable()
                         if (((std::string)(*it)).find('<') == std::string::npos)
                         {
                             nameRessouce += (*it) + "\n";
-                            if (resizeString.size() > (unsigned int)(SIZE_NAME_RESOURCE / this->nbResource_))
+                            if (resizeString.size() > (unsigned int) (SIZE_NAME_RESOURCE / this->nbResource_))
                             {
                                 resizeString.resize(SIZE_NAME_RESOURCE / this->nbResource_);
-                                    resizeString.resize(resizeString.size() + 3, '.');
+                                resizeString.resize(resizeString.size() + 3, '.');
                             }
                         }
                         newName += resizeString;
@@ -228,13 +239,13 @@ void    CreatePageWidget::fillInTable()
                 }
                 else
                 {
-                    if (nameRessouce.size() > (unsigned int)(SIZE_NAME_RESOURCE / this->nbResource_))
+                    if (nameRessouce.size() > (unsigned int) (SIZE_NAME_RESOURCE / this->nbResource_))
                     {
                         newName.resize(SIZE_NAME_RESOURCE / this->nbResource_);
                         newName.resize(newName.size() + 3, '.');
                     }
                 }
-                Wt::WText *newColumn = new Wt::WText(newName, mediaTable_->elementAt(rowBodyTable, columnTable));  
+                Wt::WText *newColumn = new Wt::WText(newName, mediaTable_->elementAt(rowBodyTable, columnTable));
                 newColumn->setTextFormat(Wt::TextFormat::XHTMLUnsafeText);
                 newColumn->setToolTip(nameRessouce);
                 columnTable++;
@@ -255,12 +266,13 @@ void    CreatePageWidget::fillInTable()
         addInputForAffix(rowBodyTable);
 }
 
-void    CreatePageWidget::addButtons(long long id, int rowTable, int columnTable)
+void
+CreatePageWidget::addButtons(long long id, int rowTable, int columnTable)
 {
     if (this->butModif_)
     {
         Wt::WPushButton *modifButton = new Wt::WPushButton(mediaTable_->elementAt(rowTable, columnTable));
-        modifButton->setAttributeValue("class","btn btn-inverse");
+        modifButton->setAttributeValue("class", "btn btn-inverse");
         modifButton->setTextFormat(Wt::XHTMLUnsafeText);
         modifButton->setText("<span class='input-group-btn'><i class='icon-edit icon-white'></i></span>");
         if (this->mainPage_)
@@ -274,7 +286,7 @@ void    CreatePageWidget::addButtons(long long id, int rowTable, int columnTable
     if (this->butSup_)
     {
         Wt::WPushButton *delButton = new Wt::WPushButton(mediaTable_->elementAt(rowTable, columnTable));
-        delButton->setAttributeValue("class","btn btn-danger");
+        delButton->setAttributeValue("class", "btn btn-danger");
         delButton->setTextFormat(Wt::XHTMLUnsafeText);
         delButton->setText("<span class='input-group-btn'><i class='icon-remove icon-white'></i></span>");
         delButton->clicked().connect(boost::bind(&CreatePageWidget::deleteResource, this, id));
@@ -283,7 +295,8 @@ void    CreatePageWidget::addButtons(long long id, int rowTable, int columnTable
     }
 }
 
-void            CreatePageWidget::addInputForAffix(int rowBodyTable)
+void
+CreatePageWidget::addInputForAffix(int rowBodyTable)
 {
     std::vector<Wt::WText*> errorMessage;
     int columnTable(0);
@@ -328,7 +341,8 @@ void            CreatePageWidget::addInputForAffix(int rowBodyTable)
     inputs_.push_back(acceptButton);
 }
 
-void    CreatePageWidget::inputForModif(long long id, int rowTable, int columnTable)
+void
+CreatePageWidget::inputForModif(long long id, int rowTable, int columnTable)
 {
     std::vector<Wt::WText*> errorMessage;
     vector_type inputs;
@@ -343,7 +357,7 @@ void    CreatePageWidget::inputForModif(long long id, int rowTable, int columnTa
     {
         Wt::WInteractWidget *widgetAdd = *j;
         std::string nameRessouce("N2Wt5WTextE");
-        if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
+        if (nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
         {
             nameRessouce = boost::lexical_cast<std::string>(((Wt::WText*)(widgetAdd))->text());
             std::string newName = nameRessouce;
@@ -352,30 +366,30 @@ void    CreatePageWidget::inputForModif(long long id, int rowTable, int columnTa
                 newName.resize(SIZE_NAME_RESOURCE + SIZE_NAME_RESOURCE);
                 newName.resize(newName.size() + 3, '.');
             }
-            
-            Wt::WLineEdit *input = new Wt::WLineEdit(newName);             
+
+            Wt::WLineEdit *input = new Wt::WLineEdit(newName);
             inputs.push_back(input);
             input->setToolTip(nameRessouce);
             input->setValidator(editValidator(cpt));
             if (inputs.size() == 0)
                 input->setFocus();
             input->setWidth(Wt::WLength(150));
-            
+
             Wt::WText *error = new Wt::WText(tr("Alert." + this->nameResourcePage + ".invalid-name-"
-                + boost::lexical_cast<std::string>(*it)));
+                    + boost::lexical_cast<std::string>(*it)));
             error->hide();
             errorMessage.push_back(error);
 
             mediaTable_->elementAt(rowTable, column)->clear();
-            mediaTable_->elementAt(rowTable, column)->addWidget(input);            
+            mediaTable_->elementAt(rowTable, column)->addWidget(input);
             mediaTable_->elementAt(rowTable, column++)->addWidget(error);
-            
+
             it++;
             cpt++;
         }
     }
     if (it == titleHeader.end() && j != resourceTable.end())
-            std::cout << "Warning : Too many title for header table" << std::endl;
+        std::cout << "Warning : Too many title for header table" << std::endl;
     mediaTable_->elementAt(rowTable, columnTable)->clear();
     mediaTable_->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
     mediaTable_->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
@@ -388,16 +402,17 @@ void    CreatePageWidget::inputForModif(long long id, int rowTable, int columnTa
 
 // Aff Input ----------------------------------------------------------------------
 
-void    CreatePageWidget::showInputForAdd()
+void
+CreatePageWidget::showInputForAdd()
 {
     mediaTable_->rowAt(mediaTable_->rowCount() - 1)->show();
-    for (std::vector<Wt::WInteractWidget*>::const_iterator j = inputs_.begin(); 
-            j != inputs_.end(); 
+    for (std::vector<Wt::WInteractWidget*>::const_iterator j = inputs_.begin();
+            j != inputs_.end();
             j++)
     {
         Wt::WInteractWidget *widgetAdd = *j;
         std::string nameRessouce("N2Wt9WLineEditE");
-        if (inputs_.begin() == j && nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
+        if (inputs_.begin() == j && nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
             ((Wt::WLineEdit*)(*j))->setFocus();
         ((Wt::WInteractWidget*)(*j))->show();
     }
@@ -405,7 +420,8 @@ void    CreatePageWidget::showInputForAdd()
 
 // Check input ----------------------------------------------
 
-void    CreatePageWidget::checkAdd(std::vector<Wt::WText*> errorMessage)
+void
+CreatePageWidget::checkAdd(std::vector<Wt::WText*> errorMessage)
 {
     if (checkInput(inputs_, errorMessage) == 0)
     {
@@ -416,17 +432,19 @@ void    CreatePageWidget::checkAdd(std::vector<Wt::WText*> errorMessage)
     }
 }
 
-void    CreatePageWidget::checkModif(vector_type inputs, long long id, std::vector<Wt::WText*> errorMessage)
+void
+CreatePageWidget::checkModif(vector_type inputs, long long id, std::vector<Wt::WText*> errorMessage)
 {
     if (checkInput(inputs, errorMessage) == 0)
     {
         this->created_ = false;
         modifResource(inputs, id);
         inputs.clear();
-    }    
+    }
 }
 
-int    CreatePageWidget::checkName(std::string inputText, std::vector<long long> ids)
+int
+CreatePageWidget::checkName(std::string inputText, std::vector<long long> ids)
 {
     for (std::vector<long long>::iterator j = ids.begin(); j != ids.end(); j++)
     {
@@ -435,7 +453,7 @@ int    CreatePageWidget::checkName(std::string inputText, std::vector<long long>
         {
             Wt::WInteractWidget *widgetAdd = *k;
             std::string nameRessouce("N2Wt5WTextE");
-            if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
+            if (nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
             {
                 if (inputText.compare(((Wt::WText*)(*k))->text().toUTF8()) == 0)
                     return 1;
@@ -445,19 +463,20 @@ int    CreatePageWidget::checkName(std::string inputText, std::vector<long long>
     return 0;
 }
 
-int    CreatePageWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage)
+int
+CreatePageWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage)
 {
     std::vector<long long> ids = getIdsTable();
     int check(0);
 
-    std::vector<Wt::WText*>::const_iterator i = errorMessage.begin(); 
-    for (std::vector<Wt::WInteractWidget*>::const_iterator j = inputName.begin(); 
-            j != inputName.end(); 
+    std::vector<Wt::WText*>::const_iterator i = errorMessage.begin();
+    for (std::vector<Wt::WInteractWidget*>::const_iterator j = inputName.begin();
+            j != inputName.end();
             j++)
     {
         Wt::WInteractWidget *widgetAdd = *j;
         std::string nameRessouce("N2Wt9WLineEditE");
-        if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
+        if (nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
         {
             if (((Wt::WLineEdit*)(*j))->validate() == Wt::WValidator::Invalid
                     || ((Wt::WLineEdit*)(*j))->text().empty())
@@ -468,17 +487,17 @@ int    CreatePageWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName,
                 ((Wt::WText*)(*i))->show();
                 check = 1;
             }
-//            else if (checkName(((Wt::WLineEdit*)(*j))->text().toUTF8(), ids) == 1)
-//            {
-//                ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-error");
-//                ((Wt::WLineEdit*)(*j))->setWidth(Wt::WLength(150));
-//                ((Wt::WLineEdit*)(*j))->setFocus();
-//                ((Wt::WText*)(*i))->setText(tr("Alert."
-//                        + this->nameResourcePage + ".invalid-name-twice"));
-//                ((Wt::WText*)(*i))->show();
-//                check = 1;
-//                
-//            }
+                //            else if (checkName(((Wt::WLineEdit*)(*j))->text().toUTF8(), ids) == 1)
+                //            {
+                //                ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-error");
+                //                ((Wt::WLineEdit*)(*j))->setWidth(Wt::WLength(150));
+                //                ((Wt::WLineEdit*)(*j))->setFocus();
+                //                ((Wt::WText*)(*i))->setText(tr("Alert."
+                //                        + this->nameResourcePage + ".invalid-name-twice"));
+                //                ((Wt::WText*)(*i))->show();
+                //                check = 1;
+                //                
+                //            }
             else
             {
                 ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-success");
@@ -493,7 +512,8 @@ int    CreatePageWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName,
 
 // Function useful ----------------------------------------------
 
-void    CreatePageWidget::builtPaginate(Wt::WNavigationBar *navBar)
+void
+CreatePageWidget::builtPaginate(Wt::WNavigationBar *navBar)
 {
     Wt::WPushButton *butPaginate = new Wt::WPushButton();
     butPaginate->addStyleClass("fg-button ui-button ui-state-default");
@@ -501,7 +521,7 @@ void    CreatePageWidget::builtPaginate(Wt::WNavigationBar *navBar)
     butPaginate->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, -1));
     navBar->addWidget(butPaginate);
     butPaginateExt_.push_back(butPaginate);
-    
+
     butPaginate = new Wt::WPushButton();
     butPaginate->addStyleClass("fg-button ui-button ui-state-default");
     butPaginate->setText(tr("Alert." + this->nameResourcePage + ".paginate-prev"));
@@ -517,8 +537,8 @@ void    CreatePageWidget::builtPaginate(Wt::WNavigationBar *navBar)
         navBar->addWidget(butPaginate);
         butPaginate_.push_back(butPaginate);
     }
-    
-    
+
+
     butPaginate = new Wt::WPushButton();
     butPaginate->addStyleClass("fg-button ui-button ui-state-default");
     butPaginate->setText(tr("Alert." + this->nameResourcePage + ".paginate-next"));
@@ -534,7 +554,8 @@ void    CreatePageWidget::builtPaginate(Wt::WNavigationBar *navBar)
     butPaginateExt_.push_back(butPaginate);
 }
 
-void    CreatePageWidget::initPaginatePage(Wt::WNavigationBar *navBar)
+void
+CreatePageWidget::initPaginatePage(Wt::WNavigationBar *navBar)
 {
     int nbRow = sizeAff();
     if (nbAff_ == 0)
@@ -545,14 +566,15 @@ void    CreatePageWidget::initPaginatePage(Wt::WNavigationBar *navBar)
     }
 }
 
-void    CreatePageWidget::paginatePage()
+void
+CreatePageWidget::paginatePage()
 {
     int nbRow = sizeAff();
     int cpt(0);
     bool check = false;
     if (nbRow > this->nbAff_)
         check = true;
-    
+
     for (vector_type::iterator it = butPaginateExt_.begin(); it != butPaginateExt_.end(); it++)
     {
         if (check)
@@ -578,11 +600,11 @@ void    CreatePageWidget::paginatePage()
         {
             ((Wt::WPushButton*)(*i))->setText(boost::lexical_cast<std::string>(cpt + 1));
             ((Wt::WPushButton*)(*i))->setAttributeValue("style",
-                            "background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6)");
+                    "background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6)");
             ((Wt::WPushButton*)(*i))->clicked().connect(boost::bind(&CreatePageWidget::switchPage, this, cpt));
             if (cpt == rst)
                 ((Wt::WPushButton*)(*i))->setAttributeValue("style",
-                        "background-image: linear-gradient(#ffffff, #ffffff 25%, #CFCFCF)");
+                    "background-image: linear-gradient(#ffffff, #ffffff 25%, #CFCFCF)");
             ((Wt::WPushButton*)(*i))->hide();
             if (((nbRow / this->nbAff_) + ((nbRow % this->nbAff_) > 0 ? 1 : 0)) <= 5)
             {
@@ -598,28 +620,30 @@ void    CreatePageWidget::paginatePage()
                     ((Wt::WPushButton*)(*i))->show();
                 }
                 else if (((cpt + 3) == rst || (cpt + 4) == rst)
-                        && (cpt + 4) >= (int)(butPaginate_.size() - 1))
+                        && (cpt + 4) >= (int) (butPaginate_.size() - 1))
                 {
-                    if ((cpt + 4) == (int)(butPaginate_.size() - 1))
+                    if ((cpt + 4) == (int) (butPaginate_.size() - 1))
                         ((Wt::WPushButton*)(*i))->setText("...");
                     ((Wt::WPushButton*)(*i))->show();
                 }
                 else if ((cpt + 2) == rst)
                 {
-                    if ((cpt + 3) < (int)(butPaginate_.size() - 1) && cpt > 0)
+                    if ((cpt + 3) < (int) (butPaginate_.size() - 1) && cpt > 0)
                         ((Wt::WPushButton*)(*i))->setText("...");
                     ((Wt::WPushButton*)(*i))->show();
                 }
                 else if ((cpt - 2) > 2 && (cpt - 2) == rst)
                 {
-                    if ((cpt + 1) < (int)(butPaginate_.size()))
+                    if ((cpt + 1) < (int) (butPaginate_.size()))
                         ((Wt::WPushButton*)(*i))->setText("...");
                     ((Wt::WPushButton*)(*i))->show();
                 }
                 else if (cpt + 1 != rst
                         && cpt - 1 != rst
                         && cpt != rst)
-                { /* Hide */ }
+                {
+                    /* Hide */
+                }
                 else
                     ((Wt::WPushButton*)(*i))->show();
             }
@@ -630,7 +654,8 @@ void    CreatePageWidget::paginatePage()
     }
 }
 
-void    CreatePageWidget::switchPage(int rst)
+void
+CreatePageWidget::switchPage(int rst)
 {
     int nbRow = sizeAff();
     if (rst == -4)
@@ -646,7 +671,8 @@ void    CreatePageWidget::switchPage(int rst)
     update();
 }
 
-Wt::WComboBox   *CreatePageWidget::getComboBox()
+Wt::WComboBox *
+CreatePageWidget::getComboBox()
 {
     this->nbAff_ = 5;
     Wt::WComboBox *comboBox = new Wt::WComboBox();
@@ -658,18 +684,19 @@ Wt::WComboBox   *CreatePageWidget::getComboBox()
     comboBox->setStyleClass("dataTables_length");
     comboBox->setWidth(Wt::WLength(61));
     comboBox->setMargin(50, Wt::Right);
-    comboBox->changed().connect(std::bind([=] () {
+    comboBox->changed().connect(std::bind([ = ] (){
         if (comboBox->currentText().toUTF8().compare("all") == 0)
-            this->nbAff_ = 0;
+                this->nbAff_ = 0;
         else
             this->nbAff_ = atoi(comboBox->currentText().toUTF8().c_str());
-        this->nbAffBegin_ = 1;
-        update();
-    }));
+                this->nbAffBegin_ = 1;
+                update();
+        }));
     return comboBox;
 }
 
-void    CreatePageWidget::resourceBeAff()
+void
+CreatePageWidget::resourceBeAff()
 {
     int nb(0);
     int nbRow = sizeAff();
@@ -685,7 +712,7 @@ void    CreatePageWidget::resourceBeAff()
     for (vector_pair::iterator it = resources_.begin(); it != resources_.end(); it++)
     {
         Wt::WTableRow *tableRow = (Wt::WTableRow *)it->second;
-        if ((int)it->first == 0)
+        if ((int) it->first == 0)
         {
             if (nb >= this->nbAffBegin_ && nb <= (this->nbAff_ + this->nbAffBegin_ - 1))
                 tableRow->show();
@@ -698,7 +725,8 @@ void    CreatePageWidget::resourceBeAff()
     }
 }
 
-void     CreatePageWidget::searchName(Wt::WLineEdit *arg)
+void
+CreatePageWidget::searchName(Wt::WLineEdit *arg)
 {
     int cpt(0);
     bool check;
@@ -717,7 +745,7 @@ void     CreatePageWidget::searchName(Wt::WLineEdit *arg)
             {
                 Wt::WText *text = (Wt::WText*)tableRow->elementAt(j)->widget(0);
                 std::string compareType("PN2Wt5WTextE");
-                if (compareType.compare(typeid(text).name()) == 0)
+                if (compareType.compare(typeid (text).name()) == 0)
                 {
                     std::string argSearch = boost::lexical_cast<std::string>(arg->text());
                     std::transform(argSearch.begin(), argSearch.end(), argSearch.begin(), ::tolower);
@@ -736,10 +764,11 @@ void     CreatePageWidget::searchName(Wt::WLineEdit *arg)
     update();
 }
 
-int     CreatePageWidget::sizeAff()
+int
+CreatePageWidget::sizeAff()
 {
     int cpt(0);
-    
+
     for (vector_pair::iterator it = resources_.begin(); it != resources_.end(); it++)
     {
         if (it->first == 0)
@@ -748,18 +777,19 @@ int     CreatePageWidget::sizeAff()
     return cpt;
 }
 
-Wt::WDialog    *CreatePageWidget::deleteResource(long long id)
+Wt::WDialog *
+CreatePageWidget::deleteResource(long long id)
 {
     Wt::WDialog *box = new Wt::WDialog(tr("Alert." + this->nameResourcePage
             + ".delete-" + this->nameResourcePage));
 
     box->contents()->addWidget(new Wt::WText(tr("Alert." + this->nameResourcePage
             + ".delete-" + this->nameResourcePageSpec_ + "-message")));
-    
+
     Wt::WPushButton *ok = new Wt::WPushButton(tr("Alert."
             + this->nameResourcePage + ".button-confirm"),
             box->footer());
-    ok->clicked().connect(box, &Wt::WDialog::accept);    
+    ok->clicked().connect(box, &Wt::WDialog::accept);
     ok->setAttributeValue("style", "margin-left:12px");
 
     Wt::WPushButton *annul = new Wt::WPushButton(tr("Alert."
@@ -774,46 +804,55 @@ Wt::WDialog    *CreatePageWidget::deleteResource(long long id)
 
 // Set attribut for option. -------------------------------------
 
-void    CreatePageWidget::setButtonModif(bool check)
+void
+CreatePageWidget::setButtonModif(bool check)
 {
     this->butModif_ = check;
 }
 
-void    CreatePageWidget::setButtonSup(bool check)
+void
+CreatePageWidget::setButtonSup(bool check)
 {
     this->butSup_ = check;
 }
 
-void    CreatePageWidget::setResourceNumberAdd(int nbResource)
+void
+CreatePageWidget::setResourceNumberAdd(int nbResource)
 {
     this->nbResource_ = nbResource;
 }
 
-void    CreatePageWidget::setLocalTable(bool background)
+void
+CreatePageWidget::setLocalTable(bool background)
 {
     this->mainPage_ = background;
 }
 
-void    CreatePageWidget::setUpdate(bool update)
+void
+CreatePageWidget::setUpdate(bool update)
 {
     this->update_ = update;
 }
 
-void    CreatePageWidget::setNameSpecial(std::string nameResourcePageSpec)
+void
+CreatePageWidget::setNameSpecial(std::string nameResourcePageSpec)
 {
     this->nameResourcePageSpec_ = nameResourcePageSpec;
 }
 
 // POPUP : ----------------------------------------------------
 
-void    CreatePageWidget::popupWindow()
+void
+CreatePageWidget::popupWindow()
 {
-    Wt::WLineEdit                       *input;
+    Wt::WLineEdit *input;
     std::vector<Wt::WInteractWidget*> inputName;
     std::vector<Wt::WText*> errorMessage;
 
     //gkr: Init dialog popup
-    Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + this->nameResourcePage + ".add-" + this->nameResourcePageSpec_));
+    Wt::WDialog *dialogAdd_ =
+            new Wt::WDialog(tr("Alert." + this->nameResourcePage
+            + ".add-" + this->nameResourcePageSpec_));
     std::vector<std::string> titleHeader = getTitlesTableText();
     std::vector<std::string>::iterator i = titleHeader.begin();
     for (int j(0); j < this->nbResource_; j++)
@@ -825,7 +864,7 @@ void    CreatePageWidget::popupWindow()
         }
         new Wt::WText(tr("Alert." + this->nameResourcePage + ".name-" + boost::lexical_cast<std::string>(*i))
                 + " : <br />", dialogAdd_->contents());
-        
+
         input = new Wt::WLineEdit(dialogAdd_->contents());
         input->setValidator(editValidator(j));
         input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
@@ -833,23 +872,23 @@ void    CreatePageWidget::popupWindow()
         if (inputName.size() == 0)
             input->setFocus();
         inputName.push_back(input);
-        
+
         Wt::WText *error = new Wt::WText(tr("Alert." + this->nameResourcePage + ".invalid-name-"
                 + boost::lexical_cast<std::string>(*i)),
                 dialogAdd_->contents());
         error->hide();
         errorMessage.push_back(error);
-        
+
         new Wt::WText("<br />", dialogAdd_->contents());
 
         //
-        
+
         i++;
     }
 
-    popupComplete(dialogAdd_, true);
-    
-    dialogAdd_->finished().connect(std::bind([=] () {
+    popupComplete(dialogAdd_, 0);
+
+    dialogAdd_->finished().connect(std::bind([ = ] (){
         popupCheck(inputName, errorMessage, dialogAdd_, -1);
         return;
     }));
@@ -857,7 +896,8 @@ void    CreatePageWidget::popupWindow()
     this->created_ = false;
 }
 
-void    CreatePageWidget::popupForModif(long long id) 
+void
+CreatePageWidget::popupForModif(long long id)
 {
     std::vector<Wt::WInteractWidget*> inputName;
     std::vector<Wt::WText*> errorMessage;
@@ -866,16 +906,16 @@ void    CreatePageWidget::popupForModif(long long id)
     Wt::WDialog *dialogModif_ = new Wt::WDialog(tr("Alert." + this->nameResourcePage + ".modif-" + this->nameResourcePageSpec_));
 
     vector_type resourceTable = getResourceRowTable(id);
-    std::vector<std::string> titleHeader = getTitlesTableText(); 
+    std::vector<std::string> titleHeader = getTitlesTableText();
     std::vector<std::string>::iterator i = titleHeader.begin();
-    
+
     int cpt(0);
     vector_type::iterator j;
     for (j = resourceTable.begin(); j != resourceTable.end() && i != titleHeader.end(); j++)
     {
         Wt::WInteractWidget *widgetAdd = *j;
         std::string nameRessouce("N2Wt5WTextE");
-        if (nameRessouce.compare(typeid(*widgetAdd).name()) == 0)
+        if (nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
         {
             new Wt::WText(tr("Alert." + this->nameResourcePage + ".name-" + boost::lexical_cast<std::string>(*i))
                     + " : <br />", dialogModif_->contents());
@@ -886,8 +926,8 @@ void    CreatePageWidget::popupForModif(long long id)
                 newName.resize(SIZE_NAME_RESOURCE + SIZE_NAME_RESOURCE);
                 newName.resize(newName.size() + 3, '.');
             }
-            
-            
+
+
             Wt::WLineEdit *input = new Wt::WLineEdit(newName, dialogModif_->contents());
             input->setValidator(editValidator(cpt));
             input->enterPressed().connect(dialogModif_, &Wt::WDialog::accept);
@@ -898,7 +938,7 @@ void    CreatePageWidget::popupForModif(long long id)
             input->setToolTip(nameRessouce);
 
             inputName.push_back(input);
-            
+
             Wt::WText *error2 = new Wt::WText(tr("Alert." + this->nameResourcePage + ".invalid-name-"
                     + boost::lexical_cast<std::string>(*i)),
                     dialogModif_->contents());
@@ -912,9 +952,9 @@ void    CreatePageWidget::popupForModif(long long id)
     if (i == titleHeader.end() && j != resourceTable.end())
         std::cout << "Warning : Too many title for header table (popupforModif" << std::endl;
 
-    popupComplete(dialogModif_, false);
+    popupComplete(dialogModif_, id);
 
-    dialogModif_->finished().connect(std::bind([=] () {
+    dialogModif_->finished().connect(std::bind([ = ] (){
         popupCheck(inputName, errorMessage, dialogModif_, id);
         return;
     }));
@@ -922,7 +962,8 @@ void    CreatePageWidget::popupForModif(long long id)
     this->created_ = false;
 }
 
-void    CreatePageWidget::popupCheck(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id)
+void
+CreatePageWidget::popupCheck(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id)
 {
     int check(0);
     if (dialog->result() == Wt::WDialog::Rejected)
@@ -939,23 +980,25 @@ void    CreatePageWidget::popupCheck(std::vector<Wt::WInteractWidget*> inputName
     return;
 }
 
-void    CreatePageWidget::popupComplete(Wt::WDialog *dialog, bool typeDial)
+void
+CreatePageWidget::popupComplete(Wt::WDialog *dialog, long long id)
 {
     dialog->setResizable(true);
     dialog->setClosable(true);
 
     new Wt::WText("\n", dialog->contents());
-    popupAddWidget(dialog, typeDial);   //Methode overload // typeDial True = Add, False = Modif
+    popupAddWidget(dialog, id); //Methode overload // id == 0 Add || id > 0 Modif
 
     buttonInDialogFooter(dialog);
 }
 
-void    CreatePageWidget::buttonInDialogFooter(Wt::WDialog *dialog)
+void
+CreatePageWidget::buttonInDialogFooter(Wt::WDialog *dialog)
 {
-        Wt::WPushButton *ok = new Wt::WPushButton(tr("Alert."
+    Wt::WPushButton *ok = new Wt::WPushButton(tr("Alert."
             + this->nameResourcePage + ".button-save"),
-                dialog->footer());
-    ok->clicked().connect(dialog, &Wt::WDialog::accept);    
+            dialog->footer());
+    ok->clicked().connect(dialog, &Wt::WDialog::accept);
     ok->setAttributeValue("style", "margin-left:12px");
 
     Wt::WPushButton *annul = new Wt::WPushButton(tr("Alert."
@@ -964,3 +1007,163 @@ void    CreatePageWidget::buttonInDialogFooter(Wt::WDialog *dialog)
     annul->clicked().connect(dialog, &Wt::WDialog::reject);
     annul->setAttributeValue("style", "margin-left:12px;");
 }
+
+/**/
+
+void
+CreatePageWidget::handleJsonGet(vectors_Json jsonResources)
+{
+//    std::cout << "Handle Json Get " << std::endl;
+//    int cpt(0);
+//    for (vector_Json jsonResource : jsonResources)
+//    {
+//        std::cout << "before before" << std::endl;
+//        if (jsonResource.size() > 0)
+//        {
+//            for (Wt::Json::Array& jsonArray : jsonResource)
+//            {
+//                std::cout << "before" << std::endl;
+//                if (!jsonArray.empty())
+//                {
+//                        std::cout << "after" << std::endl;
+//                    for (Wt::Json::Object jsonObject : jsonArray)
+//                    {
+//                        Wt::WString name = jsonObject.get("name");
+//                        long long id = jsonObject.get("id");
+//                        std::cout << "JSON : " << cpt
+//                                << " name : " << name << " id : " << id << std::endl;
+//                    }
+//                }
+//            }
+//        }
+//        cpt++;
+//    }
+//    std::cout << "Handle Json Get END" << std::endl;
+}
+
+void
+CreatePageWidget::recursiveGetResources(lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client)
+{
+    std::string apiAddress = this->getApiUrl() + "/" + (*(*listsUrl.begin()).begin())
+            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+            + "&token=" + session_->user()->token.toUTF8();
+
+    Wt::log("debug") << "[GET] address to call : " << apiAddress;
+
+    client->done().connect(boost::bind(&CreatePageWidget::handleHttpResponseGet, this, _1, _2, listsUrl, jsonResource, client));
+    if (client->get(apiAddress))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+    else
+    {
+        Wt::log("error") << "Error Client Http";
+    }
+}
+
+int
+CreatePageWidget::handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
+        lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client)
+{
+    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    if (!err)
+    {
+        Wt::Json::Value result = Wt::Json::Value::Null;
+        if (response.status() == 200)
+        {
+            try
+            {
+                Wt::Json::parse(response.body(), result);
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning")
+                        << "[" + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePage)
+                        + " Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".parsing-error-title"), tr("Alert." + this->nameResourcePage + ".parsing-error"), Wt::Ok);
+                return EXIT_FAILURE;
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning")
+                        << "[" + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePage)
+                        + " Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".typexception-error-title"), tr("Alert." + this->nameResourcePage + ".typexception-error"), Wt::Ok);
+                return EXIT_FAILURE;
+            }
+        }
+        if (response.status() == 200 || response.status() == 404)
+        {
+            if (jsonResource.size() == 0)
+            {
+                jsonResource.push_back(vector_Json());
+            }
+            if ((*(jsonResource.begin())).size() == 0)
+            {
+                (*(jsonResource.begin())).push_back(result);
+            }
+            else
+            {
+                jsonResource.back().push_back(result);
+            }
+
+            (*listsUrl.begin()).pop_front();
+            if ((*listsUrl.begin()).size() == 0 || response.status() == 404)
+            {
+                listsUrl.pop_front();
+                jsonResource.push_back(vector_Json());
+            }
+            else if ((*(*listsUrl.begin()).begin()).find(":id") != std::string::npos && response.status() == 200)
+            {
+                vector_Json itJ = jsonResource.back();
+                Wt::Json::Array& result1 = itJ.back();
+                list_string::iterator listUrl = (*listsUrl.begin()).begin();
+                std::string saveUrl = (*listUrl);
+                Wt::Json::Array::iterator itA = result1.begin();
+                while (itA != result1.end() && saveUrl.compare((*listUrl)) == 0)
+                {
+                    Wt::Json::Object jsonObject = (*itA);
+                    long long idJ = jsonObject.get("id");
+                    (*listUrl).replace((*listUrl).find(":id"), 3, boost::lexical_cast<std::string>(idJ));
+                    if (++itA != result1.end())
+                    {
+                        (*listsUrl.begin()).push_back(saveUrl);
+                        listUrl++;
+                    }
+                }
+            }
+            if (listsUrl.size() == 0)
+            {
+                handleJsonGet(jsonResource);
+            }
+            else
+            {
+                recursiveGetResources(listsUrl, jsonResource);
+            }
+            
+            return EXIT_SUCCESS;
+        }
+    }
+    else
+    {
+        Wt::log("warning") << "[" + tr("Alert." + this->nameResourcePage + ".add-form."
+                + this->nameResourcePage) + " Widget] Http::Client error: " << response.body();
+        Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".database-error-title"), tr("Alert." + this->nameResourcePage + ".database-error"), Wt::Ok);
+    }
+    return EXIT_FAILURE;
+}
+
+void
+CreatePageWidget::setApiUrl(std::string apiUrl)
+{
+    apiUrl_ = apiUrl;
+}
+
+std::string
+CreatePageWidget::getApiUrl()
+{
+    return apiUrl_;
+}
+
+

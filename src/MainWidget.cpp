@@ -164,7 +164,7 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         }
         case Enums::EPageType::RECIPIENTS:
         {
-            rpw = new RecipientsWidget(this->session, this->_apiUrl);
+//            rpw = new RecipientsWidget(this->session, this->_apiUrl);
             break;            
         }
         case Enums::EPageType::INFORMATIONS:

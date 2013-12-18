@@ -28,8 +28,13 @@
 #include <Wt/WTheme>
 
 #include "CreatePageWidget.h"
+#include "ApiManagement.h"
 
 typedef std::map<long long, std::pair<long long, std::string>> MapLongString2;
+
+typedef std::map<long long, std::map<long long, std::string>> MapAssetInfos;
+
+typedef std::multimap<long long, long long>  MapFilter;
 
 class CreatePageWidget;
 
@@ -64,7 +69,7 @@ protected:
   virtual Wt::WDialog                   *deleteResource(long long id);
   
   virtual Wt::WValidator                *editValidator(int who);
-  virtual void                          popupAddWidget(Wt::WDialog *dialog, bool typeDial);
+  virtual void                          popupAddWidget(Wt::WDialog *dialog, long long id);
 
   virtual std::vector<long long>        getIdsTable();
   virtual std::vector<std::string>      getTitlesTableText();
@@ -77,17 +82,10 @@ private:
   /*
    * return API after call.
    */
-  void                  getAssets(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  getFilters(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  getFilterParameterValues(boost::system::error_code err, const Wt::Http::Message& response, long long filterId, Wt::Json::Object filJson);
-  void                  getInformations(boost::system::error_code err, const Wt::Http::Message& response);
-  
   void                  postAsset(boost::system::error_code err, const Wt::Http::Message& response);
-  
-  void                  setSession(Echoes::Dbo::Session *session);
-  void                  setApiUrl(std::string apiUrl);
-  std::string           getApiUrl();
+  void                  deleteAsset(boost::system::error_code err, const Wt::Http::Message& response);
+
+  virtual void          handleJsonGet(vectors_Json jsonResources);
   
     struct filterValuesStruct
     {
@@ -96,25 +94,28 @@ private:
         int nbValue;
         long long searchId;
         Wt::WString filterValue;
+        int ida;
     };
   
-  MapLongString2                 assets_;
-  Wt::WStandardItemModel         *assetsModel;
-  MapLongString2                 plugins_;
-  MapLongString2                 informations_;
-  Wt::WStandardItemModel         *informationsModel;
-  std::map<long long, filterValuesStruct> filterParameterValues_;
-  std::map<int, Wt::WCheckBox*>       filterCheckBox_;
-  std::map<long long, Wt::WComboBox*> filterInfosComboBox_;
-  std::map<long long, Wt::WComboBox*> filterAssetsComboBox_;
-  long long                     idHost_;
-  long long                     idPlugin_;
-  std::vector<long long>        idsInformations_;
-  bool                          created_;
-  bool                          newClass_;
-  Echoes::Dbo::Session          *session_;
-  std::vector<long long>        idsAlert_;
-  std::string                   apiUrl_;
+  MapAssetInfos                                 assetInfos_;
+  MapFilter                                     filters_;
+  MapLongString2                                assets_;
+  Wt::WStandardItemModel                        *assetsModel;
+  MapLongString2                                plugins_;
+  MapLongString2                                 informations_;
+  Wt::WStandardItemModel                        *informationsModel;
+  std::map<long long, filterValuesStruct>       filterParameterValues_;
+  std::map<int, Wt::WCheckBox*>                 filterCheckBox_;
+  std::map<long long, Wt::WComboBox*>           filterInfosComboBox_;
+  std::map<long long, Wt::WComboBox*>           filterAssetsComboBox_;
+  long long                                     idHost_;
+  long long                                     idPlugin_;
+  std::vector<long long>                        idsInformations_;
+  bool                                          created_;
+  bool                                          newClass_;
+  Echoes::Dbo::Session                          *session_;
+  std::vector<long long>                        idsAlert_;
+  std::string                                   apiUrl_;
   
   Wt::WTable *tableFilters;
 };

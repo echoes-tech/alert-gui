@@ -16,7 +16,7 @@
 #include "AssetManagementWidget.h"
 
 AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, std::string apiUrl)
-: CreatePageWidget("asset")
+: CreatePageWidget(session, apiUrl, "asset")
 {
     session_= session;
     apiUrl_ = apiUrl;
@@ -41,7 +41,7 @@ void    AssetManagementWidget::update()
 
 // TABLE(S) FOR POPUP ------------------------------------------
 
-void  AssetManagementWidget::popupAddWidget(Wt::WDialog *dialog, bool typeDial)
+void  AssetManagementWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
 }
 
@@ -633,19 +633,5 @@ void AssetManagementWidget::downloadScript(std::string fileName)
 
 // ----------------------------------------------
 
-void    AssetManagementWidget::setSession(Echoes::Dbo::Session *session)
-{
-    session_ = session;
-}
-
-void    AssetManagementWidget::setApiUrl(std::string apiUrl)
-{
-    apiUrl_ = apiUrl;
-}
-
-std::string   AssetManagementWidget::getApiUrl()
-{
-    return apiUrl_;
-}
 
 

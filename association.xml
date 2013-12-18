@@ -60,6 +60,15 @@
   <message id="Alert.association.database-error">
       Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
   </message>
+  <message id="Alert.association.parsing-error-title">Parsing error</message>
+  <message id="Alert.association.parsing-error">
+      Parsing error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+  <message id="Alert.association.typexception-error-title">Type exception error</message>
+  <message id="Alert.association.typexception-error">
+      Type exception error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+  
 <!--    Warning message     -->
 
 <!-- templates -->

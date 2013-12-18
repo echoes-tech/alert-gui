@@ -16,7 +16,7 @@
 #include "InformationsWidget.h"
 
 InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, std::string apiUrl)
-: CreatePageWidget("information")
+: CreatePageWidget(session, apiUrl, "information")
 {
     session_ = session;
     apiUrl_ = apiUrl;
@@ -41,7 +41,7 @@ void InformationsWidget::update()
 
 // TABLE(S) FOR POPUP ------------------------------------------
 
-void InformationsWidget::popupAddWidget(Wt::WDialog *dialog)
+void InformationsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
 }
 
@@ -577,19 +577,5 @@ void InformationsWidget::postPlugin(boost::system::error_code err, const Wt::Htt
 
 // ----------------------------------------------
 
-void InformationsWidget::setSession(Echoes::Dbo::Session *session)
-{
-    session_ = session;
-}
-
-void InformationsWidget::setApiUrl(std::string apiUrl)
-{
-    apiUrl_ = apiUrl;
-}
-
-std::string InformationsWidget::getApiUrl()
-{
-    return apiUrl_;
-}
 
 

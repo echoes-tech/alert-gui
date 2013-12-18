@@ -11,8 +11,8 @@
  * 
  */
 
-#ifndef ECHOESHOME_H_
-#define ECHOESHOME_H_
+#ifndef ECHOESHOME_H
+#define ECHOESHOME_H
 
 #include "GlobalIncludeFile.h"
 
@@ -93,4 +93,4 @@ class EchoesHome : public Wt::WContainerWidget
         virtual void deleteContent();
 };
 
-#endif // ECHOESHOME_H_
+#endif // ECHOESHOME_H

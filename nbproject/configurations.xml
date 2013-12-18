@@ -74,6 +74,7 @@
       <itemPath>auth.xml</itemPath>
       <itemPath>auth_fr.xml</itemPath>
       <itemPath>config.xml</itemPath>
+      <itemPath>config.xml.erb</itemPath>
       <itemPath>global.xml</itemPath>
       <itemPath>global_fr.xml</itemPath>
       <itemPath>information.xml</itemPath>
@@ -211,6 +212,8 @@
       <item path="auth_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="config.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="config.xml.erb" ex="false" tool="3" flavor2="0">
       </item>
       <item path="global.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -456,6 +459,8 @@
       <item path="auth_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="config.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="config.xml.erb" ex="false" tool="3" flavor2="0">
       </item>
       <item path="global.xml" ex="false" tool="3" flavor2="0">
       </item>

@@ -84,10 +84,10 @@ encode_url() {
 }
 
 clean_and_exit() {
-    echo "$ERR_INSTALL_MSG: $1"
-    cd "$CURRENT_DIR"
-    rm -rf "$TMP_DIR"
-    exit 1
+  echo "$ERR_INSTALL_MSG: $1"
+  cd "$CURRENT_DIR"
+  rm -rf "$TMP_DIR"
+  exit 1
 }
 
 test_http_return() {
@@ -268,6 +268,9 @@ echo "ECHOES Alert Probe installed."
 
 # Get and copy informations file
 get "/probes/$PROBE_ID/json" "login=$LOGIN_ENC&password=$PASSWORD_ENC" informations.json
+
+# Unescape Json
+sed -i -e 's:\\\\:\\:g' -e 's:\\/:/:g' informations.json
 
 cp informations.json $INSTALL_DIR/etc/
 

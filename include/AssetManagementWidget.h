@@ -52,14 +52,12 @@
 
 #include <tools/Enums.h>
 
-#include "CreatePageWidget.h"
+#include "AbstractPage.h"
 
-#define REG_EXP ("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}")
-
-class CreatePageWidget;
+class AbstractPage;
 
 class AssetManagementWidget : 
-public CreatePageWidget 
+public AbstractPage 
 {
 public:
   /*! \brief Constructor
@@ -75,27 +73,13 @@ public:
   void          recoverListAsset();
 
 protected:
-  /*! \brief Closes the registration widget. 
-   * 
-   * The default implementation simply deletes the widget.
-   */
-  virtual void                          close();
-
-  virtual void                          closePopup();
-
-  virtual void                          update();
-  virtual void                          modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
-  virtual void                          addResource(std::vector<Wt::WInteractWidget*> argument);
   virtual Wt::WDialog                   *deleteResource(long long id);
   
-  virtual Wt::WValidator                *editValidator(int who);
-  virtual void                          popupAddWidget(Wt::WDialog *dialog, long long id);
+  virtual Wt::WValidator                *editValidator(int cpt);
 
-  virtual std::vector<long long>        getIdsTable();
-  virtual std::vector<std::string>      getTitlesTableText();
-  virtual std::vector<std::string>      getTitlesTableWidget();
-  virtual vector_type                   getResourceRowTable(long long id);
+  void                                  update();
 
+    virtual void                returnApiPostResource(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
 private:
   /*
    * Generate and get script (sonde) for asset.
@@ -107,13 +91,8 @@ private:
   /*
    * return API after call.
    */
-  void                  putAsset(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  postAsset(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  postProbe(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  postPlugin(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  checkAlertsInAsset(boost::system::error_code err, const Wt::Http::Message& response, Wt::WDialog *box, long long id);
-  void                  deleteAsset(boost::system::error_code err, const Wt::Http::Message& response);
-  void                  getAssets(boost::system::error_code err, const Wt::Http::Message& response);
+  void                  postProbe(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
+  void                  checkAlertsInAsset(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client, Wt::WDialog *box, long long id);
   
   bool                   created_;
   bool                   newClass_;

@@ -44,6 +44,8 @@
 #include "InformationsWidget.h"
 #include "AlertsWidget.h"
 #include "Association.h"
+#include "AbstractPage.h"
+#include "AssetManagementWidget.h"
 
 class RecipientsWidget;
 class InformationsWidget;

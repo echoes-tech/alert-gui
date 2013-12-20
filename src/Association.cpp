@@ -21,6 +21,33 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     setButtonModif(false);
     setButtonSup(true);
     setLocalTable(true);
+
+    list_string listTitles;
+    setTitles(listTitles);
+    
+    lists_string lListUrl;
+    std::list<std::string> listUrl;
+    
+    listUrl.push_back("assets");
+    listUrl.push_back("assets/:id");
+    lListUrl.push_back(listUrl);
+    listUrl.clear();
+
+    listUrl.push_back("informations");
+    listUrl.push_back("informations/:id");
+    lListUrl.push_back(listUrl);
+    listUrl.clear();
+
+    listUrl.push_back("plugins");
+    lListUrl.push_back(listUrl);
+    listUrl.clear();
+
+    listUrl.push_back("filters");
+    listUrl.push_back("filters/:id/parameters");
+    lListUrl.push_back(listUrl);
+    listUrl.clear(); 
+
+    setUrl(lListUrl);
 }
 
 // TABLE(S) FOR MAIN PAGE -------------------------------------
@@ -217,37 +244,14 @@ void Association::closePopup()
 
 void Association::recoverListAssociation()
 {
-
     assets_.clear();
     plugins_.clear();
     filterParameterValues_.clear();
     informations_.clear();
     idsInformations_.clear();
     assetInfos_.clear();
-    lists_string lListUrl;
-    std::list<std::string> listUrl;
 
-
-    listUrl.push_back("assets");
-    listUrl.push_back("assets/:id");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-
-    listUrl.push_back("informations");
-    listUrl.push_back("informations/:id");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-
-    listUrl.push_back("plugins");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-
-    listUrl.push_back("filters");
-    listUrl.push_back("filters/:id/parameters");
-    lListUrl.push_back(listUrl);
-    listUrl.clear(); 
-    
-    recursiveGetResources(lListUrl);
+    recursiveGetResources();
 }
 
 void    Association::handleJsonGet(vectors_Json jsonResources)

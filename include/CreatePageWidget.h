@@ -146,6 +146,9 @@ public:
     void                setUpdate(bool update);
     void                setNameSpecial(std::string nameResourcePageSpe);
 
+    void                setTitles(list_string titles);
+    void                setUrl(lists_string listsUrl);
+
 
 protected:
 
@@ -159,7 +162,7 @@ protected:
     virtual Wt::WValidator              *editValidator(int who) {return (new Wt::WValidator());};
     virtual void                        closePopup() {};
 
-    virtual std::vector<std::string>    getTitlesTableText() {std::vector<std::string> res; return res;};
+    virtual std::vector<std::string>    getTitlesTableText();
     virtual std::vector<std::string>    getTitlesTableWidget() {std::vector<std::string> res; return res;};
     virtual std::vector<long long>      getIdsTable() {std::vector<long long> res; return res;};
     virtual vector_type                 getResourceRowTable(long long id) {vector_type res; return res;};
@@ -170,7 +173,7 @@ protected:
     void                                setApiUrl(std::string apiUrl);
     std::string                         getApiUrl();
     
-    void                                recursiveGetResources(lists_string listUrl, vectors_Json jsonResource = vectors_Json(), Wt::Http::Client *client = new Wt::Http::Client());
+    void                                recursiveGetResources(vectors_Json jsonResource = vectors_Json());
     virtual void                        handleJsonGet(vectors_Json jsonResources);
     
 private:
@@ -203,6 +206,10 @@ private:
     void                        switchPage(int rst);
     bool                        checkResource();
 
+    std::vector<long long>      ids_;
+    vector_type                 rowsTable_;
+    lists_string                listsUrl_;
+    list_string                 titles_;
     Echoes::Dbo::Session        *session_;
     std::string                 apiUrl_;
     std::string                 nameResourcePage;

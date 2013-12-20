@@ -52,14 +52,13 @@
 
 #include <tools/Enums.h>
 
-#include "CreatePageWidget.h"
+#include "AbstractPage.h"
 
-#define REG_EXP ("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}")
 
-class CreatePageWidget;
+class AbstractPage;
 
 class InformationsWidget :
-public CreatePageWidget
+public AbstractPage
 {
 public:
     /*! \brief Constructor
@@ -68,76 +67,23 @@ public:
      */
     InformationsWidget(Echoes::Dbo::Session *session, std::string apiUrl);
 
-    virtual void popupAddWidget(Wt::WDialog *dialog, long long id);
-
-    long long userId;
-    void getInformations(boost::system::error_code err, const Wt::Http::Message& response);
-    void getInformation(boost::system::error_code err, const Wt::Http::Message& response);
-    void recoverListInformations();
-    void recoverInformation(int id);
-
-    Wt::Json::Value result_;
-    Wt::Json::Value result_row_;
-
-    Wt::WTable *corpTable;
-    std::string apiUrl_;
-    virtual void update();
-
 protected:
-    /*! \brief Validates the current information.
-     *
-     * The default implementation simply calls
-     * RegistrationModel::validate() on the model.
-     *
-     * You may want to reimplement this method if you've added other
-     * information to the registration form that need validation.
-     */
-    // virtual bool validate();
+    
+        void checkAlertsInInformation(boost::system::error_code err, const Wt::Http::Message& response, Wt::WDialog *box, long long id);
 
-    /*! \brief Validates the current information.                                                           
-     * 
-     * The default implementation simply calls
-     * RegistrationModel::validate() on the model.
-     * 
-     * You may want to reimplement this method if you've added other 
-     * information to the registration form that need validation.
-     */
-    //    virtual bool validate();
-    /*! \brief Closes the registration widget. 
-     * 
-     * The default implementation simply deletes the widget.
-     */
-    virtual void close();
+    
+        void    addResource(std::vector<Wt::WInteractWidget*> argument);
 
-    //void    initPopup();
-    //void        addResourceInPopup(Wt::WDialog *dialog_);
-
-    virtual void modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
-    virtual void addResource(std::vector<Wt::WInteractWidget*> argument);
+        
+        
+        
     virtual Wt::WDialog *deleteResource(long long id);
-    Wt::WFileResource *generateScript(long long i, Wt::WString assetName);
-    std::string getStringFromFile(std::string resourcePath);
-
-    void closePopup();
 
     Wt::WValidator *editValidator(int who);
 
-    void putInformation(boost::system::error_code err, const Wt::Http::Message& response);
-    void postInformation(boost::system::error_code err, const Wt::Http::Message& response);
-    void postPlugin(boost::system::error_code err, const Wt::Http::Message& response);
-    void checkAlertsInInformation(boost::system::error_code err, const Wt::Http::Message& response, Wt::WDialog *box, long long id);
-    void deleteInformation(boost::system::error_code err, const Wt::Http::Message& response);
-
 private:
 
-    std::vector<long long> getIdsTable();
-    std::vector<std::string> getTitlesTableText();
-    std::vector<std::string> getTitlesTableWidget();
-    vector_type getResourceRowTable(long long id);
-    void downloadScript(std::string fileName);
-
-
-
+    std::string apiUrl_;
 
     Wt::WLineEdit *saveEdit;
     bool created_;

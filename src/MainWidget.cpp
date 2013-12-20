@@ -332,7 +332,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::ASSET:
                 {
                     this->contentFluid->addWidget(amw);
-                    amw->recoverListAsset();
+                    amw->recursiveGetResources();
                     break;
                 }
                 case Enums::EPageType::RECIPIENTS:
@@ -343,7 +343,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::INFORMATIONS:
                 {
                     this->contentFluid->addWidget(inw);
-                    inw->recoverListInformations();
+                    inw->recursiveGetResources();
                     break;
                 }
                 case Enums::EPageType::ASSOCIATION:

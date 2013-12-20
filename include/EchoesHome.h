@@ -7,7 +7,7 @@
  * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
  * COMPANY AUTHORIZATION.
  * 
- * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
  * 
  */
 
@@ -38,21 +38,22 @@
 #include <Wt/WTableView>
 #include <Wt/WTable>
 
+#include "Conf.h"
 
 class EchoesHome : public Wt::WContainerWidget 
 {
     public:
-
         EchoesHome(Wt::WContainerWidget *parent = 0);
+        virtual ~EchoesHome();
         Echoes::Dbo::Session *getSession();
         std::string getApiUrl() const;
 
         // This globale is version of web site. Init in main.c.
-        static std::string     version_g;
-        
+        static std::string version_g;
+
     private:
         Echoes::Dbo::Session *session;
-        std::string _apiUrl;
+        std::string m_apiUrl;
 
         void concatApiUrl();
         void setApiUrl(std::string apiUrl);
@@ -94,3 +95,4 @@ class EchoesHome : public Wt::WContainerWidget
 };
 
 #endif // ECHOESHOME_H
+

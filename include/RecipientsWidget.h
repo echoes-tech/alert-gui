@@ -14,7 +14,7 @@
 
 #include "GlobalIncludeFile.h"
 
-#include "CreatePageWidget.h"
+#include "AbstractPage.h"
 #include "UserEditionWidget.h"
 
 class UserEditionWidget;

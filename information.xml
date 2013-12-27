@@ -45,7 +45,12 @@
     <message id="Alert.information.button-confirm">Confirm</message>
 
 <!--    Invalid message     -->
-  <message id="Alert.information.invalid-name-information">
+  <message id="Alert.information.invalid-name-name">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  <message id="Alert.information.invalid-name-desc">
       <span style="color:red">
 &nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
 </span>

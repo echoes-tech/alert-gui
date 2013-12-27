@@ -22,47 +22,36 @@
 #include <Wt/WRandom>
 
 #include "GlobalIncludeFile.h"
-#include "CreatePageWidget.h"
+#include "AbstractPage.h"
 
 typedef std::map<long long, std::string>        MapLongString;
 
+class AbstractPage;
+
 class UserEditionWidget :
-public CreatePageWidget
+public AbstractPage
 {
 public:
     UserEditionWidget(Echoes::Dbo::Session *session, std::string apiUrl, int type);
 
-    void                        update();
-    std::vector<std::string>    getTitlesTableWidget();
-    std::vector<std::string>    getTitlesTableText();
-    std::vector<long long>      getIdsTable();
-    vector_type                 getResourceRowTable(long long id);
     Wt::WValidator              *editValidator(int who);
-    void                        closePopup();
-    void                        recoverListMedia();
     
-    void                        getMedia(boost::system::error_code err, const Wt::Http::Message& response);
-
     void                        addResource(std::vector<Wt::WInteractWidget*> argument);
-    Wt::WDialog                 *deleteResource(long long id);
     void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
 
-    void                        close();
-    
-    
-    void                        deleteMedia(boost::system::error_code err, const Wt::Http::Message& response);
-    void                        postMedia(boost::system::error_code err, const Wt::Http::Message& response);
-    void                        putMedia(boost::system::error_code err, const Wt::Http::Message& response);
+    void                        handleJsonGet(vectors_Json jsonResources);
+    virtual std::string         addParameter();
+    virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
+
 
 private:
 
-    bool                  created_;
-    bool                  newClass_;
-    Echoes::Dbo::Session               *session_;
-    std::string           apiUrl_;
-    Wt::Json::Value       result_;
-    int                   type_;  
-    MapLongString    mediasTokens;
+    Echoes::Dbo::Session        *session_;
+    std::string                 apiUrl_;
+    Wt::Json::Value             result_;
+    int                         type_;  
+    MapLongString               mediasTokens;
+    Wt::WStandardItemModel      *usersModel_;
 };
 
 

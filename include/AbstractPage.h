@@ -77,7 +77,7 @@
 
 // DEFINE
 
-#define SIZE_NAME_RESOURCE (40)
+#define SIZE_NAME (60)
 
 // TYPEDEF
 
@@ -135,10 +135,10 @@ protected:
     enum ETypeJson
     {
         widget = -1, // other
-        string = 0,
-        boolean = 1,
-        interger = 2, // int
-        undid = 3 // under id (string) "name"
+        string = 0, //WText
+        boolean = 1, //WCheckBox
+        integer = 2, // int //WText
+        undid = 3 // under id (string) "name" //WComboBox
     };
 
     
@@ -172,6 +172,7 @@ protected:
      * @param titles &lsaquo; type, name &rsaquo; \n
      * type(0) == Wtext || type(1) == Wwidget.
      */
+    void                        setUndidName(std::string undidName);
     void                        setTitles(vector_pair_string titles);
     void                        setUrl(lists_string listsUrl);
     void                        setButtonModif(bool check);
@@ -195,6 +196,7 @@ protected:
      */
     int                         handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
     lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client);
+    virtual std::string         addParameter() {return "";};
     // ---- ADD MODIF DELETE ----------------------------------------------
     virtual void                addResource(std::vector<Wt::WInteractWidget*> argument);
     virtual void                modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
@@ -214,6 +216,7 @@ protected:
     // OVERLOAD -------------------------------------------------
     virtual Wt::WValidator      *editValidator(int who) {return (new Wt::WValidator());};
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id) {};
+    virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog) {return new Wt::WComboBox(dialog->contents());};
 
 private:
     
@@ -238,11 +241,12 @@ private:
     vector_widget               inputs_;
     // Attributs.-------------------------------
     lists_string                listsUrl_;
-    vector_pair_string                 titles_;
+    vector_pair_string          titles_;
     Echoes::Dbo::Session        *session_;
     std::string                 apiUrl_;
     std::string                 nameResourcePage;
     std::string                 nameResourcePageSpec_;
+    std::string                 undidName_;
     bool                        created_;
     bool                        butModif_;
     bool                        butDel_;

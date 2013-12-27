@@ -30,20 +30,20 @@ void    RecipientsWidget::update()
        templat->bindWidget("resource-table", tab);
 
        UserEditionWidget *uew = new UserEditionWidget(session_, apiUrl_, 1);
-       uew->recoverListMedia();
-       uew->setNameSpecial("mail");
+       uew->recursiveGetResources();
+//       uew->setNameSpecial("mail");
        Wt::WMenuItem *tabMail = tab->addTab(uew, "Mail");
        tabMail->setStyleClass("recipients recipients-radius-left");
        tabMail->select();
 
        uew = new UserEditionWidget(session_, apiUrl_, 2);
-       uew->recoverListMedia();
-       uew->setNameSpecial("sms");
+       uew->recursiveGetResources();
+//       uew->setNameSpecial("sms");
        tab->addTab(uew, "SMS")->setStyleClass("recipients recipients-radius-mid");
 
        uew = new UserEditionWidget(session_, apiUrl_, 3);
-       uew->recoverListMedia();
-       uew->setNameSpecial("push");
+       uew->recursiveGetResources();
+//       uew->setNameSpecial("push");
        tab->addTab(uew, "Push")->setStyleClass("recipients recipients-radius-right");
        newClass_ = true;
     }

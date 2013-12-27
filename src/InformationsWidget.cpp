@@ -19,9 +19,6 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, std::strin
 : AbstractPage(session, apiUrl, "information")
 {
     session_ = session;
-    apiUrl_ = apiUrl;
-    created_ = false;
-    newClass_ = false;
 
     setButtonModif(true);
     setButtonSup(true);
@@ -32,6 +29,7 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, std::strin
     titles.push_back(std::make_pair(ETypeJson::string, "desc"));
     titles.push_back(std::make_pair(ETypeJson::string, "calculate"));
     titles.push_back(std::make_pair(ETypeJson::undid, "information_unit"));
+    setUndidName("name");
     titles.push_back(std::make_pair(ETypeJson::boolean, "display"));
     setTitles(titles);
 
@@ -41,22 +39,40 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, std::strin
     listUrl.push_back("informations/:id");
     lListUrl.push_back(listUrl);
     listUrl.clear();
+    listUrl.push_back("units");
+    lListUrl.push_back(listUrl);
+    listUrl.clear();
     
     setUrl(lListUrl);
 }
 
 Wt::WValidator *InformationsWidget::editValidator(int who)
 {
-    Wt::WRegExpValidator *validator =
-            new Wt::WRegExpValidator("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}");
-    validator->setMandatory(true);
+    Wt::WRegExpValidator *validator;
+    if (who == 2)
+    {
+        validator = new Wt::WRegExpValidator();
+        validator->setMandatory(false);
+    }
+    else
+    {
+        validator = new Wt::WRegExpValidator("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}");
+        validator->setMandatory(true);
+    }
     return validator;
 }
 
-void InformationsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
+Wt::WComboBox *InformationsWidget::popupAdd(Wt::WDialog *dialog)
 {
-    std::vector<Wt::WInteractWidget*>::iterator i = argument.begin();
+    
+    Wt::WComboBox *comboBox = new Wt::WComboBox(dialog->contents());
+    comboBox->setModel(unitModel_);
+    return comboBox;
+}
 
+void InformationsWidget::addResource(std::vector<Wt::WInteractWidget*> arguments)
+{
+    std::vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
     // Post Information -------
     Wt::Http::Message messageInformation;
     
@@ -64,10 +80,17 @@ void InformationsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
     messageInformation.addBodyText("\n\"name\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
     messageInformation.addBodyText(",\n\"desc\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
     messageInformation.addBodyText(",\n\"calculate\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
-    messageInformation.addBodyText(",\n\"unit_id\" : " + ((Wt::WLineEdit*)(*i++))->text().toUTF8());
-    messageInformation.addBodyText(",\n\"display\" : " + ((Wt::WLineEdit*)(*i++))->text().toUTF8());
-    messageInformation.addBodyText("\n}");
 
+    Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
+    messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
+
+    if (((Wt::WCheckBox*)(*i))->isChecked() == true)
+        messageInformation.addBodyText(",\n\"display\" : true");
+    else if (((Wt::WCheckBox*)(*i))->isChecked() == false)
+        messageInformation.addBodyText(",\n\"display\" : false");
+
+    messageInformation.addBodyText("\n}");
+    
     std::string apiAddress = this->getApiUrl() + "/informations"
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8();
@@ -80,6 +103,73 @@ void InformationsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
         Wt::WApplication::instance()->deferRendering();
     else
         Wt::log("error") << "Error Client Http";
+}
+
+void InformationsWidget::modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id)
+{
+    std::vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
+
+    // Post Information -------
+    Wt::Http::Message messageInformation;
+    
+    messageInformation.addBodyText("{");
+    messageInformation.addBodyText("\n\"name\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+    messageInformation.addBodyText(",\n\"desc\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+    messageInformation.addBodyText(",\n\"calculate\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+    
+    Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
+    messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
+
+    if (((Wt::WCheckBox*)(*i++))->isChecked() == true)
+        messageInformation.addBodyText(",\n\"display\" : true");
+    else if (((Wt::WCheckBox*)(*i++))->isChecked() == false)
+        messageInformation.addBodyText(",\n\"display\" : false");
+
+    messageInformation.addBodyText("\n}");
+    
+    std::string apiAddress = this->getApiUrl() + "/informations/"
+            + boost::lexical_cast<std::string>(id)
+            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+            + "&token=" + session_->user()->token.toUTF8();
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&InformationsWidget::returnApiPostResource, this, _1, _2, client));
+
+    Wt::log("debug") << "InformationsWidget : [PUT] address to call : " << apiAddress;    
+
+    if (client->put(apiAddress, messageInformation))
+        Wt::WApplication::instance()->deferRendering();
+    else
+        Wt::log("error") << "Error Client Http";
+}
+
+void InformationsWidget::handleJsonGet(vectors_Json jsonResources)
+{
+    infoUnit_.clear();
+    vector_Json infoUnit = jsonResources.at(1);
+    jsonResources.pop_back();
+    AbstractPage::handleJsonGet(jsonResources);
+
+    unitModel_ = new Wt::WStandardItemModel(0,2,this);
+
+    Wt::Json::Array& result = infoUnit.at(0);
+    for (int cpt(0); cpt < (int)result.size(); cpt++)
+    {    
+       Wt::WStandardItem *itemId = new Wt::WStandardItem();
+       Wt::WStandardItem *itemName = new Wt::WStandardItem();
+
+        Wt::Json::Object obj = result.at(cpt);
+        Wt::WString name = obj.get("name");
+        long long id = obj.get("id");
+        
+        std::vector<Wt::WStandardItem*> rowVector;
+        
+        itemId->setText(boost::lexical_cast<std::string>(id));
+        itemName->setText(name);
+        
+        rowVector.push_back(itemName);
+        rowVector.push_back(itemId);
+        unitModel_->insertRow(cpt, rowVector);
+    }
 }
 
 Wt::WDialog *InformationsWidget::deleteResource(long long id)

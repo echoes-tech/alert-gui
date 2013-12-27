@@ -231,9 +231,7 @@ int Association::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::W
 
 Wt::WValidator *Association::editValidator(int who)
 {
-    Wt::WRegExpValidator *validator =
-            new Wt::WRegExpValidator(REG_EXP);
-    validator->setMandatory(true);
+    Wt::WRegExpValidator *validator;
     return validator;
 }
 

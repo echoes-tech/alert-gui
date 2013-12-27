@@ -14,6 +14,9 @@
  * 
  */
 
+#include <Wt/WStandardItemModel>
+#include <Wt/WStandardItem>
+
 #include "AbstractPage.h"
 
 AbstractPage::AbstractPage(Echoes::Dbo::Session *session, std::string apiUrl, std::string namePage)
@@ -32,6 +35,9 @@ AbstractPage::AbstractPage(Echoes::Dbo::Session *session, std::string apiUrl, st
     this->update_ = true;
     this->nameResourcePageSpec_ = ""; // whether more one class use same xml file.
     this->session_ = session;
+    this->nbAff_ = 5;
+    this->nbAffBegin_ = 1;
+    this->undidName_ = "name";
     setApiUrl(apiUrl);
 }
 
@@ -46,6 +52,7 @@ void AbstractPage::update()
         if (!this->created_ && rowsTable_.size() > 0)
         {
             bindElements();
+            resourceBeAff();
         }
         else if (!this->created_ && rowsTable_.size() == 0)
         {
@@ -208,9 +215,9 @@ void AbstractPage::fillInBodyTable()
                             if (((std::string)(*it)).find('<') == std::string::npos)
                             {
                                 nameRessouce += (*it) + "\n";
-                                if (resizeString.size() > (unsigned int) (SIZE_NAME_RESOURCE / this->rowsTable_.size()))
+                                if (resizeString.size() > (unsigned int) (SIZE_NAME / this->titles_.size()))
                                 {
-                                    resizeString.resize(SIZE_NAME_RESOURCE / this->rowsTable_.size());
+                                    resizeString.resize(SIZE_NAME / this->titles_.size());
                                     resizeString.resize(resizeString.size() + 3, '.');
                                 }
                             }
@@ -220,13 +227,14 @@ void AbstractPage::fillInBodyTable()
                     }
                     else
                     {
-                        if (nameRessouce.size() > (unsigned int) (SIZE_NAME_RESOURCE / this->rowsTable_.size()))
+                        if (nameRessouce.size() > (unsigned int) (SIZE_NAME / this->titles_.size()))
                         {
-                            newName.resize(SIZE_NAME_RESOURCE / this->rowsTable_.size());
+                            newName.resize(SIZE_NAME / this->titles_.size());
                             newName.resize(newName.size() + 3, '.');
                         }
                     }
-                    Wt::WText *newColumn = new Wt::WText(newName, mediaTable_->elementAt(rowBodyTable, columnTable));
+                    Wt::WText *newColumn = new Wt::WText(Wt::WString::fromUTF8(newName),
+                                                         mediaTable_->elementAt(rowBodyTable, columnTable));
                     newColumn->setTextFormat(Wt::TextFormat::XHTMLUnsafeText);
                     newColumn->setToolTip(nameRessouce);
                     columnTable++;
@@ -306,18 +314,40 @@ void AbstractPage::popupWindow()
     for (vector_pair_string::iterator title = titles_.begin();
             title != titles_.end(); title++)
     {
-        if ((*title).first > 0)
+        if ((*title).first >= 0)
         {
             new Wt::WText(tr("Alert." + this->nameResourcePage + ".name-" + (*title).second)
                           + " : <br />", dialogAdd_->contents());
 
-            input = new Wt::WLineEdit(dialogAdd_->contents());
-            input->setValidator(editValidator(cpt++));
-            input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-            input->setWidth(Wt::WLength(150));
-            if (inputName.size() == 0)
-                input->setFocus();
-            inputName.push_back(input);
+            if ((*title).first == ETypeJson::string)
+            {
+                input = new Wt::WLineEdit(dialogAdd_->contents());
+                input->setValidator(editValidator(cpt));
+                input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
+                input->setWidth(Wt::WLength(150));
+                if (inputName.size() == 0)
+                    input->setFocus();
+                inputName.push_back(input);
+            }
+            else if ((*title).first == ETypeJson::boolean)
+            {
+                Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
+                inputName.push_back(checkBox);
+            }
+            else if ((*title).first == ETypeJson::integer)
+            {
+                input = new Wt::WLineEdit(dialogAdd_->contents());
+                input->setValidator(editValidator(cpt));
+                input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
+                input->setWidth(Wt::WLength(150));
+                if (inputName.size() == 0)
+                    input->setFocus();
+                inputName.push_back(input);
+            }
+            else if ((*title).first == ETypeJson::undid)
+            {
+                inputName.push_back(popupAdd(dialogAdd_));
+            }
 
             Wt::WText *error = new Wt::WText(tr("Alert." + this->nameResourcePage + ".invalid-name-"
                                                 + (*title).second),
@@ -327,13 +357,14 @@ void AbstractPage::popupWindow()
 
             new Wt::WText("<br />", dialogAdd_->contents());
         }
+        cpt++;
     }
 
     popupComplete(dialogAdd_, 0);
 
     dialogAdd_->finished().connect(std::bind([ = ] (){
-                                             popupCheck(inputName, errorMessage, dialogAdd_, -1);
-                                             return;
+        popupCheck(inputName, errorMessage, dialogAdd_, -1);
+        return;
     }));
     dialogAdd_->show();
     this->created_ = false;
@@ -356,39 +387,96 @@ void AbstractPage::popupForModif(long long id)
             vector_pair_string::iterator title = titles_.begin();
             for (Wt::WInteractWidget *itElem : (*itTable).second)
             {
-                std::string nameRessouce("N2Wt5WTextE");
-                if (nameRessouce.compare(typeid (*itElem).name()) == 0)
+                if ((*title).first >= 0)
                 {
-                    new Wt::WText(tr("Alert." + this->nameResourcePage + ".name-" + (*title).second)
-                                  + " : <br />", dialogModif_->contents());
-                    nameRessouce = boost::lexical_cast<std::string>(((Wt::WText*)(itElem))->text());
-                    std::string newName = nameRessouce;
-                    if (nameRessouce.size() > SIZE_NAME_RESOURCE + SIZE_NAME_RESOURCE)
-                    {
-                        newName.resize(SIZE_NAME_RESOURCE + SIZE_NAME_RESOURCE);
-                        newName.resize(newName.size() + 3, '.');
-                    }
-
-
-                    Wt::WLineEdit *input = new Wt::WLineEdit(newName, dialogModif_->contents());
-                    input->setValidator(editValidator(cpt));
-                    input->enterPressed().connect(dialogModif_, &Wt::WDialog::accept);
-                    input->setWidth(Wt::WLength(150));
-
-                    if (inputName.size() == 0) 
-                        input->setFocus();
-                    input->setToolTip(nameRessouce);
-
-                    inputName.push_back(input);
-
-                    Wt::WText *error2 = new Wt::WText(tr("Alert." + this->nameResourcePage + ".invalid-name-"
-                                                         + (*title).second), dialogModif_->contents());
-                    error2->hide();
-                    errorMessage.push_back(error2);
-                    new Wt::WText("<br />", dialogModif_->contents());
-                    title++;
-                    cpt++;
+                        new Wt::WText(tr("Alert." + this->nameResourcePage + ".name-" + (*title).second)
+                                      + " : <br />", dialogModif_->contents());                    
                 }
+                if ((*title).first == 0 || (*title).first == 2)
+                {
+                    std::string nameRessouce("N2Wt5WTextE");
+                    if (nameRessouce.compare(typeid (*itElem).name()) == 0)
+                    {
+                        nameRessouce = ((Wt::WText*)(itElem))->text().toUTF8();
+                        std::string newName = nameRessouce;
+                        if (nameRessouce.size() > SIZE_NAME + SIZE_NAME)
+                        {
+                            newName.resize(SIZE_NAME + SIZE_NAME);
+                            newName.resize(newName.size() + 3, '.');
+                        }
+
+                        if ((*title).first == 0)
+                        {
+                            Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif_->contents());
+                            input->setValidator(editValidator(cpt));
+                            input->enterPressed().connect(dialogModif_, &Wt::WDialog::accept);
+                            input->setWidth(Wt::WLength(150));
+                            if (inputName.size() == 0)
+                                input->setFocus();
+                            input->setToolTip(Wt::WString::fromUTF8(nameRessouce));
+                            inputName.push_back(input);
+                        }
+                        else if ((*title).first == 2)
+                        {
+                            Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif_->contents());
+                            input->setValidator(new Wt::WRegExpValidator(Wt::WString::fromUTF8("^[0123456789]+")));
+                            input->enterPressed().connect(dialogModif_, &Wt::WDialog::accept);
+                            input->setWidth(Wt::WLength(150));
+                            if (inputName.size() == 0)
+                                input->setFocus();
+                            input->setToolTip(Wt::WString::fromUTF8(nameRessouce));
+                            inputName.push_back(input);
+                        }
+
+
+                        Wt::WText *error2 = new Wt::WText(tr("Alert." + this->nameResourcePage + ".invalid-name-"
+                                                             + (*title).second), dialogModif_->contents());
+                        error2->hide();
+                        errorMessage.push_back(error2);
+                        new Wt::WText("<br />", dialogModif_->contents());
+                    }
+                }
+                else if ((*title).first == 1)
+                {
+                    multimap_long_widgets::iterator rowTable = rowsTable_.find(id);
+                    for (vector_widget::iterator widg = (*rowTable).second.begin();
+                            widg != (*rowTable).second.end(); widg++)
+                    {
+                        Wt::WInteractWidget *widgetAdd = *widg;
+                        std::string nameRessouce("N2Wt9WCheckBoxE");
+                        if (nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
+                        {
+                            Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogModif_->contents());
+                            checkBox->setChecked(((Wt::WCheckBox*)(*widg))->isChecked());
+                            inputName.push_back(checkBox);
+                        }
+                    }
+                }
+                else if ((*title).first == 3)
+                {
+                    Wt::WComboBox *comboBox = popupAdd(dialogModif_);
+                    multimap_long_widgets::iterator rowTable = rowsTable_.find(id);
+                    int cpt2(0);
+                    for (vector_widget::iterator widg = (*rowTable).second.begin();
+                            widg != (*rowTable).second.end(); widg++)
+                    {
+                        Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)comboBox->model();
+                        if (cpt2 == cpt)
+                        {
+                            for (int nb(0); nb < unitModel->rowCount(); nb++)
+                            {
+                                if (((Wt::WText*)(*widg))->text().toUTF8().compare(unitModel->item(nb, 0)->text().toUTF8()) == 0)
+                                {
+                                    comboBox->setCurrentIndex(nb);
+                                }
+                            }
+                            inputName.push_back(comboBox);
+                        }
+                        cpt2++;
+                    }                    
+                }
+                title++;
+                cpt++;
             }
         }
     }
@@ -396,8 +484,8 @@ void AbstractPage::popupForModif(long long id)
     popupComplete(dialogModif_, id);
 
     dialogModif_->finished().connect(std::bind([ = ] (){
-                                               popupCheck(inputName, errorMessage, dialogModif_, id);
-                                               return;
+        popupCheck(inputName, errorMessage, dialogModif_, id);
+        return;
     }));
     dialogModif_->show();
     this->created_ = false;
@@ -489,6 +577,11 @@ multimap_long_widgets AbstractPage::getRowsTable()
     return this->rowsTable_;
 }
 
+void AbstractPage::setUndidName(std::string undidName)
+{
+    this->undidName_ = undidName;
+}
+
 void AbstractPage::setTitles(vector_pair_string titles)
 {
     this->titles_ = titles;
@@ -558,8 +651,8 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                 {
                     case ETypeJson::string :
                     {
-                        Wt::WString name = jsonObject.get((*itTitles).second);
-                        nameW.push_back(new Wt::WText(name.toUTF8()));
+                        Wt::WString string = jsonObject.get((*itTitles).second);
+                        nameW.push_back(new Wt::WText(string));
                         break;
                     }
                     case ETypeJson::boolean :
@@ -571,7 +664,7 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                         nameW.push_back(checkBox);
                         break;
                     }
-                    case ETypeJson::interger :
+                    case ETypeJson::integer :
                     {
                         int number = jsonObject.get((*itTitles).second);
                         nameW.push_back(new Wt::WText(boost::lexical_cast<std::string>(number)));
@@ -581,8 +674,8 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                     {
                         Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
                         Wt::Json::Object nameObjet = jsonObjectParam.get((*itTitles).second);
-                        Wt::WString name = nameObjet.get("name");
-                        nameW.push_back(new Wt::WText(name.toUTF8()));
+                        Wt::WString name = nameObjet.get(undidName_);
+                        nameW.push_back(new Wt::WText(name));
                         break;
                     }
                 }
@@ -591,42 +684,6 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
             rowsTable_.insert(std::make_pair(id, nameW));
         }
     }
-    
-//    Wt::Json::Array& jsonArray = jsonResources.at(0);
-//    if (!jsonArray.empty())
-//    {
-//        int cpt(0);
-//        for (Wt::Json::Object jsonObject : jsonArray)
-//        {
-//            std::vector<Wt::WInteractWidget *> nameW;
-//            for (vector_pair_string::iterator itTitles = titles_.begin();
-//                    itTitles != titles_.end(); itTitles++)
-//            {
-//                switch ((*itTitles).first)
-//                    {
-//                    case ETypeJson::string :
-//                        Wt::WString name = jsonObject.get((*itTitles).second);
-//                        nameW.push_back(new Wt::WText(name.toUTF8()));
-//                        break;
-//                    case ETypeJson::boolean :
-//                        bool boolean = jsonObject.get((*itTitles).second);
-//                        Wt::WCheckBox *checkBox = new Wt::WCheckBox(boost::lexical_cast<std::string>(boolean));
-//                        checkBox->setChecked(false);
-//                        nameW.push_back(checkBox);
-//                        break;
-//                    case ETypeJson::interger :
-//                        int number = jsonObject.get((*itTitles).second);
-//                        nameW.push_back(boost::lexical_cast<std::string>(number));
-//                        break;
-//                    case ETypeJson::undid :
-//                        break;
-//
-//                    }
-//            }
-//            long long id = jsonObject.get("id");
-//            rowsTable_.insert(std::make_pair(id, nameW));
-//        }
-//    }
     update();
 }
 
@@ -636,7 +693,8 @@ void AbstractPage::recursiveGetResources(vectors_Json jsonResource, lists_string
         listsUrl = listsUrl_;
     std::string apiAddress = this->getApiUrl() + "/" + (*(*listsUrl.begin()).begin())
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + session_->user()->token.toUTF8();
+            + "&token=" + session_->user()->token.toUTF8()
+            + addParameter();
 
     Wt::log("debug") << "[GET] address to call : " << apiAddress;
     Wt::Http::Client *client = new Wt::Http::Client();
@@ -1040,8 +1098,7 @@ int AbstractPage::checkInput(std::vector<Wt::WInteractWidget*> inputName, std::v
         std::string nameRessouce("N2Wt9WLineEditE");
         if (nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
         {
-            if (((Wt::WLineEdit*)(*j))->validate() == Wt::WValidator::Invalid
-                    || ((Wt::WLineEdit*)(*j))->text().empty())
+            if (((Wt::WLineEdit*)(*j))->validate() == Wt::WValidator::Invalid)
             {
                 ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-error");
                 ((Wt::WLineEdit*)(*j))->setWidth(Wt::WLength(150));
@@ -1107,17 +1164,17 @@ void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
                 std::string nameRessouce("N2Wt5WTextE");
                 if (nameRessouce.compare(typeid (*itElem).name()) == 0)
                 {
-                    nameRessouce = boost::lexical_cast<std::string>(((Wt::WText*)(itElem))->text());
+                    nameRessouce = ((Wt::WText*)(itElem))->text().toUTF8();
                     std::string newName = nameRessouce;
-                    if (nameRessouce.size() > SIZE_NAME_RESOURCE + SIZE_NAME_RESOURCE)
+                    if (nameRessouce.size() > SIZE_NAME + SIZE_NAME)
                     {
-                        newName.resize(SIZE_NAME_RESOURCE + SIZE_NAME_RESOURCE);
+                        newName.resize(SIZE_NAME + SIZE_NAME);
                         newName.resize(newName.size() + 3, '.');
                     }
 
-                    Wt::WLineEdit *input = new Wt::WLineEdit(newName);
+                    Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName));
                     inputs.push_back(input);
-                    input->setToolTip(nameRessouce);
+                    input->setToolTip(Wt::WString::fromUTF8(nameRessouce));
                     input->setValidator(editValidator(cpt));
                     if (inputs.size() == 0)
                         input->setFocus();
@@ -1384,9 +1441,9 @@ void AbstractPage::searchName(Wt::WLineEdit *arg)
                 std::string compareType("PN2Wt5WTextE");
                 if (compareType.compare(typeid (text).name()) == 0)
                 {
-                    std::string argSearch = boost::lexical_cast<std::string>(arg->text());
+                    std::string argSearch = arg->text().toUTF8();
                     std::transform(argSearch.begin(), argSearch.end(), argSearch.begin(), ::tolower);
-                    std::string argInTable = boost::lexical_cast<std::string>(text->text());
+                    std::string argInTable = text->text().toUTF8();
                     std::transform(argInTable.begin(), argInTable.end(), argInTable.begin(), ::tolower);
                     if (boost::contains(argInTable, argSearch) == true)
                         check = true;

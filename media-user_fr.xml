@@ -19,6 +19,8 @@
     <message id="Alert.media-user.nothing-button">
         Cliquer pour ajouter</message>
     <!--header-->
+    <message id="Alert.media-user.name-value">Medias</message>
+    <message id="Alert.media-user.name-user">Utilisateurs</message>
     <message id="Alert.media-user.add-form.sms">Numéros de téléphones</message>
     <message id="Alert.media-user.add-form.push">Nom du Smartphone</message>
     <message id="Alert.media-user.add-form.mail">Adresses e-mail</message>

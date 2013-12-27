@@ -11,8 +11,6 @@
  * 
  */
 
-
-
 #include "AssetManagementWidget.h"
 
 AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, std::string apiUrl)

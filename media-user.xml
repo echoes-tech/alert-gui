@@ -9,22 +9,24 @@
     <!--nothing media-user-->
     <message id="Alert.media-user.nothing-sms">Phones numbers</message>
     <message id="Alert.media-user.nothing-mail">Emails address</message>
-    <message id="Alert.media-user.nothing-app">Smartphone names</message>
+    <message id="Alert.media-user.nothing-push">Smartphone names</message>
     <message id="Alert.media-user.nothing-sms-text">
         No phone number registered</message>
     <message id="Alert.media-user.nothing-mail-text">
         No email address registered</message>
-    <message id="Alert.media-user.nothing-app-text">
+    <message id="Alert.media-user.nothing-push-text">
         No smartphone registered</message>
     <message id="Alert.media-user.nothing-button">Click to Add</message>
     <!--header-->
     <message id="Alert.media-user.add-form.sms">Phones numbers</message>
-    <message id="Alert.media-user.add-form.app">Smartphones names</message>
+    <message id="Alert.media-user.add-form.push">Smartphones names</message>
     <message id="Alert.media-user.add-form.mail">Emails address</message>
     <!--body-->
+    <message id="Alert.media-user.name-value">Medias</message>
+    <message id="Alert.media-user.name-user">Users</message>
     <message id="Alert.media-user.name-sms">Phone number</message>
     <message id="Alert.media-user.name-mail">Email address</message>
-    <message id="Alert.media-user.name-app">Smartphone name</message>
+    <message id="Alert.media-user.name-push">Smartphone name</message>
     <message id="Alert.media-user.modif-button">Modif</message>
     <message id="Alert.media-user.delete-button">Delete</message>
     <!--footer-->
@@ -41,11 +43,11 @@
     <!--POST--> <!-- a revoir-->
     <message id="Alert.media-user.add-sms">Add Phone number</message>
     <message id="Alert.media-user.add-mail">Add Email address</message>
-    <message id="Alert.media-user.add-app">Add Smartphone</message>
+    <message id="Alert.media-user.add-push">Add Smartphone</message>
     <!--PUT-->
     <message id="Alert.media-user.modif-sms">Modifi Phone number</message>
     <message id="Alert.media-user.modif-mail">Modifi Email address</message>
-    <message id="Alert.media-user.modif-app">Modifi Smartphone</message>
+    <message id="Alert.media-user.modif-push">Modifi Smartphone</message>
     <!--DELETE-->
     <message id="Alert.media-user.delete-media-user">Attention</message>
     <message id="Alert.media-user.delete-sms-message">
@@ -58,7 +60,7 @@
             You are about to delete a email address
         </span>
     </message>
-    <message id="Alert.media-user.delete-app-message">
+    <message id="Alert.media-user.delete-push-message">
         <span style="color:red">
             You are about to delete a Smartphone
         </span>
@@ -72,7 +74,7 @@
     <message id="Alert.media-user.invalid-name-sms">
         <span style="color:red">Invalid number phone, usage : (+33)(0)612345678</span>
     </message>
-    <message id="Alert.media-user.invalid-name-app">
+    <message id="Alert.media-user.invalid-name-push">
         <span style="color:red">Invalid name Smartphone</span>
     </message>
  <message id="Alert.media-user.invalid-name-twice">

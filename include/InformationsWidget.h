@@ -36,6 +36,7 @@
 // Ancien
 #include <Wt/Dbo/Query>
 #include <fstream>
+#include <boost/lexical_cast.hpp>
 #include <boost/random.hpp>
 #include <boost/random/random_device.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
@@ -61,36 +62,31 @@ class InformationsWidget :
 public AbstractPage
 {
 public:
-    /*! \brief Constructor
-     *
-     * Creates a new authentication.
-     */
-    InformationsWidget(Echoes::Dbo::Session *session, std::string apiUrl);
+                                /*! \brief Constructor
+                                *
+                                * Creates a new authentication.
+                                */
+                                InformationsWidget(Echoes::Dbo::Session *session, std::string apiUrl);
 
 protected:
-    
-        void checkAlertsInInformation(boost::system::error_code err, const Wt::Http::Message& response, Wt::WDialog *box, long long id);
 
-    
-        void    addResource(std::vector<Wt::WInteractWidget*> argument);
+    void                        checkAlertsInInformation(boost::system::error_code err, const Wt::Http::Message& response, Wt::WDialog *box, long long id);
 
-        
-        
-        
-    virtual Wt::WDialog *deleteResource(long long id);
+    void                addResource(std::vector<Wt::WInteractWidget*> arguments);
+    void                modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
 
-    Wt::WValidator *editValidator(int who);
+    virtual void                handleJsonGet(vectors_Json jsonResources);
+    virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
+    virtual Wt::WDialog         *deleteResource(long long id);
+
+    Wt::WValidator              *editValidator(int who);
 
 private:
 
-    std::string apiUrl_;
-
-    Wt::WLineEdit *saveEdit;
-    bool created_;
-    bool newClass_;
-    Echoes::Dbo::Session *session_;
-    Wt::WLineEdit *assetEdit;
-    std::vector<long long> idsAlert_;
+    Wt::WStandardItemModel      *unitModel_;
+    std::vector<std::string>    infoUnit_;
+    Echoes::Dbo::Session        *session_;
+    std::vector<long long>      idsAlert_;
 };
 
 

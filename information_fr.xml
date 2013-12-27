@@ -50,6 +50,9 @@
   <message id="Alert.information.invalid-name-name">
       <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
   </message>
+  <message id="Alert.information.invalid-name-desc">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
   <message id="Alert.information.invalid-name-twice">
       <span style="color:red">
            Nom du information déjà existant.

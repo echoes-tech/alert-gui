@@ -31,7 +31,7 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, std::string 
     this->setNameSpecial(nameSpe);
     
     vector_pair_string titles;
-    titles.push_back(std::make_pair(ETypeJson::string, "value"));
+    titles.push_back(std::make_pair(ETypeJson::text, "value"));
     titles.push_back(std::make_pair(ETypeJson::undid, "user"));
     setUndidName("last_name");
     setTitles(titles);

@@ -26,7 +26,7 @@ AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, std:
     setLocalTable(true);
 
     vector_pair_string titles;
-    titles.push_back(std::make_pair(ETypeJson::string, "name"));
+    titles.push_back(std::make_pair(ETypeJson::text, "name"));
     titles.push_back(std::make_pair(ETypeJson::widget, "download-script"));
     setTitles(titles);
 

@@ -74,7 +74,7 @@ protected:
   virtual std::vector<long long>        getIdsTable();
   virtual std::vector<std::string>      getTitlesTableText();
   virtual std::vector<std::string>      getTitlesTableWidget();
-  virtual vector_type                   getResourceRowTable(long long id);
+  virtual vector_widget                 getResourceRowTable(long long id);
   
   virtual int checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
 

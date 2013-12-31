@@ -25,9 +25,9 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, std::strin
     setLocalTable(true);
 
     vector_pair_string titles;
-    titles.push_back(std::make_pair(ETypeJson::string, "name"));
-    titles.push_back(std::make_pair(ETypeJson::string, "desc"));
-    titles.push_back(std::make_pair(ETypeJson::string, "calculate"));
+    titles.push_back(std::make_pair(ETypeJson::text, "name"));
+    titles.push_back(std::make_pair(ETypeJson::text, "desc"));
+    titles.push_back(std::make_pair(ETypeJson::text, "calculate"));
     titles.push_back(std::make_pair(ETypeJson::undid, "information_unit"));
     setUndidName("name");
     titles.push_back(std::make_pair(ETypeJson::boolean, "display"));

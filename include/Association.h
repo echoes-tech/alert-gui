@@ -27,7 +27,7 @@
 #include <Wt/WTable>
 #include <Wt/WTheme>
 
-#include "CreatePageWidget.h"
+#include "AbstractPage.h"
 #include "ApiManagement.h"
 
 typedef std::map<long long, std::pair<long long, std::string>> MapLongString2;
@@ -39,7 +39,7 @@ typedef std::multimap<long long, long long>  MapFilter;
 class CreatePageWidget;
 
 class Association : 
-public CreatePageWidget
+public AbstractPage
 {
 public:
   /*! \brief Constructor

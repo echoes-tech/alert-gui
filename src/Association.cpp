@@ -10,7 +10,7 @@
 using namespace std;
 
 Association::Association(Echoes::Dbo::Session *session, string apiUrl)
-: CreatePageWidget(session, apiUrl, "association")
+: AbstractPage(session, apiUrl, "association")
 {
     session_ = session;
     apiUrl_ = apiUrl;
@@ -22,7 +22,7 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     setButtonSup(true);
     setLocalTable(true);
 
-    list_string listTitles;
+    vector_pair_string listTitles;
     setTitles(listTitles);
     
     lists_string lListUrl;
@@ -54,7 +54,7 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
 
 void Association::update()
 {
-    CreatePageWidget::update();
+    AbstractPage::update();
     if (!newClass_)
     {
         newClass_ = true;
@@ -554,7 +554,7 @@ void Association::deleteAsset(boost::system::error_code err, const Wt::Http::Mes
 
 Wt::WDialog *Association::deleteResource(long long id)
 {
-    Wt::WDialog *box = CreatePageWidget::deleteResource(id);
+    Wt::WDialog *box = AbstractPage::deleteResource(id);
     box->show();
     box->finished().connect(bind([ = ] (){
         if (box->result() == Wt::WDialog::Accepted)

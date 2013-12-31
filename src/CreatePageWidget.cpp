@@ -1015,6 +1015,7 @@ CreatePageWidget::handleJsonGet(vectors_Json jsonResources)
 void
 CreatePageWidget::recursiveGetResources(vectors_Json jsonResource)
 {
+    std::cout << (*(*listsUrl_.begin()).begin()) << std::endl;
     std::string apiAddress = this->getApiUrl() + "/" + (*(*listsUrl_.begin()).begin())
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8();

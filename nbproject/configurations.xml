@@ -46,6 +46,7 @@
           <itemPath>include/rapidxml/rapidxml_utils.hpp</itemPath>
           <itemPath>include/rapidxml/rapidxml_xhtml.hpp</itemPath>
         </logicalFolder>
+        <itemPath>include/AbstractPage.h</itemPath>
         <itemPath>include/AlertsWidget.h</itemPath>
         <itemPath>include/ApiManagement.h</itemPath>
         <itemPath>include/Association.h</itemPath>
@@ -123,6 +124,7 @@
         <logicalFolder name="f7" displayName="MonitoringPage" projectFiles="true">
           <itemPath>src/MonitoringWidget.cpp</itemPath>
         </logicalFolder>
+        <itemPath>src/AbstractPage.cpp</itemPath>
         <itemPath>src/AlertsWidget.cpp</itemPath>
         <itemPath>src/ApiManagement.cpp</itemPath>
         <itemPath>src/Association.cpp</itemPath>
@@ -215,6 +217,8 @@
       <item path="global.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="global_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AbstractPage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AlertsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -334,6 +338,8 @@
       <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AbstractPage.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AlertsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -461,6 +467,8 @@
       </item>
       <item path="global_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/AbstractPage.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/AlertsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/ApiManagement.h" ex="false" tool="3" flavor2="0">
@@ -579,6 +587,8 @@
       <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AbstractPage.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AlertsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/src/AbstractPage.o \
 	${OBJECTDIR}/src/AlertsWidget.o \
 	${OBJECTDIR}/src/ApiManagement.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
@@ -89,6 +90,11 @@ ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -DNDEBUG -std=c++0x -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/src/AbstractPage.o: src/AbstractPage.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -DNDEBUG -std=c++0x -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AbstractPage.o src/AbstractPage.cpp
 
 ${OBJECTDIR}/src/AlertsWidget.o: src/AlertsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

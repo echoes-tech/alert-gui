@@ -135,7 +135,7 @@ protected:
     enum ETypeJson
     {
         widget = -1, // other
-        string = 0, //WText
+        text = 0, //WText
         boolean = 1, //WCheckBox
         integer = 2, // int //WText
         undid = 3 // under id (string) "name" //WComboBox

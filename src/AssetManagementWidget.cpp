@@ -267,11 +267,22 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long astId, Wt::WS
     try
     {
         Wt::Dbo::Transaction transaction(*(this->session_));
-        scriptCustomPart = "\nLOGIN='" + Wt::Utils::urlEncode(this->session_->user()->eMail.toUTF8()) + "'\n"
-                + "ASSET_ID=" + boost::lexical_cast<std::string>(astId) + "\n"
-        //TEMPORARY!! ToDo: Implement a method to retrieve id Porbe for this Asset
-                + "PROBE_ID=" + boost::lexical_cast<std::string>(astId) + "\n"
-                + "TOKEN='" + this->session_->user()->organization.get()->token.toUTF8() + "'\n";
+        scriptCustomPart = "\nASSET_ID=" + boost::lexical_cast<std::string>(astId) + "\n"
+                //TEMPORARY!! ToDo: Implement a method to retrieve id Porbe for this Asset
+                "PROBE_ID=" + boost::lexical_cast<std::string>(astId) + "\n"
+                "TOKEN='" + this->session_->user()->organization.get()->token.toUTF8() + "'\n\n"
+                "API_HOST='" + conf.getApiHost() + "'\n"
+                "API_PORT=" + boost::lexical_cast<std::string>(conf.getApiPort()) + "\n"
+                "API_HTTPS=";
+        if (conf.isApiHttps())
+        {
+            scriptCustomPart += "true";
+        }
+        else
+        {
+            scriptCustomPart += "false";
+        }
+        scriptCustomPart += "\nLOGIN='" + Wt::Utils::urlEncode(this->session_->user()->eMail.toUTF8()) + "'\n";
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
@@ -330,5 +341,17 @@ void AssetManagementWidget::downloadScript(std::string fileName)
 
 // ----------------------------------------------
 
+void    AssetManagementWidget::setSession(Echoes::Dbo::Session *session)
+{
+    session_ = session;
+}
 
+void    AssetManagementWidget::setApiUrl(std::string apiUrl)
+{
+    apiUrl_ = apiUrl;
+}
 
+std::string   AssetManagementWidget::getApiUrl()
+{
+    return apiUrl_;
+}

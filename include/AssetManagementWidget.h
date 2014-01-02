@@ -52,6 +52,7 @@
 
 #include <tools/Enums.h>
 
+#include "Conf.h"
 #include "AbstractPage.h"
 
 class AbstractPage;
@@ -93,6 +94,10 @@ private:
    */
   void                  postProbe(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
   void                  checkAlertsInAsset(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client, Wt::WDialog *box, long long id);
+  
+  void                  setSession(Echoes::Dbo::Session *session);
+  void                  setApiUrl(std::string apiUrl);
+  std::string           getApiUrl();
   
   bool                   created_;
   bool                   newClass_;

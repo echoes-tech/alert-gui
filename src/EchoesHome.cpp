@@ -7,7 +7,7 @@
  * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
  * COMPANY AUTHORIZATION.
  * 
- * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
  * 
  */
 
@@ -28,6 +28,10 @@ EchoesHome::EchoesHome(Wt::WContainerWidget *parent) : Wt::WContainerWidget(pare
     processEnvironment();
 }
 
+EchoesHome::~EchoesHome()
+{
+}
+
 Echoes::Dbo::Session* EchoesHome::getSession()
 {
     return this->session;
@@ -35,40 +39,29 @@ Echoes::Dbo::Session* EchoesHome::getSession()
 
 void EchoesHome::concatApiUrl()
 {
-    string apiHost = "", apiPort = "";
-    Wt::WApplication::readConfigurationProperty("api-host", apiHost);
-    Wt::WApplication::readConfigurationProperty("api-port", apiPort);
-#ifdef NDEBUG
-    setApiUrl("https://" + apiHost + ":" + apiPort);
-#else
-    setApiUrl("http://" + apiHost + ":" + apiPort);
-#endif
+    string apiUrl = "http";
+    if (conf.isApiHttps())
+    {
+        apiUrl += "s";
+    }
+    apiUrl += "://" + conf.getApiHost() + ":" + boost::lexical_cast<string>(conf.getApiPort());
+
+    setApiUrl(apiUrl);
 }
 
 void EchoesHome::setApiUrl(string apiUrl) {
-    _apiUrl = apiUrl;
+    m_apiUrl = apiUrl;
     return;
 }
 
 string EchoesHome::getApiUrl() const {
-    return _apiUrl;
+    return m_apiUrl;
 }
 
 void EchoesHome::initSession()
 {
-    string dbHost = "127.0.0.1";
-    string dbPort = "5432";
-    string dbName = "echoes";
-    string dbUser = "echoes";
-    string dbPassword = "toto";
-    Wt::WApplication::readConfigurationProperty("db-host", dbHost);
-    Wt::WApplication::readConfigurationProperty("db-port", dbPort);
-    Wt::WApplication::readConfigurationProperty("db-name", dbName);
-    Wt::WApplication::readConfigurationProperty("db-user", dbUser);
-    Wt::WApplication::readConfigurationProperty("db-password", dbPassword);
-    this->session = new Echoes::Dbo::Session("hostaddr=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " user=" + dbUser + " password=" + dbPassword);
+    this->session = new Echoes::Dbo::Session(conf.getSessConnectParams());
     this->session->login().changed().connect(this, &EchoesHome::onAuthEvent);
-    
 }
 
 void EchoesHome::initAuth()
@@ -102,7 +95,7 @@ void EchoesHome::initHeader()
 
 void EchoesHome::initMainPageWidget()
 {
-    this->mainPageWidget = new MainWidget(this->session, _apiUrl);
+    this->mainPageWidget = new MainWidget(this->session, m_apiUrl);
     this->mainPageWidget->hide();
     // Why : besoin d'accéder à l'objet de l'extérieur pour gérer les affichages 
     // dans le menu indépendemment du container central
@@ -297,3 +290,4 @@ void EchoesHome::deleteContent()
     this->mainPageWidget->clear();
     this->mainPageWidget->reset(session);
 }
+

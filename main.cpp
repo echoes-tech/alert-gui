@@ -1,3 +1,18 @@
+/* 
+ * Main
+ * @author ECHOES Technologies (TSA)
+ * @date 06/11/2011
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2011-2012-2013 BY ECHOES TECHNOLGIES SAS
+ * 
+ */
+
+#include <signal.h>
+
 #include <Wt/WServer>
 #include <Wt/WResource>
 #include <Wt/Http/Request>
@@ -9,6 +24,7 @@
 #include "GlobalIncludeFile.h"
 #include "tools/Session.h"
 #include <boost/thread.hpp>
+#include "Conf.h"
 
 // This globale is version of web site.
 //std::string      EchoesHome::version_g = "1.0.0 RC2";
@@ -73,30 +89,52 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
 }
 
 /**
-Point d'entrée du programme.
-@param argc : TBC
-@param argv : TBC
-*/
+ * Main function
+ * @param argc Number of arguments passed to the program
+ * @param argv Array of arguments passed to the program
+ * @return Exit status
+ */
 int main(int argc, char **argv)
 {
+    int res = EXIT_FAILURE;
+
     try
     {
-        // On passe le premier paramètre d'entrée au serveur
+        // use argv[0] as the application name to match a suitable entry
+        // in the Wt configuration file
         Wt::WServer server(argv[0]);
+
         // On définit la configuration du serveur en lui passant les paramètres d'entrée et son fichier de configuration
         server.setServerConfiguration(argc, argv);
-        // On fixe le point d'entrée du programme (type de point d'entée, méthode à appeler, uri, chemin favicon)
-        
-        server.addEntryPoint(Wt::Application, createEchoesHomeApplication,"", "/favicon.ico");
-        
-        Echoes::Dbo::Session::configureAuth();
-        
-        // démarrage du serveur en arrière plan
-        if (server.start())
+
+        if (conf.readProperties(server))
         {
-            // méthode qui bloque le thread courant en attendant le signal d'exctinction
-            Wt::WServer::waitForShutdown();
-            server.stop();
+            // On fixe le point d'entrée du programme (type de point d'entée, méthode à appeler, uri, chemin favicon)
+            server.addEntryPoint(Wt::Application, createEchoesHomeApplication, "", "/favicon.ico");
+
+            Echoes::Dbo::Session::configureAuth();
+
+            // démarrage du serveur en arrière plan
+            if (server.start())
+            {
+                // méthode qui bloque le thread courant en attendant le signal d'exctinction
+                int sig = Wt::WServer::waitForShutdown();
+
+                Wt::log("info") << "[Main] Shutdown (signal = " << sig << ")";
+
+                server.stop();
+
+                if (sig == SIGHUP)
+                {
+                    Wt::WServer::restart(argc, argv, environ);
+                }
+
+                res = EXIT_SUCCESS;
+            }
+        }
+        else
+        {
+            Wt::log("fatal") << "[Main] Every properties are not correctly set in " << WT_CONFIG_XML;
         }
     }
     catch (Wt::WServer::Exception& e)
@@ -107,4 +145,7 @@ int main(int argc, char **argv)
     {
         std::cerr << "exception: " << e.what() << std::endl;
     }
+
+    return res;
 }
+

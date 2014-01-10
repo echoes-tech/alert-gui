@@ -65,43 +65,57 @@ std::string     UserEditionWidget::addParameter()
 void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
 {
     mediasTokens.clear();
-
-    vector_Json jsonMedia = jsonResources.at(0);
-    Wt::Json::Array& result = jsonMedia.at(0);
-    for (int cpt(0); cpt < (int)result.size(); cpt++)
+    
+    try
     {
-        Wt::Json::Object obj = result.at(cpt);
-        Wt::WString token = obj.get("token");
-        long long id = obj.get("id");
-        mediasTokens[id] = token.toUTF8();
+
+        vector_Json jsonMedia = jsonResources.at(0);
+        Wt::Json::Array& result = jsonMedia.at(0);
+        for (int cpt(0); cpt < (int) result.size(); cpt++)
+        {
+            Wt::Json::Object obj = result.at(cpt);
+            Wt::WString token = obj.get("token");
+            long long id = obj.get("id");
+            mediasTokens[id] = token.toUTF8();
+        }
+
+        vector_Json jsonUsers = jsonResources.at(1);
+        jsonResources.pop_back();
+        AbstractPage::handleJsonGet(jsonResources);
+
+        usersModel_ = new Wt::WStandardItemModel(0, 2, this);
+
+        result = jsonUsers.at(0);
+        for (int cpt(0); cpt < (int) result.size(); cpt++)
+        {
+            Wt::WStandardItem *itemId = new Wt::WStandardItem();
+            Wt::WStandardItem *itemName = new Wt::WStandardItem();
+
+            Wt::Json::Object obj = result.at(cpt);
+            Wt::WString firstName = obj.get("first_name");
+            Wt::WString lastName = obj.get("last_name");
+            std::string name = firstName.toUTF8() + " " + lastName.toUTF8();
+            long long id = obj.get("id");
+
+            std::vector<Wt::WStandardItem*> rowVector;
+
+            itemId->setText(boost::lexical_cast<std::string>(id));
+            itemName->setText(Wt::WString::fromUTF8(name));
+
+            rowVector.push_back(itemName);
+            rowVector.push_back(itemId);
+            usersModel_->insertRow(cpt, rowVector);
+        }
     }
-
-    vector_Json jsonUsers = jsonResources.at(1);
-    jsonResources.pop_back();
-    AbstractPage::handleJsonGet(jsonResources);
-
-    usersModel_ = new Wt::WStandardItemModel(0,2,this);
-
-    result = jsonUsers.at(0);
-    for (int cpt(0); cpt < (int)result.size(); cpt++)
-    {    
-       Wt::WStandardItem *itemId = new Wt::WStandardItem();
-       Wt::WStandardItem *itemName = new Wt::WStandardItem();
-
-        Wt::Json::Object obj = result.at(cpt);
-        Wt::WString firstName = obj.get("first_name");
-        Wt::WString lastName = obj.get("last_name");
-        std::string name = firstName.toUTF8() + " " + lastName.toUTF8();
-        long long id = obj.get("id");
-        
-        std::vector<Wt::WStandardItem*> rowVector;
-        
-        itemId->setText(boost::lexical_cast<std::string>(id));
-        itemName->setText(Wt::WString::fromUTF8(name));
-        
-        rowVector.push_back(itemName);
-        rowVector.push_back(itemId);
-        usersModel_->insertRow(cpt, rowVector);
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[UserEditionWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[UserEditionWidget] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
 }
 

@@ -70,7 +70,6 @@
       <itemPath>alert-list_fr.xml</itemPath>
       <itemPath>alert.xml</itemPath>
       <itemPath>alert_fr.xml</itemPath>
-      <itemPath>alerts-test.xml</itemPath>
       <itemPath>asset.xml</itemPath>
       <itemPath>asset_fr.xml</itemPath>
       <itemPath>auth.xml</itemPath>
@@ -203,8 +202,6 @@
       <item path="alert.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="alert_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="alerts-test.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="asset.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -456,8 +453,6 @@
       <item path="alert.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="alert_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="alerts-test.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="asset.xml" ex="false" tool="3" flavor2="0">
       </item>

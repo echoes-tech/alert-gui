@@ -60,18 +60,32 @@ std::vector<long long>          AlertsWidget::getIdsTable()
 {
     std::vector<long long>      ids;
 
-    Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-    Wt::Json::Object tmp;
-    Wt::Json::Array::const_iterator idx1;
-    if (alerts_.isNull() == false)
+    try
     {
-        result1 = alerts_;
-        for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
+        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+        Wt::Json::Object tmp;
+        Wt::Json::Array::const_iterator idx1;
+        if (alerts_.isNull() == false)
         {
-            tmp = (*idx1);
-            ids.push_back(tmp.get("id"));
+            result1 = alerts_;
+            for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
+            {
+                tmp = (*idx1);
+                ids.push_back(tmp.get("id"));
+            }
         }
     }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[AlertsWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[AlertsWidget] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    
     return ids;
 }
 
@@ -1329,7 +1343,7 @@ void    AlertsWidget::recoverListRecipientAlias(long long userRoleId)
 
 void    AlertsWidget::recoverListAlert()
 {
-    alerts_ = 0;
+    alerts_ = Wt::Json::Value::Null;
     userInfo_.clear();
     mediaInfo_.clear();
     assets_.clear();
@@ -1572,7 +1586,9 @@ void AlertsWidget::getAssets(boost::system::error_code err, const Wt::Http::Mess
                     }
                 }
                 else
+                {
                     Wt::log("error") << "Erreur Data Base";
+                }
 
 
             }

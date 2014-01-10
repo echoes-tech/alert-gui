@@ -156,12 +156,13 @@ void RoleCustomizationWidget::getRoles(boost::system::error_code err, const Wt::
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+                Wt::log("warning") << "[RoleCustomizationWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
-
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+                Wt::log("warning") << "[RoleCustomizationWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
             }
             rolesComboBox->setCurrentIndex(0);
             rolesSet = true;
@@ -284,7 +285,9 @@ void RoleCustomizationWidget::fillRoleSelector()
         Wt::WApplication::instance()->deferRendering();
     } 
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 }
 
 void RoleCustomizationWidget::fillPluginSelector()
@@ -316,7 +319,9 @@ void RoleCustomizationWidget::createAssetsWidgets()
         Wt::WApplication::instance()->deferRendering();
     }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 }
 
 void RoleCustomizationWidget::createCriteriaWidgets()
@@ -340,7 +345,9 @@ void RoleCustomizationWidget::createCriteriaWidgets()
             Wt::WApplication::instance()->deferRendering();
         }
         else
+        {
             Wt::log("error") << "Error Client Http";
+        }
     }
     
 }
@@ -404,13 +411,14 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+                Wt::log("warning") << "[RoleCustomizationWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
-
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-            }          
+                Wt::log("warning") << "[RoleCustomizationWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
+            }        
         }
     }
     else
@@ -446,14 +454,16 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
 //                    idx++;
 //                }
 //            }
+//            }
 //            catch (Wt::Json::ParseError const& e)
 //            {
-//                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+//                Wt::log("warning") << "[RoleCustomizationWidget] Problems parsing JSON: " << response.body();
+//                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
 //            }
-//
 //            catch (Wt::Json::TypeException const& e)
 //            {
-//                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+//                Wt::log("warning") << "[RoleCustomizationWidget] JSON Type Exception: " << response.body();
+//                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
 //            }
 //            mediasComboBox->setCurrentIndex(0);
 //            mediasSet = true;
@@ -499,12 +509,13 @@ void RoleCustomizationWidget::getPlugins(boost::system::error_code err, const Wt
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+                Wt::log("warning") << "[RoleCustomizationWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
-
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
+                Wt::log("warning") << "[RoleCustomizationWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
             }          
         }
         else
@@ -600,13 +611,14 @@ void RoleCustomizationWidget::getCriteria(boost::system::error_code err, const W
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+                Wt::log("warning") << "[RoleCustomizationWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
-
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-            } 
+                Wt::log("warning") << "[RoleCustomizationWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
+            }
         }
     }
     else
@@ -712,13 +724,14 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+                Wt::log("warning") << "[RoleCustomizationWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
-
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-            }          
+                Wt::log("warning") << "[RoleCustomizationWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
+            }         
         }
     }
     else
@@ -785,7 +798,9 @@ void RoleCustomizationWidget::putPluginAlias()
         Wt::WApplication::instance()->deferRendering();
     } 
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 }
 
 
@@ -813,7 +828,9 @@ void RoleCustomizationWidget::putInformationAlias(int idx)
         Wt::WApplication::instance()->deferRendering();
     }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 }
 
 void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit)
@@ -841,7 +858,9 @@ void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCri
         Wt::WApplication::instance()->deferRendering();
     }
     else
-        Wt::log("error") << "Error Client Http";    
+    {
+        Wt::log("error") << "Error Client Http";
+    }
 }
 
 void RoleCustomizationWidget::displayMessageExample(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit)
@@ -875,7 +894,9 @@ void RoleCustomizationWidget::fillAssetsFields()
             Wt::WApplication::instance()->deferRendering();
         } 
         else
+        {
             Wt::log("error") << "Error Client Http";
+        }
     }
 }
 
@@ -899,7 +920,9 @@ void RoleCustomizationWidget::fillCriteriaFields(int idForInfMap, std::map<long 
             Wt::WApplication::instance()->deferRendering();
         }
         else
+        {
             Wt::log("error") << "Error Client Http";
+        }
     }
 
 }
@@ -923,7 +946,9 @@ void RoleCustomizationWidget::fillInformationsFields()
             Wt::WApplication::instance()->deferRendering();
         }
         else
+        {
             Wt::log("error") << "Error Client Http";
+        }
     }
 }
 
@@ -948,13 +973,14 @@ void RoleCustomizationWidget::getAlias(boost::system::error_code err, const Wt::
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+                Wt::log("warning") << "[RoleCustomizationWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
-
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-            }          
+                Wt::log("warning") << "[RoleCustomizationWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
+            }         
         }
         else
         {
@@ -969,9 +995,14 @@ void RoleCustomizationWidget::getAlias(boost::system::error_code err, const Wt::
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
+                Wt::log("warning") << "[RoleCustomizationWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
             }
-    //        Wt::log("warning") << "fct handleHttpResponse" << response.body();
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[RoleCustomizationWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
+            }
         }
     }
     else

@@ -200,11 +200,14 @@ vector_type Association::getResourceRowTable(long long id)
     
     MapAssetInfos::iterator assetInfos = assetInfos_.find(id);
 
+    std::cout << "AFFICHAGE DES LIGNES ????????" << std::endl;
+    
     if (assetInfos_.size() > 0)
     {
         for (MapLongString2::iterator assetResource = assets_.begin();
                 assetResource != assets_.end(); assetResource++)
         {
+            std::cout << "ROW : " << (*assetResource).second.second << std::endl;
             if (id == (*assetResource).second.first)
             {
                 rowTable.push_back(new Wt::WText((*assetResource).second.second));
@@ -252,159 +255,220 @@ void Association::recoverListAssociation()
     recursiveGetResources();
 }
 
-void    Association::handleJsonGet(vectors_Json jsonResources)
+void Association::handleJsonGet(vectors_Json jsonResources)
 {
-    
+
     vector_Json jsonResource = jsonResources.at(0);
     long long cpt(0);
-    if (jsonResource.size() > 0)
+    try
     {
-        Wt::Json::Array& jsonArray = (*jsonResource.begin());
-        if (!jsonArray.empty())
+        if (jsonResource.size() > 0)
         {
-            assetsModel = new Wt::WStandardItemModel(0,2,this);
-            for (int cpt(0); cpt < (int)jsonArray.size(); cpt++)
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
             {
-                Wt::Json::Object jsonObject = jsonArray.at(cpt);
-                Wt::Json::Object jsonAsset = jsonResource.at(cpt + 1);
-                
-                Wt::WStandardItem *itemId = new Wt::WStandardItem();
-                Wt::WStandardItem *itemName = new Wt::WStandardItem();
-
-                Wt::WString name = jsonObject.get("name");
-                long long id = jsonObject.get("id");
-
-                itemId->setText(boost::lexical_cast<string>(id));
-                itemName->setText(name);
-                vector<Wt::WStandardItem*> rowVector;
-                rowVector.push_back(itemId);
-                rowVector.push_back(itemName);
-                assetsModel->insertRow(cpt,rowVector);
-                assets_[cpt] = make_pair(id, name.toUTF8());
-                
-                
-                int information = jsonObject.get("information_datas");
-                if (information > 0)
+                assetsModel = new Wt::WStandardItemModel(0, 2, this);
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
                 {
-                    Wt::Json::Array jsonInfoData = jsonAsset.get("information_datas");
+                    Wt::Json::Object jsonObject = jsonArray.at(cpt);
+                    Wt::Json::Object jsonAsset = jsonResource.at(cpt + 1);
 
-                    std::map<long long, std::string> saveIdInfo;
-                    for (Wt::Json::Object jsonIda : jsonInfoData)
+                    Wt::WStandardItem *itemId = new Wt::WStandardItem();
+                    Wt::WStandardItem *itemName = new Wt::WStandardItem();
+
+                    Wt::WString name = jsonObject.get("name");
+                    long long id = jsonObject.get("id");
+
+                    itemId->setText(boost::lexical_cast<string>(id));
+                    itemName->setText(name);
+                    vector<Wt::WStandardItem*> rowVector;
+                    rowVector.push_back(itemId);
+                    rowVector.push_back(itemName);
+                    assetsModel->insertRow(cpt, rowVector);
+                    assets_[cpt] = make_pair(id, name.toUTF8());
+
+
+                    int information = jsonObject.get("information_datas");
+                    std::cout << "NB INFOS: " << information << std::endl;
+                    if (information > 0)
                     {
-                        Wt::Json::Object infoResource = jsonIda.get("information");
-                        long long idInfo = infoResource.get("id");
-                        saveIdInfo[idInfo] = "";
+                        std::cout << "là 1" << std::endl;
+                        Wt::Json::Array jsonInfoData = jsonAsset.get("information_datas");
+
+                        std::cout << "là 2" << std::endl;
+                        std::map<long long, std::string> saveIdInfo;
+                        for (Wt::Json::Object jsonIda : jsonInfoData)
+                        {
+                            std::cout << "là 3" << std::endl;
+                            int test = jsonIda.get("id");
+                            std::cout << "int : " << test << std::endl;
+                            Wt::Json::Object infoResource = jsonIda.get("information");
+                            std::cout << "là 4" << std::endl;
+                            long long idInfo = infoResource.get("id");
+                            saveIdInfo[idInfo] = "";
+                        }
+                        assetInfos_[id] = saveIdInfo;
                     }
-                    assetInfos_[id] = saveIdInfo;
                 }
             }
         }
     }
-    
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Association][InfoData] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Association][InfoData] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+
     jsonResource = jsonResources.at(1);
     cpt = 0;
-    if (jsonResource.size() > 0)
+    try
     {
-        Wt::Json::Array& jsonArray = (*jsonResource.begin());
-        if (!jsonArray.empty())
+        if (jsonResource.size() > 0)
         {
-            informationsModel = new Wt::WStandardItemModel(0,3,this);
-            for (int cpt(0); cpt < (int)jsonArray.size(); cpt++)
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
             {
-                Wt::Json::Object jsonObject = jsonArray.at(cpt);
-                Wt::Json::Object jsonAsset = jsonResource.at(cpt + 1);
-                
-                Wt::Json::Array infosFilters = jsonAsset.get("information_datas");
-                
-                for (Wt::Json::Object infoFilter : infosFilters)
+                informationsModel = new Wt::WStandardItemModel(0, 3, this);
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
                 {
-                    long long indexFilter = infoFilter.get("filter_field_index");
-                    Wt::Json::Object filterObj = infoFilter.get("filter");
-                    long long filterId = filterObj.get("id");
-                    filters_.insert(std::make_pair(filterId, indexFilter));
-                }
-                
-                Wt::WString name = jsonObject.get("name");
-                long long id = jsonObject.get("id");
+                    Wt::Json::Object jsonObject = jsonArray.at(cpt);
+                    Wt::Json::Object jsonAsset = jsonResource.at(cpt + 1);
 
-                Wt::WStandardItem *itemId = new Wt::WStandardItem();
-                Wt::WStandardItem *itemName = new Wt::WStandardItem();
-                Wt::WStandardItem *itemUnitId = new Wt::WStandardItem();
+                    Wt::Json::Array infosFilters = jsonAsset.get("information_datas");
 
-                itemId->setText(boost::lexical_cast<string>(id));
-                itemName->setText(name);
-
-                if (assetInfos_.size() > 0)
-                {
-                    for (MapAssetInfos::iterator assetInfos = assetInfos_.begin();
-                            assetInfos != assetInfos_.end() ;assetInfos++)
+                    for (Wt::Json::Object infoFilter : infosFilters)
                     {
-                        for (std::map<long long, std::string>::iterator saveIdInfo = (*assetInfos).second.begin();
-                                saveIdInfo != (*assetInfos).second.end(); saveIdInfo++)
+                        long long indexFilter = infoFilter.get("filter_field_index");
+                        Wt::Json::Object filterObj = infoFilter.get("filter");
+                        long long filterId = filterObj.get("id");
+                        filters_.insert(std::make_pair(filterId, indexFilter));
+                    }
+
+                    Wt::WString name = jsonObject.get("name");
+                    long long id = jsonObject.get("id");
+
+                    Wt::WStandardItem *itemId = new Wt::WStandardItem();
+                    Wt::WStandardItem *itemName = new Wt::WStandardItem();
+                    Wt::WStandardItem *itemUnitId = new Wt::WStandardItem();
+
+                    itemId->setText(boost::lexical_cast<string>(id));
+                    itemName->setText(name);
+
+                    std::cout << "NB assetInfos: " << assetInfos_.size() << std::endl;
+                    if (assetInfos_.size() > 0)
+                    {
+                        for (MapAssetInfos::iterator assetInfos = assetInfos_.begin();
+                                assetInfos != assetInfos_.end(); assetInfos++)
                         {
-                            if ((*saveIdInfo).first == id)
-                                (*saveIdInfo).second = name.toUTF8();
+                            for (std::map<long long, std::string>::iterator saveIdInfo = (*assetInfos).second.begin();
+                                    saveIdInfo != (*assetInfos).second.end(); saveIdInfo++)
+                            {
+                                std::cout << "DISPLAY ? " << assetInfos_.size() << std::endl;
+                                std::cout << "\tId: " << id << std::endl;
+                                std::cout << "\tname: " << name.toUTF8() << std::endl;
+                                if ((*saveIdInfo).first == id)
+                                    (*saveIdInfo).second = name.toUTF8();
+                            }
                         }
                     }
-                }
-                Wt::Json::Object infoUnit = jsonObject.get("information_unit");
-                long long idUnit = infoUnit.get("id");
+                    Wt::Json::Object infoUnit = jsonObject.get("information_unit");
+                    long long idUnit = infoUnit.get("id");
 
-                itemUnitId->setText(boost::lexical_cast<string>(idUnit));
-                vector<Wt::WStandardItem*> rowVector;
-                rowVector.push_back(itemId);
-                rowVector.push_back(itemName);
-                rowVector.push_back(itemUnitId);
-                informationsModel->insertRow(cpt,rowVector);
+                    itemUnitId->setText(boost::lexical_cast<string>(idUnit));
+                    vector<Wt::WStandardItem*> rowVector;
+                    rowVector.push_back(itemId);
+                    rowVector.push_back(itemName);
+                    rowVector.push_back(itemUnitId);
+                    informationsModel->insertRow(cpt, rowVector);
+                }
             }
         }
     }
-
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Association][Assets] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Association][Assets] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
 
     jsonResource = jsonResources.at(2);
     cpt = 0;
-    if (jsonResource.size() > 0)
+    try
     {
-        Wt::Json::Array& jsonArray = (*jsonResource.begin());
-        if (!jsonArray.empty())
+        if (jsonResource.size() > 0)
         {
-            for (Wt::Json::Object jsonObject : jsonArray)
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
             {
-                Wt::WString name = jsonObject.get("name");
-                long long id = jsonObject.get("id");
-                plugins_[cpt] = make_pair(id, name.toUTF8());
-                cpt++;
+                for (Wt::Json::Object jsonObject : jsonArray)
+                {
+                    Wt::WString name = jsonObject.get("name");
+                    long long id = jsonObject.get("id");
+                    plugins_[cpt] = make_pair(id, name.toUTF8());
+                    cpt++;
+                }
             }
         }
     }
-    
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Association] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Association] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
 
     jsonResource = jsonResources.at(3);
     cpt = 0;
-    if (jsonResource.size() > 0)
+    try
     {
-        Wt::Json::Array& jsonArray = jsonResource.at(0);
-        for (int cpt(0); cpt < (int)jsonArray.size(); ++cpt)
+        if (jsonResource.size() > 0)
         {
-            Wt::Json::Object jsonObject = jsonArray.at(cpt);
-            Wt::Json::Array& jsonFilterParam = jsonResource.at(cpt + 1);
-
-            long long filterId = jsonObject.get("id");
-            
-            Wt::Json::Object tmpFilterType = jsonObject.get("filter_type");
-            Wt::Json::Object tmpSearch = jsonObject.get("search");
-            for (Wt::Json::Object filJson : jsonFilterParam)
+            Wt::Json::Array& jsonArray = jsonResource.at(0);
+            for (int cpt(0); cpt < (int) jsonArray.size(); ++cpt)
             {
-                filterParameterValues_[filterId] = {
-                    jsonObject.get("id"),
-                    tmpFilterType.get("id"),
-                    jsonObject.get("nb_value"),
-                    tmpSearch.get("id"),
-                    filJson.get("value"),
-                    jsonObject.get("information_datas")
-                };
+                Wt::Json::Object jsonObject = jsonArray.at(cpt);
+                Wt::Json::Array& jsonFilterParam = jsonResource.at(cpt + 1);
+
+                long long filterId = jsonObject.get("id");
+
+                Wt::Json::Object tmpFilterType = jsonObject.get("filter_type");
+                Wt::Json::Object tmpSearch = jsonObject.get("search");
+                for (Wt::Json::Object filJson : jsonFilterParam)
+                {
+                    filterParameterValues_[filterId] = {
+                        jsonObject.get("id"),
+                        tmpFilterType.get("id"),
+                        jsonObject.get("nb_value"),
+                        tmpSearch.get("id"),
+                        filJson.get("value"),
+                        jsonObject.get("information_datas")
+                    };
+                }
             }
         }
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Association][Filters] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Association][Filters] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     update();
 }

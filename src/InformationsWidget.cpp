@@ -85,9 +85,13 @@ void InformationsWidget::addResource(std::vector<Wt::WInteractWidget*> arguments
     messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
 
     if (((Wt::WCheckBox*)(*i))->isChecked() == true)
+    {
         messageInformation.addBodyText(",\n\"display\" : true");
+    }
     else if (((Wt::WCheckBox*)(*i))->isChecked() == false)
+    {
         messageInformation.addBodyText(",\n\"display\" : false");
+    }
 
     messageInformation.addBodyText("\n}");
     
@@ -100,9 +104,13 @@ void InformationsWidget::addResource(std::vector<Wt::WInteractWidget*> arguments
     Wt::log("debug") << "InformationsWidget : [POST] address to call : " << apiAddress;    
 
     if (client->post(apiAddress, messageInformation))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 }
 
 void InformationsWidget::modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id)
@@ -121,9 +129,13 @@ void InformationsWidget::modifResource(std::vector<Wt::WInteractWidget*> argumen
     messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
 
     if (((Wt::WCheckBox*)(*i++))->isChecked() == true)
+    {
         messageInformation.addBodyText(",\n\"display\" : true");
+    }
     else if (((Wt::WCheckBox*)(*i++))->isChecked() == false)
+    {
         messageInformation.addBodyText(",\n\"display\" : false");
+    }
 
     messageInformation.addBodyText("\n}");
     
@@ -137,9 +149,13 @@ void InformationsWidget::modifResource(std::vector<Wt::WInteractWidget*> argumen
     Wt::log("debug") << "InformationsWidget : [PUT] address to call : " << apiAddress;    
 
     if (client->put(apiAddress, messageInformation))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 }
 
 void InformationsWidget::handleJsonGet(vectors_Json jsonResources)
@@ -182,9 +198,13 @@ Wt::WDialog *InformationsWidget::deleteResource(long long id)
     apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
     Wt::log("debug") << "InformationsWidget : [GET] address to call : " << apiAddress;
     if (client->get(apiAddress))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
     return box;
 }
 
@@ -192,7 +212,9 @@ void InformationsWidget::checkAlertsInInformation(boost::system::error_code err,
 {
     Wt::WApplication::instance()->resumeRendering();
     if (idsAlert_.size() > 0)
+    {
         idsAlert_.clear();
+    }
     if (!err)
     {
         try

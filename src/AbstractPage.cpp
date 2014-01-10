@@ -635,29 +635,30 @@ string AbstractPage::getApiUrl()
 void AbstractPage::handleJsonGet(vectors_Json jsonResources)
 {
     rowsTable_.clear();
-    
-    
-    vector_Json jsonResource = jsonResources.at(0);
-    if (jsonResource.size() > 0)
-    {
-        Wt::Json::Array& jsonArray = jsonResource.at(0);
-        for (int cpt(0); cpt < (int)jsonArray.size(); cpt++)
-        {
-            Wt::Json::Object jsonObject = jsonArray.at(cpt);
 
-            vector<Wt::WInteractWidget *> nameW;
-            for (vector_pair_string::iterator itTitles = titles_.begin();
-                    itTitles != titles_.end(); itTitles++)
+    try
+    {
+        vector_Json jsonResource = jsonResources.at(0);
+        if (jsonResource.size() > 0)
+        {
+            Wt::Json::Array& jsonArray = jsonResource.at(0);
+            for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
             {
-                switch ((*itTitles).first)
+                Wt::Json::Object jsonObject = jsonArray.at(cpt);
+
+                vector<Wt::WInteractWidget *> nameW;
+                for (vector_pair_string::iterator itTitles = titles_.begin();
+                        itTitles != titles_.end(); itTitles++)
                 {
-                    case ETypeJson::text :
+                    switch ((*itTitles).first)
+                    {
+                    case ETypeJson::text:
                     {
                         Wt::WString string = jsonObject.get((*itTitles).second);
                         nameW.push_back(new Wt::WText(string));
                         break;
                     }
-                    case ETypeJson::boolean :
+                    case ETypeJson::boolean:
                     {
                         bool boolean = jsonObject.get((*itTitles).second);
                         Wt::WCheckBox *checkBox = new Wt::WCheckBox();
@@ -666,13 +667,13 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                         nameW.push_back(checkBox);
                         break;
                     }
-                    case ETypeJson::integer :
+                    case ETypeJson::integer:
                     {
                         int number = jsonObject.get((*itTitles).second);
                         nameW.push_back(new Wt::WText(boost::lexical_cast<string>(number)));
                         break;
                     }
-                    case ETypeJson::undid :
+                    case ETypeJson::undid:
                     {
                         Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
                         Wt::Json::Object nameObjet = jsonObjectParam.get((*itTitles).second);
@@ -680,11 +681,23 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                         nameW.push_back(new Wt::WText(name));
                         break;
                     }
+                    }
                 }
+                long long id = jsonObject.get("id");
+                rowsTable_.insert(make_pair(id, nameW));
             }
-            long long id = jsonObject.get("id");
-            rowsTable_.insert(make_pair(id, nameW));
         }
+
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[AbstractPage] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[AbstractPage] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     update();
 }

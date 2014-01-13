@@ -57,7 +57,7 @@ Wt::WComboBox *UserEditionWidget::popupAdd(Wt::WDialog *dialog)
     return comboBox;
 }
 
-std::string     UserEditionWidget::addParameter()
+std::string UserEditionWidget::addParameter()
 {
     return "&type_id=" + boost::lexical_cast<std::string>(this->type_);
 }
@@ -123,11 +123,17 @@ Wt::WValidator *UserEditionWidget::editValidator(int who)
 {
     Wt::WRegExpValidator *validator = 0;
     if (type_ == 1)
+    {
         validator = new Wt::WRegExpValidator("[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$"); //[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}
+    }
     else if (type_ == 2)
+    {
         validator = new Wt::WRegExpValidator("(0)[0-9]{9}");
+    }
     else if (type_ == 3)
-        validator = new Wt::WRegExpValidator("[[a-zA-Z0-9.-]");
+    {
+        validator = new Wt::WRegExpValidator("[a-zA-Z0-9.-]{3,}");
+    }
     return validator;
 }
 
@@ -155,9 +161,13 @@ void UserEditionWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
     Wt::log("debug") << " Message for [POST] : " << messageMedia.body();
     
     if (client->post(apiAddress, messageMedia))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 }
 
 
@@ -185,9 +195,13 @@ void UserEditionWidget::modifResource(std::vector<Wt::WInteractWidget*> argument
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&UserEditionWidget::returnApiPutResource, this, _1, _2, client));
     if (client->put(apiAddress, message))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 }
 
 

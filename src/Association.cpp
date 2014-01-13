@@ -228,7 +228,9 @@ vector_type Association::getResourceRowTable(long long id)
 int Association::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage)
 {
     if (idsInformations_.size() == 0)
+    {
         return 1;
+    }
     return 0;
 }
 

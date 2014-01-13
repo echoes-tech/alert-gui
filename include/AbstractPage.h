@@ -144,15 +144,15 @@ protected:
     
     virtual void                update();
     void                        bindElements();
-    void                        nothingElement();
+    void                        createEmptyResourceTable();
 
     // -------- Creates Elements to table. ------------------------
     Wt::WContainerWidget        *createHeaderTable();
     Wt::WContainerWidget        *createBodyTable();
     Wt::WContainerWidget        *createFooterTable();
     // Add Resource For Elements ----------------------------------
-    void                        addResourceBodyHeader();
-    void                        fillInBodyTable();
+    void                        addResourceTableHeader();
+    void                        fillBodyTable();
     void                        addInputForAffix(int rowBodyTable);
     // POPUP : ----------------------------------------------------
     void                        popupWindow();
@@ -226,12 +226,13 @@ private:
     void                        switchPage(int rst);
     void                        initPaginatePage(Wt::WNavigationBar *navBar);
     void                        paginatePage();
-    void                        resourceBeAff();
+    void                        selectLinesToBeDisplayed();
     void                        searchName(Wt::WLineEdit *arg);
-    int                         sizeAff();
+    int                         countResources();
 
     // Main attributs ---------------------------
-    Wt::WTable                  *mediaTable_;
+    // main table of the page, used to list resources
+    Wt::WTable                  *m_resourceTable;
     /**
      * Set elements to table. \n
      * multimap &lsaquo; id/index, vector &lsaquo; widget &rsaquo; &rsaquo;\n
@@ -242,16 +243,16 @@ private:
     // Attributs.-------------------------------
     lists_string                listsUrl_;
     vector_pair_string          titles_;
-    Echoes::Dbo::Session        *session_;
-    std::string                 apiUrl_;
-    std::string                 nameResourcePage;
-    std::string                 nameResourcePageSpec_;
+    Echoes::Dbo::Session        *m_session;
+    std::string                 m_apiUrl;
+    std::string                 m_xmlPageName;
+    std::string                 m_nameResourcePageSpec_;
     std::string                 undidName_;
-    bool                        created_;
-    bool                        butModif_;
-    bool                        butDel_;
-    bool                        mainPage_;
-    bool                        update_;
+    bool                        m_isCreated;
+    bool                        m_isModifButtonPresent;
+    bool                        m_isDeleteButtonPresent;
+    bool                        m_isMainPage;
+    bool                        m_toUpdate;
     // select drop + paginate--------------------
     vector_pair                 resources_;
     vector_widget               butPaginate_;

@@ -21,25 +21,25 @@
 
 using namespace std;
 
-AbstractPage::AbstractPage(Echoes::Dbo::Session *session, string apiUrl, string namePage)
-: Wt::WTemplateFormView(Wt::WString::tr("Alert." + namePage + ".Management.template"))
+AbstractPage::AbstractPage(Echoes::Dbo::Session *session, string apiUrl, string pageName)
+: Wt::WTemplateFormView(Wt::WString::tr("Alert." + pageName + ".Management.template"))
 {
-    this->addStyleClass("template");
+    addStyleClass("template");
 
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use(namePage, false);
+    app->messageResourceBundle().use(pageName, false);
 
-    this->nameResourcePage = namePage; // XML name
-    this->butDel_ = true; // Button delete
-    this->butModif_ = true; // Button modifi
-    this->mainPage_ = true; // Dialog/True
-    this->created_ = false;
-    this->update_ = true;
-    this->nameResourcePageSpec_ = ""; // whether more one class use same xml file.
-    this->session_ = session;
-    this->nbAff_ = 5;
-    this->nbAffBegin_ = 1;
-    this->undidName_ = "name";
+    m_xmlPageName = pageName; // XML name
+    m_isDeleteButtonPresent = true; // Button delete
+    m_isModifButtonPresent = true; // Button modifi
+    m_isMainPage = true; // Dialog/True
+    m_isCreated = false;
+    m_toUpdate = true;
+    m_nameResourcePageSpec_ = ""; // whether more one class use same xml file.
+    m_session = session;
+    nbAff_ = 5;
+    nbAffBegin_ = 1;
+    undidName_ = "name";
     setApiUrl(apiUrl);
 }
 
@@ -47,22 +47,22 @@ AbstractPage::~AbstractPage() {}
 
 void AbstractPage::update()
 {
-    if (this->nameResourcePageSpec_.empty() == true)
-        this->nameResourcePageSpec_ = this->nameResourcePage;
-    if (this->update_ == true)
+    if (m_nameResourcePageSpec_.empty() == true)
+        m_nameResourcePageSpec_ = m_xmlPageName;
+    if (m_toUpdate == true)
     {
-        if (!this->created_ && rowsTable_.size() > 0)
+        if (!m_isCreated && rowsTable_.size() > 0)
         {
             bindElements();
-            resourceBeAff();
+            selectLinesToBeDisplayed();
         }
-        else if (!this->created_ && rowsTable_.size() == 0)
+        else if (!m_isCreated && rowsTable_.size() == 0)
         {
-            nothingElement();
+            createEmptyResourceTable();
         }
         else
         {
-            resourceBeAff();
+            selectLinesToBeDisplayed();
             paginatePage();            
         }
     }
@@ -70,75 +70,85 @@ void AbstractPage::update()
 
 void AbstractPage::bindElements()
 {
-    this->clear();
-    this->bindWidget("resource-header", createHeaderTable());
-    this->bindWidget("resource-table", createBodyTable());
-    this->bindWidget("resource-footer", createFooterTable());
-    this->created_ = true;
+    clear();
+    bindWidget("resource-header", createHeaderTable());
+    bindWidget("resource-table", createBodyTable());
+    bindWidget("resource-footer", createFooterTable());
+    m_isCreated = true;
 }
 
-void AbstractPage::nothingElement()
+void AbstractPage::createEmptyResourceTable()
 {
-    this->clear();
+    clear();
     Wt::WTable *table = new Wt::WTable();
-    new Wt::WText(tr("Alert." + this->nameResourcePage + ".nothing-" + this->nameResourcePageSpec_),
+    new Wt::WText(tr("Alert." + m_xmlPageName + ".nothing-" + m_nameResourcePageSpec_),
       table->elementAt(0, 0));
-    new Wt::WText(tr("Alert." + this->nameResourcePage + ".nothing-" + this->nameResourcePageSpec_ + "-text"),
+    new Wt::WText(tr("Alert." + m_xmlPageName + ".nothing-" + m_nameResourcePageSpec_ + "-text"),
       table->elementAt(1, 0));
     Wt::WPushButton *headerButton =
-    new Wt::WPushButton(tr("Alert." + this->nameResourcePage + ".nothing-button")
+    new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".nothing-button")
                     , table->elementAt(2, 0));
-    this->bindWidget("resource-header", new Wt::WText());
-    this->bindWidget("resource-table", table);
-    this->bindWidget("resource-footer", new Wt::WText());
+    bindWidget("resource-header", new Wt::WText());
+    bindWidget("resource-table", table);
+    bindWidget("resource-footer", new Wt::WText());
     table->addStyleClass("table table-striped table-hover data-table dataTable test");
 
     headerButton->clicked().connect(boost::bind(&AbstractPage::popupWindow, this));
     headerButton->setStyleClass("buttons btn");
 
-    this->created_ = true;
+    m_isCreated = true;
 }
 // -------- Creates Elements to table. ------
 
 Wt::WContainerWidget *AbstractPage::createHeaderTable()
 {
-    Wt::WContainerWidget *headerTable = new Wt::WContainerWidget();
-    headerTable->addStyleClass("widget-title header-pers");
+    Wt::WContainerWidget *headerTableContainer = new Wt::WContainerWidget();
+    headerTableContainer->addStyleClass("widget-title header-pers");
     new Wt::WText("<span class='icon'><i class='icon-tasks'></i></span><h5>"
-                  + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePageSpec_)
-                  + "</h5>", headerTable);
+                  + tr("Alert." + m_xmlPageName + ".add-form." + m_nameResourcePageSpec_)
+                  + "</h5>", headerTableContainer);
 
-    if (this->mainPage_) // gkr: whether class is not a dialog(popup).
-        headerTable->addWidget(getSelectDrop());
+    if (m_isMainPage) // gkr: whether class is not a dialog(popup).
+    {
+        headerTableContainer->addWidget(getSelectDrop());
+    }
 
-    Wt::WAnchor *headerButton = new Wt::WAnchor(headerTable);
-    if (this->mainPage_) //gkr: popup is created  in popupWindow.
+    Wt::WAnchor *headerButton = new Wt::WAnchor(headerTableContainer);
+    if (m_isMainPage) //gkr: popup is created  in popupWindow.
+    {
         headerButton->clicked().connect(boost::bind(&AbstractPage::popupWindow, this));
-    else if (!this->mainPage_) // gkr: Input is created in createBodyTable, showInputForAdd() is there just for show this.
+    }
+    else // gkr: Input is created in createBodyTable, showInputForAdd() is there just for show this.
+    {
         headerButton->clicked().connect(boost::bind(&AbstractPage::showInputForAdd, this));
+    }
 
     headerButton->setStyleClass("button-add btn");
     headerButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
-    return headerTable;
+    return headerTableContainer;
 }
 
 Wt::WContainerWidget *AbstractPage::createBodyTable()
 {
     resources_.clear();
 
-    Wt::WContainerWidget *resourceTable = new Wt::WContainerWidget();
+    Wt::WContainerWidget *resourceTableContainer = new Wt::WContainerWidget();
     // gkr: Init body of table
-    resourceTable->addStyleClass("widget-content nopadding DataTables_Table_0_wrapper dataTables_wrapper body-pers");
+    resourceTableContainer->addStyleClass("widget-content nopadding DataTables_Table_0_wrapper dataTables_wrapper body-pers");
 
-    mediaTable_ = new Wt::WTable(resourceTable);
-    mediaTable_->addStyleClass("table table-bordered table-striped table-hover data-table dataTable");
-    mediaTable_->setHeaderCount(1, Wt::Horizontal);
-    addResourceBodyHeader();
-    if (this->rowsTable_.size() > 0)
-        fillInBodyTable();
+    m_resourceTable = new Wt::WTable(resourceTableContainer);
+    m_resourceTable->addStyleClass("table table-bordered table-striped table-hover data-table dataTable");
+    m_resourceTable->setHeaderCount(1, Wt::Horizontal);
+    addResourceTableHeader();
+    if (rowsTable_.size() > 0)
+    {
+        fillBodyTable();
+    }
     else
+    {
         Wt::log("error") << "Too many argument in rowsTable_ plz setRowsTable";
-    return resourceTable;
+    }
+    return resourceTableContainer;
 }
 
 Wt::WContainerWidget *AbstractPage::createFooterTable()
@@ -149,7 +159,7 @@ Wt::WContainerWidget *AbstractPage::createFooterTable()
     Wt::WContainerWidget *footerTable = new Wt::WContainerWidget();
     footerTable->addStyleClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix footer-pers");
     // revoir ui-toolbar quand css finit  
-    new Wt::WText(tr("Alert." + this->nameResourcePage + ".search-bar")
+    new Wt::WText(tr("Alert." + m_xmlPageName + ".search-bar")
                   , footerTable);
 
     Wt::WLineEdit *search = new Wt::WLineEdit(footerTable);
@@ -165,34 +175,38 @@ Wt::WContainerWidget *AbstractPage::createFooterTable()
 
 // Add Resource For Elements -----------------------------------------------------------------
 
-void AbstractPage::addResourceBodyHeader()
+void AbstractPage::addResourceTableHeader()
 {
     int columnTable(0);
 
-    mediaTable_->elementAt(0, 0)->setAttributeValue("style", "border-left:0;");
+    m_resourceTable->elementAt(0, 0)->setAttributeValue("style", "border-left:0;");
     for (vector_pair_string::iterator it = titles_.begin(); it != titles_.end(); it++)
     {
-        new Wt::WText(tr("Alert." + this->nameResourcePage + ".name-" + (*it).second),
-                      mediaTable_->elementAt(0, columnTable++));
+        new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*it).second),
+                      m_resourceTable->elementAt(0, columnTable++));
     }
-    if (this->butModif_) // gkr: whether button Modif is true.
-        new Wt::WText(tr("Alert." + this->nameResourcePage + ".modif-button"),
-                      mediaTable_->elementAt(0, columnTable++));
-    if (this->butDel_) // gkr: whether button Sup(Delete) is true.
-        new Wt::WText(tr("Alert." + this->nameResourcePage + ".delete-button"),
-                      mediaTable_->elementAt(0, columnTable));
+    if (m_isModifButtonPresent) // gkr: whether button Modif is true.
+    {
+        new Wt::WText(tr("Alert." + m_xmlPageName + ".modif-button"),
+                      m_resourceTable->elementAt(0, columnTable++));
+    }
+    if (m_isDeleteButtonPresent) // gkr: whether button Sup(Delete) is true.
+    {
+        new Wt::WText(tr("Alert." + m_xmlPageName + ".delete-button"),
+                      m_resourceTable->elementAt(0, columnTable));
+    }
 }
 
-void AbstractPage::fillInBodyTable()
+void AbstractPage::fillBodyTable()
 {
     int columnTable(0);
     int rowBodyTable(1);
     
-    for (multimap_long_widgets::iterator itRowTable = this->rowsTable_.begin();
-            itRowTable != this->rowsTable_.end() ;itRowTable++)
+    for (multimap_long_widgets::iterator itRowTable = rowsTable_.begin();
+            itRowTable != rowsTable_.end() ;itRowTable++)
     {
         columnTable = 0;
-        mediaTable_->elementAt(rowBodyTable, columnTable)->setAttributeValue("style", "border-left:0;");
+        m_resourceTable->elementAt(rowBodyTable, columnTable)->setAttributeValue("style", "border-left:0;");
         if ((*itRowTable).first > 0)
         {
             for (vector_widget::iterator k = (*rowsTable_.find((*itRowTable).first)).second.begin();
@@ -217,9 +231,9 @@ void AbstractPage::fillInBodyTable()
                             if (((string)(*it)).find('<') == string::npos)
                             {
                                 nameRessouce += (*it) + "\n";
-                                if (resizeString.size() > (unsigned int) (SIZE_NAME / this->titles_.size()))
+                                if (resizeString.size() > (unsigned int) (SIZE_NAME / titles_.size()))
                                 {
-                                    resizeString.resize(SIZE_NAME / this->titles_.size());
+                                    resizeString.resize(SIZE_NAME / titles_.size());
                                     resizeString.resize(resizeString.size() + 3, '.');
                                 }
                             }
@@ -229,33 +243,35 @@ void AbstractPage::fillInBodyTable()
                     }
                     else
                     {
-                        if (nameRessouce.size() > (unsigned int) (SIZE_NAME / this->titles_.size()))
+                        if (nameRessouce.size() > (unsigned int) (SIZE_NAME / titles_.size()))
                         {
-                            newName.resize(SIZE_NAME / this->titles_.size());
+                            newName.resize(SIZE_NAME / titles_.size());
                             newName.resize(newName.size() + 3, '.');
                         }
                     }
                     Wt::WText *newColumn = new Wt::WText(Wt::WString::fromUTF8(newName),
-                                                         mediaTable_->elementAt(rowBodyTable, columnTable));
+                                                         m_resourceTable->elementAt(rowBodyTable, columnTable));
                     newColumn->setTextFormat(Wt::TextFormat::XHTMLUnsafeText);
                     newColumn->setToolTip(nameRessouce);
                     columnTable++;
                 }
                 else
                 {
-                    mediaTable_->elementAt(rowBodyTable, columnTable)->addWidget(widgetAdd);
-                    mediaTable_->elementAt(rowBodyTable, columnTable)->setContentAlignment(Wt::AlignCenter);
-                    mediaTable_->elementAt(rowBodyTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
+                    m_resourceTable->elementAt(rowBodyTable, columnTable)->addWidget(widgetAdd);
+                    m_resourceTable->elementAt(rowBodyTable, columnTable)->setContentAlignment(Wt::AlignCenter);
+                    m_resourceTable->elementAt(rowBodyTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
                     columnTable++;
                 }
             }
         }
-        resources_.push_back(pair<int, Wt::WTableRow*>(0, mediaTable_->rowAt(rowBodyTable)));
+        resources_.push_back(pair<int, Wt::WTableRow*>(0, m_resourceTable->rowAt(rowBodyTable)));
         addButtonsModifDel((*itRowTable).first, rowBodyTable, columnTable);
         rowBodyTable++;
     }
-    if (!this->mainPage_)
+    if (!m_isMainPage)
+    {
         addInputForAffix(rowBodyTable);
+    }
 }
 
 void AbstractPage::addInputForAffix(int rowBodyTable)
@@ -270,7 +286,7 @@ void AbstractPage::addInputForAffix(int rowBodyTable)
     {
         if ((*it).first > 0)
         {
-            Wt::WText *error = new Wt::WText(tr("Alert." + this->nameResourcePage + ".invalid-name-"
+            Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                 + (*it).second));
             error->hide();
             errorMessage.push_back(error);
@@ -280,21 +296,21 @@ void AbstractPage::addInputForAffix(int rowBodyTable)
             input->setValidator(editValidator(cpt++));
             input->hide();
 
-            mediaTable_->elementAt(rowBodyTable, columnTable)->addWidget(input);
-            mediaTable_->elementAt(rowBodyTable, columnTable++)->addWidget(error);
+            m_resourceTable->elementAt(rowBodyTable, columnTable)->addWidget(input);
+            m_resourceTable->elementAt(rowBodyTable, columnTable++)->addWidget(error);
 
             inputs_.push_back(input);
         }
     }
-    Wt::WPushButton *acceptButton = new Wt::WPushButton(mediaTable_->elementAt(rowBodyTable, columnTable));
+    Wt::WPushButton *acceptButton = new Wt::WPushButton(m_resourceTable->elementAt(rowBodyTable, columnTable));
 
     acceptButton->setTextFormat(Wt::XHTMLUnsafeText);
     acceptButton->setText("<span class='input-group-btn'><i class='icon-ok '></i></span>");
     acceptButton->clicked().connect(boost::bind(&AbstractPage::checkAdd, this, errorMessage));
     acceptButton->hide();
 
-    mediaTable_->elementAt(rowBodyTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
-    mediaTable_->elementAt(rowBodyTable, columnTable)->setContentAlignment(Wt::AlignCenter);
+    m_resourceTable->elementAt(rowBodyTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
+    m_resourceTable->elementAt(rowBodyTable, columnTable)->setContentAlignment(Wt::AlignCenter);
 
     inputs_.push_back(acceptButton);
 }
@@ -309,8 +325,8 @@ void AbstractPage::popupWindow()
 
     //gkr: Init dialog popup
     Wt::WDialog *dialogAdd_ =
-            new Wt::WDialog(tr("Alert." + this->nameResourcePage
-                               + ".add-" + this->nameResourcePageSpec_));
+            new Wt::WDialog(tr("Alert." + m_xmlPageName
+                               + ".add-" + m_nameResourcePageSpec_));
     
     int cpt(0);
     for (vector_pair_string::iterator title = titles_.begin();
@@ -318,7 +334,7 @@ void AbstractPage::popupWindow()
     {
         if ((*title).first >= 0)
         {
-            new Wt::WText(tr("Alert." + this->nameResourcePage + ".name-" + (*title).second)
+            new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
                           + " : <br />", dialogAdd_->contents());
 
             if ((*title).first == ETypeJson::text)
@@ -328,7 +344,9 @@ void AbstractPage::popupWindow()
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
                 input->setWidth(Wt::WLength(150));
                 if (inputName.size() == 0)
+                {
                     input->setFocus();
+                }
                 inputName.push_back(input);
             }
             else if ((*title).first == ETypeJson::boolean)
@@ -343,7 +361,9 @@ void AbstractPage::popupWindow()
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
                 input->setWidth(Wt::WLength(150));
                 if (inputName.size() == 0)
+                {
                     input->setFocus();
+                }
                 inputName.push_back(input);
             }
             else if ((*title).first == ETypeJson::undid)
@@ -351,7 +371,7 @@ void AbstractPage::popupWindow()
                 inputName.push_back(popupAdd(dialogAdd_));
             }
 
-            Wt::WText *error = new Wt::WText(tr("Alert." + this->nameResourcePage + ".invalid-name-"
+            Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                 + (*title).second),
                                              dialogAdd_->contents());
             error->hide();
@@ -369,7 +389,7 @@ void AbstractPage::popupWindow()
         return;
     }));
     dialogAdd_->show();
-    this->created_ = false;
+    m_isCreated = false;
 }
 
 void AbstractPage::popupForModif(long long id)
@@ -378,7 +398,7 @@ void AbstractPage::popupForModif(long long id)
     vector<Wt::WText*> errorMessage;
 
     //gkr: Init dialog popup
-    Wt::WDialog *dialogModif_ = new Wt::WDialog(tr("Alert." + this->nameResourcePage + ".modif-" + this->nameResourcePageSpec_));
+    Wt::WDialog *dialogModif_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".modif-" + m_nameResourcePageSpec_));
 
     for (multimap_long_widgets::iterator itTable = rowsTable_.begin();
             itTable != rowsTable_.end(); itTable++)
@@ -391,7 +411,7 @@ void AbstractPage::popupForModif(long long id)
             {
                 if ((*title).first >= 0)
                 {
-                        new Wt::WText(tr("Alert." + this->nameResourcePage + ".name-" + (*title).second)
+                        new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
                                       + " : <br />", dialogModif_->contents());                    
                 }
                 if ((*title).first == 0 || (*title).first == 2)
@@ -414,7 +434,9 @@ void AbstractPage::popupForModif(long long id)
                             input->enterPressed().connect(dialogModif_, &Wt::WDialog::accept);
                             input->setWidth(Wt::WLength(150));
                             if (inputName.size() == 0)
+                            {
                                 input->setFocus();
+                            }
                             input->setToolTip(Wt::WString::fromUTF8(nameRessouce));
                             inputName.push_back(input);
                         }
@@ -425,13 +447,15 @@ void AbstractPage::popupForModif(long long id)
                             input->enterPressed().connect(dialogModif_, &Wt::WDialog::accept);
                             input->setWidth(Wt::WLength(150));
                             if (inputName.size() == 0)
+                            {
                                 input->setFocus();
+                            }
                             input->setToolTip(Wt::WString::fromUTF8(nameRessouce));
                             inputName.push_back(input);
                         }
 
 
-                        Wt::WText *error2 = new Wt::WText(tr("Alert." + this->nameResourcePage + ".invalid-name-"
+                        Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                              + (*title).second), dialogModif_->contents());
                         error2->hide();
                         errorMessage.push_back(error2);
@@ -490,7 +514,7 @@ void AbstractPage::popupForModif(long long id)
         return;
     }));
     dialogModif_->show();
-    this->created_ = false;
+    m_isCreated = false;
 }
 
 void AbstractPage::popupCheck(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id)
@@ -502,11 +526,18 @@ void AbstractPage::popupCheck(vector<Wt::WInteractWidget*> inputName, vector<Wt:
         return;
     }
     else
+    {
         check = checkInput(inputName, errorMessage);
+    }
+    
     if (check == 0)
+    {
         id >= 0 ? modifResource(inputName, id) : addResource(inputName);
+    }
     else if (check == 1)
+    {
         dialog->show();
+    }
     return;
 }
 
@@ -525,29 +556,33 @@ void AbstractPage::popupComplete(Wt::WDialog *dialog, long long id)
 
 void AbstractPage::addButtonsModifDel(long long id, int rowTable, int columnTable)
 {
-    if (this->butModif_)
+    if (m_isModifButtonPresent)
     {
-        Wt::WPushButton *modifButton = new Wt::WPushButton(mediaTable_->elementAt(rowTable, columnTable));
+        Wt::WPushButton *modifButton = new Wt::WPushButton(m_resourceTable->elementAt(rowTable, columnTable));
         modifButton->setAttributeValue("class", "btn btn-inverse");
         modifButton->setTextFormat(Wt::XHTMLUnsafeText);
         modifButton->setText("<span class='input-group-btn'><i class='icon-edit icon-white'></i></span>");
-        if (this->mainPage_)
+        if (m_isMainPage)
+        {
             modifButton->clicked().connect(boost::bind(&AbstractPage::popupForModif, this, id));
+        }
         else
+        {
             modifButton->clicked().connect(boost::bind(&AbstractPage::inputForModif, this, id, rowTable, columnTable));
-        mediaTable_->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
-        mediaTable_->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
+        }
+        m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
+        m_resourceTable->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
         columnTable++;
     }
-    if (this->butDel_)
+    if (m_isDeleteButtonPresent)
     {
-        Wt::WPushButton *delButton = new Wt::WPushButton(mediaTable_->elementAt(rowTable, columnTable));
+        Wt::WPushButton *delButton = new Wt::WPushButton(m_resourceTable->elementAt(rowTable, columnTable));
         delButton->setAttributeValue("class", "btn btn-danger");
         delButton->setTextFormat(Wt::XHTMLUnsafeText);
         delButton->setText("<span class='input-group-btn'><i class='icon-remove icon-white'></i></span>");
         delButton->clicked().connect(boost::bind(&AbstractPage::deleteResource, this, id));
-        mediaTable_->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(Wt::WLength(5, Wt::WLength::Percentage)));
-        mediaTable_->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
+        m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(Wt::WLength(5, Wt::WLength::Percentage)));
+        m_resourceTable->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
     }
 }
 
@@ -555,13 +590,13 @@ void AbstractPage::addButtonsModifDel(long long id, int rowTable, int columnTabl
 void AbstractPage::addButtonsInFooterDialog(Wt::WDialog *dialog)
 {
     Wt::WPushButton *ok = new Wt::WPushButton(tr("Alert."
-                                                 + this->nameResourcePage + ".button-save"),
+                                                 + m_xmlPageName + ".button-save"),
                                               dialog->footer());
     ok->clicked().connect(dialog, &Wt::WDialog::accept);
     ok->setAttributeValue("style", "margin-left:12px");
 
     Wt::WPushButton *annul = new Wt::WPushButton(tr("Alert."
-                                                    + this->nameResourcePage + ".button-cancel"),
+                                                    + m_xmlPageName + ".button-cancel"),
                                                  dialog->footer());
     annul->clicked().connect(dialog, &Wt::WDialog::reject);
     annul->setAttributeValue("style", "margin-left:12px;");
@@ -571,62 +606,62 @@ void AbstractPage::addButtonsInFooterDialog(Wt::WDialog *dialog)
 
 void AbstractPage::setRowsTable(multimap_long_widgets rowsTable)
 {
-    this->rowsTable_ = rowsTable;
+    rowsTable_ = rowsTable;
 }
 
 multimap_long_widgets AbstractPage::getRowsTable()
 {
-    return this->rowsTable_;
+    return rowsTable_;
 }
 
 void AbstractPage::setUndidName(string undidName)
 {
-    this->undidName_ = undidName;
+    undidName_ = undidName;
 }
 
 void AbstractPage::setTitles(vector_pair_string titles)
 {
-    this->titles_ = titles;
+    titles_ = titles;
 }
 
 void AbstractPage::setUrl(lists_string listsUrl)
 {
-    this->listsUrl_ = listsUrl;
+    listsUrl_ = listsUrl;
 }
 
 void AbstractPage::setButtonModif(bool check)
 {
-    this->butModif_ = check;
+    m_isModifButtonPresent = check;
 }
 
 void AbstractPage::setButtonSup(bool check)
 {
-    this->butDel_ = check;
+    m_isDeleteButtonPresent = check;
 }
 
 void AbstractPage::setLocalTable(bool background)
 {
-    this->mainPage_ = background;
+    m_isMainPage = background;
 }
 
 void AbstractPage::setUpdate(bool update)
 {
-    this->update_ = update;
+    m_toUpdate = update;
 }
 
 void AbstractPage::setNameSpecial(string nameResourcePageSpec)
 {
-    this->nameResourcePageSpec_ = nameResourcePageSpec;
+    m_nameResourcePageSpec_ = nameResourcePageSpec;
 }
 
 void AbstractPage::setApiUrl(string apiUrl)
 {
-    apiUrl_ = apiUrl;
+    m_apiUrl = apiUrl;
 }
 
 string AbstractPage::getApiUrl()
 {
-    return apiUrl_;
+    return m_apiUrl;
 }
 
 // -------- CALL RETURN API, HANDLE -----------
@@ -705,10 +740,12 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
 void AbstractPage::recursiveGetResources(vectors_Json jsonResource, lists_string listsUrl)
 {
     if (listsUrl.size() == 0)
+    {
         listsUrl = listsUrl_;
-    string apiAddress = this->getApiUrl() + "/" + (*(*listsUrl.begin()).begin())
-            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + session_->user()->token.toUTF8()
+    }
+    string apiAddress = getApiUrl() + "/" + (*(*listsUrl.begin()).begin())
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8()
             + addParameter();
 
     Wt::log("debug") << "[GET] address to call : " << apiAddress;
@@ -741,19 +778,19 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
             catch (Wt::Json::ParseError const& e)
             {
                 Wt::log("warning")
-                        << "[" + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePage)
+                        << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
                         + " Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".parsing-error-title"),
-                                      tr("Alert." + this->nameResourcePage + ".parsing-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".parsing-error-title"),
+                                      tr("Alert." + m_xmlPageName + ".parsing-error"), Wt::Ok);
                 return EXIT_FAILURE;
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning")
-                        << "[" + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePage)
+                        << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
                         + " Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".typexception-error-title"),
-                                      tr("Alert." + this->nameResourcePage + ".typexception-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".typexception-error-title"),
+                                      tr("Alert." + m_xmlPageName + ".typexception-error"), Wt::Ok);
                 return EXIT_FAILURE;
             }
         }
@@ -812,10 +849,10 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
     }
     else
     {
-        Wt::log("warning") << "[" + tr("Alert." + this->nameResourcePage + ".add-form."
-                                       + this->nameResourcePage) + " Widget] Http::Client error: " << response.body();
-        Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".database-error-title"),
-                              tr("Alert." + this->nameResourcePage + ".database-error"), Wt::Ok);
+        Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
+                                       + m_xmlPageName) + " Widget] Http::Client error: " << response.body();
+        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
     }
     return EXIT_FAILURE;
 }
@@ -829,21 +866,23 @@ void AbstractPage::addResource(vector<Wt::WInteractWidget*> argument)
     Wt::Http::Message messageAsset;
     messageAsset.addBodyText("{\n\t\"name\": \"" + ((Wt::WLineEdit*)(*argument.begin()))->text().toUTF8() + "\"\n}");
 
-    string apiAddress = this->getApiUrl() + "/" + (*(*listsUrl_.begin()).begin())
-    + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + session_->user()->token.toUTF8();
+    string apiAddress = getApiUrl() + "/" + (*(*listsUrl_.begin()).begin())
+    + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8();
     
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&AbstractPage::returnApiPostResource, this, _1, _2, client));
 
-    Wt::log("debug") << this->nameResourcePage + " : [POST] address to call : " << apiAddress;
+    Wt::log("debug") << m_xmlPageName + " : [POST] address to call : " << apiAddress;
 
     if (client->post(apiAddress, messageAsset))
     {
         Wt::WApplication::instance()->deferRendering();
     }
     else
-        Wt::log("error") << "[" + this->nameResourcePage + "] Error Client Http";
+    {
+        Wt::log("error") << "[" + m_xmlPageName + "] Error Client Http";
+    }
 }
 
 void AbstractPage::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
@@ -855,64 +894,72 @@ void AbstractPage::modifResource(vector<Wt::WInteractWidget*> arguments, long lo
     Wt::Http::Message message;
     message.addBodyText(messageString);
 
-    string apiAddress = this->getApiUrl() + "/" + (*(*listsUrl_.begin()).begin()) + "/"
+    string apiAddress = getApiUrl() + "/" + (*(*listsUrl_.begin()).begin()) + "/"
             + boost::lexical_cast<string> (id)
-            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + session_->user()->token.toUTF8();
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8();
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&AbstractPage::returnApiPutResource, this, _1, _2, client));
-    Wt::log("debug") << this->nameResourcePage + " : [PUT] address to call : " << apiAddress;
-    Wt::log("debug") << this->nameResourcePage + " : [PUT] message : " << messageString;
+    Wt::log("debug") << m_xmlPageName + " : [PUT] address to call : " << apiAddress;
+    Wt::log("debug") << m_xmlPageName + " : [PUT] message : " << messageString;
     if (client->put(apiAddress, message))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
-        Wt::log("error") << "[" + this->nameResourcePage + "] Error Client Http";
+    {
+        Wt::log("error") << "[" + m_xmlPageName + "] Error Client Http";
+    }
 }
 
 Wt::WDialog *AbstractPage::deleteResource(long long id)
 {
     Wt::WDialog *box =
-            new Wt::WDialog(tr("Alert." + this->nameResourcePage
-            + ".delete-" + this->nameResourcePage));
+            new Wt::WDialog(tr("Alert." + m_xmlPageName
+            + ".delete-" + m_xmlPageName));
 
     box->contents()->
-            addWidget(new Wt::WText(tr("Alert." + this->nameResourcePage
-            + ".delete-" + this->nameResourcePageSpec_ + "-message")));
+            addWidget(new Wt::WText(tr("Alert." + m_xmlPageName
+            + ".delete-" + m_nameResourcePageSpec_ + "-message")));
 
     Wt::WPushButton *ok =
             new Wt::WPushButton(tr("Alert."
-            + this->nameResourcePage + ".button-confirm"),
+            + m_xmlPageName + ".button-confirm"),
                                 box->footer());
     ok->clicked().connect(box, &Wt::WDialog::accept);
     ok->setAttributeValue("style", "margin-left:12px");
 
     Wt::WPushButton *annul =
             new Wt::WPushButton(tr("Alert."
-            + this->nameResourcePage + ".button-cancel"),
+            + m_xmlPageName + ".button-cancel"),
                                 box->footer());
     annul->clicked().connect(box, &Wt::WDialog::reject);
     annul->setAttributeValue("style", "margin-left:12px;");
 
-    this->created_ = false;
+    m_isCreated = false;
 
     box->finished().connect(bind([=] () {
     if (box->result() == Wt::WDialog::Accepted)
     {
         Wt::Http::Message message;
         message.addBodyText("");
-        string apiAddress = this->getApiUrl() + "/" + (*(*listsUrl_.begin()).begin()) + "/"
+        string apiAddress = getApiUrl() + "/" + (*(*listsUrl_.begin()).begin()) + "/"
                 + boost::lexical_cast<string> (id)
-                + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-                + "&token=" + session_->user()->token.toUTF8();
+                + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+                + "&token=" + m_session->user()->token.toUTF8();
 
         Wt::Http::Client *client = new Wt::Http::Client(this);
         client->done().connect(boost::bind(&AbstractPage::returnApiDeleteResource, this, _1, _2, client));
-        Wt::log("debug") << this->nameResourcePage + " : [DELETE] address to call : " << apiAddress;
+        Wt::log("debug") << m_xmlPageName + " : [DELETE] address to call : " << apiAddress;
         if (client->deleteRequest(apiAddress, message))
+        {
             Wt::WApplication::instance()->deferRendering();
+        }
         else
+        {
             Wt::log("error") << "Error Client Http";
+        }
     }
     return box;
     }));
@@ -939,36 +986,36 @@ void AbstractPage::returnApiPostResource(boost::system::error_code err, const Wt
             catch (Wt::Json::ParseError const& e)
             {
                 Wt::log("warning")
-                        << "[" + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePage)
+                        << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
                         + " Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".parsing-error-title"),
-                                      tr("Alert." + this->nameResourcePage + ".parsing-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".parsing-error-title"),
+                                      tr("Alert." + m_xmlPageName + ".parsing-error"), Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning")
-                        << "[" + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePage)
+                        << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
                         + " Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".typexception-error-title"),
-                                      tr("Alert." + this->nameResourcePage + ".typexception-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".typexception-error-title"),
+                                      tr("Alert." + m_xmlPageName + ".typexception-error"), Wt::Ok);
             }
         }
         else
         {
-            Wt::log("warning") << "[" + tr("Alert." + this->nameResourcePage + ".add-form."
-                                       + this->nameResourcePage) + " Widget] Http::Client error: " << response.body();
-            Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".database-error-title"),
-                              tr("Alert." + this->nameResourcePage + ".database-error"), Wt::Ok);
+            Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
+                                       + m_xmlPageName) + " Widget] Http::Client error: " << response.body();
+            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
         }
     }
     else
     {
-        Wt::log("warning") << "[" + tr("Alert." + this->nameResourcePage + ".add-form."
-                                       + this->nameResourcePage) + " Widget] Http::Client error: " << response.body();
-        Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".database-error-title"),
-                              tr("Alert." + this->nameResourcePage + ".database-error"), Wt::Ok);
+        Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
+                                       + m_xmlPageName) + " Widget] Http::Client error: " << response.body();
+        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
     }
-    created_ = false;
+    m_isCreated = false;
     recursiveGetResources();
 }
 
@@ -989,36 +1036,36 @@ void AbstractPage::returnApiPutResource(boost::system::error_code err, const Wt:
             catch (Wt::Json::ParseError const& e)
             {
                 Wt::log("warning")
-                        << "[" + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePage)
+                        << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
                         + " Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".parsing-error-title"),
-                                      tr("Alert." + this->nameResourcePage + ".parsing-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".parsing-error-title"),
+                                      tr("Alert." + m_xmlPageName + ".parsing-error"), Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning")
-                        << "[" + tr("Alert." + this->nameResourcePage + ".add-form." + this->nameResourcePage)
+                        << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
                         + " Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".typexception-error-title"),
-                                      tr("Alert." + this->nameResourcePage + ".typexception-error"), Wt::Ok);
+                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".typexception-error-title"),
+                                      tr("Alert." + m_xmlPageName + ".typexception-error"), Wt::Ok);
             }
         }
         else
         {
-            Wt::log("warning") << "[" + tr("Alert." + this->nameResourcePage + ".add-form."
-                                       + this->nameResourcePage) + " Widget] Http::Client error: " << response.body();
-            Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".database-error-title"),
-                              tr("Alert." + this->nameResourcePage + ".database-error"), Wt::Ok);
+            Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
+                                       + m_xmlPageName) + " Widget] Http::Client error: " << response.body();
+            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
         }
     }
     else
     {
-        Wt::log("warning") << "[" + tr("Alert." + this->nameResourcePage + ".add-form."
-                                       + this->nameResourcePage) + " Widget] Http::Client error: " << response.body();
-        Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".database-error-title"),
-                              tr("Alert." + this->nameResourcePage + ".database-error"), Wt::Ok);
+        Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
+                                       + m_xmlPageName) + " Widget] Http::Client error: " << response.body();
+        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
     }
-    created_ = false;
+    m_isCreated = false;
     recursiveGetResources();
 }
 
@@ -1032,24 +1079,24 @@ void    AbstractPage::returnApiDeleteResource(boost::system::error_code err, con
         {
             if (response.body() != "")
             {
-                Wt::log("error") << "[" + this->nameResourcePage + " Widget] Response should be empty : "
+                Wt::log("error") << "[" + m_xmlPageName + " Widget] Response should be empty : "
                         << response.body() << ".";
             }
         }
         else
         {
-            Wt::log("warning") << "[" + tr("Alert." + this->nameResourcePage + ".add-form."
-                                       + this->nameResourcePage) + " Widget] " << response.body();
-            Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".database-error-title"),
-                              tr("Alert." + this->nameResourcePage + ".database-error"), Wt::Ok);
+            Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
+                                       + m_xmlPageName) + " Widget] " << response.body();
+            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
         }
     }
     else
     {
-            Wt::log("warning") << "[" + tr("Alert." + this->nameResourcePage + ".add-form."
-                                       + this->nameResourcePage) + " Widget] Http::Client error: " << response.body();
-            Wt::WMessageBox::show(tr("Alert." + this->nameResourcePage + ".database-error-title"),
-                              tr("Alert." + this->nameResourcePage + ".database-error"), Wt::Ok);
+            Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
+                                       + m_xmlPageName) + " Widget] Http::Client error: " << response.body();
+            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
     }
     recursiveGetResources();
 }
@@ -1062,7 +1109,7 @@ void AbstractPage::checkAdd(vector<Wt::WText*> errorMessage)
 {
     if (checkInput(inputs_, errorMessage) == 0)
     {
-        this->created_ = false;
+        m_isCreated = false;
         inputs_.pop_back();
         addResource(inputs_);
         inputs_.clear();
@@ -1073,7 +1120,7 @@ void AbstractPage::checkModif(vector_widget inputs, long long id, vector<Wt::WTe
 {
     if (checkInput(inputs, errorMessage) == 0)
     {
-        this->created_ = false;
+        m_isCreated = false;
         modifResource(inputs, id);
         inputs.clear();
     }
@@ -1111,6 +1158,7 @@ int AbstractPage::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
     {
         Wt::WInteractWidget *widgetAdd = *j;
         string nameRessouce("N2Wt9WLineEditE");
+        cout << "TYPE : " << typeid (*widgetAdd).name() << endl;
         if (nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
         {
             if (((Wt::WLineEdit*)(*j))->validate() == Wt::WValidator::Invalid)
@@ -1127,7 +1175,7 @@ int AbstractPage::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
                 //                ((Wt::WLineEdit*)(*j))->setWidth(Wt::WLength(150));
                 //                ((Wt::WLineEdit*)(*j))->setFocus();
                 //                ((Wt::WText*)(*i))->setText(tr("Alert."
-                //                        + this->nameResourcePage + ".invalid-name-twice"));
+                //                        + m_nameResourcePage + ".invalid-name-twice"));
                 //                ((Wt::WText*)(*i))->show();
                 //                check = 1;
                 //                
@@ -1136,7 +1184,9 @@ int AbstractPage::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
             {
                 ((Wt::WLineEdit*)(*j))->addStyleClass("form-group has-success");
                 if (((Wt::WText*)(*i))->isHidden() == false)
+                {
                     ((Wt::WText*)(*i))->hide();
+                }
             }
         }
         i++;
@@ -1148,7 +1198,7 @@ int AbstractPage::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
 
 void AbstractPage::showInputForAdd()
 {
-    mediaTable_->rowAt(mediaTable_->rowCount() - 1)->show();
+    m_resourceTable->rowAt(m_resourceTable->rowCount() - 1)->show();
     for (vector<Wt::WInteractWidget*>::const_iterator j = inputs_.begin();
             j != inputs_.end();
             j++)
@@ -1156,7 +1206,9 @@ void AbstractPage::showInputForAdd()
         Wt::WInteractWidget *widgetAdd = *j;
         string nameRessouce("N2Wt9WLineEditE");
         if (inputs_.begin() == j && nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
+        {
             ((Wt::WLineEdit*)(*j))->setFocus();
+        }
         ((Wt::WInteractWidget*)(*j))->show();
     }
 }
@@ -1195,14 +1247,14 @@ void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
                         input->setFocus();
                     input->setWidth(Wt::WLength(150));
 
-                    Wt::WText *error = new Wt::WText(tr("Alert." + this->nameResourcePage + ".invalid-name-"
+                    Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                         + (*title).second));
                     error->hide();
                     errorMessage.push_back(error);
 
-                    mediaTable_->elementAt(rowTable, column)->clear();
-                    mediaTable_->elementAt(rowTable, column)->addWidget(input);
-                    mediaTable_->elementAt(rowTable, column++)->addWidget(error);
+                    m_resourceTable->elementAt(rowTable, column)->clear();
+                    m_resourceTable->elementAt(rowTable, column)->addWidget(input);
+                    m_resourceTable->elementAt(rowTable, column++)->addWidget(error);
 
                     cpt++;
                 }
@@ -1211,11 +1263,11 @@ void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
         }
     }
 
-    mediaTable_->elementAt(rowTable, columnTable)->clear();
-    mediaTable_->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
-    mediaTable_->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
+    m_resourceTable->elementAt(rowTable, columnTable)->clear();
+    m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
+    m_resourceTable->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
 
-    Wt::WPushButton *valideBut = new Wt::WPushButton(mediaTable_->elementAt(rowTable, columnTable));
+    Wt::WPushButton *valideBut = new Wt::WPushButton(m_resourceTable->elementAt(rowTable, columnTable));
     valideBut->setTextFormat(Wt::XHTMLUnsafeText);
     valideBut->setText("<span class='input-group-btn'><i class='icon-ok '></i></span>");
     valideBut->clicked().connect(boost::bind(&AbstractPage::checkModif, this, inputs, id, errorMessage));
@@ -1227,7 +1279,7 @@ void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
 
 Wt::WComboBox *AbstractPage::getSelectDrop()
 {
-    this->nbAff_ = 5;
+    nbAff_ = 5;
     Wt::WComboBox *selectDrop = new Wt::WComboBox();
     selectDrop->addItem("5");
     selectDrop->addItem("10");
@@ -1239,10 +1291,14 @@ Wt::WComboBox *AbstractPage::getSelectDrop()
     selectDrop->setMargin(50, Wt::Right);
     selectDrop->changed().connect(bind([ = ] (){
     if (selectDrop->currentText().toUTF8().compare("all") == 0)
-        this->nbAff_ = 0;
+    {
+        nbAff_ = 0;
+    }
     else
-        this->nbAff_ = atoi(selectDrop->currentText().toUTF8().c_str());
-    this->nbAffBegin_ = 1;
+    {
+        nbAff_ = atoi(selectDrop->currentText().toUTF8().c_str());
+    }
+    nbAffBegin_ = 1;
     update();
         }));
     return selectDrop;
@@ -1252,20 +1308,20 @@ void AbstractPage::builtPaginate(Wt::WNavigationBar *navBar)
 {
     Wt::WPushButton *butPaginate = new Wt::WPushButton();
     butPaginate->addStyleClass("fg-button ui-button ui-state-default");
-    butPaginate->setText(tr("Alert." + this->nameResourcePage + ".paginate-first"));
+    butPaginate->setText(tr("Alert." + m_xmlPageName + ".paginate-first"));
     butPaginate->clicked().connect(boost::bind(&AbstractPage::switchPage, this, -1));
     navBar->addWidget(butPaginate);
     butPaginateExt_.push_back(butPaginate);
 
     butPaginate = new Wt::WPushButton();
     butPaginate->addStyleClass("fg-button ui-button ui-state-default");
-    butPaginate->setText(tr("Alert." + this->nameResourcePage + ".paginate-prev"));
+    butPaginate->setText(tr("Alert." + m_xmlPageName + ".paginate-prev"));
     butPaginate->clicked().connect(boost::bind(&AbstractPage::switchPage, this, -2));
     navBar->addWidget(butPaginate);
     butPaginateExt_.push_back(butPaginate);
 
 
-    for (int cpt(0); cpt < ((sizeAff() / this->nbAff_) + ((sizeAff() % this->nbAff_) > 0 ? 1 : 0)); cpt++)
+    for (int cpt(0); cpt < ((countResources() / nbAff_) + ((countResources() % nbAff_) > 0 ? 1 : 0)); cpt++)
     {
         butPaginate = new Wt::WPushButton(boost::lexical_cast<string>(cpt + 1));
         butPaginate->setStyleClass("fg-button ui-button ui-state-default btn");
@@ -1276,41 +1332,54 @@ void AbstractPage::builtPaginate(Wt::WNavigationBar *navBar)
 
     butPaginate = new Wt::WPushButton();
     butPaginate->addStyleClass("fg-button ui-button ui-state-default");
-    butPaginate->setText(tr("Alert." + this->nameResourcePage + ".paginate-next"));
+    butPaginate->setText(tr("Alert." + m_xmlPageName + ".paginate-next"));
     butPaginate->clicked().connect(boost::bind(&AbstractPage::switchPage, this, -3));
     navBar->addWidget(butPaginate);
     butPaginateExt_.push_back(butPaginate);
 
     butPaginate = new Wt::WPushButton();
     butPaginate->addStyleClass("fg-button ui-button ui-state-default");
-    butPaginate->setText(tr("Alert." + this->nameResourcePage + ".paginate-last"));
+    butPaginate->setText(tr("Alert." + m_xmlPageName + ".paginate-last"));
     butPaginate->clicked().connect(boost::bind(&AbstractPage::switchPage, this, -4));
     navBar->addWidget(butPaginate);
     butPaginateExt_.push_back(butPaginate);
 }
 
+// pagination ???
 void AbstractPage::switchPage(int rst)
 {
-    int nbRow = sizeAff();
+    int nbRow = countResources();
     if (rst == -4)
-        this->nbAffBegin_ = (nbRow - (nbRow % this->nbAff_)) + 1;
+    {
+        nbAffBegin_ = (nbRow - (nbRow % nbAff_)) + 1;
+    }
     else if (rst == -3)
-        this->nbAffBegin_ = (this->nbAffBegin_ + this->nbAff_) <= nbRow ? (this->nbAffBegin_ + this->nbAff_) : this->nbAffBegin_;
+    {
+        nbAffBegin_ = (nbAffBegin_ + nbAff_) <= nbRow ? (nbAffBegin_ + nbAff_) : nbAffBegin_;
+    }
     else if (rst == -2)
-        this->nbAffBegin_ = (this->nbAffBegin_ - this->nbAff_) >= 1 ? (this->nbAffBegin_ - this->nbAff_) : 1;
+    {
+        nbAffBegin_ = (nbAffBegin_ - nbAff_) >= 1 ? (nbAffBegin_ - nbAff_) : 1;
+    }
     else if (rst == -1)
-        this->nbAffBegin_ = 1;
+    {
+        nbAffBegin_ = 1;
+    }
     else
-        this->nbAffBegin_ = (this->nbAff_ * rst) + 1;
+    {
+        nbAffBegin_ = (nbAff_ * rst) + 1;
+    }
     update();
 }
 
 void AbstractPage::initPaginatePage(Wt::WNavigationBar *navBar)
 {
-    int nbRow = sizeAff();
+    int nbRow = countResources();
     if (nbAff_ == 0)
+    {
         nbAff_ = nbRow;
-    if (nbRow > this->nbAff_)
+    }
+    if (nbRow > nbAff_)
     {
         builtPaginate(navBar);
     }
@@ -1318,31 +1387,38 @@ void AbstractPage::initPaginatePage(Wt::WNavigationBar *navBar)
 
 void AbstractPage::paginatePage()
 {
-    int nbRow = sizeAff();
+    int nbRow = countResources();
     int cpt(0);
     bool check = false;
-    if (nbRow > this->nbAff_)
+    if (nbRow > nbAff_)
         check = true;
 
     for (vector_widget::iterator it = butPaginateExt_.begin(); it != butPaginateExt_.end(); it++)
     {
         if (check)
         {
-            if (cpt < 2 && this->nbAffBegin_ > 1)
+            if (cpt < 2 && nbAffBegin_ > 1)
+            {
                 ((Wt::WPushButton*)(*it))->setDisabled(false);
-            else if (cpt > 1 &&
-                    (nbRow + 1) > (this->nbAffBegin_ + this->nbAff_))
+            }
+            else if (cpt > 1 && (nbRow + 1) > (nbAffBegin_ + nbAff_))
+            {
                 ((Wt::WPushButton*)(*it))->setDisabled(false);
+            }
             else
+            {
                 ((Wt::WPushButton*)(*it))->setDisabled(true);
+            }
             ((Wt::WPushButton*)(*it))->show();
         }
         else
+        {
             ((Wt::WPushButton*)(*it))->hide();
+        }
         cpt++;
     }
     cpt = 0;
-    int rst = (this->nbAffBegin_ / this->nbAff_);
+    int rst = (nbAffBegin_ / nbAff_);
     for (vector_widget::iterator i = butPaginate_.begin(); i != butPaginate_.end(); i++)
     {
         if (check)
@@ -1352,39 +1428,51 @@ void AbstractPage::paginatePage()
                                                         "background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6)");
             ((Wt::WPushButton*)(*i))->clicked().connect(boost::bind(&AbstractPage::switchPage, this, cpt));
             if (cpt == rst)
+            {
                 ((Wt::WPushButton*)(*i))->setAttributeValue("style",
                                                             "background-image: linear-gradient(#ffffff, #ffffff 25%, #CFCFCF)");
+            }
             ((Wt::WPushButton*)(*i))->hide();
-            if (((nbRow / this->nbAff_) + ((nbRow % this->nbAff_) > 0 ? 1 : 0)) <= 5)
+            if (((nbRow / nbAff_) + ((nbRow % nbAff_) > 0 ? 1 : 0)) <= 5)
             {
-                if (cpt < ((nbRow / this->nbAff_) + ((nbRow % this->nbAff_) > 0 ? 1 : 0)))
+                if (cpt < ((nbRow / nbAff_) + ((nbRow % nbAff_) > 0 ? 1 : 0)))
+                {
                     ((Wt::WPushButton*)(*i))->show();
+                }
             }
             else
             {
                 if (rst <= 2 && (cpt - 2) <= 2)
                 {
                     if ((cpt - 2) == 2)
+                    {
                         ((Wt::WPushButton*)(*i))->setText("...");
+                    }
                     ((Wt::WPushButton*)(*i))->show();
                 }
                 else if (((cpt + 3) == rst || (cpt + 4) == rst)
                         && (cpt + 4) >= (int) (butPaginate_.size() - 1))
                 {
                     if ((cpt + 4) == (int) (butPaginate_.size() - 1))
+                    {
                         ((Wt::WPushButton*)(*i))->setText("...");
+                    }
                     ((Wt::WPushButton*)(*i))->show();
                 }
                 else if ((cpt + 2) == rst)
                 {
                     if ((cpt + 3) < (int) (butPaginate_.size() - 1) && cpt > 0)
+                    {
                         ((Wt::WPushButton*)(*i))->setText("...");
+                    }
                     ((Wt::WPushButton*)(*i))->show();
                 }
                 else if ((cpt - 2) > 2 && (cpt - 2) == rst)
                 {
                     if ((cpt + 1) < (int) (butPaginate_.size()))
+                    {
                         ((Wt::WPushButton*)(*i))->setText("...");
+                    }
                     ((Wt::WPushButton*)(*i))->show();
                 }
                 else if (cpt + 1 != rst
@@ -1394,26 +1482,32 @@ void AbstractPage::paginatePage()
                     /* Hide */
                 }
                 else
+                {
                     ((Wt::WPushButton*)(*i))->show();
+                }
             }
         }
         else
+        {
             ((Wt::WPushButton*)(*i))->hide();
+        }
         cpt++;
     }
 }
 
-void AbstractPage::resourceBeAff()
+void AbstractPage::selectLinesToBeDisplayed()
 {
     int nb(0);
-    int nbRow = sizeAff();
+    int nbRow = countResources();
 
-    if (this->nbAffBegin_ > nbRow)
-        this->nbAffBegin_ -= this->nbAff_;
-    if (this->nbAff_ == 0)
+    if (nbAffBegin_ > nbRow)
     {
-        this->nbAff_ = nbRow;
-        this->nbAffBegin_ = 1;
+        nbAffBegin_ -= nbAff_;
+    }
+    if (nbAff_ == 0)
+    {
+        nbAff_ = nbRow;
+        nbAffBegin_ = 1;
     }
     nb = 1;
     for (vector_pair::iterator it = resources_.begin(); it != resources_.end(); it++)
@@ -1421,14 +1515,20 @@ void AbstractPage::resourceBeAff()
         Wt::WTableRow *tableRow = (Wt::WTableRow *)it->second;
         if ((int) it->first == 0)
         {
-            if (nb >= this->nbAffBegin_ && nb <= (this->nbAff_ + this->nbAffBegin_ - 1))
+            if (nb >= nbAffBegin_ && nb <= (nbAff_ + nbAffBegin_ - 1))
+            {
                 tableRow->show();
+            }
             else
+            {
                 tableRow->hide();
+            }
             nb++;
         }
         else
+        {
             tableRow->hide();
+        }
     }
 }
 
@@ -1440,7 +1540,7 @@ void AbstractPage::searchName(Wt::WLineEdit *arg)
     {
         for (vector_pair::iterator it = resources_.begin(); it != resources_.end(); it++)
         {
-            this->nbAffBegin_ = 1;
+            nbAffBegin_ = 1;
             it->first = 0;
         }
     }
@@ -1450,7 +1550,7 @@ void AbstractPage::searchName(Wt::WLineEdit *arg)
         {
             check = false;
             Wt::WTableRow *tableRow = (Wt::WTableRow *)it->second;
-            for (int j(0); j < (int)this->rowsTable_.size(); j++)
+            for (int j(0); j < (int)rowsTable_.size(); j++)
             {
                 Wt::WText *text = (Wt::WText*)tableRow->elementAt(j)->widget(0);
                 string compareType("PN2Wt5WTextE");
@@ -1461,26 +1561,34 @@ void AbstractPage::searchName(Wt::WLineEdit *arg)
                     string argInTable = text->text().toUTF8();
                     transform(argInTable.begin(), argInTable.end(), argInTable.begin(), ::tolower);
                     if (boost::contains(argInTable, argSearch) == true)
+                    {
                         check = true;
+                    }
                 }
             }
             if (check == true)
+            {
                 it->first = 0;
+            }
             else
+            {
                 it->first = 1;
+            }
             cpt++;
         }
     }
     update();
 }
 
-int AbstractPage::sizeAff()
+int AbstractPage::countResources()
 {
     int cpt(0);
     for (vector_pair::iterator it = resources_.begin(); it != resources_.end(); it++)
     {
         if (it->first == 0)
+        {
             cpt++;
+        }
     }
     return cpt;
 }

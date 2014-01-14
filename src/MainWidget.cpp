@@ -349,7 +349,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::ASSOCIATION:
                 {
                     this->contentFluid->addWidget(act);
-                    act->recoverListAssociation();
+                    act->getAssociationList();
                     break;
                 }
                 case Enums::EPageType::ALERTS:

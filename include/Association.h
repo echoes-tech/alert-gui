@@ -52,7 +52,7 @@ public:
    * In this methode you can call API for recover resources. \n
    * She is call after initialization of this class.
    */
-  void          recoverListAssociation();
+  void          getAssociationList();
 
 protected:
   /*! \brief Closes the registration widget. 
@@ -71,9 +71,9 @@ protected:
   virtual Wt::WValidator                *editValidator(int who);
   virtual void                          popupAddWidget(Wt::WDialog *dialog, long long id);
 
-  virtual std::vector<long long>        getIdsTable();
-  virtual std::vector<std::string>      getTitlesTableText();
-  virtual std::vector<std::string>      getTitlesTableWidget();
+//  virtual std::vector<long long>        getIdsTable();
+//  virtual std::vector<std::string>      getTitlesTableText();
+//  virtual std::vector<std::string>      getTitlesTableWidget();
   virtual vector_widget                 getResourceRowTable(long long id);
   
   virtual int checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);

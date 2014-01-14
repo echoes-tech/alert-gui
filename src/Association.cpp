@@ -17,7 +17,6 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     created_ = false;
     newClass_ = false;
 
-//    setButtonModif(true);
     setButtonModif(false);
     setButtonSup(true);
     setLocalTable(true);
@@ -165,34 +164,34 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
 
 // GET INFO FOR MOTHER ---------------------------------------
 
-vector<string> Association::getTitlesTableWidget()
-{
-    vector<string> titleWidget;
-    return titleWidget;
-}
-
-vector<string> Association::getTitlesTableText()
-{
-    vector<string> titleText;
-    titleText.push_back("asset");
-    titleText.push_back("information");
-    return titleText;
-}
-
-vector<long long> Association::getIdsTable()
-{
-    vector<long long> ids;
-
-    if (assetInfos_.size() > 0)
-    {
-        for (MapAssetInfos::iterator idsAssets = assetInfos_.begin();
-                idsAssets != assetInfos_.end(); idsAssets++)
-        {
-            ids.push_back((*idsAssets).first);
-        }
-    }
-    return ids;
-}
+//vector<string> Association::getTitlesTableWidget()
+//{
+//    vector<string> titleWidget;
+//    return titleWidget;
+//}
+//
+//vector<string> Association::getTitlesTableText()
+//{
+//    vector<string> titleText;
+//    titleText.push_back("asset");
+//    titleText.push_back("information");
+//    return titleText;
+//}
+//
+//vector<long long> Association::getIdsTable()
+//{
+//    vector<long long> ids;
+//
+//    if (assetInfos_.size() > 0)
+//    {
+//        for (MapAssetInfos::iterator idsAssets = assetInfos_.begin();
+//                idsAssets != assetInfos_.end(); idsAssets++)
+//        {
+//            ids.push_back((*idsAssets).first);
+//        }
+//    }
+//    return ids;
+//}
 
 vector_type Association::getResourceRowTable(long long id)
 {
@@ -242,10 +241,10 @@ Wt::WValidator *Association::editValidator(int who)
 
 void Association::closePopup()
 {
-    recoverListAssociation();
+    getAssociationList();
 }
 
-void Association::recoverListAssociation()
+void Association::getAssociationList()
 {
     assets_.clear();
     plugins_.clear();
@@ -588,7 +587,7 @@ void Association::postAsset(boost::system::error_code err, const Wt::Http::Messa
         Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "err", tr("Alert.association.database-error"), Wt::Ok);
     }
-    recoverListAssociation();
+    getAssociationList();
 }
 
 void Association::deleteAsset(boost::system::error_code err, const Wt::Http::Message& response)
@@ -615,7 +614,7 @@ void Association::deleteAsset(boost::system::error_code err, const Wt::Http::Mes
         Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.association.database-error-title"),tr("Alert.association.database-error"),Wt::Ok);
     }
-    recoverListAssociation();
+    getAssociationList();
 }
 
 Wt::WDialog *Association::deleteResource(long long id)

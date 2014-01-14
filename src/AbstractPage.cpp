@@ -48,7 +48,9 @@ AbstractPage::~AbstractPage() {}
 void AbstractPage::updatePage()
 {
     if (m_nameResourcePageSpec_.empty() == true)
+    {
         m_nameResourcePageSpec_ = m_xmlPageName;
+    }
     if (m_toUpdate == true)
     {
         if (!m_isCreated && rowsTable_.size() > 0)

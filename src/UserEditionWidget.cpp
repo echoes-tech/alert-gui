@@ -155,7 +155,7 @@ void UserEditionWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
             + "&token=" + session_->user()->token.toUTF8();
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&UserEditionWidget::returnApiPostResource, this, _1, _2, client));
+    client->done().connect(boost::bind(&UserEditionWidget::postResourceCallback, this, _1, _2, client));
     
     Wt::log("debug") << "UserEditionWidget : [POST] address to call : " << apiAddress;
     Wt::log("debug") << " Message for [POST] : " << messageMedia.body();
@@ -193,7 +193,7 @@ void UserEditionWidget::modifResource(std::vector<Wt::WInteractWidget*> argument
     Wt::log("debug") << "UserEditionWidget : [PUT] address to call : " << apiAddress;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&UserEditionWidget::returnApiPutResource, this, _1, _2, client));
+    client->done().connect(boost::bind(&UserEditionWidget::putResourceCallback, this, _1, _2, client));
     if (client->put(apiAddress, message))
     {
         Wt::WApplication::instance()->deferRendering();

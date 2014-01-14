@@ -47,7 +47,7 @@ Wt::WValidator    *AssetManagementWidget::editValidator(int cpt)
     return validator;
 }
 
-void AssetManagementWidget::update()
+void AssetManagementWidget::updatePage()
 {
     multimap_long_widgets rowsTable = getRowsTable();
     for (multimap_long_widgets::iterator itrowTable = rowsTable.begin();
@@ -63,7 +63,7 @@ void AssetManagementWidget::update()
         (*itrowTable).second.push_back(downloadButton);
     }
     setRowsTable(rowsTable);
-    AbstractPage::update();
+    AbstractPage::updatePage();
 }
 // Call API - POST(ADD) DELETE PUT(MODIF) ----------------------------------------
 
@@ -147,7 +147,7 @@ void    AssetManagementWidget::checkAlertsInAsset(boost::system::error_code err,
     }
 }
 
-void AssetManagementWidget::returnApiPostResource(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
+void AssetManagementWidget::postResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
 {
     delete client;
     Wt::WApplication::instance()->resumeRendering();

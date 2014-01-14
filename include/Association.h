@@ -63,7 +63,7 @@ protected:
 
   virtual void                          closePopup();
 
-  virtual void                          update();
+  virtual void                          updatePage();
   virtual void                          modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
   virtual void                          addResource(std::vector<Wt::WInteractWidget*> argument);
   virtual Wt::WDialog                   *deleteResource(long long id);

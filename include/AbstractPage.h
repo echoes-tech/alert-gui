@@ -142,27 +142,27 @@ protected:
     };
 
     
-    virtual void                update();
-    void                        bindElements();
+    virtual void                updatePage();
+    void                        createTable();
     void                        createEmptyResourceTable();
 
     // -------- Creates Elements to table. ------------------------
-    Wt::WContainerWidget        *createHeaderTable();
-    Wt::WContainerWidget        *createBodyTable();
-    Wt::WContainerWidget        *createFooterTable();
+    Wt::WContainerWidget        *createTableFirstHeader();
+    Wt::WContainerWidget        *createTableBody();
+    Wt::WContainerWidget        *createTableFooter();
     // Add Resource For Elements ----------------------------------
-    void                        addResourceTableHeader();
+    void                        addTableSecondHeader();
     void                        fillBodyTable();
     void                        addInputForAffix(int rowBodyTable);
     // POPUP : ----------------------------------------------------
-    void                        popupWindow();
-    void                        popupForModif(long long id);
+    void                        addResourcePopup();
+    void                        modifResourcePopup(long long id);
     void                        popupCheck(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage,
     Wt::WDialog                 *dialog, long long id);
-    void                        popupComplete(Wt::WDialog *dialog, long long id);
+    void                        popupFinalization(Wt::WDialog *dialog, long long id);
     // Methodes useful
-    void                        addButtonsModifDel(long long id, int rowTable, int columnTable);
-    void                        addButtonsInFooterDialog(Wt::WDialog *dialog);
+    void                        addGenericButtonsToResourceTable(long long id, int rowTable, int columnTable);
+    void                        addButtonsToPopupFooter(Wt::WDialog *dialog);
 
     // Set/Get attribut to init or option. ------------------------
     void                        setRowsTable(multimap_long_widgets rowsTable);
@@ -202,9 +202,9 @@ protected:
     virtual void                modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
     virtual Wt::WDialog         *deleteResource(long long id);
     // RETURNS API --------------------------------------
-    virtual void                returnApiPostResource(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
-    virtual void                returnApiPutResource(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
-    virtual void                returnApiDeleteResource(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
+    virtual void                postResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
+    virtual void                putResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
+    virtual void                apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
     // Check input ----------------------------------------------
     void                        checkAdd(std::vector<Wt::WText*> errorMessage);
     void                        checkModif(vector_widget inputs, long long id, std::vector<Wt::WText*> errorMessage);
@@ -221,11 +221,11 @@ protected:
 private:
     
     // Methodes disposable --------------------------------------
-    Wt::WComboBox               *getSelectDrop();
-    void                        builtPaginate(Wt::WNavigationBar *navBar);
+    Wt::WComboBox               *getNumberOfLineDisplayedComboBox();
+    void                        builtPagination(Wt::WNavigationBar *navBar);
     void                        switchPage(int rst);
-    void                        initPaginatePage(Wt::WNavigationBar *navBar);
-    void                        paginatePage();
+    void                        initPagination(Wt::WNavigationBar *navBar);
+    void                        doThePaginationTrick();
     void                        selectLinesToBeDisplayed();
     void                        searchName(Wt::WLineEdit *arg);
     int                         countResources();

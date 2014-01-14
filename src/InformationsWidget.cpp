@@ -99,7 +99,7 @@ void InformationsWidget::addResource(std::vector<Wt::WInteractWidget*> arguments
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8();
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&InformationsWidget::returnApiPostResource, this, _1, _2, client));
+    client->done().connect(boost::bind(&InformationsWidget::postResourceCallback, this, _1, _2, client));
 
     Wt::log("debug") << "InformationsWidget : [POST] address to call : " << apiAddress;    
 
@@ -144,7 +144,7 @@ void InformationsWidget::modifResource(std::vector<Wt::WInteractWidget*> argumen
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8();
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&InformationsWidget::returnApiPostResource, this, _1, _2, client));
+    client->done().connect(boost::bind(&InformationsWidget::postResourceCallback, this, _1, _2, client));
 
     Wt::log("debug") << "InformationsWidget : [PUT] address to call : " << apiAddress;    
 

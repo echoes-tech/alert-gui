@@ -52,9 +52,9 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
 
 // TABLE(S) FOR MAIN PAGE -------------------------------------
 
-void Association::update()
+void Association::updatePage()
 {
-    AbstractPage::update();
+    AbstractPage::updatePage();
     if (!newClass_)
     {
         newClass_ = true;
@@ -472,7 +472,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
         Wt::log("warning") << "[Association][Filters] JSON Type Exception";
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
-    update();
+    updatePage();
 }
 
 void Association::addResource(vector<Wt::WInteractWidget*> argument)

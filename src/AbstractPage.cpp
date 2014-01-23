@@ -55,11 +55,13 @@ void AbstractPage::updatePage()
     {
         if (!m_isCreated && rowsTable_.size() > 0)
         {
+            std::cout << "ON CREE" << std::endl;
             createTable();
             selectLinesToBeDisplayed();
         }
         else if (!m_isCreated && rowsTable_.size() == 0)
         {
+            std::cout << "ON NE CREE PAS" << std::endl;
             createEmptyResourceTable();
         }
         else
@@ -142,6 +144,7 @@ Wt::WContainerWidget *AbstractPage::createTableBody()
     m_resourceTable->addStyleClass("table table-bordered table-striped table-hover data-table dataTable");
     m_resourceTable->setHeaderCount(1, Wt::Horizontal);
     addTableSecondHeader();
+    cout << "TAILLE : " << rowsTable_.size() << endl;
     if (rowsTable_.size() > 0)
     {
         fillBodyTable();
@@ -182,7 +185,7 @@ void AbstractPage::addTableSecondHeader()
     int columnTable(0);
 
     m_resourceTable->elementAt(0, 0)->setAttributeValue("style", "border-left:0;");
-    for (vector_pair_string::iterator it = titles_.begin(); it != titles_.end(); it++)
+    for (vector_pair_string::iterator it = m_titles.begin(); it != m_titles.end(); it++)
     {
         new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*it).second),
                       m_resourceTable->elementAt(0, columnTable++));
@@ -204,12 +207,14 @@ void AbstractPage::fillBodyTable()
     int columnTable(0);
     int rowBodyTable(1);
     
+    std::cout << "FILL BODY TABLE" << std::endl;
+    
     for (multimap_long_widgets::iterator itRowTable = rowsTable_.begin();
             itRowTable != rowsTable_.end() ;itRowTable++)
     {
         columnTable = 0;
         m_resourceTable->elementAt(rowBodyTable, columnTable)->setAttributeValue("style", "border-left:0;");
-        if ((*itRowTable).first > 0)
+        if ((*itRowTable).first >= 0)
         {
             for (vector_widget::iterator k = (*rowsTable_.find((*itRowTable).first)).second.begin();
                     k != (*rowsTable_.find((*itRowTable).first)).second.end(); k++)
@@ -233,9 +238,9 @@ void AbstractPage::fillBodyTable()
                             if (((string)(*it)).find('<') == string::npos)
                             {
                                 nameRessouce += (*it) + "\n";
-                                if (resizeString.size() > (unsigned int) (SIZE_NAME / titles_.size()))
+                                if (resizeString.size() > (unsigned int) (SIZE_NAME / m_titles.size()))
                                 {
-                                    resizeString.resize(SIZE_NAME / titles_.size());
+                                    resizeString.resize(SIZE_NAME / m_titles.size());
                                     resizeString.resize(resizeString.size() + 3, '.');
                                 }
                             }
@@ -245,9 +250,9 @@ void AbstractPage::fillBodyTable()
                     }
                     else
                     {
-                        if (nameRessouce.size() > (unsigned int) (SIZE_NAME / titles_.size()))
+                        if (nameRessouce.size() > (unsigned int) (SIZE_NAME / m_titles.size()))
                         {
-                            newName.resize(SIZE_NAME / titles_.size());
+                            newName.resize(SIZE_NAME / m_titles.size());
                             newName.resize(newName.size() + 3, '.');
                         }
                     }
@@ -265,10 +270,11 @@ void AbstractPage::fillBodyTable()
                     columnTable++;
                 }
             }
+            resources_.push_back(pair<int, Wt::WTableRow*>(0, m_resourceTable->rowAt(rowBodyTable)));
+            addGenericButtonsToResourceTable((*itRowTable).first, rowBodyTable, columnTable);
+            rowBodyTable++;
         }
-        resources_.push_back(pair<int, Wt::WTableRow*>(0, m_resourceTable->rowAt(rowBodyTable)));
-        addGenericButtonsToResourceTable((*itRowTable).first, rowBodyTable, columnTable);
-        rowBodyTable++;
+        
     }
     if (!m_isMainPage)
     {
@@ -332,8 +338,8 @@ void AbstractPage::addResourcePopup()
                                + ".add-" + m_nameResourcePageSpec_));
     
     int cpt(0);
-    for (vector_pair_string::iterator title = titles_.begin();
-            title != titles_.end(); title++)
+    for (vector_pair_string::iterator title = m_titles.begin();
+            title != m_titles.end(); title++)
     {
         if ((*title).first >= 0)
         {
@@ -409,7 +415,7 @@ void AbstractPage::modifResourcePopup(long long id)
         int cpt(0);
         if ((*itTable).first == id)
         {
-            vector_pair_string::iterator title = titles_.begin();
+            vector_pair_string::iterator title = m_titles.begin();
             for (Wt::WInteractWidget *itElem : (*itTable).second)
             {
                 if ((*title).first >= 0)
@@ -624,7 +630,7 @@ void AbstractPage::setUndidName(string undidName)
 
 void AbstractPage::setTitles(vector_pair_string titles)
 {
-    titles_ = titles;
+    m_titles = titles;
 }
 
 void AbstractPage::setUrl(lists_string listsUrl)
@@ -677,16 +683,18 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
     try
     {
         vector_Json jsonResource = jsonResources.at(0);
+        std::cout << "ON A LES RESSOURCES" << std::endl;
         if (jsonResource.size() > 0)
         {
+            std::cout << "IL Y EN A VRAIMENT" << std::endl;
             Wt::Json::Array& jsonArray = jsonResource.at(0);
             for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
             {
                 Wt::Json::Object jsonObject = jsonArray.at(cpt);
 
                 vector<Wt::WInteractWidget *> nameW;
-                for (vector_pair_string::iterator itTitles = titles_.begin();
-                        itTitles != titles_.end(); itTitles++)
+                for (vector_pair_string::iterator itTitles = m_titles.begin();
+                        itTitles != m_titles.end(); itTitles++)
                 {
                     switch ((*itTitles).first)
                     {
@@ -720,6 +728,8 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                         break;
                     }
                     }
+                    std::cout << "OBJET : " << (*itTitles).second << std::endl;
+                    
                 }
                 long long id = jsonObject.get("id");
                 rowsTable_.insert(make_pair(id, nameW));
@@ -840,6 +850,7 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
             }
             if (listsUrl.size() == 0)
             {
+                std::cout << "ON TRAITE CE QU'ON RECUPERE" << std::endl;
                 handleJsonGet(jsonResource);
             }
             else
@@ -1229,7 +1240,7 @@ void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
         int cpt(0);
         if ((*itTable).first == id)
         {
-            vector_pair_string::iterator title = titles_.begin();
+            vector_pair_string::iterator title = m_titles.begin();
             for (Wt::WInteractWidget *itElem : (*itTable).second)
             {
                 string nameRessouce("N2Wt5WTextE");

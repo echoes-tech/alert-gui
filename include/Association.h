@@ -68,7 +68,7 @@ protected:
   virtual void                          addResource(std::vector<Wt::WInteractWidget*> argument);
   virtual Wt::WDialog                   *deleteResource(long long id);
   
-  virtual Wt::WValidator                *editValidator(int who);
+//  virtual Wt::WValidator                *editValidator(int who);
   virtual void                          popupAddWidget(Wt::WDialog *dialog, long long id);
 
 //  virtual std::vector<long long>        getIdsTable();
@@ -82,7 +82,7 @@ private:
   /*
    * return API after call.
    */
-  void                  postAsset(boost::system::error_code err, const Wt::Http::Message& response);
+  void                  postAssetCallBack(boost::system::error_code err, const Wt::Http::Message& response);
   void                  deleteAsset(boost::system::error_code err, const Wt::Http::Message& response);
 
   virtual void          handleJsonGet(vectors_Json jsonResources);
@@ -102,7 +102,6 @@ private:
   MapLongString2                                assets_;
   Wt::WStandardItemModel                        *assetsModel;
   MapLongString2                                plugins_;
-  MapLongString2                                 informations_;
   Wt::WStandardItemModel                        *informationsModel;
   std::map<long long, filterValuesStruct>       filterParameterValues_;
   std::map<int, Wt::WCheckBox*>                 filterCheckBox_;
@@ -110,7 +109,7 @@ private:
   std::map<long long, Wt::WComboBox*>           filterAssetsComboBox_;
   long long                                     idHost_;
   long long                                     idPlugin_;
-  std::vector<long long>                        idsInformations_;
+//  std::vector<long long>                        idsInformations_;
   bool                                          created_;
   bool                                          newClass_;
   Echoes::Dbo::Session                          *session_;

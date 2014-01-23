@@ -217,6 +217,8 @@ protected:
     virtual Wt::WValidator      *editValidator(int who) {return (new Wt::WValidator());};
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id) {};
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog) {return new Wt::WComboBox(dialog->contents());};
+    
+    multimap_long_widgets       rowsTable_;
 
 private:
     
@@ -238,11 +240,10 @@ private:
      * multimap &lsaquo; id/index, vector &lsaquo; widget &rsaquo; &rsaquo;\n
      * Usage : \n id/index, always use number greader 0 \n
      */
-    multimap_long_widgets       rowsTable_;
     vector_widget               inputs_;
     // Attributs.-------------------------------
     lists_string                listsUrl_;
-    vector_pair_string          titles_;
+    vector_pair_string          m_titles;
     Echoes::Dbo::Session        *m_session;
     std::string                 m_apiUrl;
     std::string                 m_xmlPageName;

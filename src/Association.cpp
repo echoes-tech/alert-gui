@@ -20,8 +20,12 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     setButtonModif(false);
     setButtonSup(true);
     setLocalTable(true);
-
+    
     vector_pair_string listTitles;
+    listTitles.push_back(std::make_pair(ETypeJson::text, tr("Alert.association.filter").toUTF8()));
+    listTitles.push_back(std::make_pair(ETypeJson::text, tr("Alert.association.filter_index").toUTF8()));
+    listTitles.push_back(std::make_pair(ETypeJson::text, tr("Alert.association.information").toUTF8()));
+    listTitles.push_back(std::make_pair(ETypeJson::text, tr("Alert.association.asset").toUTF8()));
     setTitles(listTitles);
     
     lists_string lListUrl;
@@ -54,10 +58,10 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
 void Association::updatePage()
 {
     AbstractPage::updatePage();
-    if (!newClass_)
-    {
-        newClass_ = true;
-    }
+//    if (!newClass_)
+//    {
+//        newClass_ = true;
+//    }
 }
 
 // TABLE(S) FOR POPUP ------------------------------------------
@@ -67,8 +71,6 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
     dialog->contents()->clear();
     if (id == 0)
     {
-        idsInformations_.clear();
-        idsInformations_.push_back((*informations_.begin()).second.first);
         idPlugin_ = (*plugins_.begin()).second.first;
         idHost_ = (*assets_.begin()).second.first;
         MapLongString2::iterator itA;
@@ -162,51 +164,17 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
     dialog->show();
 }
 
-// GET INFO FOR MOTHER ---------------------------------------
-
-//vector<string> Association::getTitlesTableWidget()
-//{
-//    vector<string> titleWidget;
-//    return titleWidget;
-//}
-//
-//vector<string> Association::getTitlesTableText()
-//{
-//    vector<string> titleText;
-//    titleText.push_back("asset");
-//    titleText.push_back("information");
-//    return titleText;
-//}
-//
-//vector<long long> Association::getIdsTable()
-//{
-//    vector<long long> ids;
-//
-//    if (assetInfos_.size() > 0)
-//    {
-//        for (MapAssetInfos::iterator idsAssets = assetInfos_.begin();
-//                idsAssets != assetInfos_.end(); idsAssets++)
-//        {
-//            ids.push_back((*idsAssets).first);
-//        }
-//    }
-//    return ids;
-//}
-
 vector_type Association::getResourceRowTable(long long id)
 {
     vector_type rowTable;
     
     MapAssetInfos::iterator assetInfos = assetInfos_.find(id);
 
-    std::cout << "AFFICHAGE DES LIGNES ????????" << std::endl;
-    
     if (assetInfos_.size() > 0)
     {
         for (MapLongString2::iterator assetResource = assets_.begin();
                 assetResource != assets_.end(); assetResource++)
         {
-            std::cout << "ROW : " << (*assetResource).second.second << std::endl;
             if (id == (*assetResource).second.first)
             {
                 rowTable.push_back(new Wt::WText((*assetResource).second.second));
@@ -226,18 +194,14 @@ vector_type Association::getResourceRowTable(long long id)
 
 int Association::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage)
 {
-    if (idsInformations_.size() == 0)
-    {
-        return 1;
-    }
-    return 0;
+    return 1;
 }
 
-Wt::WValidator *Association::editValidator(int who)
-{
-    Wt::WRegExpValidator *validator;
-    return validator;
-}
+//Wt::WValidator *Association::editValidator(int who)
+//{
+//    Wt::WRegExpValidator *validator;
+//    return validator;
+//}
 
 void Association::closePopup()
 {
@@ -249,23 +213,25 @@ void Association::getAssociationList()
     assets_.clear();
     plugins_.clear();
     filterParameterValues_.clear();
-    informations_.clear();
-    idsInformations_.clear();
     assetInfos_.clear();
+    rowsTable_.clear();
 
     recursiveGetResources();
 }
 
 void Association::handleJsonGet(vectors_Json jsonResources)
 {
-
+    rowsTable_.clear();
     vector_Json jsonResource = jsonResources.at(0);
     long long cpt(0);
+    Wt::Json::Array& jsonArray = Wt::Json::Array::Empty;
     try
     {
         if (jsonResource.size() > 0)
         {
+            cout << "JSON ARRAY 0" << endl;
             Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            cout << "APRES JSON ARRAY 0" << endl;
             if (!jsonArray.empty())
             {
                 assetsModel = new Wt::WStandardItemModel(0, 2, this);
@@ -290,21 +256,21 @@ void Association::handleJsonGet(vectors_Json jsonResources)
 
 
                     int information = jsonObject.get("information_datas");
-                    std::cout << "NB INFOS: " << information << std::endl;
+//                    std::cout << "NB INFOS: " << information << std::endl;
                     if (information > 0)
                     {
-                        std::cout << "là 1" << std::endl;
+//                        std::cout << "là 1" << std::endl;
                         Wt::Json::Array jsonInfoData = jsonAsset.get("information_datas");
 
-                        std::cout << "là 2" << std::endl;
+//                        std::cout << "là 2" << std::endl;
                         std::map<long long, std::string> saveIdInfo;
                         for (Wt::Json::Object jsonIda : jsonInfoData)
                         {
-                            std::cout << "là 3" << std::endl;
-                            int test = jsonIda.get("id");
-                            std::cout << "int : " << test << std::endl;
+//                            std::cout << "là 3" << std::endl;
+//                            int test = jsonIda.get("id");
+//                            std::cout << "int : " << test << std::endl;
                             Wt::Json::Object infoResource = jsonIda.get("information");
-                            std::cout << "là 4" << std::endl;
+//                            std::cout << "là 4" << std::endl;
                             long long idInfo = infoResource.get("id");
                             saveIdInfo[idInfo] = "";
                         }
@@ -326,12 +292,15 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     }
 
     jsonResource = jsonResources.at(1);
+    
     cpt = 0;
     try
     {
         if (jsonResource.size() > 0)
         {
-            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            cout << "JSON ARRAY 1" << endl;
+            jsonArray = (*jsonResource.begin());
+            cout << "APRES JSON ARRAY 1" << endl;
             if (!jsonArray.empty())
             {
                 informationsModel = new Wt::WStandardItemModel(0, 3, this);
@@ -341,26 +310,18 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                     Wt::Json::Object jsonAsset = jsonResource.at(cpt + 1);
 
                     Wt::Json::Array infosFilters = jsonAsset.get("information_datas");
-
-                    for (Wt::Json::Object infoFilter : infosFilters)
-                    {
-                        long long indexFilter = infoFilter.get("filter_field_index");
-                        Wt::Json::Object filterObj = infoFilter.get("filter");
-                        long long filterId = filterObj.get("id");
-                        filters_.insert(std::make_pair(filterId, indexFilter));
-                    }
-
+                    
                     Wt::WString name = jsonObject.get("name");
                     long long id = jsonObject.get("id");
 
                     Wt::WStandardItem *itemId = new Wt::WStandardItem();
                     Wt::WStandardItem *itemName = new Wt::WStandardItem();
-                    Wt::WStandardItem *itemUnitId = new Wt::WStandardItem();
+//                    Wt::WStandardItem *itemUnitId = new Wt::WStandardItem();
 
                     itemId->setText(boost::lexical_cast<string>(id));
                     itemName->setText(name);
 
-                    std::cout << "NB assetInfos: " << assetInfos_.size() << std::endl;
+//                    std::cout << "NB assetInfos: " << assetInfos_.size() << std::endl;
                     if (assetInfos_.size() > 0)
                     {
                         for (MapAssetInfos::iterator assetInfos = assetInfos_.begin();
@@ -369,23 +330,44 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                             for (std::map<long long, std::string>::iterator saveIdInfo = (*assetInfos).second.begin();
                                     saveIdInfo != (*assetInfos).second.end(); saveIdInfo++)
                             {
-                                std::cout << "DISPLAY ? " << assetInfos_.size() << std::endl;
-                                std::cout << "\tId: " << id << std::endl;
-                                std::cout << "\tname: " << name.toUTF8() << std::endl;
+//                                std::cout << "DISPLAY ? " << assetInfos_.size() << std::endl;
+//                                std::cout << "\tId: " << id << std::endl;
+//                                std::cout << "\tname: " << name.toUTF8() << std::endl;
                                 if ((*saveIdInfo).first == id)
+                                {
                                     (*saveIdInfo).second = name.toUTF8();
+                                }
                             }
                         }
                     }
-                    Wt::Json::Object infoUnit = jsonObject.get("information_unit");
-                    long long idUnit = infoUnit.get("id");
+                    
+                    //FIXME
+//                    Wt::Json::Object infoUnit = jsonObject.get("information_unit");
+//                    long long idUnit = infoUnit.get("id");
 
-                    itemUnitId->setText(boost::lexical_cast<string>(idUnit));
+//                    itemUnitId->setText(boost::lexical_cast<string>(idUnit));
                     vector<Wt::WStandardItem*> rowVector;
                     rowVector.push_back(itemId);
                     rowVector.push_back(itemName);
-                    rowVector.push_back(itemUnitId);
+//                    rowVector.push_back(itemUnitId);
                     informationsModel->insertRow(cpt, rowVector);
+                    
+                    
+
+                    for (Wt::Json::Object infoFilter : infosFilters)
+                    {
+                        long long indexFilter = infoFilter.get("filter_field_index");
+                        Wt::Json::Object filterObj = infoFilter.get("filter");
+                        long long filterId = filterObj.get("id");
+                        filters_.insert(std::make_pair(filterId, indexFilter));
+                        
+                        vector<Wt::WInteractWidget *> nameW;
+                        nameW.push_back(new Wt::WText(boost::lexical_cast<string>(filterId)));
+                        nameW.push_back(new Wt::WText(boost::lexical_cast<string>(indexFilter)));
+                        nameW.push_back(new Wt::WText(informationsModel->item(cpt,1)->text()));
+                        nameW.push_back(new Wt::WText(assets_[cpt].second));
+                        rowsTable_.insert(make_pair(cpt, nameW));
+                    }             
                 }
             }
         }
@@ -402,12 +384,14 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     }
 
     jsonResource = jsonResources.at(2);
+    
     cpt = 0;
     try
     {
         if (jsonResource.size() > 0)
         {
-            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            jsonArray = (*jsonResource.begin());
+            cout << "JSON ARRAY 2" << endl;
             if (!jsonArray.empty())
             {
                 for (Wt::Json::Object jsonObject : jsonArray)
@@ -437,7 +421,9 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     {
         if (jsonResource.size() > 0)
         {
-            Wt::Json::Array& jsonArray = jsonResource.at(0);
+            jsonArray = (*jsonResource.begin());
+            cout << "JSON ARRAY 3" << endl;
+//            Wt::Json::Array& jsonArray = jsonResource.at(0);
             for (int cpt(0); cpt < (int) jsonArray.size(); ++cpt)
             {
                 Wt::Json::Object jsonObject = jsonArray.at(cpt);
@@ -458,7 +444,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                         jsonObject.get("information_datas")
                     };
                 }
-            }
+            }  
         }
     }
     catch (Wt::Json::ParseError const& e)
@@ -478,20 +464,8 @@ void Association::addResource(vector<Wt::WInteractWidget*> argument)
 {
     cout << "Host id : " << idHost_ << endl;
     cout << "Plugin id : " << idPlugin_ << endl;
-    cout << "informations ids : " << endl;
-    for (vector<long long>::iterator it = idsInformations_.begin();
-            it != idsInformations_.end(); it++)
-    {
-        cout << " " << (*it);
-    }
-    cout << endl << endl;
 
-//                    tmp.get("asset_id"),
-//                    tmp.get("information_id"),
-//                    tmp.get("information_unit_id"),
-//                    tmp.get("filter_id"),
-//                    tmp.get("filter_field_index_id")
-                    
+
             
         // Post Asset -------
         Wt::Http::Message messageAsset;
@@ -535,7 +509,7 @@ void Association::addResource(vector<Wt::WInteractWidget*> argument)
                             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) 
                             + "&token=" + session_->user()->token.toUTF8();
         Wt::Http::Client *client = new Wt::Http::Client(this);
-        client->done().connect(boost::bind(&Association::postAsset, this, _1, _2));
+        client->done().connect(boost::bind(&Association::postAssetCallBack, this, _1, _2));
         
     
         Wt::log("debug") << "Association : [POST] address to call : " << apiAddress;
@@ -551,7 +525,7 @@ void Association::addResource(vector<Wt::WInteractWidget*> argument)
         }
 }
 
-void Association::postAsset(boost::system::error_code err, const Wt::Http::Message& response)
+void Association::postAssetCallBack(boost::system::error_code err, const Wt::Http::Message& response)
 {
     std::cout << response.status() << " Reponse postAsset : " << std::endl << response.body() << std::endl;
     Wt::WApplication::instance()->resumeRendering();

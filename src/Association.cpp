@@ -31,24 +31,27 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     lists_string lListUrl;
     std::list<std::string> listUrl;
     
+    listUrl.push_back("information_datas");
+    listUrl.push_back("information_datas/:id");
+    lListUrl.push_back(listUrl);
+    listUrl.clear();
+    
     listUrl.push_back("assets");
-    listUrl.push_back("assets/:id");
     lListUrl.push_back(listUrl);
     listUrl.clear();
-
-    listUrl.push_back("informations");
-    listUrl.push_back("informations/:id");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-
+    
     listUrl.push_back("plugins");
     lListUrl.push_back(listUrl);
     listUrl.clear();
-
-    listUrl.push_back("filters");
-    listUrl.push_back("filters/:id/parameters");
+    
+    listUrl.push_back("informations");
     lListUrl.push_back(listUrl);
-    listUrl.clear(); 
+    listUrl.clear();
+//
+//    listUrl.push_back("filters");
+//    listUrl.push_back("filters/:id/parameters");
+//    lListUrl.push_back(listUrl);
+//    listUrl.clear(); 
 
     setUrl(lListUrl);
 }
@@ -71,29 +74,29 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
     dialog->contents()->clear();
     if (id == 0)
     {
-        idPlugin_ = (*plugins_.begin()).second.first;
-        idHost_ = (*assets_.begin()).second.first;
-        MapLongString2::iterator itA;
+        
+        std::map<long long, std::pair<long long, std::string>>::iterator itA;
 
         new Wt::WText("Plugin", dialog->contents());
         Wt::WComboBox *boxPlugins = new Wt::WComboBox(dialog->contents());
-        for (itA = plugins_.begin(); itA != plugins_.end(); itA++)
-        {
-            boxPlugins->addItem((*itA).second.second);
-        }
+        boxPlugins->setModel(pluginsModel);
+        boxPlugins->setModelColumn(2);
 
         boxPlugins->changed().connect(bind([ = ] (){
-                                                idPlugin_ = (*plugins_.find(boxPlugins->currentIndex())).second.first;
+            idPlugin_ = boost::lexical_cast<long long>(pluginsModel->item(boxPlugins->currentIndex(),1)->text().toUTF8());
         }));
 
         new Wt::WText("Host", dialog->contents());
         Wt::WComboBox *boxAssets = new Wt::WComboBox(dialog->contents());
         boxAssets->setModel(assetsModel);
-        boxAssets->setModelColumn(1);
+        boxAssets->setModelColumn(2);
 
         boxAssets->changed().connect(bind([ = ] (){
-            idHost_ = boost::lexical_cast<long long>(assetsModel->item(boxAssets->currentIndex(),0)->text().toUTF8());
+            idHost_ = boost::lexical_cast<long long>(assetsModel->item(boxAssets->currentIndex(),1)->text().toUTF8());
         }));
+        
+//        idPlugin_ = boost::lexical_cast<long long>(pluginsModel->item(boxPlugins->currentIndex(),1)->text().toUTF8());
+//        idHost_ = boost::lexical_cast<long long>(assetsModel->item(boxPlugins->currentIndex(),1)->text().toUTF8());
 
         new Wt::WText("Filters", dialog->contents());
 
@@ -147,7 +150,7 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
                     filterInfosComboBox_[row]->setModelColumn(1);
 
                     filterAssetsComboBox_[row] = new Wt::WComboBox(tableFilters->elementAt(row, col++));
-                    filterAssetsComboBox_[row]->setModel(assetsModel);
+                    filterAssetsComboBox_[row]->setModel(informationDatasModel);
                     filterAssetsComboBox_[row]->setModelColumn(1);
 
                     row++;
@@ -172,7 +175,7 @@ vector_type Association::getResourceRowTable(long long id)
 
     if (assetInfos_.size() > 0)
     {
-        for (MapLongString2::iterator assetResource = assets_.begin();
+        for (std::map<long long, std::pair<long long, std::string>>::iterator assetResource = assets_.begin();
                 assetResource != assets_.end(); assetResource++)
         {
             if (id == (*assetResource).second.first)
@@ -223,59 +226,57 @@ void Association::handleJsonGet(vectors_Json jsonResources)
 {
     rowsTable_.clear();
     vector_Json jsonResource = jsonResources.at(0);
-    long long cpt(0);
-    Wt::Json::Array& jsonArray = Wt::Json::Array::Empty;
+    cout << "taille resources : " << jsonResources.size() << endl;
     try
     {
         if (jsonResource.size() > 0)
         {
-            cout << "JSON ARRAY 0" << endl;
             Wt::Json::Array& jsonArray = (*jsonResource.begin());
-            cout << "APRES JSON ARRAY 0" << endl;
             if (!jsonArray.empty())
             {
-                assetsModel = new Wt::WStandardItemModel(0, 2, this);
+                informationDatasModel = new Wt::WStandardItemModel(0, 4, this);
+//                assetsModel = new Wt::WStandardItemModel(0, 2, this);
                 for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
                 {
-                    Wt::Json::Object jsonObject = jsonArray.at(cpt);
-                    Wt::Json::Object jsonAsset = jsonResource.at(cpt + 1);
-
-                    Wt::WStandardItem *itemId = new Wt::WStandardItem();
-                    Wt::WStandardItem *itemName = new Wt::WStandardItem();
-
-                    Wt::WString name = jsonObject.get("name");
-                    long long id = jsonObject.get("id");
-
-                    itemId->setText(boost::lexical_cast<string>(id));
-                    itemName->setText(name);
+                    Wt::Json::Object jsonIda = jsonArray.at(cpt);
+                    Wt::Json::Object jsonDetailedIda = jsonResource.at(cpt + 1);
+                    
+                    Wt::WStandardItem *filterIdItem = new Wt::WStandardItem();
+                    Wt::WStandardItem *filterIndexItem = new Wt::WStandardItem();
+                    Wt::WStandardItem *informationIdItem = new Wt::WStandardItem();
+                    Wt::WStandardItem *assetIdItem = new Wt::WStandardItem();
+                    
+                    Wt::Json::Object filterJsonObject = jsonDetailedIda.get("filter");
+                    long long filterId = filterJsonObject.get("id");
+                    filterIdItem->setText(boost::lexical_cast<string>(filterId));
+                    
+                    int filterIndex = jsonIda.get("filter_field_index");
+                    filterIndexItem->setText(boost::lexical_cast<string>(filterId));
+                    
+                    Wt::Json::Object informationJsonObject = jsonDetailedIda.get("information");
+                    long long informationId = informationJsonObject.get("id");
+                    string informationName = informationJsonObject.get("name");
+                    informationIdItem->setText(boost::lexical_cast<string>(informationId));
+                    
+                    Wt::Json::Object assetJsonObject = jsonDetailedIda.get("asset");
+                    long long assetId = assetJsonObject.get("id");
+                    string assetName = assetJsonObject.get("name");
+                    assetIdItem->setText(boost::lexical_cast<string>(assetId));
+                    
                     vector<Wt::WStandardItem*> rowVector;
-                    rowVector.push_back(itemId);
-                    rowVector.push_back(itemName);
-                    assetsModel->insertRow(cpt, rowVector);
-                    assets_[cpt] = make_pair(id, name.toUTF8());
-
-
-                    int information = jsonObject.get("information_datas");
-//                    std::cout << "NB INFOS: " << information << std::endl;
-                    if (information > 0)
-                    {
-//                        std::cout << "là 1" << std::endl;
-                        Wt::Json::Array jsonInfoData = jsonAsset.get("information_datas");
-
-//                        std::cout << "là 2" << std::endl;
-                        std::map<long long, std::string> saveIdInfo;
-                        for (Wt::Json::Object jsonIda : jsonInfoData)
-                        {
-//                            std::cout << "là 3" << std::endl;
-//                            int test = jsonIda.get("id");
-//                            std::cout << "int : " << test << std::endl;
-                            Wt::Json::Object infoResource = jsonIda.get("information");
-//                            std::cout << "là 4" << std::endl;
-                            long long idInfo = infoResource.get("id");
-                            saveIdInfo[idInfo] = "";
-                        }
-                        assetInfos_[id] = saveIdInfo;
-                    }
+                    rowVector.push_back(filterIdItem);
+                    rowVector.push_back(filterIndexItem);
+                    rowVector.push_back(informationIdItem);
+                    rowVector.push_back(assetIdItem);
+                    informationDatasModel->insertRow(cpt, rowVector);
+                    
+                    vector<Wt::WInteractWidget *> nameW;
+                    nameW.push_back(new Wt::WText(boost::lexical_cast<string>(filterId)));
+                    nameW.push_back(new Wt::WText(boost::lexical_cast<string>(filterIndex)));
+                    nameW.push_back(new Wt::WText(informationName));
+                    nameW.push_back(new Wt::WText(assetName));
+                    rowsTable_.insert(make_pair(cpt, nameW));
+                    
                 }
             }
         }
@@ -290,84 +291,38 @@ void Association::handleJsonGet(vectors_Json jsonResources)
         Wt::log("warning") << "[Association][InfoData] JSON Type Exception";
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
-
-    jsonResource = jsonResources.at(1);
     
-    cpt = 0;
+    // assets
+    jsonResource = jsonResources.at(2);
     try
     {
         if (jsonResource.size() > 0)
         {
-            cout << "JSON ARRAY 1" << endl;
-            jsonArray = (*jsonResource.begin());
-            cout << "APRES JSON ARRAY 1" << endl;
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
             if (!jsonArray.empty())
             {
-                informationsModel = new Wt::WStandardItemModel(0, 3, this);
+                assetsModel = new Wt::WStandardItemModel(0, 3, this);
                 for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
                 {
-                    Wt::Json::Object jsonObject = jsonArray.at(cpt);
-                    Wt::Json::Object jsonAsset = jsonResource.at(cpt + 1);
-
-                    Wt::Json::Array infosFilters = jsonAsset.get("information_datas");
+                    Wt::Json::Object jsonAsset = jsonArray.at(cpt);
                     
-                    Wt::WString name = jsonObject.get("name");
-                    long long id = jsonObject.get("id");
-
-                    Wt::WStandardItem *itemId = new Wt::WStandardItem();
-                    Wt::WStandardItem *itemName = new Wt::WStandardItem();
-//                    Wt::WStandardItem *itemUnitId = new Wt::WStandardItem();
-
-                    itemId->setText(boost::lexical_cast<string>(id));
-                    itemName->setText(name);
-
-//                    std::cout << "NB assetInfos: " << assetInfos_.size() << std::endl;
-                    if (assetInfos_.size() > 0)
-                    {
-                        for (MapAssetInfos::iterator assetInfos = assetInfos_.begin();
-                                assetInfos != assetInfos_.end(); assetInfos++)
-                        {
-                            for (std::map<long long, std::string>::iterator saveIdInfo = (*assetInfos).second.begin();
-                                    saveIdInfo != (*assetInfos).second.end(); saveIdInfo++)
-                            {
-//                                std::cout << "DISPLAY ? " << assetInfos_.size() << std::endl;
-//                                std::cout << "\tId: " << id << std::endl;
-//                                std::cout << "\tname: " << name.toUTF8() << std::endl;
-                                if ((*saveIdInfo).first == id)
-                                {
-                                    (*saveIdInfo).second = name.toUTF8();
-                                }
-                            }
-                        }
-                    }
+                    Wt::WStandardItem *cptItem = new Wt::WStandardItem();
+                    Wt::WStandardItem *assetIdItem = new Wt::WStandardItem();
+                    Wt::WStandardItem *assetNameItem = new Wt::WStandardItem();
+                                    
+                    cptItem->setText(boost::lexical_cast<string>(cpt));
                     
-                    //FIXME
-//                    Wt::Json::Object infoUnit = jsonObject.get("information_unit");
-//                    long long idUnit = infoUnit.get("id");
-
-//                    itemUnitId->setText(boost::lexical_cast<string>(idUnit));
+                    long long assetId = jsonAsset.get("id");
+                    string assetName = jsonAsset.get("name");
+                    assetIdItem->setText(boost::lexical_cast<string>(assetId));
+                    assetNameItem->setText(boost::lexical_cast<string>(assetName));
+                    
+                    
                     vector<Wt::WStandardItem*> rowVector;
-                    rowVector.push_back(itemId);
-                    rowVector.push_back(itemName);
-//                    rowVector.push_back(itemUnitId);
-                    informationsModel->insertRow(cpt, rowVector);
-                    
-                    
-
-                    for (Wt::Json::Object infoFilter : infosFilters)
-                    {
-                        long long indexFilter = infoFilter.get("filter_field_index");
-                        Wt::Json::Object filterObj = infoFilter.get("filter");
-                        long long filterId = filterObj.get("id");
-                        filters_.insert(std::make_pair(filterId, indexFilter));
-                        
-                        vector<Wt::WInteractWidget *> nameW;
-                        nameW.push_back(new Wt::WText(boost::lexical_cast<string>(filterId)));
-                        nameW.push_back(new Wt::WText(boost::lexical_cast<string>(indexFilter)));
-                        nameW.push_back(new Wt::WText(informationsModel->item(cpt,1)->text()));
-                        nameW.push_back(new Wt::WText(assets_[cpt].second));
-                        rowsTable_.insert(make_pair(cpt, nameW));
-                    }             
+                    rowVector.push_back(cptItem);
+                    rowVector.push_back(assetIdItem);
+                    rowVector.push_back(assetNameItem);
+                    assetsModel->insertRow(cpt, rowVector);
                 }
             }
         }
@@ -382,81 +337,97 @@ void Association::handleJsonGet(vectors_Json jsonResources)
         Wt::log("warning") << "[Association][Assets] JSON Type Exception";
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
-
-    jsonResource = jsonResources.at(2);
     
-    cpt = 0;
+    // plugins
+    jsonResource = jsonResources.at(3);
     try
     {
         if (jsonResource.size() > 0)
         {
-            jsonArray = (*jsonResource.begin());
-            cout << "JSON ARRAY 2" << endl;
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
             if (!jsonArray.empty())
             {
-                for (Wt::Json::Object jsonObject : jsonArray)
+                pluginsModel = new Wt::WStandardItemModel(0, 3, this);
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
                 {
-                    Wt::WString name = jsonObject.get("name");
-                    long long id = jsonObject.get("id");
-                    plugins_[cpt] = make_pair(id, name.toUTF8());
-                    cpt++;
+                    Wt::Json::Object jsonPlugin = jsonArray.at(cpt);
+                    
+                    Wt::WStandardItem *cptItem = new Wt::WStandardItem();
+                    Wt::WStandardItem *pluginIdItem = new Wt::WStandardItem();
+                    Wt::WStandardItem *pluginNameItem = new Wt::WStandardItem();
+                                    
+                    cptItem->setText(boost::lexical_cast<string>(cpt));
+                    
+                    long long assetId = jsonPlugin.get("id");
+                    string assetName = jsonPlugin.get("name");
+                    pluginIdItem->setText(boost::lexical_cast<string>(assetId));
+                    pluginNameItem->setText(boost::lexical_cast<string>(assetName));
+                    
+                    vector<Wt::WStandardItem*> rowVector;
+                    rowVector.push_back(cptItem);
+                    rowVector.push_back(pluginIdItem);
+                    rowVector.push_back(pluginNameItem);
+                    pluginsModel->insertRow(cpt, rowVector);
                 }
             }
         }
     }
     catch (Wt::Json::ParseError const& e)
     {
-        Wt::log("warning") << "[Association] Problems parsing JSON";
+        Wt::log("warning") << "[Association][Plugins] Problems parsing JSON";
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
-        Wt::log("warning") << "[Association] JSON Type Exception";
+        Wt::log("warning") << "[Association][Plugins] JSON Type Exception";
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
-
-    jsonResource = jsonResources.at(3);
-    cpt = 0;
+    
+    // information
+    jsonResource = jsonResources.at(4);
     try
     {
         if (jsonResource.size() > 0)
         {
-            jsonArray = (*jsonResource.begin());
-            cout << "JSON ARRAY 3" << endl;
-//            Wt::Json::Array& jsonArray = jsonResource.at(0);
-            for (int cpt(0); cpt < (int) jsonArray.size(); ++cpt)
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
             {
-                Wt::Json::Object jsonObject = jsonArray.at(cpt);
-                Wt::Json::Array& jsonFilterParam = jsonResource.at(cpt + 1);
-
-                long long filterId = jsonObject.get("id");
-
-                Wt::Json::Object tmpFilterType = jsonObject.get("filter_type");
-                Wt::Json::Object tmpSearch = jsonObject.get("search");
-                for (Wt::Json::Object filJson : jsonFilterParam)
+                informationsModel = new Wt::WStandardItemModel(0, 3, this);
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
                 {
-                    filterParameterValues_[filterId] = {
-                        jsonObject.get("id"),
-                        tmpFilterType.get("id"),
-                        jsonObject.get("nb_value"),
-                        tmpSearch.get("id"),
-                        filJson.get("value"),
-                        jsonObject.get("information_datas")
-                    };
+                    Wt::Json::Object jsonInformation = jsonArray.at(cpt);
+                    
+                    Wt::WStandardItem *cptItem = new Wt::WStandardItem();
+                    Wt::WStandardItem *informationIdItem = new Wt::WStandardItem();
+                    Wt::WStandardItem *informationNameItem = new Wt::WStandardItem();
+                                    
+                    cptItem->setText(boost::lexical_cast<string>(cpt));
+                    
+                    long long informationId = jsonInformation.get("id");
+                    string informationName = jsonInformation.get("name");
+                    informationIdItem->setText(boost::lexical_cast<string>(informationId));
+                    informationNameItem->setText(boost::lexical_cast<string>(informationName));
+                    
+                    vector<Wt::WStandardItem*> rowVector;
+                    rowVector.push_back(cptItem);
+                    rowVector.push_back(informationIdItem);
+                    rowVector.push_back(informationNameItem);
+                    informationsModel->insertRow(cpt, rowVector);
                 }
-            }  
+            }
         }
     }
     catch (Wt::Json::ParseError const& e)
     {
-        Wt::log("warning") << "[Association][Filters] Problems parsing JSON";
+        Wt::log("warning") << "[Association][Information] Problems parsing JSON";
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
-        Wt::log("warning") << "[Association][Filters] JSON Type Exception";
+        Wt::log("warning") << "[Association][Information] JSON Type Exception";
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
+    
     updatePage();
 }
 
@@ -487,7 +458,7 @@ void Association::addResource(vector<Wt::WInteractWidget*> argument)
                 }
                 message += "{\n"
                         "\"asset_id\": "
-                        + assetsModel->item(filterAssetsComboBox_[i]->currentIndex(),0)->text().toUTF8() +",\n"
+                        + informationDatasModel->item(filterAssetsComboBox_[i]->currentIndex(),0)->text().toUTF8() +",\n"
                         "\"information_id\": "
                         + informationsModel->item(filterInfosComboBox_[i]->currentIndex(),0)->text().toUTF8() +",\n"
                         "\"information_unit_id\": "

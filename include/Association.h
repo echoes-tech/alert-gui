@@ -30,8 +30,6 @@
 #include "AbstractPage.h"
 #include "ApiManagement.h"
 
-typedef std::map<long long, std::pair<long long, std::string>> MapLongString2;
-
 typedef std::map<long long, std::map<long long, std::string>> MapAssetInfos;
 
 typedef std::multimap<long long, long long>  MapFilter;
@@ -97,24 +95,25 @@ private:
         int ida;
     };
   
-  MapAssetInfos                                 assetInfos_;
-  MapFilter                                     filters_;
-  MapLongString2                                assets_;
-  Wt::WStandardItemModel                        *assetsModel;
-  MapLongString2                                plugins_;
-  Wt::WStandardItemModel                        *informationsModel;
-  std::map<long long, filterValuesStruct>       filterParameterValues_;
-  std::map<int, Wt::WCheckBox*>                 filterCheckBox_;
-  std::map<long long, Wt::WComboBox*>           filterInfosComboBox_;
-  std::map<long long, Wt::WComboBox*>           filterAssetsComboBox_;
-  long long                                     idHost_;
-  long long                                     idPlugin_;
-//  std::vector<long long>                        idsInformations_;
-  bool                                          created_;
-  bool                                          newClass_;
-  Echoes::Dbo::Session                          *session_;
-  std::vector<long long>                        idsAlert_;
-  std::string                                   apiUrl_;
+  MapAssetInfos                                                 assetInfos_;
+  MapFilter                                                     filters_;
+  std::map<long long, std::pair<long long, std::string>>        assets_;
+  Wt::WStandardItemModel                                        *assetsModel;
+  Wt::WStandardItemModel                                        *pluginsModel;
+  Wt::WStandardItemModel                                        *informationDatasModel;
+  std::map<long long, std::pair<long long, std::string>>        plugins_;
+  Wt::WStandardItemModel                                        *informationsModel;
+  std::map<long long, filterValuesStruct>                       filterParameterValues_;
+  std::map<int, Wt::WCheckBox*>                                 filterCheckBox_;
+  std::map<long long, Wt::WComboBox*>                           filterInfosComboBox_;
+  std::map<long long, Wt::WComboBox*>                           filterAssetsComboBox_;
+  long long                                                     idHost_;
+  long long                                                     idPlugin_;
+  bool                                                          created_;
+  bool                                                          newClass_;
+  Echoes::Dbo::Session                                          *session_;
+  std::vector<long long>                                        idsAlert_;
+  std::string                                                   apiUrl_;
   
   Wt::WTable *tableFilters;
 };

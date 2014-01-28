@@ -209,7 +209,7 @@ protected:
     void                        checkAdd(std::vector<Wt::WText*> errorMessage);
     void                        checkModif(vector_widget inputs, long long id, std::vector<Wt::WText*> errorMessage);
     int                         checkName(std::string inputText, std::vector<long long> ids);
-    int                         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
+    virtual int                 checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
     //  INPUT ---------------------------------------------------
     void                        showInputForAdd();
     void                        inputForModif(long long id, int rowTable, int columnTable);    

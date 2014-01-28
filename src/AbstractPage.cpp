@@ -349,7 +349,8 @@ void AbstractPage::addResourcePopup()
             if ((*title).first == ETypeJson::text)
             {
                 input = new Wt::WLineEdit(dialogAdd_->contents());
-                input->setValidator(editValidator(cpt));
+                //FIXME
+//                input->setValidator(editValidator(cpt));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
                 input->setWidth(Wt::WLength(150));
                 if (inputName.size() == 0)

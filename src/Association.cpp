@@ -47,11 +47,11 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     listUrl.push_back("informations");
     lListUrl.push_back(listUrl);
     listUrl.clear();
-//
-//    listUrl.push_back("filters");
-//    listUrl.push_back("filters/:id/parameters");
-//    lListUrl.push_back(listUrl);
-//    listUrl.clear(); 
+
+    listUrl.push_back("filters");
+    listUrl.push_back("filters/:id");
+    lListUrl.push_back(listUrl);
+    listUrl.clear();
 
     setUrl(lListUrl);
 }
@@ -108,56 +108,36 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
         int col = 0;
         Wt::WCheckBox *cb = new Wt::WCheckBox();
         tableFilters->elementAt(0, col++)->addWidget(cb);
-        new Wt::WText("Search id",tableFilters->elementAt(0, col++));
+//        new Wt::WText("Search id",tableFilters->elementAt(0, col++));
         new Wt::WText("Filter id",tableFilters->elementAt(0, col++));
         new Wt::WText("Filter type",tableFilters->elementAt(0, col++));
         new Wt::WText("Filter Index",tableFilters->elementAt(0, col++));
         new Wt::WText("Infos",tableFilters->elementAt(0, col++));
         new Wt::WText("Assets",tableFilters->elementAt(0, col++));
 
-
-        map<long long, filterValuesStruct>::iterator itF;
-        int row = 1;
-        for (itF = filterParameterValues_.begin(); itF != filterParameterValues_.end(); itF++)
+        for (int i = 1 ; i <= filtersModel->rowCount() ; i++ )
         {
-            for (int i = 1 ; i <= ((*itF).second.nbValue) ; i++)
-            {
-                bool check(true);
-                for (MapFilter::iterator filter = filters_.begin();
-                        filter != filters_.end(); filter++)
-                {
-                    if ((*itF).second.filterId == (*filter).first
-                            && i == (*filter).second)
-                    {
-                        check = false;
-                        
-                    }
-                }
-                if (check == true)
-                {
-                    col = 0;
+            col = 0;
+            Wt::WCheckBox *selectLine = new Wt::WCheckBox();
+            selectLine->setChecked(false);
+            filterCheckBox_[i]= selectLine;
+            tableFilters->elementAt(i, col++)->addWidget(selectLine);
+            
+            new Wt::WText(filtersModel->item(i-1,0)->text(),tableFilters->elementAt(i, col++));
+            new Wt::WText(filtersModel->item(i-1,1)->text(),tableFilters->elementAt(i, col++));
+            new Wt::WText(filtersModel->item(i-1,2)->text(),tableFilters->elementAt(i, col++));
+            cout << "FILTRE AFFICHé : " << filtersModel->item(i-1,2)->text() << endl;
+            
+            filterInfosComboBox_[i] = new Wt::WComboBox(tableFilters->elementAt(i, col++));
+            filterInfosComboBox_[i]->setModel(informationsModel);
+            filterInfosComboBox_[i]->setModelColumn(2);
 
-                    Wt::WCheckBox *cb1 = new Wt::WCheckBox();
-                    cb1->setChecked(false);
-                    filterCheckBox_[row]= cb1;
-                    tableFilters->elementAt(row, col++)->addWidget(cb1);
-                    new Wt::WText(boost::lexical_cast<string>((*itF).second.searchId),tableFilters->elementAt(row, col++));
-                    new Wt::WText(boost::lexical_cast<string>((*itF).first),tableFilters->elementAt(row, col++));
-                    new Wt::WText(boost::lexical_cast<string>((*itF).second.filterType),tableFilters->elementAt(row, col++));
-                    new Wt::WText(boost::lexical_cast<string>(i),tableFilters->elementAt(row, col++));
-                    filterInfosComboBox_[row] = new Wt::WComboBox(tableFilters->elementAt(row, col++));
-                    filterInfosComboBox_[row]->setModel(informationsModel);
-                    filterInfosComboBox_[row]->setModelColumn(1);
-
-                    filterAssetsComboBox_[row] = new Wt::WComboBox(tableFilters->elementAt(row, col++));
-                    filterAssetsComboBox_[row]->setModel(informationDatasModel);
-                    filterAssetsComboBox_[row]->setModelColumn(1);
-
-                    row++;
-                }
-            }
-
+            filterAssetsComboBox_[i] = new Wt::WComboBox(tableFilters->elementAt(i, col++));
+            filterAssetsComboBox_[i]->setModel(assetsModel);
+            filterAssetsComboBox_[i]->setModelColumn(2); 
+            
         }
+               
     }
     else
     {
@@ -200,12 +180,6 @@ int Association::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::W
     return 1;
 }
 
-//Wt::WValidator *Association::editValidator(int who)
-//{
-//    Wt::WRegExpValidator *validator;
-//    return validator;
-//}
-
 void Association::closePopup()
 {
     getAssociationList();
@@ -215,7 +189,6 @@ void Association::getAssociationList()
 {
     assets_.clear();
     plugins_.clear();
-    filterParameterValues_.clear();
     assetInfos_.clear();
     rowsTable_.clear();
 
@@ -251,7 +224,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                     filterIdItem->setText(boost::lexical_cast<string>(filterId));
                     
                     int filterIndex = jsonIda.get("filter_field_index");
-                    filterIndexItem->setText(boost::lexical_cast<string>(filterId));
+                    filterIndexItem->setText(boost::lexical_cast<string>(filterIndex));
                     
                     Wt::Json::Object informationJsonObject = jsonDetailedIda.get("information");
                     long long informationId = informationJsonObject.get("id");
@@ -275,7 +248,10 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                     nameW.push_back(new Wt::WText(boost::lexical_cast<string>(filterIndex)));
                     nameW.push_back(new Wt::WText(informationName));
                     nameW.push_back(new Wt::WText(assetName));
-                    rowsTable_.insert(make_pair(cpt, nameW));
+                    
+                    long long idaId = jsonIda.get("id");
+                    
+                    rowsTable_.insert(make_pair(idaId, nameW));
                     
                 }
             }
@@ -293,7 +269,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     }
     
     // assets
-    jsonResource = jsonResources.at(2);
+    jsonResource = jsonResources.at(1);
     try
     {
         if (jsonResource.size() > 0)
@@ -339,7 +315,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     }
     
     // plugins
-    jsonResource = jsonResources.at(3);
+    jsonResource = jsonResources.at(2);
     try
     {
         if (jsonResource.size() > 0)
@@ -358,10 +334,10 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                                     
                     cptItem->setText(boost::lexical_cast<string>(cpt));
                     
-                    long long assetId = jsonPlugin.get("id");
-                    string assetName = jsonPlugin.get("name");
-                    pluginIdItem->setText(boost::lexical_cast<string>(assetId));
-                    pluginNameItem->setText(boost::lexical_cast<string>(assetName));
+                    long long pluginId = jsonPlugin.get("id");
+                    string pluginName = jsonPlugin.get("name");
+                    pluginIdItem->setText(boost::lexical_cast<string>(pluginId));
+                    pluginNameItem->setText(boost::lexical_cast<string>(pluginName));
                     
                     vector<Wt::WStandardItem*> rowVector;
                     rowVector.push_back(cptItem);
@@ -384,7 +360,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     }
     
     // information
-    jsonResource = jsonResources.at(4);
+    jsonResource = jsonResources.at(3);
     try
     {
         if (jsonResource.size() > 0)
@@ -393,7 +369,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
             if (!jsonArray.empty())
             {
                 informationsModel = new Wt::WStandardItemModel(0, 3, this);
-                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+                for (unsigned int cpt = 0; cpt < jsonArray.size(); cpt++)
                 {
                     Wt::Json::Object jsonInformation = jsonArray.at(cpt);
                     
@@ -406,7 +382,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                     long long informationId = jsonInformation.get("id");
                     string informationName = jsonInformation.get("name");
                     informationIdItem->setText(boost::lexical_cast<string>(informationId));
-                    informationNameItem->setText(boost::lexical_cast<string>(informationName));
+                    informationNameItem->setText(informationName);
                     
                     vector<Wt::WStandardItem*> rowVector;
                     rowVector.push_back(cptItem);
@@ -425,6 +401,84 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Association][Information] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    
+    // filters
+    jsonResource = jsonResources.at(4);
+    try
+    {
+        if (jsonResource.size() > 0)
+        {
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
+            {
+                filtersModel = new Wt::WStandardItemModel(0, 3, this);
+                int row = 0;
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+                {
+                    
+//                    Wt::Json::Object jsonFilter = jsonArray.at(cpt);
+                    Wt::Json::Object jsonDetailedFilter = jsonResource.at(cpt + 1);
+                    
+                    Wt::WStandardItem *filterNbValueItem = new Wt::WStandardItem();
+                    
+                    
+                    
+                    set<int> indexAlreadyAssociated;
+                    
+                    Wt::Json::Array idaJsonArray = jsonDetailedFilter.get("information_datas");
+                    indexAlreadyAssociated.clear();
+                    for (int cptIda(0); cptIda < (int) idaJsonArray.size(); cptIda++)
+                    {
+                        
+                        Wt::Json::Object jsonIda = idaJsonArray.at(cptIda);
+                        int index = jsonIda.get("filter_field_index");
+                        indexAlreadyAssociated.insert(index);
+                    }
+                    
+                    int nbValue = jsonDetailedFilter.get("nb_value");
+                    filterNbValueItem->setText(boost::lexical_cast<string>(nbValue));
+                    
+                    for (int i = 1 ; i <= nbValue ; i++)
+                    {
+                        
+                        
+                        if (indexAlreadyAssociated.find(i) == indexAlreadyAssociated.end())
+                        {
+                            Wt::WStandardItem *filterIdItem = new Wt::WStandardItem();
+                            Wt::WStandardItem *filterTypeItem = new Wt::WStandardItem();
+                            Wt::WStandardItem *filterIndexItem = new Wt::WStandardItem();
+                            long long filterId = jsonDetailedFilter.get("id");
+                            cout << "FILTRES : " << filterId << " INDEX : " << i << endl;
+                            filterIdItem->setText(boost::lexical_cast<string>(filterId));
+
+                            Wt::Json::Object filterType = jsonDetailedFilter.get("filter_type");
+                            string filterTypeName = filterType.get("name");
+                            filterTypeItem->setText(filterTypeName);
+
+                            filterIndexItem->setText(boost::lexical_cast<string>(i));
+
+                            vector<Wt::WStandardItem*> rowVector;
+                            rowVector.push_back(filterIdItem);
+                            rowVector.push_back(filterTypeItem);
+                            rowVector.push_back(filterIndexItem);
+                            cout << "index ?? " << filterIndexItem->text() << endl;
+                            filtersModel->insertRow(row++, rowVector);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Association][Filters] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Association][Filters] JSON Type Exception";
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     

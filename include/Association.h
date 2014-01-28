@@ -101,9 +101,10 @@ private:
   Wt::WStandardItemModel                                        *assetsModel;
   Wt::WStandardItemModel                                        *pluginsModel;
   Wt::WStandardItemModel                                        *informationDatasModel;
+  Wt::WStandardItemModel                                        *filtersModel;
   std::map<long long, std::pair<long long, std::string>>        plugins_;
   Wt::WStandardItemModel                                        *informationsModel;
-  std::map<long long, filterValuesStruct>                       filterParameterValues_;
+//  std::map<long long, filterValuesStruct>                       filterParameterValues_;
   std::map<int, Wt::WCheckBox*>                                 filterCheckBox_;
   std::map<long long, Wt::WComboBox*>                           filterInfosComboBox_;
   std::map<long long, Wt::WComboBox*>                           filterAssetsComboBox_;

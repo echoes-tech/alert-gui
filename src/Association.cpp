@@ -81,7 +81,8 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
         Wt::WComboBox *boxPlugins = new Wt::WComboBox(dialog->contents());
         boxPlugins->setModel(pluginsModel);
         boxPlugins->setModelColumn(2);
-
+        boxPlugins->setCurrentIndex(0);
+                
         boxPlugins->changed().connect(bind([ = ] (){
             idPlugin_ = boost::lexical_cast<long long>(pluginsModel->item(boxPlugins->currentIndex(),1)->text().toUTF8());
         }));
@@ -90,13 +91,14 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
         Wt::WComboBox *boxAssets = new Wt::WComboBox(dialog->contents());
         boxAssets->setModel(assetsModel);
         boxAssets->setModelColumn(2);
+        boxAssets->setCurrentIndex(0);
 
         boxAssets->changed().connect(bind([ = ] (){
             idHost_ = boost::lexical_cast<long long>(assetsModel->item(boxAssets->currentIndex(),1)->text().toUTF8());
         }));
         
-//        idPlugin_ = boost::lexical_cast<long long>(pluginsModel->item(boxPlugins->currentIndex(),1)->text().toUTF8());
-//        idHost_ = boost::lexical_cast<long long>(assetsModel->item(boxPlugins->currentIndex(),1)->text().toUTF8());
+        idPlugin_ = boost::lexical_cast<long long>(pluginsModel->item(boxPlugins->currentIndex(),1)->text().toUTF8());
+        idHost_ = boost::lexical_cast<long long>(assetsModel->item(boxPlugins->currentIndex(),1)->text().toUTF8());
 
         new Wt::WText("Filters", dialog->contents());
 
@@ -177,7 +179,7 @@ vector_type Association::getResourceRowTable(long long id)
 
 int Association::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage)
 {
-    return 1;
+    return 0;
 }
 
 void Association::closePopup()
@@ -368,7 +370,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
             Wt::Json::Array& jsonArray = (*jsonResource.begin());
             if (!jsonArray.empty())
             {
-                informationsModel = new Wt::WStandardItemModel(0, 3, this);
+                informationsModel = new Wt::WStandardItemModel(0, 4, this);
                 for (unsigned int cpt = 0; cpt < jsonArray.size(); cpt++)
                 {
                     Wt::Json::Object jsonInformation = jsonArray.at(cpt);
@@ -376,18 +378,23 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                     Wt::WStandardItem *cptItem = new Wt::WStandardItem();
                     Wt::WStandardItem *informationIdItem = new Wt::WStandardItem();
                     Wt::WStandardItem *informationNameItem = new Wt::WStandardItem();
+                    Wt::WStandardItem *informationUnitIdItem = new Wt::WStandardItem();
                                     
                     cptItem->setText(boost::lexical_cast<string>(cpt));
                     
                     long long informationId = jsonInformation.get("id");
                     string informationName = jsonInformation.get("name");
+                    Wt::Json::Object jsonInfoUnit = jsonInformation.get("information_unit");
+                    long long informationUnitId = jsonInfoUnit.get("id");
                     informationIdItem->setText(boost::lexical_cast<string>(informationId));
                     informationNameItem->setText(informationName);
+                    informationUnitIdItem->setText(boost::lexical_cast<string>(informationUnitId));
                     
                     vector<Wt::WStandardItem*> rowVector;
                     rowVector.push_back(cptItem);
                     rowVector.push_back(informationIdItem);
                     rowVector.push_back(informationNameItem);
+                    rowVector.push_back(informationUnitIdItem);
                     informationsModel->insertRow(cpt, rowVector);
                 }
             }
@@ -510,17 +517,27 @@ void Association::addResource(vector<Wt::WInteractWidget*> argument)
                 {
                     coma = true;
                 }
+                string assetIdString = assetsModel->item(filterAssetsComboBox_[i]->currentIndex(),1)->text().toUTF8();
+                cout << "asset id" << assetIdString << endl;
+                string informationIdString = informationsModel->item(filterInfosComboBox_[i]->currentIndex(),1)->text().toUTF8();
+                cout << "info id" << informationIdString << endl;
+                string informationUnitIdString = informationsModel->item(filterInfosComboBox_[i]->currentIndex(),3)->text().toUTF8();
+                cout << "info unit id" << informationUnitIdString << endl;
+                string filterIdString = ((Wt::WText*)tableFilters->elementAt(i,1)->widget(0))->text().toUTF8();
+                cout << "filter id" << filterIdString << endl;
+                string filterFieldIndexString = ((Wt::WText*)tableFilters->elementAt(i,3)->widget(0))->text().toUTF8();
+                cout << "filter index id" << filterFieldIndexString << endl;
                 message += "{\n"
                         "\"asset_id\": "
-                        + informationDatasModel->item(filterAssetsComboBox_[i]->currentIndex(),0)->text().toUTF8() +",\n"
+                        + assetIdString +",\n"
                         "\"information_id\": "
-                        + informationsModel->item(filterInfosComboBox_[i]->currentIndex(),0)->text().toUTF8() +",\n"
+                        + informationIdString +",\n"
                         "\"information_unit_id\": "
-                        + informationsModel->item(filterInfosComboBox_[i]->currentIndex(),2)->text().toUTF8() +",\n"
+                        + informationUnitIdString +",\n"
                         "\"filter_id\": "
-                        + ((Wt::WText*)tableFilters->elementAt(i,2)->widget(0))->text().toUTF8() +",\n"
+                        + filterIdString +",\n"
                         "\"filter_field_index_id\": "
-                        + ((Wt::WText*)tableFilters->elementAt(i,4)->widget(0))->text().toUTF8() +"\n"
+                        + filterFieldIndexString +"\n"
                         "}";
             }
         }
@@ -537,8 +554,8 @@ void Association::addResource(vector<Wt::WInteractWidget*> argument)
         client->done().connect(boost::bind(&Association::postAssetCallBack, this, _1, _2));
         
     
-        Wt::log("debug") << "Association : [POST] address to call : " << apiAddress;
-        Wt::log("debug") << "Association : message : " << message;
+//        Wt::log("debug") << "Association : [POST] address to call : " << apiAddress;
+//        Wt::log("debug") << "Association : message : " << message;
     
         if (client->post(apiAddress, messageAsset))
         {
@@ -556,26 +573,7 @@ void Association::postAssetCallBack(boost::system::error_code err, const Wt::Htt
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
-        if (response.status() == 200)
-        {
-            try
-            {
-                Wt::Json::Value result;
-                Wt::Json::parse(response.body(), result);
-                // ToDo : check object
-            }
-            catch (Wt::Json::ParseError const& e)
-            {
-                Wt::log("warning") << "[Associations Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
-            }
-            catch (Wt::Json::TypeException const& e)
-            {
-                Wt::log("warning") << "[Associations Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
-            }
-        }
-        else
+        if (response.status() != Enums::EReturnCode::CREATED)
         {
             Wt::log("error") << "[Associations Widget] " << response.body();
             Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "status", tr("Alert.association.database-error"), Wt::Ok);

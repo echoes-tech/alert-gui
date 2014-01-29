@@ -215,8 +215,8 @@ protected:
     void                        inputForModif(long long id, int rowTable, int columnTable);    
     // OVERLOAD -------------------------------------------------
     virtual Wt::WValidator      *editValidator(int who) {return (new Wt::WValidator());};
-    virtual void                popupAddWidget(Wt::WDialog *dialog, long long id) {};
-    virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog) {return new Wt::WComboBox(dialog->contents());};
+    virtual void                popupAddWidget(Wt::WDialog *dialog, long long id);
+    virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
     multimap_long_widgets       rowsTable_;
 

@@ -326,6 +326,16 @@ void AbstractPage::addInputForAffix(int rowBodyTable)
 
 // POPUP : ----------------------------------------------------
 
+void AbstractPage::popupAddWidget(Wt::WDialog *dialog, long long id)
+{
+    
+}
+
+Wt::WComboBox *AbstractPage::popupAdd(Wt::WDialog *dialog) 
+{   
+    return new Wt::WComboBox(dialog->contents());
+}
+
 void AbstractPage::addResourcePopup()
 {
     Wt::WLineEdit *input;

@@ -22,10 +22,10 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     setLocalTable(true);
     
     vector_pair_string listTitles;
-    listTitles.push_back(std::make_pair(ETypeJson::text, tr("Alert.association.filter").toUTF8()));
-    listTitles.push_back(std::make_pair(ETypeJson::text, tr("Alert.association.filter_index").toUTF8()));
-    listTitles.push_back(std::make_pair(ETypeJson::text, tr("Alert.association.information").toUTF8()));
-    listTitles.push_back(std::make_pair(ETypeJson::text, tr("Alert.association.asset").toUTF8()));
+    listTitles.push_back(std::make_pair(ETypeJson::text, "filter"));
+    listTitles.push_back(std::make_pair(ETypeJson::text, "filter_index"));
+    listTitles.push_back(std::make_pair(ETypeJson::text, "information"));
+    listTitles.push_back(std::make_pair(ETypeJson::text, "asset"));
     setTitles(listTitles);
     
     lists_string lListUrl;

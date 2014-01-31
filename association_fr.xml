@@ -21,6 +21,8 @@
     <message id="Alert.association.name-plugin">Applications</message>
     <message id="Alert.association.name-asset">Servers</message>
     <message id="Alert.association.name-information">Informations</message>
+    <message id="Alert.association.name-filter">Filtres</message>
+    <message id="Alert.association.name-filter_index">Index Filtre</message>
     <message id="Alert.association.modif-button">Modifier</message>
     <message id="Alert.association.delete-button">Supprimer</message>
     <!--footer-->

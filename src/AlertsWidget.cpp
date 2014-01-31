@@ -251,70 +251,12 @@ void    AlertsWidget::fillInTabMessage()
 // Work popup Two End --------------------------------------------------------------- |
 
 /// ///////////////////////////////////////////// ----
-
-void AlertsWidget::aSupprimer()
-{
-
-//    std::cout << "A supprimer toujours la !!" << std::endl;
-//    std::cout << "A supprimer toujours la !!" << std::endl;
-//    std::cout << "A supprimer toujours la !!" << std::endl;
-//
-//    Pair pair = std::make_pair(41, "asset1-p1");
-//    assets_.insert(std::make_pair(4, pair));
-//    pair = std::make_pair(50, "asset2-p1-p2");
-//    assets_.insert(std::make_pair(5, pair));
-//    pair = std::make_pair(60, "asset3-p3-p4");
-//    assets_.insert(std::make_pair(6, pair));
-//
-//
-//    pair = std::make_pair(20, "plugin1-i1");
-//    plugins_.insert(std::make_pair(4, pair));
-//    pair = std::make_pair(20, "plugin1-i1");
-//    plugins_.insert(std::make_pair(5, pair));
-//    pair = std::make_pair(21, "plugin2-i1");
-//    plugins_.insert(std::make_pair(5, pair));
-//    pair = std::make_pair(22, "plugin3-i2");
-//    plugins_.insert(std::make_pair(6, pair));
-//    pair = std::make_pair(23, "plugin4-i3-i4");
-//    plugins_.insert(std::make_pair(6, pair));
-//
-//    pair = std::make_pair(42, "info1-u1");
-//    infos_.insert(std::make_pair(4, pair));
-//    pair = std::make_pair(42, "info1-u1");
-//    infos_.insert(std::make_pair(5, pair));
-//    pair = std::make_pair(45, "info2-u2");
-//    infos_.insert(std::make_pair(6, pair));
-//    pair = std::make_pair(43, "info3-u3");
-//    infos_.insert(std::make_pair(6, pair));
-//    pair = std::make_pair(44, "info4-u2");
-//    infos_.insert(std::make_pair(6, pair));
-//    
-//    assetPlugins_.insert(std::make_pair(41, 20));
-//    assetPlugins_.insert(std::make_pair(50, 20));
-//    assetPlugins_.insert(std::make_pair(50, 21));
-//    assetPlugins_.insert(std::make_pair(60, 22));
-//    assetPlugins_.insert(std::make_pair(60, 23));
-//    
-//    pluginInfos_.insert(std::make_pair(20, 42));
-//    pluginInfos_.insert(std::make_pair(21, 42));
-//    pluginInfos_.insert(std::make_pair(22, 45));
-//    pluginInfos_.insert(std::make_pair(23, 43));
-//    pluginInfos_.insert(std::make_pair(23, 44));
-//
-//    unitsIds_.insert(std::make_pair(42, 1));
-//    unitsIds_.insert(std::make_pair(45, 2));
-//    unitsIds_.insert(std::make_pair(43, 3));
-//    unitsIds_.insert(std::make_pair(44, 2));
-}
-
 // Work popup One --------------------------------------------------------------- |
 //                                                                                |
 //                                                                                v
 void    AlertsWidget::initBoxOne(Wt::WTable *tableBox)
 {
-    
-    aSupprimer();
-    
+       
     fillInMultiMap();
     
     Wt::WSelectionBox *boxAsset = new Wt::WSelectionBox(tableBox->elementAt(0, 0));
@@ -1829,8 +1771,8 @@ void AlertsWidget::getPluginsForAsset(boost::system::error_code err, const Wt::H
                     Pair pair = std::make_pair(id, name.toUTF8());
                     plugins_.insert(std::make_pair(index, pair));
                     
-                    std::string apiAddress = this->getApiUrl() + "/plugins/" + boost::lexical_cast<std::string>(id)
-                            + "/informations" + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+                    std::string apiAddress = this->getApiUrl() + "/informations"
+                            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
                             + "&token=" + session_->user()->token.toUTF8();
                     Wt::Http::Client *client = new Wt::Http::Client(this);
                     client->done().connect(boost::bind(&AlertsWidget::getInformations, this, _1, _2, id, index));

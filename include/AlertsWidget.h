@@ -147,8 +147,6 @@ private:
 
     void                        fillInTabMessage();
 
-    void aSupprimer(); // 
-
     
     std::vector<std::pair<long long, int>>   idUserPositionMedia_;
     
@@ -224,4 +222,3 @@ private:
 };
 
 #endif	/* ALERTSWIDGET_H */
-

@@ -69,6 +69,14 @@
     <message id="Alert.alert.form.mail">MAIL</message>
     <message id="Alert.alert.form.sms">SMS</message>
     <message id="Alert.alert.form.push">PUSH</message>
+    
+    <message id="Alert.alert.operator.lt">Inférieur</message>
+    <message id="Alert.alert.operator.le">Inférieur ou égal</message>
+    <message id="Alert.alert.operator.eq">Egal</message>
+    <message id="Alert.alert.operator.ge">Supérieur ou égal</message>
+    <message id="Alert.alert.operator.gt">Supérieur</message>
+    <message id="Alert.alert.operator.ne">Différent</message>
+
 
 <!--    Invalid message     -->
   <message id="Alert.alert.invalid-name-name">

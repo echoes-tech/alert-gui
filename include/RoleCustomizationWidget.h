@@ -34,7 +34,8 @@ public:
     void getAssets(boost::system::error_code err, const Wt::Http::Message& response);
 //    void getMedias(boost::system::error_code err, const Wt::Http::Message& response);
     void getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
-    void getCriteria(boost::system::error_code err, const Wt::Http::Message& response, int idForInfMap, Wt::WContainerWidget *row);
+    void getCriteria(int idForInfMap, Wt::WContainerWidget *row);
+    void addCriterionRow(int idx, std::string critName, long long critId, Wt::WContainerWidget *row, std::map<long long, Wt::WLineEdit*> *mapIdCritEdit, int idForInfMap);
     void getInformations(boost::system::error_code err, const Wt::Http::Message& response);
     void getAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
     void putAssetAlias(int idx);
@@ -103,7 +104,7 @@ private:
     
     void fillAssetsFields();
     void fillInformationsFields();
-    void fillCriteriaFields(int idForInfMap, std::map<long long, Wt::WLineEdit*> mapIdCritEdit);
+    void fillCriteriaFields(int idForInfMap, std::map<long long, Wt::WLineEdit*> *mapIdCritEdit);
     
     bool mediasSet;
     bool rolesSet;

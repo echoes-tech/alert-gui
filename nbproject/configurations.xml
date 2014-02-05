@@ -72,6 +72,8 @@
       <itemPath>alert_fr.xml</itemPath>
       <itemPath>asset.xml</itemPath>
       <itemPath>asset_fr.xml</itemPath>
+      <itemPath>association.xml</itemPath>
+      <itemPath>association_fr.xml</itemPath>
       <itemPath>auth.xml</itemPath>
       <itemPath>auth_fr.xml</itemPath>
       <itemPath>config.xml</itemPath>
@@ -206,6 +208,10 @@
       <item path="asset.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="asset_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="association.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="association_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="auth.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -457,6 +463,10 @@
       <item path="asset.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="asset_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="association.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="association_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="auth.xml" ex="false" tool="3" flavor2="0">
       </item>

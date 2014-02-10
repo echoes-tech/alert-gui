@@ -198,7 +198,7 @@ void    AlertsWidget::popupRecipients(std::string nameAlert, std::string message
     comboBox->addItem("fois"); // xml
     comboBox->setWidth(Wt::WLength(61));
     table->elementAt(0, 2)->addWidget(comboBox);
-    time_ = 1;
+    time_ = 0;
     comboBox->changed().connect(std::bind([=] () {        
         time_ = comboBox->currentIndex();
     }));
@@ -259,11 +259,11 @@ void    AlertsWidget::initBoxOne(Wt::WTable *tableBox)
        
     fillInMultiMap();
     
-    Wt::WSelectionBox *boxAsset = new Wt::WSelectionBox(tableBox->elementAt(0, 0));
-    Wt::WSelectionBox *boxPlugin = new Wt::WSelectionBox(tableBox->elementAt(0, 1));
-    Wt::WSelectionBox *boxInfo = new Wt::WSelectionBox(tableBox->elementAt(0, 2));
+    Wt::WSelectionBox *boxAsset = new Wt::WSelectionBox(tableBox->elementAt(1, 0));
+    Wt::WSelectionBox *boxPlugin = new Wt::WSelectionBox(tableBox->elementAt(1, 1));
+    Wt::WSelectionBox *boxInfo = new Wt::WSelectionBox(tableBox->elementAt(1, 2));
 
-    keyValue_ = new Wt::WLineEdit(tableBox->elementAt(0, 3));
+    keyValue_ = new Wt::WLineEdit(tableBox->elementAt(1, 3));
     
     boxAsset->resize(Wt::WLength(200), Wt::WLength(150));
     boxAsset->setSelectionMode(Wt::ExtendedSelection);
@@ -653,27 +653,37 @@ void    AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 
     Wt::WContainerWidget *contain = new Wt::WContainerWidget(dialog->contents());
     Wt::WTable *tableBox = new Wt::WTable(contain);
-    tableBox->elementAt(0, 0)
-    ->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-asset")));
-    tableBox->elementAt(0, 1)
-    ->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-plugin")));
-    tableBox->elementAt(0, 2)
-    ->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-info")));
-    tableBox->elementAt(0, 3)
-    ->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-key")));
+    Wt::WTableCell *cell0_0 = tableBox->elementAt(0, 0);
+    cell0_0->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-asset")));
+    Wt::WTableCell *cell0_1 = tableBox->elementAt(0, 1);
+    cell0_1->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-plugin")));
+    Wt::WTableCell *cell0_2 = tableBox->elementAt(0, 2);
+    cell0_2->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-info")));
+    Wt::WTableCell *cell0_3 = tableBox->elementAt(0, 3);
+    cell0_3->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-key")));
+ 
     initBoxOne(tableBox);
-    errorAsset_ = new Wt::WText(tr("Alert.alert.invalid-select-asset"),
-            tableBox->elementAt(1, 0));
-    errorPlugin_ = new Wt::WText(tr("Alert.alert.invalid-select-plugin"),
-            tableBox->elementAt(1, 1));
-    errorInfo_ = new Wt::WText(tr("Alert.alert.invalid-select-info"),
-            tableBox->elementAt(1, 2));
+
+    errorAsset_ = new Wt::WText(tr("Alert.alert.invalid-select-asset"));
+    Wt::WTableCell *cell2_0 = tableBox->elementAt(2, 0);
+    cell2_0->addWidget(errorAsset_);
+    
+    errorPlugin_ = new Wt::WText(tr("Alert.alert.invalid-select-plugin"));
+    Wt::WTableCell *cell2_1 = tableBox->elementAt(2, 1);
+    cell2_1->addWidget(errorPlugin_);
+    
+    errorInfo_ = new Wt::WText(tr("Alert.alert.invalid-select-info"));
+    Wt::WTableCell *cell2_2 = tableBox->elementAt(2, 2);
+    cell2_2->addWidget(errorAsset_);
+    
+    
     errorAsset_->hide();
     errorPlugin_->hide();
     errorInfo_->hide();
     
-    new Wt::WText(tr("Alert.alert.add-last-info"), contain);
-    new Wt::WText("21/12/2012", contain);  //a revoir quand info
+    // FIXME
+//    new Wt::WText(tr("Alert.alert.add-last-info"), contain);
+//    new Wt::WText("21/12/2012", contain);  //a revoir quand info
 
     new Wt::WText(tr("Alert.alert.add-compare"), contain);  //hide show
 
@@ -737,7 +747,7 @@ void    AlertsWidget::showUnit(long long id)
     if (id > 0)
     {
         MultiMapLongs::iterator unit = unitsIds_.find(id);
-        if ((*unit).second == Enums::EInformationUnitType::text)
+        if ((*unit).second == 1)
         {
            compareBarOne_->show();
             for (it = unitOne_.begin(); it != unitOne_.end(); it++)
@@ -745,7 +755,7 @@ void    AlertsWidget::showUnit(long long id)
                 ((Wt::WTable*)(*it).second)->show();
             }
         }
-        else if ((*unit).second == Enums::EInformationUnitType::number)
+        else if ((*unit).second == 3)
         {
             compareBarTwo_->show();
             for (it = unitTwo_.begin(); it != unitTwo_.end(); it++)
@@ -753,7 +763,7 @@ void    AlertsWidget::showUnit(long long id)
                 ((Wt::WTable*)(*it).second)->show();
             }
         }
-        else if ((*unit).second == 3) //Enums::EInformationUnitType::boolean
+        else if ((*unit).second == 5) //Enums::EInformationUnitType::boolean
         {
             unitThree_->show();
         }
@@ -867,11 +877,11 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
     ->addWidget(new Wt::WText(tr("Alert.alert.message-value")));
     
     Wt::WComboBox *comboBox2 = new Wt::WComboBox();
-    comboBox2->addItem("Ko");
-    comboBox2->addItem("Mo");
-    comboBox2->addItem("Go");
+//    comboBox2->addItem("Ko");
+//    comboBox2->addItem("Mo");
+//    comboBox2->addItem("Go");
 
-    table->elementAt(0, 3)->addWidget(comboBox2);
+//    table->elementAt(0, 3)->addWidget(comboBox2);
     
     table->hide();
 
@@ -881,9 +891,10 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
             contain);
     errorNumb->hide();
 
-    Wt::WText *text = new Wt::WText(comboBox1->currentText()
-            + " \"\" " + comboBox2->currentText());
-    compareBarTwo_->addWidget(text);
+    Wt::WText *text = new Wt::WText(comboBox1->currentText());
+//            + " \"\" " ;
+//            + comboBox2->currentText());
+//    compareBarTwo_->addWidget(text);
 
     Wt::WLineEdit *lineEditBar = new Wt::WLineEdit();
     lineEditBar->setWidth(40);
@@ -898,19 +909,22 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
     buttonValid->setStyleClass("btn-dark-warning");
     buttonValid->setTextFormat(Wt::XHTMLUnsafeText);
     buttonValid->clicked().connect(std::bind([=] () {
-        text->setText(comboBox1->currentText() + " \"" + valeurEdit->text()
-        + "\" " + comboBox2->currentText());
+        text->setText(comboBox1->currentText() + " \"" + valeurEdit->text());
+//        + "\" " + comboBox2->currentText());
         buttonValid->setText("<i class='icon-ok'></i>");
     }));
     valeurEdit->changed().connect(std::bind([=] ()
-    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text()
-    + "\" " + comboBox2->currentText()); }));
+    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text());
+//    + "\" " + comboBox2->currentText()); 
+    }));
     comboBox1->changed().connect(std::bind([=] ()
-    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text()
-    + "\" " + comboBox2->currentText()); }));
-    comboBox2->changed().connect(std::bind([=] ()
-    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text()
-    + "\" " + comboBox2->currentText()); }));
+    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text());
+//    + "\" " + comboBox2->currentText()); 
+    }));
+//    comboBox2->changed().connect(std::bind([=] ()
+//    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text());
+////    + "\" " + comboBox2->currentText()); 
+//    }));
 
     Wt::WPushButton *buttonDel =
             new Wt::WPushButton("<i class='icon-remove icon-white'></i>",
@@ -1043,6 +1057,8 @@ void     AlertsWidget::checkPopupRecipients(std::string message, std::string tim
     recoverListAlert();
 }
 
+
+// ici qu'on affiche ou pas les critères de comparaison...
 int     AlertsWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage)
 {    
     int checkAll = CreatePageWidget::checkInput(inputName, errorMessage);
@@ -1087,7 +1103,7 @@ int     AlertsWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, st
             }
             break;
         }
-        case Enums::EInformationUnitType::number :
+        case 3 :
         {
             for (MapUnitTwo::iterator it = resourcesUnitTwo.begin(); it != resourcesUnitTwo.end(); it++)
             {
@@ -1106,7 +1122,7 @@ int     AlertsWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, st
             }
             break;
         }
-        case 3 : //Enums::EInformationUnitType::boolean
+        case 5 : //Enums::EInformationUnitType::boolean
         {
             if (bool_ < 0)
             {
@@ -1118,7 +1134,6 @@ int     AlertsWidget::checkInput(std::vector<Wt::WInteractWidget*> inputName, st
             break;
         }
     }
-//    checkAll = 0; // A RETITER 
     return checkAll;
 }
 

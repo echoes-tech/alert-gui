@@ -37,7 +37,7 @@
     <message id="Alert.alert.add-title-box-asset">Equipement</message>
     <message id="Alert.alert.add-title-box-plugin">Application</message>
     <message id="Alert.alert.add-title-box-info">Information</message>
-    <message id="Alert.alert.add-title-box-key">Clef</message>
+    <message id="Alert.alert.add-title-box-key">Valeur de la clé</message>
     <message id="Alert.alert.add-last-info">
             Dernière valeur reçue :
     </message>

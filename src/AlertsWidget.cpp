@@ -1160,7 +1160,7 @@ void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
 //            }
             break;
         }
-        case Enums::EInformationUnitType::number :
+        case 3 :
         {
             message += "\"alert_criteria_id\": " + boost::lexical_cast<std::string>((*resourcesUnitTwo.begin()).second.second.first->currentIndex() + 1);
             message += "\"value\": \"" + (*resourcesUnitTwo.begin()).second.first.first->text().toUTF8() + "\",\n";
@@ -1173,7 +1173,7 @@ void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
 //            }
             break;
         }
-        case 3 : //Enums::EInformationUnitType::boolean
+        case 5 : //Enums::EInformationUnitType::boolean
         {
             message += "\"alert_criteria_id\": 3,\n";
             if (!(unitThree_->isHidden()))
@@ -1189,6 +1189,11 @@ void AlertsWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
                 else
                     Wt::log("warning") << "Problem for boolean";
             }
+            break;
+        }
+        default:
+        {
+            message += "\"value\": \"\",\n";
             break;
         }
     }

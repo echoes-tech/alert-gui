@@ -60,8 +60,6 @@ void MainWidget::reset(Echoes::Dbo::Session *session)
         Wt::log("error") << e.what();
     }
     
-//    Wt::WApplication *app = Wt::WApplication::instance();
-//    app->messageResourceBundle().use("test",false);  
     // Todo : check, sans doute inutile
     initMenus();
     initFooter();
@@ -121,10 +119,8 @@ void MainWidget::createUI()
         createContentDiv();
         createContainerFluid();
 
-    //    const Wt::WLink *test = new Wt::WLink("");
         breadCrumbsAnchor0->setTextFormat(Wt::XHTMLUnsafeText);
         breadCrumbsAnchor0->setText("<i class='icon-home'></i>" + tr("Alert.admin.home"));
-    //    breadCrumbsAnchor0->setLink(*test);
 
         breadCrumbsContainer->addWidget(breadCrumbsAnchor0);
 

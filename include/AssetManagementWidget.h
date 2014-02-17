@@ -78,9 +78,9 @@ protected:
   
   virtual Wt::WValidator                *editValidator(int cpt);
 
-  void                                  updatePage();
+  virtual void                           updatePage(bool getResources = true);
 
-    virtual void                postResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
+  virtual void                           postResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
 private:
   /*
    * Generate and get script (sonde) for asset.

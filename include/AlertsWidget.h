@@ -33,10 +33,7 @@
 #include "tools/Session.h"
 
 #include "GlobalIncludeFile.h"
-#include "CreatePageWidget.h"
 #include "ApiManagement.h"
-
-
 
 typedef std::pair<Wt::WComboBox*, Wt::WComboBox*> PairComboBox;
 typedef std::pair<long long, std::string>       Pair;
@@ -67,31 +64,23 @@ typedef std::vector<Wt::WComboBox*>             VectorComboBox;
 typedef std::pair<PairLong, PairLong>           PairTwoPair;
 
 class AlertsWidget :
-public CreatePageWidget
+public AbstractPage
 {
 public:
     AlertsWidget(Echoes::Dbo::Session *session, std::string apiUrl);
 
-    void                        update();
+    void                        updatePage(bool getResources);
     std::vector<std::string>    getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
     std::vector<long long>      getIdsTable();
-    vector_type                 getResourceRowTable(long long id);
     Wt::WValidator              *editValidator(int who);
     void                        closePopup();
-    void                        recoverListAlert();
     void                        recoverListRecipientAlias(long long userRoleId);
+    virtual void                clearStructures();
     
-    void                        getAlerts(boost::system::error_code err, const Wt::Http::Message& response);
-    void                        getCriterion(boost::system::error_code err, const Wt::Http::Message& response);
-    void                        getAssets(boost::system::error_code err, const Wt::Http::Message& response);
-    void                        getUsersList(boost::system::error_code err, const Wt::Http::Message& response);
-    void                        getMedia(boost::system::error_code err, const Wt::Http::Message& response);
-    void                        getPluginsForAsset(boost::system::error_code err, const Wt::Http::Message& response, long long idAsset, long long index);
-    void                        getInformations(boost::system::error_code err, const Wt::Http::Message& response, long long idPlugin, long long index);
-    void                        getInformation(boost::system::error_code err, const Wt::Http::Message& response);
     void                        getAliasInfo(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
     void                        getAliasAsset(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
+    void                        getAliasCriteria(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
     void                        getAliasPlugin(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
     void                        postAlert(boost::system::error_code err, const Wt::Http::Message& response);
     void                        deleteAlert(boost::system::error_code err, const Wt::Http::Message& response);
@@ -122,7 +111,7 @@ public:
 
 private:
 
-    void                        initBoxOne(Wt::WTable *tableBox);
+    void                        initAlertValueDefinitionPopup(Wt::WTable *tableBox);
 
     VectorLong                  boxActived(Wt::WSelectionBox *box, MultiMapPair infoInBox, MultiMapLongs compId, long long id);
     void                        fillInBox(Wt::WSelectionBox *box, MultiMapPair infoInBox);
@@ -165,8 +154,8 @@ private:
     std::string         messageSmsForTab_;
     std::string         messagePushForTab_;
     
-    MultiMapLongString  criterions_;
-
+//    MultiMapLongString  criterions_;
+//
     MultiMapPair        assets_; // Assets infomations (<index <idAsset, nameAsset>>)
     MultiMapPair        plugins_; // Plugins infomations (<index <idPlugin, namePlugin>>)
     MultiMapPair        infos_; // Infos infomations (<index <idInfo, nameInfo>>)

@@ -51,7 +51,6 @@
         <itemPath>include/ApiManagement.h</itemPath>
         <itemPath>include/Association.h</itemPath>
         <itemPath>include/Conf.h</itemPath>
-        <itemPath>include/CreatePageWidget.h</itemPath>
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
         <itemPath>include/InformationsWidget.h</itemPath>
@@ -131,7 +130,6 @@
         <itemPath>src/ApiManagement.cpp</itemPath>
         <itemPath>src/Association.cpp</itemPath>
         <itemPath>src/Conf.cpp</itemPath>
-        <itemPath>src/CreatePageWidget.cpp</itemPath>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
         <itemPath>src/InformationsWidget.cpp</itemPath>
@@ -251,8 +249,6 @@
       <item path="include/AuthWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Conf.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/CreatePageWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/EchoesHome.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -374,8 +370,6 @@
       <item path="src/AuthWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Conf.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/CreatePageWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/EchoesHome.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -507,8 +501,6 @@
       </item>
       <item path="include/Conf.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/CreatePageWidget.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/EchoesHome.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Enums.h" ex="false" tool="3" flavor2="0">
@@ -629,8 +621,6 @@
       <item path="src/AuthWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Conf.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/CreatePageWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/EchoesHome.cpp" ex="false" tool="1" flavor2="0">
       </item>

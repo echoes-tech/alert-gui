@@ -485,7 +485,6 @@ void RoleCustomizationWidget::getCriteria(int idForInfMap, Wt::WContainerWidget 
                 id = Echoes::Dbo::EAlertCriteria::GT;
                 break;
         }
-        cout << "AVANT CRIT" << endl;
         addCriterionRow(idx, name, id, row, mapIdCritEdit, idForInfMap);
         idx++;
     }
@@ -497,7 +496,6 @@ void RoleCustomizationWidget::getCriteria(int idForInfMap, Wt::WContainerWidget 
 
 void RoleCustomizationWidget::addCriterionRow(int idx, string critName, long long critId, Wt::WContainerWidget *row, map<long long, Wt::WLineEdit*> *mapIdCritEdit, int idForInfMap) {
 
-    cout << "ET ON ADD" << endl;
     Wt::WContainerWidget *labelContainer = new Wt::WContainerWidget();
     labelContainer->setStyleClass("span2");
     Wt::WText *label = new Wt::WText();
@@ -655,7 +653,6 @@ void RoleCustomizationWidget::putAssetAlias(int idx) {
             + ",\n"
             "\"value\" : \"" + boost::lexical_cast<string>(mapEditAssets[idx]->text()) + "\"\n}";
 
-    cout << "Message : " << strMessage << endl;
 
     Wt::Http::Message message;
     message.addBodyText(strMessage);
@@ -785,10 +782,8 @@ void RoleCustomizationWidget::fillAssetsFields() {
 
 void RoleCustomizationWidget::fillCriteriaFields(int idForInfMap, map<long long, Wt::WLineEdit*> *mapIdCritEdit) 
 {
-    cout << "FILL CRITERIA" << endl;
     for (map<long long, Wt::WLineEdit*>::const_iterator j = (*mapIdCritEdit).begin(); j != (*mapIdCritEdit).end(); j++) 
     {
-        cout << "CRIIIIIIIT" << endl;
         string urlToCall = this->getApiUrl()
                 + "/criteria/" + boost::lexical_cast<string>(j->first)
                 + "/alias" + this->getCredentials()

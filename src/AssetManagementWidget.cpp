@@ -18,8 +18,8 @@ AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, std:
 {
     session_= session;
     apiUrl_ = apiUrl;
-    created_ = false;
-    newClass_ = false;
+//    created_ = false;
+//    newClass_ = false;
 
     setButtonModif(true);
     setButtonSup(true);
@@ -47,8 +47,9 @@ Wt::WValidator    *AssetManagementWidget::editValidator(int cpt)
     return validator;
 }
 
-void AssetManagementWidget::updatePage()
+void AssetManagementWidget::updatePage(bool getResources)
 {
+    AbstractPage::updatePage(getResources);
     multimap_long_widgets rowsTable = getRowsTable();
     for (multimap_long_widgets::iterator itrowTable = rowsTable.begin();
             itrowTable != rowsTable.end(); itrowTable++)
@@ -63,7 +64,7 @@ void AssetManagementWidget::updatePage()
         (*itrowTable).second.push_back(downloadButton);
     }
     setRowsTable(rowsTable);
-    AbstractPage::updatePage();
+    
 }
 // Call API - POST(ADD) DELETE PUT(MODIF) ----------------------------------------
 
@@ -77,9 +78,13 @@ Wt::WDialog *AssetManagementWidget::deleteResource(long long id)
     apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
     Wt::log("debug") << "AssetManagementWidget : [GET] address to call : " << apiAddress;
     if (client->get(apiAddress))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
     return box;
 }
 

@@ -72,8 +72,8 @@ protected:
 
     void                        checkAlertsInInformation(boost::system::error_code err, const Wt::Http::Message& response, Wt::WDialog *box, long long id);
 
-    void                addResource(std::vector<Wt::WInteractWidget*> arguments);
-    void                modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
+    void                        addResource(std::vector<Wt::WInteractWidget*> arguments);
+    void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
 
     virtual void                handleJsonGet(vectors_Json jsonResources);
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);

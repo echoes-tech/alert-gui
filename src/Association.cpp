@@ -58,13 +58,9 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
 
 // TABLE(S) FOR MAIN PAGE -------------------------------------
 
-void Association::updatePage()
+void Association::updatePage(bool getResources)
 {
-    AbstractPage::updatePage();
-//    if (!newClass_)
-//    {
-//        newClass_ = true;
-//    }
+    AbstractPage::updatePage(getResources);
 }
 
 // TABLE(S) FOR POPUP ------------------------------------------
@@ -149,34 +145,6 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
     dialog->show();
 }
 
-vector_type Association::getResourceRowTable(long long id)
-{
-    vector_type rowTable;
-    
-    MapAssetInfos::iterator assetInfos = assetInfos_.find(id);
-
-    if (assetInfos_.size() > 0)
-    {
-        for (std::map<long long, std::pair<long long, std::string>>::iterator assetResource = assets_.begin();
-                assetResource != assets_.end(); assetResource++)
-        {
-            if (id == (*assetResource).second.first)
-            {
-                rowTable.push_back(new Wt::WText((*assetResource).second.second));
-            }
-        }
-        std::string htmlInfo = "<ul>";
-        for (std::map<long long, std::string>::iterator infos = (*assetInfos).second.begin();
-                infos != (*assetInfos).second.end(); infos++)
-        {
-            htmlInfo += "<li>|" + (*infos).second + "|</li>";
-        }
-        htmlInfo += "</ul>";
-        rowTable.push_back(new Wt::WText(htmlInfo));
-    }
-    return rowTable;
-}
-
 int Association::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage)
 {
     return 0;
@@ -184,22 +152,22 @@ int Association::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::W
 
 void Association::closePopup()
 {
-    getAssociationList();
+    getResourceList();
 }
 
-void Association::getAssociationList()
+
+
+void Association::clearStructures()
 {
+    AbstractPage::clearStructures();
     assets_.clear();
     plugins_.clear();
     assetInfos_.clear();
-    rowsTable_.clear();
-
-    recursiveGetResources();
 }
 
 void Association::handleJsonGet(vectors_Json jsonResources)
 {
-    rowsTable_.clear();
+    m_rowsTable.clear();
     vector_Json jsonResource = jsonResources.at(0);
     cout << "taille resources : " << jsonResources.size() << endl;
     try
@@ -253,7 +221,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                     
                     long long idaId = jsonIda.get("id");
                     
-                    rowsTable_.insert(make_pair(idaId, nameW));
+                    m_rowsTable.insert(make_pair(idaId, nameW));
                     
                 }
             }
@@ -489,7 +457,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
-    updatePage();
+    updatePage(false);
 }
 
 void Association::addResource(vector<Wt::WInteractWidget*> argument)
@@ -584,7 +552,7 @@ void Association::postAssetCallBack(boost::system::error_code err, const Wt::Htt
         Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "err", tr("Alert.association.database-error"), Wt::Ok);
     }
-    getAssociationList();
+    getResourceList();
 }
 
 void Association::deleteAsset(boost::system::error_code err, const Wt::Http::Message& response)
@@ -611,7 +579,7 @@ void Association::deleteAsset(boost::system::error_code err, const Wt::Http::Mes
         Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.association.database-error-title"),tr("Alert.association.database-error"),Wt::Ok);
     }
-    getAssociationList();
+    getResourceList();
 }
 
 Wt::WDialog *Association::deleteResource(long long id)

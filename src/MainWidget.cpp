@@ -176,7 +176,7 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         }
         case Enums::EPageType::ALERTS:
         {
-            atw = new AlertsWidget(this->session, this->_apiUrl);
+            alw = new AlertsWidget(this->session, this->_apiUrl);
             break;            
         }        
         case Enums::EPageType::PLUGIN:
@@ -217,7 +217,7 @@ void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
 }
 
 // ToDo : template ?
-void MainWidget::updateTitle(int index, Enums::EMenuRoot menuRoot)
+void MainWidget::updateTitle(unsigned int index, Enums::EMenuRoot menuRoot)
 {
     switch (menuRoot)
     {
@@ -326,8 +326,8 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 }
                 case Enums::EPageType::ASSET:
                 {
+                    amw->getResourceList();
                     this->contentFluid->addWidget(amw);
-                    amw->recursiveGetResources();
                     break;
                 }
                 case Enums::EPageType::RECIPIENTS:
@@ -337,20 +337,20 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 }
                 case Enums::EPageType::INFORMATIONS:
                 {
+                    inw->getResourceList();
                     this->contentFluid->addWidget(inw);
-                    inw->recursiveGetResources();
                     break;
                 }
                 case Enums::EPageType::ASSOCIATION:
                 {
+                    act->getResourceList();
                     this->contentFluid->addWidget(act);
-                    act->getAssociationList();
                     break;
                 }
                 case Enums::EPageType::ALERTS:
                 {
-                    this->contentFluid->addWidget(atw);
-                    atw->recoverListAlert();
+                    alw->getResourceList();
+                    this->contentFluid->addWidget(alw);
                     break;
                 }
                 case Enums::EPageType::PLUGIN:

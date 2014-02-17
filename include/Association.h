@@ -50,7 +50,6 @@ public:
    * In this methode you can call API for recover resources. \n
    * She is call after initialization of this class.
    */
-  void          getAssociationList();
 
 protected:
   /*! \brief Closes the registration widget. 
@@ -58,10 +57,10 @@ protected:
    * The default implementation simply deletes the widget.
    */
   virtual void                          close();
-
+  virtual void                          clearStructures();
   virtual void                          closePopup();
 
-  virtual void                          updatePage();
+  virtual void                          updatePage(bool getResources = true);
   virtual void                          modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
   virtual void                          addResource(std::vector<Wt::WInteractWidget*> argument);
   virtual Wt::WDialog                   *deleteResource(long long id);
@@ -72,7 +71,6 @@ protected:
 //  virtual std::vector<long long>        getIdsTable();
 //  virtual std::vector<std::string>      getTitlesTableText();
 //  virtual std::vector<std::string>      getTitlesTableWidget();
-  virtual vector_widget                 getResourceRowTable(long long id);
   
   virtual int checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
 

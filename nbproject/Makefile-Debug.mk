@@ -46,7 +46,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
 	${OBJECTDIR}/src/AuthWidget.o \
 	${OBJECTDIR}/src/Conf.o \
-	${OBJECTDIR}/src/CreatePageWidget.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/Enums.o \
 	${OBJECTDIR}/src/InformationsWidget.o \
@@ -141,11 +140,6 @@ ${OBJECTDIR}/src/Conf.o: src/Conf.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Conf.o src/Conf.cpp
-
-${OBJECTDIR}/src/CreatePageWidget.o: src/CreatePageWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/CreatePageWidget.o src/CreatePageWidget.cpp
 
 ${OBJECTDIR}/src/EchoesHome.o: src/EchoesHome.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

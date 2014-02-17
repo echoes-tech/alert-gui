@@ -79,7 +79,7 @@ protected:
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   
   Wt::WContainerWidget *createContentHeader();
-  void updateTitle(int index, Enums::EMenuRoot menuRoot = Enums::main);
+  void updateTitle(unsigned int index, Enums::EMenuRoot menuRoot = Enums::main);
   void updateBreadcrumbs(Enums::EMenuRoot menuRoot = Enums::main);
   std::string getBreadcrumbsClass(int pathSize, int level);
   void createContainerFluid();
@@ -107,7 +107,7 @@ protected:
   
   RecipientsWidget *rpw;
   InformationsWidget *inw;
-  AlertsWidget *atw;
+  AlertsWidget *alw;
   Association *act;
   
   Wt::WContainerWidget *wcw;

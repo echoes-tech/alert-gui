@@ -77,7 +77,7 @@
 
 // DEFINE
 
-#define SIZE_NAME (60)
+#define SIZE_NAME (160)
 
 // TYPEDEF
 
@@ -127,7 +127,7 @@ public:
     virtual                     ~AbstractPage();
 
     void                        recursiveGetResources(vectors_Json jsonResource = vectors_Json(), lists_string listsUrl = lists_string());
-
+    virtual void                getResourceList();
 protected:
 
     // ENUM
@@ -142,7 +142,9 @@ protected:
     };
 
     
-    virtual void                updatePage();
+    virtual void                updatePage(bool getResources = true);
+    virtual void                clearStructures();
+    
     void                        createTable();
     void                        createEmptyResourceTable();
 
@@ -218,7 +220,7 @@ protected:
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id);
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
-    multimap_long_widgets       rowsTable_;
+    multimap_long_widgets       m_rowsTable;
 
 private:
     
@@ -240,26 +242,26 @@ private:
      * multimap &lsaquo; id/index, vector &lsaquo; widget &rsaquo; &rsaquo;\n
      * Usage : \n id/index, always use number greader 0 \n
      */
-    vector_widget               inputs_;
+    vector_widget               m_inputs;
     // Attributs.-------------------------------
-    lists_string                listsUrl_;
+    lists_string                m_listsUrl;
     vector_pair_string          m_titles;
     Echoes::Dbo::Session        *m_session;
     std::string                 m_apiUrl;
     std::string                 m_xmlPageName;
-    std::string                 m_nameResourcePageSpec_;
-    std::string                 undidName_;
+    std::string                 m_nameResourcePageSpec;
+    std::string                 m_undidName;
     bool                        m_isCreated;
     bool                        m_isModifButtonPresent;
     bool                        m_isDeleteButtonPresent;
     bool                        m_isMainPage;
     bool                        m_toUpdate;
     // select drop + paginate--------------------
-    vector_pair                 resources_;
-    vector_widget               butPaginate_;
-    vector_widget               butPaginateExt_;
-    int                         nbAff_;
-    int                         nbAffBegin_;
+    vector_pair                 m_resources;
+    vector_widget               m_butPaginate;
+    vector_widget               m_butPaginateExt;
+    int                         m_nbAff;
+    int                         m_nbAffBegin;
 };
 
 #endif	/* ABSTRACTPAGE_H */

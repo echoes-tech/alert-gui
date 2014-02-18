@@ -775,8 +775,16 @@ void AbstractPage::recursiveGetResources(vectors_Json jsonResource, lists_string
     {
         listsUrl = m_listsUrl;
     }
+    
+    string credentialParametersFirstChar = "?";
+    if ((*(*listsUrl.begin()).begin()).find("?") != string::npos)
+    {
+        credentialParametersFirstChar = "&";
+    }
+    
     string apiAddress = getApiUrl() + "/" + (*(*listsUrl.begin()).begin())
-            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + credentialParametersFirstChar
+            + "login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
             + "&token=" + m_session->user()->token.toUTF8()
             + addParameter();
 
@@ -832,6 +840,7 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
             {
                 jsonResource.push_back(vector_Json());
             }
+            
             if ((*(jsonResource.begin())).size() == 0)
             {
                 (*(jsonResource.begin())).push_back(result);
@@ -842,7 +851,7 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
             }
 
             (*listsUrl.begin()).pop_front();
-            if ((*listsUrl.begin()).size() == 0 || response.status() == 404)
+            if ((*listsUrl.begin()).size() == 0)
             {
                 listsUrl.pop_front();
                 jsonResource.push_back(vector_Json());
@@ -858,8 +867,10 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
                 {
                     Wt::Json::Object jsonObject = (*itA);
                     long long idJ = jsonObject.get("id");
+                    // On remplace celui en cours
                     (*listUrl).replace((*listUrl).find(":id"), 3,
                                        boost::lexical_cast<string>(idJ));
+                    // on ajoute des éléments pour les autres IDs
                     if (++itA != result1.end())
                     {
                         (*listsUrl.begin()).push_back(saveUrl);
@@ -887,6 +898,11 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
                               tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
     }
     return EXIT_FAILURE;
+}
+
+string AbstractPage::addParameter()
+{
+    return "";
 }
 
 

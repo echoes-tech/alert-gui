@@ -198,7 +198,7 @@ protected:
      */
     int                         handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
     lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client);
-    virtual std::string         addParameter() {return "";};
+    virtual std::string         addParameter();
     // ---- ADD MODIF DELETE ----------------------------------------------
     virtual void                addResource(std::vector<Wt::WInteractWidget*> argument);
     virtual void                modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);

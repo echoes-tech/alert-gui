@@ -49,7 +49,7 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     listUrl.clear();
 
     listUrl.push_back("filters");
-    listUrl.push_back("filters/:id");
+    listUrl.push_back("information_datas?filter_id=:id");
     lListUrl.push_back(listUrl);
     listUrl.clear();
 
@@ -124,7 +124,6 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
             new Wt::WText(filtersModel->item(i-1,0)->text(),tableFilters->elementAt(i, col++));
             new Wt::WText(filtersModel->item(i-1,1)->text(),tableFilters->elementAt(i, col++));
             new Wt::WText(filtersModel->item(i-1,2)->text(),tableFilters->elementAt(i, col++));
-            cout << "FILTRE AFFICHé : " << filtersModel->item(i-1,2)->text() << endl;
             
             filterInfosComboBox_[i] = new Wt::WComboBox(tableFilters->elementAt(i, col++));
             filterInfosComboBox_[i]->setModel(informationsModel);
@@ -169,7 +168,6 @@ void Association::handleJsonGet(vectors_Json jsonResources)
 {
     m_rowsTable.clear();
     vector_Json jsonResource = jsonResources.at(0);
-    cout << "taille resources : " << jsonResources.size() << endl;
     try
     {
         if (jsonResource.size() > 0)
@@ -383,6 +381,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     jsonResource = jsonResources.at(4);
     try
     {
+        cout << "TAILLE JSON RESOURCE : " << jsonResource.size() << endl;
         if (jsonResource.size() > 0)
         {
             Wt::Json::Array& jsonArray = (*jsonResource.begin());
@@ -390,11 +389,13 @@ void Association::handleJsonGet(vectors_Json jsonResources)
             {
                 filtersModel = new Wt::WStandardItemModel(0, 3, this);
                 int row = 0;
+                cout << "TAILLE ARRAY : " << jsonArray.size() << endl;
                 for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
                 {
+                    cout << "INSIDE ARRAY : " << cpt << endl;
                     
-//                    Wt::Json::Object jsonFilter = jsonArray.at(cpt);
-                    Wt::Json::Object jsonDetailedFilter = jsonResource.at(cpt + 1);
+                    Wt::Json::Object jsonFilter = jsonArray.at(cpt);
+                    Wt::Json::Value jsonDetailedInformationDatas = jsonResource.at(cpt + 1);
                     
                     Wt::WStandardItem *filterNbValueItem = new Wt::WStandardItem();
                     
@@ -402,35 +403,41 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                     
                     set<int> indexAlreadyAssociated;
                     
-                    Wt::Json::Array idaJsonArray = jsonDetailedFilter.get("information_datas");
                     indexAlreadyAssociated.clear();
-                    for (int cptIda(0); cptIda < (int) idaJsonArray.size(); cptIda++)
+                    
+                    cout << "AVANT IDA" << endl;
+                    if (jsonDetailedInformationDatas.type() == Wt::Json::ArrayType)
                     {
-                        
-                        Wt::Json::Object jsonIda = idaJsonArray.at(cptIda);
-                        int index = jsonIda.get("filter_field_index");
-                        indexAlreadyAssociated.insert(index);
+                        Wt::Json::Array jsonDetailedInformationDatasArray = jsonDetailedInformationDatas;
+                        cout << "TAILLE IDA ARRAY : " << jsonDetailedInformationDatasArray.size() << endl;
+                        for (int cptIda(0); cptIda < (int) jsonDetailedInformationDatasArray.size(); cptIda++)
+                        {
+                            cout << "PROGRESSION DANS IDA ARRAY : " << cptIda << endl;
+                            Wt::Json::Object jsonIda = jsonDetailedInformationDatasArray.at(cptIda);
+                            int index = jsonIda.get("filter_field_index");
+                            indexAlreadyAssociated.insert(index);
+                        }
                     }
                     
-                    int nbValue = jsonDetailedFilter.get("nb_value");
+                    cout << "AVANT nb_value" << endl;
+                    int nbValue = jsonFilter.get("nb_value");
                     filterNbValueItem->setText(boost::lexical_cast<string>(nbValue));
                     
                     for (int i = 1 ; i <= nbValue ; i++)
                     {
                         
-                        
+                        cout << "nb_value" << i << endl;
                         if (indexAlreadyAssociated.find(i) == indexAlreadyAssociated.end())
                         {
                             Wt::WStandardItem *filterIdItem = new Wt::WStandardItem();
                             Wt::WStandardItem *filterTypeItem = new Wt::WStandardItem();
                             Wt::WStandardItem *filterIndexItem = new Wt::WStandardItem();
-                            long long filterId = jsonDetailedFilter.get("id");
-                            cout << "FILTRES : " << filterId << " INDEX : " << i << endl;
+                            long long filterId = jsonFilter.get("id");
                             filterIdItem->setText(boost::lexical_cast<string>(filterId));
 
-                            Wt::Json::Object filterType = jsonDetailedFilter.get("filter_type");
-                            string filterTypeName = filterType.get("name");
-                            filterTypeItem->setText(filterTypeName);
+                            Wt::Json::Object filterType = jsonFilter.get("filter_type");
+                            long long filterTypeId = filterType.get("id");
+                            filterTypeItem->setText(boost::lexical_cast<string>(filterTypeId));
 
                             filterIndexItem->setText(boost::lexical_cast<string>(i));
 
@@ -438,10 +445,11 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                             rowVector.push_back(filterIdItem);
                             rowVector.push_back(filterTypeItem);
                             rowVector.push_back(filterIndexItem);
-                            cout << "index ?? " << filterIndexItem->text() << endl;
                             filtersModel->insertRow(row++, rowVector);
                         }
                     }
+                    
+                    cout << "APRES nb_value" << endl;
                 }
             }
         }
@@ -457,7 +465,9 @@ void Association::handleJsonGet(vectors_Json jsonResources)
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
+    cout << "AVANT update" << endl;
     updatePage(false);
+    cout << "APRES update" << endl;
 }
 
 void Association::addResource(vector<Wt::WInteractWidget*> argument)

@@ -7,7 +7,9 @@
 
 #include "OptionManagementWidget.h"
 
-OptionManagementWidget::OptionManagementWidget(OptionManagementModel *model, Echoes::Dbo::Session *session, std::string apiUrl) 
+using namespace std;
+
+OptionManagementWidget::OptionManagementWidget(OptionManagementModel *model, Echoes::Dbo::Session *session, string apiUrl) 
 : Wt::WContainerWidget()
 {
     setApiUrl(apiUrl);
@@ -23,12 +25,12 @@ OptionManagementWidget::~OptionManagementWidget()
 {
 }
 
-void OptionManagementWidget::setApiUrl(std::string apiUrl)
+void OptionManagementWidget::setApiUrl(string apiUrl)
 {
     this->apiUrl_ = apiUrl;
 }
 
-std::string OptionManagementWidget::getApiUrl() const
+string OptionManagementWidget::getApiUrl() const
 {
     return apiUrl_;
 }
@@ -66,60 +68,22 @@ void OptionManagementWidget::createUI()
     this->setLayout(mainVerticalLayout);
     
     // Je n'ai pas pu essayer pas encore en place
-    std::string apiAddress = this->getApiUrl() + "/options/"
+    string apiAddress = this->getApiUrl() + "/options/"
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8()) 
             + "&token=" + Wt::Utils::urlEncode(session->user()->token.toUTF8())
-            + "&type=" + boost::lexical_cast<std::string>(Echoes::Dbo::EOptionType::QUOTA_SMS);
+            + "&type=" + boost::lexical_cast<string>(Echoes::Dbo::EOptionType::QUOTA_SMS);
     Wt::Http::Client *client1 = new Wt::Http::Client(this);
     client1->done().connect(boost::bind(&OptionManagementWidget::getQuota, this, _1, _2));
 
     Wt::log("debug") << "OptionManagementWidget : [GET] address to call : " << apiAddress;
     if (client1->get(apiAddress))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
+    {
         Wt::log("error") << "Error Client Http";
-    /*
-    try
-    {
-        Wt::log("info") << "Debug : before transaction";
-        Wt::Dbo::Transaction transaction(*this->session);
-        Wt::log("info") << "Debug : user found";
-        int smsQuotaValue = 0;
-         
-        Wt::Dbo::ptr<Echoes::Dbo::PackOption> ptrPackOption = session->find<Echoes::Dbo::PackOption>()
-                .where("\"POP_PCK_PCK_ID\" = ?").bind(this->session->user()->organization.get()->pack.id())
-                .where("\"POP_OTP_OTP_ID\" = ?").bind(Enums::EOption::quotaSms)
-                .limit(1);
-        if (ptrPackOption.get())
-        {
-// HEAD
-            Wt::Dbo::ptr<Echoes::Dbo::Option> ptrOptionValue = 
-                    session->find<Echoes::Dbo::Option>().where("\"OPT_ID_OPT_ID\" = ?")
-                    .bind(ptrPackOption.get()->pk.optionType.id())
-                    .where("\"ORG_ID_ORG_ID\" = ?").bind(this->session->user()->organization.id())
-                    .limit(1);
-// FIN HEAD
-            Wt::Dbo::ptr<Echoes::Dbo::Option> ptrOptionValue = session->find<Echoes::Dbo::Option>().where(QUOTE(TRIGRAM_OPTION SEP TRIGRAM_OPTION_TYPE SEP TRIGRAM_OPTION_TYPE ID)" = ?").bind(ptrPackOption.get()->pk.optionType.id())
-                                                            .where(QUOTE(TRIGRAM_OPTION SEP TRIGRAM_ORGANIZATION SEP TRIGRAM_ORGANIZATION ID)" = ?").bind(this->session->user()->organization.id())
-                                                            .limit(1);
-// FIN STASH
-            if (ptrOptionValue.get())
-            {
-                smsQuotaValue = boost::lexical_cast<int>(ptrOptionValue.get()->value);
-            }
-        }
-        
-        transaction.commit();
-        model_->setValue(model_->smsQuota,boost::any(smsQuotaValue));
-        model_->setReadOnly(model_->smsQuota,true);
-        mainForm->updateView(model_);
     }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::WMessageBox::show(tr("Alert.global.database-error-title"),tr("Alert.global.database-error").arg(e.what()).arg("1"),Wt::Ok);
-        Wt::log("error") << "[AssetManagementWidget] " << e.what();
-    }
-    */
 }
 
 bool OptionManagementWidget::validate()
@@ -194,7 +158,7 @@ void OptionManagementWidget::fillRoleSelector()
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&OptionManagementWidget::getRoles, this, _1, _2));
 
-    std::string apiAddress = this->getApiUrl() + "/roles"
+    string apiAddress = this->getApiUrl() + "/roles"
             + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
             + "&token=" + session->user()->token.toUTF8();
 
@@ -207,12 +171,14 @@ void OptionManagementWidget::fillRoleSelector()
         Wt::WApplication::instance()->deferRendering();
     }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 }
 
 void OptionManagementWidget::getQuota(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    int smsQuotaValue(0);
+    Wt::WString smsQuotaValue = "0";
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -220,28 +186,25 @@ void OptionManagementWidget::getQuota(boost::system::error_code err, const Wt::H
         {
             try
             {
-//                Wt::Json::Value result;
-//                Wt::Json::Object result1;
-//                Wt::Json::parse(response.body(), result);
-//                result1 = result;
-                // Pas tester :
-                /*
+                Wt::Json::Value result;
+                Wt::Json::Array result1;
+                Wt::Json::parse(response.body(), result);
+                result1 = result;
+                
                 Wt::Json::Object tmp;
                 Wt::Json::Array::const_iterator idx1;
                 if (result.isNull() == false)
                 {
-                    Wt::Json::Array& result1 = result;
                     for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
                     {
                         tmp = (*idx1);
-                        smsQuotaValue = tmp.get("quota_sms");
+                        smsQuotaValue = tmp.get("value");
                     }
                 }
                 else
                 {
-                    std::cout << "Parse Problem" << std::endl;
+                    cout << "Parse Problem" << endl;
                 }
-                */
                 
             }
             catch (Wt::Json::ParseError const& e)
@@ -255,11 +218,6 @@ void OptionManagementWidget::getQuota(boost::system::error_code err, const Wt::H
                 Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
             }
         }
-//        else
-//        {
-//                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
-//                Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);            
-//        }
     }
     else
     {

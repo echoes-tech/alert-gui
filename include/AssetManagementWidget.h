@@ -78,7 +78,8 @@ protected:
   
   virtual Wt::WValidator                *editValidator(int cpt);
 
-  virtual void                           updatePage(bool getResources = true);
+//  virtual void                           updatePage(bool getResources = true);
+  virtual int                            addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);
 
   virtual void                           postResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
 private:

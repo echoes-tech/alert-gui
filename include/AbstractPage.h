@@ -128,6 +128,10 @@ public:
 
     void                        recursiveGetResources(vectors_Json jsonResource = vectors_Json(), lists_string listsUrl = lists_string());
     virtual void                getResourceList();
+    void setResources(vector_pair resources);
+    vector_pair getResources() const;
+    void setResourceTable(Wt::WTable* resourceTable);
+    Wt::WTable* getResourceTable() const;
 protected:
 
     // ENUM
@@ -164,6 +168,7 @@ protected:
     void                        popupFinalization(Wt::WDialog *dialog, long long id);
     // Methodes useful
     void                        addGenericButtonsToResourceTable(long long id, int rowTable, int columnTable);
+    virtual int                 addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);
     void                        addButtonsToPopupFooter(Wt::WDialog *dialog);
 
     // Set/Get attribut to init or option. ------------------------

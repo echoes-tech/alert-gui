@@ -13,7 +13,9 @@
 
 #include "AssetManagementWidget.h"
 
-AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, std::string apiUrl)
+using namespace std;
+
+AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, string apiUrl)
 : AbstractPage(session, apiUrl, "asset")
 {
     session_= session;
@@ -26,8 +28,8 @@ AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, std:
     setLocalTable(true);
 
     vector_pair_string titles;
-    titles.push_back(std::make_pair(ETypeJson::text, "name"));
-    titles.push_back(std::make_pair(ETypeJson::widget, "download-script"));
+    titles.push_back(make_pair(ETypeJson::text, "name"));
+    titles.push_back(make_pair(ETypeJson::widget, "download-script"));
     setTitles(titles);
 
     lists_string lListUrl;
@@ -47,32 +49,53 @@ Wt::WValidator    *AssetManagementWidget::editValidator(int cpt)
     return validator;
 }
 
-void AssetManagementWidget::updatePage(bool getResources)
-{
-    AbstractPage::updatePage(getResources);
-    multimap_long_widgets rowsTable = getRowsTable();
-    for (multimap_long_widgets::iterator itrowTable = rowsTable.begin();
-            itrowTable != rowsTable.end(); itrowTable++)
-    {
-        Wt::WFileResource *file = generateScript((*itrowTable).first, ((Wt::WText*)(*(*itrowTable).second.begin()))->text());
-        Wt::WAnchor *downloadButton = new Wt::WAnchor(file, "");
-        downloadButton->setAttributeValue("class", "btn btn-info");
-        downloadButton->setTextFormat(Wt::XHTMLUnsafeText);
-        downloadButton->setText("<span class='input-group-btn'><i class='icon-download icon-white'></i></span>");
-        downloadButton->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this, file->fileName()));
+//void AssetManagementWidget::updatePage(bool getResources)
+//{
+//    AbstractPage::updatePage(getResources);
+//    multimap_long_widgets rowsTable = getRowsTable();
+//    cout << "DIM TABLE : " << rowsTable.size() << endl;
+//    for (multimap_long_widgets::iterator itrowTable = rowsTable.begin(); itrowTable != rowsTable.end(); itrowTable++)
+//    {
+//        cout << "DANS LE FOR : " << itrowTable->first << " / " << ((Wt::WText*)(*itrowTable->second.begin()))->text() << endl;
+//        Wt::WFileResource *file = generateScript(itrowTable->first, ((Wt::WText*)(*itrowTable->second.begin()))->text());
+//        Wt::WAnchor *downloadButton = new Wt::WAnchor(file, "");
+//        downloadButton->setAttributeValue("class", "btn btn-info");
+//        downloadButton->setTextFormat(Wt::XHTMLUnsafeText);
+//        downloadButton->setText("<span class='input-group-btn'><i class='icon-download icon-white'></i></span>");
+//        downloadButton->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this, file->fileName()));
+//
+//        itrowTable->second.push_back(downloadButton);
+//    }
+//    setRowsTable(rowsTable);
+//    
+//}
 
-        (*itrowTable).second.push_back(downloadButton);
-    }
-    setRowsTable(rowsTable);
-    
+int AssetManagementWidget::addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable)
+{
+    cout << "custom buttons" << endl;
+    Wt::WFileResource *file = generateScript(id, ((Wt::WText*)getResourceTable()->elementAt(rowTable, 0)->widget(0))->text());
+    cout << "gen ok" << endl;
+    Wt::WAnchor *downloadButton = new Wt::WAnchor(file, "");
+    cout << "button ok" << endl;
+    downloadButton->setAttributeValue("class", "btn btn-info");
+    downloadButton->setTextFormat(Wt::XHTMLUnsafeText);
+    downloadButton->setText("<span class='input-group-btn'><i class='icon-download icon-white'></i></span>");
+    downloadButton->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this, file->fileName()));
+    cout << "clicked ok" << endl;
+    getResourceTable()->elementAt(rowTable, columnTable)->addWidget(downloadButton); 
+    getResourceTable()->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(Wt::WLength(5, Wt::WLength::Percentage)));
+    getResourceTable()->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
+    cout << "element added" << endl;
+    return ++columnTable;
 }
+
 // Call API - POST(ADD) DELETE PUT(MODIF) ----------------------------------------
 
 Wt::WDialog *AssetManagementWidget::deleteResource(long long id)
 {
     Wt::WDialog *box = AbstractPage::deleteResource(id);
     // a REVOIR !! Récupération des alerts par rapport a id de l'asset a sup
-    std::string apiAddress = this->getApiUrl() + "/assets/" + boost::lexical_cast<std::string> (id) + "/alerts/";
+    string apiAddress = this->getApiUrl() + "/assets/" + boost::lexical_cast<string> (id) + "/alerts/";
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&AssetManagementWidget::checkAlertsInAsset, this, _1, _2, client, box, id));
     apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
@@ -174,9 +197,9 @@ void AssetManagementWidget::postResourceCallback(boost::system::error_code err, 
 
                 // Post Probe -------
                 Wt::Http::Message messageAsset;
-                messageAsset.addBodyText("{\n\t\"name\": \"Probe " + astName.toUTF8() + "\",\n\t\"asset_id\": " + boost::lexical_cast<std::string>(astId) + "\n}");
+                messageAsset.addBodyText("{\n\t\"name\": \"Probe " + astName.toUTF8() + "\",\n\t\"asset_id\": " + boost::lexical_cast<string>(astId) + "\n}");
 
-                const std::string apiAddress = this->getApiUrl() + "/probes"
+                const string apiAddress = this->getApiUrl() + "/probes"
                         + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
                         + "&token=" + session_->user()->token.toUTF8();
                 Wt::Http::Client *client = new Wt::Http::Client(this);
@@ -264,20 +287,20 @@ void AssetManagementWidget::postProbe(boost::system::error_code err, const Wt::H
 Wt::WFileResource *AssetManagementWidget::generateScript(long long astId, Wt::WString assetName)
 {
     // static part of file
-    std::string disclaimerString = getStringFromFile("resources/scripts/disclaimer");
-    std::string bodyString = getStringFromFile("resources/scripts/scriptbody");
+    string disclaimerString = getStringFromFile("resources/scripts/disclaimer");
+    string bodyString = getStringFromFile("resources/scripts/scriptbody");
 
     // custom part
-    std::string scriptCustomPart = "";
+    string scriptCustomPart = "";
     try
     {
         Wt::Dbo::Transaction transaction(*(this->session_));
-        scriptCustomPart = "\nASSET_ID=" + boost::lexical_cast<std::string>(astId) + "\n"
-                //TEMPORARY!! ToDo: Implement a method to retrieve id Porbe for this Asset
-                "PROBE_ID=" + boost::lexical_cast<std::string>(astId) + "\n"
+        scriptCustomPart = "\nASSET_ID=" + boost::lexical_cast<string>(astId) + "\n"
+                //TEMPORARY!! ToDo: Implement a method to retrieve id Probe for this Asset
+                "PROBE_ID=" + boost::lexical_cast<string>(astId) + "\n"
                 "TOKEN='" + this->session_->user()->organization.get()->token.toUTF8() + "'\n\n"
                 "API_HOST='" + conf.getApiHost() + "'\n"
-                "API_PORT=" + boost::lexical_cast<std::string>(conf.getApiPort()) + "\n"
+                "API_PORT=" + boost::lexical_cast<string>(conf.getApiPort()) + "\n"
                 "API_HTTPS=";
         if (conf.isApiHttps())
         {
@@ -297,17 +320,17 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long astId, Wt::WS
     }
 
     // full script to send
-    std::string contentToSend = disclaimerString + scriptCustomPart + bodyString;
+    string contentToSend = disclaimerString + scriptCustomPart + bodyString;
 
     // temp file
     char *tmpname = strdup("/tmp/echoes-tmp-fileXXXXXX");
     int mkstempRes = mkstemp(tmpname);
     Wt::log("debug") << "[AssetManagementWidget] Res temp file creation: " << mkstempRes;
-    std::ofstream f(tmpname);
+    ofstream f(tmpname);
     f << contentToSend;
     f.close();
 
-    std::string assetNameSpacesReplaced = assetName.toUTF8();
+    string assetNameSpacesReplaced = assetName.toUTF8();
     boost::replace_all(assetNameSpacesReplaced, " ", "_");
 
     // creating resource to send to the client
@@ -319,15 +342,15 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long astId, Wt::WS
     return res;
 }
 
-std::string AssetManagementWidget::getStringFromFile(std::string resourcePath)
+string AssetManagementWidget::getStringFromFile(string resourcePath)
 {
-    std::string filePath = Wt::WApplication::instance()->appRoot()+resourcePath;
-    std::ifstream file(filePath.c_str());
+    string filePath = Wt::WApplication::instance()->appRoot()+resourcePath;
+    ifstream file(filePath.c_str());
     
-    std::string res = "";
+    string res = "";
     if (file.is_open())
     {
-        std::string tmpResString((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+        string tmpResString((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
         res = tmpResString;
         file.close();
     }
@@ -339,7 +362,7 @@ std::string AssetManagementWidget::getStringFromFile(std::string resourcePath)
     return res;
 }
 
-void AssetManagementWidget::downloadScript(std::string fileName)
+void AssetManagementWidget::downloadScript(string fileName)
 {
     UserActionManagement::registerUserAction(Enums::download,fileName,0);
 }
@@ -351,12 +374,12 @@ void    AssetManagementWidget::setSession(Echoes::Dbo::Session *session)
     session_ = session;
 }
 
-void    AssetManagementWidget::setApiUrl(std::string apiUrl)
+void    AssetManagementWidget::setApiUrl(string apiUrl)
 {
     apiUrl_ = apiUrl;
 }
 
-std::string   AssetManagementWidget::getApiUrl()
+string   AssetManagementWidget::getApiUrl()
 {
     return apiUrl_;
 }

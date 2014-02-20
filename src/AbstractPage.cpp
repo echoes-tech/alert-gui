@@ -86,6 +86,26 @@ void AbstractPage::getResourceList()
     recursiveGetResources();
 }
 
+void AbstractPage::setResources(vector_pair resources)
+{
+    this->m_resources = resources;
+}
+
+vector_pair AbstractPage::getResources() const
+{
+    return m_resources;
+}
+
+void AbstractPage::setResourceTable(Wt::WTable* resourceTable)
+{
+    this->m_resourceTable = resourceTable;
+}
+
+Wt::WTable* AbstractPage::getResourceTable() const
+{
+    return m_resourceTable;
+}
+
 void AbstractPage::createTable()
 {
     clear();
@@ -587,6 +607,7 @@ void AbstractPage::popupFinalization(Wt::WDialog *dialog, long long id)
 
 void AbstractPage::addGenericButtonsToResourceTable(long long id, int rowTable, int columnTable)
 {
+    columnTable = addCustomButtonsToResourceTable(id, rowTable, columnTable);
     if (m_isModifButtonPresent)
     {
         Wt::WPushButton *modifButton = new Wt::WPushButton(m_resourceTable->elementAt(rowTable, columnTable));
@@ -617,6 +638,10 @@ void AbstractPage::addGenericButtonsToResourceTable(long long id, int rowTable, 
     }
 }
 
+int AbstractPage::addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable)
+{
+    return columnTable;
+}
 
 void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
 {

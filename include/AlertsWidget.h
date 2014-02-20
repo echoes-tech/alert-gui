@@ -105,7 +105,7 @@ public:
     void                        popupRecipients(std::string nameAlert, std::string message);
 
     
-    long long                   recoverId(Wt::WSelectionBox *box, MultiMapPair infoInBox);
+    long long                   getIdFromSelectedElement(Wt::WSelectionBox *box, MultiMapPair infoInBox);
 
     void                        postAlertCallApi(std::string message);
 

@@ -333,7 +333,7 @@ void AlertsWidget::initAlertValueDefinitionPopup(Wt::WTable *tableBox)
     idAll_.second.second = -1;
 
     boxAsset->activated().connect(bind([ = ] (){
-                                       idAll_.first.first = recoverId(boxAsset, assets_);
+                                       idAll_.first.first = getIdFromSelectedElement(boxAsset, assets_);
                                        if (idAll_.first.first >= 0)
         {
                                        selectAsset(idAll_.first.first, boxAsset, boxPlugin, boxInfo);
@@ -348,13 +348,13 @@ void AlertsWidget::initAlertValueDefinitionPopup(Wt::WTable *tableBox)
             else if (pluginSelected_.size() > 0)
             {
                                        fillInBox(boxPlugin, plugins_);
-                                       long long id = recoverId(boxPlugin, plugins_);
+                                       long long id = getIdFromSelectedElement(boxPlugin, plugins_);
                                        selectPlugin(id, boxAsset, boxPlugin, boxInfo);
             }
             else if (infoSelected_.size() > 0)
             {
                                        fillInBox(boxInfo, infos_);
-                                       long long id = recoverId(boxInfo, infos_);
+                                       long long id = getIdFromSelectedElement(boxInfo, infos_);
                                        selectInfo(id, boxInfo, boxPlugin, boxAsset);
             }
             else
@@ -367,7 +367,7 @@ void AlertsWidget::initAlertValueDefinitionPopup(Wt::WTable *tableBox)
     }));
 
     boxPlugin->activated().connect(bind([ = ] (){
-                                        idAll_.first.second = recoverId(boxPlugin, plugins_);
+                                        idAll_.first.second = getIdFromSelectedElement(boxPlugin, plugins_);
                                         if (idAll_.first.second >= 0)
         {
                                         selectPlugin(idAll_.first.second, boxAsset, boxPlugin, boxInfo);
@@ -382,13 +382,13 @@ void AlertsWidget::initAlertValueDefinitionPopup(Wt::WTable *tableBox)
             else if (assetSelected_.size() > 0)
             {
                                         fillInBox(boxAsset, assets_);
-                                        long long id = recoverId(boxAsset, assets_);
+                                        long long id = getIdFromSelectedElement(boxAsset, assets_);
                                         selectAsset(id, boxAsset, boxPlugin, boxInfo);
             }
             else if (infoSelected_.size() > 0)
             {
                                         fillInBox(boxInfo, infos_);
-                                        long long id = recoverId(boxInfo, infos_);
+                                        long long id = getIdFromSelectedElement(boxInfo, infos_);
                                         selectInfo(id, boxInfo, boxPlugin, boxAsset);
             }
             else
@@ -406,7 +406,7 @@ void AlertsWidget::initAlertValueDefinitionPopup(Wt::WTable *tableBox)
                                       errorsHideOne(resourcesUnitOne);
                                       errorsHideTwo(resourcesUnitTwo);
                                       errorBool_->hide();
-                                      idAll_.second.first = recoverId(boxInfo, infos_);
+                                      idAll_.second.first = getIdFromSelectedElement(boxInfo, infos_);
                                       showUnit(idAll_.second.first);
                                       if (idAll_.second.first >= 0)
         {
@@ -433,13 +433,13 @@ void AlertsWidget::initAlertValueDefinitionPopup(Wt::WTable *tableBox)
             else if (pluginSelected_.size() > 0)
             {
                                       fillInBox(boxPlugin, plugins_);
-                                      long long id = recoverId(boxPlugin, plugins_);
+                                      long long id = getIdFromSelectedElement(boxPlugin, plugins_);
                                       selectPlugin(id, boxAsset, boxPlugin, boxInfo);
             }
             else if (assetSelected_.size() > 0)
             {
                                       fillInBox(boxAsset, assets_);
-                                      long long id = recoverId(boxAsset, assets_);
+                                      long long id = getIdFromSelectedElement(boxAsset, assets_);
                                       selectAsset(id, boxAsset, boxPlugin, boxInfo);
             }
             else
@@ -575,7 +575,7 @@ void AlertsWidget::fillInMultiMap()
     }
 }
 
-long long AlertsWidget::recoverId(Wt::WSelectionBox *box, MultiMapPair infoInBox)
+long long AlertsWidget::getIdFromSelectedElement(Wt::WSelectionBox *box, MultiMapPair infoInBox)
 {
     index_.clear();
     set<int> selection = box->selectedIndexes();
@@ -592,11 +592,17 @@ long long AlertsWidget::recoverId(Wt::WSelectionBox *box, MultiMapPair infoInBox
         if (selected.toUTF8().compare((*it).second.second) == 0)
         {
             if (infoInBox == assets_)
+            {
                 assetSelected_ = selected.toUTF8();
+            }
             if (infoInBox == plugins_)
+            {
                 pluginSelected_ = selected.toUTF8();
+            }
             if (infoInBox == infos_)
+            {
                 infoSelected_ = selected.toUTF8();
+            }
             index_.push_back((*it).first);
             id = (*it).second.first;
         }

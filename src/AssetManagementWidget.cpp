@@ -49,43 +49,17 @@ Wt::WValidator    *AssetManagementWidget::editValidator(int cpt)
     return validator;
 }
 
-//void AssetManagementWidget::updatePage(bool getResources)
-//{
-//    AbstractPage::updatePage(getResources);
-//    multimap_long_widgets rowsTable = getRowsTable();
-//    cout << "DIM TABLE : " << rowsTable.size() << endl;
-//    for (multimap_long_widgets::iterator itrowTable = rowsTable.begin(); itrowTable != rowsTable.end(); itrowTable++)
-//    {
-//        cout << "DANS LE FOR : " << itrowTable->first << " / " << ((Wt::WText*)(*itrowTable->second.begin()))->text() << endl;
-//        Wt::WFileResource *file = generateScript(itrowTable->first, ((Wt::WText*)(*itrowTable->second.begin()))->text());
-//        Wt::WAnchor *downloadButton = new Wt::WAnchor(file, "");
-//        downloadButton->setAttributeValue("class", "btn btn-info");
-//        downloadButton->setTextFormat(Wt::XHTMLUnsafeText);
-//        downloadButton->setText("<span class='input-group-btn'><i class='icon-download icon-white'></i></span>");
-//        downloadButton->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this, file->fileName()));
-//
-//        itrowTable->second.push_back(downloadButton);
-//    }
-//    setRowsTable(rowsTable);
-//    
-//}
-
 int AssetManagementWidget::addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable)
 {
-    cout << "custom buttons" << endl;
     Wt::WFileResource *file = generateScript(id, ((Wt::WText*)getResourceTable()->elementAt(rowTable, 0)->widget(0))->text());
-    cout << "gen ok" << endl;
     Wt::WAnchor *downloadButton = new Wt::WAnchor(file, "");
-    cout << "button ok" << endl;
     downloadButton->setAttributeValue("class", "btn btn-info");
     downloadButton->setTextFormat(Wt::XHTMLUnsafeText);
     downloadButton->setText("<span class='input-group-btn'><i class='icon-download icon-white'></i></span>");
     downloadButton->clicked().connect(boost::bind(&AssetManagementWidget::downloadScript, this, file->fileName()));
-    cout << "clicked ok" << endl;
     getResourceTable()->elementAt(rowTable, columnTable)->addWidget(downloadButton); 
     getResourceTable()->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(Wt::WLength(5, Wt::WLength::Percentage)));
     getResourceTable()->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
-    cout << "element added" << endl;
     return ++columnTable;
 }
 

@@ -35,55 +35,30 @@
 #include "GlobalIncludeFile.h"
 #include "ApiManagement.h"
 
-typedef std::pair<Wt::WComboBox*, Wt::WComboBox*> PairComboBox;
-typedef std::pair<long long, std::string>       Pair;
-typedef std::pair<long long, long long>         PairLong;
-typedef std::pair<PairLong, std::string>         PairLongString;
-typedef std::pair<Wt::WLineEdit*, Wt::WText*>     PairResource;
-
-typedef std::multimap<long long, PairLongString>          MultiMapPairLPLS;
-
-typedef std::multimap<long long, Pair>          MultiMapPair;
-typedef std::multimap<long long, long long>     MultiMapLongs;
-typedef std::multimap<long long, std::string>     MultiMapLongString;
-
-typedef std::map<long long, std::pair<PairResource, Wt::WComboBox*>>    MapUnitOne;
-typedef std::map<long long, std::pair<PairResource, PairComboBox>>     MapUnitTwo;
-
-typedef std::map<int, Wt::WWidget *>            MapIntWWidget;
-typedef std::map<int, Wt::WLineEdit*>           MapIntLineEdit;
-typedef std::map<int, Wt::WText*>               MapIntText;
-
-typedef std::vector<long long>                  VectorLong;
-typedef std::vector<std::string>                VectorString;
-typedef std::vector<Wt::WText*>                 VectorText;
-typedef std::vector<Wt::WComboBox*>             VectorComboBox;
-/** gkr.\n
- * pair &lsaquo; pair &lsaquo; idAsset, idPlugin &rsaquo;, pair &lsaquo; idInfo, idKey &rsaquo; &rsaquo;
- */
-typedef std::pair<PairLong, PairLong>           PairTwoPair;
-
 class AlertsWidget :
 public AbstractPage
 {
 public:
     AlertsWidget(Echoes::Dbo::Session *session, std::string apiUrl);
 
+    void                        popupAddWidget(Wt::WDialog *dialog, long long id);
+    void                        popupRecipients(std::string nameAlert, std::string message);
+    
     void                        updatePage(bool getResources);
     std::vector<std::string>    getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
     std::vector<long long>      getIdsTable();
+//    long long                   getIdFromSelectedElement(Wt::WSelectionBox *box, std::multimap<long long, std::pair<long long, std::string>>  infoInBox);
     Wt::WValidator              *editValidator(int who);
-    void                        closePopup();
-    void                        recoverListRecipientAlias(long long userRoleId);
-    virtual void                clearStructures();
     
+    void                        closePopup();
+    void                        close();
+    
+    void                        recoverListRecipientAlias(long long userRoleId);
     void                        getAliasInfo(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
     void                        getAliasAsset(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
     void                        getAliasCriteria(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
     void                        getAliasPlugin(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
-    void                        postAlert(boost::system::error_code err, const Wt::Http::Message& response);
-    void                        deleteAlert(boost::system::error_code err, const Wt::Http::Message& response);
 
     int                         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
     void                        checkPopupRecipients(std::string message, std::string time, int media);
@@ -91,9 +66,9 @@ public:
     void                        addResource(std::vector<Wt::WInteractWidget*> argument);
     Wt::WDialog                 *deleteResource(long long id);
     void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
-
-    void                        close();
     
+    void                        postAlert(boost::system::error_code err, const Wt::Http::Message& response);
+    void                        deleteAlert(boost::system::error_code err, const Wt::Http::Message& response);
     
     void                        deleteAlerts(boost::system::error_code err, const Wt::Http::Message& response);
     void                        postAlerts(boost::system::error_code err, const Wt::Http::Message& response);
@@ -101,23 +76,25 @@ public:
 
     void                        modifRecip(long long id);
 
-    void                        popupAddWidget(Wt::WDialog *dialog, long long id);
-    void                        popupRecipients(std::string nameAlert, std::string message);
-
-    
-    long long                   getIdFromSelectedElement(Wt::WSelectionBox *box, MultiMapPair infoInBox);
-
     void                        postAlertCallApi(std::string message);
+    
+protected:
+    virtual void                clearStructures();
+    virtual void                handleJsonGet(vectors_Json jsonResources);
 
 private:
 
     void                        initAlertValueDefinitionPopup(Wt::WTable *tableBox);
+    void                        getBoxesDatas();
+    void                        getRelatedData(int boxType);
 
-    VectorLong                  boxActived(Wt::WSelectionBox *box, MultiMapPair infoInBox, MultiMapLongs compId, long long id);
-    void                        fillInBox(Wt::WSelectionBox *box, MultiMapPair infoInBox);
+    std::vector<long long>                  boxActived(Wt::WSelectionBox *box, std::multimap<long long, std::pair<long long, std::string>>  infoInBox, std::multimap<long long, long long> compId, long long id);
+//    void                        fillInBox(Wt::WSelectionBox *box, std::multimap<long long, std::pair<long long, std::string>>  infoInBox);
 
 
-    void                        fillInMultiMap();
+//    void                        fillInMultiMap();
+    void                        fillInTabMessage();
+    
     int                         selectItemBox(Wt::WSelectionBox *box, std::string select);
     void                        cleanBox(Wt::WSelectionBox *box);
 
@@ -131,11 +108,22 @@ private:
     void                        selectPlugin(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
     void                        selectInfo(long long id, Wt::WSelectionBox *boxInfo, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxAsset);
 
-    void                        errorsHideOne(MapUnitOne error);
-    void                        errorsHideTwo(MapUnitTwo error);
+    void                        errorsHideOne(std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>> error);
+    void                        errorsHideTwo(std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>> error);
 
-    void                        fillInTabMessage();
-
+    
+    // alert setting attributes
+    enum boxType {
+        ASSET = 1,
+        PLUGIN = 2,
+        INFORMATION = 3
+    };
+    
+    bool assetBoxSelected;
+    bool pluginBoxSelected;
+    bool informationBoxSelected;
+    
+    // end alert setting attributes
     
     std::vector<std::pair<long long, int>>   idUserPositionMedia_;
     
@@ -143,34 +131,30 @@ private:
     bool                newClass_;
     Echoes::Dbo::Session             *session_;
     std::string         apiUrl_;
-    Wt::Json::Value     alerts_;
+    Wt::Json::Value     m_alerts;
     
     int                 time_;
     
-    MultiMapPair        userInfo_;
-    MultiMapPairLPLS        mediaInfo_;
+    std::multimap<long long, std::pair<long long, std::string>>         userInfo_;
+    std::multimap<long long, std::pair<std::pair<long long, long long>, std::string>>    mediaInfo_;
     Wt::WTabWidget      *tabMessage_;
     std::string         messageMailForTab_;
     std::string         messageSmsForTab_;
     std::string         messagePushForTab_;
-    
-//    MultiMapLongString  criterions_;
-//
-    MultiMapPair        assets_; // Assets infomations (<index <idAsset, nameAsset>>)
-    MultiMapPair        plugins_; // Plugins infomations (<index <idPlugin, namePlugin>>)
-    MultiMapPair        infos_; // Infos infomations (<index <idInfo, nameInfo>>)
-    
-    MultiMapLongs       assetPlugins_; // nexus between Asset id and Plugins ids
-    MultiMapLongs       pluginInfos_; // nexus between Plugin id and Infos ids
-    MultiMapLongs       pluginAsset_; // nexus between Plugin id and Asset id
-    MultiMapLongs       infoPlugin_; // nexus between Info id and Plugin id
 
-    MultiMapLongs       unitsIds_; // Link between Info and widgets compare. (text, number, bool)
+    std::multimap<long long, std::pair<long long, std::string>>         m_assetBoxNames; // Assets infomations (<index <idAsset, nameAsset>>)
+    std::multimap<long long, std::pair<long long, std::string>>         m_pluginBoxNames; // Plugins infomations (<index <idPlugin, namePlugin>>)
+    std::multimap<long long, std::pair<long long, std::string>>         m_infoBoxNames; // Infos infomations (<index <idInfo, nameInfo>>)
 
-    VectorLong          index_;
+
+
     
-    MapIntWWidget       unitOne_; // Text
-    MapIntWWidget       unitTwo_; // Number
+    std::multimap<long long, long long>       unitsIds_; // Link between Info and widgets compare. (text, number, bool)
+
+    std::vector<long long>          index_;
+    
+    std::map<int, Wt::WWidget *>        unitOne_; // Text
+    std::map<int, Wt::WWidget *>        unitTwo_; // Number
     Wt::WTable          *unitThree_; // Bool
     
     int                 bool_;  //for check button true/false
@@ -179,7 +163,7 @@ private:
      * pair &lsaquo; pair &lsaquo; idAsset, idPlugin &rsaquo;
      * , pair &lsaquo; idInfo, idKey &rsaquo; &rsaquo;
      */
-    PairTwoPair         idAll_;
+    std::pair<std::pair<long long, long long>, std::pair<long long, long long>>         idAll_;
     
     std::string         assetSelected_; // Name Asset selected
     std::string         pluginSelected_; // Name Plugin selected
@@ -188,8 +172,8 @@ private:
     long long           idUnitOne; // html tag for widget Text
     long long           idUnitTwo; // html tag for widget number
     
-    MapUnitOne          resourcesUnitOne;
-    MapUnitTwo          resourcesUnitTwo;
+    std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>                                       resourcesUnitOne;
+    std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>             resourcesUnitTwo;
     
     //  Errors Messages ------
     Wt::WText           *errorAsset_;

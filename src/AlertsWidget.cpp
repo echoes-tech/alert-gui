@@ -101,9 +101,9 @@ vector<long long> AlertsWidget::getIdsTable()
         Wt::Json::Array& result1 = Wt::Json::Array::Empty;
         Wt::Json::Object tmp;
         Wt::Json::Array::const_iterator idx1;
-        if (alerts_.isNull() == false)
+        if (m_alerts.isNull() == false)
         {
-            result1 = alerts_;
+            result1 = m_alerts;
             for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
             {
                 tmp = (*idx1);
@@ -125,59 +125,6 @@ vector<long long> AlertsWidget::getIdsTable()
     return ids;
 }
 
-//vector_type AlertsWidget::getResourceRowTable(long long id)
-//{
-//    vector_type rowTable;
-//    Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-//    Wt::Json::Object tmp;
-//    Wt::Json::Array::const_iterator idx1;
-//    Wt::WString info = "";
-//    long long i(0);
-//    long long infoLong;
-//
-//    if (alerts_.isNull() == false)
-//    {
-//        result1 = alerts_;
-//        for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
-//        {
-//            tmp = (*idx1);
-//            i = tmp.get("id");
-//            if (i == id)
-//            {
-//                info = tmp.get("name");
-//                rowTable.push_back(new Wt::WText(boost::lexical_cast<string, Wt::WString>(info)));
-//                infoLong = tmp.get("alert_media_specializations");
-//                rowTable.push_back(new Wt::WText(boost::lexical_cast<string, long long>(infoLong)));
-//                if (tmp.get("last_attempt").isNull())
-//                    info = Wt::WString::Empty;
-//                else
-//                    info = tmp.get("last_attempt");
-//                rowTable.push_back(new Wt::WText(info.toUTF8() == "Null" ? tr("Alert.alert.no-alert-sent").toUTF8() : info)); //xml
-//                Wt::WPushButton *button = new Wt::WPushButton();
-//                button->setAttributeValue("class", "btn btn-inverse");
-//                button->setTextFormat(Wt::XHTMLUnsafeText);
-//                button->setText("<span class='input-group-btn'><i class='icon-edit icon-white'></i></span>");
-//                button->clicked().connect(bind([ = ] (){
-//
-//                                               cout << "Pas encore fait !" << endl;
-//                                               //                    popupRecipients(0);
-//                                               //                    saveLineEditOne_->show();
-//                                               //                    createUnitOne(compareWid)->show();
-//                                               //                    compareBarOne_->show();
-//                }));
-//                rowTable.push_back(button);
-//                return (rowTable);
-//            }
-//        }
-//    }
-//    return rowTable;
-//
-//}
-
-// Work popup Two---------------------------------------------------------------- |
-//                                                                                |
-//                                                                                v
-
 void AlertsWidget::popupRecipients(string nameAlert, string message)
 {
     Wt::WDialog *dialog = new Wt::WDialog();
@@ -185,33 +132,29 @@ void AlertsWidget::popupRecipients(string nameAlert, string message)
     AbstractPage::addButtonsToPopupFooter(dialog);
     dialog->resize(Wt::WLength(750), Wt::WLength(500));
     Wt::WTable *tablePopup = new Wt::WTable(dialog->contents());
-    tablePopup->elementAt(0, 0)->
-            addWidget(new Wt::WText(tr("Alert.alert.form.alert")));
-    tablePopup->elementAt(0, 1)->
-            addWidget(new Wt::WText(nameAlert));
+    tablePopup->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.alert")));
+    tablePopup->elementAt(0, 1)->addWidget(new Wt::WText(nameAlert));
 
-    tablePopup->elementAt(1, 0)->
-            addWidget(new Wt::WText(tr("Alert.alert.form.rec")));
+    tablePopup->elementAt(1, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.rec")));
     Wt::WComboBox *boxUsers = new Wt::WComboBox(tablePopup->elementAt(1, 1));
 
-    tablePopup->elementAt(2, 0)->
-            addWidget(new Wt::WText(tr("Alert.alert.form.media")));
+    tablePopup->elementAt(2, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.media")));
     Wt::WComboBox *boxMedias = new Wt::WComboBox(tablePopup->elementAt(2, 1));
 
-    tablePopup->elementAt(3, 0)->
-            addWidget(new Wt::WText(tr("Alert.alert.form.mess")));
+    tablePopup->elementAt(3, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.mess")));
     tablePopup->elementAt(3, 1)->addWidget(tabMessage_);
 
-    for (MultiMapPair::iterator itU = userInfo_.begin(); itU != userInfo_.end(); itU++)
+    for (std::multimap<long long, std::pair<long long, std::string>> ::iterator itU = userInfo_.begin(); itU != userInfo_.end(); itU++)
     {
         boxUsers->addItem((*itU).second.second);
     }
 
-    boxUsers->activated().connect(bind([ = ] (){
-                                       recoverListRecipientAlias((*userInfo_.find(boxUsers->currentIndex())).second.first);
+    boxUsers->activated().connect(bind([ = ] ()
+    {
+        recoverListRecipientAlias((*userInfo_.find(boxUsers->currentIndex())).second.first);
     }));
 
-    for (MultiMapPairLPLS::iterator itM = mediaInfo_.begin(); itM != mediaInfo_.end(); itM++)
+    for (std::multimap<long long, std::pair<std::pair<long long, long long>, std::string>>::iterator itM = mediaInfo_.begin(); itM != mediaInfo_.end(); itM++)
     {
         boxMedias->addItem((*itM).second.second);
     }
@@ -220,39 +163,41 @@ void AlertsWidget::popupRecipients(string nameAlert, string message)
 
     Wt::WLineEdit *time = new Wt::WLineEdit();
     time->setValidator(editValidator(-3));
-    table->elementAt(0, 0)
-            ->addWidget(new Wt::WText(tr("Alert.alert.form.snooze")));
+    table->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.snooze")));
     table->elementAt(0, 1)->addWidget(time);
     Wt::WText *error = new Wt::WText(tr("Alert.alert.invalid-number"));
     table->elementAt(1, 1)->addWidget(error);
     error->hide();
+    
     Wt::WComboBox *comboBox = new Wt::WComboBox();
-
     comboBox->addItem("min"); // xml
     comboBox->addItem("hour"); // xml
     comboBox->addItem("fois"); // xml
     comboBox->setWidth(Wt::WLength(61));
     table->elementAt(0, 2)->addWidget(comboBox);
     time_ = 0;
-    comboBox->changed().connect(bind([ = ] (){
-                                     time_ = comboBox->currentIndex();
+    comboBox->changed().connect(bind([ = ] ()
+    {
+        time_ = comboBox->currentIndex();
     }));
 
-    dialog->finished().connect(bind([ = ] (){
-                                    if (dialog->result() == Wt::WDialog::Rejected)
+    dialog->finished().connect(bind([ = ] ()
+    {
+        if (dialog->result() == Wt::WDialog::Rejected)
         {
-                                    closePopup();
-                                    return;
+            closePopup();
+            return;
         }
-                                    if (time->validate() == Wt::WValidator::Valid)
+        if (time->validate() == Wt::WValidator::Valid)
         {
-                                    checkPopupRecipients(message, time->text().toUTF8(), (boxMedias->currentIndex() + 1));
-                                    return;
+            checkPopupRecipients(message, time->text().toUTF8(), (boxMedias->currentIndex() + 1));
+            return;
         }
         else
-                                    error->show();
-                                    dialog->show();
-        }));
+            error->show();
+            dialog->show();
+    }
+    ));
     dialog->show();
 }
 
@@ -300,7 +245,8 @@ void AlertsWidget::fillInTabMessage()
 void AlertsWidget::initAlertValueDefinitionPopup(Wt::WTable *tableBox)
 {
 
-    fillInMultiMap();
+//    fillInMultiMap();
+    getBoxesDatas();
 
     Wt::WSelectionBox *boxAsset = new Wt::WSelectionBox(tableBox->elementAt(1, 0));
     Wt::WSelectionBox *boxPlugin = new Wt::WSelectionBox(tableBox->elementAt(1, 1));
@@ -311,219 +257,49 @@ void AlertsWidget::initAlertValueDefinitionPopup(Wt::WTable *tableBox)
     boxAsset->resize(Wt::WLength(200), Wt::WLength(150));
     boxAsset->setSelectionMode(Wt::ExtendedSelection);
     boxAsset->setSelectable(true);
-    fillInBox(boxAsset, assets_);
+//    fillInBox(boxAsset, m_assetBoxNames);
 
     boxPlugin->resize(Wt::WLength(200), Wt::WLength(150));
     boxPlugin->setSelectionMode(Wt::ExtendedSelection);
-    fillInBox(boxPlugin, plugins_);
+//    fillInBox(boxPlugin, m_pluginBoxNames);
 
 
     boxInfo->resize(Wt::WLength(150), Wt::WLength(150));
     boxInfo->setSelectionMode(Wt::ExtendedSelection);
     boxInfo->setSelectable(true);
-    fillInBox(boxInfo, infos_);
+//    fillInBox(boxInfo, m_infoBoxNames);
 
     assetSelected_.clear();
     pluginSelected_.clear();
     infoSelected_.clear();
 
-    idAll_.first.first = -1;
-    idAll_.first.second = -1;
-    idAll_.second.first = -1;
-    idAll_.second.second = -1;
+}
 
-    boxAsset->activated().connect(bind([ = ] (){
-                                       idAll_.first.first = getIdFromSelectedElement(boxAsset, assets_);
-                                       if (idAll_.first.first >= 0)
-        {
-                                       selectAsset(idAll_.first.first, boxAsset, boxPlugin, boxInfo);
-        }
-        else
-        {
-                                       assetSelected_.clear();
-                                       idAll_.first.first = -1;
-                                       if (assetSelected_.size() > 0 && pluginSelected_.size() > 0)
-            {
-            }
-            else if (pluginSelected_.size() > 0)
-            {
-                                       fillInBox(boxPlugin, plugins_);
-                                       long long id = getIdFromSelectedElement(boxPlugin, plugins_);
-                                       selectPlugin(id, boxAsset, boxPlugin, boxInfo);
-            }
-            else if (infoSelected_.size() > 0)
-            {
-                                       fillInBox(boxInfo, infos_);
-                                       long long id = getIdFromSelectedElement(boxInfo, infos_);
-                                       selectInfo(id, boxInfo, boxPlugin, boxAsset);
-            }
-            else
-            {
-                                       fillInBox(boxAsset, assets_);
-                                       fillInBox(boxPlugin, plugins_);
-                                       fillInBox(boxInfo, infos_);
-            }
-        }
-    }));
+void AlertsWidget::getBoxesDatas()
+{
+    getRelatedData(boxType::ASSET);
+    getRelatedData(boxType::PLUGIN);
+    getRelatedData(boxType::INFORMATION);
+}
 
-    boxPlugin->activated().connect(bind([ = ] (){
-                                        idAll_.first.second = getIdFromSelectedElement(boxPlugin, plugins_);
-                                        if (idAll_.first.second >= 0)
-        {
-                                        selectPlugin(idAll_.first.second, boxAsset, boxPlugin, boxInfo);
-        }
-        else
-        {
-                                        pluginSelected_.clear();
-                                        idAll_.first.second = -1;
-                                        if (assetSelected_.size() > 0 && infoSelected_.size() > 0)
-            {
-            }
-            else if (assetSelected_.size() > 0)
-            {
-                                        fillInBox(boxAsset, assets_);
-                                        long long id = getIdFromSelectedElement(boxAsset, assets_);
-                                        selectAsset(id, boxAsset, boxPlugin, boxInfo);
-            }
-            else if (infoSelected_.size() > 0)
-            {
-                                        fillInBox(boxInfo, infos_);
-                                        long long id = getIdFromSelectedElement(boxInfo, infos_);
-                                        selectInfo(id, boxInfo, boxPlugin, boxAsset);
-            }
-            else
-            {
-                                        fillInBox(boxAsset, assets_);
-                                        fillInBox(boxPlugin, plugins_);
-                                        fillInBox(boxInfo, infos_);
-            }
-        }
-    }));
-
-    boxInfo->activated().connect(bind([ = ] (){
-                                      compareBarOne_->hide();
-                                      compareBarTwo_->hide();
-                                      errorsHideOne(resourcesUnitOne);
-                                      errorsHideTwo(resourcesUnitTwo);
-                                      errorBool_->hide();
-                                      idAll_.second.first = getIdFromSelectedElement(boxInfo, infos_);
-                                      showUnit(idAll_.second.first);
-                                      if (idAll_.second.first >= 0)
-        {
-                                      if ((*unitsIds_.find(idAll_.second.first)).second == Enums::EInformationUnitType::text)
-                                      buttonAddOne_->show();
-            else
-                                      buttonAddOne_->hide();
-                                      if ((*unitsIds_.find(idAll_.second.first)).second == Enums::EInformationUnitType::number)
-                                      buttonAddTwo_->show();
-            else
-                                      buttonAddTwo_->hide();
-
-                                      selectInfo(idAll_.second.first, boxInfo, boxPlugin, boxAsset);
-            }
-        else
-        {
-                                      buttonAddOne_->hide();
-                                      buttonAddTwo_->hide();
-                                      infoSelected_.clear();
-                                      idAll_.second.first = -1;
-                                      if (assetSelected_.size() > 0 && pluginSelected_.size() > 0)
-            {
-            }
-            else if (pluginSelected_.size() > 0)
-            {
-                                      fillInBox(boxPlugin, plugins_);
-                                      long long id = getIdFromSelectedElement(boxPlugin, plugins_);
-                                      selectPlugin(id, boxAsset, boxPlugin, boxInfo);
-            }
-            else if (assetSelected_.size() > 0)
-            {
-                                      fillInBox(boxAsset, assets_);
-                                      long long id = getIdFromSelectedElement(boxAsset, assets_);
-                                      selectAsset(id, boxAsset, boxPlugin, boxInfo);
-            }
-            else
-            {
-                                      fillInBox(boxAsset, assets_);
-                                      fillInBox(boxPlugin, plugins_);
-                                      fillInBox(boxInfo, infos_);
-            }
-        }
-    }));
+void AlertsWidget::getRelatedData(int boxType)
+{
+    switch (boxType)
+    {
+        case ASSET:
+            
+            break;
+        case PLUGIN:
+            break;
+        case INFORMATION:
+            break;
+        default:
+            break;
+    }
 }
 
 // Selected in selectionBox  ----------------
 
-void AlertsWidget::selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo)
-{
-    boxPlugin->clear();
-    VectorLong idsPlugins = boxActived(boxPlugin, plugins_, assetPlugins_, id);
-    if (pluginSelected_.size() > 0 && selectItemBox(boxPlugin, pluginSelected_) == 1)
-        Wt::log("warning") << "Problem for index define";
-    if (pluginSelected_.size() == 0)
-    {
-        boxInfo->clear();
-        if (idsPlugins.size() > 0)
-        {
-            for (VectorLong::iterator it = idsPlugins.begin(); it != idsPlugins.end(); it++)
-            {
-                boxActived(boxInfo, infos_, pluginInfos_, (*it));
-            }
-        }
-        else
-            boxInfo->clear();
-        if (infoSelected_.size() > 0 && selectItemBox(boxInfo, infoSelected_) == 1)
-            Wt::log("warning") << "Problem for index define";
-    }
-    cleanBox(boxAsset);
-    cleanBox(boxPlugin);
-    cleanBox(boxInfo);
-}
-
-void AlertsWidget::selectPlugin(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo)
-{
-    if (assetSelected_.size() >= 0)
-    {
-        boxInfo->clear();
-        boxActived(boxInfo, infos_, pluginInfos_, id);
-    }
-    if (infoSelected_.size() >= 0)
-    {
-        boxAsset->clear();
-        boxActived(boxAsset, assets_, pluginAsset_, id);
-    }
-    if (assetSelected_.size() > 0 && selectItemBox(boxAsset, assetSelected_) == 1)
-        Wt::log("warning") << "Problem for index define";
-    if (infoSelected_.size() > 0 && selectItemBox(boxInfo, infoSelected_) == 1)
-        Wt::log("warning") << "Problem for index define";
-    cleanBox(boxAsset);
-    cleanBox(boxPlugin);
-    cleanBox(boxInfo);
-}
-
-void AlertsWidget::selectInfo(long long id, Wt::WSelectionBox *boxInfo, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxAsset)
-{
-    boxPlugin->clear();
-    VectorLong idsPlugins = boxActived(boxPlugin, plugins_, infoPlugin_, id);
-    if (pluginSelected_.size() > 0 && selectItemBox(boxPlugin, pluginSelected_) == 1)
-        Wt::log("warning") << "Problem for index define";
-    if (pluginSelected_.size() == 0)
-    {
-        boxAsset->clear();
-        if (idsPlugins.size() > 0)
-            for (VectorLong::iterator it = idsPlugins.begin(); it != idsPlugins.end(); it++)
-            {
-                boxActived(boxAsset, assets_, pluginAsset_, (*it));
-            }
-        else
-            boxAsset->clear();
-        if (assetSelected_.size() > 0 && selectItemBox(boxAsset, assetSelected_) == 1)
-            Wt::log("warning") << "Problem for index define";
-    }
-    cleanBox(boxAsset);
-    cleanBox(boxPlugin);
-    cleanBox(boxInfo);
-}
 
 int AlertsWidget::selectItemBox(Wt::WSelectionBox *box, string select)
 {
@@ -543,147 +319,9 @@ int AlertsWidget::selectItemBox(Wt::WSelectionBox *box, string select)
     return 1;
 }
 
-void AlertsWidget::cleanBox(Wt::WSelectionBox *box)
-{
-    Wt::WString selected;
-    VectorString checkString;
 
-    for (int cpt(0); cpt < box->count(); cpt++)
-    {
-        selected = box->itemText(cpt);
-        for (VectorString::iterator it = checkString.begin(); it != checkString.end(); it++)
-        {
-            if ((*it).compare(selected.toUTF8()) == 0)
-                box->removeItem(cpt);
-        }
-        checkString.push_back(selected.toUTF8());
-    }
 
-}
 
-void AlertsWidget::fillInMultiMap()
-{
-    pluginAsset_.clear();
-    infoPlugin_.clear();
-    for (MultiMapLongs::iterator it = assetPlugins_.begin(); it != assetPlugins_.end(); it++)
-    {
-        pluginAsset_.insert(make_pair((*it).second, (*it).first));
-    }
-    for (MultiMapLongs::iterator it = pluginInfos_.begin(); it != pluginInfos_.end(); it++)
-    {
-        infoPlugin_.insert(make_pair((*it).second, (*it).first));
-    }
-}
-
-long long AlertsWidget::getIdFromSelectedElement(Wt::WSelectionBox *box, MultiMapPair infoInBox)
-{
-    index_.clear();
-    set<int> selection = box->selectedIndexes();
-    Wt::WString selected;
-    for (set<int>::iterator it = selection.begin();
-            it != selection.end(); ++it)
-    {
-        selected = box->itemText(*it);
-    }
-    int cpt(0);
-    long long id(-1);
-    for (MultiMapPair::iterator it = infoInBox.begin(); it != infoInBox.end(); it++)
-    {
-        if (selected.toUTF8().compare((*it).second.second) == 0)
-        {
-            if (infoInBox == assets_)
-            {
-                assetSelected_ = selected.toUTF8();
-            }
-            if (infoInBox == plugins_)
-            {
-                pluginSelected_ = selected.toUTF8();
-            }
-            if (infoInBox == infos_)
-            {
-                infoSelected_ = selected.toUTF8();
-            }
-            index_.push_back((*it).first);
-            id = (*it).second.first;
-        }
-        cpt++;
-    }
-    return id;
-}
-
-VectorLong AlertsWidget::boxActived(Wt::WSelectionBox *box, MultiMapPair infoInBox, MultiMapLongs compId, long long id)
-{
-    VectorLong checkId;
-
-    for (MultiMapLongs::iterator it = compId.begin(); it != compId.end(); it++)
-    {
-        if ((*it).first == id)
-        {
-            for (MultiMapPair::iterator itP = infoInBox.begin(); itP != infoInBox.end(); itP++)
-            {
-                if ((*itP).second.first == (*it).second)
-                {
-                    bool check(true);
-                    for (VectorLong::iterator itV = checkId.begin(); itV != checkId.end(); itV++)
-                    {
-                        if ((*itV) == (*itP).second.first)
-                            check = false;
-                    }
-                    if (check)
-                    {
-                        for (VectorLong::iterator itI = index_.begin(); itI != index_.end(); itI++)
-                        {
-                            if ((*itP).first == (*itI))
-                            {
-                                box->addItem((*itP).second.second);
-                                checkId.push_back((*itP).second.first);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return checkId;
-}
-
-void AlertsWidget::fillInBox(Wt::WSelectionBox *box, MultiMapPair infoInBox)
-{
-    set<int> selection = box->selectedIndexes();
-    Wt::WString selected;
-    for (set<int>::iterator it = selection.begin();
-            it != selection.end(); ++it)
-        selected = box->itemText(*it);
-
-    vector<long long> checkId;
-    box->clear();
-    for (MultiMapPair::iterator it = infoInBox.begin(); it != infoInBox.end(); it++)
-    {
-        bool check(true);
-        for (vector<long long>::iterator itV = checkId.begin(); itV != checkId.end(); itV++)
-        {
-            if ((*itV) == (*it).second.first)
-                check = false;
-        }
-        if (check)
-        {
-            checkId.push_back((*it).second.first);
-            box->addItem((*it).second.second);
-        }
-    }
-    if (selection.size() > 0)
-    {
-        for (int cpt(0); cpt < box->count(); cpt++)
-        {
-            if (selected.toUTF8().compare(box->itemText(cpt).toUTF8()) == 0)
-            {
-                selection.clear();
-                selection.insert(cpt);
-                box->setSelectedIndexes(selection);
-            }
-        }
-    }
-}
 
 // ------- init popup one -------
 
@@ -790,11 +428,11 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 
 void AlertsWidget::showUnit(long long id)
 {
-    MapIntWWidget::iterator it;
+    std::map<int, Wt::WWidget *>::iterator it;
     hideUnit();
     if (id > 0)
     {
-        MultiMapLongs::iterator unit = unitsIds_.find(id);
+        std::multimap<long long, long long>::iterator unit = unitsIds_.find(id);
         if ((*unit).second == 1)
         {
             compareBarOne_->show();
@@ -824,7 +462,7 @@ void AlertsWidget::showUnit(long long id)
 
 void AlertsWidget::hideUnit()
 {
-    MapIntWWidget::iterator it;
+    std::map<int, Wt::WWidget *>::iterator it;
     for (it = unitOne_.begin(); it != unitOne_.end(); it++)
     {
         ((Wt::WTable*)(*it).second)->hide();
@@ -843,10 +481,6 @@ Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
 
     Wt::WComboBox *comboBox = new Wt::WComboBox();
     comboBox->addItem("=="); //xml
-    //    comboBox->addItem("is not equal"); //xml
-    //    comboBox->addItem("contains"); //xml
-    //    comboBox->addItem("doesn't contain"); //xml
-    //    comboBox->addItem("reg-exp"); //xml
 
     table->elementAt(0, 0)->addWidget(comboBox);
     table->hide();
@@ -884,12 +518,12 @@ Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
     buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
     buttonDel->setId(boost::lexical_cast<string>(idUnitOne));
     buttonDel->clicked().connect(bind([ = ] (){
-                                      MapUnitOne::iterator widUnit =
+                                      std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator widUnit =
                                       resourcesUnitOne.find(boost::lexical_cast<int, string>(buttonDel->id()));
                                       (*widUnit).second.first.second->hide(); // errorText
                                       resourcesUnitOne.erase(widUnit);
 
-                                      MapIntWWidget::iterator wid =
+                                      std::map<int, Wt::WWidget *>::iterator wid =
                                       unitOne_.find(boost::lexical_cast<int, string>(buttonDel->id()));
                                       contain->removeWidget((*wid).second);
                                       contain->refresh();
@@ -900,7 +534,9 @@ Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
     }));
 
     if (idUnitOne == 1)
+    {
         buttonDel->hide();
+    }
     resourcesUnitOne[idUnitOne++] = make_pair(make_pair(textEdit, errorText), comboBox);
 
     return table;
@@ -979,12 +615,12 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
     buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
     buttonDel->setId(boost::lexical_cast<string>(idUnitTwo));
     buttonDel->clicked().connect(bind([ = ] (){
-                                      MapUnitTwo::iterator widUnit =
+                                      std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator widUnit =
                                       resourcesUnitTwo.find(boost::lexical_cast<int, string>(buttonDel->id()));
                                       (*widUnit).second.first.second->hide(); // errorValue
                                       resourcesUnitTwo.erase(widUnit);
 
-                                      MapIntWWidget::iterator wid =
+                                      std::map<int, Wt::WWidget *>::iterator wid =
                                       unitTwo_.find(boost::lexical_cast<int, string>(buttonDel->id()));
                                       contain->removeWidget((*wid).second);
                                       contain->refresh();
@@ -1129,7 +765,7 @@ int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
         errorBool_->hide();
     case Enums::EInformationUnitType::text:
     {
-        for (MapUnitOne::iterator it = resourcesUnitOne.begin(); it != resourcesUnitOne.end(); it++)
+        for (std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator it = resourcesUnitOne.begin(); it != resourcesUnitOne.end(); it++)
         {
             /* Mettre en place si validator sur l'input texte.
              if (((Wt::WLineEdit*)(*it).second.first.first)->validate() == Wt::WValidator::Invalid)
@@ -1151,7 +787,7 @@ int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
     }
     case 3:
     {
-        for (MapUnitTwo::iterator it = resourcesUnitTwo.begin(); it != resourcesUnitTwo.end(); it++)
+        for (std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator it = resourcesUnitTwo.begin(); it != resourcesUnitTwo.end(); it++)
         {
             if (((Wt::WLineEdit*)(*it).second.first.first)->validate() == Wt::WValidator::Invalid)
             {
@@ -1277,17 +913,17 @@ void AlertsWidget::closePopup()
     getResourceList();
 }
 
-void AlertsWidget::errorsHideOne(MapUnitOne error)
+void AlertsWidget::errorsHideOne(std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>> error)
 {
-    for (MapUnitOne::iterator it = error.begin(); it != error.end(); it++)
+    for (std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator it = error.begin(); it != error.end(); it++)
     {
         ((Wt::WText*)(*it).second.first.second)->hide();
     }
 }
 
-void AlertsWidget::errorsHideTwo(MapUnitTwo error)
+void AlertsWidget::errorsHideTwo(std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>> error)
 {
-    for (MapUnitTwo::iterator it = error.begin(); it != error.end(); it++)
+    for (std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator it = error.begin(); it != error.end(); it++)
     {
         ((Wt::WText*)(*it).second.first.second)->hide();
     }
@@ -1327,16 +963,16 @@ void AlertsWidget::recoverListRecipientAlias(long long userRoleId)
 void AlertsWidget::clearStructures()
 {
     AbstractPage::clearStructures();
-    alerts_ = Wt::Json::Value::Null;
+    m_alerts = Wt::Json::Value::Null;
     userInfo_.clear();
     mediaInfo_.clear();
-    assets_.clear();
-    plugins_.clear();
-    infos_.clear();
-    assetPlugins_.clear();
-    pluginAsset_.clear();
-    pluginInfos_.clear();
-    infoPlugin_.clear();
+    m_assetBoxNames.clear();
+    m_pluginBoxNames.clear();
+    m_infoBoxNames.clear();
+//    m_mapAssetIdsPluginIds.clear();
+//    m_mapPluginIdsAssetIds.clear();
+//    m_mapPluginIdsInfoIds.clear();
+//    m_mapInfoIdsPluginsIds.clear();
     unitsIds_.clear();
     messageMailForTab_.clear();
     messageSmsForTab_.clear();
@@ -1413,6 +1049,95 @@ void AlertsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long lo
     else
         Wt::log("error") << "Error Client Http";
      */
+}
+
+void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
+{
+   
+    
+      
+//    // filters
+//    jsonResource = jsonResources.at(4);
+//    try
+//    {
+//        if (jsonResource.size() > 0)
+//        {
+//            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+//            if (!jsonArray.empty())
+//            {
+//                filtersModel = new Wt::WStandardItemModel(0, 3, this);
+//                int row = 0;
+//                cout << "TAILLE ARRAY : " << jsonArray.size() << endl;
+//                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+//                {
+//                    cout << "INSIDE ARRAY : " << cpt << endl;
+//                    
+//                    Wt::Json::Object jsonFilter = jsonArray.at(cpt);
+//                    Wt::Json::Value jsonDetailedInformationDatas = jsonResource.at(cpt + 1);
+//                    
+//                    Wt::WStandardItem *filterNbValueItem = new Wt::WStandardItem();
+//                    
+//                    
+//                    
+//                    set<int> indexAlreadyAssociated;
+//                    
+//                    indexAlreadyAssociated.clear();
+//                    
+//                    if (jsonDetailedInformationDatas.type() == Wt::Json::ArrayType)
+//                    {
+//                        Wt::Json::Array jsonDetailedInformationDatasArray = jsonDetailedInformationDatas;
+//                        for (int cptIda(0); cptIda < (int) jsonDetailedInformationDatasArray.size(); cptIda++)
+//                        {
+//                            Wt::Json::Object jsonIda = jsonDetailedInformationDatasArray.at(cptIda);
+//                            int index = jsonIda.get("filter_field_index");
+//                            indexAlreadyAssociated.insert(index);
+//                        }
+//                    }
+//                    
+//                    int nbValue = jsonFilter.get("nb_value");
+//                    filterNbValueItem->setText(boost::lexical_cast<string>(nbValue));
+//                    
+//                    for (int i = 1 ; i <= nbValue ; i++)
+//                    {
+//                        
+//                        if (indexAlreadyAssociated.find(i) == indexAlreadyAssociated.end())
+//                        {
+//                            Wt::WStandardItem *filterIdItem = new Wt::WStandardItem();
+//                            Wt::WStandardItem *filterTypeItem = new Wt::WStandardItem();
+//                            Wt::WStandardItem *filterIndexItem = new Wt::WStandardItem();
+//                            long long filterId = jsonFilter.get("id");
+//                            filterIdItem->setText(boost::lexical_cast<string>(filterId));
+//
+//                            Wt::Json::Object filterType = jsonFilter.get("filter_type");
+//                            long long filterTypeId = filterType.get("id");
+//                            filterTypeItem->setText(boost::lexical_cast<string>(filterTypeId));
+//
+//                            filterIndexItem->setText(boost::lexical_cast<string>(i));
+//
+//                            vector<Wt::WStandardItem*> rowVector;
+//                            rowVector.push_back(filterIdItem);
+//                            rowVector.push_back(filterTypeItem);
+//                            rowVector.push_back(filterIndexItem);
+//                            filtersModel->insertRow(row++, rowVector);
+//                        }
+//                    }
+//                    
+//                }
+//            }
+//        }
+//    }
+//    catch (Wt::Json::ParseError const& e)
+//    {
+//        Wt::log("warning") << "[Association][Filters] Problems parsing JSON";
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//    }
+//    catch (Wt::Json::TypeException const& e)
+//    {
+//        Wt::log("warning") << "[Association][Filters] JSON Type Exception";
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//    }
+    
+      AbstractPage::handleJsonGet(jsonResources);
 }
 
 // API CALLS ------------------------------------------

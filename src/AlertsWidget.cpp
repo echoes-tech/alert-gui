@@ -31,33 +31,44 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
     setLocalTable(true);
 
     vector_pair_string listTitles;
-    listTitles.push_back(std::make_pair(ETypeJson::text, "name"));
-    listTitles.push_back(std::make_pair(ETypeJson::text, "last_attempt"));
-    //    listTitles.push_back(std::make_pair(ETypeJson::text, "alert_media_specializations"));
-    //    listTitles.push_back(std::make_pair(ETypeJson::text, "al4"));
+    listTitles.push_back(make_pair(ETypeJson::text, "name"));
+    listTitles.push_back(make_pair(ETypeJson::text, "last_attempt"));
+    //    listTitles.push_back(make_pair(ETypeJson::text, "alert_media_specializations"));
+    //    listTitles.push_back(make_pair(ETypeJson::text, "al4"));
     setTitles(listTitles);
 
     lists_string lListUrl;
-    std::list<std::string> listUrl;
+    list<string> listUrl;
 
     listUrl.push_back("alerts");
     lListUrl.push_back(listUrl);
     listUrl.clear();
 
     listUrl.push_back("assets");
-    listUrl.push_back("assets/:id");
+    listUrl.push_back("assets/:id/plugins");
+    lListUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    // voir si on peut inclure cet appel dans le précédent
+    listUrl.push_back("plugins");
+    listUrl.push_back("plugins/:id/informations");
     lListUrl.push_back(listUrl);
     listUrl.clear();
 
+    listUrl.push_back("plugins");
+    listUrl.push_back("plugins/:id/assets");
+    lListUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    listUrl.push_back("informations");
+    listUrl.push_back("informations/:id/plugins");
+    lListUrl.push_back(listUrl);
+    listUrl.clear();
+    
     listUrl.push_back("criteria");
     lListUrl.push_back(listUrl);
     listUrl.clear();
 
-    listUrl.push_back("informations");
-    listUrl.push_back("informations/:id");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-    
     listUrl.push_back("users");
     lListUrl.push_back(listUrl);
     listUrl.clear();
@@ -144,7 +155,7 @@ void AlertsWidget::popupRecipients(string nameAlert, string message)
     tablePopup->elementAt(3, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.mess")));
     tablePopup->elementAt(3, 1)->addWidget(tabMessage_);
 
-    for (std::multimap<long long, std::pair<long long, std::string>> ::iterator itU = userInfo_.begin(); itU != userInfo_.end(); itU++)
+    for (multimap<long long, pair<long long, string>> ::iterator itU = userInfo_.begin(); itU != userInfo_.end(); itU++)
     {
         boxUsers->addItem((*itU).second.second);
     }
@@ -154,7 +165,7 @@ void AlertsWidget::popupRecipients(string nameAlert, string message)
         recoverListRecipientAlias((*userInfo_.find(boxUsers->currentIndex())).second.first);
     }));
 
-    for (std::multimap<long long, std::pair<std::pair<long long, long long>, std::string>>::iterator itM = mediaInfo_.begin(); itM != mediaInfo_.end(); itM++)
+    for (multimap<long long, pair<pair<long long, long long>, string>>::iterator itM = mediaInfo_.begin(); itM != mediaInfo_.end(); itM++)
     {
         boxMedias->addItem((*itM).second.second);
     }
@@ -428,11 +439,11 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 
 void AlertsWidget::showUnit(long long id)
 {
-    std::map<int, Wt::WWidget *>::iterator it;
+    map<int, Wt::WWidget *>::iterator it;
     hideUnit();
     if (id > 0)
     {
-        std::multimap<long long, long long>::iterator unit = unitsIds_.find(id);
+        multimap<long long, long long>::iterator unit = unitsIds_.find(id);
         if ((*unit).second == 1)
         {
             compareBarOne_->show();
@@ -462,7 +473,7 @@ void AlertsWidget::showUnit(long long id)
 
 void AlertsWidget::hideUnit()
 {
-    std::map<int, Wt::WWidget *>::iterator it;
+    map<int, Wt::WWidget *>::iterator it;
     for (it = unitOne_.begin(); it != unitOne_.end(); it++)
     {
         ((Wt::WTable*)(*it).second)->hide();
@@ -518,12 +529,12 @@ Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
     buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
     buttonDel->setId(boost::lexical_cast<string>(idUnitOne));
     buttonDel->clicked().connect(bind([ = ] (){
-                                      std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator widUnit =
+                                      map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator widUnit =
                                       resourcesUnitOne.find(boost::lexical_cast<int, string>(buttonDel->id()));
                                       (*widUnit).second.first.second->hide(); // errorText
                                       resourcesUnitOne.erase(widUnit);
 
-                                      std::map<int, Wt::WWidget *>::iterator wid =
+                                      map<int, Wt::WWidget *>::iterator wid =
                                       unitOne_.find(boost::lexical_cast<int, string>(buttonDel->id()));
                                       contain->removeWidget((*wid).second);
                                       contain->refresh();
@@ -615,12 +626,12 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
     buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
     buttonDel->setId(boost::lexical_cast<string>(idUnitTwo));
     buttonDel->clicked().connect(bind([ = ] (){
-                                      std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator widUnit =
+                                      map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator widUnit =
                                       resourcesUnitTwo.find(boost::lexical_cast<int, string>(buttonDel->id()));
                                       (*widUnit).second.first.second->hide(); // errorValue
                                       resourcesUnitTwo.erase(widUnit);
 
-                                      std::map<int, Wt::WWidget *>::iterator wid =
+                                      map<int, Wt::WWidget *>::iterator wid =
                                       unitTwo_.find(boost::lexical_cast<int, string>(buttonDel->id()));
                                       contain->removeWidget((*wid).second);
                                       contain->refresh();
@@ -765,7 +776,7 @@ int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
         errorBool_->hide();
     case Enums::EInformationUnitType::text:
     {
-        for (std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator it = resourcesUnitOne.begin(); it != resourcesUnitOne.end(); it++)
+        for (map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator it = resourcesUnitOne.begin(); it != resourcesUnitOne.end(); it++)
         {
             /* Mettre en place si validator sur l'input texte.
              if (((Wt::WLineEdit*)(*it).second.first.first)->validate() == Wt::WValidator::Invalid)
@@ -787,7 +798,7 @@ int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
     }
     case 3:
     {
-        for (std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator it = resourcesUnitTwo.begin(); it != resourcesUnitTwo.end(); it++)
+        for (map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator it = resourcesUnitTwo.begin(); it != resourcesUnitTwo.end(); it++)
         {
             if (((Wt::WLineEdit*)(*it).second.first.first)->validate() == Wt::WValidator::Invalid)
             {
@@ -913,17 +924,17 @@ void AlertsWidget::closePopup()
     getResourceList();
 }
 
-void AlertsWidget::errorsHideOne(std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>> error)
+void AlertsWidget::errorsHideOne(map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>> error)
 {
-    for (std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator it = error.begin(); it != error.end(); it++)
+    for (map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator it = error.begin(); it != error.end(); it++)
     {
         ((Wt::WText*)(*it).second.first.second)->hide();
     }
 }
 
-void AlertsWidget::errorsHideTwo(std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>> error)
+void AlertsWidget::errorsHideTwo(map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, pair<Wt::WComboBox*,Wt::WComboBox*>>> error)
 {
-    for (std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator it = error.begin(); it != error.end(); it++)
+    for (map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator it = error.begin(); it != error.end(); it++)
     {
         ((Wt::WText*)(*it).second.first.second)->hide();
     }
@@ -1054,90 +1065,173 @@ void AlertsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long lo
 void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
 {
    
+    vector<Wt::Json::Value> jsonResource = jsonResources.at(1);
+    try
+    {
+        if (jsonResource.size() > 0)
+        {
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
+            {
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+                {
+                    Wt::Json::Object jsonAsset = jsonArray.at(cpt);
+                    Wt::Json::Array jsonAssetPlugins = jsonResource.at(cpt + 1);
+                    long long assetId = jsonAsset.get("id");
+                    vector<long long> pluginsIds;
+                    cout << "ASSET ID " << assetId << endl;
+                    for (int cpt1(0); cpt1 < (int) jsonAssetPlugins.size(); cpt1++)
+                    {
+                        Wt::Json::Object jsonPlugin = jsonAssetPlugins.at(cpt1);
+                        long long pluginId = jsonPlugin.get("id");
+                        cout << ">> PLUGIN ID " << pluginId << endl;
+                        pluginsIds.push_back(pluginId);
+                    }
+                    m_mapAssetPlugins[assetId] = pluginsIds;
+                }
+            }
+        }
+            
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Alerts][AST_PLG] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Alerts][AST_PLG] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
     
-      
-//    // filters
-//    jsonResource = jsonResources.at(4);
-//    try
-//    {
-//        if (jsonResource.size() > 0)
-//        {
-//            Wt::Json::Array& jsonArray = (*jsonResource.begin());
-//            if (!jsonArray.empty())
-//            {
-//                filtersModel = new Wt::WStandardItemModel(0, 3, this);
-//                int row = 0;
-//                cout << "TAILLE ARRAY : " << jsonArray.size() << endl;
-//                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
-//                {
-//                    cout << "INSIDE ARRAY : " << cpt << endl;
-//                    
-//                    Wt::Json::Object jsonFilter = jsonArray.at(cpt);
-//                    Wt::Json::Value jsonDetailedInformationDatas = jsonResource.at(cpt + 1);
-//                    
-//                    Wt::WStandardItem *filterNbValueItem = new Wt::WStandardItem();
-//                    
-//                    
-//                    
-//                    set<int> indexAlreadyAssociated;
-//                    
-//                    indexAlreadyAssociated.clear();
-//                    
-//                    if (jsonDetailedInformationDatas.type() == Wt::Json::ArrayType)
-//                    {
-//                        Wt::Json::Array jsonDetailedInformationDatasArray = jsonDetailedInformationDatas;
-//                        for (int cptIda(0); cptIda < (int) jsonDetailedInformationDatasArray.size(); cptIda++)
-//                        {
-//                            Wt::Json::Object jsonIda = jsonDetailedInformationDatasArray.at(cptIda);
-//                            int index = jsonIda.get("filter_field_index");
-//                            indexAlreadyAssociated.insert(index);
-//                        }
-//                    }
-//                    
-//                    int nbValue = jsonFilter.get("nb_value");
-//                    filterNbValueItem->setText(boost::lexical_cast<string>(nbValue));
-//                    
-//                    for (int i = 1 ; i <= nbValue ; i++)
-//                    {
-//                        
-//                        if (indexAlreadyAssociated.find(i) == indexAlreadyAssociated.end())
-//                        {
-//                            Wt::WStandardItem *filterIdItem = new Wt::WStandardItem();
-//                            Wt::WStandardItem *filterTypeItem = new Wt::WStandardItem();
-//                            Wt::WStandardItem *filterIndexItem = new Wt::WStandardItem();
-//                            long long filterId = jsonFilter.get("id");
-//                            filterIdItem->setText(boost::lexical_cast<string>(filterId));
-//
-//                            Wt::Json::Object filterType = jsonFilter.get("filter_type");
-//                            long long filterTypeId = filterType.get("id");
-//                            filterTypeItem->setText(boost::lexical_cast<string>(filterTypeId));
-//
-//                            filterIndexItem->setText(boost::lexical_cast<string>(i));
-//
-//                            vector<Wt::WStandardItem*> rowVector;
-//                            rowVector.push_back(filterIdItem);
-//                            rowVector.push_back(filterTypeItem);
-//                            rowVector.push_back(filterIndexItem);
-//                            filtersModel->insertRow(row++, rowVector);
-//                        }
-//                    }
-//                    
-//                }
-//            }
-//        }
-//    }
-//    catch (Wt::Json::ParseError const& e)
-//    {
-//        Wt::log("warning") << "[Association][Filters] Problems parsing JSON";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-//    }
-//    catch (Wt::Json::TypeException const& e)
-//    {
-//        Wt::log("warning") << "[Association][Filters] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-//    }
     
-      AbstractPage::handleJsonGet(jsonResources);
+    // plugins // infos
+    jsonResource = jsonResources.at(2);
+    try
+    {
+        if (jsonResource.size() > 0)
+        {
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
+            {
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+                {
+                    Wt::Json::Object jsonPlugin = jsonArray.at(cpt);
+                    Wt::Json::Array jsonPluginInfos = jsonResource.at(cpt + 1);
+                    long long pluginId = jsonPlugin.get("id");
+                    vector<long long> infosIds;
+                    cout << "PLUGIN ID " << pluginId << endl;
+                    for (int cpt1(0); cpt1 < (int) jsonPluginInfos.size(); cpt1++)
+                    {
+                        Wt::Json::Object jsonInfo = jsonPluginInfos.at(cpt1);
+                        long long infoId = jsonInfo.get("id");
+                        cout << ">> INFO ID " << infoId << endl;
+                        infosIds.push_back(infoId);
+                    }
+                    m_mapPluginInfos[pluginId] = infosIds;
+                }
+            }
+        }
+            
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Alerts][PLG_INF] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Alerts][PLG_INF] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    
+    // plugins // assets
+    jsonResource = jsonResources.at(3);
+    try
+    {
+        if (jsonResource.size() > 0)
+        {
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
+            {
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+                {
+                    Wt::Json::Object jsonPlugin = jsonArray.at(cpt);
+                    Wt::Json::Array jsonPluginAssets = jsonResource.at(cpt + 1);
+                    long long pluginId = jsonPlugin.get("id");
+                    vector<long long> infosIds;
+                    cout << "PLUGIN ID " << pluginId << endl;
+                    for (int cpt1(0); cpt1 < (int) jsonPluginAssets.size(); cpt1++)
+                    {
+                        Wt::Json::Object jsonAsset = jsonPluginAssets.at(cpt1);
+                        long long assetId = jsonAsset.get("id");
+                        cout << ">> ASSET ID " << assetId << endl;
+                        infosIds.push_back(assetId);
+                    }
+                    m_mapPluginAssets[pluginId] = infosIds;
+                }
+            }
+        }
+            
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Alerts][PLG_AST] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Alerts][PLG_AST] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    
+    // informations // plugins
+    jsonResource = jsonResources.at(4);
+    try
+    {
+        if (jsonResource.size() > 0)
+        {
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
+            {
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+                {
+                    Wt::Json::Object jsonInformation = jsonArray.at(cpt);
+                    Wt::Json::Value jsonInformationPlugins = jsonResource.at(cpt + 1);
+                    long long infoId = jsonInformation.get("id");
+                    vector<long long> pluginsIds;
+                    cout << "INFO ID " << infoId << endl;
+                    if (jsonInformationPlugins.type() == Wt::Json::ArrayType)
+                    {
+                        Wt::Json::Array jsonInformationPluginsArray = jsonInformationPlugins;
+                        for (int cpt1(0); cpt1 < (int) jsonInformationPluginsArray.size(); cpt1++)
+                        {
+                            Wt::Json::Object jsonPlugin = jsonInformationPluginsArray.at(cpt1);
+                            long long pluginId = jsonPlugin.get("id");
+                            cout << ">> PLUGIN ID " << pluginId << endl;
+                            pluginsIds.push_back(pluginId);
+                        }
+                    }
+                    m_mapInfoPlugins[infoId] = pluginsIds;
+                }
+            }
+        }
+            
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Alerts][INFO_PLG] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Alerts][INFO_PLG] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+          
+    cout << "HANDLE PARENT CLASS" << endl;
+    AbstractPage::handleJsonGet(jsonResources);
+    cout << "AFTER HANDLE PARENT CLASS" << endl;
 }
 
 // API CALLS ------------------------------------------

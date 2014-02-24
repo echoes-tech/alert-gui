@@ -26,6 +26,7 @@
 #include <Wt/Json/Value>
 #include <Wt/Http/Message>
 #include <Wt/WRandom>
+#include <Wt/WStandardItemModel>
 
 #include <boost/function.hpp>
 #include <boost/system/error_code.hpp>
@@ -122,6 +123,17 @@ private:
     bool assetBoxSelected;
     bool pluginBoxSelected;
     bool informationBoxSelected;
+    
+    std::map<long long, std::vector<long long>> m_mapAssetPlugins;
+    std::map<long long, std::vector<long long>> m_mapAssetInfos;
+    std::map<long long, std::vector<long long>> m_mapPluginAssets;
+    std::map<long long, std::vector<long long>> m_mapPluginInfos;
+    std::map<long long, std::vector<long long>> m_mapInfoAssets;
+    std::map<long long, std::vector<long long>> m_mapInfoPlugins;
+    
+//    Wt::WStandardItemModel m_assets;
+//    Wt::WStandardItemModel m_plugins;
+//    Wt::WStandardItemModel m_informations;
     
     // end alert setting attributes
     

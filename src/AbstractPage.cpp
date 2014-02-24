@@ -729,7 +729,7 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
 
     try
     {
-        vector_Json jsonResource = jsonResources.at(0);
+        std::vector<Wt::Json::Value> jsonResource = jsonResources.at(0);
         if (jsonResource.size() > 0)
         {
             Wt::Json::Array& jsonArray = jsonResource.at(0);
@@ -863,7 +863,7 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
         {
             if (jsonResource.size() == 0)
             {
-                jsonResource.push_back(vector_Json());
+                jsonResource.push_back(std::vector<Wt::Json::Value>());
             }
             
             if ((*(jsonResource.begin())).size() == 0)
@@ -879,11 +879,11 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
             if ((*listsUrl.begin()).size() == 0)
             {
                 listsUrl.pop_front();
-                jsonResource.push_back(vector_Json());
+                jsonResource.push_back(std::vector<Wt::Json::Value>());
             }
             else if ((*(*listsUrl.begin()).begin()).find(":id") != string::npos && response.status() == 200)
             {
-                vector_Json itJ = jsonResource.back();
+                std::vector<Wt::Json::Value> itJ = jsonResource.back();
                 Wt::Json::Array& result1 = itJ.back();
                 list_string::iterator listUrl = (*listsUrl.begin()).begin();
                 string saveUrl = (*listUrl);

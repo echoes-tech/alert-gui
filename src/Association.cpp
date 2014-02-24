@@ -22,14 +22,14 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     setLocalTable(true);
     
     vector_pair_string listTitles;
-    listTitles.push_back(std::make_pair(ETypeJson::text, "filter"));
-    listTitles.push_back(std::make_pair(ETypeJson::text, "filter_index"));
-    listTitles.push_back(std::make_pair(ETypeJson::text, "information"));
-    listTitles.push_back(std::make_pair(ETypeJson::text, "asset"));
+    listTitles.push_back(make_pair(ETypeJson::text, "filter"));
+    listTitles.push_back(make_pair(ETypeJson::text, "filter_index"));
+    listTitles.push_back(make_pair(ETypeJson::text, "information"));
+    listTitles.push_back(make_pair(ETypeJson::text, "asset"));
     setTitles(listTitles);
     
     lists_string lListUrl;
-    std::list<std::string> listUrl;
+    list<string> listUrl;
     
     listUrl.push_back("information_datas");
     listUrl.push_back("information_datas/:id");
@@ -71,7 +71,7 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
     if (id == 0)
     {
         
-        std::map<long long, std::pair<long long, std::string>>::iterator itA;
+        map<long long, pair<long long, string>>::iterator itA;
 
         new Wt::WText("Plugin", dialog->contents());
         Wt::WComboBox *boxPlugins = new Wt::WComboBox(dialog->contents());
@@ -167,7 +167,7 @@ void Association::clearStructures()
 void Association::handleJsonGet(vectors_Json jsonResources)
 {
     m_rowsTable.clear();
-    vector_Json jsonResource = jsonResources.at(0);
+    vector<Wt::Json::Value> jsonResource = jsonResources.at(0);
     try
     {
         if (jsonResource.size() > 0)
@@ -381,7 +381,6 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     jsonResource = jsonResources.at(4);
     try
     {
-        cout << "TAILLE JSON RESOURCE : " << jsonResource.size() << endl;
         if (jsonResource.size() > 0)
         {
             Wt::Json::Array& jsonArray = (*jsonResource.begin());
@@ -389,10 +388,8 @@ void Association::handleJsonGet(vectors_Json jsonResources)
             {
                 filtersModel = new Wt::WStandardItemModel(0, 3, this);
                 int row = 0;
-                cout << "TAILLE ARRAY : " << jsonArray.size() << endl;
                 for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
                 {
-                    cout << "INSIDE ARRAY : " << cpt << endl;
                     
                     Wt::Json::Object jsonFilter = jsonArray.at(cpt);
                     Wt::Json::Value jsonDetailedInformationDatas = jsonResource.at(cpt + 1);
@@ -405,28 +402,23 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                     
                     indexAlreadyAssociated.clear();
                     
-                    cout << "AVANT IDA" << endl;
                     if (jsonDetailedInformationDatas.type() == Wt::Json::ArrayType)
                     {
                         Wt::Json::Array jsonDetailedInformationDatasArray = jsonDetailedInformationDatas;
-                        cout << "TAILLE IDA ARRAY : " << jsonDetailedInformationDatasArray.size() << endl;
                         for (int cptIda(0); cptIda < (int) jsonDetailedInformationDatasArray.size(); cptIda++)
                         {
-                            cout << "PROGRESSION DANS IDA ARRAY : " << cptIda << endl;
                             Wt::Json::Object jsonIda = jsonDetailedInformationDatasArray.at(cptIda);
                             int index = jsonIda.get("filter_field_index");
                             indexAlreadyAssociated.insert(index);
                         }
                     }
                     
-                    cout << "AVANT nb_value" << endl;
                     int nbValue = jsonFilter.get("nb_value");
                     filterNbValueItem->setText(boost::lexical_cast<string>(nbValue));
                     
                     for (int i = 1 ; i <= nbValue ; i++)
                     {
                         
-                        cout << "nb_value" << i << endl;
                         if (indexAlreadyAssociated.find(i) == indexAlreadyAssociated.end())
                         {
                             Wt::WStandardItem *filterIdItem = new Wt::WStandardItem();
@@ -448,8 +440,6 @@ void Association::handleJsonGet(vectors_Json jsonResources)
                             filtersModel->insertRow(row++, rowVector);
                         }
                     }
-                    
-                    cout << "APRES nb_value" << endl;
                 }
             }
         }
@@ -547,7 +537,7 @@ void Association::addResource(vector<Wt::WInteractWidget*> argument)
 
 void Association::postAssetCallBack(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    std::cout << response.status() << " Reponse postAsset : " << std::endl << response.body() << std::endl;
+    cout << response.status() << " Reponse postAsset : " << endl << response.body() << endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -570,7 +560,7 @@ void Association::deleteAsset(boost::system::error_code err, const Wt::Http::Mes
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
-        std::cout << response.status() << std::endl;
+        cout << response.status() << endl;
         if(response.status() == Enums::EReturnCode::NO_CONTENT)
         {
             if (response.body() != "")

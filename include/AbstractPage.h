@@ -115,9 +115,7 @@ typedef std::multimap<long long, vector_widget> multimap_long_widgets;
  */
 typedef std::vector<std::pair<int, Wt::WObject*>> vector_pair;
 
-typedef std::vector<Wt::Json::Value> vector_Json;
-
-typedef std::vector<vector_Json> vectors_Json;
+typedef std::vector<std::vector<Wt::Json::Value>> vectors_Json;
 
 class AbstractPage :
 public Wt::WTemplateFormView

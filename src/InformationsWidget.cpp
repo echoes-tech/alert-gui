@@ -15,7 +15,9 @@
 
 #include "InformationsWidget.h"
 
-InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, std::string apiUrl)
+using namespace std;
+
+InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string apiUrl)
 : AbstractPage(session, apiUrl, "information")
 {
     session_ = session;
@@ -25,12 +27,12 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, std::strin
     setLocalTable(true);
 
     vector_pair_string titles;
-    titles.push_back(std::make_pair(ETypeJson::text, "name"));
-    titles.push_back(std::make_pair(ETypeJson::text, "desc"));
-    titles.push_back(std::make_pair(ETypeJson::text, "calculate"));
-    titles.push_back(std::make_pair(ETypeJson::undid, "information_unit"));
+    titles.push_back(make_pair(ETypeJson::text, "name"));
+    titles.push_back(make_pair(ETypeJson::text, "desc"));
+    titles.push_back(make_pair(ETypeJson::text, "calculate"));
+    titles.push_back(make_pair(ETypeJson::undid, "information_unit"));
     setUndidName("name");
-    titles.push_back(std::make_pair(ETypeJson::boolean, "display"));
+    titles.push_back(make_pair(ETypeJson::boolean, "display"));
     setTitles(titles);
 
     lists_string lListUrl;
@@ -70,9 +72,9 @@ Wt::WComboBox *InformationsWidget::popupAdd(Wt::WDialog *dialog)
     return comboBox;
 }
 
-void InformationsWidget::addResource(std::vector<Wt::WInteractWidget*> arguments)
+void InformationsWidget::addResource(vector<Wt::WInteractWidget*> arguments)
 {
-    std::vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
+    vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
     // Post Information -------
     Wt::Http::Message messageInformation;
     
@@ -95,7 +97,7 @@ void InformationsWidget::addResource(std::vector<Wt::WInteractWidget*> arguments
 
     messageInformation.addBodyText("\n}");
     
-    std::string apiAddress = this->getApiUrl() + "/informations"
+    string apiAddress = this->getApiUrl() + "/informations"
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8();
     Wt::Http::Client *client = new Wt::Http::Client(this);
@@ -113,9 +115,9 @@ void InformationsWidget::addResource(std::vector<Wt::WInteractWidget*> arguments
     }
 }
 
-void InformationsWidget::modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id)
+void InformationsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
 {
-    std::vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
+    vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
 
     // Post Information -------
     Wt::Http::Message messageInformation;
@@ -139,8 +141,8 @@ void InformationsWidget::modifResource(std::vector<Wt::WInteractWidget*> argumen
 
     messageInformation.addBodyText("\n}");
     
-    std::string apiAddress = this->getApiUrl() + "/informations/"
-            + boost::lexical_cast<std::string>(id)
+    string apiAddress = this->getApiUrl() + "/informations/"
+            + boost::lexical_cast<string>(id)
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8();
     Wt::Http::Client *client = new Wt::Http::Client(this);
@@ -161,7 +163,7 @@ void InformationsWidget::modifResource(std::vector<Wt::WInteractWidget*> argumen
 void InformationsWidget::handleJsonGet(vectors_Json jsonResources)
 {
     infoUnit_.clear();
-    vector_Json infoUnit = jsonResources.at(1);
+    vector<Wt::Json::Value> infoUnit = jsonResources.at(1);
     jsonResources.pop_back();
     AbstractPage::handleJsonGet(jsonResources);
 
@@ -177,9 +179,9 @@ void InformationsWidget::handleJsonGet(vectors_Json jsonResources)
         Wt::WString name = obj.get("name");
         long long id = obj.get("id");
         
-        std::vector<Wt::WStandardItem*> rowVector;
+        vector<Wt::WStandardItem*> rowVector;
         
-        itemId->setText(boost::lexical_cast<std::string>(id));
+        itemId->setText(boost::lexical_cast<string>(id));
         itemName->setText(name);
         
         rowVector.push_back(itemName);
@@ -192,7 +194,7 @@ Wt::WDialog *InformationsWidget::deleteResource(long long id)
 {
     Wt::WDialog *box = AbstractPage::deleteResource(id);
     // a REVOIR !! Récupération des alerts par rapport a id de l'asset a sup
-    std::string apiAddress = this->getApiUrl() + "/informations/" + boost::lexical_cast<std::string> (id) + "/alerts/";
+    string apiAddress = this->getApiUrl() + "/informations/" + boost::lexical_cast<string> (id) + "/alerts/";
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&InformationsWidget::checkAlertsInInformation, this, _1, _2, box, id));
     apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();

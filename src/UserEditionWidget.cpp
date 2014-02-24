@@ -16,7 +16,9 @@
 
 #include "UserEditionWidget.h"
 
-UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, std::string apiUrl, int type)
+using namespace std;
+
+UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUrl, int type)
 : AbstractPage(session, apiUrl, "media-user")
 {
     this->session_ = session;
@@ -27,12 +29,12 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, std::string 
     setButtonSup(true);
     setLocalTable(true);
     
-    std::string nameSpe = type == 1 ? "mail" : type == 2 ? "sms" : type == 3 ? "push" : "error";
+    string nameSpe = type == 1 ? "mail" : type == 2 ? "sms" : type == 3 ? "push" : "error";
     this->setNameSpecial(nameSpe);
     
     vector_pair_string titles;
-    titles.push_back(std::make_pair(ETypeJson::text, "value"));
-    titles.push_back(std::make_pair(ETypeJson::undid, "user"));
+    titles.push_back(make_pair(ETypeJson::text, "value"));
+    titles.push_back(make_pair(ETypeJson::undid, "user"));
     setUndidName("last_name");
     setTitles(titles);
 
@@ -57,9 +59,9 @@ Wt::WComboBox *UserEditionWidget::popupAdd(Wt::WDialog *dialog)
     return comboBox;
 }
 
-std::string UserEditionWidget::addParameter()
+string UserEditionWidget::addParameter()
 {
-    return "&type_id=" + boost::lexical_cast<std::string>(this->type_);
+    return "&type_id=" + boost::lexical_cast<string>(this->type_);
 }
 
 void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
@@ -69,7 +71,7 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
     try
     {
 
-        vector_Json jsonMedia = jsonResources.at(0);
+        vector<Wt::Json::Value> jsonMedia = jsonResources.at(0);
         Wt::Json::Array& result = jsonMedia.at(0);
         for (int cpt(0); cpt < (int) result.size(); cpt++)
         {
@@ -79,7 +81,7 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
             mediasTokens[id] = token.toUTF8();
         }
 
-        vector_Json jsonUsers = jsonResources.at(1);
+        vector<Wt::Json::Value> jsonUsers = jsonResources.at(1);
         jsonResources.pop_back();
         AbstractPage::handleJsonGet(jsonResources);
 
@@ -94,12 +96,12 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
             Wt::Json::Object obj = result.at(cpt);
             Wt::WString firstName = obj.get("first_name");
             Wt::WString lastName = obj.get("last_name");
-            std::string name = firstName.toUTF8() + " " + lastName.toUTF8();
+            string name = firstName.toUTF8() + " " + lastName.toUTF8();
             long long id = obj.get("id");
 
-            std::vector<Wt::WStandardItem*> rowVector;
+            vector<Wt::WStandardItem*> rowVector;
 
-            itemId->setText(boost::lexical_cast<std::string>(id));
+            itemId->setText(boost::lexical_cast<string>(id));
             itemName->setText(Wt::WString::fromUTF8(name));
 
             rowVector.push_back(itemName);
@@ -137,20 +139,20 @@ Wt::WValidator *UserEditionWidget::editValidator(int who)
     return validator;
 }
 
-void UserEditionWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
+void UserEditionWidget::addResource(vector<Wt::WInteractWidget*> argument)
 {
-    std::vector<Wt::WInteractWidget*>::iterator i = argument.begin();
+    vector<Wt::WInteractWidget*>::iterator i = argument.begin();
 
     Wt::Http::Message messageMedia;
-    messageMedia.addBodyText("{\n\"type_id\": " + boost::lexical_cast<std::string>(this->type_)
-            + ",\n\"value\": \"" + boost::lexical_cast<std::string>(((Wt::WLineEdit*)(*i++))->text()) + "\"");
+    messageMedia.addBodyText("{\n\"type_id\": " + boost::lexical_cast<string>(this->type_)
+            + ",\n\"value\": \"" + boost::lexical_cast<string>(((Wt::WLineEdit*)(*i++))->text()) + "\"");
 
     Wt::WStandardItemModel *userModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
     messageMedia.addBodyText(",\n\"user_id\" : " + userModel->item(((Wt::WComboBox*)(*i))->currentIndex(), 1)->text().toUTF8());
 
     messageMedia.addBodyText("\n}");
 
-    std::string apiAddress = this->getApiUrl() + "/medias"
+    string apiAddress = this->getApiUrl() + "/medias"
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8();
 
@@ -171,10 +173,10 @@ void UserEditionWidget::addResource(std::vector<Wt::WInteractWidget*> argument)
 }
 
 
-void UserEditionWidget::modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id)
+void UserEditionWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
 {
     MapLongString::iterator it = mediasTokens.find(id);
-    std::vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
+    vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
 
     Wt::Http::Message message;
     message.addBodyText("{\n\"token\": \"" + (*it).second
@@ -185,8 +187,8 @@ void UserEditionWidget::modifResource(std::vector<Wt::WInteractWidget*> argument
 
     message.addBodyText("\n}");
 
-    std::string apiAddress = this->getApiUrl() + "/medias/"
-            + boost::lexical_cast<std::string>(id)
+    string apiAddress = this->getApiUrl() + "/medias/"
+            + boost::lexical_cast<string>(id)
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8();
 

@@ -86,7 +86,10 @@ protected:
 private:
 
     void                        initAlertValueDefinitionPopup(Wt::WTable *tableBox);
-    void                        getBoxesDatas();
+    void                        assetSelected();
+    void                        pluginSelected();
+    void                        infoSelected();
+    void                        fillModels();
     void                        getRelatedData(int boxType);
 
     std::vector<long long>                  boxActived(Wt::WSelectionBox *box, std::multimap<long long, std::pair<long long, std::string>>  infoInBox, std::multimap<long long, long long> compId, long long id);
@@ -124,6 +127,7 @@ private:
     bool pluginBoxSelected;
     bool informationBoxSelected;
     
+    //ids
     std::map<long long, std::vector<long long>> m_mapAssetPlugins;
     std::map<long long, std::vector<long long>> m_mapAssetInfos;
     std::map<long long, std::vector<long long>> m_mapPluginAssets;
@@ -131,9 +135,19 @@ private:
     std::map<long long, std::vector<long long>> m_mapInfoAssets;
     std::map<long long, std::vector<long long>> m_mapInfoPlugins;
     
-//    Wt::WStandardItemModel m_assets;
-//    Wt::WStandardItemModel m_plugins;
-//    Wt::WStandardItemModel m_informations;
+    //names
+    std::map<long long, std::string> m_mapAssetsNames;
+    std::map<long long, std::string> m_mapPluginsNames;
+    std::map<long long, std::string> m_mapInformationsNames;
+    
+    // popup boxes
+    Wt::WSelectionBox *m_boxAsset;
+    Wt::WSelectionBox *m_boxPlugin;
+    Wt::WSelectionBox *m_boxInfo;
+    
+    Wt::WStandardItemModel * m_assets;
+    Wt::WStandardItemModel * m_plugins;
+    Wt::WStandardItemModel * m_informations;
     
     // end alert setting attributes
     

@@ -22,29 +22,29 @@ void    RecipientsWidget::update()
    if (!newClass_)
     {
        this->clear();
-       Wt::WTemplateFormView *templat =
+       Wt::WTemplateFormView *templateFormView =
                new Wt::WTemplateFormView(Wt::WString::tr("Alert.recipients.Management.template"));
-       templat->addStyleClass("template");
-       this->addWidget(templat);
+       templateFormView->addStyleClass("template");
+       this->addWidget(templateFormView);
        Wt::WTabWidget *tab = new Wt::WTabWidget();
-       templat->bindWidget("resource-table", tab);
+       templateFormView->bindWidget("resource-table", tab);
 
-       UserEditionWidget *uew = new UserEditionWidget(session_, apiUrl_, 1);
-       uew->recursiveGetResources();
-//       uew->setNameSpecial("mail");
-       Wt::WMenuItem *tabMail = tab->addTab(uew, "Mail");
+       UserEditionWidget *uewMail = new UserEditionWidget(session_, apiUrl_, 1);
+       uewMail->recursiveGetResources();
+       UserEditionWidget *uewSMS = new UserEditionWidget(session_, apiUrl_, 2);
+       uewSMS->recursiveGetResources();
+       UserEditionWidget *uewPush = new UserEditionWidget(session_, apiUrl_, 3);
+       uewPush->recursiveGetResources();
+       
+       Wt::WMenuItem *tabMail = tab->addTab(uewMail, "Mail");
        tabMail->setStyleClass("recipients recipients-radius-left");
+       
+       tab->addTab(uewSMS, "SMS")->setStyleClass("recipients recipients-radius-mid");
+
+       tab->addTab(uewPush, "Push")->setStyleClass("recipients recipients-radius-right");
+       
        tabMail->select();
-
-       uew = new UserEditionWidget(session_, apiUrl_, 2);
-       uew->recursiveGetResources();
-//       uew->setNameSpecial("sms");
-       tab->addTab(uew, "SMS")->setStyleClass("recipients recipients-radius-mid");
-
-       uew = new UserEditionWidget(session_, apiUrl_, 3);
-       uew->recursiveGetResources();
-//       uew->setNameSpecial("push");
-       tab->addTab(uew, "Push")->setStyleClass("recipients recipients-radius-right");
+       
        newClass_ = true;
     }
 }

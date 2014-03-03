@@ -1282,33 +1282,6 @@ void AlertsWidget::postAlertCallApi(string message)
 
 }
 
-Wt::WDialog *AlertsWidget::deleteResource(long long id)
-{
-    Wt::WDialog *box = AbstractPage::deleteResource(id);
-    box->show();
-    box->finished().connect(bind([ = ] (){
-                                 if (box->result() == Wt::WDialog::Accepted)
-        {
-                                 Wt::Http::Message message;
-                                 message.addBodyText("");
-                                 string apiAddress = this->getApiUrl()
-                                 + "/alerts/" + boost::lexical_cast<string>(id)
-                                 + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-                                 + "&token=" + session_->user()->token.toUTF8();
-
-                                 Wt::Http::Client *client = new Wt::Http::Client(this);
-                                 client->done().connect(boost::bind(&AlertsWidget::deleteAlert, this, _1, _2));
-                                 Wt::log("debug") << "AlertsWidget : [DELETE] address to call : " << apiAddress;
-                                 if (client->deleteRequest(apiAddress, message))
-                                 Wt::WApplication::instance()->deferRendering();
-            else
-                                 Wt::log("error") << "Error Client Http";
-            }
-                                 return box;
-    }));
-    return box;
-}
-
 void AlertsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
 {
     //    Wt::Http::Message message;

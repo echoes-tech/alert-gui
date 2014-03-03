@@ -251,24 +251,24 @@ void AbstractPage::fillBodyTable()
                     k != (*m_rowsTable.find((*itRowTable).first)).second.end(); k++)
             {
                 Wt::WInteractWidget *widgetAdd = *k;
-                string nameRessouce("N2Wt5WTextE");
-                if (nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
+                string nameRessource("N2Wt5WTextE");
+                if (nameRessource.compare(typeid (*widgetAdd).name()) == 0)
                 {
-                    nameRessouce = ((Wt::WText*)(widgetAdd))->text().toUTF8();
-                    string newName = nameRessouce;
+                    nameRessource = ((Wt::WText*)(widgetAdd))->text().toUTF8();
+                    string newName = nameRessource;
                     if (newName.find('|') != string::npos)
                     {
                         vector<string> dataline;
                         boost::split(dataline, newName, boost::is_any_of("|"));
                         newName.clear();
-                        nameRessouce.clear();
+                        nameRessource.clear();
                         for (vector<string>::iterator it = dataline.begin();
                                 it != dataline.end(); it++)
                         {
                             string resizeString = (*it);
                             if (((string)(*it)).find('<') == string::npos)
                             {
-                                nameRessouce += (*it) + "\n";
+                                nameRessource += (*it) + "\n";
                                 if (resizeString.size() > (unsigned int) (SIZE_NAME / m_titles.size()))
                                 {
                                     resizeString.resize(SIZE_NAME / m_titles.size());
@@ -281,7 +281,7 @@ void AbstractPage::fillBodyTable()
                     }
                     else
                     {
-                        if (nameRessouce.size() > (unsigned int) (SIZE_NAME / m_titles.size()))
+                        if (nameRessource.size() > (unsigned int) (SIZE_NAME / m_titles.size()))
                         {
                             newName.resize(SIZE_NAME / m_titles.size());
                             newName.resize(newName.size() + 3, '.');
@@ -290,7 +290,7 @@ void AbstractPage::fillBodyTable()
                     Wt::WText *newColumn = new Wt::WText(Wt::WString::fromUTF8(newName),
                                                          m_resourceTable->elementAt(rowBodyTable, columnTable));
                     newColumn->setTextFormat(Wt::TextFormat::XHTMLUnsafeText);
-                    newColumn->setToolTip(nameRessouce);
+                    newColumn->setToolTip(nameRessource);
                     columnTable++;
                 }
                 else
@@ -741,17 +741,19 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                 for (vector_pair_string::iterator itTitles = m_titles.begin();
                         itTitles != m_titles.end(); itTitles++)
                 {
-                    switch ((*itTitles).first)
+                    switch (itTitles->first)
                     {
                     case ETypeJson::text:
                     {
-                        Wt::WString string = jsonObject.get((*itTitles).second);
-                        nameW.push_back(new Wt::WText(string));
+                        Wt::WString wString = jsonObject.get(itTitles->second);
+                        Wt::WText *text = new Wt::WText(wString);
+                        text->setObjectName("text");
+                        nameW.push_back(text);
                         break;
                     }
                     case ETypeJson::boolean:
                     {
-                        bool boolean = jsonObject.get((*itTitles).second);
+                        bool boolean = jsonObject.get(itTitles->second);
                         Wt::WCheckBox *checkBox = new Wt::WCheckBox();
                         checkBox->setChecked(boolean);
                         checkBox->setDisabled(true);
@@ -760,16 +762,18 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                     }
                     case ETypeJson::integer:
                     {
-                        int number = jsonObject.get((*itTitles).second);
+                        int number = jsonObject.get(itTitles->second);
                         nameW.push_back(new Wt::WText(boost::lexical_cast<string>(number)));
                         break;
                     }
                     case ETypeJson::undid:
                     {
                         Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
-                        Wt::Json::Object nameObjet = jsonObjectParam.get((*itTitles).second);
+                        Wt::Json::Object nameObjet = jsonObjectParam.get(itTitles->second);
                         Wt::WString name = nameObjet.get(m_undidName);
-                        nameW.push_back(new Wt::WText(name));
+                        Wt::WText *text = new Wt::WText(name);
+                        text->setObjectName("text");
+                        nameW.push_back(text);
                         break;
                     }
                     }
@@ -1598,6 +1602,14 @@ void AbstractPage::searchName(Wt::WLineEdit *arg)
 {
     int cpt(0);
     bool check;
+    
+    // tsa : added it to "reset" the search, not optimal.
+    for (vector_pair::iterator it = m_resources.begin(); it != m_resources.end(); it++)
+    {
+        m_nbAffBegin = 1;
+        it->first = 0;
+    }
+    
     if (arg->text().empty())
     {
         for (vector_pair::iterator it = m_resources.begin(); it != m_resources.end(); it++)
@@ -1612,30 +1624,26 @@ void AbstractPage::searchName(Wt::WLineEdit *arg)
         {
             check = false;
             Wt::WTableRow *tableRow = (Wt::WTableRow *)it->second;
-            for (int j(0); j < (int)m_rowsTable.size(); j++)
+
+            //FIXME: TSA should be done for all columns (maybe add other columns in child class to be sure of the type)
+            
+            it->first = 1;
+            
+            Wt::WText *text = (Wt::WText*)tableRow->elementAt(0)->widget(0);
+            string argSearch = arg->text().toUTF8();
+            transform(argSearch.begin(), argSearch.end(), argSearch.begin(), ::tolower);
+            string argInTable = text->text().toUTF8();
+            transform(argInTable.begin(), argInTable.end(), argInTable.begin(), ::tolower);
+            if (boost::contains(argInTable, argSearch) == true)
             {
-                Wt::WText *text = (Wt::WText*)tableRow->elementAt(j)->widget(0);
-                string compareType("PN2Wt5WTextE");
-                if (compareType.compare(typeid (text).name()) == 0)
-                {
-                    string argSearch = arg->text().toUTF8();
-                    transform(argSearch.begin(), argSearch.end(), argSearch.begin(), ::tolower);
-                    string argInTable = text->text().toUTF8();
-                    transform(argInTable.begin(), argInTable.end(), argInTable.begin(), ::tolower);
-                    if (boost::contains(argInTable, argSearch) == true)
-                    {
-                        check = true;
-                    }
-                }
+                check = true;
             }
+            
             if (check == true)
             {
                 it->first = 0;
             }
-            else
-            {
-                it->first = 1;
-            }
+
             cpt++;
         }
     }

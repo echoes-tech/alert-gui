@@ -69,7 +69,13 @@ void EchoesHome::initAuth()
     this->authModel = new Wt::Auth::AuthModel(Echoes::Dbo::Session::auth(),this->session->users(), this);
     this->authModel->addPasswordAuth(&Echoes::Dbo::Session::passwordAuth());
     this->authModel->addOAuth(Echoes::Dbo::Session::oAuth());
-
+//    this->authModel->setValue(Wt::Auth::AuthModel::RememberMeField, true);
+//    this->authModel->setReadOnly(Wt::Auth::AuthModel::RememberMeField, true);
+//    this->authModel->setVisible(Wt::Auth::AuthModel::RememberMeField, false);
+    
+    cout << "TRUE : " << boost::any_cast<bool>(true) << endl;
+    cout << "REMEMBER ME FIELD ??? : " << boost::any_cast<bool>(this->authModel->value(Wt::Auth::AuthModel::RememberMeField)) << endl;
+    
     this->authWidget = new Wt::Auth::AuthWidget(this->session->login());
     this->authWidget->setModel(this->authModel);
     this->authWidget->setRegistrationEnabled(true);

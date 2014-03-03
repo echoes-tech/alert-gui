@@ -39,7 +39,6 @@ public:
     void                        addResource(std::vector<Wt::WInteractWidget*> argument);
     void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
 
-    void                        handleJsonGet(vectors_Json jsonResources);
     virtual std::string         addParameter();
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
 

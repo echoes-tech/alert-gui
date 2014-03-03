@@ -418,66 +418,70 @@ void AlertsWidget::pluginSelected()
 
 void AlertsWidget::infoSelected()
 {
-//    int infoId = 0;
-//    const set<int> setSelectedIndexes = m_boxInfo->selectedIndexes();
-//    if (!setSelectedIndexes.empty())
-//    {
-//        // le faire pour select multiple également
-//        if (setSelectedIndexes.size() == 1)
-//        {
-//            int indexSelected = -1;
-//            set<int>::iterator iteratorSelectedIndexes;
-//            for(iteratorSelectedIndexes = setSelectedIndexes.begin() ; iteratorSelectedIndexes != setSelectedIndexes.end() ; iteratorSelectedIndexes++)
-//            {
-//                indexSelected = *iteratorSelectedIndexes;
-//            }
-//            infoId = boost::lexical_cast<long long>(m_assets->item(indexSelected,0)->text());
-//            
-//            int rowPlug = 0;
-//            m_plugins->clear();
-//            m_boxPlugin->clear();
-//            m_informations->clear();
-//            m_boxInfo->clear();
-//            set<long long> setPluginIds;
-//            for(unsigned int i = 0 ; i < m_mapAssetPlugins[infoId].size() ; i++)
-//            {
-//                setPluginIds.insert(m_mapAssetPlugins[infoId][i]);
-//                Wt::WStandardItem *id = new Wt::WStandardItem();
-//                m_plugins->setItem(rowPlug,0,id);
-//                m_plugins->item(rowPlug,0)->setText(boost::lexical_cast<string>(m_mapAssetPlugins[infoId][i]));
-//                Wt::WStandardItem *name = new Wt::WStandardItem();
-//                m_plugins->setItem(rowPlug,1,name);
-//                m_plugins->item(rowPlug,1)->setText(m_mapPluginsNames[m_mapAssetPlugins[infoId][i]]);
-//                rowPlug++;
-//            }
-//            
-//            int rowInfo = 0;
-//            set<long long>::iterator iteratorSetPluginsIds;
-//            for(iteratorSetPluginsIds = setPluginIds.begin() ; iteratorSetPluginsIds != setPluginIds.end() ; iteratorSetPluginsIds++)
-//            {
-//                cout << "PLUGIN TO FIND INFOS : " << *iteratorSetPluginsIds << endl;
-//                cout << "TAILLE DE LA MAP : " << m_mapPluginInfos[*iteratorSetPluginsIds].size() << endl;
-//                for(unsigned int i = 0 ; i < m_mapPluginInfos[*iteratorSetPluginsIds].size() ; i++)
-//                {
-//                    Wt::WStandardItem *idInf = new Wt::WStandardItem();
-//                    m_informations->setItem(rowInfo,0,idInf);
-//                    m_informations->item(rowInfo,0)->setText(boost::lexical_cast<string>(m_mapPluginInfos[*iteratorSetPluginsIds][i]));
-//                    Wt::WStandardItem *nameInf = new Wt::WStandardItem();
-//                    m_informations->setItem(rowInfo,1,nameInf);
-//                    m_informations->item(rowInfo,1)->setText(m_mapInformationsNames[m_mapPluginInfos[*iteratorSetPluginsIds][i]]);
-//                    rowInfo++;
-//                }
-//            }
-//        }
-//        else
-//        {
-//            Wt::log("debug") << "[AlertsWidget][selectAsset] Multiple selection";
-//        }
-//    }
-//    else
-//    {
-//        Wt::log("debug") << "[AlertsWidget][selectAsset] Box empty";
-//    }
+    int infoId = 0;
+    const set<int> setSelectedIndexes = m_boxInfo->selectedIndexes();
+    if (!setSelectedIndexes.empty())
+    {
+        // le faire pour select multiple également
+        if (setSelectedIndexes.size() == 1)
+        {
+            int indexSelected = -1;
+            set<int>::iterator iteratorSelectedIndexes;
+            for(iteratorSelectedIndexes = setSelectedIndexes.begin() ; iteratorSelectedIndexes != setSelectedIndexes.end() ; iteratorSelectedIndexes++)
+            {
+                indexSelected = *iteratorSelectedIndexes;
+            }
+            infoId = boost::lexical_cast<long long>(m_informations->item(indexSelected,0)->text());
+            
+            int rowPlug = 0;
+            m_plugins->clear();
+            m_boxPlugin->clear();
+            m_assets->clear();
+            m_boxAsset->clear();
+            set<long long> setPluginIds;
+            for(unsigned int i = 0 ; i < m_mapInfoPlugins[infoId].size() ; i++)
+            {
+                setPluginIds.insert(m_mapInfoPlugins[infoId][i]);
+                Wt::WStandardItem *id = new Wt::WStandardItem();
+                m_plugins->setItem(rowPlug,0,id);
+                m_plugins->item(rowPlug,0)->setText(boost::lexical_cast<string>(m_mapInfoPlugins[infoId][i]));
+                Wt::WStandardItem *name = new Wt::WStandardItem();
+                m_plugins->setItem(rowPlug,1,name);
+                m_plugins->item(rowPlug,1)->setText(m_mapPluginsNames[m_mapInfoPlugins[infoId][i]]);
+                rowPlug++;
+            }
+            
+            int rowAsset = 0;
+            set<long long>::iterator iteratorSetPluginsIds;
+            for(iteratorSetPluginsIds = setPluginIds.begin() ; iteratorSetPluginsIds != setPluginIds.end() ; iteratorSetPluginsIds++)
+            {
+                cout << "PLUGIN TO FIND ASSETS : " << *iteratorSetPluginsIds << endl;
+                cout << "TAILLE DE LA MAP : " << m_mapPluginAssets[*iteratorSetPluginsIds].size() << endl;
+                for(unsigned int i = 0 ; i < m_mapPluginAssets[*iteratorSetPluginsIds].size() ; i++)
+                {
+                    Wt::WStandardItem *idInf = new Wt::WStandardItem();
+                    m_assets->setItem(rowAsset,0,idInf);
+                    m_assets->item(rowAsset,0)->setText(boost::lexical_cast<string>(m_mapPluginAssets[*iteratorSetPluginsIds][i]));
+                    Wt::WStandardItem *nameInf = new Wt::WStandardItem();
+                    m_assets->setItem(rowAsset,1,nameInf);
+                    m_assets->item(rowAsset,1)->setText(m_mapAssetsNames[m_mapPluginAssets[*iteratorSetPluginsIds][i]]);
+                    rowAsset++;
+                }
+            }
+        }
+        else
+        {
+            Wt::log("debug") << "[AlertsWidget][selectInfo] Multiple selection";
+        }
+        showUnit(infoId);
+    }
+    else
+    {
+        Wt::log("debug") << "[AlertsWidget][selectInfo] Box empty";
+    }
+    
+    // ToDo
+    // afficher les champs de paramétrages liés à l'unité de l'information
 }
 
 void AlertsWidget::fillModels()
@@ -680,8 +684,8 @@ void AlertsWidget::showUnit(long long id)
     hideUnit();
     if (id > 0)
     {
-        multimap<long long, long long>::iterator unit = unitsIds_.find(id);
-        if ((*unit).second == 1)
+        long long unitId = m_mapInformationsUnits[id];
+        if (unitId == 1)
         {
             compareBarOne_->show();
             for (it = unitOne_.begin(); it != unitOne_.end(); it++)
@@ -689,7 +693,7 @@ void AlertsWidget::showUnit(long long id)
                 ((Wt::WTable*)(*it).second)->show();
             }
         }
-        else if ((*unit).second == 3)
+        else if (unitId == 3)
         {
             compareBarTwo_->show();
             for (it = unitTwo_.begin(); it != unitTwo_.end(); it++)
@@ -697,7 +701,7 @@ void AlertsWidget::showUnit(long long id)
                 ((Wt::WTable*)(*it).second)->show();
             }
         }
-        else if ((*unit).second == 5) //Enums::EInformationUnitType::boolean
+        else if (unitId == 5) //Enums::EInformationUnitType::boolean
         {
             unitThree_->show();
         }
@@ -1029,7 +1033,9 @@ int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
                 checkAll = 1;
             }
             else
+            {
                 (*it).second.first.second->hide();
+            }
         }
         break;
     }
@@ -1048,7 +1054,9 @@ int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
                 checkAll = 1;
             }
             else
+            {
                 (*it).second.first.second->hide();
+            }
         }
         break;
     }
@@ -1060,7 +1068,9 @@ int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
             checkAll = 1;
         }
         else
+        {
             errorBool_->hide();
+        }
         break;
     }
     }
@@ -1076,7 +1086,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
     boost::algorithm::to_lower(data);
     message += "{\n\"name\": \"" + data + "\",\n";
 
-    switch ((*unitsIds_.find(idAll_.second.first)).second)
+    switch (m_mapInformationsUnits[getSelectedIdFromBox(m_boxInfo)])
     {
     case Enums::EInformationUnitType::text:
     {
@@ -1132,9 +1142,13 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
 
     message += "\"key_value\": \"" + keyValue_->text().toUTF8() + "\",\n";
 
-    message += "\"asset_id\": " + boost::lexical_cast<string>(idAll_.first.first) + ",\n";
-    message += "\"plugin_id\": " + boost::lexical_cast<string>(idAll_.first.second) + ",\n";
-    message += "\"information_id\": " + boost::lexical_cast<string>(idAll_.second.first);
+    long long assetId = getSelectedIdFromBox(m_boxAsset);
+    long long pluginId = getSelectedIdFromBox(m_boxPlugin);
+    long long infoId = getSelectedIdFromBox(m_boxInfo);
+    
+    message += "\"asset_id\": " + boost::lexical_cast<string>(assetId) + ",\n";
+    message += "\"plugin_id\": " + boost::lexical_cast<string>(pluginId) + ",\n";
+    message += "\"information_id\": " + boost::lexical_cast<string>(infoId);
 
     if (checkAll_ == 1)
     {
@@ -1159,6 +1173,27 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
 void AlertsWidget::closePopup()
 {
     getResourceList();
+}
+
+long long AlertsWidget::getSelectedIdFromBox(Wt::WSelectionBox * box)
+{
+    const set<int> setSelectedIndexes = box->selectedIndexes();
+    long long res = -1;
+    if (!setSelectedIndexes.empty())
+    {
+        // le faire pour select multiple également
+        if (setSelectedIndexes.size() == 1)
+        {
+            int indexSelected = -1;
+            set<int>::iterator iteratorSelectedIndexes;
+            for(iteratorSelectedIndexes = setSelectedIndexes.begin() ; iteratorSelectedIndexes != setSelectedIndexes.end() ; iteratorSelectedIndexes++)
+            {
+                indexSelected = *iteratorSelectedIndexes;
+            }
+            res = boost::lexical_cast<long long>(((Wt::WStandardItemModel*)box->model())->item(indexSelected,0)->text());
+        }
+    }
+    return res;
 }
 
 void AlertsWidget::errorsHideOne(map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>> error)
@@ -1198,12 +1233,13 @@ void AlertsWidget::recoverListRecipientAlias(long long userRoleId)
         client->done().connect(boost::bind(&AlertsWidget::getAliasInfo, this, _1, _2, userRoleId, mediaType));
         Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
         if (client->get(apiAddress))
+        {
             Wt::WApplication::instance()->deferRendering();
+        }
         else
+        {
             Wt::log("error") << "Error Client Http";
-
-
-
+        }
 
     }
 }
@@ -1214,13 +1250,10 @@ void AlertsWidget::clearStructures()
     m_alerts = Wt::Json::Value::Null;
     userInfo_.clear();
     mediaInfo_.clear();
-    m_assetBoxNames.clear();
-    m_pluginBoxNames.clear();
-    m_infoBoxNames.clear();
-//    m_mapAssetIdsPluginIds.clear();
-//    m_mapPluginIdsAssetIds.clear();
-//    m_mapPluginIdsInfoIds.clear();
-//    m_mapInfoIdsPluginsIds.clear();
+//    m_assetBoxNames.clear();
+//    m_pluginBoxNames.clear();
+//    m_infoBoxNames.clear();
+
     unitsIds_.clear();
     messageMailForTab_.clear();
     messageSmsForTab_.clear();
@@ -1302,6 +1335,7 @@ void AlertsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long lo
 void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
 {
    
+    // asset plugins
     vector<Wt::Json::Value> jsonResource = jsonResources.at(1);
     try
     {
@@ -1475,6 +1509,9 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
                     Wt::Json::Value jsonInformationPlugins = jsonResource.at(cpt + 1);
                     long long infoId = jsonInformation.get("id");
                     string infoName = jsonInformation.get("name");
+                    Wt::Json::Object jsonInfoUnit = jsonInformation.get("information_unit");
+                    long long infoUnitId = jsonInfoUnit.get("id");
+                    m_mapInformationsUnits[infoId] = infoUnitId;
                     bool infoDisplay = jsonInformation.get("display");
                     if (infoDisplay)
                     {
@@ -1532,6 +1569,75 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
           
+    //users
+    jsonResource = jsonResources.at(6);
+    try
+    {
+        if (jsonResource.size() > 0)
+        {
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
+            {
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+                {
+                    Wt::Json::Object jsonUser = jsonArray.at(cpt);
+                    long long userId = jsonUser.get("id");
+                    string userFirstName = jsonUser.get("first_name");
+                    string userLastName = jsonUser.get("last_name");
+                    userInfo_.insert(std::make_pair(cpt++, std::make_pair(userId, userFirstName + " " + userLastName)));
+                }
+            }
+        }
+            
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Alerts][Users] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Alerts][Users] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    
+    //medias
+    jsonResource = jsonResources.at(7);
+    try
+    {
+        if (jsonResource.size() > 0)
+        {
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
+            {
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+                {
+                    Wt::Json::Object jsonMedia = jsonArray.at(cpt);
+                    long long mediaId = jsonMedia.get("id");
+                    Wt::Json::Object mediaType = jsonMedia.get("media_type");
+                    long long mediaTypeId = mediaType.get("id");
+                    string mediaValue = jsonMedia.get("value");
+                    Wt::Json::Object mediaUser = jsonMedia.get("user");
+                    mediaInfo_.insert(std::make_pair(cpt++, std::make_pair(std::make_pair(mediaId, mediaTypeId), mediaValue)));
+                    
+//                    idUserPositionMedia_.push_back(std::make_pair(mediaUser.get("id"),cpt));
+                }
+            }
+        }
+            
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Alerts][Users] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Alerts][Users] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+                
+    
     AbstractPage::handleJsonGet(jsonResources);
 }
 

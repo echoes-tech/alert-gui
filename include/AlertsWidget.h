@@ -82,6 +82,7 @@ public:
 protected:
     virtual void                clearStructures();
     virtual void                handleJsonGet(vectors_Json jsonResources);
+    long long                   getSelectedIdFromBox(Wt::WSelectionBox * box);
 
 private:
 
@@ -140,7 +141,10 @@ private:
     std::map<long long, std::string> m_mapPluginsNames;
     std::map<long long, std::string> m_mapInformationsNames;
     
-    // popup boxes
+    //info unit id
+    std::map<long long, long long> m_mapInformationsUnits;
+    
+    // first popup boxes
     Wt::WSelectionBox *m_boxAsset;
     Wt::WSelectionBox *m_boxPlugin;
     Wt::WSelectionBox *m_boxInfo;
@@ -167,12 +171,6 @@ private:
     std::string         messageMailForTab_;
     std::string         messageSmsForTab_;
     std::string         messagePushForTab_;
-
-    std::multimap<long long, std::pair<long long, std::string>>         m_assetBoxNames; // Assets infomations (<index <idAsset, nameAsset>>)
-    std::multimap<long long, std::pair<long long, std::string>>         m_pluginBoxNames; // Plugins infomations (<index <idPlugin, namePlugin>>)
-    std::multimap<long long, std::pair<long long, std::string>>         m_infoBoxNames; // Infos infomations (<index <idInfo, nameInfo>>)
-
-
 
     
     std::multimap<long long, long long>       unitsIds_; // Link between Info and widgets compare. (text, number, bool)

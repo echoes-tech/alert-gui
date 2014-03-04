@@ -26,7 +26,7 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
     created_ = false;
     newClass_ = false;
 
-    setButtonModif(true);
+    setButtonModif(false);
     setButtonSup(true);
     setLocalTable(true);
     
@@ -142,6 +142,7 @@ vector<long long> AlertsWidget::getIdsTable()
 
 void AlertsWidget::popupRecipients(string nameAlert, string message)
 {
+    recoverListRecipientAlias(this->session_->user().id());
     Wt::WDialog *dialog = new Wt::WDialog();
     dialog->setClosable(true);
     AbstractPage::addButtonsToPopupFooter(dialog);
@@ -577,7 +578,6 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
     tabMessage_ = new Wt::WTabWidget();
     tabMessage_->resize(Wt::WLength(300), Wt::WLength(200));
-    recoverListRecipientAlias(this->session_->user().id());
     checkAll_ = 1;
     Wt::WPushButton *ButtonSC = new Wt::WPushButton(tr("Alert.alert.button-save-continu"), dialog->footer());
     ButtonSC->clicked().connect(bind([ = ] (){
@@ -1224,7 +1224,7 @@ void AlertsWidget::recoverListRecipientAlias(long long userRoleId)
     for (long long mediaType(1); mediaType <= 3; mediaType++)
     {
         string apiAddress = this->getApiUrl() + "/informations/"
-                + boost::lexical_cast<string>(idAll_.second.first) + "/alias"
+                + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxInfo)) + "/alias"
                 + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
                 + "&token=" + session_->user()->token.toUTF8()
                 + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)
@@ -1557,7 +1557,7 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
                     long long userId = jsonUser.get("id");
                     string userFirstName = jsonUser.get("first_name");
                     string userLastName = jsonUser.get("last_name");
-                    userInfo_.insert(std::make_pair(cpt++, std::make_pair(userId, userFirstName + " " + userLastName)));
+                    userInfo_.insert(std::make_pair(cpt, std::make_pair(userId, userFirstName + " " + userLastName)));
                 }
             }
         }
@@ -1591,7 +1591,7 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
                     long long mediaTypeId = mediaType.get("id");
                     string mediaValue = jsonMedia.get("value");
                     Wt::Json::Object mediaUser = jsonMedia.get("user");
-                    mediaInfo_.insert(std::make_pair(cpt++, std::make_pair(std::make_pair(mediaId, mediaTypeId), mediaValue)));
+                    mediaInfo_.insert(std::make_pair(cpt, std::make_pair(std::make_pair(mediaId, mediaTypeId), mediaValue)));
                     
 //                    idUserPositionMedia_.push_back(std::make_pair(mediaUser.get("id"),cpt));
                 }
@@ -1701,7 +1701,7 @@ void AlertsWidget::getAliasInfo(boost::system::error_code err, const Wt::Http::M
     created_ = false;
 
     string apiAddress = this->getApiUrl() + "/assets/"
-            + boost::lexical_cast<string>(idAll_.first.first) + "/alias"
+            + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxAsset)) + "/alias"
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8()
             + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)
@@ -1838,7 +1838,7 @@ void AlertsWidget::getAliasCriteria(boost::system::error_code err, const Wt::Htt
     created_ = false;
 
     string apiAddress = this->getApiUrl() + "/plugins/"
-            + boost::lexical_cast<string>(idAll_.first.second) + "/alias"
+            + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxPlugin)) + "/alias"
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8()
             + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)

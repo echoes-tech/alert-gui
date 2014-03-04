@@ -384,51 +384,55 @@ void AbstractPage::addResourcePopup()
     {
         if ((*title).first >= 0)
         {
-            new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
-                          + " : <br />", dialogAdd_->contents());
-
-            if ((*title).first == ETypeJson::text)
+            // FIXME: HACK for add alert popup
+            if ((*title).second.compare("last_attempt") != 0)
             {
-                input = new Wt::WLineEdit(dialogAdd_->contents());
-                //FIXME
-//                input->setValidator(editValidator(cpt));
-                input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-                input->setWidth(Wt::WLength(150));
-                if (inputName.size() == 0)
+                new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
+                              + " : <br />", dialogAdd_->contents());
+
+                if ((*title).first == ETypeJson::text)
                 {
-                    input->setFocus();
+                    input = new Wt::WLineEdit(dialogAdd_->contents());
+                    //FIXME
+    //                input->setValidator(editValidator(cpt));
+                    input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
+                    input->setWidth(Wt::WLength(150));
+                    if (inputName.size() == 0)
+                    {
+                        input->setFocus();
+                    }
+                    inputName.push_back(input);
                 }
-                inputName.push_back(input);
-            }
-            else if ((*title).first == ETypeJson::boolean)
-            {
-                Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
-                inputName.push_back(checkBox);
-            }
-            else if ((*title).first == ETypeJson::integer)
-            {
-                input = new Wt::WLineEdit(dialogAdd_->contents());
-                input->setValidator(editValidator(cpt));
-                input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-                input->setWidth(Wt::WLength(150));
-                if (inputName.size() == 0)
+                else if ((*title).first == ETypeJson::boolean)
                 {
-                    input->setFocus();
+                    Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
+                    inputName.push_back(checkBox);
                 }
-                inputName.push_back(input);
-            }
-            else if ((*title).first == ETypeJson::undid)
-            {
-                inputName.push_back(popupAdd(dialogAdd_));
-            }
+                else if ((*title).first == ETypeJson::integer)
+                {
+                    input = new Wt::WLineEdit(dialogAdd_->contents());
+                    input->setValidator(editValidator(cpt));
+                    input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
+                    input->setWidth(Wt::WLength(150));
+                    if (inputName.size() == 0)
+                    {
+                        input->setFocus();
+                    }
+                    inputName.push_back(input);
+                }
+                else if ((*title).first == ETypeJson::undid)
+                {
+                    inputName.push_back(popupAdd(dialogAdd_));
+                }
 
-            Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
-                                                + (*title).second),
-                                             dialogAdd_->contents());
-            error->hide();
-            errorMessage.push_back(error);
+                Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
+                                                    + (*title).second),
+                                                 dialogAdd_->contents());
+                error->hide();
+                errorMessage.push_back(error);
 
-            new Wt::WText("<br />", dialogAdd_->contents());
+                new Wt::WText("<br />", dialogAdd_->contents());
+            }
         }
         cpt++;
     }

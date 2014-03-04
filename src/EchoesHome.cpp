@@ -73,8 +73,8 @@ void EchoesHome::initAuth()
 //    this->authModel->setReadOnly(Wt::Auth::AuthModel::RememberMeField, true);
 //    this->authModel->setVisible(Wt::Auth::AuthModel::RememberMeField, false);
     
-    cout << "TRUE : " << boost::any_cast<bool>(true) << endl;
-    cout << "REMEMBER ME FIELD ??? : " << boost::any_cast<bool>(this->authModel->value(Wt::Auth::AuthModel::RememberMeField)) << endl;
+//    cout << "TRUE : " << boost::any_cast<bool>(true) << endl;
+//    cout << "REMEMBER ME FIELD ??? : " << boost::any_cast<bool>(this->authModel->value(Wt::Auth::AuthModel::RememberMeField)) << endl;
     
     this->authWidget = new Wt::Auth::AuthWidget(this->session->login());
     this->authWidget->setModel(this->authModel);

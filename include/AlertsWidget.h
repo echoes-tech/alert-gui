@@ -83,6 +83,7 @@ protected:
     virtual void                clearStructures();
     virtual void                handleJsonGet(vectors_Json jsonResources);
     long long                   getSelectedIdFromBox(Wt::WSelectionBox * box);
+    virtual void                setDisplayedTitlesPopups();
 
 private:
 

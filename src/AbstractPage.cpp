@@ -375,60 +375,56 @@ void AbstractPage::addResourcePopup()
     Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".add-" + m_nameResourcePageSpec));
     
     int cpt(0);
-    for (multimap<int, string>::iterator title = m_titles.begin();
-            title != m_titles.end(); title++)
+    for (multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
+            title != m_displayedTitlesPopups.end(); title++)
     {
         if (title->first >= 0)
         {
-            // FIXME: HACK for add alert popup
-            if ((*title).second.compare("last_attempt") != 0)
+            new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
+                          + " : <br />", dialogAdd_->contents());
+
+            if ((*title).first == ETypeJson::text)
             {
-                new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
-                              + " : <br />", dialogAdd_->contents());
-
-                if ((*title).first == ETypeJson::text)
+                input = new Wt::WLineEdit(dialogAdd_->contents());
+                //FIXME
+//                input->setValidator(editValidator(cpt));
+                input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
+                input->setWidth(Wt::WLength(150));
+                if (inputName.size() == 0)
                 {
-                    input = new Wt::WLineEdit(dialogAdd_->contents());
-                    //FIXME
-    //                input->setValidator(editValidator(cpt));
-                    input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-                    input->setWidth(Wt::WLength(150));
-                    if (inputName.size() == 0)
-                    {
-                        input->setFocus();
-                    }
-                    inputName.push_back(input);
+                    input->setFocus();
                 }
-                else if ((*title).first == ETypeJson::boolean)
-                {
-                    Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
-                    inputName.push_back(checkBox);
-                }
-                else if ((*title).first == ETypeJson::integer)
-                {
-                    input = new Wt::WLineEdit(dialogAdd_->contents());
-                    input->setValidator(editValidator(cpt));
-                    input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-                    input->setWidth(Wt::WLength(150));
-                    if (inputName.size() == 0)
-                    {
-                        input->setFocus();
-                    }
-                    inputName.push_back(input);
-                }
-                else if ((*title).first == ETypeJson::undid)
-                {
-                    inputName.push_back(popupAdd(dialogAdd_));
-                }
-
-                Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
-                                                    + (*title).second),
-                                                 dialogAdd_->contents());
-                error->hide();
-                errorMessage.push_back(error);
-
-                new Wt::WText("<br />", dialogAdd_->contents());
+                inputName.push_back(input);
             }
+            else if ((*title).first == ETypeJson::boolean)
+            {
+                Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
+                inputName.push_back(checkBox);
+            }
+            else if ((*title).first == ETypeJson::integer)
+            {
+                input = new Wt::WLineEdit(dialogAdd_->contents());
+                input->setValidator(editValidator(cpt));
+                input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
+                input->setWidth(Wt::WLength(150));
+                if (inputName.size() == 0)
+                {
+                    input->setFocus();
+                }
+                inputName.push_back(input);
+            }
+            else if ((*title).first == ETypeJson::undid)
+            {
+                inputName.push_back(popupAdd(dialogAdd_));
+            }
+
+            Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
+                                                + (*title).second),
+                                             dialogAdd_->contents());
+            error->hide();
+            errorMessage.push_back(error);
+
+            new Wt::WText("<br />", dialogAdd_->contents());
         }
         cpt++;
     }
@@ -457,7 +453,7 @@ void AbstractPage::modifResourcePopup(long long id)
         int cpt(0);
         if ((*itTable).first == id)
         {
-            multimap<int, string>::iterator title = m_titles.begin();
+            multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
             for (Wt::WInteractWidget *itElem : (*itTable).second)
             {
                 if ((*title).first >= 0)
@@ -678,6 +674,12 @@ void AbstractPage::setUndidName(string undidName)
 void AbstractPage::setTitles(multimap<int, string> titles)
 {
     m_titles = titles;
+    setDisplayedTitlesPopups();
+}
+
+void AbstractPage::setDisplayedTitlesPopups()
+{
+    m_displayedTitlesPopups = m_titles;
 }
 
 void AbstractPage::setUrl(lists_string listsUrl)
@@ -1291,7 +1293,7 @@ void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
         int cpt(0);
         if ((*itTable).first == id)
         {
-            multimap<int, string>::iterator title = m_titles.begin();
+            multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
             for (Wt::WInteractWidget *itElem : (*itTable).second)
             {
                 string nameRessouce("N2Wt5WTextE");

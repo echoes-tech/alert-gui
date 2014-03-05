@@ -37,7 +37,7 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
     multimap<int, string> listTitles;
     listTitles.insert(make_pair(ETypeJson::text, "name"));
     listTitles.insert(make_pair(ETypeJson::text, "last_attempt"));
-    //    listTitles.push_back(make_pair(ETypeJson::text, "alert_media_specializations"));
+    listTitles.insert(make_pair(ETypeJson::integer, "alert_media_specializations"));
     //    listTitles.push_back(make_pair(ETypeJson::text, "al4"));
     setTitles(listTitles);
 
@@ -82,6 +82,13 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
     listUrl.clear();
 
     setUrl(lListUrl);
+}
+
+void AlertsWidget::setDisplayedTitlesPopups()
+{
+    multimap<int, string> displayedTitles;
+    displayedTitles.insert(make_pair(ETypeJson::text, "name"));
+    m_displayedTitlesPopups = displayedTitles;
 }
 
 void AlertsWidget::updatePage(bool getResources)

@@ -176,6 +176,7 @@ protected:
      */
     void                        setUndidName(std::string undidName);
     void                        setTitles(std::multimap<int, std::string> titles);
+    virtual void                setDisplayedTitlesPopups();
     void                        setUrl(lists_string listsUrl);
     void                        setButtonModif(bool check);
     void                        setButtonSup(bool check);
@@ -220,7 +221,8 @@ protected:
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id);
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
-    multimap_long_widgets       m_rowsTable;
+    multimap_long_widgets               m_rowsTable;
+    std::multimap<int, std::string>     m_displayedTitlesPopups;
 
 private:
     

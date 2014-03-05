@@ -54,7 +54,7 @@ void PluginEditionWidget::refresh1()
 
 void PluginEditionWidget::updateData()
 {
-    Wt::WApplication::instance()->triggerUpdate();
+//    Wt::WApplication::instance()->triggerUpdate();
 }
 
 void PluginEditionWidget::createUI()

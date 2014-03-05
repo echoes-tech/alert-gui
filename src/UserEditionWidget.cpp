@@ -32,9 +32,9 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
     string nameSpe = type == 1 ? "mail" : type == 2 ? "sms" : type == 3 ? "push" : "error";
     this->setNameSpecial(nameSpe);
     
-    vector_pair_string titles;
-    titles.push_back(make_pair(ETypeJson::text, "value"));
-    titles.push_back(make_pair(ETypeJson::undid, "user"));
+    multimap<int, string> titles;
+    titles.insert(make_pair(ETypeJson::text, "value"));
+    titles.insert(make_pair(ETypeJson::undid, "user"));
     setUndidName("last_name");
     setTitles(titles);
 

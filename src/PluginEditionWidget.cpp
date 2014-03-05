@@ -20,7 +20,7 @@ PluginEditionWidget::PluginEditionWidget(Echoes::Dbo::Session* session, const st
     if (this->session->user().id() != -1)
     {
         Wt::WApplication *app = Wt::WApplication::instance();
-        app->enableUpdates(true);
+//        app->enableUpdates(true);
         app->messageResourceBundle().use("plugin", false);
         searchToken();
         createUI();

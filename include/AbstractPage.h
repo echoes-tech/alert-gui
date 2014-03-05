@@ -16,6 +16,8 @@
 #ifndef ABSTRACTPAGE_H
 #define	ABSTRACTPAGE_H
 
+// Lib c
+#include <stdlib.h>
 // Lib c++
 #include <vector>
 #include <map>
@@ -23,8 +25,6 @@
 #include <algorithm>
 #include <typeinfo>
 #include <string>
-// Lib c
-#include <stdlib.h>
 // Lib boost
 #include <boost/concept_check.hpp>
 #include <boost/algorithm/string/predicate.hpp>
@@ -32,6 +32,8 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/system/system_error.hpp>
 // Lib Witty
+#include <Wt/Utils>
+
 #include <Wt/WValidator>
 #include <Wt/WInteractWidget>
 #include <Wt/WTemplateFormView>
@@ -72,7 +74,6 @@
 
 #include <Enums.h>
 // Lib perso
-#include "WebUtils.h"
 #include "tools/Session.h"
 
 // DEFINE
@@ -81,10 +82,6 @@
 
 // TYPEDEF
 
-/** AbstractPage. vector_pair \n
- * list &lsaquo; pair &lsaquo; int, string &rsaquo; &rsaquo;
- */
-typedef std::vector<std::pair<int, std::string>>  vector_pair_string;
 /** AbstractPage. map_widget \n
  * list &lsaquo; int, string &rsaquo;
  */
@@ -178,7 +175,7 @@ protected:
      * type(0) == Wtext || type(1) == Wwidget.
      */
     void                        setUndidName(std::string undidName);
-    void                        setTitles(vector_pair_string titles);
+    void                        setTitles(std::multimap<int, std::string> titles);
     void                        setUrl(lists_string listsUrl);
     void                        setButtonModif(bool check);
     void                        setButtonSup(bool check);
@@ -245,20 +242,20 @@ private:
      * multimap &lsaquo; id/index, vector &lsaquo; widget &rsaquo; &rsaquo;\n
      * Usage : \n id/index, always use number greader 0 \n
      */
-    vector_widget               m_inputs;
+    vector_widget                       m_inputs;
     // Attributs.-------------------------------
-    lists_string                m_listsUrl;
-    vector_pair_string          m_titles;
-    Echoes::Dbo::Session        *m_session;
-    std::string                 m_apiUrl;
-    std::string                 m_xmlPageName;
-    std::string                 m_nameResourcePageSpec;
-    std::string                 m_undidName;
-    bool                        m_isCreated;
-    bool                        m_isModifButtonPresent;
-    bool                        m_isDeleteButtonPresent;
-    bool                        m_isMainPage;
-    bool                        m_toUpdate;
+    lists_string                        m_listsUrl;
+    std::multimap<int, std::string>     m_titles;
+    Echoes::Dbo::Session                *m_session;
+    std::string                         m_apiUrl;
+    std::string                         m_xmlPageName;
+    std::string                         m_nameResourcePageSpec;
+    std::string                         m_undidName;
+    bool                                m_isCreated;
+    bool                                m_isModifButtonPresent;
+    bool                                m_isDeleteButtonPresent;
+    bool                                m_isMainPage;
+    bool                                m_toUpdate;
     // select drop + paginate--------------------
     vector_pair                 m_resources;
     vector_widget               m_butPaginate;

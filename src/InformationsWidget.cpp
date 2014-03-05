@@ -26,13 +26,13 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
     setButtonSup(true);
     setLocalTable(true);
 
-    vector_pair_string titles;
-    titles.push_back(make_pair(ETypeJson::text, "name"));
-    titles.push_back(make_pair(ETypeJson::text, "desc"));
-    titles.push_back(make_pair(ETypeJson::text, "calculate"));
-    titles.push_back(make_pair(ETypeJson::undid, "information_unit"));
+    multimap<int, string> titles;
+    titles.insert(make_pair(ETypeJson::text, "name"));
+    titles.insert(make_pair(ETypeJson::text, "desc"));
+    titles.insert(make_pair(ETypeJson::text, "calculate"));
+    titles.insert(make_pair(ETypeJson::undid, "information_unit"));
     setUndidName("name");
-    titles.push_back(make_pair(ETypeJson::boolean, "display"));
+    titles.insert(make_pair(ETypeJson::boolean, "display"));
     setTitles(titles);
 
     lists_string lListUrl;

@@ -27,9 +27,9 @@ AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, stri
     setButtonSup(true);
     setLocalTable(true);
 
-    vector_pair_string titles;
-    titles.push_back(make_pair(ETypeJson::text, "name"));
-    titles.push_back(make_pair(ETypeJson::widget, "download-script"));
+    multimap<int, string> titles;
+    titles.insert(make_pair(ETypeJson::text, "name"));
+    titles.insert(make_pair(ETypeJson::widget, "download-script"));
     setTitles(titles);
 
     lists_string lListUrl;

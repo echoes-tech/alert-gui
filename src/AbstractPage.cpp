@@ -171,7 +171,7 @@ Wt::WContainerWidget *AbstractPage::createTableBody()
     m_resources.clear();
 
     Wt::WContainerWidget *resourceTableContainer = new Wt::WContainerWidget();
-    // gkr: Init body of table
+
     resourceTableContainer->addStyleClass("widget-content nopadding DataTables_Table_0_wrapper dataTables_wrapper body-pers");
 
     m_resourceTable = new Wt::WTable(resourceTableContainer);
@@ -196,9 +196,8 @@ Wt::WContainerWidget *AbstractPage::createTableFooter()
         
     Wt::WContainerWidget *footerTable = new Wt::WContainerWidget();
     footerTable->addStyleClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix footer-pers");
-    // revoir ui-toolbar quand css finit  
-    new Wt::WText(tr("Alert." + m_xmlPageName + ".search-bar")
-                  , footerTable);
+
+    new Wt::WText(tr("Alert." + m_xmlPageName + ".search-bar"), footerTable);
 
     Wt::WLineEdit *search = new Wt::WLineEdit(footerTable);
     search->resize(Wt::WLength(100), Wt::WLength(15));
@@ -218,7 +217,7 @@ void AbstractPage::addTableSecondHeader()
     int columnTable(0);
 
     m_resourceTable->elementAt(0, 0)->setAttributeValue("style", "border-left:0;");
-    for (vector_pair_string::iterator it = m_titles.begin(); it != m_titles.end(); it++)
+    for (multimap<int, string>::iterator it = m_titles.begin(); it != m_titles.end(); it++)
     {
         new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*it).second),
                       m_resourceTable->elementAt(0, columnTable++));
@@ -373,16 +372,13 @@ void AbstractPage::addResourcePopup()
     vector<Wt::WInteractWidget*> inputName;
     vector<Wt::WText*> errorMessage;
 
-    //gkr: Init dialog popup
-    Wt::WDialog *dialogAdd_ =
-            new Wt::WDialog(tr("Alert." + m_xmlPageName
-                               + ".add-" + m_nameResourcePageSpec));
+    Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".add-" + m_nameResourcePageSpec));
     
     int cpt(0);
-    for (vector_pair_string::iterator title = m_titles.begin();
+    for (multimap<int, string>::iterator title = m_titles.begin();
             title != m_titles.end(); title++)
     {
-        if ((*title).first >= 0)
+        if (title->first >= 0)
         {
             // FIXME: HACK for add alert popup
             if ((*title).second.compare("last_attempt") != 0)
@@ -461,7 +457,7 @@ void AbstractPage::modifResourcePopup(long long id)
         int cpt(0);
         if ((*itTable).first == id)
         {
-            vector_pair_string::iterator title = m_titles.begin();
+            multimap<int, string>::iterator title = m_titles.begin();
             for (Wt::WInteractWidget *itElem : (*itTable).second)
             {
                 if ((*title).first >= 0)
@@ -679,7 +675,7 @@ void AbstractPage::setUndidName(string undidName)
     m_undidName = undidName;
 }
 
-void AbstractPage::setTitles(vector_pair_string titles)
+void AbstractPage::setTitles(multimap<int, string> titles)
 {
     m_titles = titles;
 }
@@ -733,7 +729,7 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
 
     try
     {
-        std::vector<Wt::Json::Value> jsonResource = jsonResources.at(0);
+        vector<Wt::Json::Value> jsonResource = jsonResources.at(0);
         if (jsonResource.size() > 0)
         {
             Wt::Json::Array& jsonArray = jsonResource.at(0);
@@ -742,7 +738,7 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                 Wt::Json::Object jsonObject = jsonArray.at(cpt);
 
                 vector<Wt::WInteractWidget *> nameW;
-                for (vector_pair_string::iterator itTitles = m_titles.begin();
+                for (multimap<int, string>::iterator itTitles = m_titles.begin();
                         itTitles != m_titles.end(); itTitles++)
                 {
                     switch (itTitles->first)
@@ -871,7 +867,7 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
         {
             if (jsonResource.size() == 0)
             {
-                jsonResource.push_back(std::vector<Wt::Json::Value>());
+                jsonResource.push_back(vector<Wt::Json::Value>());
             }
             
             if ((*(jsonResource.begin())).size() == 0)
@@ -887,11 +883,11 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
             if ((*listsUrl.begin()).size() == 0)
             {
                 listsUrl.pop_front();
-                jsonResource.push_back(std::vector<Wt::Json::Value>());
+                jsonResource.push_back(vector<Wt::Json::Value>());
             }
             else if ((*(*listsUrl.begin()).begin()).find(":id") != string::npos && response.status() == 200)
             {
-                std::vector<Wt::Json::Value> itJ = jsonResource.back();
+                vector<Wt::Json::Value> itJ = jsonResource.back();
                 Wt::Json::Array& result1 = itJ.back();
                 list_string::iterator listUrl = (*listsUrl.begin()).begin();
                 string saveUrl = (*listUrl);
@@ -1295,7 +1291,7 @@ void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
         int cpt(0);
         if ((*itTable).first == id)
         {
-            vector_pair_string::iterator title = m_titles.begin();
+            multimap<int, string>::iterator title = m_titles.begin();
             for (Wt::WInteractWidget *itElem : (*itTable).second)
             {
                 string nameRessouce("N2Wt5WTextE");

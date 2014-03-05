@@ -21,11 +21,11 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     setButtonSup(true);
     setLocalTable(true);
     
-    vector_pair_string listTitles;
-    listTitles.push_back(make_pair(ETypeJson::text, "filter"));
-    listTitles.push_back(make_pair(ETypeJson::text, "filter_index"));
-    listTitles.push_back(make_pair(ETypeJson::text, "information"));
-    listTitles.push_back(make_pair(ETypeJson::text, "asset"));
+    multimap<int, string> listTitles;
+    listTitles.insert(make_pair(ETypeJson::text, "filter"));
+    listTitles.insert(make_pair(ETypeJson::text, "filter_index"));
+    listTitles.insert(make_pair(ETypeJson::text, "information"));
+    listTitles.insert(make_pair(ETypeJson::text, "asset"));
     setTitles(listTitles);
     
     lists_string lListUrl;

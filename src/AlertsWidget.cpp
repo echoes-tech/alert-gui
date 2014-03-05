@@ -34,9 +34,9 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
     m_plugins = new Wt::WStandardItemModel(0,3,this);
     m_informations = new Wt::WStandardItemModel(0,3,this);
     
-    vector_pair_string listTitles;
-    listTitles.push_back(make_pair(ETypeJson::text, "name"));
-    listTitles.push_back(make_pair(ETypeJson::text, "last_attempt"));
+    multimap<int, string> listTitles;
+    listTitles.insert(make_pair(ETypeJson::text, "name"));
+    listTitles.insert(make_pair(ETypeJson::text, "last_attempt"));
     //    listTitles.push_back(make_pair(ETypeJson::text, "alert_media_specializations"));
     //    listTitles.push_back(make_pair(ETypeJson::text, "al4"));
     setTitles(listTitles);

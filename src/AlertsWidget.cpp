@@ -69,7 +69,8 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
     lListUrl.push_back(listUrl);
     listUrl.clear();
     
-    listUrl.push_back("criteria");
+    listUrl.push_back("informations");
+    listUrl.push_back("informations/:id");
     lListUrl.push_back(listUrl);
     listUrl.clear();
 
@@ -114,42 +115,9 @@ vector<string> AlertsWidget::getTitlesTableText()
     return titleText;
 }
 
-vector<long long> AlertsWidget::getIdsTable()
-{
-    vector<long long> ids;
-
-    try
-    {
-        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-        Wt::Json::Object tmp;
-        Wt::Json::Array::const_iterator idx1;
-        if (m_alerts.isNull() == false)
-        {
-            result1 = m_alerts;
-            for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
-            {
-                tmp = (*idx1);
-                ids.push_back(tmp.get("id"));
-            }
-        }
-    }
-    catch (Wt::Json::ParseError const& e)
-    {
-        Wt::log("warning") << "[AlertsWidget] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
-    catch (Wt::Json::TypeException const& e)
-    {
-        Wt::log("warning") << "[AlertsWidget] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
-
-    return ids;
-}
-
 void AlertsWidget::popupRecipients(string nameAlert, string message)
 {
-    recoverListRecipientAlias(this->session_->user().id());
+    getAliasListFromRecipient(this->session_->user().id());
     Wt::WDialog *dialog = new Wt::WDialog();
     dialog->setClosable(true);
     AbstractPage::addButtonsToPopupFooter(dialog);
@@ -169,23 +137,23 @@ void AlertsWidget::popupRecipients(string nameAlert, string message)
 
     for (multimap<long long, pair<long long, string>> ::iterator itU = userInfo_.begin(); itU != userInfo_.end(); itU++)
     {
-        boxUsers->addItem((*itU).second.second);
+        boxUsers->addItem(itU->second.second);
     }
 
     boxUsers->activated().connect(bind([ = ] ()
     {
-        recoverListRecipientAlias((*userInfo_.find(boxUsers->currentIndex())).second.first);
+        getAliasListFromRecipient(userInfo_.find(boxUsers->currentIndex())->second.first);
     }));
 
     for (multimap<long long, pair<pair<long long, long long>, string>>::iterator itM = mediaInfo_.begin(); itM != mediaInfo_.end(); itM++)
     {
-        boxMedias->addItem((*itM).second.second);
+        boxMedias->addItem(itM->second.second);
     }
 
     Wt::WTable *table = new Wt::WTable(tablePopup->elementAt(2, 2));
 
     Wt::WLineEdit *time = new Wt::WLineEdit();
-    time->setValidator(editValidator(-3));
+    time->setValidator(editValidator(EValidatorType::VALIDATOR_INT));
     table->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.snooze")));
     table->elementAt(0, 1)->addWidget(time);
     Wt::WText *error = new Wt::WText(tr("Alert.alert.invalid-number"));
@@ -228,31 +196,28 @@ void AlertsWidget::fillInTabMessage()
 {
     if (tabMessage_->count() == 0)
     {
-        Wt::WTextArea *test1 = new Wt::WTextArea(messageMailForTab_);
-        Wt::WTextArea *test2 = new Wt::WTextArea(messageSmsForTab_);
-        Wt::WTextArea *test3 = new Wt::WTextArea(messagePushForTab_);
-        tabMessage_->addTab(test1, tr("Alert.alert.form.mail"),
-                            Wt::WTabWidget::PreLoading);
-        tabMessage_->addTab(test2, tr("Alert.alert.form.sms"),
-                            Wt::WTabWidget::PreLoading);
-        tabMessage_->addTab(test3, tr("Alert.alert.form.push"),
-                            Wt::WTabWidget::PreLoading);
+        Wt::WTextArea *textAreaMail = new Wt::WTextArea(m_tabContentMessageMail);
+        Wt::WTextArea *textAreaSMS = new Wt::WTextArea(m_tabContentMessageSMS);
+        Wt::WTextArea *textAreaMobileApp = new Wt::WTextArea(m_tabContentMessageMobileApp);
+        tabMessage_->addTab(textAreaMail, tr("Alert.alert.form.mail"), Wt::WTabWidget::PreLoading);
+        tabMessage_->addTab(textAreaSMS, tr("Alert.alert.form.sms"), Wt::WTabWidget::PreLoading);
+        tabMessage_->addTab(textAreaMobileApp, tr("Alert.alert.form.push"), Wt::WTabWidget::PreLoading);
 
-        test1->changed().connect(bind([ = ] (){
-                                      messageMailForTab_ = test1->text().toUTF8();
+        textAreaMail->changed().connect(bind([ = ] (){
+                                      m_tabContentMessageMail = textAreaMail->text().toUTF8();
         }));
-        test2->changed().connect(bind([ = ] (){
-                                      messageSmsForTab_ = test2->text().toUTF8();
+        textAreaSMS->changed().connect(bind([ = ] (){
+                                      m_tabContentMessageSMS = textAreaSMS->text().toUTF8();
         }));
-        test3->changed().connect(bind([ = ] (){
-                                      messagePushForTab_ = test3->text().toUTF8();
+        textAreaMobileApp->changed().connect(bind([ = ] (){
+                                      m_tabContentMessageMobileApp = textAreaMobileApp->text().toUTF8();
         }));
     }
     else
     {
-        ((Wt::WTextArea*)tabMessage_->widget(0))->setText(messageMailForTab_);
-        ((Wt::WTextArea*)tabMessage_->widget(1))->setText(messageSmsForTab_);
-        ((Wt::WTextArea*)tabMessage_->widget(2))->setText(messagePushForTab_);
+        ((Wt::WTextArea*)tabMessage_->widget(0))->setText(m_tabContentMessageMail);
+        ((Wt::WTextArea*)tabMessage_->widget(1))->setText(m_tabContentMessageSMS);
+        ((Wt::WTextArea*)tabMessage_->widget(2))->setText(m_tabContentMessageMobileApp);
     }
 }
 
@@ -267,41 +232,28 @@ void AlertsWidget::fillInTabMessage()
 
 void AlertsWidget::initAlertValueDefinitionPopup(Wt::WTable *tableBox)
 {
-
-//    fillInMultiMap();
     fillModels();
 
     keyValue_ = new Wt::WLineEdit(tableBox->elementAt(1, 3));
 
-    m_boxAsset->resize(Wt::WLength(200), Wt::WLength(150));
-    m_boxAsset->setSelectionMode(Wt::ExtendedSelection);
-    m_boxAsset->setSelectable(true);
-    m_boxAsset->setModel(m_assets);
-    m_boxAsset->setModelColumn(1);
+    setBox(m_boxAsset,m_assets);
     m_boxAsset->clicked().connect(this, &AlertsWidget::assetSelected);
-//    fillInBox(boxAsset, m_assetBoxNames);
 
-    m_boxPlugin->resize(Wt::WLength(200), Wt::WLength(150));
-    m_boxPlugin->setSelectionMode(Wt::ExtendedSelection);
-    m_boxPlugin->setSelectable(true);
-    m_boxPlugin->setModel(m_plugins);
-    m_boxPlugin->setModelColumn(1);
+    setBox(m_boxPlugin,m_plugins);
     m_boxPlugin->clicked().connect(this, &AlertsWidget::pluginSelected);
-//    fillInBox(boxPlugin, m_pluginBoxNames);
 
-
-    m_boxInfo->resize(Wt::WLength(150), Wt::WLength(150));
-    m_boxInfo->setSelectionMode(Wt::ExtendedSelection);
-    m_boxInfo->setSelectable(true);
-    m_boxInfo->setModel(m_informations);
-    m_boxInfo->setModelColumn(1);
+    setBox(m_boxInfo,m_informations);
     m_boxInfo->clicked().connect(this, &AlertsWidget::infoSelected);
-//    fillInBox(boxInfo, m_infoBoxNames);
 
-    assetSelected_.clear();
-    pluginSelected_.clear();
-    infoSelected_.clear();
+}
 
+void AlertsWidget::setBox(Wt::WSelectionBox *box, Wt::WStandardItemModel *model)
+{
+    box->resize(Wt::WLength(200), Wt::WLength(150));
+    box->setSelectionMode(Wt::ExtendedSelection);
+    box->setSelectable(true);
+    box->setModel(model);
+    box->setModelColumn(1);
 }
 
 void AlertsWidget::assetSelected()
@@ -313,13 +265,7 @@ void AlertsWidget::assetSelected()
         // le faire pour select multiple également
         if (setSelectedIndexes.size() == 1)
         {
-            int indexSelected = -1;
-            set<int>::iterator iteratorSelectedIndexes;
-            for(iteratorSelectedIndexes = setSelectedIndexes.begin() ; iteratorSelectedIndexes != setSelectedIndexes.end() ; iteratorSelectedIndexes++)
-            {
-                indexSelected = *iteratorSelectedIndexes;
-            }
-            assetId = boost::lexical_cast<long long>(m_assets->item(indexSelected,0)->text());
+            assetId = getSelectedIdFromBox(m_boxAsset);
             
             int rowPlug = 0;
             m_plugins->clear();
@@ -343,8 +289,6 @@ void AlertsWidget::assetSelected()
             set<long long>::iterator iteratorSetPluginsIds;
             for(iteratorSetPluginsIds = setPluginIds.begin() ; iteratorSetPluginsIds != setPluginIds.end() ; iteratorSetPluginsIds++)
             {
-                cout << "PLUGIN TO FIND INFOS : " << *iteratorSetPluginsIds << endl;
-                cout << "TAILLE DE LA MAP : " << m_mapPluginInfos[*iteratorSetPluginsIds].size() << endl;
                 for(unsigned int i = 0 ; i < m_mapPluginInfos[*iteratorSetPluginsIds].size() ; i++)
                 {
                     Wt::WStandardItem *idInf = new Wt::WStandardItem();
@@ -377,13 +321,7 @@ void AlertsWidget::pluginSelected()
         // le faire pour select multiple également
         if (setSelectedIndexes.size() == 1)
         {
-            int indexSelected = -1;
-            set<int>::iterator iteratorSelectedIndexes;
-            for(iteratorSelectedIndexes = setSelectedIndexes.begin() ; iteratorSelectedIndexes != setSelectedIndexes.end() ; iteratorSelectedIndexes++)
-            {
-                indexSelected = *iteratorSelectedIndexes;
-            }
-            pluginId = boost::lexical_cast<long long>(m_plugins->item(indexSelected,0)->text());
+            pluginId = getSelectedIdFromBox(m_boxPlugin);
             
             int rowAsset = 0;
             m_assets->clear();
@@ -433,13 +371,7 @@ void AlertsWidget::infoSelected()
         // le faire pour select multiple également
         if (setSelectedIndexes.size() == 1)
         {
-            int indexSelected = -1;
-            set<int>::iterator iteratorSelectedIndexes;
-            for(iteratorSelectedIndexes = setSelectedIndexes.begin() ; iteratorSelectedIndexes != setSelectedIndexes.end() ; iteratorSelectedIndexes++)
-            {
-                indexSelected = *iteratorSelectedIndexes;
-            }
-            infoId = boost::lexical_cast<long long>(m_informations->item(indexSelected,0)->text());
+            infoId = getSelectedIdFromBox(m_boxInfo);
             
             int rowPlug = 0;
             m_plugins->clear();
@@ -463,8 +395,6 @@ void AlertsWidget::infoSelected()
             set<long long>::iterator iteratorSetPluginsIds;
             for(iteratorSetPluginsIds = setPluginIds.begin() ; iteratorSetPluginsIds != setPluginIds.end() ; iteratorSetPluginsIds++)
             {
-                cout << "PLUGIN TO FIND ASSETS : " << *iteratorSetPluginsIds << endl;
-                cout << "TAILLE DE LA MAP : " << m_mapPluginAssets[*iteratorSetPluginsIds].size() << endl;
                 for(unsigned int i = 0 ; i < m_mapPluginAssets[*iteratorSetPluginsIds].size() ; i++)
                 {
                     Wt::WStandardItem *idInf = new Wt::WStandardItem();
@@ -481,7 +411,7 @@ void AlertsWidget::infoSelected()
         {
             Wt::log("debug") << "[AlertsWidget][selectInfo] Multiple selection";
         }
-        showUnit(infoId);
+        showCompareWidget(infoId);
     }
     else
     {
@@ -494,89 +424,27 @@ void AlertsWidget::infoSelected()
 
 void AlertsWidget::fillModels()
 {
-    m_assets->clear(); 
-    m_plugins->clear();
-    m_informations->clear();
-    
-    std::map<long long, std::string>::iterator mapAssetsNamesIt;
+    fillModel(m_assets,m_mapAssetsNames);
+    fillModel(m_plugins,m_mapPluginsNames);
+    fillModel(m_informations,m_mapInformationsNames);
+}
+
+void AlertsWidget::fillModel(Wt::WStandardItemModel * model, std::map<long long, std::string> m_mapNames)
+{
+    model->clear();
+    std::map<long long, std::string>::iterator mapNamesIt;
     int row = 0;
-    for (mapAssetsNamesIt = m_mapAssetsNames.begin() ; mapAssetsNamesIt != m_mapAssetsNames.end() ; mapAssetsNamesIt++)
+    for (mapNamesIt = m_mapNames.begin() ; mapNamesIt != m_mapNames.end() ; mapNamesIt++)
     {
         Wt::WStandardItem *id = new Wt::WStandardItem();
-        m_assets->setItem(row,0,id);
-        m_assets->item(row,0)->setText(boost::lexical_cast<string>(mapAssetsNamesIt->first));
+        model->setItem(row,0,id);
+        model->item(row,0)->setText(boost::lexical_cast<string>(mapNamesIt->first));
         Wt::WStandardItem *name = new Wt::WStandardItem();
-        m_assets->setItem(row,1,name);
-        m_assets->item(row,1)->setText(mapAssetsNamesIt->second);
-        row++;
-    }
-    
-    std::map<long long, std::string>::iterator mapPluginsNamesIt;
-    row = 0;
-    for (mapPluginsNamesIt = m_mapPluginsNames.begin() ; mapPluginsNamesIt != m_mapPluginsNames.end() ; mapPluginsNamesIt++)
-    {
-        Wt::WStandardItem *id = new Wt::WStandardItem();
-        m_plugins->setItem(row,0,id);
-        m_plugins->item(row,0)->setText(boost::lexical_cast<string>(mapPluginsNamesIt->first));
-        Wt::WStandardItem *name = new Wt::WStandardItem();
-        m_plugins->setItem(row,1,name);
-        m_plugins->item(row,1)->setText(mapPluginsNamesIt->second);
-        row++;
-    }
-    
-    std::map<long long, std::string>::iterator mapInfosNamesIt;
-    row = 0;
-    for (mapInfosNamesIt = m_mapInformationsNames.begin() ; mapInfosNamesIt != m_mapInformationsNames.end() ; mapInfosNamesIt++)
-    {
-        Wt::WStandardItem *id = new Wt::WStandardItem();
-        m_informations->setItem(row,0,id);
-        m_informations->item(row,0)->setText(boost::lexical_cast<string>(mapInfosNamesIt->first));
-        Wt::WStandardItem *name = new Wt::WStandardItem();
-        m_informations->setItem(row,1,name);
-        m_informations->item(row,1)->setText(mapInfosNamesIt->second);
+        model->setItem(row,1,name);
+        model->item(row,1)->setText(mapNamesIt->second);
         row++;
     }
 }
-
-void AlertsWidget::getRelatedData(int boxType)
-{
-    switch (boxType)
-    {
-        case ASSET:
-            
-            break;
-        case PLUGIN:
-            break;
-        case INFORMATION:
-            break;
-        default:
-            break;
-    }
-}
-
-// Selected in selectionBox  ----------------
-
-
-int AlertsWidget::selectItemBox(Wt::WSelectionBox *box, string select)
-{
-    Wt::WString rst = " ";
-    for (int cpt(0); cpt < box->count(); cpt++)
-    {
-        rst = box->itemText(cpt);
-        if (rst.toUTF8().compare(select) == 0)
-        {
-            set<int> selection;
-            selection.clear();
-            selection.insert(cpt);
-            box->setSelectedIndexes(selection);
-            return 0;
-        }
-    }
-    return 1;
-}
-
-
-
 
 
 // ------- init popup one -------
@@ -637,8 +505,8 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     resourcesUnitOne.clear();
     resourcesUnitTwo.clear();
 
-    unitOne_.clear();
-    unitTwo_.clear();
+    m_textCompareWidget.clear();
+    m_numberCompareWidget.clear();
     idUnitOne = 1;
     idUnitTwo = 1;
 
@@ -656,9 +524,9 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     buttonAddTwo_->setTextFormat(Wt::XHTMLUnsafeText);
     buttonAddTwo_->hide();
 
-    createUnitOne(compareWid);
-    createUnitTwo(compareWid);
-    createUnitThree(compareWid);
+    createCompareWidgetText(compareWid);
+    createCompareWidgetNumber(compareWid);
+    createCompareWidgetBoolean(compareWid);
 
     contain->addWidget(buttonAddOne_);
     contain->addWidget(buttonAddTwo_);
@@ -670,13 +538,13 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 
     buttonAddOne_->clicked().connect(bind([ = ] (){
                                           saveLineEditOne_->show();
-                                          createUnitOne(compareWid)->show();
+                                          createCompareWidgetText(compareWid)->show();
                                           compareBarOne_->show();
     }));
 
     buttonAddTwo_->clicked().connect(bind([ = ] (){
                                           saveLineEditTwo_->show();
-                                          createUnitTwo(compareWid)->show();
+                                          createCompareWidgetNumber(compareWid)->show();
                                           compareBarTwo_->show();
     }));
 
@@ -685,55 +553,55 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 
 // ------------------ Unit ------------------------------
 
-void AlertsWidget::showUnit(long long id)
+void AlertsWidget::showCompareWidget(long long id)
 {
     map<int, Wt::WWidget *>::iterator it;
-    hideUnit();
+    hideCompareWidget();
     if (id > 0)
     {
-        long long unitId = m_mapInformationsUnits[id];
-        if (unitId == 1)
+        long long unitTypeId = m_mapInformationsUnitTypes[id];
+        if (unitTypeId == Enums::EInformationUnitType::text)
         {
             compareBarOne_->show();
-            for (it = unitOne_.begin(); it != unitOne_.end(); it++)
+            for (it = m_textCompareWidget.begin(); it != m_textCompareWidget.end(); it++)
             {
-                ((Wt::WTable*)(*it).second)->show();
+                ((Wt::WTable*)it->second)->show();
             }
         }
-        else if (unitId == 3)
+        else if (unitTypeId == Enums::EInformationUnitType::number)
         {
             compareBarTwo_->show();
-            for (it = unitTwo_.begin(); it != unitTwo_.end(); it++)
+            for (it = m_numberCompareWidget.begin(); it != m_numberCompareWidget.end(); it++)
             {
-                ((Wt::WTable*)(*it).second)->show();
+                ((Wt::WTable*)it->second)->show();
             }
         }
-        else if (unitId == 5) //Enums::EInformationUnitType::boolean
+        else if (unitTypeId == 3) //Enums::EInformationUnitType::boolean
         {
-            unitThree_->show();
+            m_booleanCompareWidget->show();
         }
         else
         {
-            Wt::log("warning") << "Error for show table unit";
+            Wt::log("error") << "Wrong unit type : " << unitTypeId;
         }
     }
 }
 
-void AlertsWidget::hideUnit()
+void AlertsWidget::hideCompareWidget()
 {
     map<int, Wt::WWidget *>::iterator it;
-    for (it = unitOne_.begin(); it != unitOne_.end(); it++)
+    for (it = m_textCompareWidget.begin(); it != m_textCompareWidget.end(); it++)
     {
-        ((Wt::WTable*)(*it).second)->hide();
+        ((Wt::WTable*)it->second)->hide();
     }
-    for (it = unitTwo_.begin(); it != unitTwo_.end(); it++)
+    for (it = m_numberCompareWidget.begin(); it != m_numberCompareWidget.end(); it++)
     {
-        ((Wt::WTable*)(*it).second)->hide();
+        ((Wt::WTable*)it->second)->hide();
     }
-    unitThree_->hide();
+    m_booleanCompareWidget->hide();
 }
 
-Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
+Wt::WTable *AlertsWidget::createCompareWidgetText(Wt::WContainerWidget *contain)
 {
     Wt::WTable *table = new Wt::WTable(contain);
     Wt::WLineEdit *textEdit = new Wt::WLineEdit(table->elementAt(0, 1));
@@ -744,7 +612,7 @@ Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
     table->elementAt(0, 0)->addWidget(comboBox);
     table->hide();
 
-    unitOne_[idUnitOne] = table;
+    m_textCompareWidget[idUnitOne] = table;
 
     Wt::WText *errorText = new Wt::WText(tr("Alert.alert.invalid-name-alert"),
                                          table->elementAt(1, 1));
@@ -783,15 +651,16 @@ Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
                                       resourcesUnitOne.erase(widUnit);
 
                                       map<int, Wt::WWidget *>::iterator wid =
-                                      unitOne_.find(boost::lexical_cast<int, string>(buttonDel->id()));
+                                      m_textCompareWidget.find(boost::lexical_cast<int, string>(buttonDel->id()));
                                       contain->removeWidget((*wid).second);
                                       contain->refresh();
-                                      unitOne_.erase(wid);
+                                      m_textCompareWidget.erase(wid);
 
                                       compareBarOne_->removeWidget(text);
                                       compareBarOne_->removeWidget(lineEditBar);
     }));
 
+    // pour la premiere ligne on cache le bouton delete
     if (idUnitOne == 1)
     {
         buttonDel->hide();
@@ -801,11 +670,11 @@ Wt::WTable *AlertsWidget::createUnitOne(Wt::WContainerWidget *contain)
     return table;
 }
 
-Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
+Wt::WTable *AlertsWidget::createCompareWidgetNumber(Wt::WContainerWidget *contain)
 {
     Wt::WTable *table = new Wt::WTable(contain);
     Wt::WLineEdit *valeurEdit = new Wt::WLineEdit(table->elementAt(0, 2));
-    valeurEdit->setValidator(editValidator(-2));
+    valeurEdit->setValidator(editValidator(EValidatorType::VALIDATOR_FLOAT));
 
     Wt::WComboBox *comboBox1 = new Wt::WComboBox();
     comboBox1->addItem("<");
@@ -828,7 +697,7 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
 
     table->hide();
 
-    unitTwo_[idUnitTwo] = table;
+    m_numberCompareWidget[idUnitTwo] = table;
 
     Wt::WText *errorNumb = new Wt::WText(tr("Alert.alert.invalid-number"),
                                          contain);
@@ -880,23 +749,25 @@ Wt::WTable *AlertsWidget::createUnitTwo(Wt::WContainerWidget *contain)
                                       resourcesUnitTwo.erase(widUnit);
 
                                       map<int, Wt::WWidget *>::iterator wid =
-                                      unitTwo_.find(boost::lexical_cast<int, string>(buttonDel->id()));
+                                      m_numberCompareWidget.find(boost::lexical_cast<int, string>(buttonDel->id()));
                                       contain->removeWidget((*wid).second);
                                       contain->refresh();
-                                      unitTwo_.erase(wid);
+                                      m_numberCompareWidget.erase(wid);
 
                                       compareBarTwo_->removeWidget(text);
                                       compareBarTwo_->removeWidget(lineEditBar);
     }));
 
     if (idUnitTwo == 1)
+    {
         buttonDel->hide();
+    }
     resourcesUnitTwo[idUnitTwo++] = make_pair(make_pair(valeurEdit, errorNumb), make_pair(comboBox1, comboBox2));
 
     return table;
 }
 
-void AlertsWidget::createUnitThree(Wt::WContainerWidget *contain)
+void AlertsWidget::createCompareWidgetBoolean(Wt::WContainerWidget *contain)
 {
     Wt::WTable *table = new Wt::WTable(contain);
     errorBool_ = new Wt::WText(tr("Alert.alert.invalid-choose"), contain);
@@ -930,7 +801,7 @@ void AlertsWidget::createUnitThree(Wt::WContainerWidget *contain)
 
     table->hide();
 
-    unitThree_ = table;
+    m_booleanCompareWidget = table;
 }
 
 //                                                                                    ^
@@ -942,18 +813,17 @@ void AlertsWidget::modifRecip(long long id)
     cout << "modif recipient" << endl;
 }
 
-Wt::WValidator *AlertsWidget::editValidator(int who)
+Wt::WValidator *AlertsWidget::editValidator(int validatorType)
 {
     Wt::WRegExpValidator *validator = 0;
 
-    //    if (who == -1)
     //        validator->setRegExp(); // pour regex a voir ! 
-    if (who == -2)
+    if (validatorType == EValidatorType::VALIDATOR_FLOAT)
     {
         validator = new Wt::WRegExpValidator("-?[0-9]+\\.*[0-9]*");
         validator->setMandatory(true);
     }
-    if (who == -3)
+    if (validatorType == EValidatorType::VALIDATOR_INT)
     {
         validator = new Wt::WRegExpValidator("^[0-9]+");
         validator->setMandatory(true);
@@ -964,8 +834,8 @@ Wt::WValidator *AlertsWidget::editValidator(int who)
 void AlertsWidget::checkPopupRecipients(string message, string time, int media)
 {
     message += "\"alert_media_specialization\":\n[\n";
-    //    for (long long cpt(1); cpt <= 3; cpt++)
-    //    {
+
+    // FIXME: time time_ ???
     message += "{\n\"media_id\": " + boost::lexical_cast<string>((*mediaInfo_.find(media - 1)).second.first.first);
     switch (time_)
     {
@@ -979,19 +849,19 @@ void AlertsWidget::checkPopupRecipients(string message, string time, int media)
         message += ",\n\"snooze\": 0";
         break;
     }
+    
     switch ((*mediaInfo_.find(media - 1)).second.first.second)
     {
     case Enums::EMedia::email:
-        message += ",\n\"message\": \"" + messageMailForTab_ + "\"\n}";
+        message += ",\n\"message\": \"" + m_tabContentMessageMail + "\"\n}";
         break;
     case Enums::EMedia::sms:
-        message += ",\n\"message\": \"" + messageSmsForTab_ + "\"\n}";
+        message += ",\n\"message\": \"" + m_tabContentMessageSMS + "\"\n}";
         break;
     case Enums::EMedia::mobileapp:
-        message += ",\n\"message\": \"" + messagePushForTab_ + "\"\n}";
+        message += ",\n\"message\": \"" + m_tabContentMessageMobileApp + "\"\n}";
         break;
     }
-    //    }
     message += "\n]\n}";
     postAlertCallApi(message);
     getResourceList();
@@ -1017,7 +887,10 @@ int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
         errorInfo_->hide();
     }
 
-    switch ((*unitsIds_.find(idAll_.second.first)).second)
+    
+    long long unitTypeId = m_mapInformationsUnitTypes[getSelectedIdFromBox(m_boxInfo)];
+    
+    switch (unitTypeId)
     {
         errorsHideOne(resourcesUnitOne);
         errorsHideTwo(resourcesUnitTwo);
@@ -1036,38 +909,38 @@ int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
              */
             if (((Wt::WLineEdit*)(*it).second.first.first)->text().toUTF8().size() <= 0)
             {
-                (*it).second.first.second->show();
+                it->second.first.second->show();
                 checkAll = 1;
             }
             else
             {
-                (*it).second.first.second->hide();
+                it->second.first.second->hide();
             }
         }
         break;
     }
-    case 3:
+    case Enums::EInformationUnitType::number:
     {
         for (map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator it = resourcesUnitTwo.begin(); it != resourcesUnitTwo.end(); it++)
         {
             if (((Wt::WLineEdit*)(*it).second.first.first)->validate() == Wt::WValidator::Invalid)
             {
-                (*it).second.first.second->show();
+                it->second.first.second->show();
                 checkAll = 1;
             }
             else if (((Wt::WLineEdit*)(*it).second.first.first)->text().toUTF8().size() <= 0)
             {
-                (*it).second.first.second->show();
+                it->second.first.second->show();
                 checkAll = 1;
             }
             else
             {
-                (*it).second.first.second->hide();
+                it->second.first.second->hide();
             }
         }
         break;
     }
-    case 5: //Enums::EInformationUnitType::boolean
+    case 3: //Enums::EInformationUnitType::boolean
     {
         if (bool_ < 0)
         {
@@ -1098,32 +971,19 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
     case Enums::EInformationUnitType::text:
     {
         message += "\"alert_criteria_id\": 3,\n";
-        message += "\"value\": \"" + (*resourcesUnitOne.begin()).second.first.first->text().toUTF8() + "\",\n";
-        //            for (MapUnitOne::iterator itUnit = resourcesUnitOne.begin(); itUnit != resourcesUnitOne.end(); itUnit++)
-        //            {
-        //                cout
-        //                        << "input : " << (*itUnit).second.first.first->text().toUTF8() << endl
-        //                        << "Comp : " << (*itUnit).second.second->currentText().toUTF8() << endl;
-        //            }
+        message += "\"value\": \"" + resourcesUnitOne.begin()->second.first.first->text().toUTF8() + "\",\n";
         break;
     }
     case 3:
     {
         message += "\"alert_criteria_id\": " + boost::lexical_cast<string>((*resourcesUnitTwo.begin()).second.second.first->currentIndex() + 1) + ",\n";
-        message += "\"value\": \"" + (*resourcesUnitTwo.begin()).second.first.first->text().toUTF8() + "\",\n";
-        //            for (MapUnitTwo::iterator itUnit = resourcesUnitTwo.begin(); itUnit != resourcesUnitTwo.end(); itUnit++)
-        //            {
-        //                cout
-        //                        << "input : " << (*itUnit).second.first.first->text().toUTF8() << endl
-        //                        << "Comp : " << (*itUnit).second.second.first->currentText().toUTF8() << endl
-        //                        << "size : " << (*itUnit).second.second.second->currentText().toUTF8() << endl;
-        //            }
+        message += "\"value\": \"" + resourcesUnitTwo.begin()->second.first.first->text().toUTF8() + "\",\n";
         break;
     }
     case 5: //Enums::EInformationUnitType::boolean
     {
         message += "\"alert_criteria_id\": 3,\n";
-        if (!(unitThree_->isHidden()))
+        if (!(m_booleanCompareWidget->isHidden()))
         {
             if (bool_ == 0)
             {
@@ -1134,7 +994,9 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
                 message += "\"value\": \"false\",\n";
             }
             else
+            {
                 Wt::log("warning") << "Problem for boolean";
+            }
         }
         break;
     }
@@ -1162,7 +1024,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
         message += "\"alert_media_specialization\":\n[\n{\n\"media_id\": "
                 + boost::lexical_cast<string>(1)
                 + ",\n\"snooze\": 0,\n\"message\": \""
-                + messagePushForTab_
+                + m_tabContentMessageMobileApp
                 + "\"\n}\n]\n}";
 
         postAlertCallApi(message);
@@ -1207,7 +1069,7 @@ void AlertsWidget::errorsHideOne(map<long long, pair<pair<Wt::WLineEdit*, Wt::WT
 {
     for (map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator it = error.begin(); it != error.end(); it++)
     {
-        ((Wt::WText*)(*it).second.first.second)->hide();
+        ((Wt::WText*)it->second.first.second)->hide();
     }
 }
 
@@ -1215,7 +1077,7 @@ void AlertsWidget::errorsHideTwo(map<long long, pair<pair<Wt::WLineEdit*, Wt::WT
 {
     for (map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator it = error.begin(); it != error.end(); it++)
     {
-        ((Wt::WText*)(*it).second.first.second)->hide();
+        ((Wt::WText*)it->second.first.second)->hide();
     }
 }
 
@@ -1226,9 +1088,12 @@ void AlertsWidget::close()
 
 // API CALL AND RETURN --------------------------------------------------
 
-void AlertsWidget::recoverListRecipientAlias(long long userRoleId)
+void AlertsWidget::getAliasListFromRecipient(long long userRoleId)
 {
-    for (long long mediaType(1); mediaType <= 3; mediaType++)
+    m_tabContentMessageMail.clear();
+    m_tabContentMessageSMS.clear();
+    m_tabContentMessageMobileApp.clear();
+    for (long long mediaType(Enums::EMedia::email); mediaType <= Enums::EMedia::mobileapp; mediaType++)
     {
         string apiAddress = this->getApiUrl() + "/informations/"
                 + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxInfo)) + "/alias"
@@ -1257,14 +1122,11 @@ void AlertsWidget::clearStructures()
     m_alerts = Wt::Json::Value::Null;
     userInfo_.clear();
     mediaInfo_.clear();
-//    m_assetBoxNames.clear();
-//    m_pluginBoxNames.clear();
-//    m_infoBoxNames.clear();
 
     unitsIds_.clear();
-    messageMailForTab_.clear();
-    messageSmsForTab_.clear();
-    messagePushForTab_.clear();
+    m_tabContentMessageMail.clear();
+    m_tabContentMessageSMS.clear();
+    m_tabContentMessageMobileApp.clear();
 }
 
 void AlertsWidget::postAlertCallApi(string message)
@@ -1283,9 +1145,13 @@ void AlertsWidget::postAlertCallApi(string message)
     Wt::log("debug") << "[POST] Message : " << messageAlert.body();
 
     if (client->post(apiAddress, messageAlert))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 
 }
 
@@ -1409,17 +1275,6 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
             }
         }
         
-        
-//        map<long long, vector<long long>>::iterator assetInfosIterator;
-//        for(assetInfosIterator = m_mapAssetInfos.begin() ; assetInfosIterator != m_mapAssetInfos.end() ; assetInfosIterator++)
-//        {
-//            cout << "ASSET ID : " << assetInfosIterator->first << endl;
-//            for (unsigned int i = 0 ; i < assetInfosIterator->second.size() ; i++)
-//            {
-//                cout << ">> INFO ID : " << assetInfosIterator->second.at(i) << endl;
-//            }
-//        }
-        
     }
     catch (Wt::Json::ParseError const& e)
     {
@@ -1527,16 +1382,39 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
             }
         }
         
-//        map<long long, vector<long long>>::iterator infoAssetsIterator;
-//        for(infoAssetsIterator = m_mapInfoAssets.begin() ; infoAssetsIterator != m_mapInfoAssets.end() ; infoAssetsIterator++)
-//        {
-//            cout << "INFO ID : " << infoAssetsIterator->first << endl;
-//            for (unsigned int i = 0 ; i < infoAssetsIterator->second.size() ; i++)
-//            {
-//                cout << ">> ASSET ID : " << infoAssetsIterator->second.at(i) << endl;
-//            }
-//        }
-        
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[Alerts][INFO_PLG] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[Alerts][INFO_PLG] JSON Type Exception";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    
+    // informations // information
+    jsonResource = jsonResources.at(5);
+    try
+    {
+        if (jsonResource.size() > 0)
+        {
+            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+            if (!jsonArray.empty())
+            {
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+                {
+                    Wt::Json::Object jsonInformation = jsonArray.at(cpt);
+                    Wt::Json::Object jsonInformationDetailed = jsonResource.at(cpt + 1);
+                    long long infoId = jsonInformation.get("id");
+                    Wt::Json::Object jsonInfoUnit = jsonInformationDetailed.get("information_unit");
+                    Wt::Json::Object jsonInfoUnitType = jsonInfoUnit.get("information_unit_type");
+                    long long infoUnitTypeId = jsonInfoUnitType.get("id");
+                    m_mapInformationsUnitTypes[infoId] = infoUnitTypeId;
+                }
+            }
+        }
     }
     catch (Wt::Json::ParseError const& e)
     {
@@ -1597,10 +1475,9 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
                     Wt::Json::Object mediaType = jsonMedia.get("media_type");
                     long long mediaTypeId = mediaType.get("id");
                     string mediaValue = jsonMedia.get("value");
-                    Wt::Json::Object mediaUser = jsonMedia.get("user");
+//                    Wt::Json::Object mediaUser = jsonMedia.get("user");
                     mediaInfo_.insert(std::make_pair(cpt, std::make_pair(std::make_pair(mediaId, mediaTypeId), mediaValue)));
                     
-//                    idUserPositionMedia_.push_back(std::make_pair(mediaUser.get("id"),cpt));
                 }
             }
         }
@@ -1677,13 +1554,13 @@ void AlertsWidget::getAliasInfo(boost::system::error_code err, const Wt::Http::M
                 switch (mediaType)
                 {
                 case Enums::EMedia::email:
-                    messageMailForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageMail += message.toUTF8() + " ";
                     break;
                 case Enums::EMedia::sms:
-                    messageSmsForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageSMS += message.toUTF8() + " ";
                     break;
                 case Enums::EMedia::mobileapp:
-                    messagePushForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageMobileApp += message.toUTF8() + " ";
                     break;
                 }
             }
@@ -1717,9 +1594,13 @@ void AlertsWidget::getAliasInfo(boost::system::error_code err, const Wt::Http::M
     client1->done().connect(boost::bind(&AlertsWidget::getAliasAsset, this, _1, _2, userRoleId, mediaType));
     Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
     if (client1->get(apiAddress))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 
 }
 
@@ -1742,13 +1623,13 @@ void AlertsWidget::getAliasAsset(boost::system::error_code err, const Wt::Http::
                 switch (mediaType)
                 {
                 case Enums::EMedia::email:
-                    messageMailForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageMail += message.toUTF8() + " ";
                     break;
                 case Enums::EMedia::sms:
-                    messageSmsForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageSMS += message.toUTF8() + " ";
                     break;
                 case Enums::EMedia::mobileapp:
-                    messagePushForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageMobileApp += message.toUTF8() + " ";
                     break;
                 }
             }
@@ -1784,14 +1665,18 @@ void AlertsWidget::getAliasAsset(boost::system::error_code err, const Wt::Http::
             + "&token=" + session_->user()->token.toUTF8()
             + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)
             + "&media_type_id=" + boost::lexical_cast<string>(mediaType)
-            + "&information_id=" + boost::lexical_cast<string>(idAll_.second.first);
+            + "&information_id=" + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxInfo));
     Wt::Http::Client *client2 = new Wt::Http::Client(this);
     client2->done().connect(boost::bind(&AlertsWidget::getAliasCriteria, this, _1, _2, userRoleId, mediaType));
     Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
     if (client2->get(apiAddress))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 
 }
 
@@ -1814,13 +1699,13 @@ void AlertsWidget::getAliasCriteria(boost::system::error_code err, const Wt::Htt
                 switch (mediaType)
                 {
                 case Enums::EMedia::email:
-                    messageMailForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageMail += message.toUTF8() + " ";
                     break;
                 case Enums::EMedia::sms:
-                    messageSmsForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageSMS += message.toUTF8() + " ";
                     break;
                 case Enums::EMedia::mobileapp:
-                    messagePushForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageMobileApp += message.toUTF8() + " ";
                     break;
                 }
             }
@@ -1854,9 +1739,13 @@ void AlertsWidget::getAliasCriteria(boost::system::error_code err, const Wt::Htt
     client2->done().connect(boost::bind(&AlertsWidget::getAliasPlugin, this, _1, _2, userRoleId, mediaType));
     Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
     if (client2->get(apiAddress))
+    {
         Wt::WApplication::instance()->deferRendering();
+    }
     else
+    {
         Wt::log("error") << "Error Client Http";
+    }
 
 }
 
@@ -1879,13 +1768,13 @@ void AlertsWidget::getAliasPlugin(boost::system::error_code err, const Wt::Http:
                 switch (mediaType)
                 {
                 case Enums::EMedia::email:
-                    messageMailForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageMail += message.toUTF8() + " ";
                     break;
                 case Enums::EMedia::sms:
-                    messageSmsForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageSMS += message.toUTF8() + " ";
                     break;
                 case Enums::EMedia::mobileapp:
-                    messagePushForTab_ += message.toUTF8() + " ";
+                    m_tabContentMessageMobileApp += message.toUTF8() + " ";
                     break;
                 }
             }

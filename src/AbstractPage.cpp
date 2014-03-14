@@ -454,14 +454,14 @@ void AbstractPage::modifResourcePopup(long long id)
         if ((*itTable).first == id)
         {
             multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
-            for (Wt::WInteractWidget *itElem : (*itTable).second)
+            for (Wt::WInteractWidget *itElem : itTable->second)
             {
-                if ((*title).first >= 0)
+                if (title->first >= 0)
                 {
-                        new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
+                        new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + title->second)
                                       + " : <br />", dialogModif_->contents());                    
                 }
-                if ((*title).first == 0 || (*title).first == 2)
+                if (title->first == 0 || title->first == 2)
                 {
                     string nameRessouce("N2Wt5WTextE");
                     if (nameRessouce.compare(typeid (*itElem).name()) == 0)
@@ -474,7 +474,7 @@ void AbstractPage::modifResourcePopup(long long id)
                             newName.resize(newName.size() + 3, '.');
                         }
 
-                        if ((*title).first == 0)
+                        if (title->first == 0)
                         {
                             Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif_->contents());
                             input->setValidator(editValidator(cpt));
@@ -487,7 +487,7 @@ void AbstractPage::modifResourcePopup(long long id)
                             input->setToolTip(Wt::WString::fromUTF8(nameRessouce));
                             inputName.push_back(input);
                         }
-                        else if ((*title).first == 2)
+                        else if (title->first == 2)
                         {
                             Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif_->contents());
                             input->setValidator(new Wt::WRegExpValidator(Wt::WString::fromUTF8("^[0123456789]+")));

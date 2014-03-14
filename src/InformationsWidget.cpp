@@ -86,11 +86,11 @@ void InformationsWidget::addResource(vector<Wt::WInteractWidget*> arguments)
     Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
     messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
 
-    if (((Wt::WCheckBox*)(*i))->isChecked() == true)
+    if (((Wt::WCheckBox*)(*i))->isChecked())
     {
         messageInformation.addBodyText(",\n\"display\" : true");
     }
-    else if (((Wt::WCheckBox*)(*i))->isChecked() == false)
+    else
     {
         messageInformation.addBodyText(",\n\"display\" : false");
     }
@@ -128,6 +128,7 @@ void InformationsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, l
     messageInformation.addBodyText(",\n\"calculate\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
     
     Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
+    // FIXME: segfault ici !
     messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
 
     if (((Wt::WCheckBox*)(*i++))->isChecked() == true)

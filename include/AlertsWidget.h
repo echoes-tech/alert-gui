@@ -127,10 +127,6 @@ private:
         INFORMATION = 3
     };
     
-    bool assetBoxSelected;
-    bool pluginBoxSelected;
-    bool informationBoxSelected;
-    
     //ids
     std::map<long long, std::vector<long long>> m_mapAssetPlugins;
     std::map<long long, std::vector<long long>> m_mapAssetInfos;
@@ -159,19 +155,15 @@ private:
     
     // end alert setting attributes
     
-    std::vector<std::pair<long long, int>>   idUserPositionMedia_;
-    
-    bool                        created_;
-    bool                        newClass_;
-    Echoes::Dbo::Session        *session_;
-    std::string                 apiUrl_;
+    Echoes::Dbo::Session        *m_session;
+    std::string                 m_apiUrl;
     Wt::Json::Value             m_alerts;
     
     int                         time_;
     
     std::multimap<long long, std::pair<long long, std::string>>                         userInfo_;
     std::multimap<long long, std::pair<std::pair<long long, long long>, std::string>>   mediaInfo_;
-    Wt::WTabWidget      *tabMessage_;
+    Wt::WTabWidget      *m_tabWidgetMessages;
     std::string         m_tabContentMessageMail;
     std::string         m_tabContentMessageSMS;
     std::string         m_tabContentMessageMobileApp;
@@ -179,13 +171,13 @@ private:
     
     std::multimap<long long, long long>       unitsIds_; // Link between Info and widgets compare. (text, number, bool)
 
-    std::vector<long long>          index_;
     
+    // should be the same type
     std::map<int, Wt::WWidget *>        m_textCompareWidget; // Text
     std::map<int, Wt::WWidget *>        m_numberCompareWidget; // Number
     Wt::WTable                          *m_booleanCompareWidget; // Bool
     
-    int                 bool_;  //for check button true/false
+    bool                m_contentOfBooleanCheck;  //for check button true/false
     int                 checkAll_;
     /**
      * pair &lsaquo; pair &lsaquo; idAsset, idPlugin &rsaquo;

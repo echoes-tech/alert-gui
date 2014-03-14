@@ -21,10 +21,8 @@ using namespace std;
 AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
 : AbstractPage(session, apiUrl, "alert")
 {
-    session_ = session;
-    apiUrl_ = apiUrl;
-    created_ = false;
-    newClass_ = false;
+    m_session = session;
+    m_apiUrl = apiUrl;
 
     setButtonModif(false);
     setButtonSup(true);
@@ -117,7 +115,7 @@ vector<string> AlertsWidget::getTitlesTableText()
 
 void AlertsWidget::popupRecipients(string nameAlert, string message)
 {
-    getAliasListFromRecipient(this->session_->user().id());
+    getAliasListFromRecipient(this->m_session->user().id());
     Wt::WDialog *dialog = new Wt::WDialog();
     dialog->setClosable(true);
     AbstractPage::addButtonsToPopupFooter(dialog);
@@ -133,7 +131,7 @@ void AlertsWidget::popupRecipients(string nameAlert, string message)
     Wt::WComboBox *boxMedias = new Wt::WComboBox(tablePopup->elementAt(2, 1));
 
     tablePopup->elementAt(3, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.mess")));
-    tablePopup->elementAt(3, 1)->addWidget(tabMessage_);
+    tablePopup->elementAt(3, 1)->addWidget(m_tabWidgetMessages);
 
     for (multimap<long long, pair<long long, string>> ::iterator itU = userInfo_.begin(); itU != userInfo_.end(); itU++)
     {
@@ -194,14 +192,14 @@ void AlertsWidget::popupRecipients(string nameAlert, string message)
 
 void AlertsWidget::fillInTabMessage()
 {
-    if (tabMessage_->count() == 0)
+    if (m_tabWidgetMessages->count() == 0)
     {
         Wt::WTextArea *textAreaMail = new Wt::WTextArea(m_tabContentMessageMail);
         Wt::WTextArea *textAreaSMS = new Wt::WTextArea(m_tabContentMessageSMS);
         Wt::WTextArea *textAreaMobileApp = new Wt::WTextArea(m_tabContentMessageMobileApp);
-        tabMessage_->addTab(textAreaMail, tr("Alert.alert.form.mail"), Wt::WTabWidget::PreLoading);
-        tabMessage_->addTab(textAreaSMS, tr("Alert.alert.form.sms"), Wt::WTabWidget::PreLoading);
-        tabMessage_->addTab(textAreaMobileApp, tr("Alert.alert.form.push"), Wt::WTabWidget::PreLoading);
+        m_tabWidgetMessages->addTab(textAreaMail, tr("Alert.alert.form.mail"), Wt::WTabWidget::PreLoading);
+        m_tabWidgetMessages->addTab(textAreaSMS, tr("Alert.alert.form.sms"), Wt::WTabWidget::PreLoading);
+        m_tabWidgetMessages->addTab(textAreaMobileApp, tr("Alert.alert.form.push"), Wt::WTabWidget::PreLoading);
 
         textAreaMail->changed().connect(bind([ = ] (){
                                       m_tabContentMessageMail = textAreaMail->text().toUTF8();
@@ -215,9 +213,9 @@ void AlertsWidget::fillInTabMessage()
     }
     else
     {
-        ((Wt::WTextArea*)tabMessage_->widget(0))->setText(m_tabContentMessageMail);
-        ((Wt::WTextArea*)tabMessage_->widget(1))->setText(m_tabContentMessageSMS);
-        ((Wt::WTextArea*)tabMessage_->widget(2))->setText(m_tabContentMessageMobileApp);
+        ((Wt::WTextArea*)m_tabWidgetMessages->widget(0))->setText(m_tabContentMessageMail);
+        ((Wt::WTextArea*)m_tabWidgetMessages->widget(1))->setText(m_tabContentMessageSMS);
+        ((Wt::WTextArea*)m_tabWidgetMessages->widget(2))->setText(m_tabContentMessageMobileApp);
     }
 }
 
@@ -451,8 +449,8 @@ void AlertsWidget::fillModel(Wt::WStandardItemModel * model, std::map<long long,
 
 void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
-    tabMessage_ = new Wt::WTabWidget();
-    tabMessage_->resize(Wt::WLength(300), Wt::WLength(200));
+    m_tabWidgetMessages = new Wt::WTabWidget();
+    m_tabWidgetMessages->resize(Wt::WLength(300), Wt::WLength(200));
     checkAll_ = 1;
     Wt::WPushButton *ButtonSC = new Wt::WPushButton(tr("Alert.alert.button-save-continu"), dialog->footer());
     ButtonSC->clicked().connect(bind([ = ] (){
@@ -685,8 +683,7 @@ Wt::WTable *AlertsWidget::createCompareWidgetNumber(Wt::WContainerWidget *contai
     comboBox1->addItem(">");
 
     table->elementAt(0, 1)->addWidget(comboBox1);
-    table->elementAt(0, 0)
-            ->addWidget(new Wt::WText(tr("Alert.alert.message-value")));
+    table->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.message-value")));
 
     Wt::WComboBox *comboBox2 = new Wt::WComboBox();
     //    comboBox2->addItem("Ko");
@@ -773,8 +770,6 @@ void AlertsWidget::createCompareWidgetBoolean(Wt::WContainerWidget *contain)
     errorBool_ = new Wt::WText(tr("Alert.alert.invalid-choose"), contain);
     errorBool_->hide();
 
-    bool_ = -1;
-
     table->elementAt(0, 0)->
             addWidget(new Wt::WText(tr("Alert.alert.message-true")));
     Wt::WPushButton *button = new Wt::WPushButton(table->elementAt(0, 0));
@@ -782,7 +777,7 @@ void AlertsWidget::createCompareWidgetBoolean(Wt::WContainerWidget *contain)
     button->setTextFormat(Wt::XHTMLUnsafeText);
     button->setText("<span class='input-group-btn'><i class='icon-ok icon-white'></i></span>");
     button->clicked().connect(bind([ = ] (){
-                                   bool_ = 0;
+                                   m_contentOfBooleanCheck = true;
                                    errorBool_->setText(tr("Alert.alert.message-true"));
                                    errorBool_->show();
     }));
@@ -794,7 +789,7 @@ void AlertsWidget::createCompareWidgetBoolean(Wt::WContainerWidget *contain)
     button->setTextFormat(Wt::XHTMLUnsafeText);
     button->setText("<span class='input-group-btn'><i class='icon-remove icon-white'></i></span>");
     button->clicked().connect(bind([ = ] (){
-                                   bool_ = 1;
+                                   m_contentOfBooleanCheck = false;
                                    errorBool_->setText(tr("Alert.alert.message-false"));
                                    errorBool_->show();
     }));
@@ -817,17 +812,18 @@ Wt::WValidator *AlertsWidget::editValidator(int validatorType)
 {
     Wt::WRegExpValidator *validator = 0;
 
-    //        validator->setRegExp(); // pour regex a voir ! 
-    if (validatorType == EValidatorType::VALIDATOR_FLOAT)
+    switch (validatorType)
     {
+    case EValidatorType::VALIDATOR_FLOAT:
         validator = new Wt::WRegExpValidator("-?[0-9]+\\.*[0-9]*");
         validator->setMandatory(true);
-    }
-    if (validatorType == EValidatorType::VALIDATOR_INT)
-    {
+        break;
+    case EValidatorType::VALIDATOR_INT:
         validator = new Wt::WRegExpValidator("^[0-9]+");
         validator->setMandatory(true);
+        break;
     }
+
     return validator;
 }
 
@@ -867,93 +863,90 @@ void AlertsWidget::checkPopupRecipients(string message, string time, int media)
     getResourceList();
 }
 
-
-// ici qu'on affiche ou pas les critères de comparaison...
-
 int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage)
 {
     int checkAll = AbstractPage::checkInput(inputName, errorMessage);
-    if (idAll_.first.first < 0 || idAll_.first.second < 0 || idAll_.second.first < 0)
-    {
-        idAll_.first.first < 0 ? errorAsset_->show() : errorAsset_->hide();
-        idAll_.first.second < 0 ? errorPlugin_->show() : errorPlugin_->hide();
-        idAll_.second.first < 0 ? errorInfo_->show() : errorInfo_->hide();
-        checkAll = 1;
-    }
-    else
-    {
-        errorAsset_->hide();
-        errorPlugin_->hide();
-        errorInfo_->hide();
-    }
-
-    
-    long long unitTypeId = m_mapInformationsUnitTypes[getSelectedIdFromBox(m_boxInfo)];
-    
-    switch (unitTypeId)
-    {
-        errorsHideOne(resourcesUnitOne);
-        errorsHideTwo(resourcesUnitTwo);
-        errorBool_->hide();
-    case Enums::EInformationUnitType::text:
-    {
-        for (map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator it = resourcesUnitOne.begin(); it != resourcesUnitOne.end(); it++)
-        {
-            /* Mettre en place si validator sur l'input texte.
-             if (((Wt::WLineEdit*)(*it).second.first.first)->validate() == Wt::WValidator::Invalid)
-            {
-                (*it).second.first.second.show();
-                checkAll = 1;
-                break;
-            }
-             */
-            if (((Wt::WLineEdit*)(*it).second.first.first)->text().toUTF8().size() <= 0)
-            {
-                it->second.first.second->show();
-                checkAll = 1;
-            }
-            else
-            {
-                it->second.first.second->hide();
-            }
-        }
-        break;
-    }
-    case Enums::EInformationUnitType::number:
-    {
-        for (map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator it = resourcesUnitTwo.begin(); it != resourcesUnitTwo.end(); it++)
-        {
-            if (((Wt::WLineEdit*)(*it).second.first.first)->validate() == Wt::WValidator::Invalid)
-            {
-                it->second.first.second->show();
-                checkAll = 1;
-            }
-            else if (((Wt::WLineEdit*)(*it).second.first.first)->text().toUTF8().size() <= 0)
-            {
-                it->second.first.second->show();
-                checkAll = 1;
-            }
-            else
-            {
-                it->second.first.second->hide();
-            }
-        }
-        break;
-    }
-    case 3: //Enums::EInformationUnitType::boolean
-    {
-        if (bool_ < 0)
-        {
-            errorBool_->show();
-            checkAll = 1;
-        }
-        else
-        {
-            errorBool_->hide();
-        }
-        break;
-    }
-    }
+//    if (idAll_.first.first < 0 || idAll_.first.second < 0 || idAll_.second.first < 0)
+//    {
+//        idAll_.first.first < 0 ? errorAsset_->show() : errorAsset_->hide();
+//        idAll_.first.second < 0 ? errorPlugin_->show() : errorPlugin_->hide();
+//        idAll_.second.first < 0 ? errorInfo_->show() : errorInfo_->hide();
+//        checkAll = 1;
+//    }
+//    else
+//    {
+//        errorAsset_->hide();
+//        errorPlugin_->hide();
+//        errorInfo_->hide();
+//    }
+//
+//    
+//    long long unitTypeId = m_mapInformationsUnitTypes[getSelectedIdFromBox(m_boxInfo)];
+//    
+//    switch (unitTypeId)
+//    {
+//        errorsHideOne(resourcesUnitOne);
+//        errorsHideTwo(resourcesUnitTwo);
+//        errorBool_->hide();
+//    case Enums::EInformationUnitType::text:
+//    {
+//        for (map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator it = resourcesUnitOne.begin(); it != resourcesUnitOne.end(); it++)
+//        {
+//            /* Mettre en place si validator sur l'input texte.
+//             if (((Wt::WLineEdit*)(*it).second.first.first)->validate() == Wt::WValidator::Invalid)
+//            {
+//                (*it).second.first.second.show();
+//                checkAll = 1;
+//                break;
+//            }
+//             */
+//            if (((Wt::WLineEdit*)(*it).second.first.first)->text().toUTF8().size() <= 0)
+//            {
+//                it->second.first.second->show();
+//                checkAll = 1;
+//            }
+//            else
+//            {
+//                it->second.first.second->hide();
+//            }
+//        }
+//        break;
+//    }
+//    case Enums::EInformationUnitType::number:
+//    {
+//        for (map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator it = resourcesUnitTwo.begin(); it != resourcesUnitTwo.end(); it++)
+//        {
+//            if (((Wt::WLineEdit*)(*it).second.first.first)->validate() == Wt::WValidator::Invalid)
+//            {
+//                it->second.first.second->show();
+//                checkAll = 1;
+//            }
+//            else if (((Wt::WLineEdit*)(*it).second.first.first)->text().toUTF8().size() <= 0)
+//            {
+//                it->second.first.second->show();
+//                checkAll = 1;
+//            }
+//            else
+//            {
+//                it->second.first.second->hide();
+//            }
+//        }
+//        break;
+//    }
+//    case 3: //Enums::EInformationUnitType::boolean
+//    {
+//        if (bool_ < 0)
+//        {
+//            errorBool_->show();
+//            checkAll = 1;
+//        }
+//        else
+//        {
+//            errorBool_->hide();
+//        }
+//        break;
+//    }
+//    }
     return checkAll;
 }
 
@@ -974,28 +967,24 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
         message += "\"value\": \"" + resourcesUnitOne.begin()->second.first.first->text().toUTF8() + "\",\n";
         break;
     }
-    case 3:
+    case Enums::EInformationUnitType::number:
     {
         message += "\"alert_criteria_id\": " + boost::lexical_cast<string>((*resourcesUnitTwo.begin()).second.second.first->currentIndex() + 1) + ",\n";
         message += "\"value\": \"" + resourcesUnitTwo.begin()->second.first.first->text().toUTF8() + "\",\n";
         break;
     }
-    case 5: //Enums::EInformationUnitType::boolean
+    case 3: //Enums::EInformationUnitType::boolean
     {
         message += "\"alert_criteria_id\": 3,\n";
         if (!(m_booleanCompareWidget->isHidden()))
         {
-            if (bool_ == 0)
+            if (m_contentOfBooleanCheck)
             {
                 message += "\"value\": \"true\",\n";
             }
-            else if (bool_ == 1)
-            {
-                message += "\"value\": \"false\",\n";
-            }
             else
             {
-                Wt::log("warning") << "Problem for boolean";
+                message += "\"value\": \"false\",\n";
             }
         }
         break;
@@ -1097,8 +1086,8 @@ void AlertsWidget::getAliasListFromRecipient(long long userRoleId)
     {
         string apiAddress = this->getApiUrl() + "/informations/"
                 + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxInfo)) + "/alias"
-                + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-                + "&token=" + session_->user()->token.toUTF8()
+                + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+                + "&token=" + m_session->user()->token.toUTF8()
                 + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)
                 + "&media_type_id=" + boost::lexical_cast<string>(mediaType);
         Wt::Http::Client *client = new Wt::Http::Client(this);
@@ -1135,8 +1124,8 @@ void AlertsWidget::postAlertCallApi(string message)
     messageAlert.addBodyText(message);
 
     string apiAddress = this->getApiUrl() + "/alerts"
-            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + session_->user()->token.toUTF8();
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8();
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&AlertsWidget::postAlert, this, _1, _2));
@@ -1530,8 +1519,6 @@ void AlertsWidget::postAlert(boost::system::error_code err, const Wt::Http::Mess
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
     }
-    newClass_ = false;
-    created_ = false;
 }
 
 
@@ -1581,13 +1568,11 @@ void AlertsWidget::getAliasInfo(boost::system::error_code err, const Wt::Http::M
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
     }
-    newClass_ = false;
-    created_ = false;
 
     string apiAddress = this->getApiUrl() + "/assets/"
             + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxAsset)) + "/alias"
-            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + session_->user()->token.toUTF8()
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8()
             + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)
             + "&media_type_id=" + boost::lexical_cast<string>(mediaType);
     Wt::Http::Client *client1 = new Wt::Http::Client(this);
@@ -1650,8 +1635,6 @@ void AlertsWidget::getAliasAsset(boost::system::error_code err, const Wt::Http::
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
     }
-    newClass_ = false;
-    created_ = false;
 
     string criteria_id = "3";
     if (unitsIds_.find(idAll_.second.first)->second == 3)
@@ -1661,8 +1644,8 @@ void AlertsWidget::getAliasAsset(boost::system::error_code err, const Wt::Http::
 
     string apiAddress = this->getApiUrl() + "/criteria/"
             + criteria_id + "/alias"
-            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + session_->user()->token.toUTF8()
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8()
             + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)
             + "&media_type_id=" + boost::lexical_cast<string>(mediaType)
             + "&information_id=" + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxInfo));
@@ -1726,13 +1709,11 @@ void AlertsWidget::getAliasCriteria(boost::system::error_code err, const Wt::Htt
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
     }
-    newClass_ = false;
-    created_ = false;
 
     string apiAddress = this->getApiUrl() + "/plugins/"
             + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxPlugin)) + "/alias"
-            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-            + "&token=" + session_->user()->token.toUTF8()
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8()
             + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)
             + "&media_type_id=" + boost::lexical_cast<string>(mediaType);
     Wt::Http::Client *client2 = new Wt::Http::Client(this);
@@ -1795,8 +1776,6 @@ void AlertsWidget::getAliasPlugin(boost::system::error_code err, const Wt::Http:
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
     }
-    newClass_ = false;
-    created_ = false;
     //pour ne le faire qu'une fois ?????
     if (mediaType == 3)
     {
@@ -1821,8 +1800,6 @@ void AlertsWidget::deleteAlert(boost::system::error_code err, const Wt::Http::Me
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
     }
-    newClass_ = false;
-    created_ = false;
     getResourceList();
 }
 

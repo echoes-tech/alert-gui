@@ -74,26 +74,26 @@ Wt::WComboBox *InformationsWidget::popupAdd(Wt::WDialog *dialog)
 
 void InformationsWidget::addResource(vector<Wt::WInteractWidget*> arguments)
 {
-    vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
+    vector<Wt::WInteractWidget*>::iterator it = arguments.begin();
     // Post Information -------
     Wt::Http::Message messageInformation;
     
     messageInformation.addBodyText("{");
-    messageInformation.addBodyText("\n\"name\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
-    messageInformation.addBodyText(",\n\"desc\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
-    messageInformation.addBodyText(",\n\"calculate\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+    messageInformation.addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
+    messageInformation.addBodyText(",\n\"desc\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
+    messageInformation.addBodyText(",\n\"calculate\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
 
-    Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
-    messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
-
-    if (((Wt::WCheckBox*)(*i))->isChecked() == true)
+    if (((Wt::WCheckBox*)(*it))->isChecked() == true)
     {
-        messageInformation.addBodyText(",\n\"display\" : true");
+        messageInformation.addBodyText(",\n\"display\": true");
     }
-    else if (((Wt::WCheckBox*)(*i))->isChecked() == false)
+    else if (((Wt::WCheckBox*)(*it))->isChecked() == false)
     {
-        messageInformation.addBodyText(",\n\"display\" : false");
+        messageInformation.addBodyText(",\n\"display\": false");
     }
+    
+    Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*++it))->model();
+    messageInformation.addBodyText(",\n\"unit_id\": " + unitModel->item(((Wt::WComboBox*)(*it))->currentIndex(), 1)->text().toUTF8());
 
     messageInformation.addBodyText("\n}");
     

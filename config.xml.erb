@@ -39,11 +39,9 @@
 	       Note: currently only supported using the FastCGI connector
               -->
 
-	    <!--
 	       <dedicated-process>
 		 <max-num-sessions>100</max-num-sessions>
 	       </dedicated-process>
-	      -->
 
 	    <!-- Multiple sessions within one process.
 
@@ -64,9 +62,11 @@
 
 	       Note: wthttpd always uses exactly one process
               -->
+	    <!--
 	    <shared-process>
 	        <num-processes>1</num-processes>
 	    </shared-process>
+	      -->
 
 	    <!-- Session tracking strategy.
 

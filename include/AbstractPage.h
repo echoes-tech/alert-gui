@@ -103,10 +103,6 @@ typedef std::list<list_string> lists_string;
  * vector &lsaquo; WInteractWidget* &rsaquo;
  */
 typedef std::vector<Wt::WInteractWidget*> vector_widget;
-/** AbstractPage. multimap_long_widgets \n
- * multimap &lsaquo; long long, vector &lsaquo; WInteractWidget* &rsaquo; &rsaquo;
- */
-typedef std::multimap<long long, vector_widget> multimap_long_widgets;
 /** AbstractPage. vector_pair \n
  * vector &lsaquo; pair &lsaquo; int, WObject* &rsaquo; &rsaquo;
  */
@@ -167,8 +163,8 @@ protected:
     void                        addButtonsToPopupFooter(Wt::WDialog *dialog);
 
     // Set/Get attribut to init or option. ------------------------
-    void                        setRowsTable(multimap_long_widgets rowsTable);
-    multimap_long_widgets       getRowsTable();
+    void                                        setRowsTable(std::multimap<long long, vector_widget> rowsTable);
+    std::multimap<long long, vector_widget>     getRowsTable();
     /**
      * Set titles for table.
      * @param titles &lsaquo; type, name &rsaquo; \n
@@ -221,8 +217,8 @@ protected:
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id);
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
-    multimap_long_widgets               m_rowsTable;
-    std::multimap<int, std::string>     m_displayedTitlesPopups;
+    std::multimap<long long, vector_widget>     m_rowsTable;
+    std::multimap<int, std::string>                     m_displayedTitlesPopups;
 
 private:
     

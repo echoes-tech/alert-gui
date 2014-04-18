@@ -460,8 +460,8 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 
     dialog->resize(Wt::WLength(750), Wt::WLength(500));
 
-    Wt::WContainerWidget *contain = new Wt::WContainerWidget(dialog->contents());
-    Wt::WTable *tableBox = new Wt::WTable(contain);
+    Wt::WContainerWidget *mainContainerWidget = new Wt::WContainerWidget(dialog->contents());
+    Wt::WTable *tableBox = new Wt::WTable(mainContainerWidget);
     Wt::WTableCell *cell0_0 = tableBox->elementAt(0, 0);
     cell0_0->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-asset")));
     Wt::WTableCell *cell0_1 = tableBox->elementAt(0, 1);
@@ -477,28 +477,23 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     
     initAlertValueDefinitionPopup(tableBox);
 
-    errorAsset_ = new Wt::WText(tr("Alert.alert.invalid-select-asset"));
+    m_textErrorForAsset = new Wt::WText(tr("Alert.alert.invalid-select-asset"));
     Wt::WTableCell *cell2_0 = tableBox->elementAt(2, 0);
-    cell2_0->addWidget(errorAsset_);
+    cell2_0->addWidget(m_textErrorForAsset);
 
-    errorPlugin_ = new Wt::WText(tr("Alert.alert.invalid-select-plugin"));
+    m_textErrorForPlugin = new Wt::WText(tr("Alert.alert.invalid-select-plugin"));
     Wt::WTableCell *cell2_1 = tableBox->elementAt(2, 1);
-    cell2_1->addWidget(errorPlugin_);
+    cell2_1->addWidget(m_textErrorForPlugin);
 
-    errorInfo_ = new Wt::WText(tr("Alert.alert.invalid-select-info"));
+    m_textErrorForInformation = new Wt::WText(tr("Alert.alert.invalid-select-info"));
     Wt::WTableCell *cell2_2 = tableBox->elementAt(2, 2);
-    cell2_2->addWidget(errorAsset_);
+    cell2_2->addWidget(m_textErrorForAsset);
 
+    m_textErrorForAsset->hide();
+    m_textErrorForPlugin->hide();
+    m_textErrorForInformation->hide();
 
-    errorAsset_->hide();
-    errorPlugin_->hide();
-    errorInfo_->hide();
-
-    // FIXME
-    //    new Wt::WText(tr("Alert.alert.add-last-info"), contain);
-    //    new Wt::WText("21/12/2012", contain);  //a revoir quand info
-
-    new Wt::WText(tr("Alert.alert.add-compare"), contain); //hide show
+    new Wt::WText(tr("Alert.alert.add-compare"), mainContainerWidget);
 
     resourcesUnitOne.clear();
     resourcesUnitTwo.clear();
@@ -508,42 +503,41 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     idUnitOne = 1;
     idUnitTwo = 1;
 
-    Wt::WContainerWidget *compareWid = new Wt::WContainerWidget(contain);
+    Wt::WContainerWidget *compareWidgetContainer = new Wt::WContainerWidget(mainContainerWidget);
 
-    compareBarOne_ = new Wt::WContainerWidget();
-    compareBarOne_->addStyleClass("widget-title");
-    compareBarTwo_ = new Wt::WContainerWidget();
-    compareBarTwo_->addStyleClass("widget-title");
+    m_textCompareContainerWidget = new Wt::WContainerWidget();
+    m_textCompareContainerWidget->addStyleClass("widget-title");
+    m_numberCompareContainerWidget = new Wt::WContainerWidget();
+    m_numberCompareContainerWidget->addStyleClass("widget-title");
 
-    buttonAddOne_ = new Wt::WPushButton("<i class='icon-plus'></i>");
-    buttonAddOne_->setTextFormat(Wt::XHTMLUnsafeText);
-    buttonAddOne_->hide();
-    buttonAddTwo_ = new Wt::WPushButton("<i class='icon-plus'></i>");
-    buttonAddTwo_->setTextFormat(Wt::XHTMLUnsafeText);
-    buttonAddTwo_->hide();
+    m_buttonAddText = new Wt::WPushButton("<i class='icon-plus'></i>");
+    m_buttonAddText->setTextFormat(Wt::XHTMLUnsafeText);
+//    m_buttonAddText->hide();
+    m_buttonAddNumber = new Wt::WPushButton("<i class='icon-plus'></i>");
+    m_buttonAddNumber->setTextFormat(Wt::XHTMLUnsafeText);
+//    m_buttonAddNumber->hide();
 
-    createCompareWidgetText(compareWid);
-    createCompareWidgetNumber(compareWid);
-    createCompareWidgetBoolean(compareWid);
+    createCompareWidgetText(compareWidgetContainer);
+    createCompareWidgetNumber(compareWidgetContainer);
+    createCompareWidgetBoolean(compareWidgetContainer);
+    createCompareWidgetCustom(compareWidgetContainer);
 
-    contain->addWidget(buttonAddOne_);
-    contain->addWidget(buttonAddTwo_);
-    contain->addWidget(compareBarOne_);
-    contain->addWidget(compareBarTwo_);
+    mainContainerWidget->addWidget(m_buttonAddText);
+    mainContainerWidget->addWidget(m_buttonAddNumber);
+    mainContainerWidget->addWidget(m_textCompareContainerWidget);
+    mainContainerWidget->addWidget(m_numberCompareContainerWidget);
 
-    compareBarOne_->hide();
-    compareBarTwo_->hide();
+    m_textCompareContainerWidget->hide();
+    m_numberCompareContainerWidget->hide();
 
-    buttonAddOne_->clicked().connect(bind([ = ] (){
-                                          saveLineEditOne_->show();
-                                          createCompareWidgetText(compareWid)->show();
-                                          compareBarOne_->show();
+    m_buttonAddText->clicked().connect(bind([ = ] (){
+                                          addCompareLine(Enums::EInformationUnitType::text,compareWidgetContainer);
     }));
 
-    buttonAddTwo_->clicked().connect(bind([ = ] (){
-                                          saveLineEditTwo_->show();
-                                          createCompareWidgetNumber(compareWid)->show();
-                                          compareBarTwo_->show();
+    m_buttonAddNumber->clicked().connect(bind([ = ] (){
+//                                          saveLineEditTwo_->show();
+                                          addCompareLine(Enums::EInformationUnitType::number,compareWidgetContainer);
+//                                          m_numberCompareContainerWidget->show();
     }));
 
 
@@ -553,6 +547,7 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 
 void AlertsWidget::showCompareWidget(long long id)
 {
+    // SUITE DU TRAVAIL ICI
     map<int, Wt::WWidget *>::iterator it;
     hideCompareWidget();
     if (id > 0)
@@ -560,7 +555,7 @@ void AlertsWidget::showCompareWidget(long long id)
         long long unitTypeId = m_mapInformationsUnitTypes[id];
         if (unitTypeId == Enums::EInformationUnitType::text)
         {
-            compareBarOne_->show();
+            m_textCompareContainerWidget->show();
             for (it = m_textCompareWidget.begin(); it != m_textCompareWidget.end(); it++)
             {
                 ((Wt::WTable*)it->second)->show();
@@ -568,13 +563,13 @@ void AlertsWidget::showCompareWidget(long long id)
         }
         else if (unitTypeId == Enums::EInformationUnitType::number)
         {
-            compareBarTwo_->show();
+            m_numberCompareContainerWidget->show();
             for (it = m_numberCompareWidget.begin(); it != m_numberCompareWidget.end(); it++)
             {
                 ((Wt::WTable*)it->second)->show();
             }
         }
-        else if (unitTypeId == 3) //Enums::EInformationUnitType::boolean
+        else if (unitTypeId == Enums::EInformationUnitType::boolean) //Enums::EInformationUnitType::boolean
         {
             m_booleanCompareWidget->show();
         }
@@ -599,169 +594,243 @@ void AlertsWidget::hideCompareWidget()
     m_booleanCompareWidget->hide();
 }
 
-Wt::WTable *AlertsWidget::createCompareWidgetText(Wt::WContainerWidget *contain)
+void AlertsWidget::addCompareLine(Enums::EInformationUnitType type, Wt::WContainerWidget *parent)
 {
-    Wt::WTable *table = new Wt::WTable(contain);
-    Wt::WLineEdit *textEdit = new Wt::WLineEdit(table->elementAt(0, 1));
+    int mapId = m_alertCriterion.size()+1;
+    
+    Wt::WTable *newTableLine = new Wt::WTable(parent);
+    Wt::WLineEdit *textEdit = new Wt::WLineEdit(newTableLine->elementAt(0, 1));
 
-    Wt::WComboBox *comboBox = new Wt::WComboBox();
-    comboBox->addItem("=="); //xml
-
-    table->elementAt(0, 0)->addWidget(comboBox);
-    table->hide();
-
-    m_textCompareWidget[idUnitOne] = table;
+    Wt::WComboBox *comboBox = createCompareComboBox(type);
+    newTableLine->elementAt(0, 0)->addWidget(comboBox);
+//    newTableLine->hide();
 
     Wt::WText *errorText = new Wt::WText(tr("Alert.alert.invalid-name-alert"),
-                                         table->elementAt(1, 1));
+                                         newTableLine->elementAt(1, 1));
     errorText->hide();
 
     Wt::WText *text = new Wt::WText(comboBox->currentText());
-    compareBarOne_->addWidget(text);
+    m_textCompareContainerWidget->addWidget(text);
 
     Wt::WLineEdit *lineEditBar = new Wt::WLineEdit();
     lineEditBar->setWidth(40);
     lineEditBar->hide();
-    compareBarOne_->addWidget(lineEditBar);
-
-    saveLineEditOne_ = lineEditBar;
-
+    m_textCompareContainerWidget->addWidget(lineEditBar);
+    
     Wt::WPushButton *buttonValid =
-            new Wt::WPushButton("<i class='icon-ok'></i>", table->elementAt(0, 2));
+            new Wt::WPushButton("<i class='icon-ok'></i>", newTableLine->elementAt(0, 2));
     buttonValid->setStyleClass("btn-dark-warning");
     buttonValid->setTextFormat(Wt::XHTMLUnsafeText);
     buttonValid->clicked().connect(bind([ = ] (){
                                         text->setText(comboBox->currentText() + " \"" + textEdit->text() + "\"");
                                         buttonValid->setText("<i class='icon-ok'></i>");
     }));
-    textEdit->changed().connect(bind([ = ] (){text->setText(comboBox->currentText() + " \"" + textEdit->text() + "\"");}));
-    comboBox->changed().connect(bind([ = ] (){text->setText(comboBox->currentText() + " \"" + textEdit->text() + "\"");}));
 
-    Wt::WPushButton *buttonDel =
-            new Wt::WPushButton("<i class='icon-remove icon-white'></i>", table->elementAt(0, 3));
-    buttonDel->setStyleClass("btn-danger");
-    buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
-    buttonDel->setId(boost::lexical_cast<string>(idUnitOne));
-    buttonDel->clicked().connect(bind([ = ] (){
-                                      map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator widUnit =
-                                      resourcesUnitOne.find(boost::lexical_cast<int, string>(buttonDel->id()));
-                                      (*widUnit).second.first.second->hide(); // errorText
-                                      resourcesUnitOne.erase(widUnit);
-
-                                      map<int, Wt::WWidget *>::iterator wid =
-                                      m_textCompareWidget.find(boost::lexical_cast<int, string>(buttonDel->id()));
-                                      contain->removeWidget((*wid).second);
-                                      contain->refresh();
-                                      m_textCompareWidget.erase(wid);
-
-                                      compareBarOne_->removeWidget(text);
-                                      compareBarOne_->removeWidget(lineEditBar);
-    }));
-
-    // pour la premiere ligne on cache le bouton delete
-    if (idUnitOne == 1)
+    if (m_alertCriterion.size() > 0)
     {
-        buttonDel->hide();
+        Wt::WPushButton *buttonDel =
+            new Wt::WPushButton("<i class='icon-remove icon-white'></i>", newTableLine->elementAt(0, 3));
+        buttonDel->setStyleClass("btn-danger");
+        buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
+        buttonDel->setId(boost::lexical_cast<string>(idUnitOne));
+        buttonDel->clicked().connect(bind([ = ] ()
+        {
+                                      parent->removeWidget(m_alertCriterion[mapId]);
+                                      parent->refresh();
+                                      m_alertCriterion.erase(mapId);
+                                      
+        }));
     }
-    resourcesUnitOne[idUnitOne++] = make_pair(make_pair(textEdit, errorText), comboBox);
-
-    return table;
+    
+    
+    m_alertCriterion[mapId] = newTableLine;
 }
 
-Wt::WTable *AlertsWidget::createCompareWidgetNumber(Wt::WContainerWidget *contain)
+Wt::WComboBox *AlertsWidget::createCompareComboBox(Enums::EInformationUnitType type)
 {
-    Wt::WTable *table = new Wt::WTable(contain);
-    Wt::WLineEdit *valeurEdit = new Wt::WLineEdit(table->elementAt(0, 2));
-    valeurEdit->setValidator(editValidator(EValidatorType::VALIDATOR_FLOAT));
-
-    Wt::WComboBox *comboBox1 = new Wt::WComboBox();
-    comboBox1->addItem("<");
-    comboBox1->addItem("<=");
-    comboBox1->addItem("==");
-    comboBox1->addItem("!=");
-    comboBox1->addItem(">=");
-    comboBox1->addItem(">");
-
-    table->elementAt(0, 1)->addWidget(comboBox1);
-    table->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.message-value")));
-
-    Wt::WComboBox *comboBox2 = new Wt::WComboBox();
-    //    comboBox2->addItem("Ko");
-    //    comboBox2->addItem("Mo");
-    //    comboBox2->addItem("Go");
-
-    //    table->elementAt(0, 3)->addWidget(comboBox2);
-
-    table->hide();
-
-    m_numberCompareWidget[idUnitTwo] = table;
-
-    Wt::WText *errorNumb = new Wt::WText(tr("Alert.alert.invalid-number"),
-                                         contain);
-    errorNumb->hide();
-
-    Wt::WText *text = new Wt::WText(comboBox1->currentText());
-    //            + " \"\" " ;
-    //            + comboBox2->currentText());
-    //    compareBarTwo_->addWidget(text);
-
-    Wt::WLineEdit *lineEditBar = new Wt::WLineEdit();
-    lineEditBar->setWidth(40);
-    lineEditBar->hide();
-    compareBarTwo_->addWidget(lineEditBar);
-
-    saveLineEditTwo_ = lineEditBar;
-
-    Wt::WPushButton *buttonValid =
-            new Wt::WPushButton("<i class='icon-ok'></i>",
-                                table->elementAt(0, 4));
-    buttonValid->setStyleClass("btn-dark-warning");
-    buttonValid->setTextFormat(Wt::XHTMLUnsafeText);
-    buttonValid->clicked().connect(bind([ = ] (){
-                                        text->setText(comboBox1->currentText() + " \"" + valeurEdit->text());
-                                        //        + "\" " + comboBox2->currentText());
-                                        buttonValid->setText("<i class='icon-ok'></i>");
-    }));
-    valeurEdit->changed().connect(bind([ = ] (){text->setText(comboBox1->currentText() + " \"" + valeurEdit->text());
-                                       //    + "\" " + comboBox2->currentText()); 
-    }));
-    comboBox1->changed().connect(bind([ = ] (){text->setText(comboBox1->currentText() + " \"" + valeurEdit->text());
-                                      //    + "\" " + comboBox2->currentText()); 
-    }));
-    //    comboBox2->changed().connect(bind([=] ()
-    //    { text->setText(comboBox1->currentText() + " \"" + valeurEdit->text());
-    ////    + "\" " + comboBox2->currentText()); 
-    //    }));
-
-    Wt::WPushButton *buttonDel =
-            new Wt::WPushButton("<i class='icon-remove icon-white'></i>",
-                                table->elementAt(0, 5));
-    buttonDel->setStyleClass("btn-danger");
-    buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
-    buttonDel->setId(boost::lexical_cast<string>(idUnitTwo));
-    buttonDel->clicked().connect(bind([ = ] (){
-                                      map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator widUnit =
-                                      resourcesUnitTwo.find(boost::lexical_cast<int, string>(buttonDel->id()));
-                                      (*widUnit).second.first.second->hide(); // errorValue
-                                      resourcesUnitTwo.erase(widUnit);
-
-                                      map<int, Wt::WWidget *>::iterator wid =
-                                      m_numberCompareWidget.find(boost::lexical_cast<int, string>(buttonDel->id()));
-                                      contain->removeWidget((*wid).second);
-                                      contain->refresh();
-                                      m_numberCompareWidget.erase(wid);
-
-                                      compareBarTwo_->removeWidget(text);
-                                      compareBarTwo_->removeWidget(lineEditBar);
-    }));
-
-    if (idUnitTwo == 1)
+    Wt::WComboBox *comboBox = new Wt::WComboBox();
+    Wt::WStandardItemModel *model = new Wt::WStandardItemModel(1,2,this);
+    vector<Wt::WString> criterion;
+    switch(type)
     {
-        buttonDel->hide();
+    case Enums::EInformationUnitType::text:
+        criterion.push_back(tr("Alert.alert.operator.eq"));
+        criterion.push_back(tr("Alert.alert.operator.contains"));
+        break;
+    case Enums::EInformationUnitType::number:
+        criterion.push_back(tr("Alert.alert.operator.eq"));
+        criterion.push_back(tr("Alert.alert.operator.neq"));
+        criterion.push_back(tr("Alert.alert.operator.le"));
+        criterion.push_back(tr("Alert.alert.operator.lt"));
+        criterion.push_back(tr("Alert.alert.operator.ge"));
+        criterion.push_back(tr("Alert.alert.operator.gt"));
+        break;
+//    case Enums::EInformationUnitType::boolean:
+//        break;
+//    case Enums::EInformationUnitType::custom:
+//        break;
+    default:
+        break;
     }
-    resourcesUnitTwo[idUnitTwo++] = make_pair(make_pair(valeurEdit, errorNumb), make_pair(comboBox1, comboBox2));
+    int rank = 1;
+    for(auto it = criterion.begin(); it != criterion.end(); it++)
+    {
+        Wt::WStandardItem *itemIndex = new Wt::WStandardItem();
+        Wt::WStandardItem *itemComparison = new Wt::WStandardItem();
+        itemIndex->setText(boost::lexical_cast<string>(rank));
+        itemComparison->setText(*it);
+        model->setItem(rank,1,itemIndex);
+        model->setItem(rank++,2,itemComparison);
+    }
+    comboBox->setModel(model);
+    comboBox->setModelColumn(2);
+    return comboBox;
+}
 
-    return table;
+void AlertsWidget::createCompareWidgetText(Wt::WContainerWidget *contain)
+{
+    
+    addCompareLine(Enums::EInformationUnitType::text, contain);
+//    Wt::WTable *table = new Wt::WTable(contain);
+//    Wt::WLineEdit *textEdit = new Wt::WLineEdit(table->elementAt(0, 1));
+//
+//    Wt::WComboBox *comboBox = createCompareComboBox(Enums::EInformationUnitType::text);
+//    table->elementAt(0, 0)->addWidget(comboBox);
+//    table->hide();
+//
+//    m_textCompareWidget[idUnitOne] = table;
+//
+//    Wt::WText *errorText = new Wt::WText(tr("Alert.alert.invalid-name-alert"),
+//                                         table->elementAt(1, 1));
+//    errorText->hide();
+//
+//    Wt::WText *text = new Wt::WText(comboBox->currentText());
+//    m_textCompareContainerWidget->addWidget(text);
+//
+//    Wt::WLineEdit *lineEditBar = new Wt::WLineEdit();
+//    lineEditBar->setWidth(40);
+//    lineEditBar->hide();
+//    m_textCompareContainerWidget->addWidget(lineEditBar);
+//
+//    saveLineEditOne_ = lineEditBar;
+//
+//    Wt::WPushButton *buttonValid =
+//            new Wt::WPushButton("<i class='icon-ok'></i>", table->elementAt(0, 2));
+//    buttonValid->setStyleClass("btn-dark-warning");
+//    buttonValid->setTextFormat(Wt::XHTMLUnsafeText);
+//    buttonValid->clicked().connect(bind([ = ] (){
+//                                        text->setText(comboBox->currentText() + " \"" + textEdit->text() + "\"");
+//                                        buttonValid->setText("<i class='icon-ok'></i>");
+//    }));
+//    textEdit->changed().connect(bind([ = ] (){text->setText(comboBox->currentText() + " \"" + textEdit->text() + "\"");}));
+//    comboBox->changed().connect(bind([ = ] (){text->setText(comboBox->currentText() + " \"" + textEdit->text() + "\"");}));
+//
+//    Wt::WPushButton *buttonDel =
+//            new Wt::WPushButton("<i class='icon-remove icon-white'></i>", table->elementAt(0, 3));
+//    buttonDel->setStyleClass("btn-danger");
+//    buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
+//    buttonDel->setId(boost::lexical_cast<string>(idUnitOne));
+//    buttonDel->clicked().connect(bind([ = ] (){
+//                                      map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>::iterator widUnit =
+//                                      resourcesUnitOne.find(boost::lexical_cast<int, string>(buttonDel->id()));
+//                                      (*widUnit).second.first.second->hide(); // errorText
+//                                      resourcesUnitOne.erase(widUnit);
+//
+//                                      map<int, Wt::WWidget *>::iterator wid =
+//                                      m_textCompareWidget.find(boost::lexical_cast<int, string>(buttonDel->id()));
+//                                      contain->removeWidget((*wid).second);
+//                                      contain->refresh();
+//                                      m_textCompareWidget.erase(wid);
+//
+//                                      m_textCompareContainerWidget->removeWidget(text);
+//                                      m_textCompareContainerWidget->removeWidget(lineEditBar);
+//    }));
+//
+//    // pour la premiere ligne on cache le bouton delete
+//    if (idUnitOne == 1)
+//    {
+//        buttonDel->hide();
+//    }
+//    resourcesUnitOne[idUnitOne++] = make_pair(make_pair(textEdit, errorText), comboBox);
+
+}
+
+void AlertsWidget::createCompareWidgetNumber(Wt::WContainerWidget *contain)
+{
+    addCompareLine(Enums::EInformationUnitType::number, contain);
+//    Wt::WTable *table = new Wt::WTable(contain);
+//    Wt::WLineEdit *valeurEdit = new Wt::WLineEdit(table->elementAt(0, 2));
+//    valeurEdit->setValidator(editValidator(EValidatorType::VALIDATOR_FLOAT));
+//
+//    Wt::WComboBox *comboBox1 = createCompareComboBox(Enums::EInformationUnitType::number);
+//
+//    table->elementAt(0, 1)->addWidget(comboBox1);
+//    table->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.message-value")));
+//
+//    Wt::WComboBox *comboBox2 = new Wt::WComboBox();
+//
+//    table->hide();
+//
+//    m_numberCompareWidget[idUnitTwo] = table;
+//
+//    Wt::WText *errorNumb = new Wt::WText(tr("Alert.alert.invalid-number"),
+//                                         contain);
+//    errorNumb->hide();
+//
+//    Wt::WText *text = new Wt::WText(comboBox1->currentText());
+//
+//
+//    Wt::WLineEdit *lineEditBar = new Wt::WLineEdit();
+//    lineEditBar->setWidth(40);
+//    lineEditBar->hide();
+//    m_numberCompareContainerWidget->addWidget(lineEditBar);
+//
+//    saveLineEditTwo_ = lineEditBar;
+//
+//    Wt::WPushButton *buttonValid =
+//            new Wt::WPushButton("<i class='icon-ok'></i>",
+//                                table->elementAt(0, 4));
+//    buttonValid->setStyleClass("btn-dark-warning");
+//    buttonValid->setTextFormat(Wt::XHTMLUnsafeText);
+//    buttonValid->clicked().connect(bind([ = ] (){
+//                                        text->setText(comboBox1->currentText() + " \"" + valeurEdit->text());
+//                                        buttonValid->setText("<i class='icon-ok'></i>");
+//    }));
+//    valeurEdit->changed().connect(bind([ = ] (){text->setText(comboBox1->currentText() + " \"" + valeurEdit->text());
+//    }));
+//    comboBox1->changed().connect(bind([ = ] (){text->setText(comboBox1->currentText() + " \"" + valeurEdit->text());
+//    }));
+//
+//
+//    Wt::WPushButton *buttonDel =
+//            new Wt::WPushButton("<i class='icon-remove icon-white'></i>",
+//                                table->elementAt(0, 5));
+//    buttonDel->setStyleClass("btn-danger");
+//    buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
+//    buttonDel->setId(boost::lexical_cast<string>(idUnitTwo));
+//    buttonDel->clicked().connect(bind([ = ] (){
+//                                      map<long long, pair<pair<Wt::WLineEdit*, Wt::WText*>, pair<Wt::WComboBox*,Wt::WComboBox*>>>::iterator widUnit =
+//                                      resourcesUnitTwo.find(boost::lexical_cast<int, string>(buttonDel->id()));
+//                                      (*widUnit).second.first.second->hide(); // errorValue
+//                                      resourcesUnitTwo.erase(widUnit);
+//
+//                                      map<int, Wt::WWidget *>::iterator wid =
+//                                      m_numberCompareWidget.find(boost::lexical_cast<int, string>(buttonDel->id()));
+//                                      contain->removeWidget((*wid).second);
+//                                      contain->refresh();
+//                                      m_numberCompareWidget.erase(wid);
+//
+//                                      m_numberCompareContainerWidget->removeWidget(text);
+//                                      m_numberCompareContainerWidget->removeWidget(lineEditBar);
+//    }));
+//
+//    if (idUnitTwo == 1)
+//    {
+//        buttonDel->hide();
+//    }
+//    resourcesUnitTwo[idUnitTwo++] = make_pair(make_pair(valeurEdit, errorNumb), make_pair(comboBox1, comboBox2));
+//
+//    return table;
 }
 
 void AlertsWidget::createCompareWidgetBoolean(Wt::WContainerWidget *contain)
@@ -797,6 +866,11 @@ void AlertsWidget::createCompareWidgetBoolean(Wt::WContainerWidget *contain)
     table->hide();
 
     m_booleanCompareWidget = table;
+}
+
+void AlertsWidget::createCompareWidgetCustom(Wt::WContainerWidget *contain)
+{
+    
 }
 
 //                                                                                    ^

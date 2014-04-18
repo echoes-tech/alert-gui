@@ -239,7 +239,7 @@ void AbstractPage::fillBodyTable()
     int columnTable(0);
     int rowBodyTable(1);
     
-    for (multimap_long_widgets::iterator itRowTable = m_rowsTable.begin();
+    for (std::multimap<long long, vector_widget>::iterator itRowTable = m_rowsTable.begin();
             itRowTable != m_rowsTable.end() ;itRowTable++)
     {
         columnTable = 0;
@@ -447,7 +447,7 @@ void AbstractPage::modifResourcePopup(long long id)
     //gkr: Init dialog popup
     Wt::WDialog *dialogModif_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".modif-" + m_nameResourcePageSpec));
 
-    for (multimap_long_widgets::iterator itTable = m_rowsTable.begin();
+    for (std::multimap<long long, vector_widget>::iterator itTable = m_rowsTable.begin();
             itTable != m_rowsTable.end(); itTable++)
     {
         int cpt(0);
@@ -511,7 +511,7 @@ void AbstractPage::modifResourcePopup(long long id)
                 }
                 else if ((*title).first == 1)
                 {
-                    multimap_long_widgets::iterator rowTable = m_rowsTable.find(id);
+                    std::multimap<long long, vector_widget>::iterator rowTable = m_rowsTable.find(id);
                     for (vector_widget::iterator widg = (*rowTable).second.begin();
                             widg != (*rowTable).second.end(); widg++)
                     {
@@ -528,7 +528,7 @@ void AbstractPage::modifResourcePopup(long long id)
                 else if ((*title).first == 3)
                 {
                     Wt::WComboBox *comboBox = popupAdd(dialogModif_);
-                    multimap_long_widgets::iterator rowTable = m_rowsTable.find(id);
+                    std::multimap<long long, vector_widget>::iterator rowTable = m_rowsTable.find(id);
                     int cpt2(0);
                     for (vector_widget::iterator widg = (*rowTable).second.begin();
                             widg != (*rowTable).second.end(); widg++)
@@ -656,12 +656,12 @@ void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
 
 // Set/Get attribut to init or option. -------------------------------------
 
-void AbstractPage::setRowsTable(multimap_long_widgets rowsTable)
+void AbstractPage::setRowsTable(std::multimap<long long, vector_widget> rowsTable)
 {
     m_rowsTable = rowsTable;
 }
 
-multimap_long_widgets AbstractPage::getRowsTable()
+std::multimap<long long, vector_widget> AbstractPage::getRowsTable()
 {
     return m_rowsTable;
 }
@@ -1287,7 +1287,7 @@ void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
     vector_widget inputs;
     int column(0);
 
-    for (multimap_long_widgets::iterator itTable = m_rowsTable.begin();
+    for (std::multimap<long long, vector_widget>::iterator itTable = m_rowsTable.begin();
             itTable != m_rowsTable.end(); itTable++)
     {
         int cpt(0);

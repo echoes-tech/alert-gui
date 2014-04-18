@@ -99,11 +99,14 @@ private:
     
     void                        cleanBox(Wt::WSelectionBox *box);
 
-    Wt::WTable                  *createCompareWidgetText(Wt::WContainerWidget *contain);
-    Wt::WTable                  *createCompareWidgetNumber(Wt::WContainerWidget *contain);
+    void                        createCompareWidgetText(Wt::WContainerWidget *contain);
+    void                        createCompareWidgetNumber(Wt::WContainerWidget *contain);
     void                        createCompareWidgetBoolean(Wt::WContainerWidget *contain);
+    void                        createCompareWidgetCustom(Wt::WContainerWidget *contain);
     void                        showCompareWidget(long long id);
     void                        hideCompareWidget();
+    void                        addCompareLine(Enums::EInformationUnitType type, Wt::WContainerWidget *parent);
+    Wt::WComboBox               *createCompareComboBox(Enums::EInformationUnitType type);
 
     void                        selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
     void                        selectPlugin(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
@@ -153,6 +156,9 @@ private:
     Wt::WStandardItemModel * m_plugins;
     Wt::WStandardItemModel * m_informations;
     
+    // alerts criterion
+    std::map<int,Wt::WTable *> m_alertCriterion;
+    
     // end alert setting attributes
     
     Echoes::Dbo::Session        *m_session;
@@ -185,10 +191,6 @@ private:
      */
     std::pair<std::pair<long long, long long>, std::pair<long long, long long>>         idAll_;
     
-    std::string         assetSelected_; // Name Asset selected
-    std::string         pluginSelected_; // Name Plugin selected
-    std::string         infoSelected_; // Name Info selected
-
     long long           idUnitOne; // html tag for widget Text
     long long           idUnitTwo; // html tag for widget number
     
@@ -196,20 +198,21 @@ private:
     std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>             resourcesUnitTwo;
     
     //  Errors Messages ------
-    Wt::WText           *errorAsset_;
-    Wt::WText           *errorPlugin_; 
-    Wt::WText           *errorInfo_;
-    Wt::WText           *errorKey_;
+    Wt::WText           *m_textErrorForAsset;
+    Wt::WText           *m_textErrorForPlugin; 
+    Wt::WText           *m_textErrorForInformation;
+    Wt::WText           *m_textErrorForKeyValue;
 
     Wt::WLineEdit       *keyValue_;
     
     Wt::WText            *errorBool_;
     //  -------
     
-    Wt::WContainerWidget *compareBarOne_;
-    Wt::WContainerWidget *compareBarTwo_;
-    Wt::WPushButton      *buttonAddOne_;
-    Wt::WPushButton      *buttonAddTwo_;
+    Wt::WContainerWidget *m_textCompareContainerWidget;
+    Wt::WContainerWidget *m_numberCompareContainerWidget;
+    Wt::WPushButton      *m_buttonAddText;
+    Wt::WPushButton      *m_buttonAddNumber;
+    
     Wt::WLineEdit        *saveLineEditOne_;
     Wt::WLineEdit        *saveLineEditTwo_;
 };

@@ -42,6 +42,8 @@ public:
     virtual std::string         addParameter();
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
 
+protected:
+    virtual void                handleJsonGet(vectors_Json jsonResources);
 
 private:
 

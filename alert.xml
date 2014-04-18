@@ -73,6 +73,8 @@
     <message id="Alert.alert.operator.ge">Greater or equal</message>
     <message id="Alert.alert.operator.gt">Greater</message>
     <message id="Alert.alert.operator.ne">Not equal</message>
+    
+    <message id="Alert.alert.operator.contains">Contains</message>
 
 <!--    Invalid message     -->
   <message id="Alert.alert.invalid-name-alert">

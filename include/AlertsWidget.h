@@ -88,7 +88,7 @@ private:
     void                        setBox(Wt::WSelectionBox *box, Wt::WStandardItemModel *model);
     void                        assetSelected();
     void                        pluginSelected();
-    void                        infoSelected();
+    void                        informationSelected();
     void                        fillModels();
     void                        fillModel(Wt::WStandardItemModel * model, std::map<long long, std::string> m_mapNames);
 
@@ -99,13 +99,12 @@ private:
     
     void                        cleanBox(Wt::WSelectionBox *box);
 
-    void                        createCompareWidgetText(Wt::WContainerWidget *contain);
-    void                        createCompareWidgetNumber(Wt::WContainerWidget *contain);
-    void                        createCompareWidgetBoolean(Wt::WContainerWidget *contain);
-    void                        createCompareWidgetCustom(Wt::WContainerWidget *contain);
+    void                        createCompareWidgetText();
+    void                        createCompareWidgetNumber();
+    void                        createCompareWidgetBoolean();
+    void                        createCompareWidgetCustom();
     void                        showCompareWidget(long long id);
-    void                        hideCompareWidget();
-    void                        addCompareLine(Enums::EInformationUnitType type, Wt::WContainerWidget *parent);
+    void                        addCompareLine(Enums::EInformationUnitType type);
     Wt::WComboBox               *createCompareComboBox(Enums::EInformationUnitType type);
 
     void                        selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
@@ -208,9 +207,12 @@ private:
     Wt::WText            *errorBool_;
     //  -------
     
+    Wt::WContainerWidget *m_compareWidgetContainer;
+    Wt::WContainerWidget *m_compareWidgetContainerBottom;
+    Wt::WContainerWidget *m_compareWidgetContainerSequence;
     Wt::WContainerWidget *m_textCompareContainerWidget;
     Wt::WContainerWidget *m_numberCompareContainerWidget;
-    Wt::WPushButton      *m_buttonAddText;
+    Wt::WPushButton      *m_buttonAddCompareCriteria;
     Wt::WPushButton      *m_buttonAddNumber;
     
     Wt::WLineEdit        *saveLineEditOne_;

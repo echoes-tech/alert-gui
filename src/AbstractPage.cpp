@@ -396,12 +396,12 @@ void AbstractPage::addResourcePopup()
                 }
                 inputName.push_back(input);
             }
-            else if ((*title).first == ETypeJson::boolean)
+            else if (title->first == ETypeJson::boolean)
             {
                 Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
                 inputName.push_back(checkBox);
             }
-            else if ((*title).first == ETypeJson::integer)
+            else if (title->first == ETypeJson::integer)
             {
                 input = new Wt::WLineEdit(dialogAdd_->contents());
                 input->setValidator(editValidator(cpt));
@@ -413,13 +413,13 @@ void AbstractPage::addResourcePopup()
                 }
                 inputName.push_back(input);
             }
-            else if ((*title).first == ETypeJson::undid)
+            else if (title->first == ETypeJson::undid)
             {
                 inputName.push_back(popupAdd(dialogAdd_));
             }
 
             Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
-                                                + (*title).second),
+                                                + title->second),
                                              dialogAdd_->contents());
             error->hide();
             errorMessage.push_back(error);
@@ -451,7 +451,7 @@ void AbstractPage::modifResourcePopup(long long id)
             itTable != m_rowsTable.end(); itTable++)
     {
         int cpt(0);
-        if ((*itTable).first == id)
+        if (itTable->first == id)
         {
             multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
             for (Wt::WInteractWidget *itElem : itTable->second)

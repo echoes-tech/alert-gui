@@ -175,11 +175,9 @@ private:
     
     std::multimap<long long, long long>       unitsIds_; // Link between Info and widgets compare. (text, number, bool)
 
-    
-    // should be the same type
-    std::map<int, Wt::WWidget *>        m_textCompareWidget; // Text
-    std::map<int, Wt::WWidget *>        m_numberCompareWidget; // Number
+    // FIXME : to be refactored and included in m_alertCriteria
     Wt::WTable                          *m_booleanCompareWidget; // Bool
+    Wt::WTextArea                       *m_customCompareWidget; // Bool
     
     bool                m_contentOfBooleanCheck;  //for check button true/false
     int                 checkAll_;

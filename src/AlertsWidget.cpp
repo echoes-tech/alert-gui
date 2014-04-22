@@ -509,9 +509,6 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     resourcesUnitOne.clear();
     resourcesUnitTwo.clear();
 
-    m_textCompareWidget.clear();
-    m_numberCompareWidget.clear();
-
     m_compareWidgetContainer = new Wt::WContainerWidget(mainContainerWidget);
     m_compareWidgetContainerBottom = new Wt::WContainerWidget(mainContainerWidget);
 
@@ -536,6 +533,7 @@ void AlertsWidget::showCompareWidget(long long id)
                 m_buttonAddCompareCriteria->clicked().connect(bind([ = ] (){
                                                   addCompareLine(Enums::EInformationUnitType::text);
                 }));
+                m_compareWidgetContainerBottom->addWidget(m_buttonAddCompareCriteria);
                 break;
             case Enums::EInformationUnitType::number:
                 addCompareLine(Enums::EInformationUnitType::number);
@@ -544,6 +542,7 @@ void AlertsWidget::showCompareWidget(long long id)
                 m_buttonAddCompareCriteria->clicked().connect(bind([ = ] (){
                                                   addCompareLine(Enums::EInformationUnitType::number);
                 }));
+                m_compareWidgetContainerBottom->addWidget(m_buttonAddCompareCriteria);
                 break;
             case Enums::EInformationUnitType::boolean:
                 createCompareWidgetBoolean();
@@ -555,7 +554,7 @@ void AlertsWidget::showCompareWidget(long long id)
             Wt::log("error") << "Unknown unit type : " << unitTypeId;
         }
         
-        m_compareWidgetContainerBottom->addWidget(m_buttonAddCompareCriteria);
+        
         
     }
 }
@@ -684,14 +683,17 @@ void AlertsWidget::createCompareWidgetBoolean()
                                    errorBool_->show();
     }));
 
-    table->hide();
 
     m_booleanCompareWidget = table;
 }
 
 void AlertsWidget::createCompareWidgetCustom()
 {
-    
+    Wt::WTextArea *ta = new Wt::WTextArea(m_compareWidgetContainer);
+    ta->setColumns(80);
+    ta->setRows(6);
+    ta->setText(tr("Alert.alert.sec-base-message"));
+    m_customCompareWidget = ta;
 }
 
 //                                                                                    ^
@@ -854,71 +856,58 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
 //    boost::algorithm::to_lower(data);
     message += "{\n\"name\": \"" + data + "\",\n";
     
-    message += "\"alert_criteria\":\n[\n{\n";
-    
-    unsigned int indexCriterion = 0;
-    for(auto it = m_alertCriteria.begin(); it != m_alertCriteria.end(); it++)
+    message += "\"alert_criterion_id\": " + boost::lexical_cast<string>(m_mapInformationsUnitTypes[getSelectedIdFromBox(m_boxInfo)]) + ",\n";
+
+    switch (m_mapInformationsUnitTypes[getSelectedIdFromBox(m_boxInfo)])
     {
-        if (it != m_alertCriteria.begin())
+        case Enums::EInformationUnitType::text:
+        //same for text & number
+        case Enums::EInformationUnitType::number:
         {
-            message += "\n{\n";
+            unsigned int indexCriterion = 0;
+            message += "\"alert_criteria\":\n[\n{\n";
+            for(auto it = m_alertCriteria.begin(); it != m_alertCriteria.end(); it++)
+            {
+                if (it != m_alertCriteria.begin())
+                {
+                    message += "\n{\n";
+                }
+                message += "\"value\": \"" + ((Wt::WLineEdit*)it->second->elementAt(0,1)->widget(0))->text().toUTF8() + "\",\n";
+                message += "\"operator\": \"" + ((Wt::WComboBox*)it->second->elementAt(0,0)->widget(0))->currentText().toUTF8() + "\"";
+                if (indexCriterion < m_alertCriteria.size() - 1)
+                {
+                    message += "\n},";
+                }
+                else
+                {
+                    message += "\n}";
+                }
+                ++indexCriterion;
+            }
+            message += "\n],\n";
+            break;
         }
-        message += "\"alert_criterion_id\": " + boost::lexical_cast<string>(m_mapInformationsUnitTypes[getSelectedIdFromBox(m_boxInfo)]) + ",\n";
-        message += "\"value\": \"" + ((Wt::WLineEdit*)it->second->elementAt(0,1)->widget(0))->text().toUTF8() + "\",\n";
-        message += "\"operator\": \"" + ((Wt::WComboBox*)it->second->elementAt(0,0)->widget(0))->currentText().toUTF8() + "\"";
-        if (indexCriterion < m_alertCriteria.size() - 1)
-        {
-            message += "\n},";
-        }
-        else
-        {
-            message += "\n}";
-        }
-        ++indexCriterion;
+        case Enums::EInformationUnitType::boolean:
+            if (!(m_booleanCompareWidget->isHidden()))
+            {
+                if (m_contentOfBooleanCheck)
+                {
+                    message += "\"value\": \"true\",\n";
+                }
+                else
+                {
+                    message += "\"value\": \"false\",\n";
+                }
+            }
+            break;
+        case Enums::EInformationUnitType::custom:
+            message += "\"value\": \"" + m_customCompareWidget->text().toUTF8() + "\",\n";
+            break;
+        default:
+            message += "\"value\": \"\",\n";
+            break;
+      
     }
-    
-    
-//    switch ()
-//    {
-//    case Enums::EInformationUnitType::text:
-//    {
-//        
-//        break;
-//    }
-//    case Enums::EInformationUnitType::number:
-//    {
-//        message += "\"alert_criteria_id\": 2,\n";
-//        message += "\"value\": \"" + resourcesUnitTwo.begin()->second.first.first->text().toUTF8() + "\",\n";
-//        break;
-//    }
-//    case Enums::EInformationUnitType::boolean:
-//    {
-//        message += "\"alert_criteria_id\": 3,\n";
-//        if (!(m_booleanCompareWidget->isHidden()))
-//        {
-//            if (m_contentOfBooleanCheck)
-//            {
-//                message += "\"value\": \"true\",\n";
-//            }
-//            else
-//            {
-//                message += "\"value\": \"false\",\n";
-//            }
-//        }
-//        break;
-//    }
-//    case Enums::EInformationUnitType::custom:
-//    {
-//        break;
-//    }
-//    default:
-//    {
-//        message += "\"value\": \"\",\n";
-//        break;
-//    }
-//    }
-    
-    message += "\n],\n";
 
     message += "\"thread_sleep\": 0,\n";
 

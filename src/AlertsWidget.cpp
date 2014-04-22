@@ -264,7 +264,7 @@ void AlertsWidget::assetSelected()
         // le faire pour select multiple également
         if (setSelectedIndexes.size() == 1)
         {
-            assetId = getSelectedIdFromBox(m_boxAsset);
+            assetId = getSelectedIdFromSelectionBox(m_boxAsset);
             
             int rowPlug = 0;
             m_plugins->clear();
@@ -321,7 +321,7 @@ void AlertsWidget::pluginSelected()
         // le faire pour select multiple également
         if (setSelectedIndexes.size() == 1)
         {
-            pluginId = getSelectedIdFromBox(m_boxPlugin);
+            pluginId = getSelectedIdFromSelectionBox(m_boxPlugin);
             
             int rowAsset = 0;
             m_assets->clear();
@@ -372,7 +372,7 @@ void AlertsWidget::informationSelected()
         // le faire pour select multiple également
         if (setSelectedIndexes.size() == 1)
         {
-            infoId = getSelectedIdFromBox(m_boxInfo);
+            infoId = getSelectedIdFromSelectionBox(m_boxInfo);
             
             int rowPlug = 0;
             m_plugins->clear();
@@ -533,7 +533,7 @@ void AlertsWidget::showCompareWidget(long long id)
                 m_buttonAddCompareCriteria->clicked().connect(bind([ = ] (){
                                                   addCompareLine(Enums::EInformationUnitType::text);
                 }));
-                m_compareWidgetContainerBottom->addWidget(m_buttonAddCompareCriteria);
+//                m_compareWidgetContainerBottom->addWidget(m_buttonAddCompareCriteria);
                 break;
             case Enums::EInformationUnitType::number:
                 addCompareLine(Enums::EInformationUnitType::number);
@@ -542,7 +542,8 @@ void AlertsWidget::showCompareWidget(long long id)
                 m_buttonAddCompareCriteria->clicked().connect(bind([ = ] (){
                                                   addCompareLine(Enums::EInformationUnitType::number);
                 }));
-                m_compareWidgetContainerBottom->addWidget(m_buttonAddCompareCriteria);
+                //FIXME : réafficher le bouton !
+//                m_compareWidgetContainerBottom->addWidget(m_buttonAddCompareCriteria);
                 break;
             case Enums::EInformationUnitType::boolean:
                 createCompareWidgetBoolean();
@@ -579,7 +580,7 @@ void AlertsWidget::addCompareLine(Enums::EInformationUnitType type)
     }
 
     new Wt::WLineEdit(newTableLine->elementAt(0, column++));
-    Wt::WComboBox *comboBox = createCompareComboBox(type);
+    Wt::WComboBox *comboBox = createCompareCriteriaComboBox(type);
     
     newTableLine->elementAt(0, column++)->addWidget(comboBox);
 //    newTableLine->hide();
@@ -614,25 +615,42 @@ void AlertsWidget::addCompareLine(Enums::EInformationUnitType type)
     m_alertCriteria[mapId] = newTableLine;
 }
 
-Wt::WComboBox *AlertsWidget::createCompareComboBox(Enums::EInformationUnitType type)
+void AlertsWidget::createItemsCriteriaComboBox(long long id, Wt::WString criterion, Wt::WStandardItemModel *model)
+{
+    Wt::WStandardItem *itemIndex = new Wt::WStandardItem();
+    Wt::WStandardItem *itemComparison = new Wt::WStandardItem();
+    itemIndex->setText(boost::lexical_cast<string>(id));
+    itemComparison->setText(criterion);
+    vector<Wt::WStandardItem*> items;
+    items.push_back(itemIndex);
+    items.push_back(itemComparison);
+    model->insertRow(0,items);
+}
+
+Wt::WComboBox *AlertsWidget::createCompareCriteriaComboBox(Enums::EInformationUnitType type)
 {
     Wt::WComboBox *comboBox = new Wt::WComboBox();
     Wt::WStandardItemModel *model = new Wt::WStandardItemModel(1,2,this);
-    vector<Wt::WString> criterion;
+//    vector<Wt::WString> criterion;
     switch(type)
     {
     case Enums::EInformationUnitType::text:
-        criterion.push_back(tr("Alert.alert.operator.eq"));
-        criterion.push_back(tr("Alert.alert.operator.contains"));
+    {
+        //FIXME : create contains
+        createItemsCriteriaComboBox(Echoes::Dbo::EAlertCriteria::EQ,tr("Alert.alert.operator.contains"),model);
+        createItemsCriteriaComboBox(Echoes::Dbo::EAlertCriteria::EQ,tr("Alert.alert.operator.eq"),model);
         break;
+    }
     case Enums::EInformationUnitType::number:
-        criterion.push_back(tr("Alert.alert.operator.eq"));
-        criterion.push_back(tr("Alert.alert.operator.ne"));
-        criterion.push_back(tr("Alert.alert.operator.le"));
-        criterion.push_back(tr("Alert.alert.operator.lt"));
-        criterion.push_back(tr("Alert.alert.operator.ge"));
-        criterion.push_back(tr("Alert.alert.operator.gt"));
+    {
+        createItemsCriteriaComboBox(Echoes::Dbo::EAlertCriteria::LE,tr("Alert.alert.operator.le"),model);
+        createItemsCriteriaComboBox(Echoes::Dbo::EAlertCriteria::LT,tr("Alert.alert.operator.lt"),model);
+        createItemsCriteriaComboBox(Echoes::Dbo::EAlertCriteria::GE,tr("Alert.alert.operator.ge"),model);
+        createItemsCriteriaComboBox(Echoes::Dbo::EAlertCriteria::GT,tr("Alert.alert.operator.gt"),model);
+        createItemsCriteriaComboBox(Echoes::Dbo::EAlertCriteria::NE,tr("Alert.alert.operator.ne"),model);
+        createItemsCriteriaComboBox(Echoes::Dbo::EAlertCriteria::EQ,tr("Alert.alert.operator.eq"),model);
         break;
+    }
 //    case Enums::EInformationUnitType::boolean:
 //        break;
 //    case Enums::EInformationUnitType::custom:
@@ -640,18 +658,18 @@ Wt::WComboBox *AlertsWidget::createCompareComboBox(Enums::EInformationUnitType t
     default:
         break;
     }
-    int rank = 1;
-    for(auto it = criterion.begin(); it != criterion.end(); it++)
-    {
-        Wt::WStandardItem *itemIndex = new Wt::WStandardItem();
-        Wt::WStandardItem *itemComparison = new Wt::WStandardItem();
-        itemIndex->setText(boost::lexical_cast<string>(rank));
-        itemComparison->setText(*it);
-        model->setItem(rank,1,itemIndex);
-        model->setItem(rank++,2,itemComparison);
-    }
+//    int rank = 1;
+//    for(auto it = criterion.begin(); it != criterion.end(); it++)
+//    {
+//        Wt::WStandardItem *itemIndex = new Wt::WStandardItem();
+//        Wt::WStandardItem *itemComparison = new Wt::WStandardItem();
+//        itemIndex->setText(boost::lexical_cast<string>(rank));
+//        itemComparison->setText(*it);
+//        model->setItem(rank,1,itemIndex);
+//        model->setItem(rank++,2,itemComparison);
+//    }
     comboBox->setModel(model);
-    comboBox->setModelColumn(2);
+    comboBox->setModelColumn(1);
     return comboBox;
 }
 
@@ -726,7 +744,7 @@ Wt::WValidator *AlertsWidget::editValidator(int validatorType)
 
 void AlertsWidget::checkPopupRecipients(string message, string time, int media)
 {
-    message += "\"alert_media_specialization\":\n[\n";
+    message += "\"alert_media_specializations\":\n[\n";
 
     // FIXME: time time_ ???
     message += "{\n\"media_id\": " + boost::lexical_cast<string>((*mediaInfo_.find(media - 1)).second.first.first);
@@ -855,25 +873,38 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
     string data = ((Wt::WLineEdit*) * argument.begin())->text().toUTF8();
 //    boost::algorithm::to_lower(data);
     message += "{\n\"name\": \"" + data + "\",\n";
+    message += "\"thread_sleep\": 0,\n";
     
-    message += "\"alert_criterion_id\": " + boost::lexical_cast<string>(m_mapInformationsUnitTypes[getSelectedIdFromBox(m_boxInfo)]) + ",\n";
+//    message += "\"alert_information_unit_type_id\": " + boost::lexical_cast<string>(m_mapInformationsUnitTypes[getSelectedIdFromBox(m_boxInfo)]) + ",\n";
 
-    switch (m_mapInformationsUnitTypes[getSelectedIdFromBox(m_boxInfo)])
+    // FIXME: différencier suivant le critère (dans le cas multi asset)
+    long long assetId = getSelectedIdFromSelectionBox(m_boxAsset);
+    long long pluginId = getSelectedIdFromSelectionBox(m_boxPlugin);
+    long long infoId = getSelectedIdFromSelectionBox(m_boxInfo);
+    
+    switch (m_mapInformationsUnitTypes[getSelectedIdFromSelectionBox(m_boxInfo)])
     {
         case Enums::EInformationUnitType::text:
         //same for text & number
         case Enums::EInformationUnitType::number:
         {
             unsigned int indexCriterion = 0;
-            message += "\"alert_criteria\":\n[\n{\n";
+            message += "\"alert_values\":\n[\n{\n";
             for(auto it = m_alertCriteria.begin(); it != m_alertCriteria.end(); it++)
             {
                 if (it != m_alertCriteria.begin())
                 {
                     message += "\n{\n";
                 }
+                
+                message += "\"alert_criterion_id\": " + boost::lexical_cast<string>(getSelectedIdFromComboBox(((Wt::WComboBox*)it->second->elementAt(0,2)->widget(0)))) + ",\n";
                 message += "\"value\": \"" + ((Wt::WLineEdit*)it->second->elementAt(0,1)->widget(0))->text().toUTF8() + "\",\n";
-                message += "\"operator\": \"" + ((Wt::WComboBox*)it->second->elementAt(0,0)->widget(0))->currentText().toUTF8() + "\"";
+                // FIXME: différencier suivant le critère (dans le cas multi asset)
+                message += "\"key_value\": \"" + keyValue_->text().toUTF8() + "\",\n";
+                message += "\"operator\": \"" + ((Wt::WComboBox*)it->second->elementAt(0,0)->widget(0))->currentText().toUTF8() + "\",\n";
+                message += "\"asset_id\": " + boost::lexical_cast<string>(assetId) + ",\n";
+                message += "\"plugin_id\": " + boost::lexical_cast<string>(pluginId) + ",\n";
+                message += "\"information_id\": " + boost::lexical_cast<string>(infoId);
                 if (indexCriterion < m_alertCriteria.size() - 1)
                 {
                     message += "\n},";
@@ -888,42 +919,62 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
             break;
         }
         case Enums::EInformationUnitType::boolean:
-            if (!(m_booleanCompareWidget->isHidden()))
+            message += "\"alert_values\":\n[\n{\n";
+            message += "\"alert_criterion_id\": 1,\n";
+            if (m_contentOfBooleanCheck)
             {
-                if (m_contentOfBooleanCheck)
-                {
-                    message += "\"value\": \"true\",\n";
-                }
-                else
-                {
-                    message += "\"value\": \"false\",\n";
-                }
+                message += "\"value\": \"true\",\n";
             }
+            else
+            {
+                message += "\"value\": \"false\",\n";
+            }
+            message += "\"key_value\": \"\",\n";
+            message += "\"operator\": \"\",\n";
+            message += "\"asset_id\": " + boost::lexical_cast<string>(assetId) + ",\n";
+            message += "\"plugin_id\": " + boost::lexical_cast<string>(pluginId) + ",\n";
+            message += "\"information_id\": " + boost::lexical_cast<string>(infoId);
+            message += "\n}";
+            message += "\n],\n";
             break;
         case Enums::EInformationUnitType::custom:
+            message += "\"alert_values\":\n[\n{\n";
+            message += "\"alert_criterion_id\": 1,\n";
             message += "\"value\": \"" + m_customCompareWidget->text().toUTF8() + "\",\n";
+            message += "\"key_value\": \"\",\n";
+            message += "\"operator\": \"\",\n";
+            message += "\"asset_id\": " + boost::lexical_cast<string>(assetId) + ",\n";
+            message += "\"plugin_id\": " + boost::lexical_cast<string>(pluginId) + ",\n";
+            message += "\"information_id\": " + boost::lexical_cast<string>(infoId);
+            message += "\n}";
+            message += "\n],\n";
             break;
         default:
+            message += "\"alert_values\":\n[\n{\n";
+            message += "\"alert_criterion_id\": 1,\n";
             message += "\"value\": \"\",\n";
+            message += "\"key_value\": \"\",\n";
+            message += "\"operator\": \"\",\n";
+            message += "\"asset_id\": " + boost::lexical_cast<string>(assetId) + ",\n";
+            message += "\"plugin_id\": " + boost::lexical_cast<string>(pluginId) + ",\n";
+            message += "\"information_id\": " + boost::lexical_cast<string>(infoId);
+            message += "\n}";
+            message += "\n],\n";
             break;
       
     }
 
-    message += "\"thread_sleep\": 0,\n";
-
-    message += "\"key_value\": \"" + keyValue_->text().toUTF8() + "\",\n";
-
-    long long assetId = getSelectedIdFromBox(m_boxAsset);
-    long long pluginId = getSelectedIdFromBox(m_boxPlugin);
-    long long infoId = getSelectedIdFromBox(m_boxInfo);
     
-    message += "\"asset_id\": " + boost::lexical_cast<string>(assetId) + ",\n";
-    message += "\"plugin_id\": " + boost::lexical_cast<string>(pluginId) + ",\n";
-    message += "\"information_id\": " + boost::lexical_cast<string>(infoId);
+
+    
+
+    
+    
+    
 
     if (checkAll_ == 1)
     {
-        message += "\"alert_media_specialization\":\n[\n{\n\"media_id\": "
+        message += "\"alert_media_specializations\":\n[\n{\n\"media_id\": "
                 + boost::lexical_cast<string>(1)
                 + ",\n\"snooze\": 0,\n\"message\": \""
                 + m_tabContentMessageMobileApp
@@ -934,7 +985,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
     }
     else
     {
-        message += ",\n";
+//        message += ",\n";
         popupRecipients(data, message);
     }
 }
@@ -946,7 +997,7 @@ void AlertsWidget::closePopup()
     getResourceList();
 }
 
-long long AlertsWidget::getSelectedIdFromBox(Wt::WSelectionBox * box)
+long long AlertsWidget::getSelectedIdFromSelectionBox(Wt::WSelectionBox * box)
 {
     const set<int> setSelectedIndexes = box->selectedIndexes();
     long long res = -1;
@@ -964,6 +1015,16 @@ long long AlertsWidget::getSelectedIdFromBox(Wt::WSelectionBox * box)
             res = boost::lexical_cast<long long>(((Wt::WStandardItemModel*)box->model())->item(indexSelected,0)->text());
         }
     }
+    return res;
+}
+
+long long AlertsWidget::getSelectedIdFromComboBox(Wt::WComboBox * box)
+{
+
+    long long res = -1;
+    
+    res = boost::lexical_cast<long long>(((Wt::WStandardItemModel*)box->model())->item(box->currentIndex(),0)->text());
+
     return res;
 }
 
@@ -998,7 +1059,7 @@ void AlertsWidget::getAliasListFromRecipient(long long userRoleId)
     for (long long mediaType(Enums::EMedia::email); mediaType <= Enums::EMedia::mobileapp; mediaType++)
     {
         string apiAddress = this->getApiUrl() + "/informations/"
-                + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxInfo)) + "/alias"
+                + boost::lexical_cast<string>(getSelectedIdFromSelectionBox(m_boxInfo)) + "/alias"
                 + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
                 + "&token=" + m_session->user()->token.toUTF8()
                 + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)
@@ -1483,7 +1544,7 @@ void AlertsWidget::getAliasInfo(boost::system::error_code err, const Wt::Http::M
     }
 
     string apiAddress = this->getApiUrl() + "/assets/"
-            + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxAsset)) + "/alias"
+            + boost::lexical_cast<string>(getSelectedIdFromSelectionBox(m_boxAsset)) + "/alias"
             + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
             + "&token=" + m_session->user()->token.toUTF8()
             + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)
@@ -1561,7 +1622,7 @@ void AlertsWidget::getAliasAsset(boost::system::error_code err, const Wt::Http::
             + "&token=" + m_session->user()->token.toUTF8()
             + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)
             + "&media_type_id=" + boost::lexical_cast<string>(mediaType)
-            + "&information_id=" + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxInfo));
+            + "&information_id=" + boost::lexical_cast<string>(getSelectedIdFromSelectionBox(m_boxInfo));
     Wt::Http::Client *client2 = new Wt::Http::Client(this);
     client2->done().connect(boost::bind(&AlertsWidget::getAliasCriteria, this, _1, _2, userRoleId, mediaType));
     Wt::log("debug") << "AlertsWidget : [GET] address to call : " << apiAddress;
@@ -1624,7 +1685,7 @@ void AlertsWidget::getAliasCriteria(boost::system::error_code err, const Wt::Htt
     }
 
     string apiAddress = this->getApiUrl() + "/plugins/"
-            + boost::lexical_cast<string>(getSelectedIdFromBox(m_boxPlugin)) + "/alias"
+            + boost::lexical_cast<string>(getSelectedIdFromSelectionBox(m_boxPlugin)) + "/alias"
             + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
             + "&token=" + m_session->user()->token.toUTF8()
             + "&user_role_id=" + boost::lexical_cast<string>(userRoleId)

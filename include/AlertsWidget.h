@@ -79,7 +79,8 @@ public:
 protected:
     virtual void                clearStructures();
     virtual void                handleJsonGet(vectors_Json jsonResources);
-    long long                   getSelectedIdFromBox(Wt::WSelectionBox * box);
+    long long                   getSelectedIdFromSelectionBox(Wt::WSelectionBox * box);
+    long long                   getSelectedIdFromComboBox(Wt::WComboBox * box);
     virtual void                setDisplayedTitlesPopups();
 
 private:
@@ -104,7 +105,8 @@ private:
     void                        createCompareWidgetCustom();
     void                        showCompareWidget(long long id);
     void                        addCompareLine(Enums::EInformationUnitType type);
-    Wt::WComboBox               *createCompareComboBox(Enums::EInformationUnitType type);
+    void                        createItemsCriteriaComboBox(long long id, Wt::WString criterion, Wt::WStandardItemModel *model);
+    Wt::WComboBox               *createCompareCriteriaComboBox(Enums::EInformationUnitType type);
 
     void                        selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
     void                        selectPlugin(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);

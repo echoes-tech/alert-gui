@@ -231,6 +231,7 @@ void AlertsWidget::fillInTabMessage()
 void AlertsWidget::initAlertValueDefinitionPopup(Wt::WTable *tableBox)
 {
     fillModels();
+    sortModels();
 
     keyValue_ = new Wt::WLineEdit(tableBox->elementAt(1, 3));
 
@@ -303,6 +304,7 @@ void AlertsWidget::assetSelected()
         {
             Wt::log("debug") << "[AlertsWidget][selectAsset] Multiple selection";
         }
+        sortModels();
     }
     else
     {
@@ -353,6 +355,7 @@ void AlertsWidget::pluginSelected()
         {
             Wt::log("debug") << "[AlertsWidget][selectPlugin] Multiple selection";
         }
+        sortModels();
     }
     else
     {
@@ -409,6 +412,7 @@ void AlertsWidget::informationSelected()
         {
             Wt::log("debug") << "[AlertsWidget][selectInfo] Multiple selection";
         }
+        sortModels();
         showCompareWidget(infoId);
     }
     else
@@ -442,6 +446,13 @@ void AlertsWidget::fillModel(Wt::WStandardItemModel * model, std::map<long long,
         model->item(row,1)->setText(mapNamesIt->second);
         row++;
     }
+}
+
+void AlertsWidget::sortModels()
+{
+    m_assets->sort(1);
+    m_plugins->sort(1);
+    m_informations->sort(1);
 }
 
 
@@ -500,22 +511,10 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 
     m_textCompareWidget.clear();
     m_numberCompareWidget.clear();
-    idUnitOne = 1;
-    idUnitTwo = 1;
 
     m_compareWidgetContainer = new Wt::WContainerWidget(mainContainerWidget);
     m_compareWidgetContainerBottom = new Wt::WContainerWidget(mainContainerWidget);
 
-    m_textCompareContainerWidget = new Wt::WContainerWidget();
-    m_textCompareContainerWidget->addStyleClass("widget-title");
-    m_numberCompareContainerWidget = new Wt::WContainerWidget();
-    m_numberCompareContainerWidget->addStyleClass("widget-title");
-
-    mainContainerWidget->addWidget(m_textCompareContainerWidget);
-    mainContainerWidget->addWidget(m_numberCompareContainerWidget);
-
-    m_textCompareContainerWidget->hide();
-    m_numberCompareContainerWidget->hide();
 }
 
 // ------------------ Unit ------------------------------
@@ -524,7 +523,7 @@ void AlertsWidget::showCompareWidget(long long id)
 {
     m_compareWidgetContainer->clear();
     m_compareWidgetContainerBottom->clear();
-    m_alertCriterion.clear();
+    m_alertCriteria.clear();
     if (id > 0)
     {
         long long unitTypeId = m_mapInformationsUnitTypes[id];
@@ -547,8 +546,10 @@ void AlertsWidget::showCompareWidget(long long id)
                 }));
                 break;
             case Enums::EInformationUnitType::boolean:
+                createCompareWidgetBoolean();
                 break;
             case Enums::EInformationUnitType::custom:
+                createCompareWidgetCustom();
                 break;
         default:
             Wt::log("error") << "Unknown unit type : " << unitTypeId;
@@ -561,7 +562,7 @@ void AlertsWidget::showCompareWidget(long long id)
 
 void AlertsWidget::addCompareLine(Enums::EInformationUnitType type)
 {
-    int mapId = m_alertCriterion.size()+1;
+    int mapId = m_alertCriteria.size()+1;
     
     Wt::WTable *newTableLine = new Wt::WTable(m_compareWidgetContainer);
 
@@ -572,13 +573,13 @@ void AlertsWidget::addCompareLine(Enums::EInformationUnitType type)
     operatorComboBox->addItem("or");
     newTableLine->elementAt(0, column++)->addWidget(operatorComboBox);
     
-    if (m_alertCriterion.size() == 0)
+    if (m_alertCriteria.size() == 0)
     {
         operatorComboBox->disable();
 //        operatorComboBox->clear();
     }
 
-    Wt::WLineEdit *textEdit = new Wt::WLineEdit(newTableLine->elementAt(0, column++));
+    new Wt::WLineEdit(newTableLine->elementAt(0, column++));
     Wt::WComboBox *comboBox = createCompareComboBox(type);
     
     newTableLine->elementAt(0, column++)->addWidget(comboBox);
@@ -596,27 +597,22 @@ void AlertsWidget::addCompareLine(Enums::EInformationUnitType type)
     m_compareWidgetContainer->addWidget(text);
     m_compareWidgetContainer->addWidget(lineEditBar);
     
-//    m_textCompareContainerWidget->addWidget(lineEditBar);
-    
-    
-
-    if (m_alertCriterion.size() > 0)
+    if (m_alertCriteria.size() > 0)
     {
         Wt::WPushButton *buttonDel =
             new Wt::WPushButton("<i class='icon-remove icon-white'></i>", newTableLine->elementAt(0, column++));
         buttonDel->setStyleClass("btn-danger");
         buttonDel->setTextFormat(Wt::XHTMLUnsafeText);
-        buttonDel->setId(boost::lexical_cast<string>(idUnitOne));
         buttonDel->clicked().connect(bind([ = ] ()
         {
-                                      m_compareWidgetContainer->removeWidget(m_alertCriterion[mapId]);
+                                      m_compareWidgetContainer->removeWidget(m_alertCriteria[mapId]);
                                       m_compareWidgetContainer->refresh();
-                                      m_alertCriterion.erase(mapId);
+                                      m_alertCriteria.erase(mapId);
         }));
     }
     
     
-    m_alertCriterion[mapId] = newTableLine;
+    m_alertCriteria[mapId] = newTableLine;
 }
 
 Wt::WComboBox *AlertsWidget::createCompareComboBox(Enums::EInformationUnitType type)
@@ -658,16 +654,6 @@ Wt::WComboBox *AlertsWidget::createCompareComboBox(Enums::EInformationUnitType t
     comboBox->setModel(model);
     comboBox->setModelColumn(2);
     return comboBox;
-}
-
-void AlertsWidget::createCompareWidgetText()
-{
-    addCompareLine(Enums::EInformationUnitType::text);
-}
-
-void AlertsWidget::createCompareWidgetNumber()
-{
-    addCompareLine(Enums::EInformationUnitType::number);
 }
 
 void AlertsWidget::createCompareWidgetBoolean()
@@ -868,19 +854,19 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
 //    boost::algorithm::to_lower(data);
     message += "{\n\"name\": \"" + data + "\",\n";
     
-    message += "\"alert_criterion\":\n[\n{\n";
+    message += "\"alert_criteria\":\n[\n{\n";
     
-
-    for(auto it = m_alertCriterion.begin(); it != m_alertCriterion.end(); it++)
+    unsigned int indexCriterion = 0;
+    for(auto it = m_alertCriteria.begin(); it != m_alertCriteria.end(); it++)
     {
-        if (it != m_alertCriterion.begin())
+        if (it != m_alertCriteria.begin())
         {
             message += "\n{\n";
         }
-        message += "\"alert_criteria_id\": " + boost::lexical_cast<string>(m_mapInformationsUnitTypes[getSelectedIdFromBox(m_boxInfo)]) + ",\n";
+        message += "\"alert_criterion_id\": " + boost::lexical_cast<string>(m_mapInformationsUnitTypes[getSelectedIdFromBox(m_boxInfo)]) + ",\n";
         message += "\"value\": \"" + ((Wt::WLineEdit*)it->second->elementAt(0,1)->widget(0))->text().toUTF8() + "\",\n";
         message += "\"operator\": \"" + ((Wt::WComboBox*)it->second->elementAt(0,0)->widget(0))->currentText().toUTF8() + "\"";
-        if (it != m_alertCriterion.end())
+        if (indexCriterion < m_alertCriteria.size() - 1)
         {
             message += "\n},";
         }
@@ -888,6 +874,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
         {
             message += "\n}";
         }
+        ++indexCriterion;
     }
     
     

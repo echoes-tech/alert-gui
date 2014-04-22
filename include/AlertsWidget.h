@@ -91,6 +91,7 @@ private:
     void                        informationSelected();
     void                        fillModels();
     void                        fillModel(Wt::WStandardItemModel * model, std::map<long long, std::string> m_mapNames);
+    void                        sortModels();
 
     std::vector<long long>      boxActived(Wt::WSelectionBox *box, std::multimap<long long, std::pair<long long, std::string>>  infoInBox, std::multimap<long long, long long> compId, long long id);
 
@@ -99,8 +100,6 @@ private:
     
     void                        cleanBox(Wt::WSelectionBox *box);
 
-    void                        createCompareWidgetText();
-    void                        createCompareWidgetNumber();
     void                        createCompareWidgetBoolean();
     void                        createCompareWidgetCustom();
     void                        showCompareWidget(long long id);
@@ -156,7 +155,7 @@ private:
     Wt::WStandardItemModel * m_informations;
     
     // alerts criterion
-    std::map<int,Wt::WTable *> m_alertCriterion;
+    std::map<int,Wt::WTable *> m_alertCriteria;
     
     // end alert setting attributes
     
@@ -190,9 +189,6 @@ private:
      */
     std::pair<std::pair<long long, long long>, std::pair<long long, long long>>         idAll_;
     
-    long long           idUnitOne; // html tag for widget Text
-    long long           idUnitTwo; // html tag for widget number
-    
     std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>                                       resourcesUnitOne;
     std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>             resourcesUnitTwo;
     
@@ -210,8 +206,7 @@ private:
     Wt::WContainerWidget *m_compareWidgetContainer;
     Wt::WContainerWidget *m_compareWidgetContainerBottom;
     Wt::WContainerWidget *m_compareWidgetContainerSequence;
-    Wt::WContainerWidget *m_textCompareContainerWidget;
-    Wt::WContainerWidget *m_numberCompareContainerWidget;
+    
     Wt::WPushButton      *m_buttonAddCompareCriteria;
     Wt::WPushButton      *m_buttonAddNumber;
     

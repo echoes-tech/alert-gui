@@ -898,7 +898,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
                 }
                 
                 message += "\"alert_criterion_id\": " + boost::lexical_cast<string>(getSelectedIdFromComboBox(((Wt::WComboBox*)it->second->elementAt(0,2)->widget(0)))) + ",\n";
-                message += "\"value\": \"" + ((Wt::WLineEdit*)it->second->elementAt(0,1)->widget(0))->text().toUTF8() + "\",\n";
+                message += "\"value\": \"" + Wt::Utils::base64Encode(((Wt::WLineEdit*)it->second->elementAt(0,1)->widget(0))->text().toUTF8()) + "\",\n";
                 // FIXME: différencier suivant le critère (dans le cas multi asset)
                 message += "\"key_value\": \"" + keyValue_->text().toUTF8() + "\",\n";
                 message += "\"operator\": \"" + ((Wt::WComboBox*)it->second->elementAt(0,0)->widget(0))->currentText().toUTF8() + "\",\n";
@@ -923,11 +923,11 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
             message += "\"alert_criterion_id\": 1,\n";
             if (m_contentOfBooleanCheck)
             {
-                message += "\"value\": \"true\",\n";
+                message += "\"value\": \"" + Wt::Utils::base64Encode("true") + "\",\n";
             }
             else
             {
-                message += "\"value\": \"false\",\n";
+                message += "\"value\": \"" + Wt::Utils::base64Encode("false") + "\",\n";
             }
             message += "\"key_value\": \"\",\n";
             message += "\"operator\": \"\",\n";
@@ -940,7 +940,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
         case Enums::EInformationUnitType::custom:
             message += "\"alert_values\":\n[\n{\n";
             message += "\"alert_criterion_id\": 1,\n";
-            message += "\"value\": \"" + m_customCompareWidget->text().toUTF8() + "\",\n";
+            message += "\"value\": \"" + Wt::Utils::base64Encode(m_customCompareWidget->text().toUTF8()) + "\",\n";
             message += "\"key_value\": \"\",\n";
             message += "\"operator\": \"\",\n";
             message += "\"asset_id\": " + boost::lexical_cast<string>(assetId) + ",\n";

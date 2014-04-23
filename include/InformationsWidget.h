@@ -83,10 +83,12 @@ protected:
 
 private:
 
-    Wt::WStandardItemModel      *unitModel_;
+    Wt::WStandardItemModel      *m_unitModel;
     std::vector<std::string>    infoUnit_;
     Echoes::Dbo::Session        *session_;
     std::vector<long long>      idsAlert_;
+    
+    Wt::WComboBox               *m_unitComboBox;
 };
 
 

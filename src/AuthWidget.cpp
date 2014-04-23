@@ -107,7 +107,7 @@ void AuthWidget::registerNewUser()
 
 void AuthWidget::registerNewUser(const Identity& oauth)
 {
-    UserActionManagement::registerUserAction(Enums::display,"register",0);
+    UserActionManagement::registerUserAction(Enums::EAction::display,"register",0);
     showDialog(tr("Wt.Auth.registration"), createRegistrationView(oauth));
 }
 

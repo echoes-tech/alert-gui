@@ -200,7 +200,7 @@ void EchoesHome::handleInternalPath(const string &internalPath)
                             }
                             
                         }
-                        UserActionManagement::registerUserAction(Enums::display,internalPathWithoutBlank[0],0);
+                        UserActionManagement::registerUserAction(Enums::EAction::display,internalPathWithoutBlank[0],0);
                         showPage(i->index());
                         displayed = true;
                         break;
@@ -224,7 +224,7 @@ void EchoesHome::handleInternalPath(const string &internalPath)
         
         if (!displayed)
         {
-            UserActionManagement::registerUserAction(Enums::display,"/welcome/ (default)",0);
+            UserActionManagement::registerUserAction(Enums::EAction::display,"/welcome/ (default)",0);
             Wt::WApplication::instance()->setInternalPath("/welcome",  false);
             if (this->mainPageWidget->getMenu()->currentIndex() != Enums::EPageType::WELCOME)
             {
@@ -255,7 +255,7 @@ void EchoesHome::onAuthEvent()
 {
     if (this->session->login().loggedIn())
     {
-        UserActionManagement::registerUserAction(Enums::login,"success",1);
+        UserActionManagement::registerUserAction(Enums::EAction::login,"success",1);
         this->title->show();
         this->mainPageWidget->createUI();
         this->mainPageWidget->show();
@@ -264,7 +264,7 @@ void EchoesHome::onAuthEvent()
     }
     else
     {
-        UserActionManagement::registerUserAction(Enums::logout,"",0);
+        UserActionManagement::registerUserAction(Enums::EAction::logout,"",0);
         this->mainPageWidget->reset(session);
         this->mainPageWidget->hide();
         

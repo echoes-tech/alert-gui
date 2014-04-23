@@ -57,7 +57,7 @@ class MainWidget : public Wt::WContainerWidget
 public:
 
   MainWidget(Echoes::Dbo::Session *session, const std::string &apiUrl);
-  void doActionMenu(int index = -1, Enums::EMenuRoot menuRoot = Enums::main);
+  void doActionMenu(int index = -1, Enums::EMenuRoot menuRoot = Enums::EMenuRoot::main);
   
   Wt::WMenu *getMenu();
   Wt::WMenu *getAccountSubmenu();
@@ -79,11 +79,11 @@ protected:
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   
   Wt::WContainerWidget *createContentHeader();
-  void updateTitle(unsigned int index, Enums::EMenuRoot menuRoot = Enums::main);
-  void updateBreadcrumbs(Enums::EMenuRoot menuRoot = Enums::main);
+  void updateTitle(unsigned int index, Enums::EMenuRoot menuRoot = Enums::EMenuRoot::main);
+  void updateBreadcrumbs(Enums::EMenuRoot menuRoot = Enums::EMenuRoot::main);
   std::string getBreadcrumbsClass(int pathSize, int level);
   void createContainerFluid();
-  void updateContainerFluid(int type, Enums::EMenuRoot menuRoot = Enums::main);
+  void updateContainerFluid(int type, Enums::EMenuRoot menuRoot = Enums::EMenuRoot::main);
   void createContentDiv();
   
   void createSubMenu(Enums::EPageType enumPT);

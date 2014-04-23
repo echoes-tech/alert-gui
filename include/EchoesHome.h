@@ -85,7 +85,7 @@ class EchoesHome : public Wt::WContainerWidget
         void processEnvironment();
 
         void onAuthEvent();
-        void showPage(int page, Enums::EMenuRoot menuRoot = Enums::main);
+        void showPage(int page, Enums::EMenuRoot menuRoot = Enums::EMenuRoot::main);
 
         Wt::WTabWidget* initAdminWidget();
         void initMainPageWidget();

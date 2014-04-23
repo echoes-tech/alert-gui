@@ -338,7 +338,7 @@ string AssetManagementWidget::getStringFromFile(string resourcePath)
 
 void AssetManagementWidget::downloadScript(string fileName)
 {
-    UserActionManagement::registerUserAction(Enums::download,fileName,0);
+    UserActionManagement::registerUserAction(Enums::EAction::download,fileName,0);
 }
 
 // ----------------------------------------------

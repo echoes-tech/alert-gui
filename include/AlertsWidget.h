@@ -48,14 +48,12 @@ public:
     void                        updatePage(bool getResources);
     std::vector<std::string>    getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
-    std::vector<long long>      getIdsTable();
-//    long long                   getIdFromSelectedElement(Wt::WSelectionBox *box, std::multimap<long long, std::pair<long long, std::string>>  infoInBox);
     Wt::WValidator              *editValidator(int who);
     
     void                        closePopup();
     void                        close();
     
-    void                        recoverListRecipientAlias(long long userRoleId);
+    void                        getAliasListFromRecipient(long long userRoleId);
     void                        getAliasInfo(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
     void                        getAliasAsset(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
     void                        getAliasCriteria(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
@@ -65,7 +63,6 @@ public:
     void                        checkPopupRecipients(std::string message, std::string time, int media);
 
     void                        addResource(std::vector<Wt::WInteractWidget*> argument);
-//    Wt::WDialog                 *deleteResource(long long id);
     void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
     
     void                        postAlert(boost::system::error_code err, const Wt::Http::Message& response);
@@ -82,32 +79,34 @@ public:
 protected:
     virtual void                clearStructures();
     virtual void                handleJsonGet(vectors_Json jsonResources);
-    long long                   getSelectedIdFromBox(Wt::WSelectionBox * box);
+    long long                   getSelectedIdFromSelectionBox(Wt::WSelectionBox * box);
+    long long                   getSelectedIdFromComboBox(Wt::WComboBox * box);
+    virtual void                setDisplayedTitlesPopups();
 
 private:
 
     void                        initAlertValueDefinitionPopup(Wt::WTable *tableBox);
+    void                        setBox(Wt::WSelectionBox *box, Wt::WStandardItemModel *model);
     void                        assetSelected();
     void                        pluginSelected();
-    void                        infoSelected();
+    void                        informationSelected();
     void                        fillModels();
-    void                        getRelatedData(int boxType);
+    void                        fillModel(Wt::WStandardItemModel * model, std::map<long long, std::string> m_mapNames);
+    void                        sortModels();
 
-    std::vector<long long>                  boxActived(Wt::WSelectionBox *box, std::multimap<long long, std::pair<long long, std::string>>  infoInBox, std::multimap<long long, long long> compId, long long id);
-//    void                        fillInBox(Wt::WSelectionBox *box, std::multimap<long long, std::pair<long long, std::string>>  infoInBox);
+    std::vector<long long>      boxActived(Wt::WSelectionBox *box, std::multimap<long long, std::pair<long long, std::string>>  infoInBox, std::multimap<long long, long long> compId, long long id);
 
 
-//    void                        fillInMultiMap();
     void                        fillInTabMessage();
     
-    int                         selectItemBox(Wt::WSelectionBox *box, std::string select);
     void                        cleanBox(Wt::WSelectionBox *box);
 
-    Wt::WTable                  *createUnitOne(Wt::WContainerWidget *contain);
-    Wt::WTable                  *createUnitTwo(Wt::WContainerWidget *contain);
-    void                        createUnitThree(Wt::WContainerWidget *contain);
-    void                        showUnit(long long id);
-    void                        hideUnit();
+    void                        createCompareWidgetBoolean();
+    void                        createCompareWidgetCustom();
+    void                        showCompareWidget(long long id);
+    void                        addCompareLine(Enums::EInformationUnitType type);
+    void                        createItemsCriteriaComboBox(long long id, Wt::WString criterion, Wt::WStandardItemModel *model);
+    Wt::WComboBox               *createCompareCriteriaComboBox(Enums::EInformationUnitType type);
 
     void                        selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
     void                        selectPlugin(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
@@ -117,16 +116,19 @@ private:
     void                        errorsHideTwo(std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>> error);
 
     
+    // validator type
+    enum EValidatorType
+    {
+        VALIDATOR_INT = 0,
+        VALIDATOR_FLOAT = 1
+    };
+    
     // alert setting attributes
-    enum boxType {
+    enum EBoxType {
         ASSET = 1,
         PLUGIN = 2,
         INFORMATION = 3
     };
-    
-    bool assetBoxSelected;
-    bool pluginBoxSelected;
-    bool informationBoxSelected;
     
     //ids
     std::map<long long, std::vector<long long>> m_mapAssetPlugins;
@@ -141,8 +143,9 @@ private:
     std::map<long long, std::string> m_mapPluginsNames;
     std::map<long long, std::string> m_mapInformationsNames;
     
-    //info unit id
+    //info unit
     std::map<long long, long long> m_mapInformationsUnits;
+    std::map<long long, long long> m_mapInformationsUnitTypes;
     
     // first popup boxes
     Wt::WSelectionBox *m_boxAsset;
@@ -153,35 +156,32 @@ private:
     Wt::WStandardItemModel * m_plugins;
     Wt::WStandardItemModel * m_informations;
     
+    // alerts criterion
+    std::map<int,Wt::WTable *> m_alertCriteria;
+    
     // end alert setting attributes
     
-    std::vector<std::pair<long long, int>>   idUserPositionMedia_;
+    Echoes::Dbo::Session        *m_session;
+    std::string                 m_apiUrl;
+    Wt::Json::Value             m_alerts;
     
-    bool                created_;
-    bool                newClass_;
-    Echoes::Dbo::Session             *session_;
-    std::string         apiUrl_;
-    Wt::Json::Value     m_alerts;
+    int                         time_;
     
-    int                 time_;
-    
-    std::multimap<long long, std::pair<long long, std::string>>         userInfo_;
-    std::multimap<long long, std::pair<std::pair<long long, long long>, std::string>>    mediaInfo_;
-    Wt::WTabWidget      *tabMessage_;
-    std::string         messageMailForTab_;
-    std::string         messageSmsForTab_;
-    std::string         messagePushForTab_;
+    std::multimap<long long, std::pair<long long, std::string>>                         userInfo_;
+    std::multimap<long long, std::pair<std::pair<long long, long long>, std::string>>   mediaInfo_;
+    Wt::WTabWidget      *m_tabWidgetMessages;
+    std::string         m_tabContentMessageMail;
+    std::string         m_tabContentMessageSMS;
+    std::string         m_tabContentMessageMobileApp;
 
     
     std::multimap<long long, long long>       unitsIds_; // Link between Info and widgets compare. (text, number, bool)
 
-    std::vector<long long>          index_;
+    // FIXME : to be refactored and included in m_alertCriteria
+    Wt::WTable                          *m_booleanCompareWidget; // Bool
+    Wt::WTextArea                       *m_customCompareWidget; // Bool
     
-    std::map<int, Wt::WWidget *>        unitOne_; // Text
-    std::map<int, Wt::WWidget *>        unitTwo_; // Number
-    Wt::WTable          *unitThree_; // Bool
-    
-    int                 bool_;  //for check button true/false
+    bool                m_contentOfBooleanCheck;  //for check button true/false
     int                 checkAll_;
     /**
      * pair &lsaquo; pair &lsaquo; idAsset, idPlugin &rsaquo;
@@ -189,31 +189,27 @@ private:
      */
     std::pair<std::pair<long long, long long>, std::pair<long long, long long>>         idAll_;
     
-    std::string         assetSelected_; // Name Asset selected
-    std::string         pluginSelected_; // Name Plugin selected
-    std::string         infoSelected_; // Name Info selected
-
-    long long           idUnitOne; // html tag for widget Text
-    long long           idUnitTwo; // html tag for widget number
-    
     std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>                                       resourcesUnitOne;
     std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>             resourcesUnitTwo;
     
     //  Errors Messages ------
-    Wt::WText           *errorAsset_;
-    Wt::WText           *errorPlugin_; 
-    Wt::WText           *errorInfo_;
-    Wt::WText           *errorKey_;
+    Wt::WText           *m_textErrorForAsset;
+    Wt::WText           *m_textErrorForPlugin; 
+    Wt::WText           *m_textErrorForInformation;
+    Wt::WText           *m_textErrorForKeyValue;
 
     Wt::WLineEdit       *keyValue_;
     
     Wt::WText            *errorBool_;
     //  -------
     
-    Wt::WContainerWidget *compareBarOne_;
-    Wt::WContainerWidget *compareBarTwo_;
-    Wt::WPushButton      *buttonAddOne_;
-    Wt::WPushButton      *buttonAddTwo_;
+    Wt::WContainerWidget *m_compareWidgetContainer;
+    Wt::WContainerWidget *m_compareWidgetContainerBottom;
+    Wt::WContainerWidget *m_compareWidgetContainerSequence;
+    
+    Wt::WPushButton      *m_buttonAddCompareCriteria;
+    Wt::WPushButton      *m_buttonAddNumber;
+    
     Wt::WLineEdit        *saveLineEditOne_;
     Wt::WLineEdit        *saveLineEditTwo_;
 };

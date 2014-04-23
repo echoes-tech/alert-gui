@@ -239,7 +239,7 @@ void AbstractPage::fillBodyTable()
     int columnTable(0);
     int rowBodyTable(1);
     
-    for (multimap_long_widgets::iterator itRowTable = m_rowsTable.begin();
+    for (std::multimap<long long, vector_widget>::iterator itRowTable = m_rowsTable.begin();
             itRowTable != m_rowsTable.end() ;itRowTable++)
     {
         columnTable = 0;
@@ -375,59 +375,56 @@ void AbstractPage::addResourcePopup()
     Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".add-" + m_nameResourcePageSpec));
 
     int cpt(0);
-    for (multimap<int, string>::iterator title = m_titles.begin(); title != m_titles.end(); ++title)
+    for (multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
+            title != m_displayedTitlesPopups.end(); title++)
     {
         if (title->first >= 0)
         {
-            // FIXME: HACK for add alert popup
-            if (title->second.compare("last_attempt") != 0)
+            new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
+                          + " : <br />", dialogAdd_->contents());
+
+            if ((*title).first == ETypeJson::text)
             {
-                new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + title->second)
-                              + " : <br />", dialogAdd_->contents());
-
-                if (title->first == ETypeJson::text)
+                input = new Wt::WLineEdit(dialogAdd_->contents());
+                //FIXME
+//                input->setValidator(editValidator(cpt));
+                input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
+                input->setWidth(Wt::WLength(150));
+                if (inputName.size() == 0)
                 {
-                    input = new Wt::WLineEdit(dialogAdd_->contents());
-                    //FIXME
-    //                input->setValidator(editValidator(cpt));
-                    input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-                    input->setWidth(Wt::WLength(150));
-                    if (inputName.size() == 0)
-                    {
-                        input->setFocus();
-                    }
-                    inputName.push_back(input);
+                    input->setFocus();
                 }
-                else if (title->first == ETypeJson::boolean)
-                {
-                    Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
-                    inputName.push_back(checkBox);
-                }
-                else if (title->first == ETypeJson::integer)
-                {
-                    input = new Wt::WLineEdit(dialogAdd_->contents());
-                    input->setValidator(editValidator(cpt));
-                    input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-                    input->setWidth(Wt::WLength(150));
-                    if (inputName.size() == 0)
-                    {
-                        input->setFocus();
-                    }
-                    inputName.push_back(input);
-                }
-                else if (title->first == ETypeJson::undid)
-                {
-                    inputName.push_back(popupAdd(dialogAdd_));
-                }
-
-                Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
-                                                    + title->second),
-                                                 dialogAdd_->contents());
-                error->hide();
-                errorMessage.push_back(error);
-
-                new Wt::WText("<br />", dialogAdd_->contents());
+                inputName.push_back(input);
             }
+            else if (title->first == ETypeJson::boolean)
+            {
+                Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
+                inputName.push_back(checkBox);
+            }
+            else if (title->first == ETypeJson::integer)
+            {
+                input = new Wt::WLineEdit(dialogAdd_->contents());
+                input->setValidator(editValidator(cpt));
+                input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
+                input->setWidth(Wt::WLength(150));
+                if (inputName.size() == 0)
+                {
+                    input->setFocus();
+                }
+                inputName.push_back(input);
+            }
+            else if (title->first == ETypeJson::undid)
+            {
+                inputName.push_back(popupAdd(dialogAdd_));
+            }
+
+            Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
+                                                + title->second),
+                                             dialogAdd_->contents());
+            error->hide();
+            errorMessage.push_back(error);
+
+            new Wt::WText("<br />", dialogAdd_->contents());
         }
         cpt++;
     }
@@ -450,21 +447,21 @@ void AbstractPage::modifResourcePopup(long long id)
     //gkr: Init dialog popup
     Wt::WDialog *dialogModif_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".modif-" + m_nameResourcePageSpec));
 
-    for (multimap_long_widgets::iterator itTable = m_rowsTable.begin();
+    for (std::multimap<long long, vector_widget>::iterator itTable = m_rowsTable.begin();
             itTable != m_rowsTable.end(); itTable++)
     {
         int cpt(0);
-        if ((*itTable).first == id)
+        if (itTable->first == id)
         {
-            multimap<int, string>::iterator title = m_titles.begin();
-            for (Wt::WInteractWidget *itElem : (*itTable).second)
+            multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
+            for (Wt::WInteractWidget *itElem : itTable->second)
             {
-                if ((*title).first >= 0)
+                if (title->first >= 0)
                 {
-                        new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
+                        new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + title->second)
                                       + " : <br />", dialogModif_->contents());                    
                 }
-                if ((*title).first == 0 || (*title).first == 2)
+                if (title->first == 0 || title->first == 2)
                 {
                     string nameRessouce("N2Wt5WTextE");
                     if (nameRessouce.compare(typeid (*itElem).name()) == 0)
@@ -477,7 +474,7 @@ void AbstractPage::modifResourcePopup(long long id)
                             newName.resize(newName.size() + 3, '.');
                         }
 
-                        if ((*title).first == 0)
+                        if (title->first == 0)
                         {
                             Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif_->contents());
                             input->setValidator(editValidator(cpt));
@@ -490,7 +487,7 @@ void AbstractPage::modifResourcePopup(long long id)
                             input->setToolTip(Wt::WString::fromUTF8(nameRessouce));
                             inputName.push_back(input);
                         }
-                        else if ((*title).first == 2)
+                        else if (title->first == 2)
                         {
                             Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif_->contents());
                             input->setValidator(new Wt::WRegExpValidator(Wt::WString::fromUTF8("^[0123456789]+")));
@@ -514,7 +511,7 @@ void AbstractPage::modifResourcePopup(long long id)
                 }
                 else if ((*title).first == 1)
                 {
-                    multimap_long_widgets::iterator rowTable = m_rowsTable.find(id);
+                    std::multimap<long long, vector_widget>::iterator rowTable = m_rowsTable.find(id);
                     for (vector_widget::iterator widg = (*rowTable).second.begin();
                             widg != (*rowTable).second.end(); widg++)
                     {
@@ -531,7 +528,7 @@ void AbstractPage::modifResourcePopup(long long id)
                 else if ((*title).first == 3)
                 {
                     Wt::WComboBox *comboBox = popupAdd(dialogModif_);
-                    multimap_long_widgets::iterator rowTable = m_rowsTable.find(id);
+                    std::multimap<long long, vector_widget>::iterator rowTable = m_rowsTable.find(id);
                     int cpt2(0);
                     for (vector_widget::iterator widg = (*rowTable).second.begin();
                             widg != (*rowTable).second.end(); widg++)
@@ -659,12 +656,12 @@ void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
 
 // Set/Get attribut to init or option. -------------------------------------
 
-void AbstractPage::setRowsTable(multimap_long_widgets rowsTable)
+void AbstractPage::setRowsTable(std::multimap<long long, vector_widget> rowsTable)
 {
     m_rowsTable = rowsTable;
 }
 
-multimap_long_widgets AbstractPage::getRowsTable()
+std::multimap<long long, vector_widget> AbstractPage::getRowsTable()
 {
     return m_rowsTable;
 }
@@ -677,6 +674,12 @@ void AbstractPage::setUndidName(string undidName)
 void AbstractPage::setTitles(multimap<int, string> titles)
 {
     m_titles = titles;
+    setDisplayedTitlesPopups();
+}
+
+void AbstractPage::setDisplayedTitlesPopups()
+{
+    m_displayedTitlesPopups = m_titles;
 }
 
 void AbstractPage::setUrl(lists_string listsUrl)
@@ -1284,13 +1287,13 @@ void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
     vector_widget inputs;
     int column(0);
 
-    for (multimap_long_widgets::iterator itTable = m_rowsTable.begin();
+    for (std::multimap<long long, vector_widget>::iterator itTable = m_rowsTable.begin();
             itTable != m_rowsTable.end(); itTable++)
     {
         int cpt(0);
         if ((*itTable).first == id)
         {
-            multimap<int, string>::iterator title = m_titles.begin();
+            multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
             for (Wt::WInteractWidget *itElem : (*itTable).second)
             {
                 string nameRessouce("N2Wt5WTextE");

@@ -17,9 +17,10 @@
     <message id="Alert.alert.name-name">Alert name</message>
     <message id="Alert.alert.modif-button">Modify</message>
     <message id="Alert.alert.delete-button">Delete</message>
-    <message id="Alert.alert.name-nb-dest">Recipients number</message>
-    <message id="Alert.alert.name-last-out">Last sent</message>
+    <message id="Alert.alert.name-alert_media_specializations">Recipients number</message>
+    <message id="Alert.alert.name-last_attempt">Last sent</message>
     <message id="Alert.alert.name-modif-dest">Modify recip.</message>
+    
     <!--footer-->
     <message id="Alert.alert.search-bar">Search: </message>
         <!-- Paginate -->
@@ -73,6 +74,10 @@
     <message id="Alert.alert.operator.ge">Greater or equal</message>
     <message id="Alert.alert.operator.gt">Greater</message>
     <message id="Alert.alert.operator.ne">Not equal</message>
+    
+    <message id="Alert.alert.operator.contains">Contains</message>
+    
+    <message id="Alert.alert.sec-base-message">Add your correlation file here.</message>
 
 <!--    Invalid message     -->
   <message id="Alert.alert.invalid-name-alert">

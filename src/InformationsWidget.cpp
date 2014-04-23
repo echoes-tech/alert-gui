@@ -21,6 +21,7 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
 : AbstractPage(session, apiUrl, "information")
 {
     session_ = session;
+    m_unitComboBox = new Wt::WComboBox();
 
     setButtonModif(true);
     setButtonSup(true);
@@ -66,10 +67,10 @@ Wt::WValidator *InformationsWidget::editValidator(int who)
 
 Wt::WComboBox *InformationsWidget::popupAdd(Wt::WDialog *dialog)
 {
-    
-    Wt::WComboBox *comboBox = new Wt::WComboBox(dialog->contents());
-    comboBox->setModel(unitModel_);
-    return comboBox;
+    m_unitComboBox = new Wt::WComboBox(dialog->contents());
+    m_unitComboBox->setModel(m_unitModel);
+    // Fixme : WTF ?
+    return m_unitComboBox;
 }
 
 void InformationsWidget::addResource(vector<Wt::WInteractWidget*> arguments)
@@ -83,17 +84,18 @@ void InformationsWidget::addResource(vector<Wt::WInteractWidget*> arguments)
     messageInformation.addBodyText(",\n\"desc\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
     messageInformation.addBodyText(",\n\"calculate\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
 
-    if (((Wt::WCheckBox*)(*it))->isChecked() == true)
+    if (((Wt::WCheckBox*)(*it++))->isChecked())
     {
         messageInformation.addBodyText(",\n\"display\": true");
     }
-    else if (((Wt::WCheckBox*)(*it))->isChecked() == false)
+    else
     {
         messageInformation.addBodyText(",\n\"display\": false");
     }
     
-    Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*++it))->model();
-    messageInformation.addBodyText(",\n\"unit_id\": " + unitModel->item(((Wt::WComboBox*)(*it))->currentIndex(), 1)->text().toUTF8());
+    messageInformation.addBodyText(",\n\"unit_id\" : " + m_unitModel->item(m_unitComboBox->currentIndex(), 1)->text().toUTF8());
+
+    
 
     messageInformation.addBodyText("\n}");
     
@@ -128,6 +130,7 @@ void InformationsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, l
     messageInformation.addBodyText(",\n\"calculate\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
     
     Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
+    // FIXME: segfault ici !
     messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
 
     if (((Wt::WCheckBox*)(*i++))->isChecked() == true)
@@ -167,7 +170,7 @@ void InformationsWidget::handleJsonGet(vectors_Json jsonResources)
     jsonResources.pop_back();
     AbstractPage::handleJsonGet(jsonResources);
 
-    unitModel_ = new Wt::WStandardItemModel(0,2,this);
+    m_unitModel = new Wt::WStandardItemModel(0,2,this);
 
     Wt::Json::Array& result = infoUnit.at(0);
     for (int cpt(0); cpt < (int)result.size(); cpt++)
@@ -186,7 +189,7 @@ void InformationsWidget::handleJsonGet(vectors_Json jsonResources)
         
         rowVector.push_back(itemName);
         rowVector.push_back(itemId);
-        unitModel_->insertRow(cpt, rowVector);
+        m_unitModel->insertRow(cpt, rowVector);
     }
 }
 

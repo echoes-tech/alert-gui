@@ -39,7 +39,9 @@ public:
     enum EInformationUnitType
     {
         text = 1,
-        number = 2
+        number = 2,
+        boolean = 3,
+        custom = 4
     };
 
     enum EOption

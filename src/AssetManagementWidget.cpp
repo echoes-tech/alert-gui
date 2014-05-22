@@ -20,8 +20,6 @@ AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, stri
 {
     session_= session;
     apiUrl_ = apiUrl;
-//    created_ = false;
-//    newClass_ = false;
 
     setButtonModif(true);
     setButtonSup(true);

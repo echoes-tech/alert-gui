@@ -117,7 +117,7 @@ public:
                                 AbstractPage(Echoes::Dbo::Session *session, std::string apiUrl, std::string namePage);
     virtual                     ~AbstractPage();
 
-    void                        recursiveGetResources(vectors_Json jsonResource = vectors_Json(), lists_string listsUrl = lists_string());
+    
     virtual void                getResourceList();
     void setResources(vector_pair resources);
     vector_pair getResources() const;
@@ -193,6 +193,7 @@ protected:
      * listsUrl_ is set in construtor child in setUrl()
      * @param Send jsonResource whether u want use her after handleJsonGet
      */
+    void                        recursiveGetResources(vectors_Json jsonResource = vectors_Json(), lists_string listsUrl = lists_string());
     int                         handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
     lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client);
     virtual std::string         addParameter();

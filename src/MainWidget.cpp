@@ -304,8 +304,6 @@ std::string MainWidget::getBreadcrumbsClass(int pathSize, int level)
     return res;
 }
 
-
-// ToDo ajouter deux update poru les sous menus
 void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
 {
     for (int i = 0 ; i < this->contentFluid->count() ; i++)
@@ -332,6 +330,7 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 }
                 case Enums::EPageType::RECIPIENTS:
                 {
+                    rpw->update();
                     this->contentFluid->addWidget(rpw);
                     break;
                 }

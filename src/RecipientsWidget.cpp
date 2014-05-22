@@ -30,11 +30,11 @@ void    RecipientsWidget::update()
        templateFormView->bindWidget("resource-table", tab);
 
        UserEditionWidget *uewMail = new UserEditionWidget(session_, apiUrl_, 1);
-       uewMail->recursiveGetResources();
+       uewMail->getResourceList();
        UserEditionWidget *uewSMS = new UserEditionWidget(session_, apiUrl_, 2);
-       uewSMS->recursiveGetResources();
+       uewSMS->getResourceList();
        UserEditionWidget *uewPush = new UserEditionWidget(session_, apiUrl_, 3);
-       uewPush->recursiveGetResources();
+       uewPush->getResourceList();
        
        Wt::WMenuItem *tabMail = tab->addTab(uewMail, "Mail");
        tabMail->setStyleClass("recipients recipients-radius-left");

@@ -165,7 +165,7 @@ void InformationsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, l
 
 void InformationsWidget::handleJsonGet(vectors_Json jsonResources)
 {
-    infoUnit_.clear();
+//    infoUnit_.clear();
     vector<Wt::Json::Value> infoUnit = jsonResources.at(1);
     jsonResources.pop_back();
     AbstractPage::handleJsonGet(jsonResources);

@@ -311,6 +311,7 @@
   <message id="Alert.admin.association-tab">Associations</message>
   <message id="Alert.admin.alerts-tab">Alerts</message>
   <message id="Alert.admin.plugins-tab">Applications</message>
+  <message id="Alert.admin.units-tab">Units</message>
   
   <message id="Alert.admin.home">Home</message>
   

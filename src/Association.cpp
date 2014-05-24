@@ -233,7 +233,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Association][InfoData] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     // assets
@@ -279,7 +279,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Association][Assets] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     // plugins
@@ -324,7 +324,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Association][Plugins] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     // information
@@ -374,7 +374,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Association][Information] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     // filters
@@ -452,7 +452,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Association][Filters] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     cout << "AVANT update" << endl;

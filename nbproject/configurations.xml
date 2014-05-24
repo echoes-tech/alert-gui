@@ -57,6 +57,7 @@
         <itemPath>include/RecipientsWidget.h</itemPath>
         <itemPath>include/RoleCustomizationWidget.h</itemPath>
         <itemPath>include/SummaryBoard.h</itemPath>
+        <itemPath>include/UnitsWidget.h</itemPath>
         <itemPath>include/enum.hpp</itemPath>
       </logicalFolder>
       <itemPath>include/Enums.h</itemPath>
@@ -93,6 +94,7 @@
       <itemPath>role-customization_fr.xml</itemPath>
       <itemPath>summary.xml</itemPath>
       <itemPath>summary_fr.xml</itemPath>
+      <itemPath>unit.xml</itemPath>
       <itemPath>user.xml</itemPath>
       <itemPath>user_fr.xml</itemPath>
     </logicalFolder>
@@ -139,6 +141,7 @@
         <itemPath>src/RecipientsWidget.cpp</itemPath>
         <itemPath>src/RoleCustomizationWidget.cpp</itemPath>
         <itemPath>src/SummaryBoard.cpp</itemPath>
+        <itemPath>src/UnitsWidget.cpp</itemPath>
         <itemPath>src/UserActionManagement.cpp</itemPath>
       </logicalFolder>
       <itemPath>main.cpp</itemPath>
@@ -283,6 +286,8 @@
       </item>
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/UnitsWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserEditionWidget.h" ex="false" tool="3" flavor2="0">
@@ -404,6 +409,8 @@
       </item>
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/UnitsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
@@ -411,6 +418,8 @@
       <item path="summary.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="summary_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="unit.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="user.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -539,6 +548,8 @@
       </item>
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/UnitsWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UserEditionWidget.h" ex="false" tool="3" flavor2="0">
@@ -660,6 +671,8 @@
       </item>
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/UnitsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
@@ -667,6 +680,8 @@
       <item path="summary.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="summary_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="unit.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="user.xml" ex="false" tool="3" flavor2="0">
       </item>

@@ -113,6 +113,7 @@ public:
                       (PLUGIN) ("plugins")
                       (ROLE) ("role")
                       (OPTIONS) ("options")
+                      (UNITS) ("units")
                       )
 
 

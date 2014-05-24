@@ -16,7 +16,9 @@
 #include "MainWidget.h"
 #include "SummaryBoard.h"
 
-MainWidget::MainWidget(Echoes::Dbo::Session *session, const std::string &apiUrl)
+using namespace std;
+
+MainWidget::MainWidget(Echoes::Dbo::Session *session, const string &apiUrl)
 : Wt::WContainerWidget()
 {
     setApiUrl(apiUrl);
@@ -204,6 +206,10 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             omw = new OptionManagementWidget(omm, this->session, _apiUrl);
             break;
         }
+        case Enums::EPageType::UNITS:
+        {
+            unw = new UnitsWidget(this->session, this->_apiUrl);
+        }
         default:
             break;
     }
@@ -227,7 +233,7 @@ void MainWidget::updateTitle(unsigned int index, Enums::EMenuRoot menuRoot)
             {
                 if (i->index() == index)
                 {
-                    this->titleText->setText("<h1>" + tr(boost::lexical_cast<std::string>("Alert.admin.")+i->value()+boost::lexical_cast<std::string>("-tab")) + "</h1>");
+                    this->titleText->setText("<h1>" + tr(boost::lexical_cast<string>("Alert.admin.")+i->value()+boost::lexical_cast<string>("-tab")) + "</h1>");
                     break;
                 }
             }
@@ -242,11 +248,11 @@ void MainWidget::updateBreadcrumbs(Enums::EMenuRoot menuRoot)
 {
     this->breadCrumbsContainer->removeWidget(breadCrumbsAnchor2);
     
-    std::string internalPath = Wt::WApplication::instance()->internalPath();
-    std::vector<std::string> internalPathSplitResult;
-    std::vector<std::string> internalPathWithoutBlank;
+    string internalPath = Wt::WApplication::instance()->internalPath();
+    vector<string> internalPathSplitResult;
+    vector<string> internalPathWithoutBlank;
     boost::split(internalPathSplitResult, internalPath, boost::is_any_of("/"), boost::token_compress_on);
-    for (std::vector<std::string>::const_iterator i = internalPathSplitResult.begin() ; i != internalPathSplitResult.end() ; i++)
+    for (vector<string>::const_iterator i = internalPathSplitResult.begin() ; i != internalPathSplitResult.end() ; i++)
     {
         if (i->compare("") != 0)
         {
@@ -266,7 +272,7 @@ void MainWidget::updateBreadcrumbs(Enums::EMenuRoot menuRoot)
         {
             case 1:
             {
-                breadCrumbsAnchor1->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<std::string>("-tab")));
+                breadCrumbsAnchor1->setText(tr(boost::lexical_cast<string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<string>("-tab")));
                 breadCrumbsAnchor1->setRefInternalPath("/" + internalPathWithoutBlank[i]);
                 this->breadCrumbsContainer->addWidget(breadCrumbsAnchor1);
                 breadCrumbsAnchor1->setAttributeValue("class", getBreadcrumbsClass(internalPathWithoutBlank.size(),1).c_str());
@@ -274,7 +280,7 @@ void MainWidget::updateBreadcrumbs(Enums::EMenuRoot menuRoot)
             }
             case 2:
             {
-                breadCrumbsAnchor2->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<std::string>("-tab")));
+                breadCrumbsAnchor2->setText(tr(boost::lexical_cast<string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<string>("-tab")));
                 breadCrumbsAnchor2->setRefInternalPath("/" + internalPathWithoutBlank[i-1] + "/" + internalPathWithoutBlank[i]);
                 this->breadCrumbsContainer->addWidget(breadCrumbsAnchor2);
                 breadCrumbsAnchor2->setAttributeValue("class", getBreadcrumbsClass(internalPathWithoutBlank.size(),2).c_str());
@@ -290,9 +296,9 @@ void MainWidget::updateBreadcrumbs(Enums::EMenuRoot menuRoot)
 
 }
 
-std::string MainWidget::getBreadcrumbsClass(int pathSize, int level)
+string MainWidget::getBreadcrumbsClass(int pathSize, int level)
 {
-    std::string res;
+    string res;
     if (pathSize == level)
     {
         res = "current";
@@ -324,7 +330,9 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 }
                 case Enums::EPageType::ASSET:
                 {
+                    cout << "asset get resource list" << endl;
                     amw->getResourceList();
+                    cout << "asset get resource list done" << endl;
                     this->contentFluid->addWidget(amw);
                     break;
                 }
@@ -365,6 +373,12 @@ void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
                 case Enums::EPageType::OPTIONS:
                 {
                     this->contentFluid->addWidget(omw);
+                    break;
+                }
+                case Enums::EPageType::UNITS:
+                {
+                    unw->getResourceList();
+                    this->contentFluid->addWidget(unw);
                     break;
                 }
                 default:
@@ -416,9 +430,9 @@ void MainWidget::doActionMenu(int index, Enums::EMenuRoot menuRoot)
     
 }
 
-std::string MainWidget::getIconName(Enums::EPageType enumPT)
+string MainWidget::getIconName(Enums::EPageType enumPT)
 {
-    std::string res = "home";
+    string res = "home";
     switch (enumPT.index())
     {
         case Enums::EPageType::WELCOME:
@@ -466,6 +480,11 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
             res = "check";
             break;
         }
+        case Enums::EPageType::UNITS:
+        {
+            res = "tasks";
+            break;
+        }
         default:
             res = "home";
             break;
@@ -476,11 +495,6 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
 Wt::WMenu * MainWidget::getMenu()
 {
     return this->menu;
-}
-
-Wt::WMenu * MainWidget::getAccountSubmenu()
-{
-    return this->accountSubmenu;
 }
 
 Wt::WContainerWidget * MainWidget::getSideBarContainer()
@@ -504,13 +518,13 @@ void MainWidget::refresh()
 //    this->amw->refresh();
 }
 
-void MainWidget::setApiUrl(std::string apiUrl)
+void MainWidget::setApiUrl(string apiUrl)
 {
     _apiUrl = apiUrl;
     return;
 }
 
-std::string MainWidget::getApiUrl() const
+string MainWidget::getApiUrl() const
 {
     return _apiUrl;
 }

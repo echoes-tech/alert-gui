@@ -24,6 +24,7 @@
 #include "OptionManagementWidget.h"
 #include "MonitoringWidget.h"
 #include "RoleCustomizationWidget.h"
+#include "UnitsWidget.h"
 #include "MainWidget.h"
 #include "EchoesHome.h"
 #include "PluginEditionWidget.h"
@@ -40,5 +41,6 @@ class MainWidget;
 class EchoesHome;
 class UserActionManagement;
 class AuthWidget;
+class UnitsWidget;
 class Login;
 

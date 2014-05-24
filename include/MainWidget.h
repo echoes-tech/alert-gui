@@ -46,6 +46,7 @@
 #include "Association.h"
 #include "AbstractPage.h"
 #include "AssetManagementWidget.h"
+#include "UnitsWidget.h"
 
 class RecipientsWidget;
 class InformationsWidget;
@@ -60,7 +61,6 @@ public:
   void doActionMenu(int index = -1, Enums::EMenuRoot menuRoot = Enums::EMenuRoot::main);
   
   Wt::WMenu *getMenu();
-  Wt::WMenu *getAccountSubmenu();
   Wt::WContainerWidget *getSideBarContainer();
   Wt::WContainerWidget *getFooterContainer();
   
@@ -99,6 +99,7 @@ protected:
   AssetManagementWidget *amw;
   OptionManagementModel *omm;
   OptionManagementWidget *omw;
+  UnitsWidget *unw;
 //  AlertEditionModel *aem;
 //  AlertListWidget *alw;
   RoleCustomizationWidget *rcw;

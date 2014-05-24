@@ -313,6 +313,7 @@
   <message id="Alert.admin.association-tab">Associations</message>
   <message id="Alert.admin.alerts-tab">Alertes</message>
   <message id="Alert.admin.plugins-tab">Applications</message>
+  <message id="Alert.admin.units-tab">Unités</message>
   
   <message id="Alert.admin.home">Accueil</message>
 

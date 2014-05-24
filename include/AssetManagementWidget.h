@@ -98,14 +98,13 @@ private:
   
   void                  setSession(Echoes::Dbo::Session *session);
   void                  setApiUrl(std::string apiUrl);
-  std::string           getApiUrl();
   
   bool                   created_;
   bool                   newClass_;
-  Echoes::Dbo::Session   *session_;
+
   std::vector<long long> idsAlert_;
   Wt::Json::Value        result_;
-  std::string            apiUrl_;
+
 };
 
 

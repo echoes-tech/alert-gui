@@ -24,6 +24,7 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
     this->session_ = session;
     this->apiUrl_ = apiUrl;
     this->type_ = type;
+    usersModel_ = new Wt::WStandardItemModel(0, 2, this);
 
     setButtonModif(true);
     setButtonSup(true);
@@ -155,7 +156,7 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
     
     try
     {
-
+        cout << "avant medias" << endl;
         vector<Wt::Json::Value> jsonMedia = jsonResources.at(0);
         Wt::Json::Array& result = jsonMedia.at(0);
         for (int cpt(0); cpt < (int) result.size(); cpt++)
@@ -165,14 +166,31 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
             long long id = obj.get("id");
             mediasTokens[id] = token.toUTF8();
         }
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[UserEditionWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[UserEditionWidget] JSON Type Exception";
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
 
+    try
+    {
+        cout << "avant users" << endl;
         vector<Wt::Json::Value> jsonUsers = jsonResources.at(1);
         jsonResources.pop_back();
         AbstractPage::handleJsonGet(jsonResources);
 
-        usersModel_ = new Wt::WStandardItemModel(0, 2, this);
+        usersModel_->clear();
 
-        result = jsonUsers.at(0);
+        
+        Wt::Json::Array& result = jsonUsers.at(0);
+        
+        cout << "boucle users" << endl;
         for (int cpt(0); cpt < (int) result.size(); cpt++)
         {
             Wt::WStandardItem *itemId = new Wt::WStandardItem();
@@ -202,7 +220,7 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[UserEditionWidget] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
 }
 

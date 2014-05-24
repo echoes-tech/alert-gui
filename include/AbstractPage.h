@@ -71,6 +71,7 @@
 #include <Wt/Json/Object>
 
 #include <Wt/WCheckBox>
+//#include <Wt/WTimer>
 
 #include <Enums.h>
 // Lib perso
@@ -133,7 +134,8 @@ protected:
         text = 0, //WText
         boolean = 1, //WCheckBox
         integer = 2, // int //WText
-        undid = 3 // under id (string) "name" //WComboBox
+        undid = 3, // under id (string) "name" //WComboBox
+        object = 4
     };
 
     
@@ -199,6 +201,7 @@ protected:
     virtual std::string         addParameter();
     // ---- ADD MODIF DELETE ----------------------------------------------
     virtual void                addResource(std::vector<Wt::WInteractWidget*> argument);
+    virtual void                setAddResourceMessage(Wt::Http::Message *message,std::vector<Wt::WInteractWidget*> argument);
     virtual void                modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
     virtual Wt::WDialog         *deleteResource(long long id);
     // RETURNS API --------------------------------------
@@ -219,7 +222,9 @@ protected:
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
     std::multimap<long long, vector_widget>     m_rowsTable;
-    std::multimap<int, std::string>                     m_displayedTitlesPopups;
+    std::multimap<int, std::string>             m_displayedTitlesPopups;
+    
+    Echoes::Dbo::Session                        *m_session;
 
 private:
     
@@ -245,7 +250,7 @@ private:
     // Attributs.-------------------------------
     lists_string                        m_listsUrl;
     std::multimap<int, std::string>     m_titles;
-    Echoes::Dbo::Session                *m_session;
+    
     std::string                         m_apiUrl;
     std::string                         m_xmlPageName;
     std::string                         m_nameResourcePageSpec;
@@ -254,13 +259,14 @@ private:
     bool                                m_isModifButtonPresent;
     bool                                m_isDeleteButtonPresent;
     bool                                m_isMainPage;
-    bool                                m_toUpdate;
     // select drop + paginate--------------------
     vector_pair                 m_resources;
     vector_widget               m_butPaginate;
     vector_widget               m_butPaginateExt;
     int                         m_nbAff;
     int                         m_nbAffBegin;
+    
+//    Wt::WTimer                  *_timer;
 };
 
 #endif	/* ABSTRACTPAGE_H */

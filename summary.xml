@@ -8,6 +8,8 @@
     <message id="Alert.summary.alert-media">Recipient</message>
     <message id="Alert.summary.alert-name">Alert name</message>
     <message id="Alert.summary.alert-message">Message sent</message>
+    <message id="Alert.summary.alert-type">Type</message>
+    <message id="Alert.summary.alert-status">Status</message>
     
 	<message id="Alert.summary.board.template">
 	    

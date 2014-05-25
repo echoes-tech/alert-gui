@@ -53,6 +53,8 @@ void MonitoringWidget::createUI()
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-name"), alertsSentTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-media"), alertsSentTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-message"), alertsSentTable->elementAt(row, ++col));
+    new Wt::WText(Wt::WString::tr("Alert.summary.alert-type"), alertsSentTable->elementAt(row, ++col));
+    new Wt::WText(Wt::WString::tr("Alert.summary.alert-status"), alertsSentTable->elementAt(row, ++col));
 
     
     try
@@ -110,6 +112,17 @@ void MonitoringWidget::createUI()
                 alertsSentTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
                 
                 new Wt::WText(i->get<3>()->message, alertsSentTable->elementAt(row, ++colNum));
+                
+                new Wt::WText(i->get<1>()->mediaType->name, alertsSentTable->elementAt(row, ++colNum));
+                
+                if (i->get<2>()->alertTrackingEvents.size() > 0)
+                {
+                    new Wt::WText(i->get<2>()->alertTrackingEvents.front()->value, alertsSentTable->elementAt(row, ++colNum));
+                }
+                else
+                {
+                    new Wt::WText("N/A", alertsSentTable->elementAt(row, ++colNum));
+                }
             }
         }
         

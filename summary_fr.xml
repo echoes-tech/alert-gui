@@ -8,5 +8,7 @@
     <message id="Alert.summary.alert-media">Destinataire</message>
     <message id="Alert.summary.alert-name">Nom de l'alerte</message>
     <message id="Alert.summary.alert-message">Message envoyé</message>
+    <message id="Alert.summary.alert-type">Type</message>
+    <message id="Alert.summary.alert-status">Statut</message>
 	
 </messages>

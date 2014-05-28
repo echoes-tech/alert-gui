@@ -46,6 +46,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
 	${OBJECTDIR}/src/AuthWidget.o \
 	${OBJECTDIR}/src/Conf.o \
+	${OBJECTDIR}/src/CsvUtil.o \
+	${OBJECTDIR}/src/DashBoard.o \
 	${OBJECTDIR}/src/EATableTemplate.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/Enums.o \
@@ -142,6 +144,16 @@ ${OBJECTDIR}/src/Conf.o: src/Conf.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Conf.o src/Conf.cpp
+
+${OBJECTDIR}/src/CsvUtil.o: src/CsvUtil.C 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/CsvUtil.o src/CsvUtil.C
+
+${OBJECTDIR}/src/DashBoard.o: src/DashBoard.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/DashBoard.o src/DashBoard.cpp
 
 ${OBJECTDIR}/src/EATableTemplate.o: src/EATableTemplate.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

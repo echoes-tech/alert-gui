@@ -73,9 +73,6 @@ void EchoesHome::initAuth()
 //    this->authModel->setReadOnly(Wt::Auth::AuthModel::RememberMeField, true);
 //    this->authModel->setVisible(Wt::Auth::AuthModel::RememberMeField, false);
     
-//    cout << "TRUE : " << boost::any_cast<bool>(true) << endl;
-//    cout << "REMEMBER ME FIELD ??? : " << boost::any_cast<bool>(this->authModel->value(Wt::Auth::AuthModel::RememberMeField)) << endl;
-    
     this->authWidget = new Wt::Auth::AuthWidget(this->session->login());
     this->authWidget->setModel(this->authModel);
     this->authWidget->setRegistrationEnabled(true);
@@ -118,45 +115,6 @@ void EchoesHome::processEnvironment()
     this->authWidget->processEnvironment();
 }
 
-
-// Todo : On s'en sert encore ??
-Wt::WTabWidget* EchoesHome::initAdminWidget()
-{
-    // main widget
-    Wt::WTabWidget *res = new Wt::WTabWidget(this);
-    this->mainStack->addWidget(res);
-    res->hide();
-    
-    
-    //user list widget
-    Wt::WGroupBox * usersGroupBox = new Wt::WGroupBox("Users list");
-    
-    Wt::Dbo::QueryModel<Wt::Dbo::ptr<Echoes::Dbo::User> > *qm = new Wt::Dbo::QueryModel<Wt::Dbo::ptr<Echoes::Dbo::User> >();
-    
-    Wt::WTableView *tview = new Wt::WTableView(usersGroupBox);
-    try
-    {
-        Wt::Dbo::Transaction transaction(*(this->session));
-        Wt::Dbo::Query<Wt::Dbo::ptr<Echoes::Dbo::User>,Wt::Dbo::DynamicBinding> q = this->session->find<Echoes::Dbo::User,Wt::Dbo::DynamicBinding>().where("\"USR_ID\" = ?").bind(this->session->user().id());
-        qm->setQuery(q, false);
-        qm->addColumn("USR_LAST_NAME", "Last name", Wt::ItemIsEditable);
-//        qm->setColumnFlags(0,Wt::ItemIsUserCheckable);
-        qm->addColumn("USR_FIRST_NAME", "First name", Wt::ItemIsEditable);
-        qm->addColumn("USR_MAIL", "E-mail", Wt::ItemIsSelectable);
-
-        tview->setSelectionMode(Wt::SingleSelection);
-//        tview->doubleClicked().connect(boost::bind(&EchoesHome::openUserEdition, this));
-        tview->setModel(qm);   
-    }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::log("error") << e.what();
-    }
-
-
-    return res;
-}
-
 void EchoesHome::handleInternalPath(const string &internalPath)
 {
     if (this->session->login().loggedIn()) 
@@ -178,33 +136,33 @@ void EchoesHome::handleInternalPath(const string &internalPath)
         {
         case 1:
         {
-            for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
+            for (vector<Enums::EPageType>::const_iterator i = mainPageWidget->getPageDisplayVector()->begin(); i != mainPageWidget->getPageDisplayVector()->end(); ++i)
             {
-    //            string test = i->value();
-                if (!boost::starts_with(i->value(), "submenu_"))
+                map<unsigned int, unsigned int> *mapFromPageTypeToMenuIndex = mainPageWidget->getMenuIndexFromPageType();
+                map<unsigned int, string> *mapFromMenuIndexToValue = mainPageWidget->getValueFromMenuIndex();
+                unsigned int menuIndex = (*mapFromPageTypeToMenuIndex)[i->index()];
+                string value = (*mapFromMenuIndexToValue)[(*mapFromPageTypeToMenuIndex)[i->index()]];
+                if (internalPathWithoutBlank[0].compare(value) == 0)
                 {
-                    if (internalPathWithoutBlank[0].compare(i->value()) == 0)
+                
+                    if ((unsigned)this->mainPageWidget->getMenu()->currentIndex() != menuIndex)
                     {
-                        if ((unsigned)this->mainPageWidget->getMenu()->currentIndex() != i->index())
+                        
+                        if(menuIndex <= (unsigned)this->mainPageWidget->getMenu()->count())
                         {
-                            if(i->index() < (unsigned)this->mainPageWidget->getMenu()->count())
-                            {
-                                // Toujours pertinent?
-                                std::cout << this->mainPageWidget->getMenu()->count() << " <= ? " << i->index() << std::endl;
-                                this->mainPageWidget->getMenu()->itemAt(i->index())->setFromInternalPath(internalPath);
-                            }
-                            else
-                            {
-                                Wt::WApplication::instance()->setInternalPath("/welcome",  false);
-                                this->mainPageWidget->getMenu()->itemAt(0)->setFromInternalPath(internalPath);
-                            }
-                            
+                            this->mainPageWidget->getMenu()->itemAt(menuIndex)->setFromInternalPath(internalPath);
                         }
-                        UserActionManagement::registerUserAction(Enums::EAction::display,internalPathWithoutBlank[0],0);
-                        showPage(i->index());
-                        displayed = true;
-                        break;
+                        else
+                        {
+                            Wt::WApplication::instance()->setInternalPath("/welcome",  false);
+                            this->mainPageWidget->getMenu()->itemAt(0)->setFromInternalPath(internalPath);
+                        }
+
                     }
+                    UserActionManagement::registerUserAction(Enums::EAction::display,internalPathWithoutBlank[0],0);
+                    showPage(i->index());
+                    displayed = true;
+                    break;
                 }
             }
             if ((!displayed) && (boost::starts_with(internalPathWithoutBlank[0], "submenu_")))
@@ -241,14 +199,14 @@ void EchoesHome::handleInternalPath(const string &internalPath)
 }
 
 
-void EchoesHome::showPage(int type, Enums::EMenuRoot menuRoot)
+void EchoesHome::showPage(int pageType)
 {
     if (this->mainPageWidget->isHidden())
     {
         this->mainPageWidget->show();
     }
     
-    this->mainPageWidget->doActionMenu(type,menuRoot);
+    this->mainPageWidget->doActionMenu(pageType);
 }
 
 void EchoesHome::onAuthEvent()
@@ -259,16 +217,13 @@ void EchoesHome::onAuthEvent()
         this->title->show();
         this->mainPageWidget->createUI();
         this->mainPageWidget->show();
-//        this->mainPageWidget->getSideBarContainer()->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
     }
     else
     {
         UserActionManagement::registerUserAction(Enums::EAction::logout,"",0);
-        this->mainPageWidget->reset(session);
+        this->mainPageWidget->reset();
         this->mainPageWidget->hide();
-        
-//        this->mainPageWidget->getSideBarContainer()->hide();
         this->title->hide();
         Wt::WApplication::instance()->setInternalPath("/",  false);
     }
@@ -276,24 +231,12 @@ void EchoesHome::onAuthEvent()
 
 void EchoesHome::refresh()
 {
-//    this->alertGroupBox->refresh();
-//    this->mainPageWidget->refresh();
-//    if (this->mainPageWidget->aew->isCreated())
-//    {
-//        this->mainPageWidget->aew->updateServerSelectionBox(this->session->user().id());
-//    }
-//    else
-//    {
-//        this->mainPageWidget->aew->refresh();
-//    }
-//    this->mainPageWidget->clear();
     this->mainPageWidget->refresh();
 }
 
 void EchoesHome::deleteContent()
 {
-//    this->alertGroupBox->refresh();
     this->mainPageWidget->clear();
-    this->mainPageWidget->reset(session);
+    this->mainPageWidget->reset();
 }
 

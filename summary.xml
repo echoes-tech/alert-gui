@@ -7,6 +7,7 @@
     <message id="Alert.summary.alert-date">Date</message>
     <message id="Alert.summary.alert-media">Recipient</message>
     <message id="Alert.summary.alert-name">Alert name</message>
+    <message id="Alert.summary.alert-code">Code</message>
     <message id="Alert.summary.alert-message">Message sent</message>
     <message id="Alert.summary.alert-type">Type</message>
     <message id="Alert.summary.alert-status">Status</message>

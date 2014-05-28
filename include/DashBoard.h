@@ -1,12 +1,12 @@
 /* 
- * File:   MonitoringWidget.h
+ * File:   DashBoard.h
  * Author: tsa
  *
- * Created on 30 nov 2012, 11:50
+ * Created on 26 jun 2014, 11:50
  */
 
-#ifndef MONITORINGWIDGET_H
-#define	MONITORINGWIDGET_H
+#ifndef DASHBOARD_H
+#define	DASHBOARD_H
 
 #include "GlobalIncludeFile.h"
 
@@ -73,13 +73,21 @@
 #include <Wt/Chart/WCartesianChart>
 #include <Wt/Chart/WPieChart>
 
+
+    #include <Wt/WApplication>
+    #include <Wt/WContainerWidget>
+    #include <Wt/WEnvironment>
+    #include <Wt/WStandardItemModel>
+    #include <Wt/WStandardItem>
+    #include <Wt/WTableView>
+
 #include "CsvUtil.h"
 
-class MonitoringWidget : public Wt::WContainerWidget
+class DashBoard : public Wt::WContainerWidget
 {
 public:
 
-  MonitoringWidget(Echoes::Dbo::Session *session);
+  DashBoard(Echoes::Dbo::Session *session);
 
 protected:
 
@@ -90,6 +98,7 @@ protected:
 
 private:
   Echoes::Dbo::Session * session;
+  Wt::WTemplate *mainTemplate;
  
   bool created_;
   
@@ -98,14 +107,6 @@ private:
   
 };
 
-class ScatterPlot: public Wt::WContainerWidget
-{
-public:
-  /*! \brief Creates the scatter plot example
-   */
-  ScatterPlot(Wt::WContainerWidget *parent);
-};
 
-
-#endif	/* MONITORINGWIDGET_H */
+#endif	/* DASHBOARD_H */
 

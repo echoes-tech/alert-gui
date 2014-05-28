@@ -7,6 +7,35 @@
 
 #include "MonitoringWidget.h"
 
+
+
+using namespace std;
+
+class NumericItem : public Wt::WStandardItem {
+public:
+virtual NumericItem *clone() const {
+    return new NumericItem();
+}
+
+virtual void setData(const boost::any &data, int role = Wt::UserRole) 
+{
+    boost::any dt;
+
+    if (role == Wt::EditRole) {
+    double d = Wt::asNumber(data);
+
+    if (d != d)
+        dt = data;
+    else
+        dt = boost::any(d);
+    }
+
+    Wt::WStandardItem::setData(dt, role);
+}
+
+};
+
+
 MonitoringWidget::MonitoringWidget(Echoes::Dbo::Session *session)
 : Wt::WContainerWidget()
 {
@@ -42,7 +71,7 @@ void MonitoringWidget::createUI()
 
     alertsSentTable->setHeaderCount(2, Wt::Horizontal);
 
-    alertsSentTable->elementAt(row, col)->setColumnSpan(4);
+    alertsSentTable->elementAt(row, col)->setColumnSpan(6);
     alertsSentTable->elementAt(row, col)->setContentAlignment(Wt::AlignTop | Wt::AlignCenter);
     alertsSentTable->elementAt(row, col)->setPadding(5);
     
@@ -51,8 +80,9 @@ void MonitoringWidget::createUI()
     row = 1;
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-date"), alertsSentTable->elementAt(row, col));
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-name"), alertsSentTable->elementAt(row, ++col));
+    new Wt::WText(Wt::WString::tr("Alert.summary.alert-code"), alertsSentTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-media"), alertsSentTable->elementAt(row, ++col));
-    new Wt::WText(Wt::WString::tr("Alert.summary.alert-message"), alertsSentTable->elementAt(row, ++col));
+//    new Wt::WText(Wt::WString::tr("Alert.summary.alert-message"), alertsSentTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-type"), alertsSentTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-status"), alertsSentTable->elementAt(row, ++col));
 
@@ -60,7 +90,7 @@ void MonitoringWidget::createUI()
     try
     {
         Wt::Dbo::Transaction transaction(*(this->session));
-        std::string queryString = "SELECT ale, med, atr, ams "
+        string queryString = "SELECT ale, med, atr, ams "
                 "FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_MED\" med, \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" ams" 
             " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
             " AND ale.\"ALE_DELETE\" IS NULL "
@@ -68,7 +98,7 @@ void MonitoringWidget::createUI()
             " AND atr.\"ATR_MED_MED_ID\" = med.\"MED_ID\" "
             " AND med.\"MED_USR_USR_ID\" IN"
             "("
-                "SELECT \"USR_ID\" FROM \"T_USER_USR\" WHERE \"USR_ORG_ORG_ID\" = " + boost::lexical_cast<std::string>(this->session->user()->organization.id()) + ""
+                "SELECT \"USR_ID\" FROM \"T_USER_USR\" WHERE \"USR_ORG_ORG_ID\" = " + boost::lexical_cast<string>(this->session->user()->organization.id()) + ""
             ")"
             " AND ams.\"AMS_ALE_ALE_ID\" = ale.\"ALE_ID\"" 
             " AND ams.\"AMS_MED_MED_ID\" = med.\"MED_ID\"" 
@@ -96,7 +126,7 @@ void MonitoringWidget::createUI()
             for (Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
                 Wt::Dbo::ptr<Echoes::Dbo::Media>,
                 Wt::Dbo::ptr<Echoes::Dbo::AlertTracking>,
-                Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization>    >>::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i)
+                Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization>>>::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i)
             {
                 row++;
 
@@ -107,11 +137,21 @@ void MonitoringWidget::createUI()
                 alertsSentTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
                 
                 new Wt::WText(i->get<0>()->name, alertsSentTable->elementAt(row, ++colNum));
+                
+                if (Wt::WString::tr(i->get<0>()->name.toUTF8()).toUTF8().find_first_of("?") == 0)
+                {
+                    new Wt::WText(("N/A"), alertsSentTable->elementAt(row, ++colNum));
+                }
+                else
+                {
+                    new Wt::WText(Wt::WString::tr(i->get<0>()->name.toUTF8()), alertsSentTable->elementAt(row, ++colNum));
+                }
+                
 
                 new Wt::WText(i->get<1>()->value, alertsSentTable->elementAt(row, ++colNum));
                 alertsSentTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
                 
-                new Wt::WText(i->get<3>()->message, alertsSentTable->elementAt(row, ++colNum));
+//                new Wt::WText(i->get<3>()->message, alertsSentTable->elementAt(row, ++colNum));
                 
                 new Wt::WText(i->get<1>()->mediaType->name, alertsSentTable->elementAt(row, ++colNum));
                 
@@ -132,8 +172,8 @@ void MonitoringWidget::createUI()
         Wt::log("error") << e.what();
     }
     
-    
-//    new ScatterPlot(this);
+        
+    //    new ScatterPlot(this);
 }
 
 
@@ -143,7 +183,6 @@ void MonitoringWidget::close()
 {
     delete this;
 }
-
 
 
 

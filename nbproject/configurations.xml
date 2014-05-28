@@ -51,6 +51,8 @@
         <itemPath>include/ApiManagement.h</itemPath>
         <itemPath>include/Association.h</itemPath>
         <itemPath>include/Conf.h</itemPath>
+        <itemPath>include/CsvUtil.h</itemPath>
+        <itemPath>include/DashBoard.h</itemPath>
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
         <itemPath>include/InformationsWidget.h</itemPath>
@@ -77,6 +79,8 @@
       <itemPath>auth.xml</itemPath>
       <itemPath>auth_fr.xml</itemPath>
       <itemPath>config.xml</itemPath>
+      <itemPath>dashboard.xml</itemPath>
+      <itemPath>dashboard_fr.xml</itemPath>
       <itemPath>ea_table.xml</itemPath>
       <itemPath>global.xml</itemPath>
       <itemPath>global_fr.xml</itemPath>
@@ -133,6 +137,8 @@
         <itemPath>src/ApiManagement.cpp</itemPath>
         <itemPath>src/Association.cpp</itemPath>
         <itemPath>src/Conf.cpp</itemPath>
+        <itemPath>src/CsvUtil.C</itemPath>
+        <itemPath>src/DashBoard.cpp</itemPath>
         <itemPath>src/EATableTemplate.cpp</itemPath>
         <itemPath>include/EATableTemplate.h</itemPath>
         <itemPath>src/EchoesHome.cpp</itemPath>
@@ -223,6 +229,10 @@
       </item>
       <item path="config.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="dashboard.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dashboard_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="ea_table.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="global.xml" ex="false" tool="3" flavor2="0">
@@ -257,6 +267,10 @@
       <item path="include/AuthWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Conf.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/CsvUtil.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/DashBoard.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/EATableTemplate.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -382,6 +396,10 @@
       <item path="src/AuthWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Conf.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/CsvUtil.C" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DashBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/EATableTemplate.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -485,6 +503,10 @@
       </item>
       <item path="config.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="dashboard.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dashboard_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="ea_table.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="global.xml" ex="false" tool="3" flavor2="0">
@@ -519,6 +541,10 @@
       <item path="include/AuthWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Conf.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/CsvUtil.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/DashBoard.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/EATableTemplate.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -644,6 +670,10 @@
       <item path="src/AuthWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Conf.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/CsvUtil.C" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DashBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/EATableTemplate.cpp" ex="false" tool="1" flavor2="0">
       </item>

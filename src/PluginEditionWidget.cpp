@@ -2191,19 +2191,21 @@ void PluginEditionWidget::fillAddonComboBox()
     comboAddon->clear();
 
     int idx = 0;
-    
+
     map<int, Wt::WString> mapEAddonName;
     mapEAddonName[Echoes::Dbo::EAddon::FILESYSTEM] = tr("Alert.plugins.filesystem");
     mapEAddonName[Echoes::Dbo::EAddon::FILE] = tr("Alert.plugins.file");
     mapEAddonName[Echoes::Dbo::EAddon::LOG] = tr("Alert.plugins.log");
     mapEAddonName[Echoes::Dbo::EAddon::ODBC] = tr("Alert.plugins.odbc");
     mapEAddonName[Echoes::Dbo::EAddon::SNMP] = tr("Alert.plugins.snmp");
+    mapEAddonName[Echoes::Dbo::EAddon::HASH] = tr("Alert.plugins.hash");
+    mapEAddonName[Echoes::Dbo::EAddon::XML] = tr("Alert.plugins.xml");
+    mapEAddonName[Echoes::Dbo::EAddon::PROCESS] = tr("Alert.plugins.process");
 
-    for (int idx1 = Echoes::Dbo::EAddon::FILESYSTEM; idx1 <= Echoes::Dbo::EAddon::SNMP; idx1++)
+    for (map<int, Wt::WString>::iterator mapEAddonNameIt = mapEAddonName.begin(); mapEAddonNameIt != mapEAddonName.end(); ++mapEAddonNameIt)
     {
-        slmAddons->insertString(idx, mapEAddonName[idx1]);
-//        this->mapAddonParameterIdSboxRow[idx] = idx1;
-        this->mapAddonsIdSboxRow[idx] = idx1;
+        slmAddons->insertString(idx, mapEAddonNameIt->second);
+        this->mapAddonsIdSboxRow[idx] = mapEAddonNameIt->first;
         idx++;
     }
 
@@ -2220,16 +2222,19 @@ void PluginEditionWidget::fillSearchTypeComboBox()
     int idx = 0;
 
     map<int, Wt::WString> mapESearchTypeName;
-    mapESearchTypeName[Echoes::Dbo::ESearchType::OID] = tr("Alert.plugins.oid");
-    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_LINE] = tr("Alert.plugins.path_line");
     mapESearchTypeName[Echoes::Dbo::ESearchType::PATH] = tr("Alert.plugins.path");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_LINE] = tr("Alert.plugins.path_line");
     mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_LAST_LINE] = tr("Alert.plugins.path_last_line");
     mapESearchTypeName[Echoes::Dbo::ESearchType::QUERY] = tr("Alert.plugins.query");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::OID] = tr("Alert.plugins.oid");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_ALGORITHM] = tr("Alert.plugins.path_algorithm");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_XPATH] = tr("Alert.plugins.path_xpath");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::NAME] = tr("Alert.plugins.name");
 
-    for (int idx1 = Echoes::Dbo::ESearchType::OID; idx1 <= Echoes::Dbo::ESearchType::QUERY; idx1++)
+    for (map<int, Wt::WString>::iterator mapESearchTypeNameIt = mapESearchTypeName.begin(); mapESearchTypeNameIt != mapESearchTypeName.end(); ++mapESearchTypeNameIt)
     {
-        slmSearchTypes->insertString(idx, mapESearchTypeName[idx1]);
-        this->mapSeaTypeIdSboxRow[idx] = idx1;
+        slmSearchTypes->insertString(idx, mapESearchTypeNameIt->second);
+        this->mapSeaTypeIdSboxRow[idx] = mapESearchTypeNameIt->first;
         idx++;
     }
 
@@ -2243,16 +2248,16 @@ void PluginEditionWidget::fillFilterTypeComboBox()
     comboFilType->clear();
 
     int idx = 0;
-    
+
     map<int, Wt::WString> mapEFilterTypeName;
     mapEFilterTypeName[Echoes::Dbo::EFilterType::ALL] = tr("Alert.plugins.all");
     mapEFilterTypeName[Echoes::Dbo::EFilterType::REGEX] = tr("Alert.plugins.regex");
     mapEFilterTypeName[Echoes::Dbo::EFilterType::LOCATION] = tr("Alert.plugins.location");
-   
-    for (int idx1 = Echoes::Dbo::EFilterType::ALL; idx1 <= Echoes::Dbo::EFilterType::LOCATION; idx1++)
+
+    for (map<int, Wt::WString>::iterator mapEFilterTypeNameIt = mapEFilterTypeName.begin(); mapEFilterTypeNameIt != mapEFilterTypeName.end(); ++mapEFilterTypeNameIt)
     {
-        slmFilType->insertString(idx, mapEFilterTypeName[idx1]);
-        this->mapFilTypeIdSboxRow[idx] = idx1;
+        slmFilType->insertString(idx, mapEFilterTypeNameIt->second);
+        this->mapFilTypeIdSboxRow[idx] = mapEFilterTypeNameIt->first;
         idx++;
     }
 

@@ -20,7 +20,7 @@ AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, stri
 {
     setButtonModif(true);
     setButtonSup(true);
-    setLocalTable(true);
+//    setLocalTable(true);
 
     multimap<int, string> titles;
     titles.insert(make_pair(ETypeJson::text, "name"));

@@ -28,7 +28,7 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
 
     setButtonModif(true);
     setButtonSup(true);
-    setLocalTable(true);
+//    setLocalTable(true);
     
     string nameSpe = type == 1 ? "mail" : type == 2 ? "sms" : type == 3 ? "push" : "error";
     this->setNameSpecial(nameSpe);
@@ -79,6 +79,10 @@ Wt::WValidator *UserEditionWidget::editValidator(int who)
     else if (type_ == 3)
     {
         validator = new Wt::WRegExpValidator("[a-zA-Z0-9.-]{3,}");
+    }
+    else
+    {
+        AbstractPage::editValidator(who);
     }
     return validator;
 }

@@ -26,7 +26,7 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
 
     setButtonModif(true);
     setButtonSup(true);
-    setLocalTable(true);
+//    setLocalTable(true);
 
     multimap<int, string> titles;
     titles.insert(make_pair(ETypeJson::text, "name"));
@@ -50,18 +50,27 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
     setUrl(lListUrl);
 }
 
-Wt::WValidator *InformationsWidget::editValidator(int who)
+Wt::WValidator *InformationsWidget::editValidator(int jsonType)
 {
     Wt::WRegExpValidator *validator;
-    if (who == 2)
+    switch(jsonType)
     {
-        validator = new Wt::WRegExpValidator();
-        validator->setMandatory(false);
-    }
-    else
-    {
-        validator = new Wt::WRegExpValidator("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}");
-        validator->setMandatory(true);
+        case ETypeJson::text:
+        {
+            validator = new Wt::WRegExpValidator();
+            validator->setMandatory(false);
+            break;
+        }
+        case ETypeJson::integer:
+        {
+            validator = new Wt::WRegExpValidator("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}");
+            validator->setMandatory(true);
+            break;
+        }
+        default:
+        {
+            break;
+        }
     }
     return validator;
 }
@@ -130,19 +139,22 @@ void InformationsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, l
     messageInformation.addBodyText(",\n\"desc\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
     messageInformation.addBodyText(",\n\"calculate\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
     
-    Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
-    // FIXME: segfault ici !
-    messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
-
-    if (((Wt::WCheckBox*)(*i++))->isChecked() == true)
+    Wt::WCheckBox * displayBox = (Wt::WCheckBox*)(*i++);
+    if (displayBox->isChecked())
     {
         messageInformation.addBodyText(",\n\"display\" : true");
     }
-    else if (((Wt::WCheckBox*)(*i++))->isChecked() == false)
+    else
     {
         messageInformation.addBodyText(",\n\"display\" : false");
     }
 
+    
+    Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
+    // FIXME: segfault ici !
+    messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
+
+    
     messageInformation.addBodyText("\n}");
     
     string apiAddress = this->getApiUrl() + "/informations/"
@@ -150,7 +162,7 @@ void InformationsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, l
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8();
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&InformationsWidget::postResourceCallback, this, _1, _2, client));
+    client->done().connect(boost::bind(&InformationsWidget::putResourceCallback, this, _1, _2, client));
 
     Wt::log("debug") << "InformationsWidget : [PUT] address to call : " << apiAddress;    
 
@@ -166,7 +178,6 @@ void InformationsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, l
 
 void InformationsWidget::handleJsonGet(vectors_Json jsonResources)
 {
-//    infoUnit_.clear();
     vector<Wt::Json::Value> infoUnit = jsonResources.at(1);
     jsonResources.pop_back();
     AbstractPage::handleJsonGet(jsonResources);

@@ -26,7 +26,7 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
 
     setButtonModif(false);
     setButtonSup(true);
-    setLocalTable(true);
+//    setLocalTable(true);
     
     m_assets = new Wt::WStandardItemModel(0,3,this);
     m_plugins = new Wt::WStandardItemModel(0,3,this);

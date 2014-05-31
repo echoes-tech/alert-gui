@@ -19,7 +19,7 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
 
     setButtonModif(false);
     setButtonSup(true);
-    setLocalTable(true);
+//    setLocalTable(true);
     
     multimap<int, string> listTitles;
     listTitles.insert(make_pair(ETypeJson::text, "filter"));

@@ -19,15 +19,11 @@ SummaryBoard::SummaryBoard(Echoes::Dbo::Session *session)
     
     this->addWidget(mainTemplate);
     
-    
-    
     this->alertSentWidget = new MonitoringWidget(session);
     this->welcomeText = new Wt::WText(tr("welcome-text"));
     
     mainTemplate->bindWidget("alerts-sent",this->alertSentWidget);
     mainTemplate->bindWidget("welcome", this->welcomeText);
-    
-    
     
 }
 

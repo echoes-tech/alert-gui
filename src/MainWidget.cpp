@@ -16,7 +16,9 @@
 #include "MainWidget.h"
 #include "SummaryBoard.h"
 
-MainWidget::MainWidget(Echoes::Dbo::Session *session, const std::string &apiUrl)
+using namespace std;
+
+MainWidget::MainWidget(Echoes::Dbo::Session *session, const string &apiUrl)
 : Wt::WContainerWidget()
 {
     setApiUrl(apiUrl);
@@ -29,17 +31,49 @@ MainWidget::MainWidget(Echoes::Dbo::Session *session, const std::string &apiUrl)
     
     breadCrumbsContainer = new Wt::WContainerWidget(this);
     
-    reset(session);
+    this->session = session;
+    
+    m_pageDisplayRights = new vector<Enums::EPageType>();
+    m_indexFromPageType = new map<unsigned int, unsigned int>();
+    m_valueFromMenuIndex = new map<unsigned int, string>();
+    reset();
     
 }
 
-void MainWidget::reset(Echoes::Dbo::Session *session)
+void MainWidget::getRightsFromUser()
+{
+    m_pageDisplayRights->clear();
+    unsigned int menuIndex = 0;
+    for (auto i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
+    {
+        switch (i->index())
+        {
+            case Enums::EPageType::DASHBOARD:
+            {
+                break;
+            }
+            default:
+            {
+                m_pageDisplayRights->push_back(*i);
+                (*m_indexFromPageType)[i->index()] = menuIndex;
+                (*m_valueFromMenuIndex)[menuIndex++] = i->value();
+                break;
+            }
+        }
+        
+    }
+}
+
+void MainWidget::reset()
 {
     delete breadCrumbsContainer;
     // voir si utile, refait dans initMenus()
     sideBarContainer->clear();
     footerContainer->clear();
     contentContainer->clear();
+    
+    getRightsFromUser();
+    
     titleText = new Wt::WText();
     breadCrumbsContainer = new Wt::WContainerWidget(this);
     breadCrumbsAnchor0 = new Wt::WAnchor("");
@@ -47,7 +81,7 @@ void MainWidget::reset(Echoes::Dbo::Session *session)
     breadCrumbsAnchor2 = new Wt::WAnchor("");
     breadCrumbsAnchor0->setRefInternalPath("/welcome");
     created_ = false;
-    this->session = session;
+    
     
     try
     {
@@ -86,7 +120,6 @@ void MainWidget::initMenus(void)
 {
     sideBarContainer->clear();
     sideBarContainer->setId("sidebar");
-    //    sideBarContainer->hide();
         
     Wt::WAnchor *phoneMenuAnchor = new Wt::WAnchor("#");
     phoneMenuAnchor->setText("Menu");
@@ -114,7 +147,7 @@ void MainWidget::createUI()
 {
     if (!created_)
     {
-        reset(session);
+        reset();
         initMenus();
         createContentDiv();
         createContainerFluid();
@@ -125,7 +158,7 @@ void MainWidget::createUI()
         breadCrumbsContainer->addWidget(breadCrumbsAnchor0);
 
 
-        for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
+        for (auto i = m_pageDisplayRights->begin(); i != m_pageDisplayRights->end(); ++i)
         {
             createMenuItem(*i,menu,getIconName(*i));
             createPage(*i);
@@ -157,6 +190,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         case Enums::EPageType::WELCOME:
         {
             wcw = new SummaryBoard(this->session);
+            break;
+        }
+        case Enums::EPageType::DASHBOARD:
+        {
+            dsw = new DashBoard(this->session);
             break;
         }
         case Enums::EPageType::RECIPIENTS:
@@ -204,56 +242,44 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             omw = new OptionManagementWidget(omm, this->session, _apiUrl);
             break;
         }
+        case Enums::EPageType::UNITS:
+        {
+            unw = new UnitsWidget(this->session, this->_apiUrl);
+        }
         default:
             break;
     }
 
 }
 
-
-void MainWidget::createAccountPage(Enums::EAccountSubmenu enumSAC)
-{
-
-}
-
 // ToDo : template ?
-void MainWidget::updateTitle(unsigned int index, Enums::EMenuRoot menuRoot)
+void MainWidget::updateTitle(unsigned int index)
 {
-    switch (menuRoot)
+    for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
     {
-        case Enums::main:
+        if (i->index() == index)
         {
-            for (Enums::EPageType::const_iterator i = Enums::EPageType::begin(); i != Enums::EPageType::end(); ++i)
-            {
-                if (i->index() == index)
-                {
-                    this->titleText->setText("<h1>" + tr(boost::lexical_cast<std::string>("Alert.admin.")+i->value()+boost::lexical_cast<std::string>("-tab")) + "</h1>");
-                    break;
-                }
-            }
+            this->titleText->setText("<h1>" + tr(boost::lexical_cast<string>("Alert.admin.")+i->value()+boost::lexical_cast<string>("-tab")) + "</h1>");
             break;
         }
-        
     }
-    
 }
 
-void MainWidget::updateBreadcrumbs(Enums::EMenuRoot menuRoot)
+void MainWidget::updateBreadcrumbs()
 {
     this->breadCrumbsContainer->removeWidget(breadCrumbsAnchor2);
     
-    std::string internalPath = Wt::WApplication::instance()->internalPath();
-    std::vector<std::string> internalPathSplitResult;
-    std::vector<std::string> internalPathWithoutBlank;
+    string internalPath = Wt::WApplication::instance()->internalPath();
+    vector<string> internalPathSplitResult;
+    vector<string> internalPathWithoutBlank;
     boost::split(internalPathSplitResult, internalPath, boost::is_any_of("/"), boost::token_compress_on);
-    for (std::vector<std::string>::const_iterator i = internalPathSplitResult.begin() ; i != internalPathSplitResult.end() ; i++)
+    for (vector<string>::const_iterator i = internalPathSplitResult.begin() ; i != internalPathSplitResult.end() ; i++)
     {
         if (i->compare("") != 0)
         {
             internalPathWithoutBlank.push_back(*i);
         }
     }
-    
     
     for (unsigned int i = 0; i < internalPathWithoutBlank.size(); i++)
     {
@@ -266,7 +292,7 @@ void MainWidget::updateBreadcrumbs(Enums::EMenuRoot menuRoot)
         {
             case 1:
             {
-                breadCrumbsAnchor1->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<std::string>("-tab")));
+                breadCrumbsAnchor1->setText(tr(boost::lexical_cast<string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<string>("-tab")));
                 breadCrumbsAnchor1->setRefInternalPath("/" + internalPathWithoutBlank[i]);
                 this->breadCrumbsContainer->addWidget(breadCrumbsAnchor1);
                 breadCrumbsAnchor1->setAttributeValue("class", getBreadcrumbsClass(internalPathWithoutBlank.size(),1).c_str());
@@ -274,7 +300,7 @@ void MainWidget::updateBreadcrumbs(Enums::EMenuRoot menuRoot)
             }
             case 2:
             {
-                breadCrumbsAnchor2->setText(tr(boost::lexical_cast<std::string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<std::string>("-tab")));
+                breadCrumbsAnchor2->setText(tr(boost::lexical_cast<string>("Alert.admin.")+internalPathWithoutBlank[i]+boost::lexical_cast<string>("-tab")));
                 breadCrumbsAnchor2->setRefInternalPath("/" + internalPathWithoutBlank[i-1] + "/" + internalPathWithoutBlank[i]);
                 this->breadCrumbsContainer->addWidget(breadCrumbsAnchor2);
                 breadCrumbsAnchor2->setAttributeValue("class", getBreadcrumbsClass(internalPathWithoutBlank.size(),2).c_str());
@@ -290,9 +316,9 @@ void MainWidget::updateBreadcrumbs(Enums::EMenuRoot menuRoot)
 
 }
 
-std::string MainWidget::getBreadcrumbsClass(int pathSize, int level)
+string MainWidget::getBreadcrumbsClass(int pathSize, int level)
 {
-    std::string res;
+    string res;
     if (pathSize == level)
     {
         res = "current";
@@ -304,88 +330,87 @@ std::string MainWidget::getBreadcrumbsClass(int pathSize, int level)
     return res;
 }
 
-
-// ToDo ajouter deux update poru les sous menus
-void MainWidget::updateContainerFluid(int type, Enums::EMenuRoot menuRoot)
+void MainWidget::updateContainerFluid(int type)
 {
     for (int i = 0 ; i < this->contentFluid->count() ; i++)
     {
         contentFluid->removeWidget(contentFluid->widget(i));
     }
     
-    switch (menuRoot)
+
+    switch (type)
     {
-        case Enums::main:
+        case Enums::EPageType::WELCOME:
         {
-            switch (type)
-            {
-                case Enums::EPageType::WELCOME:
-                {
-                    this->contentFluid->addWidget(wcw);
-                    break;
-                }
-                case Enums::EPageType::ASSET:
-                {
-                    amw->getResourceList();
-                    this->contentFluid->addWidget(amw);
-                    break;
-                }
-                case Enums::EPageType::RECIPIENTS:
-                {
-                    this->contentFluid->addWidget(rpw);
-                    break;
-                }
-                case Enums::EPageType::INFORMATIONS:
-                {
-                    inw->getResourceList();
-                    this->contentFluid->addWidget(inw);
-                    break;
-                }
-                case Enums::EPageType::ASSOCIATION:
-                {
-                    act->getResourceList();
-                    this->contentFluid->addWidget(act);
-                    break;
-                }
-                case Enums::EPageType::ALERTS:
-                {
-                    alw->getResourceList();
-                    this->contentFluid->addWidget(alw);
-                    break;
-                }
-                case Enums::EPageType::PLUGIN:
-                {
-                    this->contentFluid->addWidget(pew);
-                    break;
-                }
-                case Enums::EPageType::ROLE:
-                {
-                    this->contentFluid->addWidget(rcw);
-                    break;
-                }
-                case Enums::EPageType::OPTIONS:
-                {
-                    this->contentFluid->addWidget(omw);
-                    break;
-                }
-                default:
-                    break;
-            }
+            this->contentFluid->addWidget(wcw);
             break;
         }
-        
+        case Enums::EPageType::DASHBOARD:
+        {
+            this->contentFluid->addWidget(dsw);
+            break;
+        }
+        case Enums::EPageType::ASSET:
+        {
+            amw->getResourceList();
+            this->contentFluid->addWidget(amw);
+            break;
+        }
+        case Enums::EPageType::RECIPIENTS:
+        {
+            rpw->update();
+            this->contentFluid->addWidget(rpw);
+            break;
+        }
+        case Enums::EPageType::INFORMATIONS:
+        {
+            inw->getResourceList();
+            this->contentFluid->addWidget(inw);
+            break;
+        }
+        case Enums::EPageType::ASSOCIATION:
+        {
+            act->getResourceList();
+            this->contentFluid->addWidget(act);
+            break;
+        }
+        case Enums::EPageType::ALERTS:
+        {
+            alw->getResourceList();
+            this->contentFluid->addWidget(alw);
+            break;
+        }
+        case Enums::EPageType::PLUGIN:
+        {
+            this->contentFluid->addWidget(pew);
+            break;
+        }
+        case Enums::EPageType::ROLE:
+        {
+            this->contentFluid->addWidget(rcw);
+            break;
+        }
+        case Enums::EPageType::OPTIONS:
+        {
+            this->contentFluid->addWidget(omw);
+            break;
+        }
+        case Enums::EPageType::UNITS:
+        {
+            unw->getResourceList();
+            this->contentFluid->addWidget(unw);
+            break;
+        }
+        default:
+            break;
     }
-    
-    
-
+ 
 }
 
 void MainWidget::createContainerFluid()
 {
     contentFluid = new Wt::WContainerWidget();
     contentFluid->setStyleClass("container-fluid");
-    
-    
     contentContainer->addWidget(contentFluid);
 }
 
@@ -395,36 +420,41 @@ void MainWidget::createContentDiv()
     contentContainer->addWidget(breadCrumbsContainer);
 }
 
-void MainWidget::doActionMenu(int index, Enums::EMenuRoot menuRoot)
+void MainWidget::doActionMenu(int index)
 {
-    if (index < menu->count())
+    if ((*m_indexFromPageType)[index] < (unsigned)menu->count())
     {
-        menu->itemAt(index)->setFromInternalPath(Wt::WApplication::instance()->internalPath());
+        menu->itemAt((*m_indexFromPageType)[index])->setFromInternalPath(Wt::WApplication::instance()->internalPath());
         // ToDo open the menu if necessary
-        updateTitle(index,menuRoot);
-        updateBreadcrumbs(menuRoot);
-        updateContainerFluid(index,menuRoot);
+        updateTitle(index);
+        updateBreadcrumbs();
+        updateContainerFluid(index);
     }
     else
     {
         Wt::WApplication::instance()->setInternalPath("/welcome",  false);
         menu->itemAt(0)->setFromInternalPath("/welcome");
-        updateTitle(0,Enums::main);
-        updateBreadcrumbs(Enums::main);
-        updateContainerFluid(0,Enums::main);
+        updateTitle(0);
+        updateBreadcrumbs();
+        updateContainerFluid(0);
     }
     
     
 }
 
-std::string MainWidget::getIconName(Enums::EPageType enumPT)
+string MainWidget::getIconName(Enums::EPageType enumPT)
 {
-    std::string res = "home";
+    string res = "home";
     switch (enumPT.index())
     {
         case Enums::EPageType::WELCOME:
         {
             res = "home";
+            break;
+        }
+        case Enums::EPageType::DASHBOARD:
+        {
+            res = "list";
             break;
         }
         case Enums::EPageType::ASSET:
@@ -467,6 +497,11 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
             res = "check";
             break;
         }
+        case Enums::EPageType::UNITS:
+        {
+            res = "tasks";
+            break;
+        }
         default:
             res = "home";
             break;
@@ -477,11 +512,6 @@ std::string MainWidget::getIconName(Enums::EPageType enumPT)
 Wt::WMenu * MainWidget::getMenu()
 {
     return this->menu;
-}
-
-Wt::WMenu * MainWidget::getAccountSubmenu()
-{
-    return this->accountSubmenu;
 }
 
 Wt::WContainerWidget * MainWidget::getSideBarContainer()
@@ -505,13 +535,28 @@ void MainWidget::refresh()
 //    this->amw->refresh();
 }
 
-void MainWidget::setApiUrl(std::string apiUrl)
+void MainWidget::setApiUrl(string apiUrl)
 {
     _apiUrl = apiUrl;
     return;
 }
 
-std::string MainWidget::getApiUrl() const
+string MainWidget::getApiUrl() const
 {
     return _apiUrl;
+}
+
+vector<Enums::EPageType> *MainWidget::getPageDisplayVector()
+{
+    return m_pageDisplayRights;
+}
+
+map<unsigned int,unsigned int> *MainWidget::getMenuIndexFromPageType()
+{
+    return m_indexFromPageType;
+}
+
+std::map<unsigned int,string> *MainWidget::getValueFromMenuIndex()
+{
+    return m_valueFromMenuIndex;
 }

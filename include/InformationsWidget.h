@@ -84,7 +84,7 @@ protected:
 private:
 
     Wt::WStandardItemModel      *m_unitModel;
-    std::vector<std::string>    infoUnit_;
+//    std::vector<std::string>    infoUnit_;
     Echoes::Dbo::Session        *session_;
     std::vector<long long>      idsAlert_;
     

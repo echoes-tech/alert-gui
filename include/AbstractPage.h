@@ -71,6 +71,7 @@
 #include <Wt/Json/Object>
 
 #include <Wt/WCheckBox>
+//#include <Wt/WTimer>
 
 #include <Enums.h>
 // Lib perso
@@ -117,7 +118,7 @@ public:
                                 AbstractPage(Echoes::Dbo::Session *session, std::string apiUrl, std::string namePage);
     virtual                     ~AbstractPage();
 
-    void                        recursiveGetResources(vectors_Json jsonResource = vectors_Json(), lists_string listsUrl = lists_string());
+    
     virtual void                getResourceList();
     void setResources(vector_pair resources);
     vector_pair getResources() const;
@@ -133,7 +134,8 @@ protected:
         text = 0, //WText
         boolean = 1, //WCheckBox
         integer = 2, // int //WText
-        undid = 3 // under id (string) "name" //WComboBox
+        undid = 3, // under id (string) "name" //WComboBox
+        object = 4
     };
 
     
@@ -141,7 +143,6 @@ protected:
     virtual void                clearStructures();
     
     void                        createTable();
-    void                        createEmptyResourceTable();
 
     // -------- Creates Elements to table. ------------------------
     Wt::WContainerWidget        *createTableFirstHeader();
@@ -163,8 +164,8 @@ protected:
     void                        addButtonsToPopupFooter(Wt::WDialog *dialog);
 
     // Set/Get attribut to init or option. ------------------------
-    void                                        setRowsTable(std::multimap<long long, vector_widget> rowsTable);
-    std::multimap<long long, vector_widget>     getRowsTable();
+    void                                        setRowsTable(std::map<long long, vector_widget> rowsTable);
+    std::map<long long, vector_widget>          getRowsTable();
     /**
      * Set titles for table.
      * @param titles &lsaquo; type, name &rsaquo; \n
@@ -176,7 +177,7 @@ protected:
     void                        setUrl(lists_string listsUrl);
     void                        setButtonModif(bool check);
     void                        setButtonSup(bool check);
-    void                        setLocalTable(bool background);
+//    void                        setLocalTable(bool background);
     void                        setUpdate(bool update);
     void                        setNameSpecial(std::string nameResourcePageSpec);
     void                        setApiUrl(std::string apiUrl);
@@ -193,12 +194,15 @@ protected:
      * listsUrl_ is set in construtor child in setUrl()
      * @param Send jsonResource whether u want use her after handleJsonGet
      */
+    void                        recursiveGetResources(vectors_Json jsonResource = vectors_Json(), lists_string listsUrl = lists_string());
     int                         handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
     lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client);
     virtual std::string         addParameter();
     // ---- ADD MODIF DELETE ----------------------------------------------
     virtual void                addResource(std::vector<Wt::WInteractWidget*> argument);
+    virtual void                setAddResourceMessage(Wt::Http::Message *message,std::vector<Wt::WInteractWidget*> argument);
     virtual void                modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
+    virtual void                setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
     virtual Wt::WDialog         *deleteResource(long long id);
     // RETURNS API --------------------------------------
     virtual void                postResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
@@ -217,20 +221,13 @@ protected:
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id);
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
-    std::multimap<long long, vector_widget>     m_rowsTable;
-    std::multimap<int, std::string>                     m_displayedTitlesPopups;
+    std::map<long long, vector_widget>     m_rowsTable;
+    std::multimap<int, std::string>             m_displayedTitlesPopups;
+    
+    Echoes::Dbo::Session                        *m_session;
 
 private:
     
-    // Methodes disposable --------------------------------------
-    Wt::WComboBox               *getNumberOfLineDisplayedComboBox();
-    void                        builtPagination(Wt::WNavigationBar *navBar);
-    void                        switchPage(int rst);
-    void                        initPagination(Wt::WNavigationBar *navBar);
-    void                        doThePaginationTrick();
-    void                        selectLinesToBeDisplayed();
-    void                        searchName(Wt::WLineEdit *arg);
-    int                         countResources();
 
     // Main attributs ---------------------------
     // main table of the page, used to list resources
@@ -244,22 +241,18 @@ private:
     // Attributs.-------------------------------
     lists_string                        m_listsUrl;
     std::multimap<int, std::string>     m_titles;
-    Echoes::Dbo::Session                *m_session;
+    
     std::string                         m_apiUrl;
     std::string                         m_xmlPageName;
     std::string                         m_nameResourcePageSpec;
     std::string                         m_undidName;
-    bool                                m_isCreated;
     bool                                m_isModifButtonPresent;
     bool                                m_isDeleteButtonPresent;
-    bool                                m_isMainPage;
-    bool                                m_toUpdate;
+//    bool                                m_isMainPage;
     // select drop + paginate--------------------
     vector_pair                 m_resources;
-    vector_widget               m_butPaginate;
-    vector_widget               m_butPaginateExt;
-    int                         m_nbAff;
-    int                         m_nbAffBegin;
+    
+//    Wt::WTimer                  *_timer;
 };
 
 #endif	/* ABSTRACTPAGE_H */

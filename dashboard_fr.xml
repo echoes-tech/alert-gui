@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+	
+    <message id="Alert.dashboard.welcome-message">Statistiques sur la livraison des bagages</message>
+    
+    <message id="Livraison conforme">LIV CFM</message>
+	
+</messages>

@@ -204,7 +204,7 @@ private:
     //  -------
     
     Wt::WContainerWidget *m_compareWidgetContainer;
-    Wt::WContainerWidget *m_compareWidgetContainerBottom;
+    Wt::WContainerWidget *m_compareWidgetContainerTop;
     Wt::WContainerWidget *m_compareWidgetContainerSequence;
     
     Wt::WPushButton      *m_buttonAddCompareCriteria;

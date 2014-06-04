@@ -26,7 +26,7 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
 
     setButtonModif(false);
     setButtonSup(true);
-    setLocalTable(true);
+//    setLocalTable(true);
     
     m_assets = new Wt::WStandardItemModel(0,3,this);
     m_plugins = new Wt::WStandardItemModel(0,3,this);
@@ -36,7 +36,6 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
     listTitles.insert(make_pair(ETypeJson::text, "name"));
     listTitles.insert(make_pair(ETypeJson::text, "last_attempt"));
     listTitles.insert(make_pair(ETypeJson::integer, "alert_media_specializations"));
-    //    listTitles.push_back(make_pair(ETypeJson::text, "al4"));
     setTitles(listTitles);
 
     lists_string lListUrl;
@@ -159,9 +158,9 @@ void AlertsWidget::popupRecipients(string nameAlert, string message)
     error->hide();
     
     Wt::WComboBox *comboBox = new Wt::WComboBox();
-    comboBox->addItem("min"); // xml
-    comboBox->addItem("hour"); // xml
-    comboBox->addItem("fois"); // xml
+    comboBox->addItem(tr("Alert.alert.form.minutes")); 
+    comboBox->addItem(tr("Alert.alert.form.hours")); 
+    comboBox->addItem(tr("Alert.alert.form.times")); 
     comboBox->setWidth(Wt::WLength(61));
     table->elementAt(0, 2)->addWidget(comboBox);
     time_ = 0;
@@ -509,8 +508,10 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     resourcesUnitOne.clear();
     resourcesUnitTwo.clear();
 
+    // ToDo : remplacer le container (ou le remplir avec ?) par EATableTemplate.
+    m_compareWidgetContainerTop = new Wt::WContainerWidget(mainContainerWidget);
+    m_compareWidgetContainerTop->setStyleClass("compare-widget-container-top");    
     m_compareWidgetContainer = new Wt::WContainerWidget(mainContainerWidget);
-    m_compareWidgetContainerBottom = new Wt::WContainerWidget(mainContainerWidget);
 
 }
 
@@ -518,32 +519,33 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 
 void AlertsWidget::showCompareWidget(long long id)
 {
-    m_compareWidgetContainer->clear();
-    m_compareWidgetContainerBottom->clear();
-    m_alertCriteria.clear();
+    // TODO : reset button with those 3 lines
+//    m_compareWidgetContainer->clear();
+//    m_compareWidgetContainerTop->clear();
+//    m_alertCriteria.clear();
     if (id > 0)
     {
         long long unitTypeId = m_mapInformationsUnitTypes[id];
         switch(unitTypeId)
         {
             case Enums::EInformationUnitType::text:
-                addCompareLine(Enums::EInformationUnitType::text);
+//                addCompareLine(Enums::EInformationUnitType::text);
                 m_buttonAddCompareCriteria = new Wt::WPushButton("<i class='icon-plus'></i>");
                 m_buttonAddCompareCriteria->setTextFormat(Wt::XHTMLUnsafeText);
                 m_buttonAddCompareCriteria->clicked().connect(bind([ = ] (){
                                                   addCompareLine(Enums::EInformationUnitType::text);
                 }));
-//                m_compareWidgetContainerBottom->addWidget(m_buttonAddCompareCriteria);
+                m_compareWidgetContainerTop->addWidget(m_buttonAddCompareCriteria);
                 break;
             case Enums::EInformationUnitType::number:
-                addCompareLine(Enums::EInformationUnitType::number);
+//                addCompareLine(Enums::EInformationUnitType::number);
                 m_buttonAddCompareCriteria = new Wt::WPushButton("<i class='icon-plus'></i>");
                 m_buttonAddCompareCriteria->setTextFormat(Wt::XHTMLUnsafeText);
                 m_buttonAddCompareCriteria->clicked().connect(bind([ = ] (){
                                                   addCompareLine(Enums::EInformationUnitType::number);
                 }));
                 //FIXME : réafficher le bouton !
-//                m_compareWidgetContainerBottom->addWidget(m_buttonAddCompareCriteria);
+                m_compareWidgetContainerTop->addWidget(m_buttonAddCompareCriteria);
                 break;
             case Enums::EInformationUnitType::boolean:
                 createCompareWidgetBoolean();
@@ -554,9 +556,6 @@ void AlertsWidget::showCompareWidget(long long id)
         default:
             Wt::log("error") << "Unknown unit type : " << unitTypeId;
         }
-        
-        
-        
     }
 }
 
@@ -569,6 +568,7 @@ void AlertsWidget::addCompareLine(Enums::EInformationUnitType type)
     int column = 0;
     
     Wt::WComboBox *operatorComboBox = new Wt::WComboBox(m_compareWidgetContainer);
+    // Todo : unhardcode
     operatorComboBox->addItem("and");
     operatorComboBox->addItem("or");
     newTableLine->elementAt(0, column++)->addWidget(operatorComboBox);
@@ -576,14 +576,12 @@ void AlertsWidget::addCompareLine(Enums::EInformationUnitType type)
     if (m_alertCriteria.size() == 0)
     {
         operatorComboBox->disable();
-//        operatorComboBox->clear();
     }
 
     new Wt::WLineEdit(newTableLine->elementAt(0, column++));
     Wt::WComboBox *comboBox = createCompareCriteriaComboBox(type);
     
     newTableLine->elementAt(0, column++)->addWidget(comboBox);
-//    newTableLine->hide();
 
     Wt::WText *errorText = new Wt::WText(tr("Alert.alert.invalid-name-alert"), newTableLine->elementAt(1, column++));
     errorText->hide();
@@ -707,11 +705,12 @@ void AlertsWidget::createCompareWidgetBoolean()
 
 void AlertsWidget::createCompareWidgetCustom()
 {
-    Wt::WTextArea *ta = new Wt::WTextArea(m_compareWidgetContainer);
-    ta->setColumns(80);
-    ta->setRows(6);
-    ta->setText(tr("Alert.alert.sec-base-message"));
-    m_customCompareWidget = ta;
+    Wt::WTable *table = new Wt::WTable(m_compareWidgetContainer);
+    Wt::WTextArea *textArea = new Wt::WTextArea(table->elementAt(0,0));
+    textArea->setColumns(80);
+    textArea->setRows(6);
+    textArea->setText(tr("Alert.alert.sec-base-message"));
+    m_customCompareWidget = textArea;
 }
 
 //                                                                                    ^
@@ -1185,7 +1184,7 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][AST_PLG] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     
@@ -1247,7 +1246,7 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][PLG_INF] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     // plugins // assets
@@ -1289,7 +1288,7 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][PLG_AST] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     // informations // plugins
@@ -1354,7 +1353,7 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][INFO_PLG] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     // informations // information
@@ -1387,7 +1386,7 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][INFO_PLG] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
           
     //users
@@ -1419,7 +1418,7 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][Users] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     //medias
@@ -1454,7 +1453,7 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][Users] JSON Type Exception";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
                 
     

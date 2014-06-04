@@ -22,10 +22,11 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
 {
     session_ = session;
     m_unitComboBox = new Wt::WComboBox();
+    m_unitModel = new Wt::WStandardItemModel(0,2,this);
 
     setButtonModif(true);
     setButtonSup(true);
-    setLocalTable(true);
+//    setLocalTable(true);
 
     multimap<int, string> titles;
     titles.insert(make_pair(ETypeJson::text, "name"));
@@ -49,18 +50,27 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
     setUrl(lListUrl);
 }
 
-Wt::WValidator *InformationsWidget::editValidator(int who)
+Wt::WValidator *InformationsWidget::editValidator(int jsonType)
 {
     Wt::WRegExpValidator *validator;
-    if (who == 2)
+    switch(jsonType)
     {
-        validator = new Wt::WRegExpValidator();
-        validator->setMandatory(false);
-    }
-    else
-    {
-        validator = new Wt::WRegExpValidator("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}");
-        validator->setMandatory(true);
+        case ETypeJson::text:
+        {
+            validator = new Wt::WRegExpValidator();
+            validator->setMandatory(false);
+            break;
+        }
+        case ETypeJson::integer:
+        {
+            validator = new Wt::WRegExpValidator("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}");
+            validator->setMandatory(true);
+            break;
+        }
+        default:
+        {
+            break;
+        }
     }
     return validator;
 }
@@ -129,19 +139,22 @@ void InformationsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, l
     messageInformation.addBodyText(",\n\"desc\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
     messageInformation.addBodyText(",\n\"calculate\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
     
-    Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
-    // FIXME: segfault ici !
-    messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
-
-    if (((Wt::WCheckBox*)(*i++))->isChecked() == true)
+    Wt::WCheckBox * displayBox = (Wt::WCheckBox*)(*i++);
+    if (displayBox->isChecked())
     {
         messageInformation.addBodyText(",\n\"display\" : true");
     }
-    else if (((Wt::WCheckBox*)(*i++))->isChecked() == false)
+    else
     {
         messageInformation.addBodyText(",\n\"display\" : false");
     }
 
+    
+    Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
+    // FIXME: segfault ici !
+    messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
+
+    
     messageInformation.addBodyText("\n}");
     
     string apiAddress = this->getApiUrl() + "/informations/"
@@ -149,7 +162,7 @@ void InformationsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, l
             + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
             + "&token=" + session_->user()->token.toUTF8();
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&InformationsWidget::postResourceCallback, this, _1, _2, client));
+    client->done().connect(boost::bind(&InformationsWidget::putResourceCallback, this, _1, _2, client));
 
     Wt::log("debug") << "InformationsWidget : [PUT] address to call : " << apiAddress;    
 
@@ -165,31 +178,43 @@ void InformationsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, l
 
 void InformationsWidget::handleJsonGet(vectors_Json jsonResources)
 {
-    infoUnit_.clear();
     vector<Wt::Json::Value> infoUnit = jsonResources.at(1);
     jsonResources.pop_back();
     AbstractPage::handleJsonGet(jsonResources);
 
-    m_unitModel = new Wt::WStandardItemModel(0,2,this);
+    m_unitModel->clear();
 
-    Wt::Json::Array& result = infoUnit.at(0);
-    for (int cpt(0); cpt < (int)result.size(); cpt++)
-    {    
-       Wt::WStandardItem *itemId = new Wt::WStandardItem();
-       Wt::WStandardItem *itemName = new Wt::WStandardItem();
+    try
+    {
+        Wt::Json::Array& result = infoUnit.at(0);
+        for (int cpt(0); cpt < (int)result.size(); cpt++)
+        {    
+           Wt::WStandardItem *itemId = new Wt::WStandardItem();
+           Wt::WStandardItem *itemName = new Wt::WStandardItem();
 
-        Wt::Json::Object obj = result.at(cpt);
-        Wt::WString name = obj.get("name");
-        long long id = obj.get("id");
-        
-        vector<Wt::WStandardItem*> rowVector;
-        
-        itemId->setText(boost::lexical_cast<string>(id));
-        itemName->setText(name);
-        
-        rowVector.push_back(itemName);
-        rowVector.push_back(itemId);
-        m_unitModel->insertRow(cpt, rowVector);
+            Wt::Json::Object obj = result.at(cpt);
+            Wt::WString name = obj.get("name");
+            long long id = obj.get("id");
+
+            vector<Wt::WStandardItem*> rowVector;
+
+            itemId->setText(boost::lexical_cast<string>(id));
+            itemName->setText(name);
+
+            rowVector.push_back(itemName);
+            rowVector.push_back(itemId);
+            m_unitModel->insertRow(cpt, rowVector);
+        }
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[AbstractPage] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[AbstractPage] JSON Type Exception";
+//            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
 }
 
@@ -264,7 +289,7 @@ void InformationsWidget::checkAlertsInInformation(boost::system::error_code err,
         catch (Wt::Json::TypeException const& e)
         {
             Wt::log("warning") << "[Information Management Widget] JSON Type Exception: " << response.body();
-            Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "TypeException", tr("Alert.alert.database-error"), Wt::Ok);
+//            Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "TypeException", tr("Alert.alert.database-error"), Wt::Ok);
         }
     }
     else

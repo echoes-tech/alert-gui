@@ -18,14 +18,9 @@ using namespace std;
 AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, string apiUrl)
 : AbstractPage(session, apiUrl, "asset")
 {
-    session_= session;
-    apiUrl_ = apiUrl;
-//    created_ = false;
-//    newClass_ = false;
-
     setButtonModif(true);
     setButtonSup(true);
-    setLocalTable(true);
+//    setLocalTable(true);
 
     multimap<int, string> titles;
     titles.insert(make_pair(ETypeJson::text, "name"));
@@ -69,10 +64,10 @@ Wt::WDialog *AssetManagementWidget::deleteResource(long long id)
 {
     Wt::WDialog *box = AbstractPage::deleteResource(id);
     // a REVOIR !! Récupération des alerts par rapport a id de l'asset a sup
-    string apiAddress = this->getApiUrl() + "/assets/" + boost::lexical_cast<string> (id) + "/alerts/";
+    string apiAddress = getApiUrl() + "/assets/" + boost::lexical_cast<string> (id) + "/alerts/";
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&AssetManagementWidget::checkAlertsInAsset, this, _1, _2, client, box, id));
-    apiAddress += "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8()) + "&token=" + session_->user()->token.toUTF8();
+    apiAddress += "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8()) + "&token=" + m_session->user()->token.toUTF8();
     Wt::log("debug") << "AssetManagementWidget : [GET] address to call : " << apiAddress;
     if (client->get(apiAddress))
     {
@@ -173,9 +168,9 @@ void AssetManagementWidget::postResourceCallback(boost::system::error_code err, 
                 Wt::Http::Message messageAsset;
                 messageAsset.addBodyText("{\n\t\"name\": \"Probe " + astName.toUTF8() + "\",\n\t\"asset_id\": " + boost::lexical_cast<string>(astId) + "\n}");
 
-                const string apiAddress = this->getApiUrl() + "/probes"
-                        + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
-                        + "&token=" + session_->user()->token.toUTF8();
+                const string apiAddress = getApiUrl() + "/probes"
+                        + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+                        + "&token=" + m_session->user()->token.toUTF8();
                 Wt::Http::Client *client = new Wt::Http::Client(this);
                 client->done().connect(boost::bind(&AssetManagementWidget::postProbe, this, _1, _2, client));
 
@@ -212,7 +207,6 @@ void AssetManagementWidget::postResourceCallback(boost::system::error_code err, 
         Wt::log("error") << "[Asset Management Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
     }
-    recursiveGetResources();
 }
 
 void AssetManagementWidget::postProbe(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
@@ -253,6 +247,8 @@ void AssetManagementWidget::postProbe(boost::system::error_code err, const Wt::H
         Wt::log("error") << "[Asset Management Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
     }
+    cout << "là on update !!!" << endl;
+    updatePage();
 }
 
 
@@ -268,11 +264,11 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long astId, Wt::WS
     string scriptCustomPart = "";
     try
     {
-        Wt::Dbo::Transaction transaction(*(this->session_));
+        Wt::Dbo::Transaction transaction(*(m_session));
         scriptCustomPart = "\nASSET_ID=" + boost::lexical_cast<string>(astId) + "\n"
                 //TEMPORARY!! ToDo: Implement a method to retrieve id Probe for this Asset
                 "PROBE_ID=" + boost::lexical_cast<string>(astId) + "\n"
-                "TOKEN='" + this->session_->user()->organization.get()->token.toUTF8() + "'\n\n"
+                "TOKEN='" + m_session->user()->organization.get()->token.toUTF8() + "'\n\n"
                 "API_HOST='" + conf.getApiHost() + "'\n"
                 "API_PORT=" + boost::lexical_cast<string>(conf.getApiPort()) + "\n"
                 "API_HTTPS=";
@@ -284,7 +280,7 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long astId, Wt::WS
         {
             scriptCustomPart += "false";
         }
-        scriptCustomPart += "\nLOGIN='" + Wt::Utils::urlEncode(this->session_->user()->eMail.toUTF8()) + "'\n";
+        scriptCustomPart += "\nLOGIN='" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8()) + "'\n";
         transaction.commit();
     }
     catch (Wt::Dbo::Exception e)
@@ -343,17 +339,3 @@ void AssetManagementWidget::downloadScript(string fileName)
 
 // ----------------------------------------------
 
-void    AssetManagementWidget::setSession(Echoes::Dbo::Session *session)
-{
-    session_ = session;
-}
-
-void    AssetManagementWidget::setApiUrl(string apiUrl)
-{
-    apiUrl_ = apiUrl;
-}
-
-string   AssetManagementWidget::getApiUrl()
-{
-    return apiUrl_;
-}

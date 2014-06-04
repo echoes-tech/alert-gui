@@ -105,6 +105,7 @@ public:
 
     BOOST_ENUM_VALUES(EPageType, const char*,
                       (WELCOME) ("welcome")
+                      (DASHBOARD) ("dashboard")
                       (ASSET) ("assets")
                       (RECIPIENTS) ("recipients")
                       (INFORMATIONS) ("informations")
@@ -113,13 +114,9 @@ public:
                       (PLUGIN) ("plugins")
                       (ROLE) ("role")
                       (OPTIONS) ("options")
+                      (UNITS) ("units")
                       )
 
-
-    BOOST_ENUM_VALUES(EAccountSubmenu, const char*,
-                      
-                      
-                      )
 private:
 
 };

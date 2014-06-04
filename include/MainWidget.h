@@ -46,10 +46,13 @@
 #include "Association.h"
 #include "AbstractPage.h"
 #include "AssetManagementWidget.h"
+#include "UnitsWidget.h"
+#include "DashBoard.h"
 
 class RecipientsWidget;
 class InformationsWidget;
 class AlertsWidget;
+class DashBoard;
 class Association;
 
 class MainWidget : public Wt::WContainerWidget
@@ -57,10 +60,9 @@ class MainWidget : public Wt::WContainerWidget
 public:
 
   MainWidget(Echoes::Dbo::Session *session, const std::string &apiUrl);
-  void doActionMenu(int index = -1, Enums::EMenuRoot menuRoot = Enums::EMenuRoot::main);
+  void doActionMenu(int index = -1);
   
   Wt::WMenu *getMenu();
-  Wt::WMenu *getAccountSubmenu();
   Wt::WContainerWidget *getSideBarContainer();
   Wt::WContainerWidget *getFooterContainer();
   
@@ -70,7 +72,11 @@ public:
   void  createUI();
   virtual void refresh();
   std::string getApiUrl() const;
-  void reset(Echoes::Dbo::Session *session);
+  std::vector<Enums::EPageType>  *getPageDisplayVector();
+  std::map<unsigned int,unsigned int> *getMenuIndexFromPageType();
+  std::map<unsigned int,std::string> *getValueFromMenuIndex();
+  
+  void reset();
 
 protected:
     
@@ -79,26 +85,28 @@ protected:
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   
   Wt::WContainerWidget *createContentHeader();
-  void updateTitle(unsigned int index, Enums::EMenuRoot menuRoot = Enums::EMenuRoot::main);
-  void updateBreadcrumbs(Enums::EMenuRoot menuRoot = Enums::EMenuRoot::main);
+  void updateTitle(unsigned int index);
+  void updateBreadcrumbs();
   std::string getBreadcrumbsClass(int pathSize, int level);
   void createContainerFluid();
-  void updateContainerFluid(int type, Enums::EMenuRoot menuRoot = Enums::EMenuRoot::main);
+  void updateContainerFluid(int type);
   void createContentDiv();
   
   void createSubMenu(Enums::EPageType enumPT);
   void createPage(Enums::EPageType enumPT);
   std::string getIconName(Enums::EPageType enumPT);
-  void createAccountPage(Enums::EAccountSubmenu enumSAC);
   
   template <class C>
   void createMenuItem(C enumC, Wt::WMenu *submenu, std::string iconStr);
+  
+  void getRightsFromUser();
  
   PluginEditionWidget *pew;
 //  AssetManagementModel *amm;
   AssetManagementWidget *amw;
   OptionManagementModel *omm;
   OptionManagementWidget *omw;
+  UnitsWidget *unw;
 //  AlertEditionModel *aem;
 //  AlertListWidget *alw;
   RoleCustomizationWidget *rcw;
@@ -109,6 +117,7 @@ protected:
   InformationsWidget *inw;
   AlertsWidget *alw;
   Association *act;
+  DashBoard *dsw;
   
   Wt::WContainerWidget *wcw;
   
@@ -130,6 +139,10 @@ private:
   Wt::WAnchor *breadCrumbsAnchor2;
   Wt::WMenu *menu;
   Wt::WMenu *accountSubmenu;
+  
+  std::vector<Enums::EPageType>  *m_pageDisplayRights;
+  std::map<unsigned int,unsigned int> *m_indexFromPageType;
+  std::map<unsigned int,std::string> *m_valueFromMenuIndex;
 
   void setApiUrl(std::string _apiUrl);
   

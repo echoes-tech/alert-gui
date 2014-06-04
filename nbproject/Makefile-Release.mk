@@ -46,6 +46,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
 	${OBJECTDIR}/src/AuthWidget.o \
 	${OBJECTDIR}/src/Conf.o \
+	${OBJECTDIR}/src/CsvUtil.o \
+	${OBJECTDIR}/src/DashBoard.o \
+	${OBJECTDIR}/src/EATableTemplate.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/Enums.o \
 	${OBJECTDIR}/src/InformationsWidget.o \
@@ -58,6 +61,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/RecipientsWidget.o \
 	${OBJECTDIR}/src/RoleCustomizationWidget.o \
 	${OBJECTDIR}/src/SummaryBoard.o \
+	${OBJECTDIR}/src/UnitsWidget.o \
 	${OBJECTDIR}/src/UserActionManagement.o \
 	${OBJECTDIR}/src/UserEditionWidget.o
 
@@ -141,6 +145,21 @@ ${OBJECTDIR}/src/Conf.o: src/Conf.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Conf.o src/Conf.cpp
 
+${OBJECTDIR}/src/CsvUtil.o: src/CsvUtil.C 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/CsvUtil.o src/CsvUtil.C
+
+${OBJECTDIR}/src/DashBoard.o: src/DashBoard.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/DashBoard.o src/DashBoard.cpp
+
+${OBJECTDIR}/src/EATableTemplate.o: src/EATableTemplate.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EATableTemplate.o src/EATableTemplate.cpp
+
 ${OBJECTDIR}/src/EchoesHome.o: src/EchoesHome.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -200,6 +219,11 @@ ${OBJECTDIR}/src/SummaryBoard.o: src/SummaryBoard.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/SummaryBoard.o src/SummaryBoard.cpp
+
+${OBJECTDIR}/src/UnitsWidget.o: src/UnitsWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UnitsWidget.o src/UnitsWidget.cpp
 
 ${OBJECTDIR}/src/UserActionManagement.o: src/UserActionManagement.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

@@ -221,10 +221,13 @@ protected:
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id);
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
-    std::map<long long, vector_widget>     m_rowsTable;
+    std::map<long long, vector_widget>          m_rowsTable;
     std::multimap<int, std::string>             m_displayedTitlesPopups;
     
     Echoes::Dbo::Session                        *m_session;
+    
+    bool                getFooterOkButtonStatus();
+    void                setFooterOkButtonStatus(bool active);
 
 private:
     
@@ -251,6 +254,8 @@ private:
 //    bool                                m_isMainPage;
     // select drop + paginate--------------------
     vector_pair                 m_resources;
+    
+    bool m_footerOkButtonActive;
     
 //    Wt::WTimer                  *_timer;
 };

@@ -2,7 +2,7 @@
 <messages xmlns:if="Wt.WTemplate.conditions">
 
     <message id="Alert.unit.form-info">
-      On this page you can add the units you need to create informations.
+      On this page you can manage the units needed to create informations.
     </message>
 
 <!--    In table     -->
@@ -11,7 +11,7 @@
     <!--body-->
     <message id="Alert.unit.name-name">Units</message>
     <message id="Alert.unit.name-information_unit_type">Type</message>
-    <message id="Alert.unit.modif-button">Modif</message>
+    <message id="Alert.unit.modif-button">Modify</message>
     <message id="Alert.unit.delete-button">Delete</message>
     <!--footer-->
     <message id="Alert.unit.search-bar">Search : </message>
@@ -27,7 +27,7 @@
     <!--POST-->
     <message id="Alert.unit.add-unit">Add unit</message>
     <!--PUT-->
-    <message id="Alert.unit.modif-unit">Modify this unit</message>
+    <message id="Alert.unit.modif-unit">Modify</message>
     <!--DELETE-->
     <message id="Alert.unit.delete-unit">Attention</message>
     <message id="Alert.unit.delete-unit-message">
@@ -36,11 +36,16 @@
         </span>
     </message>
     <message id="Alert.unit.button-confirm">Confirm</message>
+    
+    <message id="Alert.unit.type.text">Text</message>
+    <message id="Alert.unit.type.number">Number</message>
+    <message id="Alert.unit.type.boolean">Boolean</message>
+    <message id="Alert.unit.type.custom">Custom</message>
 
 <!--    Invalid message     -->
   <message id="Alert.unit.invalid-name-unit">
       <span style="color:red">
-&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+&nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
 </span>
   </message>
   

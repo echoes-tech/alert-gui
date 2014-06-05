@@ -203,7 +203,7 @@ void OptionManagementWidget::getQuota(boost::system::error_code err, const Wt::H
                 }
                 else
                 {
-                    cout << "Parse Problem" << endl;
+                    Wt::log("warning") << "[Alerts Widget] Unexpected ";
                 }
                 
             }

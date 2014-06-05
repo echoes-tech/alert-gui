@@ -160,7 +160,6 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
     
     try
     {
-        cout << "avant medias" << endl;
         vector<Wt::Json::Value> jsonMedia = jsonResources.at(0);
         Wt::Json::Array& result = jsonMedia.at(0);
         for (int cpt(0); cpt < (int) result.size(); cpt++)
@@ -184,7 +183,6 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
 
     try
     {
-        cout << "avant users" << endl;
         vector<Wt::Json::Value> jsonUsers = jsonResources.at(1);
         jsonResources.pop_back();
         AbstractPage::handleJsonGet(jsonResources);
@@ -194,7 +192,6 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
         
         Wt::Json::Array& result = jsonUsers.at(0);
         
-        cout << "boucle users" << endl;
         for (int cpt(0); cpt < (int) result.size(); cpt++)
         {
             Wt::WStandardItem *itemId = new Wt::WStandardItem();

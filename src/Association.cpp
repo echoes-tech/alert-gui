@@ -19,7 +19,8 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
 
     setButtonModif(false);
     setButtonSup(true);
-//    setLocalTable(true);
+    
+    pluginsModel = new Wt::WStandardItemModel(0, 3, this);
     
     multimap<int, string> listTitles;
     listTitles.insert(make_pair(ETypeJson::text, "filter"));
@@ -56,19 +57,25 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     setUrl(lListUrl);
 }
 
-// TABLE(S) FOR MAIN PAGE -------------------------------------
-
-void Association::updatePage(bool getResources)
-{
-    AbstractPage::updatePage(getResources);
-}
-
-// TABLE(S) FOR POPUP ------------------------------------------
-
 void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
     dialog->contents()->clear();
-    if (id == 0)
+    
+    bool displayFilterTable = true;
+    if (pluginsModel->rowCount() == 0)
+    {
+        new Wt::WText("No plugin",dialog->contents());
+        setFooterOkButtonStatus(false);
+        displayFilterTable = false;
+    }
+    if (assetsModel->rowCount() == 0)
+    {
+        new Wt::WText("No asset",dialog->contents());
+        setFooterOkButtonStatus(false);
+        displayFilterTable = false;
+    }
+    
+    if ((id == 0) && displayFilterTable)
     {
         
         map<long long, pair<long long, string>>::iterator itA;
@@ -136,7 +143,7 @@ void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
         }
                
     }
-    else
+    else if (id != 0)
     {
         // Modif
 //        MapAssetInfos::iterator ResForModif = assetInfos_.find(id);
@@ -291,7 +298,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
             Wt::Json::Array& jsonArray = (*jsonResource.begin());
             if (!jsonArray.empty())
             {
-                pluginsModel = new Wt::WStandardItemModel(0, 3, this);
+                pluginsModel->clear();
                 for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
                 {
                     Wt::Json::Object jsonPlugin = jsonArray.at(cpt);
@@ -455,17 +462,11 @@ void Association::handleJsonGet(vectors_Json jsonResources)
 //        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
-    cout << "AVANT update" << endl;
     updatePage(false);
-    cout << "APRES update" << endl;
 }
 
 void Association::addResource(vector<Wt::WInteractWidget*> argument)
 {
-    cout << "Host id : " << idHost_ << endl;
-    cout << "Plugin id : " << idPlugin_ << endl;
-
-
             
         // Post Asset -------
         Wt::Http::Message messageAsset;
@@ -486,15 +487,10 @@ void Association::addResource(vector<Wt::WInteractWidget*> argument)
                     coma = true;
                 }
                 string assetIdString = assetsModel->item(filterAssetsComboBox_[i]->currentIndex(),1)->text().toUTF8();
-                cout << "asset id" << assetIdString << endl;
                 string informationIdString = informationsModel->item(filterInfosComboBox_[i]->currentIndex(),1)->text().toUTF8();
-                cout << "info id" << informationIdString << endl;
                 string informationUnitIdString = informationsModel->item(filterInfosComboBox_[i]->currentIndex(),3)->text().toUTF8();
-                cout << "info unit id" << informationUnitIdString << endl;
                 string filterIdString = ((Wt::WText*)tableFilters->elementAt(i,1)->widget(0))->text().toUTF8();
-                cout << "filter id" << filterIdString << endl;
                 string filterFieldIndexString = ((Wt::WText*)tableFilters->elementAt(i,3)->widget(0))->text().toUTF8();
-                cout << "filter index id" << filterFieldIndexString << endl;
                 message += "{\n"
                         "\"asset_id\": "
                         + assetIdString +",\n"
@@ -537,7 +533,6 @@ void Association::addResource(vector<Wt::WInteractWidget*> argument)
 
 void Association::postAssetCallBack(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    cout << response.status() << " Reponse postAsset : " << endl << response.body() << endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -560,7 +555,6 @@ void Association::deleteAsset(boost::system::error_code err, const Wt::Http::Mes
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
-        cout << response.status() << endl;
         if(response.status() == Enums::EReturnCode::NO_CONTENT)
         {
             if (response.body() != "")

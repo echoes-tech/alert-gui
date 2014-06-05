@@ -247,7 +247,6 @@ void AssetManagementWidget::postProbe(boost::system::error_code err, const Wt::H
         Wt::log("error") << "[Asset Management Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
     }
-    cout << "là on update !!!" << endl;
     updatePage();
 }
 

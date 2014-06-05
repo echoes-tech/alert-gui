@@ -680,23 +680,19 @@ bool PluginEditionWidget::validateFilter(string &badField)
         return false;
     }
 
-    cout << "VALID 1" << endl;
     for (unsigned i = 0; i < mapFilTypeParameterNameSBoxRow.size(); i++)
     {
-        cout << "VALID 1-" << i << endl;
         if (mapLEFilTypeParam[mapFilTypeParameterNameSBoxRow[i]]->validate() != Wt::WValidator::State::Valid)
         {
             badField = "Alert.plugins.parameter-title";
             return false;
         }
     }
-    cout << "VALID 2" << endl;
     if (pKValueLE->validate() != Wt::WValidator::State::Valid)
     {
         badField = "Alert.plugins.filter-key-value";
         return false;
     }
-    cout << "VALID 3" << endl;
     if (nbValueLE->validate() != Wt::WValidator::State::Valid)
     {
         badField = "Alert.plugins.filter-nomber-value";
@@ -779,17 +775,14 @@ void PluginEditionWidget::addSearch()
 
 void PluginEditionWidget::addFilter()
 {
-    cout << "STEP 0" << endl;
     string badField = "";
     if (validateFilter(badField))
     {
-        cout << "STEP 1" << endl;
         for (int row = 1; row < tableFilTypeParam->rowCount(); row++)
         {
             mapFilTypeParameterValueSBoxRow[row - 1] = mapLEFilTypeParam[mapFilTypeParameterNameSBoxRow[row - 1]]->text();
         }
 
-        cout << "STEP 2" << endl;
         client1 = new Wt::Http::Client();
         client1->done().connect(boost::bind(&PluginEditionWidget::handleHttpResponseAddFilter, this, _1, _2));
         string messAdd =
@@ -799,7 +792,6 @@ void PluginEditionWidget::addFilter()
                 "\"position_key_value\" : " + boost::lexical_cast<string>(pKValueLE->text()) + ",\n"
                 "\"nb_value\" : " + boost::lexical_cast<string>(nbValueLE->text()) + ",\n";
 
-        cout << "STEP 3" << endl;
         if (mapFilTypeParameterNameSBoxRow.size() == mapFilTypeParameterValueSBoxRow.size())
         {
             for (long unsigned idx = 0; idx < mapFilTypeParameterNameSBoxRow.size(); idx++)
@@ -827,7 +819,6 @@ void PluginEditionWidget::addFilter()
             Wt::log("debug") << "PluginEditionWidget : [POST] address to call : " << urlAdd;
             Wt::log("debug") << "PluginEditionWidget : [POST] message : " << messAdd;
             
-            cout << "STEP 4" << endl;
             if (client1->post(urlAdd, message))
             {
                 Wt::WApplication::instance()->deferRendering();
@@ -1225,8 +1216,6 @@ void PluginEditionWidget::selectedSource()
 
     for (unsigned i = 0; i < mapAddonsIdSboxRow.size(); i++)
     {
-        cout << "mapAddonParameterIdSboxRow" << mapAddonParameterIdSboxRow[comboAddon->currentIndex()] << endl;
-        cout << "mapAddonsIdSboxRow" << mapAddonsIdSboxRow[i] << endl;
         if (mapAddonParameterIdSboxRow[sourceSelectionBox->currentIndex()] == mapAddonsIdSboxRow[i])
         {
             

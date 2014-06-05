@@ -34,6 +34,7 @@ AbstractPage::AbstractPage(Echoes::Dbo::Session *session, string apiUrl, string 
     m_nameResourcePageSpec = ""; // when more one class use same xml file.
     m_session = session;
     m_undidName = "name";
+    m_footerOkButtonActive = true;
     setApiUrl(apiUrl);
     
     
@@ -53,11 +54,9 @@ void AbstractPage::updatePage(bool getResources)
     }
     if (getResources)
     {
-        cout << "check resources" << endl;
         getResourceList();
     }
 
-    cout << "create resources" << endl;
     createTable();
    
 }
@@ -325,7 +324,6 @@ void AbstractPage::addResourcePopup()
             {
                 inputName.push_back(popupAdd(dialogAdd_));
             }
-            cout << "dialog content : " << dialogAdd_->contents() << endl;
             Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                 + title->second),
                                              dialogAdd_->contents());
@@ -358,17 +356,14 @@ void AbstractPage::modifResourcePopup(long long id)
     {
         
         unsigned int cpt(0);
-        cout << "l'id qui nous intéresse : " << id << endl;
         if (itTable->first == id)
         {
-            cout << "on entre, itTablefirst : " << itTable->first << endl;
         
             for (Wt::WInteractWidget *itElem : itTable->second)
             {
                 
                 multimap<int, string>::iterator title;
                 unsigned int correctTitlefinder = 0;
-                cout << "avant displayed titles" << endl;
                 for(title = m_displayedTitlesPopups.begin(); title != m_displayedTitlesPopups.end() ; title++ )
                 {
                     if (cpt == correctTitlefinder++)
@@ -376,26 +371,22 @@ void AbstractPage::modifResourcePopup(long long id)
                         break;
                     }
                 }
-                cout << "on teste > 0" << endl;
                 if (title->first >= 0)
                 {
                         new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + title->second)
                                       + " : <br />", dialogModif->contents());                    
                 }
                 
-                cout << "et on switch vers" << title->first << endl;
                 switch (title->first)
                 {
                     case ETypeJson::text:
                     {
-                        cout << "text" << endl;
                         string nameResource = ((Wt::WText*)(itElem))->text().toUTF8();
                         string newName = nameResource;
                         if (nameResource.size() > SIZE_NAME + SIZE_NAME)
                         {
                             newName.resize(newName.size() + 3, '.');
                         }
-                        cout << "avant crea input" << endl;
                         Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif->contents());
                         // FIXME: ne marche pas quand c'est un mail / tel, cf. medias
                         input->setValidator(editValidator(ETypeJson::text));
@@ -405,7 +396,6 @@ void AbstractPage::modifResourcePopup(long long id)
                         {
                             input->setFocus();
                         }
-                        cout << "apres input focus" << endl;
                         input->setToolTip(Wt::WString::fromUTF8(nameResource));
                         inputName.push_back(input);
                         Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
@@ -417,7 +407,6 @@ void AbstractPage::modifResourcePopup(long long id)
                     }
                     case ETypeJson::integer:
                     {
-                        cout << "int" << endl;
                         string nameResource = ((Wt::WText*)(itElem))->text().toUTF8();
                         string newName = nameResource;
                         if (nameResource.size() > SIZE_NAME + SIZE_NAME)
@@ -443,23 +432,18 @@ void AbstractPage::modifResourcePopup(long long id)
                     }
                     case ETypeJson::boolean:
                     {
-                        cout << "boolean" << endl;
                         unsigned int cpt2(0);
                         for (vector_widget::iterator widgetAdd = itTable->second.begin();
                                 widgetAdd != itTable->second.end(); widgetAdd++)
                         {
-                            cout << "widget numero : " << cpt2 << " pour le " << cpt << endl;
                             if (cpt2 == cpt)
                             {
-                                cout << "on a l'interact widget" << endl;
                                 
                                 Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogModif->contents());
                                 new Wt::WText("<br />", dialogModif->contents());
                                 Wt::WCheckBox *originalCheckBox = (Wt::WCheckBox*)(*widgetAdd);
-                                cout << "check state : " << originalCheckBox->checkState() << endl;
                                 if (originalCheckBox->checkState() == Wt::CheckState::Checked)
                                 {
-                                    cout << "et on check ! " << endl;
                                     checkBox->setChecked();
                                 }
                                 inputName.push_back(checkBox);
@@ -471,13 +455,11 @@ void AbstractPage::modifResourcePopup(long long id)
                     }
                     case ETypeJson::undid:
                     {
-                        cout << "undid" << endl;
                         Wt::WComboBox *comboBox = popupAdd(dialogModif);
                         unsigned int cpt2(0);
                         for (vector_widget::iterator widg = itTable->second.begin();
                                 widg != itTable->second.end(); widg++)
                         {
-                            cout << "widget numero : " << cpt2 << endl;
                             Wt::WStandardItemModel *model = (Wt::WStandardItemModel*)comboBox->model();
                             if (cpt2 == cpt)
                             {
@@ -497,7 +479,6 @@ void AbstractPage::modifResourcePopup(long long id)
                     }
                     default:
                     {
-                        cout << "on n'entre pas : " << title->first << endl;
                         break;
                     }
                     
@@ -511,7 +492,7 @@ void AbstractPage::modifResourcePopup(long long id)
         }
     }
 
-    popupFinalization(dialogModif, id);
+    popupFinalization(dialogModif ,id);
 
     dialogModif->finished().connect(bind([ = ] (){
         popupCheck(inputName, errorMessage, dialogModif, id);
@@ -597,17 +578,25 @@ int AbstractPage::addCustomButtonsToResourceTable(long long id, int rowTable, in
 
 void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
 {
-    Wt::WPushButton *ok = new Wt::WPushButton(tr("Alert."
-                                                 + m_xmlPageName + ".button-save"),
+    Wt::WPushButton *footerOkButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-save"),
                                               dialog->footer());
-    ok->clicked().connect(dialog, &Wt::WDialog::accept);
-    ok->setAttributeValue("style", "margin-left:12px");
+    if (getFooterOkButtonStatus())
+    {
+        footerOkButton->clicked().connect(dialog, &Wt::WDialog::accept);
+        footerOkButton->setAttributeValue("style", "margin-left:12px");
+    }
+    else
+    {
+        footerOkButton->disable();
+    }
+    
+    
+    
 
-    Wt::WPushButton *annul = new Wt::WPushButton(tr("Alert."
-                                                    + m_xmlPageName + ".button-cancel"),
+    Wt::WPushButton *footerCancelButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-cancel"),
                                                  dialog->footer());
-    annul->clicked().connect(dialog, &Wt::WDialog::reject);
-    annul->setAttributeValue("style", "margin-left:12px;");
+    footerCancelButton->clicked().connect(dialog, &Wt::WDialog::reject);
+    footerCancelButton->setAttributeValue("style", "margin-left:12px;");
 }
 
 // Set/Get attribut to init or option. -------------------------------------
@@ -668,12 +657,21 @@ string AbstractPage::getApiUrl()
     return m_apiUrl;
 }
 
+bool AbstractPage::getFooterOkButtonStatus()
+{
+    return m_footerOkButtonActive;
+}
+
+void AbstractPage::setFooterOkButtonStatus(bool active)
+{
+    m_footerOkButtonActive = active;
+}
+
 // -------- CALL RETURN API, HANDLE -----------
 
 
 void AbstractPage::handleJsonGet(vectors_Json jsonResources)
 {
-    cout << "GET GET GET" << endl;
     m_rowsTable.clear();
     vector<Wt::Json::Value> jsonResource;
     try
@@ -718,9 +716,7 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                     {
                         Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
                         Wt::Json::Object nameObjet = jsonObjectParam.get(itTitles->second);
-                        cout << "name of title second : " << itTitles->second << endl;
                         Wt::WString name = nameObjet.get(m_undidName);
-                        cout << "name of undid : " << name << endl;
                         Wt::WText *text = new Wt::WText(name);
                         nameW.push_back(text);
                         break;
@@ -728,7 +724,6 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                     case ETypeJson::object:
                     {
                         Wt::Json::Object subObject = jsonObject.get(itTitles->second);
-                        cout << "name of title second : " << itTitles->second << endl;
                         long long id = subObject.get("id");
                         nameW.push_back(new Wt::WText(boost::lexical_cast<string>(id)));
                         break;
@@ -737,7 +732,6 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                     
                 }
                 long long id = jsonObject.get("id");
-                cout << "INSERT" << endl;
                 m_rowsTable.insert(make_pair(id, nameW));
             }
         }
@@ -753,7 +747,6 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
         Wt::log("warning") << "[AbstractPage] JSON Type Exception";
 //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
-    cout << "we are out !" << endl;
 }
 
 void AbstractPage::recursiveGetResources(vectors_Json jsonResource, lists_string listsUrl)
@@ -889,7 +882,6 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
             if (listsUrl.size() == 0)
             {
                 handleJsonGet(jsonResource);
-                cout << "update page " << m_xmlPageName << endl;
                 updatePage(false);
             }
             else if (response.status() == 200)
@@ -1133,7 +1125,6 @@ void AbstractPage::putResourceCallback(boost::system::error_code err, const Wt::
         Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
                               tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
     }
-    cout << "on va update là quand meme" << endl;
     updatePage();
 }
 

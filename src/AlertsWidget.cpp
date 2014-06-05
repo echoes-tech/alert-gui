@@ -719,7 +719,6 @@ void AlertsWidget::createCompareWidgetCustom()
 
 void AlertsWidget::modifRecip(long long id)
 {
-    cout << "modif recipient" << endl;
 }
 
 Wt::WValidator *AlertsWidget::editValidator(int validatorType)
@@ -1464,7 +1463,6 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
 
 void AlertsWidget::postAlert(boost::system::error_code err, const Wt::Http::Message& response)
 {
-    cout << "post Alert reponse : " << response.body() << " Status : " << response.status() << endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -1497,7 +1495,6 @@ void AlertsWidget::postAlert(boost::system::error_code err, const Wt::Http::Mess
 
 void AlertsWidget::getAliasInfo(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType)
 {
-    cout << response.status() << " get Alias Info : " << response.body() << endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -1564,7 +1561,6 @@ void AlertsWidget::getAliasInfo(boost::system::error_code err, const Wt::Http::M
 
 void AlertsWidget::getAliasAsset(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType)
 {
-    cout << response.status() << " get Alias Asset : " << response.body() << endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -1638,7 +1634,6 @@ void AlertsWidget::getAliasAsset(boost::system::error_code err, const Wt::Http::
 
 void AlertsWidget::getAliasCriteria(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType)
 {
-    cout << response.status() << " get Alias Criteria : " << response.body() << endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
@@ -1705,7 +1700,6 @@ void AlertsWidget::getAliasCriteria(boost::system::error_code err, const Wt::Htt
 
 void AlertsWidget::getAliasPlugin(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType)
 {
-    cout << response.status() << " get Alias Plugin : " << response.body() << endl;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {

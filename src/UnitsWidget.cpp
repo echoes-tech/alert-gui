@@ -41,10 +41,10 @@ UnitsWidget::~UnitsWidget()
 void UnitsWidget::fillModel()
 {
     m_unitTypeModel->clear();
-    addEnumToModel(Enums::EInformationUnitType::text, tr("Alert.units.type.text"));
-    addEnumToModel(Enums::EInformationUnitType::number, tr("Alert.units.type.number"));
-    addEnumToModel(Enums::EInformationUnitType::boolean, tr("Alert.units.type.boolean"));
-    addEnumToModel(Enums::EInformationUnitType::custom, tr("Alert.units.type.custom"));
+    addEnumToModel(Enums::EInformationUnitType::text, tr("Alert.unit.type.text"));
+    addEnumToModel(Enums::EInformationUnitType::number, tr("Alert.unit.type.number"));
+    addEnumToModel(Enums::EInformationUnitType::boolean, tr("Alert.unit.type.boolean"));
+    addEnumToModel(Enums::EInformationUnitType::custom, tr("Alert.unit.type.custom"));
 }
 
 Wt::WComboBox *UnitsWidget::popupAdd(Wt::WDialog *dialog)

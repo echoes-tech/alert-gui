@@ -76,6 +76,10 @@
     <message id="Alert.alert.operator.ge">Supérieur ou égal</message>
     <message id="Alert.alert.operator.gt">Supérieur</message>
     <message id="Alert.alert.operator.ne">Différent</message>
+    
+    <message id="Alert.alert.form.minutes">minutes</message>
+    <message id="Alert.alert.form.hours">heures</message>
+    <message id="Alert.alert.form.times">fois</message>
 
     <message id="Alert.alert.operator.contains">Contient</message>
     

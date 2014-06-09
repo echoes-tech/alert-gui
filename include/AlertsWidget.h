@@ -175,8 +175,6 @@ private:
     std::string         m_tabContentMessageMobileApp;
 
     
-    std::multimap<long long, long long>       unitsIds_; // Link between Info and widgets compare. (text, number, bool)
-
     // FIXME : to be refactored and included in m_alertCriteria
     Wt::WTable                          *m_booleanCompareWidget; // Bool
     Wt::WTextArea                       *m_customCompareWidget; // Bool

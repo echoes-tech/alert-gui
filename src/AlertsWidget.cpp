@@ -159,8 +159,8 @@ void AlertsWidget::popupRecipients(string nameAlert, string message)
     
     Wt::WComboBox *comboBox = new Wt::WComboBox();
     comboBox->addItem(tr("Alert.alert.form.minutes")); 
-    comboBox->addItem(tr("Alert.alert.form.hours")); 
-    comboBox->addItem(tr("Alert.alert.form.times")); 
+//    comboBox->addItem(tr("Alert.alert.form.hours")); 
+//    comboBox->addItem(tr("Alert.alert.form.times")); 
     comboBox->setWidth(Wt::WLength(61));
     table->elementAt(0, 2)->addWidget(comboBox);
     time_ = 0;
@@ -461,6 +461,7 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
     m_tabWidgetMessages = new Wt::WTabWidget();
     m_tabWidgetMessages->resize(Wt::WLength(300), Wt::WLength(200));
+    m_alertCriteria.clear();
     checkAll_ = 1;
     Wt::WPushButton *ButtonSC = new Wt::WPushButton(tr("Alert.alert.button-save-continu"), dialog->footer());
     ButtonSC->clicked().connect(bind([ = ] (){
@@ -1083,8 +1084,8 @@ void AlertsWidget::clearStructures()
     m_alerts = Wt::Json::Value::Null;
     userInfo_.clear();
     mediaInfo_.clear();
+    m_alertCriteria.clear();
 
-    unitsIds_.clear();
     m_tabContentMessageMail.clear();
     m_tabContentMessageSMS.clear();
     m_tabContentMessageMobileApp.clear();
@@ -1605,11 +1606,9 @@ void AlertsWidget::getAliasAsset(boost::system::error_code err, const Wt::Http::
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
     }
 
-    string criteria_id = "3";
-    if (unitsIds_.find(idAll_.second.first)->second == 3)
-    {
-        criteria_id = boost::lexical_cast<string>(resourcesUnitTwo.begin()->second.second.first->currentIndex() + 1);
-    }
+    Wt::WComboBox * criterionComboBox = (Wt::WComboBox*)m_alertCriteria[1]->elementAt(0,2)->widget(0);
+    
+    string criteria_id = ((Wt::WStandardItemModel*)(criterionComboBox->model()))->item(criterionComboBox->currentIndex(),0)->text().toUTF8();
 
     string apiAddress = this->getApiUrl() + "/criteria/"
             + criteria_id + "/alias"

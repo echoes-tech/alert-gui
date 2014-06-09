@@ -75,6 +75,10 @@
     <message id="Alert.alert.operator.gt">Greater</message>
     <message id="Alert.alert.operator.ne">Not equal</message>
     
+    <message id="Alert.alert.form.minutes">minutes</message>
+    <message id="Alert.alert.form.hours">hours</message>
+    <message id="Alert.alert.form.times">times</message>
+    
     <message id="Alert.alert.operator.contains">Contains</message>
     
     <message id="Alert.alert.sec-base-message">Add your correlation file here.</message>

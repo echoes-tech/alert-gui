@@ -790,7 +790,7 @@ void PluginEditionWidget::addFilter()
                 "\"search_id\": " + boost::lexical_cast<string>(mapSearchId[searchSelectionBox->currentIndex()]) + ",\n"
                 "\"type_id\" : " + boost::lexical_cast<string>(mapFilTypeIdSboxRow[comboFilType->currentIndex()]) + ",\n"
                 "\"position_key_value\" : " + boost::lexical_cast<string>(pKValueLE->text()) + ",\n"
-                "\"nb_value\" : " + boost::lexical_cast<string>(nbValueLE->text()) + ",\n";
+                "\"nb_value\" : " + boost::lexical_cast<string>(nbValueLE->text());
 
         if (mapFilTypeParameterNameSBoxRow.size() == mapFilTypeParameterValueSBoxRow.size())
         {
@@ -801,12 +801,8 @@ void PluginEditionWidget::addFilter()
                 //////////////////////////////////
                 string strTmp = boost::lexical_cast<string>(mapFilTypeParameterValueSBoxRow[idx]);
                 formatValue(strTmp, 1); //
+                messAdd += ",\n";
                 messAdd += "\"" + boost::lexical_cast<string>(mapFilTypeParameterNameSBoxRow[idx]) + "\": \"" + strTmp + "\"";
-                if (idx != mapFilTypeParameterNameSBoxRow.size() - 1)
-                {
-                    messAdd += ",\n";
-                }
-
             }
             messAdd += "\n}\n";
             Wt::Http::Message message;

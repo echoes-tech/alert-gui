@@ -7,14 +7,17 @@
 
 #include "OptionManagementWidget.h"
 
-OptionManagementWidget::OptionManagementWidget(OptionManagementModel *model, Session *session) 
+using namespace std;
+
+OptionManagementWidget::OptionManagementWidget(OptionManagementModel *model, Echoes::Dbo::Session *session, string apiUrl) 
 : Wt::WContainerWidget()
 {
+    setApiUrl(apiUrl);
     model_ = model;
     created_ = false;
     this->session = session;
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use("options",false);      
+    app->messageResourceBundle().use("options",false);    
     createUI();
 }
 
@@ -22,14 +25,14 @@ OptionManagementWidget::~OptionManagementWidget()
 {
 }
 
-void OptionManagementWidget::setApiUrl(std::string apiUrl)
+void OptionManagementWidget::setApiUrl(string apiUrl)
 {
-    this->apiUrl = apiUrl;
+    this->apiUrl_ = apiUrl;
 }
 
-std::string OptionManagementWidget::getApiUrl() const
+string OptionManagementWidget::getApiUrl() const
 {
-    return apiUrl;
+    return apiUrl_;
 }
 
 void OptionManagementWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
@@ -64,37 +67,22 @@ void OptionManagementWidget::createUI()
     mainVerticalLayout->addLayout(topHorizontalLayout);
     this->setLayout(mainVerticalLayout);
     
-    try
+    // Je n'ai pas pu essayer pas encore en place
+    string apiAddress = this->getApiUrl() + "/options/"
+            + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8()) 
+            + "&token=" + Wt::Utils::urlEncode(session->user()->token.toUTF8())
+            + "&type=" + boost::lexical_cast<string>(Echoes::Dbo::EOptionType::QUOTA_SMS);
+    Wt::Http::Client *client1 = new Wt::Http::Client(this);
+    client1->done().connect(boost::bind(&OptionManagementWidget::getQuota, this, _1, _2));
+
+    Wt::log("debug") << "OptionManagementWidget : [GET] address to call : " << apiAddress;
+    if (client1->get(apiAddress))
     {
-        Wt::log("info") << "Debug : before transaction";
-        Wt::Dbo::Transaction transaction(*this->session);
-        Wt::log("info") << "Debug : user found";
-        int smsQuotaValue = 0;
-         
-        Wt::Dbo::ptr<PackOption> ptrPackOption = session->find<PackOption>()
-                .where("\"POP_PCK_PCK_ID\" = ?").bind(this->session->user()->currentOrganization.get()->pack.id())
-                .where("\"POP_OPT_OPT_ID\" = ?").bind(Enums::quotaSms)
-                .limit(1);
-        if (ptrPackOption.get())
-        {
-            Wt::Dbo::ptr<OptionValue> ptrOptionValue = session->find<OptionValue>().where("\"OPT_ID_OPT_ID\" = ?").bind(ptrPackOption.get()->pk.option.id())
-                                                            .where("\"ORG_ID_ORG_ID\" = ?").bind(this->session->user()->currentOrganization.id())
-                                                            .limit(1);
-            if (ptrOptionValue.get())
-            {
-                smsQuotaValue = boost::lexical_cast<int>(ptrOptionValue.get()->value);
-            }
-        }
-            
-        transaction.commit();
-        model_->setValue(model_->smsQuota,boost::any(smsQuotaValue));
-        model_->setReadOnly(model_->smsQuota,true);
-        mainForm->updateView(model_);
+        Wt::WApplication::instance()->deferRendering();
     }
-    catch (Wt::Dbo::Exception e)
+    else
     {
-        Wt::WMessageBox::show(tr("Alert.global.database-error-title"),tr("Alert.global.database-error").arg(e.what()).arg("1"),Wt::Ok);
-        Wt::log("error") << "[AssetManagementWidget] " << e.what();
+        Wt::log("error") << "Error Client Http";
     }
 }
 
@@ -167,19 +155,78 @@ void OptionManagementWidget::changeRole()
 
 void OptionManagementWidget::fillRoleSelector()
 {
-    std::string urlToCall = this->getApiUrl() + "/roles";
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&OptionManagementWidget::getRoles, this, _1, _2));
 
-    std::string apiAddress = urlToCall;
+    string apiAddress = this->getApiUrl() + "/roles"
+            + "?login=" + Wt::Utils::urlEncode(session->user()->eMail.toUTF8())
+            + "&token=" + session->user()->token.toUTF8();
+
 //    + this->getCredentials();
 
-    std::cout << "address to call : " << apiAddress << std::endl;
+    Wt::log("debug") << "[GET] address to call : " << apiAddress;
     
     if (client->get(apiAddress))
     {
         Wt::WApplication::instance()->deferRendering();
-    } 
+    }
+    else
+    {
+        Wt::log("error") << "Error Client Http";
+    }
+}
+
+void OptionManagementWidget::getQuota(boost::system::error_code err, const Wt::Http::Message& response)
+{
+    Wt::WString smsQuotaValue = "0";
+    Wt::WApplication::instance()->resumeRendering();
+    if (!err)
+    {
+        if(response.status() >= 200 && response.status() < 300)
+        {
+            try
+            {
+                Wt::Json::Value result;
+                Wt::Json::Array result1;
+                Wt::Json::parse(response.body(), result);
+                result1 = result;
+                
+                Wt::Json::Object tmp;
+                Wt::Json::Array::const_iterator idx1;
+                if (result.isNull() == false)
+                {
+                    for (idx1 = result1.begin(); idx1 != result1.end(); idx1++)
+                    {
+                        tmp = (*idx1);
+                        smsQuotaValue = tmp.get("value");
+                    }
+                }
+                else
+                {
+                    Wt::log("warning") << "[Alerts Widget] Unexpected ";
+                }
+                
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
+            }
+        }
+    }
+    else
+    {
+        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
+    }
+    model_->setValue(model_->smsQuota,boost::any(smsQuotaValue));
+    model_->setReadOnly(model_->smsQuota, true);
+    mainForm->updateView(model_);
 }
 
 void OptionManagementWidget::getRoles(boost::system::error_code err, const Wt::Http::Message& response)

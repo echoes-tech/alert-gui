@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <message id="Alert.unit.form-info">
+      On this page you can manage the units needed to create informations.
+    </message>
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.unit.add-form.unit">Units</message>
+    <!--body-->
+    <message id="Alert.unit.name-name">Units</message>
+    <message id="Alert.unit.name-information_unit_type">Type</message>
+    <message id="Alert.unit.modif-button">Modify</message>
+    <message id="Alert.unit.delete-button">Delete</message>
+    <!--footer-->
+    <message id="Alert.unit.search-bar">Search : </message>
+        <!-- Paginate -->
+        <message id="Alert.unit.paginate-first">First</message>
+        <message id="Alert.unit.paginate-prev">Prev</message>
+        <message id="Alert.unit.paginate-next">Next</message>
+        <message id="Alert.unit.paginate-last">Last</message>
+
+<!--    In popup     -->
+    <message id="Alert.unit.button-cancel">Cancel</message>
+    <message id="Alert.unit.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.unit.add-unit">Add unit</message>
+    <!--PUT-->
+    <message id="Alert.unit.modif-unit">Modify</message>
+    <!--DELETE-->
+    <message id="Alert.unit.delete-unit">Attention</message>
+    <message id="Alert.unit.delete-unit-message">
+        <span style="color:red">
+            You are about to delete a unit
+        </span>
+    </message>
+    <message id="Alert.unit.button-confirm">Confirm</message>
+    
+    <message id="Alert.unit.type.text">Text</message>
+    <message id="Alert.unit.type.number">Number</message>
+    <message id="Alert.unit.type.boolean">Boolean</message>
+    <message id="Alert.unit.type.custom">Custom</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.unit.invalid-name-unit">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.unit.database-error-title">Database error</message>
+  <message id="Alert.unit.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+
+
+<!-- templates -->
+    <message id="Alert.unit.Management.template" >
+        <br />
+            <div class ="alert alert-info">${tr:Alert.unit.form-info}</div> 
+            <div id="unit-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers">
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>
+
+  
+
+</messages>

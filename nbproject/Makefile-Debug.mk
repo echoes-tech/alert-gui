@@ -15,8 +15,8 @@ NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
 CC=gcc
-CCC=DISTCC_FALLBACK=0 distcc
-CXX=DISTCC_FALLBACK=0 distcc
+CCC=DISTCC_FALLBACK=0 distcc g++-4.7
+CXX=DISTCC_FALLBACK=0 distcc g++-4.7
 FC=gfortran
 AS=as
 
@@ -36,27 +36,33 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/src/AlertEditionModel.o \
-	${OBJECTDIR}/src/AlertEditionWidget.o \
-	${OBJECTDIR}/src/AlertListWidget.o \
-	${OBJECTDIR}/src/AssetManagementModel.o \
+	${OBJECTDIR}/src/AbstractPage.o \
+	${OBJECTDIR}/src/AlertsWidget.o \
+	${OBJECTDIR}/src/ApiManagement.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
+	${OBJECTDIR}/src/Association.o \
 	${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o \
 	${OBJECTDIR}/src/Auth/RegistrationModelAlert.o \
 	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
 	${OBJECTDIR}/src/AuthWidget.o \
+	${OBJECTDIR}/src/Conf.o \
+	${OBJECTDIR}/src/CsvUtil.o \
+	${OBJECTDIR}/src/DashBoard.o \
+	${OBJECTDIR}/src/EATableTemplate.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/Enums.o \
+	${OBJECTDIR}/src/InformationsWidget.o \
 	${OBJECTDIR}/src/MainWidget.o \
 	${OBJECTDIR}/src/MonitoringWidget.o \
 	${OBJECTDIR}/src/OptionManagementModel.o \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
 	${OBJECTDIR}/src/PluginEditionModel.o \
 	${OBJECTDIR}/src/PluginEditionWidget.o \
+	${OBJECTDIR}/src/RecipientsWidget.o \
 	${OBJECTDIR}/src/RoleCustomizationWidget.o \
 	${OBJECTDIR}/src/SummaryBoard.o \
+	${OBJECTDIR}/src/UnitsWidget.o \
 	${OBJECTDIR}/src/UserActionManagement.o \
-	${OBJECTDIR}/src/UserEditionModel.o \
 	${OBJECTDIR}/src/UserEditionWidget.o
 
 
@@ -89,30 +95,30 @@ ${OBJECTDIR}/main.o: main.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
-${OBJECTDIR}/src/AlertEditionModel.o: src/AlertEditionModel.cpp 
+${OBJECTDIR}/src/AbstractPage.o: src/AbstractPage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AlertEditionModel.o src/AlertEditionModel.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AbstractPage.o src/AbstractPage.cpp
 
-${OBJECTDIR}/src/AlertEditionWidget.o: src/AlertEditionWidget.cpp 
+${OBJECTDIR}/src/AlertsWidget.o: src/AlertsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AlertEditionWidget.o src/AlertEditionWidget.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AlertsWidget.o src/AlertsWidget.cpp
 
-${OBJECTDIR}/src/AlertListWidget.o: src/AlertListWidget.cpp 
+${OBJECTDIR}/src/ApiManagement.o: src/ApiManagement.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AlertListWidget.o src/AlertListWidget.cpp
-
-${OBJECTDIR}/src/AssetManagementModel.o: src/AssetManagementModel.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AssetManagementModel.o src/AssetManagementModel.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ApiManagement.o src/ApiManagement.cpp
 
 ${OBJECTDIR}/src/AssetManagementWidget.o: src/AssetManagementWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AssetManagementWidget.o src/AssetManagementWidget.cpp
+
+${OBJECTDIR}/src/Association.o: src/Association.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Association.o src/Association.cpp
 
 ${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o: src/Auth/LostPasswordWidgetAlert.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/Auth
@@ -134,6 +140,26 @@ ${OBJECTDIR}/src/AuthWidget.o: src/AuthWidget.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AuthWidget.o src/AuthWidget.cpp
 
+${OBJECTDIR}/src/Conf.o: src/Conf.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Conf.o src/Conf.cpp
+
+${OBJECTDIR}/src/CsvUtil.o: src/CsvUtil.C 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/CsvUtil.o src/CsvUtil.C
+
+${OBJECTDIR}/src/DashBoard.o: src/DashBoard.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/DashBoard.o src/DashBoard.cpp
+
+${OBJECTDIR}/src/EATableTemplate.o: src/EATableTemplate.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EATableTemplate.o src/EATableTemplate.cpp
+
 ${OBJECTDIR}/src/EchoesHome.o: src/EchoesHome.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -143,6 +169,11 @@ ${OBJECTDIR}/src/Enums.o: src/Enums.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Enums.o src/Enums.cpp
+
+${OBJECTDIR}/src/InformationsWidget.o: src/InformationsWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/InformationsWidget.o src/InformationsWidget.cpp
 
 ${OBJECTDIR}/src/MainWidget.o: src/MainWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -174,6 +205,11 @@ ${OBJECTDIR}/src/PluginEditionWidget.o: src/PluginEditionWidget.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/PluginEditionWidget.o src/PluginEditionWidget.cpp
 
+${OBJECTDIR}/src/RecipientsWidget.o: src/RecipientsWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/RecipientsWidget.o src/RecipientsWidget.cpp
+
 ${OBJECTDIR}/src/RoleCustomizationWidget.o: src/RoleCustomizationWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -184,15 +220,15 @@ ${OBJECTDIR}/src/SummaryBoard.o: src/SummaryBoard.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/SummaryBoard.o src/SummaryBoard.cpp
 
+${OBJECTDIR}/src/UnitsWidget.o: src/UnitsWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UnitsWidget.o src/UnitsWidget.cpp
+
 ${OBJECTDIR}/src/UserActionManagement.o: src/UserActionManagement.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UserActionManagement.o src/UserActionManagement.cpp
-
-${OBJECTDIR}/src/UserEditionModel.o: src/UserEditionModel.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -pedantic -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/UserEditionModel.o src/UserEditionModel.cpp
 
 ${OBJECTDIR}/src/UserEditionWidget.o: src/UserEditionWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

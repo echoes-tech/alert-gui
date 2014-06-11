@@ -40,25 +40,43 @@
 #include <Wt/Chart/WCartesianChart>
 #include <Wt/Chart/WPieChart>
 
+#include "RecipientsWidget.h"
+#include "InformationsWidget.h"
+#include "AlertsWidget.h"
+#include "Association.h"
+#include "AbstractPage.h"
+#include "AssetManagementWidget.h"
+#include "UnitsWidget.h"
+#include "DashBoard.h"
+
+class RecipientsWidget;
+class InformationsWidget;
+class AlertsWidget;
+class DashBoard;
+class Association;
+
 class MainWidget : public Wt::WContainerWidget
 {
 public:
 
-  MainWidget(Session *session, const std::string &apiUrl);
-  void doActionMenu(int index = -1, Enums::EMenuRoot menuRoot = Enums::main);
+  MainWidget(Echoes::Dbo::Session *session, const std::string &apiUrl);
+  void doActionMenu(int index = -1);
   
   Wt::WMenu *getMenu();
-  Wt::WMenu *getAlertSubmenu();
-  Wt::WMenu *getAccountSubmenu();
   Wt::WContainerWidget *getSideBarContainer();
+  Wt::WContainerWidget *getFooterContainer();
   
-  
-  AlertEditionWidget *aew;
-  void initMenus();
-  void createUI();
+//  AlertEditionWidget *aew;
+  void  initFooter(void);
+  void  initMenus();
+  void  createUI();
   virtual void refresh();
   std::string getApiUrl() const;
-  void reset(Session *session);
+  std::vector<Enums::EPageType>  *getPageDisplayVector();
+  std::map<unsigned int,unsigned int> *getMenuIndexFromPageType();
+  std::map<unsigned int,std::string> *getValueFromMenuIndex();
+  
+  void reset();
 
 protected:
     
@@ -67,45 +85,52 @@ protected:
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   
   Wt::WContainerWidget *createContentHeader();
-  void updateTitle(int index, Enums::EMenuRoot menuRoot = Enums::main);
-  void updateBreadcrumbs(Enums::EMenuRoot menuRoot = Enums::main);
+  void updateTitle(unsigned int index);
+  void updateBreadcrumbs();
   std::string getBreadcrumbsClass(int pathSize, int level);
   void createContainerFluid();
-  void updateContainerFluid(int type, Enums::EMenuRoot menuRoot = Enums::main);
+  void updateContainerFluid(int type);
   void createContentDiv();
   
   void createSubMenu(Enums::EPageType enumPT);
   void createPage(Enums::EPageType enumPT);
   std::string getIconName(Enums::EPageType enumPT);
-  void createAlertPage(Enums::EAlertSubmenu enumSAL);
-  void createAccountPage(Enums::EAccountSubmenu enumSAC);
   
   template <class C>
   void createMenuItem(C enumC, Wt::WMenu *submenu, std::string iconStr);
+  
+  void getRightsFromUser();
  
   PluginEditionWidget *pew;
-  AssetManagementModel *amm;
+//  AssetManagementModel *amm;
   AssetManagementWidget *amw;
   OptionManagementModel *omm;
   OptionManagementWidget *omw;
-  AlertEditionModel *aem;
-  AlertListWidget *alw;
+  UnitsWidget *unw;
+//  AlertEditionModel *aem;
+//  AlertListWidget *alw;
   RoleCustomizationWidget *rcw;
   
-  UserEditionModel *uem;
   UserEditionWidget *uew;
+  
+  RecipientsWidget *rpw;
+  InformationsWidget *inw;
+  AlertsWidget *alw;
+  Association *act;
+  DashBoard *dsw;
   
   Wt::WContainerWidget *wcw;
   
 
 private:
-  Session * session;
+  Echoes::Dbo::Session * session;
   std::string _apiUrl;
  
   bool created_;
   
   Wt::WText *titleText;
   Wt::WContainerWidget *sideBarContainer;
+  Wt::WContainerWidget *footerContainer;
   Wt::WContainerWidget *contentContainer;
   Wt::WContainerWidget *contentFluid;
   Wt::WContainerWidget *breadCrumbsContainer;
@@ -113,8 +138,11 @@ private:
   Wt::WAnchor *breadCrumbsAnchor1;
   Wt::WAnchor *breadCrumbsAnchor2;
   Wt::WMenu *menu;
-  Wt::WMenu *alertSubmenu;
   Wt::WMenu *accountSubmenu;
+  
+  std::vector<Enums::EPageType>  *m_pageDisplayRights;
+  std::map<unsigned int,unsigned int> *m_indexFromPageType;
+  std::map<unsigned int,std::string> *m_valueFromMenuIndex;
 
   void setApiUrl(std::string _apiUrl);
   
@@ -124,7 +152,7 @@ private:
 template <class C>
 void MainWidget::createMenuItem(C enumC, Wt::WMenu *submenu, std::string iconStr)
 {
-    Wt::WMenuItem *newMenuItem = new Wt::WMenuItem(tr(boost::lexical_cast<std::string>("Alert.admin.")+enumC.value()+boost::lexical_cast<std::string>("-tab")));
+    Wt::WMenuItem *newMenuItem = new Wt::WMenuItem(tr("Alert.admin." + boost::lexical_cast<std::string>(enumC.value()) + "-tab"));
     
     // Todo : renommer alertCount, voir comment indiquer la présence de sous-menus
     Wt::WText *alertCount = new Wt::WText("</span><i class='icon icon-" + iconStr + "'></i><span>",Wt::XHTMLUnsafeText);

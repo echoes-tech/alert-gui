@@ -107,7 +107,7 @@ void AuthWidget::registerNewUser()
 
 void AuthWidget::registerNewUser(const Identity& oauth)
 {
-    UserActionManagement::registerUserAction(Enums::display,"register",0);
+    UserActionManagement::registerUserAction(Enums::EAction::display,"register",0);
     showDialog(tr("Wt.Auth.registration"), createRegistrationView(oauth));
 }
 
@@ -158,8 +158,6 @@ RegistrationModelAlert *AuthWidget::createRegistrationModel()
     RegistrationModelAlert *result = new RegistrationModelAlert(*model_->baseAuth(),
                                                       model_->users(),
                                                       login_, this);
-    
-    std::cout << "taille dans le model pendant créa : " << result->fields().size() << std::endl;
 
     if (model_->passwordAuth())
         result->addPasswordAuth(model_->passwordAuth());
@@ -179,8 +177,6 @@ WWidget *AuthWidget::createRegistrationView(const Identity& id)
     if (id.isValid())
         registrationModel_->registerIdentified(id);
     
-    std::cout << "taille à la création : " << registrationModel_->fields().size() << std::endl;
-
     RegistrationWidgetAlert *w = new RegistrationWidgetAlert(this);
     w->setModel(registrationModel_);
 

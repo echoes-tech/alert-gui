@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <!-- Models -->
+
+
+  <message id="Alert.test.form-info">
+      On this page you can add the medias used to send alerts.</message>
+    <message id="Alert.test.delete-message">
+      <span style="color:red"> Test Delete this server. Continue ?</span>
+  </message>
+
+  <message id="Alert.test.name-label">Server to add: </message>
+  <message id="Alert.test.invalid-name">Invalid name</message>
+  <message id="Alert.test.invalid-name-info">
+      <span style="color:red">&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</span>
+  </message>
+  <message id="Alert.test.invalid-name-info2">
+      <h5>Invalid name :</h5>
+      <ul>
+          <li>Size Minimun : 1 </li>
+          <li>Size Maximum : 255</li>
+          <li> Not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</li>
+      </ul>
+  </message>
+  
+  <message id="Alert.test.add-button">Add a server</message>
+
+  <message id="Alert.test.modif-button">Modif</message>
+  <message id="Alert.test.delete-button">Delete</message>
+
+  <message id="Alert.test.add-form">Your servers</message>
+  
+  <message id="Alert.test.name">test name</message>
+  <message id="Alert.test.action">Actions</message>
+  
+  <message id="Alert.test.download-script">Download<br />Script</message>
+
+  <message id="Alert.test.delete-test">Delete this server</message>
+  <message id="Alert.test.modif-test">Modifi this server</message>
+  <message id="Alert.test.add-test">Add server</message>
+
+  <message id="Alert.test.name-invalid">Invalid</message>
+  <message id="Alert.test.database-error-title">Database error</message>
+  <message id="Alert.test.database-error">Error : {1} | {2}</message>
+  
+  <message id="Alert.test.file-not-generated">
+      <span style="color:red">The file as not been generated. Please contact us.</span>
+  </message>
+    
+  <!-- templates -->
+
+<message id="Alert.test.Management.template" >
+    <br />
+      <div class ="alert alert-info">${tr:Alert.test.form-info} </div>
+    <message id="Alert.test.Management.template" >
+            <div id="test-name" class="">
+                    ${resource-table}
+            </div>
+            
+    </message>
+</message>
+
+  
+
+</messages>

@@ -77,3 +77,117 @@ select {
 #header h1 {
     background: url("../img/ea-logo.png") no-repeat scroll 0 0 transparent;
 }
+
+.modal-body {max-height: inherit;}
+
+.nav-tabs {margin-bottom: -37px;}
+
+/* CSS size column for CreatePageWidget*/
+
+/* Asset */
+.asset {
+}
+
+.download-script {width:5%;}
+/* Media */
+.sms {
+}
+
+.mail {
+}
+
+.app {
+}
+
+.recipients {
+    border: 1px solid #DDDDDD;
+    background-image: 
+    -webkit-linear-gradient(top, #fdfdfd 0%, #eaeaea 100%);
+    margin: 0;
+    font-weight: bold;
+    text-shadow: 0 1px 0 #FFFFFF;
+}
+
+.recipients-radius-mid {
+   border-radius: 0px 0px 0 0;
+   border-right: 0;
+   border-left: 0;
+   border-bottom: 0;
+}
+
+.recipients-radius-right {border-radius: 0 5px 0 0;}
+
+.recipients-radius-left {border-radius: 5px 0 0 0;}
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+    margin-right: 0px;
+}
+
+OB.ui-toolbar {border-radius: 0;}
+
+.button-add {
+    float:right;
+    margin: 5px 6px 0 0;
+}
+
+.paginate-edit {
+    width:440px;
+    position: relative;
+
+    right: 0px;
+    float:right;
+}
+
+.navbar-inner {
+    min-height: 0;
+    padding-right: 0;
+    padding-left: 0;
+    background-color: 0;
+    border: 0px solid #ffffff;
+    border-webkit-border-radius: 0;
+    border-radius: 0;
+    box-shadow: 0 0 0;
+}
+
+.widget-pers
+{
+ /* SAlut */
+    position: relative;
+    background: none repeat scroll 0 0 #F9F9F9;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    clear: both;
+}
+
+.header-pers
+{
+    border-top: 1px solid #dddddd;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+}
+
+.body-pers
+{
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+}
+
+.footer-pers
+{
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    border-radius: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+}
+
+#logo img {
+    width: 360px;
+}
+
+#logo {
+    padding: 20px 0px 0px 5px;
+}

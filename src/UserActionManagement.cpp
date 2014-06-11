@@ -21,16 +21,16 @@ void UserActionManagement::registerUserAction(Enums::EAction enumAction, Wt::WSt
     try
     {
         Wt::WApplication *app = Wt::WApplication::instance();
-        Session *session = dynamic_cast<EchoesHome*>((app->root()->widget(0)))->getSession();
+        Echoes::Dbo::Session *session = dynamic_cast<EchoesHome*>((app->root()->widget(0)))->getSession();
         Wt::Dbo::Transaction transaction(*session);
         
-        Wt::Dbo::ptr<UserAction> ptrUserAction = session->find<UserAction>().where("\"UAC_ID\" = ?").bind(enumAction);
+        Wt::Dbo::ptr<Echoes::Dbo::UserActionType> ptrUserAction = session->find<Echoes::Dbo::UserActionType>().where(QUOTE(TRIGRAM_USER_ACTION_TYPE ID)" = ?").bind(enumAction);
         
-        UserHistoricalAction *userHistoricalAction = new UserHistoricalAction();
+        Echoes::Dbo::UserHistoricalAction *userHistoricalAction = new Echoes::Dbo::UserHistoricalAction();
         userHistoricalAction->tableObject = tableObject;
         userHistoricalAction->tableObjectId = id;
         
-        Wt::Dbo::ptr<UserHistoricalAction> ptrUserHistoricalAction = session->add<UserHistoricalAction>(userHistoricalAction);
+        Wt::Dbo::ptr<Echoes::Dbo::UserHistoricalAction> ptrUserHistoricalAction = session->add<Echoes::Dbo::UserHistoricalAction>(userHistoricalAction);
         ptrUserHistoricalAction.modify()->userAction = ptrUserAction;
         ptrUserHistoricalAction.modify()->user = session->user();
         ptrUserHistoricalAction.modify()->dateTime = Wt::WDateTime::currentDateTime();

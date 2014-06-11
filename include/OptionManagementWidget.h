@@ -14,7 +14,7 @@
 
 class OptionManagementWidget : public Wt::WContainerWidget {
 public:
-    OptionManagementWidget(OptionManagementModel *model, Session *session);
+    OptionManagementWidget(OptionManagementModel *model, Echoes::Dbo::Session *session, std::string apiUrl);
     virtual ~OptionManagementWidget();
 protected:
 
@@ -26,12 +26,13 @@ protected:
 
   virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
   
+  void setApiUrl(std::string apiUrl);
   std::string getApiUrl() const;
 
 private:
   OptionManagementModel *model_;
-  Session * session;
-  std::string apiUrl;
+  Echoes::Dbo::Session * session;
+  std::string apiUrl_;
   Wt::WComboBox roleComboBox;
 
   Wt::WTemplateFormView *mainForm;
@@ -41,9 +42,9 @@ private:
   void askSms();
   void changeRole();
   void fillRoleSelector();
+  void getQuota(boost::system::error_code err, const Wt::Http::Message& response);
   void getRoles(boost::system::error_code err, const Wt::Http::Message& response);
   
-  void setApiUrl(std::string apiUrl);
   
 };
 

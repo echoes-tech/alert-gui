@@ -1,447 +1,227 @@
 /* 
- * File:   UserEditionWidget.cpp
- * Author: tsa
+ * Gui UserEditionWidget.cpp
  * 
- * Created on 14 août 2012, 11:50
+ * @author ECHOES Technologies (TSA)
+ * @author Guillaume KRIER
+ * 
+ * @date 15/11/2013
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
+ * 
  */
 
 #include "UserEditionWidget.h"
 
-UserEditionWidget::UserEditionWidget()
-: Wt::WTemplateFormView(Wt::WString::tr("Alert.User.Edition.template"))
+using namespace std;
+
+UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUrl, int type)
+: AbstractPage(session, apiUrl, "media-user")
 {
-    created_ = false;
-    Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use("user", false);
-}
+    this->session_ = session;
+    this->apiUrl_ = apiUrl;
+    this->type_ = type;
+    usersModel_ = new Wt::WStandardItemModel(0, 2, this);
 
-void UserEditionWidget::setModel(UserEditionModel *model)
-{
-    model_ = model;
-}
-
-void UserEditionWidget::setSession(Session *session)
-{
-    this->session = session;
-}
-
-void UserEditionWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
-{
-    if (!created_)
-    {
-        update();
-        created_ = true;
-    }
-
-    WTemplate::render(flags);
-}
-
-Wt::WFormWidget *UserEditionWidget::createFormWidget(UserEditionModel::Field field)
-{
-    Wt::WFormWidget *result = 0;
-
-//    if (field == UserEditionModel::FirstName)
-//    {
-//        result = new Wt::WLineEdit();
-////        result->changed().connect(boost::bind(&RegistrationWidget::checkOrganization, this));
-//    }
-//    else if (field == UserEditionModel::LastName)
-//    {
-//        result = new Wt::WLineEdit();
-//    }
-//    else if (field == UserEditionModel::Email)
-//    {
-//        result = new Wt::WLineEdit();
-//    }
-//    else if (field == UserEditionModel::ChoosePasswordField)
-//    {
-//        Wt::WLineEdit *p = new Wt::WLineEdit();
-//        p->setEchoMode(Wt::WLineEdit::Password);
-////        p->keyWentUp().connect
-////                (boost::bind(&RegistrationWidget::checkPassword, this));
-////        p->changed().connect
-////                (boost::bind(&RegistrationWidget::checkPassword, this));
-//        result = p;
-//    }
-//    else if (field == UserEditionModel::RepeatPasswordField)
-//    {
-//        Wt::WLineEdit *p = new Wt::WLineEdit();
-//        p->setEchoMode(Wt::WLineEdit::Password);
-////        p->changed().connect
-////                (boost::bind(&RegistrationWidget::checkPassword2, this));
-//        result = p;
-//    }
-//    else if (field == UserEditionModel::Role)
-//    {
-//        Wt::WComboBox *combo = new Wt::WComboBox();
-//        result = combo;
-//    }
-//    else if (field == UserEditionModel::State)
-//    {
-//        result = new Wt::WComboBox();
-//    }
-    if (field == UserEditionModel::MediaEMail)
-    {
-        emailEdit = new Wt::WLineEdit();
-        result = emailEdit;
-        result->changed().connect(boost::bind(&UserEditionWidget::checkMediaEmail, this));
-        
-    }
-    else if (field == UserEditionModel::MediaSMS)
-    {
-        smsEdit = new Wt::WLineEdit();
-        result = smsEdit;
-        result->changed().connect(boost::bind(&UserEditionWidget::checkMediaSms, this));
-    }
-    else if (field == UserEditionModel::MediaMobileApp)
-    {
-        mobileappEdit = new Wt::WLineEdit();
-        result = mobileappEdit;
-        result->changed().connect(boost::bind(&UserEditionWidget::checkMediaMobileApp, this));
-    }
-
-    return result;
-}
-
-void UserEditionWidget::checkMediaEmail()
-{
-    updateModelField(model_, UserEditionModel::MediaEMail);
-    model_->validateField(UserEditionModel::MediaEMail);
-    model_->setValidated(UserEditionModel::MediaEMail, false);
-    update();
-}
-
-void UserEditionWidget::checkMediaSms()
-{
-    updateModelField(model_, UserEditionModel::MediaSMS);
-    model_->validateField(UserEditionModel::MediaSMS);
-    model_->setValidated(UserEditionModel::MediaSMS, false);
-    update();
-}
-
-void UserEditionWidget::checkMediaMobileApp()
-{
-    updateModelField(model_, UserEditionModel::MediaMobileApp);
-    model_->validateField(UserEditionModel::MediaMobileApp);
-    model_->setValidated(UserEditionModel::MediaMobileApp, false);
-    update();
-}
-
-void UserEditionWidget::update()
-{
-
-    updateView(model_);
-
-    if (!created_)
-    {
-
-        emailsTable = new Wt::WTable();
-        smsTable = new Wt::WTable();
-        mobileappTable = new Wt::WTable();
-        
-        createMediaTable(Enums::email);
-        createMediaTable(Enums::sms);
-        createMediaTable(Enums::mobileapp);
-        
-        bindWidget("email-table", emailsTable);
-        bindWidget("sms-table", smsTable);
-        bindWidget("mobileapp-table", mobileappTable);
-
-        
-        created_ = true;
-    }
+    setButtonModif(true);
+    setButtonSup(true);
+//    setLocalTable(true);
     
+    string nameSpe = type == 1 ? "mail" : type == 2 ? "sms" : type == 3 ? "push" : "error";
+    this->setNameSpecial(nameSpe);
     
+    multimap<int, string> titles;
+    titles.insert(make_pair(ETypeJson::text, "value"));
+    titles.insert(make_pair(ETypeJson::undid, "user"));
+    setUndidName("last_name");
+    setTitles(titles);
+
+    lists_string lListUrl;
+    list_string listUrl;
+    listUrl.push_back("medias");
+    listUrl.push_back("medias/:id");
+    lListUrl.push_back(listUrl);
+    listUrl.clear();
+    listUrl.push_back("users");
+    lListUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    setUrl(lListUrl);
 
 }
 
-void UserEditionWidget::createMediaTable(int medEnumId)
+Wt::WComboBox *UserEditionWidget::popupAdd(Wt::WDialog *dialog)
 {
-    Wt::WTable *mediasTable;
-    std::string desc;
-    switch (medEnumId)
-    {
-        case Enums::email:
-        {
-            mediasTable = emailsTable;
-            desc = "email";
-            break;
-        }
-        case Enums::sms:
-        {
-            mediasTable = smsTable;
-            desc = "sms";
-            break;
-        }
-        case Enums::mobileapp:
-        {
-            mediasTable = mobileappTable;
-            desc = "mobileapp";
-            break;
-        }
-    }
-    
-    mediasTable->addStyleClass("table");
-    mediasTable->addStyleClass("table-bordered");
-    mediasTable->addStyleClass("table-striped");
-
-    int row = 0;
-
-
-    mediasTable->setHeaderCount(2,Wt::Horizontal);
-    mediasTable->elementAt(row, 0)->setColumnSpan(2);
-    mediasTable->columnAt(1)->setStyleClass("asset-action-width");
-
-    Wt::WText *tableMediaTitle = new Wt::WText("<div class='widget-title widget-title-ea-table'><span class='icon'><i class='icon-envelope'></i></span><h5>"+ tr("Alert.media.add-"+desc+"-table") + "</h5></div>",mediasTable->elementAt(row, 0));
-    mediasTable->elementAt(row, 0)->setPadding(*(new Wt::WLength("0px")));
-    tableMediaTitle->setTextFormat(Wt::XHTMLUnsafeText);
-    ++row;
-    new Wt::WText(tr("Alert.media."+desc+"-name"),mediasTable->elementAt(row, 0));
-    new Wt::WText(tr("Alert.global.action"),mediasTable->elementAt(row, 1));
-
-
-
-
-    std::map<long long,Wt::WString> mediaMap = getMediasForCurrentUser(medEnumId);
-    for (std::map<long long,Wt::WString>::const_iterator i = mediaMap.begin() ; i != mediaMap.end(); ++i)
-    {
-        ++row;
-        new Wt::WText(i->second,mediasTable->elementAt(row, 0));
-        Wt::WPushButton *deleteButton = new Wt::WPushButton(mediasTable->elementAt(row, 1));
-        deleteButton->setTextFormat(Wt::XHTMLUnsafeText);
-        deleteButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.user.edition.delete-button"));
-        deleteButton->addStyleClass("btn");
-        deleteButton->addStyleClass("btn-danger");
-        deleteButton->clicked().connect(boost::bind(&UserEditionWidget::deleteMedia,this,medEnumId,i->first,mediasTable->elementAt(row, 1)));
-    }
-
-    ++row;
-    Wt::WPushButton *addButton = new Wt::WPushButton(mediasTable->elementAt(row, 1));
-    addButton->setTextFormat(Wt::XHTMLUnsafeText);
-    addButton->setText("<i class='icon-plus icon-white'></i> " + tr("Alert.user.edition.add-button"));
-    addButton->addStyleClass("btn");
-    addButton->addStyleClass("btn-info");
-    
-
-    switch (medEnumId)
-    {
-        case Enums::email:
-        {
-            mediasTable->elementAt(row, 0)->addWidget(emailEdit);
-            addButton->clicked().connect(this, &UserEditionWidget::addEmail);
-            break;
-        }
-        case Enums::sms:
-        {
-            mediasTable->elementAt(row, 0)->addWidget(smsEdit);
-            addButton->clicked().connect(this, &UserEditionWidget::addSms);
-            break;
-        }
-        case Enums::mobileapp:
-        {
-            mediasTable->elementAt(row, 0)->addWidget(mobileappEdit);
-            addButton->clicked().connect(this, &UserEditionWidget::addMobileApp);
-            break;
-        }
-    }
-    
+    Wt::WComboBox *comboBox = new Wt::WComboBox(dialog->contents());
+    comboBox->setModel(usersModel_);
+    return comboBox;
 }
 
-
-std::map<long long, Wt::WString> UserEditionWidget::getMediasForCurrentUser(int mediaType)
+string UserEditionWidget::addParameter()
 {
-    std::map<long long, Wt::WString> res;
-    try
-    {
-        Wt::Dbo::Transaction transaction(*session);
-        Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> > medias = session->find<MediaValue>().where("\"MEV_USR_USR_ID\" = ?").bind(session->user().id())
-                                                                                            .where("\"MEV_MED_MED_ID\" = ?").bind(mediaType)
-                                                                                            .where("\"MEV_DELETE\" IS NULL");
-        int idx = 0;
-        for (Wt::Dbo::collection<Wt::Dbo::ptr<MediaValue> >::const_iterator i = medias.begin(); i != medias.end(); ++i)
-        {
-            Wt::WString test = i->get()->value;
-            res[i->id()] = test;
-            idx++;
-        }
-        transaction.commit();
-    }
-    catch (Wt::Dbo::Exception e)
-    {
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error").arg(e.what()).arg("1"),Wt::Ok);
-        Wt::log("error") << "[UserEditionWidget] " << e.what();
-    }
-    return res;
+    return "&type_id=" + boost::lexical_cast<string>(this->type_);
 }
 
-void UserEditionWidget::addMedia(Wt::WFormModel::Field field, int medEnumId)
+Wt::WValidator *UserEditionWidget::editValidator(int who)
 {
-    if (model_->validateField(field))
+    Wt::WRegExpValidator *validator = 0;
+    if (type_ == 1)
     {
-        Wt::WString mediaToAdd = model_->valueText(field);
-        try
-        {
-            Wt::Dbo::Transaction transaction(*session);
-            Wt::Dbo::ptr<User> ptrUser = session->user();
-            Wt::Dbo::ptr<Media> media = session->find<Media>().where("\"MED_ID\" = ?").bind(medEnumId);
-            
-            MediaValue *mev = new MediaValue();
-            mev->user = ptrUser;
-            mev->media = media;
-            mev->value = mediaToAdd;
-            mev->isDefault = false;
-            mev->isConfirmed = false;
-            mev->token = Wt::WRandom::generateId(25);
-            Wt::Dbo::ptr<MediaValue> ptrMev = session->add<MediaValue>(mev);
-            ptrMev.flush();
-            model_->setValidated(field,false);
-            transaction.commit();
-            
-            Wt::WPushButton *deleteButton;
-            int tableRow;
-            switch(medEnumId)
-            {
-                case Enums::email:
-                {
-                    tableRow = emailsTable->rowCount() - 1;
-                    emailsTable->insertRow(tableRow);
-                    new Wt::WText(mediaToAdd,emailsTable->elementAt(tableRow, 0));
-                    deleteButton = new Wt::WPushButton(tr("Alert.user.edition.delete-button"),emailsTable->elementAt(tableRow, 1));
-                    break;
-                }
-                case Enums::sms:
-                {
-                    tableRow = smsTable->rowCount() - 1;
-                    smsTable->insertRow(tableRow);
-                    new Wt::WText(mediaToAdd,smsTable->elementAt(tableRow, 0));
-                    deleteButton = new Wt::WPushButton(tr("Alert.user.edition.delete-button"),smsTable->elementAt(tableRow, 1));
-                    break;
-                }
-                case Enums::mobileapp:
-                {
-                    tableRow = mobileappTable->rowCount() - 1;
-                    mobileappTable->insertRow(tableRow);
-                    new Wt::WText(mediaToAdd,mobileappTable->elementAt(tableRow, 0));
-                    deleteButton = new Wt::WPushButton(tr("Alert.user.edition.delete-button"),mobileappTable->elementAt(tableRow, 1));
-                    break;
-                }
-            }
-            
-            deleteButton->setTextFormat(Wt::XHTMLUnsafeText);
-            deleteButton->setText("<i class='icon-remove icon-white'></i> " + tr("Alert.user.edition.delete-button"));
-            deleteButton->addStyleClass("btn");
-            deleteButton->addStyleClass("btn-danger");
-
-            deleteButton->clicked().connect(boost::bind(&UserEditionWidget::deleteMedia,this,medEnumId,ptrMev.id(),smsTable->elementAt(tableRow, 1)));
-            
-            
-            UserActionManagement::registerUserAction(Enums::add,Constants::T_MEDIA_VALUE_MEV,ptrMev.id());
-        }
-        catch (Wt::Dbo::Exception e)
-        {
-            Wt::log("error") << "[UserEditionWidget] " << e.what();
-            Wt::WMessageBox::show(tr("Alert.user.problem-adding-media-title"),tr("Alert.user.problem-adding-media"),Wt::Ok);
-        }
+        validator = new Wt::WRegExpValidator("[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$"); //[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}
+    }
+    else if (type_ == 2)
+    {
+        validator = new Wt::WRegExpValidator("(0)[0-9]{9}");
+    }
+    else if (type_ == 3)
+    {
+        validator = new Wt::WRegExpValidator("[a-zA-Z0-9.-]{3,}");
     }
     else
     {
-        //todo
+        AbstractPage::editValidator(who);
     }
-//    sBox->setModel(getMediasForCurrentUser(medId));
-//    sBox->refresh();
-    
-    const std::string emptyString="";
-    model_->setValue(field,boost::any(emptyString));
-    update();
+    return validator;
 }
 
-void UserEditionWidget::deleteMedia(int medEnumId, long long medId, Wt::WTableCell * cell)
+void UserEditionWidget::addResource(vector<Wt::WInteractWidget*> argument)
 {
+    vector<Wt::WInteractWidget*>::iterator i = argument.begin();
+
+    Wt::Http::Message messageMedia;
+    messageMedia.addBodyText("{\n\"type_id\": " + boost::lexical_cast<string>(this->type_)
+            + ",\n\"value\": \"" + boost::lexical_cast<string>(((Wt::WLineEdit*)(*i++))->text()) + "\"");
+
+    Wt::WStandardItemModel *userModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
+    messageMedia.addBodyText(",\n\"user_id\" : " + userModel->item(((Wt::WComboBox*)(*i))->currentIndex(), 1)->text().toUTF8());
+
+    messageMedia.addBodyText("\n}");
+
+    string apiAddress = this->getApiUrl() + "/medias"
+            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+            + "&token=" + session_->user()->token.toUTF8();
+
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&UserEditionWidget::postResourceCallback, this, _1, _2, client));
+    
+    Wt::log("debug") << "UserEditionWidget : [POST] address to call : " << apiAddress;
+    Wt::log("debug") << " Message for [POST] : " << messageMedia.body();
+    
+    if (client->post(apiAddress, messageMedia))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+    else
+    {
+        Wt::log("error") << "Error Client Http";
+    }
+}
+
+
+void UserEditionWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
+{
+    MapLongString::iterator it = mediasTokens.find(id);
+    vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
+
+    Wt::Http::Message message;
+    message.addBodyText("{\n\"token\": \"" + (*it).second
+                        + "\",\n\"value\":\"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+
+    Wt::WStandardItemModel *userModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
+    message.addBodyText(",\n\"user_id\" : " + userModel->item(((Wt::WComboBox*)(*i))->currentIndex(), 1)->text().toUTF8());
+
+    message.addBodyText("\n}");
+
+    string apiAddress = this->getApiUrl() + "/medias/"
+            + boost::lexical_cast<string>(id)
+            + "?login=" + Wt::Utils::urlEncode(session_->user()->eMail.toUTF8())
+            + "&token=" + session_->user()->token.toUTF8();
+
+    Wt::log("debug") << "UserEditionWidget : [PUT] address to call : " << apiAddress;
+
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&UserEditionWidget::putResourceCallback, this, _1, _2, client));
+    if (client->put(apiAddress, message))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+    else
+    {
+        Wt::log("error") << "Error Client Http";
+    }
+}
+
+void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
+{
+    mediasTokens.clear();
+    
     try
     {
-        Wt::Dbo::Transaction transaction2(*session);
-        
-        std::string qryString = "DELETE FROM \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" "
-                                " WHERE \"AMS_ALE_ALE_ID\" IS NULL"
-                                " AND \"AMS_MEV_MEV_ID\" IN "
-                                " (SELECT \"MEV_ID\" FROM \"T_MEDIA_VALUE_MEV\" WHERE \"MEV_USR_USR_ID\" = " + boost::lexical_cast<std::string>(session->user().id())  + ")";
-
-        session->execute(qryString);
-
-        
-        transaction2.commit();
+        vector<Wt::Json::Value> jsonMedia = jsonResources.at(0);
+        Wt::Json::Array& result = jsonMedia.at(0);
+        for (int cpt(0); cpt < (int) result.size(); cpt++)
+        {
+            Wt::Json::Object obj = result.at(cpt);
+            Wt::WString token = obj.get("token");
+            long long id = obj.get("id");
+            mediasTokens[id] = token.toUTF8();
+        }
     }
-    catch (Wt::Dbo::Exception e)
+    catch (Wt::Json::ParseError const& e)
     {
-        Wt::log("error") << "[UserEditionWidget] [deleteMedia]" << e.what();
-//        Wt::WMessageBox::show(tr("Alert.alert.database-error-title"),tr("Alert.alert.database-error"),Wt::Ok);
-//        return;
+        Wt::log("warning") << "[UserEditionWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
-    
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[UserEditionWidget] JSON Type Exception";
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+
     try
     {
-        Wt::Dbo::Transaction transaction(*session);
-        Wt::Dbo::ptr<MediaValue> mediaValue = session->find<MediaValue>().where("\"MEV_ID\" = ?").bind(medId)
-                                                                           .where("\"MEV_MED_MED_ID\" = ?").bind(medEnumId)
-                                                                           .where("\"MEV_USR_USR_ID\" = ?").bind(session->user().id());
+        vector<Wt::Json::Value> jsonUsers = jsonResources.at(1);
+        jsonResources.pop_back();
+        AbstractPage::handleJsonGet(jsonResources);
+
+        usersModel_->clear();
+
         
-        mediaValue.modify()->deleteTag = Wt::WDateTime::currentDateTime();
+        Wt::Json::Array& result = jsonUsers.at(0);
+        
+        for (int cpt(0); cpt < (int) result.size(); cpt++)
+        {
+            Wt::WStandardItem *itemId = new Wt::WStandardItem();
+            Wt::WStandardItem *itemName = new Wt::WStandardItem();
 
-        transaction.commit();
-        UserActionManagement::registerUserAction(Enums::del,Constants::T_MEDIA_VALUE_MEV,medId);
+            Wt::Json::Object obj = result.at(cpt);
+            Wt::WString firstName = obj.get("first_name");
+            Wt::WString lastName = obj.get("last_name");
+            string name = firstName.toUTF8() + " " + lastName.toUTF8();
+            long long id = obj.get("id");
+
+            vector<Wt::WStandardItem*> rowVector;
+
+            itemId->setText(boost::lexical_cast<string>(id));
+            itemName->setText(Wt::WString::fromUTF8(name));
+
+            rowVector.push_back(itemName);
+            rowVector.push_back(itemId);
+            usersModel_->insertRow(cpt, rowVector);
+        }
     }
-    catch (Wt::Dbo::Exception e)
+    catch (Wt::Json::ParseError const& e)
     {
-        Wt::log("error") << "[UserEditionWidget] " << e.what();
-        Wt::WMessageBox::show(tr("Alert.user.dependant-alert-exists-title"),tr("Alert.user.dependant-alert-exists"),Wt::Ok);
-        return;
+        Wt::log("warning") << "[UserEditionWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
-    
-    switch(medEnumId)
+    catch (Wt::Json::TypeException const& e)
     {
-        case Enums::email:
-        {
-            
-            emailsTable->deleteRow(cell->row());
-            break;
-        }
-        case Enums::sms:
-        {
-            smsTable->deleteRow(cell->row());
-            break;
-        }
-        case Enums::mobileapp:
-        {
-            mobileappTable->deleteRow(cell->row());
-            break;
-        }
+        Wt::log("warning") << "[UserEditionWidget] JSON Type Exception";
+//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
-    
-//    render(Wt::RenderFull); 
 }
 
-void UserEditionWidget::addMobileApp()
-{
-    addMedia(model_->MediaMobileApp,Enums::mobileapp);
-}
-
-void UserEditionWidget::addEmail()
-{
-    addMedia(model_->MediaEMail,Enums::email);
-}
-
-void UserEditionWidget::addSms()
-{
-    addMedia(model_->MediaSMS,Enums::sms);
-}
-
-bool UserEditionWidget::validate()
-{
-    return model_->validate();
-}
-
-
-void UserEditionWidget::close()
-{
-    delete this;
-}

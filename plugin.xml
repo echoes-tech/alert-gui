@@ -6,42 +6,61 @@
   <message id="Alert.plugins.add-plugin-button">Add plugin</message>
   <message id="Alert.plugins.delete-plugin-button">Delete plugin</message>
   
-  <message id="Alert.plugins.add-source-button">Add source </message>
+  <message id="Alert.plugins.add-source-button">Add source</message>
   <message id="Alert.plugins.delete-source-button">Delete source</message>
   <message id="Alert.plugins.modify-source-button">Modify source</message>
 
-  <message id="Alert.plugins.add-search-and-information-button">Add search and information</message> 
+  <message id="Alert.plugins.add-search-button">Add search</message> 
   <message id="Alert.plugins.delete-search-button">Delete search</message>
   <message id="Alert.plugins.modify-search-button">Modify search</message>
   
-  <message id="Alert.plugins.create-JSON-button">Generate plugin </message>
-  <message id="Alert.plugins.create-JSON-anchor">Download plugin</message>
-  <message id="Alert.plugin.create-JSON-anchor-info">To download plugin, you must first generate</message>
+  <message id="Alert.plugins.add-filter-button">Add filter</message> 
+  <message id="Alert.plugins.delete-filter-button">Delete filter</message>
+  <message id="Alert.plugins.modify-filter-button">Modify filter</message>
   
   <message id="Alert.plugins.plugin-table-create-title">Create plugin</message>
   <message id="Alert.plugins.plugin-table-title">Edit plugin</message>
   <message id="Alert.plugins.source-table-title">Edit source for selected plugin</message>
   <message id="Alert.plugins.search-table-title">Edit search for selected source</message>
+  <message id="Alert.plugins.filter-table-title">Edit filter for selected search</message>
   <message id="Alert.plugins.alert-form-title">Alerts</message>
   <message id="Alert.plugins.alert-form-info">On this page you can add a plugin</message>
   
   <message id="Alert.plugins.name-label">Name</message>
   <message id="Alert.plugins.choice-label">Plugin to edit</message>
   <message id="Alert.plugins.description-label">Description</message> 
-  <message id="Alert.plugins.search-periode-label">Periode</message> 
-  <message id="Alert.plugins.search-static-label">Is static</message> 
-  <message id="Alert.plugins.search-key-value">Position key value</message> 
-  <message id="Alert.plugins.search-nomber-value">Number of value</message> 
+  <message id="Alert.plugins.search-periode-label">Period</message> 
   
-  <message id="Alert.plugins.value-number-title">Value Number</message>
   <message id="Alert.plugins.name-title">Name</message> 
-  <message id="Alert.plugins.unit-title">Unit</message>
-  <message id="Alert.plugins.display-title">Is display</message>
-  <message id="Alert.plugins.calculate-title">Is calculate</message>
   <message id="Alert.plugins.value-title">Value</message> 
   <message id="Alert.plugins.parameter-title">Parameter</message> 
   <message id="Alert.plugins.description-title">Description</message> 
   <message id="Alert.plugins.action-title">Action</message> 
+  
+  <message id="Alert.plugins.filter-key-value">Position key value</message> 
+  <message id="Alert.plugins.filter-nomber-value">Number of value(s)</message> 
+  
+  <message id="Alert.plugins.filesystem">Filesystem</message>
+  <message id="Alert.plugins.file">File</message>
+  <message id="Alert.plugins.log">Log</message>
+  <message id="Alert.plugins.odbc">Database (ODBC)</message>
+  <message id="Alert.plugins.snmp">SNMP</message>
+  <message id="Alert.plugins.hash">Hash</message>
+  <message id="Alert.plugins.xml">XML</message>
+  <message id="Alert.plugins.process">Process</message>
+
+  <message id="Alert.plugins.path">Path</message>
+  <message id="Alert.plugins.path_line">Path + Line</message>
+  <message id="Alert.plugins.path_last_line">Path + Last n lines</message>
+  <message id="Alert.plugins.query">Query</message>
+  <message id="Alert.plugins.oid">OID</message>
+  <message id="Alert.plugins.path_algorithm">Path + Algorithm</message>
+  <message id="Alert.plugins.path_xpath">Path + XPath</message>
+  <message id="Alert.plugins.name">Name</message>
+  
+  <message id="Alert.plugins.location">Location</message>
+  <message id="Alert.plugins.regex">Regular expression</message>
+  <message id="Alert.plugins.all">All</message>
   
   <message id="Alert.plugins.message-box-error">Error</message> 
   <message id="Alert.plugins.message-field">Field : "</message>
@@ -100,38 +119,6 @@
                                 ${plugin-selection-box}
                             </div> 
                         </div>
-<!--                         to disable the :first-child behaviour 
-                        <div class="row-fluid" style="display:none"></div>
-                        
-                        plugin
-                        <div class="row-fluid">
-                            <div class="span3">
-                                ${plugin-selection-box}
-                            </div> 
-                            <div class="span1">    
-                                <label class="control-label">${tr:Alert.plugins.name-label} </label>
-                            </div>
-                            <div class="span2">                            
-                                ${plugin-name-edit}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.name-info}"></i>
-                            </div>
-                            <div class="span1">
-                            </div>
-                             <div class="span1">    
-                                <label class="control-label">${tr:Alert.plugins.description-label} </label>
-                            </div>
-                            <div class="span4">                            
-                                ${plugin-description-edit}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugins.description-info}"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="row-fluid">
-                            <span class="controls">
-                                ${plugin-add-plugin-button}
-                                ${plugin-delete-plugin-button}
-                            </span>
-                        </div>-->
                         
                         <!--source-->
                         <div class="widget-box">
@@ -150,7 +137,6 @@
                                     </div>
                                     <div class="span2">
                                         ${plugin-combo-addon}
-<!--                                        <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugin.combo-addon-info}"></i>-->
                                     </div> 
                                     <div class="span8">
                                         ${plugin-table-source-param}
@@ -165,85 +151,112 @@
                                     </span>
                                 </div>
                                 
-                                <!--search-->
-                                <div class="widget-box">
-                                <div class="widget-title">
-                                    <span class="icon">
-                                        <i class='icon-pencil'></i>
-                                    </span>
-                                    <h5>${tr:Alert.plugins.search-table-title}</h5>
-                                </div> 
-                                <div class="widget-content">
-                                    
-                                    <div class="row-fluid" style="display:none"></div>
-                                    <div class="row-fluid">
-                                        <div class="span2">
-                                            ${plugin-search-selection-box}
-                                        </div>
-                                        <div class="span2">
-                                            ${plugin-combo-search-type}
-                                        </div>
-                                        <div class="span8">
-                                            ${plugin-table-search-type-param}
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span1"> 
-                                            <label class="control-label">${tr:Alert.plugins.search-periode-label} </label>
-                                        </div>
-                                        <div class="span1">
-                                            ${plugin-search-periode}
-                                        </div>
-                                        <div class="span1">
-                                        </div>
-                                        <div class="span1">    
-                                            <label class="control-label">${tr:Alert.plugins.search-static-label} </label>
-                                        </div>
-                                        <div class="span1">
-                                            ${plugin-search-static}
-                                        </div>
-                                        <div class="span1">
-                                        </div>
-                                        <div class="span1">    
-                                            <label class="control-label">${tr:Alert.plugins.search-key-value} </label>
-                                        </div>
-                                        <div class="span1">
-                                            ${plugin-search-key-value}
-                                        </div>
-                                        <div class="span1">
-                                        </div>  
-                                        <div class="span1"> 
-                                            <label class="control-label">${tr:Alert.plugins.search-nomber-value} </label>
-                                        </div>
-                                        <div class="span1">
-                                            ${plugin-search-nomber-value}
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            ${plugin-search-information-table}
-                                        </div>
-                                    </div> 
-                                    <div class="row-fluid">
-                                        <span class="controls">
-                                            ${plugin-add-search-information-button}
-                                            ${plugin-modify-search-button}
-                                            ${plugin-delete-search-button}
-                                        </span>
-                                       
-                                        </div>
-                                     </div>
-                                </div>
+                                
                              </div>
                         </div>
                         
-                        <div class="row-fluid">
-                            <div class="controls">
-                                ${plugin-create-JSON-button}
-                                ${plugin-create-JSON-anchor}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.plugin.create-JSON-anchor-info}"></i>
+                        <!--search-->
+                        <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon">
+                                <i class='icon-pencil'></i>
+                            </span>
+                            <h5>${tr:Alert.plugins.search-table-title}</h5>
+                        </div> 
+                        <div class="widget-content">
+
+                            <div class="row-fluid" style="display:none"></div>
+                            <div class="row-fluid">
+                                <div class="span2">
+                                    ${plugin-search-selection-box}
+                                </div>
+                                <div class="span2">
+                                    ${plugin-combo-search-type}
+                                </div>
+                                <div class="span8">
+                                    ${plugin-table-search-param}
+                                </div>
                             </div>
+                            <div class="row-fluid">
+                                <div class="span1"> 
+                                    <label class="control-label">${tr:Alert.plugins.search-periode-label} </label>
+                                </div>
+                                <div class="span1">
+                                    ${plugin-search-period}
+                                </div>
+
+                            </div>
+                            <div class="row-fluid">
+                                <span class="controls">
+                                    ${plugin-add-search-button}
+                                    ${plugin-modify-search-button}
+                                    ${plugin-delete-search-button}
+                                </span>
+
+                                </div>
+                             </div>
+
+
+
+
+                            
+
+
                         </div>
+                        
+                        <!--filter-->
+                            <div class="widget-box">
+                            <div class="widget-title">
+                                <span class="icon">
+                                    <i class='icon-pencil'></i>
+                                </span>
+                                <h5>${tr:Alert.plugins.filter-table-title}</h5>
+                            </div> 
+                            <div class="widget-content">
+
+                                <div class="row-fluid" style="display:none"></div>
+                                <div class="row-fluid">
+                                    <div class="span2">
+                                        ${plugin-filter-selection-box}
+                                    </div>
+                                    <div class="span2">
+                                        ${plugin-combo-filter-type}
+                                    </div>
+                                    <div class="span8">
+                                        ${plugin-table-filter-type-param}
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span1">
+                                    </div>
+                                    <div class="span1">
+                                    </div>
+                                    <div class="span1">    
+                                        <label class="control-label">${tr:Alert.plugins.filter-key-value} </label>
+                                    </div>
+                                    <div class="span1">
+                                        ${plugin-filter-key-value}
+                                    </div>
+                                    <div class="span1">
+                                    </div>  
+                                    <div class="span1"> 
+                                        <label class="control-label">${tr:Alert.plugins.filter-nomber-value} </label>
+                                    </div>
+                                    <div class="span1">
+                                        ${plugin-filter-nomber-value}
+                                    </div>
+                                </div>
+                                 <div class="row-fluid">
+                                    <span class="controls">
+                                        ${plugin-add-filter-button}
+                                        ${plugin-modify-filter-button}
+                                        ${plugin-delete-filter-button}
+                                    </span>
+
+                                    </div>
+                                 </div>
+                            </div>
+                        
                     </div>
                 </div>
             </div>

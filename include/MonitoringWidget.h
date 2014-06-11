@@ -73,11 +73,13 @@
 #include <Wt/Chart/WCartesianChart>
 #include <Wt/Chart/WPieChart>
 
+#include "CsvUtil.h"
+
 class MonitoringWidget : public Wt::WContainerWidget
 {
 public:
 
-  MonitoringWidget(Session *session);
+  MonitoringWidget(Echoes::Dbo::Session *session);
 
 protected:
 
@@ -87,9 +89,12 @@ protected:
   void createUI();
 
 private:
-  Session * session;
+  Echoes::Dbo::Session * session;
  
   bool created_;
+  
+  Wt::WContainerWidget * addPieChart(Wt::WStandardItemModel *model);
+  Wt::WContainerWidget * addCategoryChart(Wt::WStandardItemModel *model);
   
 };
 

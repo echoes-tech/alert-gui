@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <!-- Models -->
+
+
+  <message id="Alert.recipients.form-info">
+      Cette page permet d'ajouter des médias, ils pourront être utilisés pour l'envoi des alertes.
+  </message>
+<!--    <message id="Alert.recipients.delete-message">
+      <span style="color:red"> Supprimer ce media. Continuer ?</span>
+  </message>
+
+  <message id="Alert.recipients.name-label">Serveur à ajouter: </message>
+  <message id="Alert.recipients.invalid-name">Nom invalide</message>
+  <message id="Alert.recipients.invalid-name-info">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|</span>
+  </message>
+  
+  <message id="Alert.recipients.add-button">Ajouter un serveur</message>
+
+  <message id="Alert.recipients.modif-button">Modifier</message>
+  <message id="Alert.recipients.delete-button">Supprimer</message>
+
+  <message id="Alert.recipients.add-form">Tes Serveurs</message>
+  
+  <message id="Alert.recipients.name">Nom du destinataire</message>
+  <message id="Alert.recipients.action">Actions</message>
+  
+  <message id="Alert.recipients.delete-recipients">Supprimer ce serveur</message>
+  <message id="Alert.recipients.modif-recipients">Modifier ce serveur</message>
+  <message id="Alert.recipients.add-recipients">Ajouter un serveur</message>
+
+  <message id="Alert.recipients.name-invalid">Invalide</message>
+  <message id="Alert.recipients.database-error-title">Erreur de la base de donnée</message>
+  <message id="Alert.recipients.database-error">Erreur : {1} | {2}</message>-->
+
+</messages>

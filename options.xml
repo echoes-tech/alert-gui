@@ -17,6 +17,9 @@
   <message id="Alert.option.sms-quota-label">SMS quota</message>
   <message id="Alert.option.sms-quota-info">The number of SMS remaining</message>
   
+  <message id="Alert.option.database-error-title">Database error</message>
+  <message id="Alert.option.database-error">Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
+
   <!-- templates -->
 
   <message id="Alert.Option.Management.template">

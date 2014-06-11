@@ -1,145 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
-
-  <!-- AlertWidget -->
-
-  <message id="Alert.alert.information-table-title">Information sur laquelle porte l'alerte</message>
-  <message id="Alert.alert.alert-form-title">Alertes</message>
-  <message id="Alert.alert.alert-form-info">Cette page vous donne la possibilité de créer une alerte</message>
-
-  <message id="Alert.alert.asset-label">Serveur</message>
-  <message id="Alert.alert.asset-info">Serveur sur lequel est installé la sonde</message>
-
-  <message id="Alert.alert.application-label">Application</message>
-  <message id="Alert.alert.application-info">Application à surveiller</message>
-
-  <message id="Alert.alert.information-label">Information</message>
-  <message id="Alert.alert.information-info">Information à collecter</message>
-
-  <message id="Alert.alert.threshold-operator-label">Opérateur</message>
-  <message id="Alert.alert.threshold-operator-info">Opérateur de comparaison</message>
-
-  <message id="Alert.alert.threshold-value-label">Valeur</message>
-  <message id="Alert.alert.threshold-value-info">Valeur à comparer</message>
-  
-  <message id="Alert.alert.threshold-value-key-label">Valeur clé</message>
-  <message id="Alert.alert.threshold-value-key-info">Clé pour l'information</message>
-  <message id="Alert.alert.not-applicable">Non applicable dans ce cas</message>
-
-  <message id="Alert.alert.user-label">Destinataire</message>
-  <message id="Alert.alert.user-info">Destinataire pour l'alerte</message>
-
-  <message id="Alert.alert.media-label">Média</message>
-  <message id="Alert.alert.media-info">Média pour l'alerte</message>
-
-  <message id="Alert.alert.media-value-label">Média enregistré</message>
-  <message id="Alert.alert.media-value-info">Média enregistré pour l'alerte</message>
-
-  <message id="Alert.alert.snooze-label">Snooze</message>
-  <message id="Alert.alert.snooze-info">Délai entre deux alertes (secondes) (> 60)</message>
-  
-  <message id="Alert.alert.information-unit-label">Unité</message>
-  <message id="Alert.alert.information-unit-info">Unité utilisée pour paramétrer l'alerte</message>
-
-  <message id="Alert.alert.edition.add-button">Ajouter cette alerte</message>
-  <message id="Alert.alert.edition.delete-button">Supprimer</message>
-  
-  <message id="Alert.alert.add-media-button">Ajouter à la liste</message>
-  <message id="Alert.alert.delete-media-button">Supprimer de la liste</message>
-  
-  <message id="Alert.alert.NaN"><span style="color:red">Ce n'est pas un nombre</span></message>
-  <message id="Alert.alert.snooze-too-small"><span style="color:red">Inférieur à 60</span></message>
-  <message id="Alert.alert.string-tooshort"><span style="color:red">Ne doit pas être vide</span></message>
-  <message id="Alert.alert.operator-empty"><span style="color:red">Ne doit pas être vide</span></message>
-  
-  <message id="Alert.alert.operator.lt">Inférieur</message>
-  <message id="Alert.alert.operator.le">Inférieur ou égal</message>
-  <message id="Alert.alert.operator.eq">Egal</message>
-  <message id="Alert.alert.operator.ne">Différent </message>
-  <message id="Alert.alert.operator.ge">Supérieur ou égal</message>
-  <message id="Alert.alert.operator.gt">Supérieur</message>
-  
-  <message id="Alert.alert.media-destination-table">Destinataires de l'alerte</message>
-  
-  <message id="Alert.alert.user">Utilisateur</message>
-  <message id="Alert.alert.media">Média</message>
-  <message id="Alert.alert.media-value">Valeur</message>
-  <message id="Alert.alert.snooze">Snooze</message>
-  <message id="Alert.alert.role">Rôle</message>
-  
-  <message id="Alert.alert.information-missing-title">Information manquante</message>
-  <message id="Alert.alert.information-missing">Vous n'avez pas spécifié sur quelle information porte l'alerte</message>
-  
-  <message id="Alert.alert.media-missing-title">Média manquant</message>
-  <message id="Alert.alert.media-missing">
-    Vous n'avez pas choisi de média de destination pour l'alerte. <br />
-    Vous devez en ajouter au moins un dans la liste.
+    
+  <message id="Alert.alert.form-info">
+      Cette page permet d'ajouter des alertes, elles vous permettent d'envoyer le bon message, à la bonne personne au bon moment !
   </message>
-  
-  <message id="Alert.alert.media-selection-missing-title">Média manquant</message>
-  <message id="Alert.alert.media-selection-missing">Vous n'avez pas choisi le média à ajouter</message>
-  
-  <message id="Alert.alert.database-error-title">Erreur base de données</message>
-  <message id="Alert.alert.database-error">Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com</message>
-  
-  <message id="Alert.alert.alert-created-title">Alerte créée</message>
-  <message id="Alert.alert.alert-created">La création de votre alerte s'est déroulée avec succès !</message>
-  
-  <message id="Alert.alert.alert-already-exists-title">Alert existante</message>
-  <message id="Alert.alert.alert-already-exists">
-    Une alerte concernant cette information existe déjà. <br />
-    Les alertes multiples à propos d'une même information ne sont pas encore implémentées.
-  </message>
-  
-  <message id="Alert.alert.unit.kilo_bits">Kilo bits</message>
-  <message id="Alert.alert.unit.packets">Paquets</message>
-  <message id="Alert.alert.unit.octets">Octets</message>
-  <message id="Alert.alert.unit.kilo_octets">Kilo octets</message>
-  <message id="Alert.alert.unit.name">Nom</message>
-  <message id="Alert.alert.unit.load">Charge</message>
-  <message id="Alert.alert.unit.time_user_hz">Temps utilisateur hertz</message>
-  <message id="Alert.alert.unit.percent">Pourcents</message>
-  <message id="Alert.alert.unit.time_secs">Secondes</message>
-  <message id="Alert.alert.unit.oct_secs">Octets / seconde</message>
-  <message id="Alert.alert.unit.degrees">Degrés</message>
-  <message id="Alert.alert.unit.quantity">Quantité</message>
-  <message id="Alert.alert.unit.quantity_by_sec">Quantité par seconde</message>
-  <message id="Alert.alert.unit.state">Etat</message>
-  <message id="Alert.alert.unit.euros">Euros</message>
-  
-  <message id="Alert.alert.sub-unit.ko_s">Ko / seconde</message>
-  <message id="Alert.alert.sub-unit.mo_s">Mo / seconde</message>
-  <message id="Alert.alert.sub-unit.go_s">Go / seconde</message>
-  
-  <message id="Alert.alert.sub-unit.mo">Mega octets</message>
-  <message id="Alert.alert.sub-unit.go">Giga octets</message>
-  
-  <message id="Alert.alert.information.cpu_usage">Utilisation CPU</message>
-  <message id="Alert.alert.information.incoming_traffic">Trafic entrant</message>
-  <message id="Alert.alert.information.load_1_minute">Charge 1 minute</message>
-  <message id="Alert.alert.information.load_5_minutes">Charge 5 minutes</message>
-  <message id="Alert.alert.information.load_15_minutes">Charge 15 minutes</message>
-  <message id="Alert.alert.information.memory_free">Mémoire libre</message>
-  <message id="Alert.alert.information.memory_swap_free">Mémoire virtuelle libre</message>
-  <message id="Alert.alert.information.outgoing_traffic">Trafic sortant</message>
-  <message id="Alert.alert.information.received_drops">Paquets reçus : drops</message>
-  <message id="Alert.alert.information.received_errors">Paquets reçus : erreurs</message>
-  <message id="Alert.alert.information.received_packets">Paquets reçus</message>
-  <message id="Alert.alert.information.transmitted_drops">Paquets transmis : drops</message>
-  <message id="Alert.alert.information.transmitted_errors">Paquets transmis : erreurs</message>
-  <message id="Alert.alert.information.transmitted_packets">Paquets transmis</message>
-  
-  <message id="Alert.alert.information.humid_couloir">Humidité couloir</message>
-  <message id="Alert.alert.information.temp_couloir">Temperature couloir</message>
-  <message id="Alert.alert.information.humid_salle">Humidité salle</message>
-  <message id="Alert.alert.information.temp_salle">Température salle</message>
-  <message id="Alert.alert.information.temp_baie_1">Temp baie 1</message>
-  <message id="Alert.alert.information.temp_baie_2">Temp baie 2</message>
-  <message id="Alert.alert.information.temp_baie_3">Temp baie 3</message>
-  <message id="Alert.alert.information.temp_baie_4">Temp baie 4</message>
-  
-  <message id="Alert.alert.hint.network_interface_name">Nom interface réseau</message>
-  <message id="Alert.alert.hint.cpu_name">Nom CPU</message>
-  
 
+<!--    In table     -->
+    <!--nothing alert-->
+    
+    <message id="Alert.alert.nothing-alert">Alertes</message>
+    <message id="Alert.alert.nothing-alert-text">Aucune alerte enregistrée actuellement.</message>
+    <message id="Alert.alert.nothing-button">Cliquer pour ajouter</message>
+    <message id="Alert.alert.no-alert-sent">Jamais</message>
+    <!--header-->
+    <message id="Alert.alert.add-form.alert">Alertes</message>
+    <!--body-->
+    <message id="Alert.alert.name-name">Nom de l'alerte</message>
+    <message id="Alert.alert.modif-button">Modifier</message>
+    <message id="Alert.alert.delete-button">Supprimer</message>
+    <message id="Alert.alert.name-alert_media_specializations">Nombre de destinataires</message>
+    <message id="Alert.alert.name-last_attempt">Dernier envoi</message>
+    <message id="Alert.alert.name-modif-dest">Modifier dest</message>
+    <!--footer-->
+    <message id="Alert.alert.search-bar">Recherche : </message>
+        <!-- Paginate -->
+        <message id="Alert.alert.paginate-first">Début</message>
+        <message id="Alert.alert.paginate-prev">Préc</message>
+        <message id="Alert.alert.paginate-next">Suiv</message>
+        <message id="Alert.alert.paginate-last">Fin</message>
+
+<!--    In popup     -->
+    <message id="Alert.alert.button-cancel">Annuler</message>
+    <message id="Alert.alert.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.alert.add-alert">Ajouter une alerte</message>
+    <message id="Alert.alert.add-title-box-asset">Equipement</message>
+    <message id="Alert.alert.add-title-box-plugin">Application</message>
+    <message id="Alert.alert.add-title-box-info">Information</message>
+    <message id="Alert.alert.add-title-box-key">Valeur de la clé</message>
+    <message id="Alert.alert.add-last-info">
+            Dernière valeur reçue :
+    </message>
+    <message id="Alert.alert.add-compare">
+            <p>Critères de comparaison.</p>
+    </message>
+    <message id="Alert.alert.button-save-continu">Enregistrer et continuer</message>
+    <message id="Alert.alert.message-true">Vrai</message>
+    <message id="Alert.alert.message-false">Faux</message>
+    <message id="Alert.alert.message-value">
+        <p align="middle">Valeur</p>
+    </message>
+    <!--PUT-->
+    <message id="Alert.alert.modif-alert">Modifier cette alerte</message>
+    <!--DELETE-->
+    <message id="Alert.alert.delete-alert">Attention</message>
+    <message id="Alert.alert.delete-alert-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer une alerte.
+        </span>
+    </message>
+    <message id="Alert.alert.button-confirm">Confirmer</message>
+    <!--In popup recipients-->
+    <message id="Alert.alert.form.alert">Alerte&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.rec">Destinataire&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.media">Média&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.mess">Message&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.snooze">Temporisation&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.mail">MAIL</message>
+    <message id="Alert.alert.form.sms">SMS</message>
+    <message id="Alert.alert.form.push">PUSH</message>
+    
+    <message id="Alert.alert.operator.lt">Inférieur</message>
+    <message id="Alert.alert.operator.le">Inférieur ou égal</message>
+    <message id="Alert.alert.operator.eq">Egal</message>
+    <message id="Alert.alert.operator.ge">Supérieur ou égal</message>
+    <message id="Alert.alert.operator.gt">Supérieur</message>
+    <message id="Alert.alert.operator.ne">Différent</message>
+    
+    <message id="Alert.alert.form.minutes">minutes</message>
+    <message id="Alert.alert.form.hours">heures</message>
+    <message id="Alert.alert.form.times">fois</message>
+
+    <message id="Alert.alert.operator.contains">Contient</message>
+    
+    <message id="Alert.alert.sec-base-message">Ajoutez votre fichier de correlation ici.</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.alert.invalid-name-name">
+      <span style="color:red">&nbsp;Nom d'alerte invalide</span>
+  </message>
+  <message id="Alert.alert.invalid-name-alert">
+      <span style="color:red">&nbsp;Nom d'alerte invalide</span>
+  </message>
+  <message id="Alert.alert.invalid-name-twice">
+      <span style="color:red">
+           Nom de l'alerte déjà existant.
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-number">
+      <span style="color:red">
+        Nombre invalide
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-asset">
+      <span style="color:red">
+        Sélectionner <br/> un serveur
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-plugin">
+      <span style="color:red">
+        Sélectionner <br/>une application
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-info">
+      <span style="color:red">
+        Sélectionner <br/>une information
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-choose">
+      <span style="color:red">
+        Faites un choix
+      </span>
+  </message>
+
+<!--    Error message     -->
+  <message id="Alert.alert.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.alert.database-error">
+    Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+
+<!--    Warning message     -->
 </messages>

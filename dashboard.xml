@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+	
+    <message id="Alert.dashboard.title">Luggage delivery status</message>
+    
+	<message id="Alert.dashboard.board.template">
+	    
+	    <h3>${tr:Alert.dashboard.welcome-message} 
+            <img src="resources/themes/bootstrap/img/customer_logo.jpg" alt="" style="float:right; width:200px; margin-right:1%"></img>
+            
+        </h3>  
+        
+        ${firstrow}
+        ${secondrow}
+  	</message>
+</messages>

@@ -7,12 +7,12 @@
  * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
  * COMPANY AUTHORIZATION.
  * 
- * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
  * 
  */
 
-#ifndef ECHOESHOME_H_
-#define ECHOESHOME_H_
+#ifndef ECHOESHOME_H
+#define ECHOESHOME_H
 
 #include "GlobalIncludeFile.h"
 
@@ -38,18 +38,22 @@
 #include <Wt/WTableView>
 #include <Wt/WTable>
 
+#include "Conf.h"
 
 class EchoesHome : public Wt::WContainerWidget 
 {
     public:
-
         EchoesHome(Wt::WContainerWidget *parent = 0);
-        Session *getSession();
+        virtual ~EchoesHome();
+        Echoes::Dbo::Session *getSession();
         std::string getApiUrl() const;
 
+        // This globale is version of web site. Init in main.c.
+        static std::string version_g;
+
     private:
-        Session *session;
-        std::string _apiUrl;
+        Echoes::Dbo::Session *session;
+        std::string m_apiUrl;
 
         void concatApiUrl();
         void setApiUrl(std::string apiUrl);
@@ -81,13 +85,14 @@ class EchoesHome : public Wt::WContainerWidget
         void processEnvironment();
 
         void onAuthEvent();
-        void showPage(int page, Enums::EMenuRoot menuRoot = Enums::main);
+        void showPage(int page);
 
-        Wt::WTabWidget* initAdminWidget();
+//        Wt::WTabWidget* initAdminWidget();
         void initMainPageWidget();
 
         virtual void refresh();
         virtual void deleteContent();
 };
 
-#endif // ECHOESHOME_H_
+#endif // ECHOESHOME_H
+

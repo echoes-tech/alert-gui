@@ -31,6 +31,7 @@
   
   <message id="Alert.media.add-mobileapp-table">Application Mobile</message>
   <message id="Alert.media.mobileapp-name">Nom du mobile</message>
+  <message id="Alert.media.sms-name">Numéros de téléphone</message>
   
   <message id="Alert.user.edition.valid">Valide</message>
 </messages>

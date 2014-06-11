@@ -1,8 +1,14 @@
 /* 
- * File:   AssetManagementWidget.h
- * Author: tsa
- *
- * Created on 14 août 2012, 11:50
+ * Header of Asset Management Widget
+ * @author ECHOES Technologies (TSA)
+ * @date 14/08/2012
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
+ * 
  */
 
 #ifndef ASSETMANAGEMENTWIDGET_H
@@ -10,129 +16,96 @@
 
 #include "GlobalIncludeFile.h"
 
-#include <Wt/WAnchor>
-#include <Wt/WApplication>
-#include <Wt/WContainerWidget>
+#include <Wt/WButtonGroup>
+#include <Wt/WRadioButton>
+#include <Wt/WGroupBox>
+#include <Wt/WBreak>
+
+#include <Wt/WInteractWidget>
 #include <Wt/WDialog>
-#include <Wt/WImage>
+#include <Wt/WTableView>
+#include <Wt/WLengthValidator>
+#include <Wt/WContainerWidget>
+#include <Wt/WAnchor>
 #include <Wt/WLineEdit>
 #include <Wt/WPushButton>
 #include <Wt/WText>
-
-#include <Wt/WBreak>
-#include <Wt/WDatePicker>
-#include <Wt/WSelectionBox>
-#include <Wt/WIntValidator>
-#include <Wt/WTextArea>
-#include <Wt/WFileResource>
-
-#include <Wt/WComboBox>
-#include <Wt/WSelectionBox>
-#include <Wt/WStringListModel>
-#include <Wt/Dbo/Query>
-#include <Wt/WStandardItem>
-#include <Wt/WStandardItemModel>
-#include <Wt/Mail/Client>
-#include <Wt/Mail/Message>
-
-#include <Wt/WMessageBox>
-
-#include <Wt/WVBoxLayout>
-#include <Wt/WHBoxLayout>
 #include <Wt/WTable>
-#include <Wt/WTableCell>
-#include <Wt/WTableView>
+#include <Wt/WTheme>
 
-#include <Wt/Utils>
-#include <Wt/WLabel>
-
-#include <Wt/WGroupBox>
-#include <Wt/WButtonGroup>
-#include <Wt/WRadioButton>
-
-#include <memory>
-#include <iostream>
+// Ancien
+#include <Wt/Dbo/Query>
 #include <fstream>
 #include <boost/random.hpp>
 #include <boost/random/random_device.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 #include <boost/algorithm/string.hpp>
 
-class AssetManagementWidget : public Wt::WContainerWidget
+#include <Wt/Json/Value>
+
+#include <vector>
+#include <map>
+
+#include <Wt/Http/Message>
+
+#include <Wt/WInPlaceEdit>
+
+#include <tools/Enums.h>
+
+#include "Conf.h"
+#include "AbstractPage.h"
+
+class AbstractPage;
+
+class AssetManagementWidget : 
+public AbstractPage 
 {
 public:
   /*! \brief Constructor
    *
-   * Creates a new authentication.
+   * Creates a new page Asset.
    */
-  AssetManagementWidget(AssetManagementModel *model, Session *session);
+  AssetManagementWidget(Echoes::Dbo::Session *session, std::string apiUrl);
 
-  /*! \brief Returns the registration model.
-   *
-   * This returns the model that is used by the widget to do the actual
-   * registration.
+  /**
+   * In this methode you can call API for recover resources. \n
+   * She is call after initialization of this class.
    */
-  AssetManagementModel *model() const { return model_; }
-  
-  long long userId;
+  void          recoverListAsset();
 
-  
 protected:
-  /*! \brief Validates the current information.
-   *
-   * The default implementation simply calls
-   * RegistrationModel::validate() on the model.
-   *
-   * You may want to reimplement this method if you've added other
-   * information to the registration form that need validation.
-   */
-  virtual bool validate();
-
-
-  /*! \brief Closes the registration widget.
-   *
-   * The default implementation simply deletes the widget.
-   */
-  virtual void close();
-
-
-  virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
-  void createUI();
-
-  virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
+  virtual Wt::WDialog                   *deleteResource(long long id);
   
-  
-  void addAsset();
-  void deleteAsset(long long id);
-  Wt::WFileResource *generateScript(long long i, Wt::WString assetName);
-  std::string getStringFromFile(std::string resourcePath);
+  virtual Wt::WValidator                *editValidator(int cpt);
 
+//  virtual void                           updatePage(bool getResources = true);
+  virtual int                            addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);
+
+  virtual void                           postResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
 private:
-  AssetManagementModel *model_;
-  Session * session;
+  /*
+   * Generate and get script (sonde) for asset.
+   */
+  Wt::WFileResource     *generateScript(long long astId, Wt::WString assetName);
+  std::string           getStringFromFile(std::string resourcePath);
+  void                  downloadScript(std::string fileName);
 
-  Wt::WTemplateFormView *mainForm;
+  /*
+   * return API after call.
+   */
+  void                  postProbe(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
+  void                  checkAlertsInAsset(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client, Wt::WDialog *box, long long id);
   
-  bool created_;
+  void                  setSession(Echoes::Dbo::Session *session);
+  void                  setApiUrl(std::string apiUrl);
   
-  void downloadScript(std::string fileName);
-  
-  Wt::WContainerWidget *feedbackMessages_;
+  bool                   created_;
+  bool                   newClass_;
 
-  Wt::WLineEdit *nameEdit_;
-  Wt::WLineEdit *firstNameEdit_;
+  std::vector<long long> idsAlert_;
+  Wt::Json::Value        result_;
 
-  Wt::WComboBox *countryEdit_;
-  Wt::WComboBox *cityEdit_;
-
-  Wt::WDatePicker *birthDateEdit_;
-  Wt::WPushButton *childCountEdit_;
-  Wt::WLineEdit *weightEdit_;
-
-  Wt::WTextArea *remarksEdit_;
-  
 };
-
 
 
 #endif	/* ASSETMANAGEMENTWIDGET_H */

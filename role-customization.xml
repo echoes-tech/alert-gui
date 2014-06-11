@@ -6,6 +6,9 @@
     <message id="Alert.role.role-label">Role</message>
     <message id="Alert.role.media-label">Media</message>
     <message id="Alert.role.load">Load</message>
+    <message id="Alert.role.title-choose">Choose role or related media</message>
+    <message id="Alert.role.title-alias-asset">Aliases definition for assets</message>
+    <message id="Alert.role.title-alias-information">Aliases definition for information and criterion</message>
 
 	<message id="Alert.role.customization.template">
 	    <br />
@@ -15,7 +18,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon"><i class="icon-envelope"></i></span>
-                <h5>Choix du rôle et du media associé</h5>
+                <h5>${tr:Alert.role.title-choose}</h5>
             </div>
             <div class="widget-content">
                 <div class="container-fluid">
@@ -32,7 +35,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon"><i class="icon-pencil"></i></span>
-                <h5>Définition des alias pour les serveurs</h5>
+                <h5>${tr:Alert.role.title-alias-asset}</h5>
             </div>
             <div class="widget-content">
                 ${assets-container}
@@ -42,7 +45,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon"><i class="icon-pencil"></i></span>
-                <h5>Définition des alias pour les informations et les critères associés</h5>
+                <h5>${tr:Alert.role.title-alias-information}</h5>
             </div>
             <div class="widget-content">
                 <div class ="row-fluid">

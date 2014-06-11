@@ -1,273 +1,156 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
 
-  <!-- AlertWidget -->
-  
-  <message id="Alert.alert.information-table-title">What is the alert about ?</message>
+    <message id="Alert.alert.form-info">
+      This page allows you to add the alert, they allow you to send the right message to the right people at the right time!.
+    </message>
 
-  <message id="Alert.alert.alert-form-title">Alerts</message>
-  <message id="Alert.alert.alert-form-info">This page gives you the possibility to create an alert</message>
-
-  <message id="Alert.alert.asset-label">Server</message>
-  <message id="Alert.alert.asset-info">Choose your server</message>
-
-  <message id="Alert.alert.application-label">Application</message>
-  <message id="Alert.alert.application-info">Choose your application</message>
-
-  <message id="Alert.alert.information-label">Information</message>
-  <message id="Alert.alert.information-info">Choose your information</message>
-
-  <message id="Alert.alert.threshold-operator-label">Operator</message>
-  <message id="Alert.alert.threshold-operator-info">Choose your operator</message>
-
-  <message id="Alert.alert.threshold-value-label">Value</message>
-  <message id="Alert.alert.threshold-value-info">Choose your value</message>
-
-  <message id="Alert.alert.threshold-value-key-label">Value key</message>
-  <message id="Alert.alert.threshold-value-key-info">Key for the value</message>
-  <message id="Alert.alert.not-applicable">Not applicable for this information</message>
-
-  <message id="Alert.alert.user-label">Recipient</message>
-  <message id="Alert.alert.user-info">Choose an alert recipient</message>
-
-  <message id="Alert.alert.media-label">Media</message>
-  <message id="Alert.alert.media-info">Choose an alert media</message>
-
-  <message id="Alert.alert.media-value-label">Registered media</message>
-  <message id="Alert.alert.media-value-info">Choose an alert registered media</message>
-
-  <message id="Alert.alert.snooze-label">Snooze</message>
-  <message id="Alert.alert.snooze-info">Delay between two alerts (seconds) (> 60)</message>
-
-  <message id="Alert.alert.information-unit-label">Unit</message>
-  <message id="Alert.alert.information-unit-info">Unit used to set the alert</message>
-
-  <message id="Alert.alert.add-media-button">Add to the list</message>
-  <message id="Alert.alert.delete-media-button">Delete from the list</message>
-
-  <message id="Alert.alert.edition.add-button">Add this alert</message>
-  <message id="Alert.alert.edition.delete-button">Delete</message>
-  
-  <message id="Alert.alert.NaN"><span style="color:red">Not a number</span></message>
-  <message id="Alert.alert.snooze-too-small"><span style="color:red">Less than 60</span></message>
-  <message id="Alert.alert.string-tooshort"><span style="color:red">Must not be empty</span></message>
-  <message id="Alert.alert.operator-empty"><span style="color:red">Must not be empty</span></message>
-  
-  
-  <message id="Alert.alert.operator.lt">Less</message>
-  <message id="Alert.alert.operator.le">Less or equal</message>
-  <message id="Alert.alert.operator.eq">Equal</message>
-  <message id="Alert.alert.operator.ne">Not equal</message>
-  <message id="Alert.alert.operator.ge">Greater or equal</message>
-  <message id="Alert.alert.operator.gt">Greater</message>
-  
-  <message id="Alert.alert.media-destination-table">Recipients</message>
-  
-  <message id="Alert.alert.user">User</message>
-  <message id="Alert.alert.media">Media</message>
-  <message id="Alert.alert.media-value">Value</message>
-  <message id="Alert.alert.snooze">Snooze</message>
-  <message id="Alert.alert.role">Role</message>
-  
-  <message id="Alert.alert.information-missing-title">Missing information</message>
-  <message id="Alert.alert.information-missing">You didn't choose the information to be monitored</message>
-  
-  <message id="Alert.alert.media-missing-title">Missing media</message>
-  <message id="Alert.alert.media-missing">
-    You didn't choose a destination media. <br />
-    You have to add a least one in the list.
-  </message>
-  
-  <message id="Alert.alert.media-selection-missing-title">Missing media</message>
-  <message id="Alert.alert.media-selection-missing">You didn't select the media to be added</message>
-  
-  <message id="Alert.alert.database-error-title">Database error</message>
-  <message id="Alert.alert.database-error">Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
-  
-  <message id="Alert.alert.alert-created-title">Alert created</message>
-  <message id="Alert.alert.alert-created">Your alert was successfully created !</message>
-  
-  <message id="Alert.alert.alert-already-exists-title">Alert exists</message>
-  <message id="Alert.alert.alert-already-exists">An alert about this information already exists. Multiple alerts on a single information are not implemented yet.</message>
-  
-  <message id="Alert.alert.unit.kilo_bits">Kilo bits</message>
-  <message id="Alert.alert.unit.packets">Packets</message>
-  <message id="Alert.alert.unit.octets">Octets</message>
-  <message id="Alert.alert.unit.kilo_octets">Kilo octets</message>
-  <message id="Alert.alert.unit.name">Name</message>
-  <message id="Alert.alert.unit.load">Load</message>
-  <message id="Alert.alert.unit.time_user_hz">Time user hertz</message>
-  <message id="Alert.alert.unit.percent">Percent</message>
-  <message id="Alert.alert.unit.time_secs">Seconds</message>
-  <message id="Alert.alert.unit.oct_secs">Octets / second</message>
-  <message id="Alert.alert.unit.degrees">Degrees</message>
-  <message id="Alert.alert.unit.quantity">Amount</message>
-  <message id="Alert.alert.unit.quantity_by_sec">Amount by sec</message>
-  <message id="Alert.alert.unit.state">State</message>
-  
-  <message id="Alert.alert.sub-unit.ko_s">Ko / second</message>
-  <message id="Alert.alert.sub-unit.mo_s">Mo / second</message>
-  <message id="Alert.alert.sub-unit.go_s">Go / second</message>
-  
-  <message id="Alert.alert.sub-unit.mo">Mega octets</message>
-  <message id="Alert.alert.sub-unit.go">Giga octets</message>
-  
-  <message id="Alert.alert.information.cpu_usage">CPU Usage</message>
-  <message id="Alert.alert.information.incoming_traffic">Incoming traffic</message>
-  <message id="Alert.alert.information.load_1_minute">Load 1 minute</message>
-  <message id="Alert.alert.information.load_5_minutes">Load 5 minutes</message>
-  <message id="Alert.alert.information.load_15_minutes">Load 15 minutes</message>
-  <message id="Alert.alert.information.memory_free">Memory free</message>
-  <message id="Alert.alert.information.memory_swap_free">Swap memory free</message>
-  <message id="Alert.alert.information.outgoing_traffic">Outgoing traffic</message>
-  <message id="Alert.alert.information.received_drops">Received packets : drops</message>
-  <message id="Alert.alert.information.received_errors">Received packets : errors</message>
-  <message id="Alert.alert.information.received_packets">Received packets</message>
-  <message id="Alert.alert.information.transmitted_drops">Transmitted packets : drops</message>
-  <message id="Alert.alert.information.transmitted_errors">Transmitted packets : errors</message>
-  <message id="Alert.alert.information.transmitted_packets">Transmitted packets</message>
-  
-  <message id="Alert.alert.information.humid_couloir">Corridor humidity</message>
-  <message id="Alert.alert.information.temp_couloir">Corridor temperature</message>
-  <message id="Alert.alert.information.humid_salle">Room humidity</message>
-  <message id="Alert.alert.information.temp_salle">Room temperature</message>
-  <message id="Alert.alert.information.temp_baie_1">Bay 1 temperature</message>
-  <message id="Alert.alert.information.temp_baie_2">Bay 2 temperature</message>
-  <message id="Alert.alert.information.temp_baie_3">Bay 3 temperature</message>
-  <message id="Alert.alert.information.temp_baie_4">Bay 4 temperature</message>
-
-  <message id="Alert.alert.hint.network_interface_name">Network interface name</message>
-  <message id="Alert.alert.hint.cpu_name">CPU name</message>
-  
-
-  <!-- templates -->
-
-  <message id="Alert.alert.Edition.template">
-    <br />  
+<!--    In table     -->
+    <!--nothing alert-->
+    <message id="Alert.alert.nothing-alert">Alerts</message>
+    <message id="Alert.alert.nothing-alert-text">No alert</message> 
+    <message id="Alert.alert.nothing-button">Click to Add</message>
+    <message id="Alert.alert.no-alert-sent">Never</message>
+    <!--header-->
+    <message id="Alert.alert.add-form.alert">Alerts</message>
+    <!--body-->
+    <message id="Alert.alert.name-name">Alert name</message>
+    <message id="Alert.alert.modif-button">Modify</message>
+    <message id="Alert.alert.delete-button">Delete</message>
+    <message id="Alert.alert.name-alert_media_specializations">Recipients number</message>
+    <message id="Alert.alert.name-last_attempt">Last sent</message>
+    <message id="Alert.alert.name-modif-dest">Modify recip.</message>
     
-    <div class="Alert-form">
-      <div class ="alert alert-info">${tr:Alert.alert.alert-form-info} </div>
+    <!--footer-->
+    <message id="Alert.alert.search-bar">Search: </message>
+        <!-- Paginate -->
+        <message id="Alert.alert.paginate-first">First</message>
+        <message id="Alert.alert.paginate-prev">Prev</message>
+        <message id="Alert.alert.paginate-next">Next</message>
+        <message id="Alert.alert.paginate-last">Last</message>
 
+<!--    In popup     -->
+    <message id="Alert.alert.button-cancel">Cancel</message>
+    <message id="Alert.alert.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.alert.add-alert">Add alert</message>
+    <message id="Alert.alert.add-title-box-asset">Asset</message>
+    <message id="Alert.alert.add-title-box-plugin">Plugin</message>
+    <message id="Alert.alert.add-title-box-info">Information</message>
+    <message id="Alert.alert.add-title-box-key">Key</message>
+    <message id="Alert.alert.add-last-info">
+            <p>Last info value :&nbsp;</p>
+    </message>
+    <message id="Alert.alert.add-compare">
+            <p>Compare criterion</p>
+    </message>
+    <message id="Alert.alert.button-save-continu">Save and continue</message>
+    <message id="Alert.alert.message-true">True</message>
+    <message id="Alert.alert.message-false">False</message>
+    <message id="Alert.alert.message-value">Value</message>
+    <!--PUT-->
+    <message id="Alert.alert.modif-alert">Modify this alert</message>
+    <!--DELETE-->
+    <message id="Alert.alert.delete-alert">Attention</message>
+    <message id="Alert.alert.delete-alert-message">
+        <span style="color:red">
+            You are about to delete a server
+        </span>
+    </message>
+    <message id="Alert.alert.button-confirm">Confirm</message>
+    <!--In popup recipients-->
+    <message id="Alert.alert.form.alert">Alert&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.rec">Recipient&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.media">Media&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.mess">Message&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.snooze">Snooze&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.mail">MAIL</message>
+    <message id="Alert.alert.form.sms">SMS</message>
+    <message id="Alert.alert.form.push">PUSH</message>
+    
+    <message id="Alert.alert.operator.lt">Less</message>
+    <message id="Alert.alert.operator.le">Less or equal</message>
+    <message id="Alert.alert.operator.eq">Equal</message>
+    <message id="Alert.alert.operator.ge">Greater or equal</message>
+    <message id="Alert.alert.operator.gt">Greater</message>
+    <message id="Alert.alert.operator.ne">Not equal</message>
+    
+    <message id="Alert.alert.form.minutes">minutes</message>
+    <message id="Alert.alert.form.hours">hours</message>
+    <message id="Alert.alert.form.times">times</message>
+    
+    <message id="Alert.alert.operator.contains">Contains</message>
+    
+    <message id="Alert.alert.sec-base-message">Add your correlation file here.</message>
 
-      <div class="row-fluid">
-            <div class="span12">
-                <div class="widget-box">
-                    <div class="widget-title">
-                        <span class="icon">
-                            <i class='icon-tasks'></i>
-                        </span>
-                        <h5>${tr:Alert.alert.information-table-title}</h5>
-                    </div>
-                    <div class="widget-content">
-                        
-                        <!-- to disable the :first-child behaviour -->
-                        <div class="row-fluid" style="display:none"></div>
-                            
-                        <div class="row-fluid">
-                            <div class="span1">    
-                                <label class="control-label">${tr:Alert.alert.asset-label} </label>
-                            </div>
-                            <div class="span3">                            
-                                ${server-sbox}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.alert.asset-info}"></i>
-                            </div>
-                            <div class="span1">
-                                ${tr:Alert.alert.application-label}
-                            </div>
-                            <div class="span3">                            
-                                ${application-sbox}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.alert.application-info}"></i>
-                            </div>
-                            <div class="span1">
-                                ${tr:Alert.alert.information-label}
-                            </div>
-                            <div class="span3">
-                                ${information-sbox}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.alert.information-info}"></i>
-                            </div> 
-                        </div>
-                        
-                        <div class="row-fluid"> 
+<!--    Invalid message     -->
+  <message id="Alert.alert.invalid-name-alert">
+      <span style="color:red">
+        &nbsp;Invalid name
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-name-name">
+      <span style="color:red">
+        &nbsp;Invalid name
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-name-twice">
+      <span style="color:red">
+          Please, do not use the same name twice
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-number">
+      <span style="color:red">
+        Invalid number
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-asset">
+      <span style="color:red">
+        Select asset
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-plugin">
+      <span style="color:red">
+        Select plugin
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-info">
+      <span style="color:red">
+        Select info
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-choose">
+      <span style="color:red">
+        Choose Boolean
+      </span>
+  </message>
 
-                            <div class="span1 offset8">
-                                <br />
-                                ${threshold-value-key-label}
-                            </div>
-                            <div class="span3">
-                                <br />
-                                ${threshold-value-key}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.alert.threshold-value-key-info}"></i>
-                            </div>
-                            
-                        </div>
-                        
-<!--                        <div class="row-fluid"> 
+<!--    Error message     -->
+  <message id="Alert.alert.file-not-generated">
+      <span style="color:red">
+          The file has not been generated. Please contact us.
+      </span>
+  </message>
+  <message id="Alert.alert.database-error-title">Database error</message>
+  <message id="Alert.alert.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+<!--    Warning message     -->
 
-                            <div class="span1 offset8">
-                                <br />
-                                ${threshold-value-exemple-label}
-                            </div>
-                            <div class="span3">
-                                <br />
-                                ${threshold-value-exemple}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.alert.threshold-value-exemple-info}"></i>
-                            </div>
-                            
-                        </div>-->
-                        
-                        <div class="row-fluid"> 
-                            <div class="span12">    
-                            </div>
-                        </div>
-                        
-                        <div class = "new-update"></div>
-                        
-                        
-                        <div class="row-fluid"> 
-                            <div class="span1">
-                                ${threshold-operator-label}
-                            </div>
-                            <div class="span3">
-                                ${threshold-operator}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.alert.threshold-operator-info}"></i>
-                            </div>
-                            <div class="span1">
-                                ${threshold-value-label}
-                            </div>
-                            <div class="span3">
-                                ${threshold-value}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.alert.threshold-value-info}"></i>
-                            </div>
-                            <div class="span1">
-                                ${information-unit-label}
-                            </div>
-                            <div class="span3">
-                                ${information-unit}
-                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.alert.information-unit-info}"></i>
-                            </div>
-                            <div class="row-fluid"> 
-                                <div class="span12">    
-                                </div>
-                            </div>
-                        
-                            <div class = "new-update"></div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span12">
-                                ${table-media-destination}
-                            </div>
-                        </div>
-                        
-                        <div class="form-actions no-margin">
-                            ${create-alert-button}
-                        </div>
-                    </div>
+<!-- templates -->
+    <message id="Alert.alert.Management.template" >
+        <br />
+            <div class ="alert alert-info">${tr:Alert.alert.form-info}</div> 
+            <div id="alert-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers">
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
                 </div>
             </div>
-      </div>
+            </div>
             
-    </div>
-
-  </message>
+    </message>
 
 </messages>

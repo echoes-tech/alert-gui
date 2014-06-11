@@ -7,7 +7,7 @@
 
 #include "SummaryBoard.h"
 
-SummaryBoard::SummaryBoard(Session *session)
+SummaryBoard::SummaryBoard(Echoes::Dbo::Session *session)
 : Wt::WContainerWidget()
 {
     created_ = false;
@@ -19,15 +19,11 @@ SummaryBoard::SummaryBoard(Session *session)
     
     this->addWidget(mainTemplate);
     
-    
-    
     this->alertSentWidget = new MonitoringWidget(session);
     this->welcomeText = new Wt::WText(tr("welcome-text"));
     
     mainTemplate->bindWidget("alerts-sent",this->alertSentWidget);
     mainTemplate->bindWidget("welcome", this->welcomeText);
-    
-    
     
 }
 

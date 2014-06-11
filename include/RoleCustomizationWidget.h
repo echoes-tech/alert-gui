@@ -24,7 +24,7 @@
 
 class RoleCustomizationWidget : public Wt::WContainerWidget {
 public:
-    RoleCustomizationWidget(Session *session, const std::string &apiUrl);
+    RoleCustomizationWidget(Echoes::Dbo::Session *session, const std::string &apiUrl);
     RoleCustomizationWidget(const RoleCustomizationWidget& orig);
     virtual ~RoleCustomizationWidget();
     std::string getApiUrl() const;
@@ -32,9 +32,10 @@ public:
     
     void getRoles(boost::system::error_code err, const Wt::Http::Message& response);
     void getAssets(boost::system::error_code err, const Wt::Http::Message& response);
-    void getMedias(boost::system::error_code err, const Wt::Http::Message& response);
+//    void getMedias(boost::system::error_code err, const Wt::Http::Message& response);
     void getPlugins(boost::system::error_code err, const Wt::Http::Message& response);
-    void getCriteria(boost::system::error_code err, const Wt::Http::Message& response, int idForInfMap, Wt::WContainerWidget *row);
+    void getCriteria(int idForInfMap, Wt::WContainerWidget *row);
+    void addCriterionRow(int idx, std::string critName, long long critId, Wt::WContainerWidget *row, std::map<long long, Wt::WLineEdit*> *mapIdCritEdit, int idForInfMap);
     void getInformations(boost::system::error_code err, const Wt::Http::Message& response);
     void getAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
     void putAssetAlias(int idx);
@@ -47,7 +48,7 @@ public:
     void resPutCritAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit);
     
 private:
-    Session * session;
+    Echoes::Dbo::Session * session;
     bool created_;
     Wt::WTemplate *mainTemplate;
     std::string credentials;
@@ -69,7 +70,7 @@ private:
     
     std::map<int,std::map<long long,Wt::WLineEdit*>> mapEditInformationCriteria;
     
-    std::map<int,Wt::Json::Object> mapIdInformations;
+    std::map<int,long long> mapIdInformations;
     std::map<int,Wt::WLineEdit*> mapEditInformations;
     std::map<int,Wt::WContainerWidget*> mapRowCriteriaInformations;
     
@@ -103,7 +104,7 @@ private:
     
     void fillAssetsFields();
     void fillInformationsFields();
-    void fillCriteriaFields(int idForInfMap, std::map<long long, Wt::WLineEdit*> mapIdCritEdit);
+    void fillCriteriaFields(int idForInfMap, std::map<long long, Wt::WLineEdit*> *mapIdCritEdit);
     
     bool mediasSet;
     bool rolesSet;

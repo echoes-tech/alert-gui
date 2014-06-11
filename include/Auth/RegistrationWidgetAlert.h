@@ -20,6 +20,7 @@
 #include <Wt/WApplication>
 #include <Wt/Auth/Login>
 #include <Enums.h>
+#include <tools/Enums.h>
 #include <string.h>
 #include <boost/lexical_cast.hpp>
 #include <boost/any.hpp>

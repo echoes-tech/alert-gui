@@ -18,4 +18,7 @@
   <message id="Alert.option.sms-quota-label">Quota SMS</message>
   <message id="Alert.option.sms-quota-info">Le nombre de SMS qu'il vous reste</message>
 
+  <message id="Alert.option.database-error-title">Erreur base de données</message>
+  <message id="Alert.option.database-error">Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com</message>
+
 </messages>

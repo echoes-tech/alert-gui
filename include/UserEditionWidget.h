@@ -1,132 +1,58 @@
 /* 
- * File:   UserEditionWidget.h
- * Author: tsa
- *
- * Created on 14 août 2012, 11:50
+ * Gui UserEditionWidget.h
+ * 
+ * @author ECHOES Technologies (TSA)
+ * @author Guillaume KRIER
+ * 
+ * @date 15/11/2013
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
+ * 
  */
 
 #ifndef USEREDITIONWIDGET_H
 #define	USEREDITIONWIDGET_H
 
-#include "GlobalIncludeFile.h"
-
-#include <Wt/WButtonGroup>
-#include <Wt/WRadioButton>
-#include <Wt/WGroupBox>
-#include <Wt/WBreak>
-
-#include <Wt/WAnchor>
-#include <Wt/WApplication>
-#include <Wt/WContainerWidget>
-#include <Wt/WDialog>
-#include <Wt/WImage>
-#include <Wt/WLineEdit>
-#include <Wt/WPushButton>
-#include <Wt/WText>
-
-#include <Wt/WComboBox>
-#include <Wt/WSelectionBox>
-#include <Wt/WStringListModel>
-
-#include <memory>
-
+#include <Wt/Json/Value>
+#include <Wt/Http/Message>
 #include <Wt/WRandom>
 
-class UserEditionWidget : public Wt::WTemplateFormView
+#include "GlobalIncludeFile.h"
+#include "AbstractPage.h"
+
+typedef std::map<long long, std::string>        MapLongString;
+
+class AbstractPage;
+
+class UserEditionWidget :
+public AbstractPage
 {
 public:
-  /*! \brief Constructor
-   *
-   * Creates a new authentication.
-   */
-  UserEditionWidget();
+    UserEditionWidget(Echoes::Dbo::Session *session, std::string apiUrl, int type);
 
-  /*! \brief Sets the registration model.
-   */
-  void setModel(UserEditionModel *model);
-  
-  /*! \brief Sets the session.
-   */
-  void setSession(Session *session);
+    Wt::WValidator              *editValidator(int who);
+    
+    void                        addResource(std::vector<Wt::WInteractWidget*> argument);
+    void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
 
-  /*! \brief Returns the registration model.
-   *
-   * This returns the model that is used by the widget to do the actual
-   * registration.
-   */
-  UserEditionModel *model() const { return model_; }
-
-//  void companyClick();
-//  void individualClick();
-//  void associationClick();
-  
-  void checkMediaEmail();
-  void checkMediaSms();
-  void checkMediaMobileApp();
-  
-  /*! \brief Updates the user-interface.
-   *
-   * This updates the user-interface to reflect the current state of the
-   * model.
-   */
-  void update();
-  
-  Wt::WTable *emailsTable;
-  Wt::WTable *smsTable;
-  Wt::WTable *mobileappTable;
-  Wt::WLineEdit *emailEdit;
-  Wt::WLineEdit *smsEdit;
-  Wt::WLineEdit *mobileappEdit;
-  
-  void createMediaTable(int medEnumId);
-  
-  std::map<long long, Wt::WString> getMediasForCurrentUser(int mediaType);
-  
-  
-  void addMedia(Wt::WFormModel::Field field, int medId);
-  void deleteMedia(int medEnumId, long long medId, Wt::WTableCell * cell);
-  
-  void addMobileApp();
-  void addEmail();
-  void addSms();
+    virtual std::string         addParameter();
+    virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
 
 protected:
-  /*! \brief Validates the current information.
-   *
-   * The default implementation simply calls
-   * RegistrationModel::validate() on the model.
-   *
-   * You may want to reimplement this method if you've added other
-   * information to the registration form that need validation.
-   */
-  virtual bool validate();
-
-  /*! \brief Performs the registration.
-   *
-   * The default implementation checks if the information is valid
-   * with validate(), and then calls
-   * RegistrationModel::doRegister(). If registration was successful,
-   * it calls registerUserDetails() and subsequently logs the user in.
-   */
-  
-  virtual void close();
-
-  virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
-
-protected:
-  virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
+    virtual void                handleJsonGet(vectors_Json jsonResources);
 
 private:
-  AuthWidget *authWidget_;
-  UserEditionModel *model_;
-  Session * session;
 
-  bool created_;
-  Login *confirmPasswordLogin_;
-  
-  Wt::WGroupBox *organizationContainer;
-  Wt::WButtonGroup *organizationGroup;
-
+    Echoes::Dbo::Session        *session_;
+    std::string                 apiUrl_;
+    Wt::Json::Value             result_;
+    int                         type_;  
+    MapLongString               mediasTokens;
+    Wt::WStandardItemModel      *usersModel_;
 };
 
 

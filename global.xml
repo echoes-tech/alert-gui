@@ -16,7 +16,7 @@
             <div class="new-update clearfix">
                 <i class="icon-comment"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>Tell us what you want about our product</strong></a>
+                    <p><strong>Tell us what you want about our product</strong></p>
                     <ul>
                         <li><a href="https://forge.echoes-tech.com/" target="blank_">Forge to ask everything you need.</a></li>
                         <li><a href="https://forge.echoes-tech.com/projects/echoes-alert/boards" target="blank_">Assistance forum.</a></li>         
@@ -28,7 +28,7 @@
             <div class="new-update clearfix">
                 <i class="icon-tasks"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>Major changes in next release</strong></a>
+                    <p><strong>Major changes in next release</strong></p>
                     <ul>
                         <li>Full alert customization</li>
                         <li>Correlation</li>
@@ -53,7 +53,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-gift">
-                    <a title="" href="#"><strong>[GUI] New Features</strong></a>
+                    <p><strong>[GUI] New Features</strong></p>
                     <ul>
                         <li>Boostrap theme engine integrated</li>
                         <li>Alert customization</li>
@@ -65,7 +65,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">										
-                    <a title="" href="#"><strong>[API] New Features</strong></a>
+                    <p><strong>[API] New Features</strong></p>
                     <ul>
                         <li>All our resources are accessible through API</li>
                     </ul>
@@ -77,7 +77,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-alert">										
-                    <a title="" href="#"><strong>[Engine] New features</strong></a>
+                    <p><strong>[Engine] New features</strong></p>
                     <ul>
                         <li>Correlation engine</li>
                     </ul>
@@ -101,7 +101,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">										
-                    <a title="" href="#"><strong>[API] New Features</strong></a>
+                    <p><strong>[API] New Features</strong></p>
                     <ul>
                         <li>RESTful compliant</li>
                         <li>Packages management system</li>    
@@ -114,7 +114,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-alert">										
-                    <a title="" href="#"><strong>[Engine] New feature</strong></a>
+                    <p><strong>[Engine] New feature</strong></p>
                     <ul>
                         <li>Alerts about textual pieces of information</li>
                     </ul>
@@ -125,7 +125,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[GUI] Bugfixes</strong></a>
+                    <p><strong>[GUI] Bugfixes</strong></p>
                     <ul>
                         <li>Impossible to create alerts in some cases</li>
                         <li>Impossible to link user and organisation in some cases</li>    
@@ -137,7 +137,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[Install script] Evolutions / New features</strong></a>
+                    <p><strong>[Install script] Evolutions / New features</strong></p>
                     <ul>
                         <li>Uses API</li>
                         <li>Uses openssl binary instead of wget (use of PUT method)</li>
@@ -150,7 +150,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[Probe] Bugfixes / New features</strong></a>
+                    <p><strong>[Probe] Bugfixes / New features</strong></p>
                     <ul>
                         <li>Memory leaks deleted</li>
                         <li>SNMP addon</li>
@@ -165,7 +165,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[Deployment] New features</strong></a>
+                    <p><strong>[Deployment] New features</strong></p>
                     <ul>
                         <li>Automatic deployment process</li>
                         <li>New key process indicators about development</li>
@@ -189,7 +189,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[ECHOES Alert] Bugfixes</strong></a>
+                    <p><strong>[ECHOES Alert] Bugfixes</strong></p>
                     <ul>
                     <li>Beta version opened all day</li>
                     <li>Various bugfixes</li>
@@ -212,7 +212,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[ECHOES Alert] Bugfixes</strong></a>
+                    <p><strong>[ECHOES Alert] Bugfixes</strong></p>
                     <ul>
                     <li>Beta version opened every day between 2pm and 2am</li>
                     <li>[Engine] Stabilization : performances improved
@@ -248,7 +248,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[ECHOES Alert] bugfixes</strong></a>
+                    <p><strong>[ECHOES Alert] bugfixes</strong></p>
                     <ul>
                         <li> [Engine] Bugfix : SMS were not always sent</li>
                         <li> [GUI] Bugfix : sometimes it was impossible to add an alert</li>
@@ -264,7 +264,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[ECHOES Alert] bugfixes</strong></a>
+                    <p><strong>[ECHOES Alert] bugfixes</strong></p>
                     <ul>
                         <li> [Engine] Alert calculation process bugfixes</li>
                         <li> [GUI] Interface stabilization</li>
@@ -283,7 +283,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">
-                    <a title="" href="#"><strong>[ECHOES Alert] New features</strong></a>
+                    <p><strong>[ECHOES Alert] New features</strong></p>
                     <ul>
                         <li>Create an account (but it seems to be done)</li>
                         <li>Order you first probe</li>
@@ -305,24 +305,16 @@
     
     
   <message id="Alert.admin.welcome-tab">Welcome</message>
-  <message id="Alert.admin.asset-tab">Servers</message>
-  <message id="Alert.admin.alert-creation-tab">Alert creation</message>
-  <message id="Alert.admin.alert-list-tab">Alerts list</message>
-  <message id="Alert.admin.users-tab">Users</message>
-  <message id="Alert.admin.medias-tab">Medias</message><message id="Alert.admin.welcome-tab">Welcome</message>
+  <message id="Alert.admin.recipients-tab">Recipients</message>
   <message id="Alert.admin.assets-tab">Servers</message>
-  <message id="Alert.admin.alerts-tab">Alerts definition</message>
-  <message id="Alert.admin.alert-creation-tab">Alert creation</message>
-  <message id="Alert.admin.alerts_list-tab">Alerts list</message>
-  <message id="Alert.admin.users-tab">Users</message>
-  <message id="Alert.admin.medias-tab">Medias</message>
-  <message id="Alert.admin.submenu_alerts-tab">Alerts Management</message>
-  <message id="Alert.admin.submenu_accounts-tab">Account options</message>
-  <message id="Alert.admin.plugins-tab">Plugins creation</message>
+  <message id="Alert.admin.informations-tab">Informations</message>
+  <message id="Alert.admin.association-tab">Associations</message>
+  <message id="Alert.admin.alerts-tab">Alerts</message>
+  <message id="Alert.admin.plugins-tab">Applications</message>
+  <message id="Alert.admin.units-tab">Units</message>
+  <message id="Alert.admin.dashboard-tab">Dashboard</message>
   
   <message id="Alert.admin.home">Home</message>
-  <message id="Alert.admin.title">Administration</message>
-  <message id="Alert.monitoring.title">Monitoring</message>
   
   
   <message id="Alert.admin.options-tab">Options</message>
@@ -330,5 +322,7 @@
   <message id="Alert.global.database-error">Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
   
   <message id="Alert.global.action">Actions</message>
+  <message id="Footer.text.date">&copy; 2012 -</message>
+  <message id="Footer.text"><a href="http://www.echoes-tech.com/" target="_blank" >ECHOES Technologies</a>. Tous droits réservés.</message>
 
 </messages>

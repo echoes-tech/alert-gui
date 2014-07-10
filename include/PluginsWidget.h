@@ -15,8 +15,7 @@ class PluginsWidget :
 public Wt::WContainerWidget 
 {
     public:
-    
-        PluginsWidget(Echoes::Dbo::Session *session, const std::string &apiUrl);
+        PluginsWidget(Echoes::Dbo::Session *session, const std::string apiUrl);
         void update();
 
     private:

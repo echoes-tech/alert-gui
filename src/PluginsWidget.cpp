@@ -11,7 +11,7 @@
 
 using namespace std;
 
-PluginsWidget::PluginsWidget(Echoes::Dbo::Session* session, const string &apiUrl)
+PluginsWidget::PluginsWidget(Echoes::Dbo::Session* session, const std::string apiUrl)
 {        
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use("plugins", false);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="89">
+<configurationDescriptor version="94">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
@@ -15,6 +15,8 @@
         <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
           <itemPath>include/PluginEditionModel.h</itemPath>
           <itemPath>include/PluginEditionWidget.h</itemPath>
+          <itemPath>include/PluginsTablePluginWidget.h</itemPath>
+          <itemPath>include/PluginsWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>include/UserEditionWidget.h</itemPath>
@@ -116,6 +118,8 @@
         <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
           <itemPath>src/PluginEditionModel.cpp</itemPath>
           <itemPath>src/PluginEditionWidget.cpp</itemPath>
+          <itemPath>src/PluginsTablePluginWidget.cpp</itemPath>
+          <itemPath>src/PluginsWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>src/UserEditionWidget.cpp</itemPath>
@@ -172,7 +176,6 @@
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
@@ -294,6 +297,10 @@
       </item>
       <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginsTablePluginWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
@@ -421,6 +428,10 @@
       </item>
       <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/PluginsTablePluginWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/RecipientsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
@@ -446,7 +457,6 @@
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
-        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
@@ -568,6 +578,10 @@
       </item>
       <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginsTablePluginWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
@@ -694,6 +708,10 @@
       <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTablePluginWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RecipientsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -63,6 +63,8 @@
 #include <Wt/WMessageBox>
 #include <Wt/WNavigationBar>
 
+#include <Wt/WEvent>
+
 #include <Wt/Http/Message>
 #include <Wt/Json/Parser>
 #include <Wt/Json/Value>
@@ -115,7 +117,7 @@ class AbstractPage :
 public Wt::WTemplateFormView
 {
 public:
-                                AbstractPage(Echoes::Dbo::Session *session, std::string apiUrl, std::string namePage);
+                                AbstractPage(Echoes::Dbo::Session *session, std::string apiUrl, std::string namePage, bool selectable = false);
     virtual                     ~AbstractPage();
 
     
@@ -151,7 +153,7 @@ protected:
     // Add Resource For Elements ----------------------------------
     void                        addTableSecondHeader();
     void                        fillBodyTable();
-    void                        addInputForAffix(int rowBodyTable);
+    void                        addInputForAffix(int rowBodyTable);   
     // POPUP : ----------------------------------------------------
     void                        addResourcePopup();
     void                        modifResourcePopup(long long id);
@@ -228,10 +230,9 @@ protected:
     
     bool                getFooterOkButtonStatus();
     void                setFooterOkButtonStatus(bool active);
+    void                        tableHandler(long long id);
 
 private:
-    
-
     // Main attributs ---------------------------
     // main table of the page, used to list resources
     Wt::WTable                  *m_resourceTable;
@@ -251,6 +252,8 @@ private:
     std::string                         m_undidName;
     bool                                m_isModifButtonPresent;
     bool                                m_isDeleteButtonPresent;
+    bool                                m_selectable;
+    long long                           m_selectedID;
 //    bool                                m_isMainPage;
     // select drop + paginate--------------------
     vector_pair                 m_resources;

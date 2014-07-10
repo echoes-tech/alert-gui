@@ -21,7 +21,7 @@
 
 using namespace std;
 
-AbstractPage::AbstractPage(Echoes::Dbo::Session *session, string apiUrl, string pageName)
+AbstractPage::AbstractPage(Echoes::Dbo::Session *session, string apiUrl, string pageName, bool selectable)
 : Wt::WTemplateFormView(Wt::WString::tr("Alert." + pageName + ".Management.template"))
 {
     Wt::WApplication *app = Wt::WApplication::instance();
@@ -35,6 +35,8 @@ AbstractPage::AbstractPage(Echoes::Dbo::Session *session, string apiUrl, string 
     m_session = session;
     m_undidName = "name";
     m_footerOkButtonActive = true;
+    m_selectable = selectable;
+    m_selectedID = 0;
     setApiUrl(apiUrl);
     
     
@@ -138,9 +140,14 @@ Wt::WContainerWidget *AbstractPage::createTableBody()
     m_resourceTable->setHeaderCount(1, Wt::Horizontal);
     addTableSecondHeader();
 
-    fillBodyTable();
+    fillBodyTable();            
 
     return resourceTableContainer;
+}
+
+void AbstractPage::tableHandler(long long id) {
+    m_selectedID = id;
+    updatePage();
 }
 
 Wt::WContainerWidget *AbstractPage::createTableFooter()
@@ -197,7 +204,7 @@ void AbstractPage::fillBodyTable()
             for (vector_widget::iterator k = m_rowsTable.find(itRowTable->first)->second.begin();
                     k != m_rowsTable.find(itRowTable->first)->second.end(); k++)
             {
-                Wt::WInteractWidget *widgetAdd = *k;
+                Wt::WInteractWidget *widgetAdd = *k; 
                 string nameRessource("N2Wt5WTextE");
                 if (nameRessource.compare(typeid (*widgetAdd).name()) == 0)
                 {
@@ -238,18 +245,29 @@ void AbstractPage::fillBodyTable()
                                                          m_resourceTable->elementAt(rowBodyTable, columnTable));
                     newColumn->setTextFormat(Wt::TextFormat::XHTMLUnsafeText);
                     newColumn->setToolTip(nameRessource);
-                    columnTable++;
                 }
                 else
                 {
                     m_resourceTable->elementAt(rowBodyTable, columnTable)->addWidget(widgetAdd);
                     m_resourceTable->elementAt(rowBodyTable, columnTable)->setContentAlignment(Wt::AlignCenter);
                     m_resourceTable->elementAt(rowBodyTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
-                    columnTable++;
                 }
+                columnTable++;
             }
             m_resources.push_back(pair<int, Wt::WTableRow*>(0, m_resourceTable->rowAt(rowBodyTable)));
             addGenericButtonsToResourceTable((*itRowTable).first, rowBodyTable, columnTable);
+            if(m_selectable)
+            {
+                long long id = itRowTable->first;
+                if(m_selectedID == 0)
+                    m_selectedID = id;
+                for(int column = 0; column < m_resourceTable->columnCount(); column++)
+                {
+                    m_resourceTable->elementAt(rowBodyTable, column)->clicked().connect(boost::bind(&AbstractPage::tableHandler, this, id));
+                    if (m_selectedID == id)
+                        m_resourceTable->elementAt(rowBodyTable, column)->decorationStyle().setBackgroundColor(Wt::red);
+                }
+            }
             rowBodyTable++;
         }
         

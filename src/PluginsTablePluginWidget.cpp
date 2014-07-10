@@ -19,7 +19,7 @@
 using namespace std;
 
 PluginsTablePluginWidget::PluginsTablePluginWidget(Echoes::Dbo::Session *session, string apiUrl)
-: AbstractPage(session, apiUrl, "plugins-plugin")
+: AbstractPage(session, apiUrl, "plugins-plugin", true)
 {
     setButtonModif(true);
     setButtonSup(true);

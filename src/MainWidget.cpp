@@ -217,11 +217,16 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             alw = new AlertsWidget(this->session, this->_apiUrl);
             break;            
         }        
-        case Enums::EPageType::PLUGIN:
+        case Enums::EPageType::PLUGINOLD:
         {
             pew = new PluginEditionWidget(this->session, _apiUrl);
             break;
         }
+        case Enums::EPageType::PLUGIN:
+        {
+            plw = new PluginsWidget(this->session, _apiUrl);
+            break;            
+        }      
         case Enums::EPageType::ROLE:
         {
             rcw = new RoleCustomizationWidget(session, _apiUrl);
@@ -380,9 +385,14 @@ void MainWidget::updateContainerFluid(int type)
             this->contentFluid->addWidget(alw);
             break;
         }
-        case Enums::EPageType::PLUGIN:
+        case Enums::EPageType::PLUGINOLD:
         {
             this->contentFluid->addWidget(pew);
+            break;
+        }
+        case Enums::EPageType::PLUGIN:
+        {
+            this->contentFluid->addWidget(plw);
             break;
         }
         case Enums::EPageType::ROLE:

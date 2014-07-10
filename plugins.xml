@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!-- Models -->
+<message id="Alert.plugins.alert-form-info">On this page you can add a plugin</message>
+  
+  
+ <!-- templates -->
+ 
+
+<message id="Alert.plugins.Management.template">
+    <br />
+    <div class ="alert alert-info">${tr:Alert.plugins.alert-form-info} </div>
+    <div id="plugins-table-plugin" class="">
+        ${resource-table-plugin}
+    </div>
+    <div id="plugins-table-source" class="">
+        ${resource-table-source}
+    </div>
+    <div id="plugins-table-search" class="">
+        ${resource-table-search}
+    </div>
+</message>
+  
+  
+</messages>

@@ -44,6 +44,7 @@
 #include "InformationsWidget.h"
 #include "AlertsWidget.h"
 #include "Association.h"
+#include "PluginsWidget.h"
 #include "AbstractPage.h"
 #include "AssetManagementWidget.h"
 #include "UnitsWidget.h"
@@ -102,6 +103,7 @@ protected:
   void getRightsFromUser();
  
   PluginEditionWidget *pew;
+  PluginsWidget *plw;
 //  AssetManagementModel *amm;
   AssetManagementWidget *amw;
   OptionManagementModel *omm;

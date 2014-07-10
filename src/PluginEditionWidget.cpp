@@ -12,7 +12,7 @@
 using namespace std;
 
 PluginEditionWidget::PluginEditionWidget(Echoes::Dbo::Session* session, const string &apiUrl)
-: Wt::WTemplateFormView(Wt::WString::tr("Alert.plugins.Edition.template"))
+: Wt::WTemplateFormView(Wt::WString::tr("Alert.pluginsold.Edition.template"))
 {
     this->session = session;
     setApiUrl(apiUrl);
@@ -21,7 +21,7 @@ PluginEditionWidget::PluginEditionWidget(Echoes::Dbo::Session* session, const st
     {
         Wt::WApplication *app = Wt::WApplication::instance();
 //        app->enableUpdates(true);
-        app->messageResourceBundle().use("plugin", false);
+        app->messageResourceBundle().use("pluginold", false);
         searchToken();
         createUI();
     }
@@ -78,7 +78,7 @@ void PluginEditionWidget::createUI()
     plgDescEdit = new Wt::WLineEdit();
     plgDescEdit->setValidator(validatorRegExp);
 
-    Wt::WPushButton *addPlugin = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-plugin-button"));
+    Wt::WPushButton *addPlugin = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.pluginsold.add-plugin-button"));
     addPlugin->addStyleClass("btn");
     addPlugin->addStyleClass("btn-info");
     addPlugin->setTextFormat(Wt::XHTMLUnsafeText);
@@ -86,9 +86,9 @@ void PluginEditionWidget::createUI()
 
     tablePlugin = new Wt::WTable();
 
-    tablePlugin->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.name-title")));
-    tablePlugin->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.description-title")));
-    tablePlugin->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.plugins.action-title")));
+    tablePlugin->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.pluginsold.name-title")));
+    tablePlugin->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.pluginsold.description-title")));
+    tablePlugin->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.pluginsold.action-title")));
     tablePlugin->elementAt(1, 0)->addWidget(plgNameEdit);
     tablePlugin->elementAt(1, 1)->addWidget(plgDescEdit);
     tablePlugin->elementAt(1, 2)->addWidget(addPlugin);
@@ -114,24 +114,24 @@ void PluginEditionWidget::createUI()
     bindWidget("plugin-table-source-param", tableSrcParam);
     fixStyleTable(tableSrcParam);
 
-    tableSrcParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-    tableSrcParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+    tableSrcParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.pluginsold.parameter-title")));
+    tableSrcParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.pluginsold.value-title")));
 
-    Wt::WPushButton *addSource = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-source-button"));
+    Wt::WPushButton *addSource = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.pluginsold.add-source-button"));
     addSource->addStyleClass("btn");
     addSource->addStyleClass("btn-info");
     addSource->setTextFormat(Wt::XHTMLUnsafeText);
     addSource->clicked().connect(this, &PluginEditionWidget::addSource);
     bindWidget("plugin-add-source-button", addSource);
 
-    buttonModifySource = new Wt::WPushButton(tr("Alert.plugins.modify-source-button"));
+    buttonModifySource = new Wt::WPushButton(tr("Alert.pluginsold.modify-source-button"));
     buttonModifySource->addStyleClass("btn");
     buttonModifySource->addStyleClass("btn-primary");
     buttonModifySource->setTextFormat(Wt::XHTMLUnsafeText);
     buttonModifySource->clicked().connect(this, &PluginEditionWidget::modifySource);
     bindWidget("plugin-modify-source-button", buttonModifySource);
 
-    Wt::WPushButton *deleteSource = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-source-button"));
+    Wt::WPushButton *deleteSource = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.pluginsold.delete-source-button"));
     deleteSource->addStyleClass("btn");
     deleteSource->addStyleClass("btn-danger");
     deleteSource->setTextFormat(Wt::XHTMLUnsafeText);
@@ -153,24 +153,24 @@ void PluginEditionWidget::createUI()
     bindWidget("plugin-table-search-param", tableSeaParam);
     fixStyleTable(tableSeaParam);
 
-    tableSeaParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-    tableSeaParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+    tableSeaParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.pluginsold.parameter-title")));
+    tableSeaParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.pluginsold.value-title")));
 
-    Wt::WPushButton *addSearch = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-search-button"));
+    Wt::WPushButton *addSearch = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.pluginsold.add-search-button"));
     addSearch->addStyleClass("btn");
     addSearch->addStyleClass("btn-info");
     addSearch->setTextFormat(Wt::XHTMLUnsafeText);
     addSearch->clicked().connect(this, &PluginEditionWidget::addSearch);
     bindWidget("plugin-add-search-button", addSearch);
 
-    buttonModifySearch = new Wt::WPushButton(tr("Alert.plugins.modify-search-button"));
+    buttonModifySearch = new Wt::WPushButton(tr("Alert.pluginsold.modify-search-button"));
     buttonModifySearch->addStyleClass("btn");
     buttonModifySearch->addStyleClass("btn-primary");
     buttonModifySearch->setTextFormat(Wt::XHTMLUnsafeText);
     buttonModifySearch->clicked().connect(this, &PluginEditionWidget::modifySearch);
     bindWidget("plugin-modify-search-button", buttonModifySearch);
 
-    Wt::WPushButton *deleteSearch = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-search-button"));
+    Wt::WPushButton *deleteSearch = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.pluginsold.delete-search-button"));
     deleteSearch->addStyleClass("btn");
     deleteSearch->addStyleClass("btn-danger");
     deleteSearch->setTextFormat(Wt::XHTMLUnsafeText);
@@ -190,8 +190,8 @@ void PluginEditionWidget::createUI()
 
     tableFilTypeParam = new Wt::WTable();
     fixStyleTable(tableFilTypeParam);
-    tableFilTypeParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-    tableFilTypeParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+    tableFilTypeParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.pluginsold.parameter-title")));
+    tableFilTypeParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.pluginsold.value-title")));
     bindWidget("plugin-table-filter-type-param", tableFilTypeParam);
 
     periodeLE = new Wt::WLineEdit();
@@ -210,21 +210,21 @@ void PluginEditionWidget::createUI()
     nbValueLE->setValidator(validatorInt);
     bindWidget("plugin-filter-nomber-value", nbValueLE);
 
-    Wt::WPushButton *addFilter = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.add-filter-button"));
+    Wt::WPushButton *addFilter = new Wt::WPushButton("<span class='icon'><i class='icon-plus icon-white'></i></span>&nbsp;" + tr("Alert.pluginsold.add-filter-button"));
     addFilter->addStyleClass("btn");
     addFilter->addStyleClass("btn-info");
     addFilter->setTextFormat(Wt::XHTMLUnsafeText);
     addFilter->clicked().connect(this, &PluginEditionWidget::addFilter);
     bindWidget("plugin-add-filter-button", addFilter);
 
-    buttonModifyFilter = new Wt::WPushButton(tr("Alert.plugins.modify-filter-button"));
+    buttonModifyFilter = new Wt::WPushButton(tr("Alert.pluginsold.modify-filter-button"));
     buttonModifyFilter->addStyleClass("btn");
     buttonModifyFilter->addStyleClass("btn-primary");
     buttonModifyFilter->setTextFormat(Wt::XHTMLUnsafeText);
     buttonModifyFilter->clicked().connect(this, &PluginEditionWidget::modifyFilter);
     bindWidget("plugin-modify-filter-button", buttonModifyFilter);
 
-    Wt::WPushButton *deleteFilter = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-filter-button"));
+    Wt::WPushButton *deleteFilter = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.pluginsold.delete-filter-button"));
     deleteFilter->addStyleClass("btn");
     deleteFilter->addStyleClass("btn-danger");
     deleteFilter->setTextFormat(Wt::XHTMLUnsafeText);
@@ -300,7 +300,7 @@ void PluginEditionWidget::handleHttpResponsePlgList(boost::system::error_code er
 
                 int row = tablePlugin->rowCount() - 1;
 
-                Wt::WPushButton *deletePlugin = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-plugin-button"));
+                Wt::WPushButton *deletePlugin = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.pluginsold.delete-plugin-button"));
                 deletePlugin->addStyleClass("btn");
                 deletePlugin->addStyleClass("btn-danger");
                 deletePlugin->setTextFormat(Wt::XHTMLUnsafeText);
@@ -518,12 +518,12 @@ bool PluginEditionWidget::validatePlugin(string &badField)
         }
         else
         {
-            badField = "Alert.plugins.description-label";
+            badField = "Alert.pluginsold.description-label";
         }
     }
     else
     {
-        badField = "Alert.plugins.name-label";
+        badField = "Alert.pluginsold.name-label";
     }
 
     return false;
@@ -567,9 +567,9 @@ void PluginEditionWidget::addPlugin()
     }
     else
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") +
-                              tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
-                              tr("Alert.plugins.message-cause"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), tr("Alert.pluginsold.message-field") +
+                              tr(badField) + tr("Alert.pluginsold.message-is-bad-fills") + "\n" +
+                              tr("Alert.pluginsold.message-cause"), Wt::Ok);
         cerr << "[addPlugin] : Mal remplit" << endl;
     }
 }
@@ -582,7 +582,7 @@ bool PluginEditionWidget::validateSource(string &badField)
         {
             if (mapLEAddonParam[mapAddonParameterNameSBoxRow[i]]->validate() != Wt::WValidator::State::Valid)
             {
-                badField = "Alert.plugins.parameter-title";
+                badField = "Alert.pluginsold.parameter-title";
                 return false;
             }
         }
@@ -643,9 +643,9 @@ void PluginEditionWidget::addSource()
     }
     else
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") +
-                              tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
-                              tr("Alert.plugins.message-cause"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), tr("Alert.pluginsold.message-field") +
+                              tr(badField) + tr("Alert.pluginsold.message-is-bad-fills") + "\n" +
+                              tr("Alert.pluginsold.message-cause"), Wt::Ok);
         cerr << "[addSource] : Mal remplit" << endl;
     }
 }
@@ -660,13 +660,13 @@ bool PluginEditionWidget::validateSearch(string &badField)
     {
         if (mapLESeaTypeParam[mapSeaTypeParameterNameSBoxRow[i]]->validate() != Wt::WValidator::State::Valid)
         {
-            badField = "Alert.plugins.parameter-title";
+            badField = "Alert.pluginsold.parameter-title";
             return false;
         }
     }
     if (periodeLE->validate() != Wt::WValidator::State::Valid)
     {
-        badField = "Alert.plugins.search-periode-label";
+        badField = "Alert.pluginsold.search-periode-label";
         return false;
     }
 
@@ -684,18 +684,18 @@ bool PluginEditionWidget::validateFilter(string &badField)
     {
         if (mapLEFilTypeParam[mapFilTypeParameterNameSBoxRow[i]]->validate() != Wt::WValidator::State::Valid)
         {
-            badField = "Alert.plugins.parameter-title";
+            badField = "Alert.pluginsold.parameter-title";
             return false;
         }
     }
     if (pKValueLE->validate() != Wt::WValidator::State::Valid)
     {
-        badField = "Alert.plugins.filter-key-value";
+        badField = "Alert.pluginsold.filter-key-value";
         return false;
     }
     if (nbValueLE->validate() != Wt::WValidator::State::Valid)
     {
-        badField = "Alert.plugins.filter-nomber-value";
+        badField = "Alert.pluginsold.filter-nomber-value";
         return false;
     }
     return true;
@@ -766,9 +766,9 @@ void PluginEditionWidget::addSearch()
     }
     else
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") +
-                              tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
-                              tr("Alert.plugins.message-cause"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), tr("Alert.pluginsold.message-field") +
+                              tr(badField) + tr("Alert.pluginsold.message-is-bad-fills") + "\n" +
+                              tr("Alert.pluginsold.message-cause"), Wt::Ok);
         cerr << "[addSearch] : Mal remplit" << endl;
     }
 }
@@ -833,9 +833,9 @@ void PluginEditionWidget::addFilter()
     }
     else
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") +
-                              tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
-                              tr("Alert.plugins.message-cause"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), tr("Alert.pluginsold.message-field") +
+                              tr(badField) + tr("Alert.pluginsold.message-is-bad-fills") + "\n" +
+                              tr("Alert.pluginsold.message-cause"), Wt::Ok);
         cerr << "[addFilter] : Mal rempli" << endl;
     }
 }
@@ -917,9 +917,9 @@ void PluginEditionWidget::modifySource()
     }
     else
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") +
-                              tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
-                              tr("Alert.plugins.message-cause"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), tr("Alert.pluginsold.message-field") +
+                              tr(badField) + tr("Alert.pluginsold.message-is-bad-fills") + "\n" +
+                              tr("Alert.pluginsold.message-cause"), Wt::Ok);
         cerr << "[addSource] : Mal remplit" << endl;
     }
 }
@@ -1011,9 +1011,9 @@ void PluginEditionWidget::modifySearch()
     }
     else
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") +
-                              tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
-                              tr("Alert.plugins.message-cause"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), tr("Alert.pluginsold.message-field") +
+                              tr(badField) + tr("Alert.pluginsold.message-is-bad-fills") + "\n" +
+                              tr("Alert.pluginsold.message-cause"), Wt::Ok);
         cerr << "[addSource] : Mal remplit" << endl;
     }
 }
@@ -1081,9 +1081,9 @@ void PluginEditionWidget::modifyFilter()
     //    }
     //    else
     //    {
-    //         Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), tr("Alert.plugins.message-field") + 
-    //                                tr(badField) + tr("Alert.plugins.message-is-bad-fills") + "\n" +
-    //                                tr("Alert.plugins.message-cause"),Wt::Ok);
+    //         Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), tr("Alert.pluginsold.message-field") + 
+    //                                tr(badField) + tr("Alert.pluginsold.message-is-bad-fills") + "\n" +
+    //                                tr("Alert.pluginsold.message-cause"),Wt::Ok);
     //        cerr << "[addSource] : Mal remplit"<< endl;
     //    }
 }
@@ -1152,8 +1152,8 @@ void PluginEditionWidget::resetSource()
     mapAddonParameterValueSBoxRow.clear();
 //    mapLEAddonParam.clear();
     tableSrcParam->clear();
-    tableSrcParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-    tableSrcParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+    tableSrcParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.pluginsold.parameter-title")));
+    tableSrcParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.pluginsold.value-title")));
     fixStyleTable(tableSrcParam);
 }
 
@@ -1170,8 +1170,8 @@ void PluginEditionWidget::resetSearch()
     mapSeaTypeParameterValueSBoxRow.clear();
     mapLESeaTypeParam.clear();
     tableSeaParam->clear();
-    tableSeaParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-    tableSeaParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+    tableSeaParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.pluginsold.parameter-title")));
+    tableSeaParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.pluginsold.value-title")));
     fixStyleTable(tableSeaParam);
     periodeLE->setText("");
     staticCB->setChecked(false);
@@ -1194,8 +1194,8 @@ void PluginEditionWidget::resetFilter()
         mapFilTypeParameterValueSBoxRow.clear();
         mapLEFilTypeParam.clear();
         tableFilTypeParam->clear();
-        tableFilTypeParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-        tableFilTypeParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+        tableFilTypeParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.pluginsold.parameter-title")));
+        tableFilTypeParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.pluginsold.value-title")));
         fixStyleTable(tableFilTypeParam);
         pKValueLE->setText("0");
         nbValueLE->setText("");
@@ -1842,7 +1842,7 @@ void PluginEditionWidget::handleHttpResponseAddPlg(boost::system::error_code err
             pluginSelectionBox->setCurrentIndex(-1); //utile lorsqu'on crée le premier plugin sinon elle ne se selectionne pas automatiqement
             pluginSelectionBox->setCurrentIndex(mapPluginsIdSboxRow.size());
             mapPluginsDescrition[mapPluginsIdSboxRow.size() - 1] = pluginDesc;
-            Wt::WPushButton *deletePlugin = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.plugins.delete-plugin-button"));
+            Wt::WPushButton *deletePlugin = new Wt::WPushButton("<span class='icon'><i class='icon-minus icon-white'></i></span>&nbsp;" + tr("Alert.pluginsold.delete-plugin-button"));
             deletePlugin->addStyleClass("btn");
             deletePlugin->addStyleClass("btn-danger");
             deletePlugin->setTextFormat(Wt::XHTMLUnsafeText);
@@ -1884,8 +1884,8 @@ void PluginEditionWidget::handleHttpResponseSeaTypeParameters(boost::system::err
     mapSeaTypeParameterValueSBoxRow.clear();
     mapLESeaTypeParam.clear();
     tableSeaParam->clear();
-    tableSeaParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-    tableSeaParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+    tableSeaParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.pluginsold.parameter-title")));
+    tableSeaParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.pluginsold.value-title")));
     fixStyleTable(tableSeaParam);
 
     if (response.status() == 200)
@@ -1958,8 +1958,8 @@ void PluginEditionWidget::handleHttpResponseFilTypeParameters(boost::system::err
     mapFilTypeParameterValueSBoxRow.clear();
     mapLEFilTypeParam.clear();
     tableFilTypeParam->clear();
-    tableFilTypeParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-    tableFilTypeParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+    tableFilTypeParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.pluginsold.parameter-title")));
+    tableFilTypeParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.pluginsold.value-title")));
     fixStyleTable(tableFilTypeParam);
 
     if(response.status() == 200)
@@ -2106,8 +2106,8 @@ void PluginEditionWidget::handleHttpResponseAddonList(boost::system::error_code 
     mapAddonParameterValueSBoxRow.clear();
     mapLEAddonParam.clear();
     tableSrcParam->clear();
-    tableSrcParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.plugins.parameter-title")));
-    tableSrcParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.plugins.value-title")));
+    tableSrcParam->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.pluginsold.parameter-title")));
+    tableSrcParam->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.pluginsold.value-title")));
     fixStyleTable(tableSrcParam);
     if (response.status() == 200)
     {
@@ -2178,14 +2178,14 @@ void PluginEditionWidget::fillAddonComboBox()
     int idx = 0;
 
     map<int, Wt::WString> mapEAddonName;
-    mapEAddonName[Echoes::Dbo::EAddon::FILESYSTEM] = tr("Alert.plugins.filesystem");
-    mapEAddonName[Echoes::Dbo::EAddon::FILE] = tr("Alert.plugins.file");
-    mapEAddonName[Echoes::Dbo::EAddon::LOG] = tr("Alert.plugins.log");
-    mapEAddonName[Echoes::Dbo::EAddon::ODBC] = tr("Alert.plugins.odbc");
-    mapEAddonName[Echoes::Dbo::EAddon::SNMP] = tr("Alert.plugins.snmp");
-    mapEAddonName[Echoes::Dbo::EAddon::HASH] = tr("Alert.plugins.hash");
-    mapEAddonName[Echoes::Dbo::EAddon::XML] = tr("Alert.plugins.xml");
-    mapEAddonName[Echoes::Dbo::EAddon::PROCESS] = tr("Alert.plugins.process");
+    mapEAddonName[Echoes::Dbo::EAddon::FILESYSTEM] = tr("Alert.pluginsold.filesystem");
+    mapEAddonName[Echoes::Dbo::EAddon::FILE] = tr("Alert.pluginsold.file");
+    mapEAddonName[Echoes::Dbo::EAddon::LOG] = tr("Alert.pluginsold.log");
+    mapEAddonName[Echoes::Dbo::EAddon::ODBC] = tr("Alert.pluginsold.odbc");
+    mapEAddonName[Echoes::Dbo::EAddon::SNMP] = tr("Alert.pluginsold.snmp");
+    mapEAddonName[Echoes::Dbo::EAddon::HASH] = tr("Alert.pluginsold.hash");
+    mapEAddonName[Echoes::Dbo::EAddon::XML] = tr("Alert.pluginsold.xml");
+    mapEAddonName[Echoes::Dbo::EAddon::PROCESS] = tr("Alert.pluginsold.process");
 
     for (map<int, Wt::WString>::iterator mapEAddonNameIt = mapEAddonName.begin(); mapEAddonNameIt != mapEAddonName.end(); ++mapEAddonNameIt)
     {
@@ -2207,14 +2207,14 @@ void PluginEditionWidget::fillSearchTypeComboBox()
     int idx = 0;
 
     map<int, Wt::WString> mapESearchTypeName;
-    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH] = tr("Alert.plugins.path");
-    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_LINE] = tr("Alert.plugins.path_line");
-    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_LAST_LINE] = tr("Alert.plugins.path_last_line");
-    mapESearchTypeName[Echoes::Dbo::ESearchType::QUERY] = tr("Alert.plugins.query");
-    mapESearchTypeName[Echoes::Dbo::ESearchType::OID] = tr("Alert.plugins.oid");
-    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_ALGORITHM] = tr("Alert.plugins.path_algorithm");
-    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_XPATH] = tr("Alert.plugins.path_xpath");
-    mapESearchTypeName[Echoes::Dbo::ESearchType::NAME] = tr("Alert.plugins.name");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH] = tr("Alert.pluginsold.path");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_LINE] = tr("Alert.pluginsold.path_line");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_LAST_LINE] = tr("Alert.pluginsold.path_last_line");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::QUERY] = tr("Alert.pluginsold.query");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::OID] = tr("Alert.pluginsold.oid");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_ALGORITHM] = tr("Alert.pluginsold.path_algorithm");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::PATH_XPATH] = tr("Alert.pluginsold.path_xpath");
+    mapESearchTypeName[Echoes::Dbo::ESearchType::NAME] = tr("Alert.pluginsold.name");
 
     for (map<int, Wt::WString>::iterator mapESearchTypeNameIt = mapESearchTypeName.begin(); mapESearchTypeNameIt != mapESearchTypeName.end(); ++mapESearchTypeNameIt)
     {
@@ -2235,9 +2235,9 @@ void PluginEditionWidget::fillFilterTypeComboBox()
     int idx = 0;
 
     map<int, Wt::WString> mapEFilterTypeName;
-    mapEFilterTypeName[Echoes::Dbo::EFilterType::ALL] = tr("Alert.plugins.all");
-    mapEFilterTypeName[Echoes::Dbo::EFilterType::REGEX] = tr("Alert.plugins.regex");
-    mapEFilterTypeName[Echoes::Dbo::EFilterType::LOCATION] = tr("Alert.plugins.location");
+    mapEFilterTypeName[Echoes::Dbo::EFilterType::ALL] = tr("Alert.pluginsold.all");
+    mapEFilterTypeName[Echoes::Dbo::EFilterType::REGEX] = tr("Alert.pluginsold.regex");
+    mapEFilterTypeName[Echoes::Dbo::EFilterType::LOCATION] = tr("Alert.pluginsold.location");
 
     for (map<int, Wt::WString>::iterator mapEFilterTypeNameIt = mapEFilterTypeName.begin(); mapEFilterTypeNameIt != mapEFilterTypeName.end(); ++mapEFilterTypeNameIt)
     {
@@ -2286,11 +2286,11 @@ void PluginEditionWidget::handleHttpResponseDeletePlg(boost::system::error_code 
     }
     else if (response.status() == 409)
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body(), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), response.body(), Wt::Ok);
     }
     else
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body(), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), response.body(), Wt::Ok);
         Wt::log("warning") << "fct handleHttpResponseDeletePlg" << response.body();
     }
 }
@@ -2305,11 +2305,11 @@ void PluginEditionWidget::handleHttpResponseDeleteSource(boost::system::error_co
     }
     else if (response.status() == 409)
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body(), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), response.body(), Wt::Ok);
     }
     else
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body(), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), response.body(), Wt::Ok);
         Wt::log("warning") << "fct handleHttpResponseDeleteSource" << response.body();
     }
 }
@@ -2324,11 +2324,11 @@ void PluginEditionWidget::handleHttpResponseDeleteSearch(boost::system::error_co
     }
     else if (response.status() == 409)
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body(), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), response.body(), Wt::Ok);
     }
     else
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body(), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), response.body(), Wt::Ok);
         Wt::log("warning") << "[ERROR] : fct handleHttpResponseDeleteSearch" << response.body();
     }
 }
@@ -2343,11 +2343,11 @@ void PluginEditionWidget::handleHttpResponseDeleteFilter(boost::system::error_co
     }
     else if (response.status() == 409)
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body(), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), response.body(), Wt::Ok);
     }
     else
     {
-        Wt::WMessageBox::show(tr("Alert.plugins.message-box-error"), response.body(), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.pluginsold.message-box-error"), response.body(), Wt::Ok);
         Wt::log("warning") << "[ERROR] : fct handleHttpResponseDeleteFilter" << response.body();
     }
 }

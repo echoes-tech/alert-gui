@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <message id="Alert.plugins-plugin.form-info">
+      On this page you can manage the units needed to create informations.
+    </message>
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.plugins-plugin.add-form.plugins-plugin">Plugins</message>
+    <!--body-->
+    <message id="Alert.plugins-plugin.name-name">Name</message>
+    <message id="Alert.plugins-plugin.name-desc">Description</message>
+    <message id="Alert.plugins-plugin.modif-button">Modify</message>
+    <message id="Alert.plugins-plugin.delete-button">Delete</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.plugins-plugin.button-cancel">Cancel</message>
+    <message id="Alert.plugins-plugin.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.plugins-plugin.add-plugins-plugin">Add plugin</message>
+    <!--PUT-->
+    <message id="Alert.plugins-plugin.modif-plugins-plugin">Modify</message>
+    <!--DELETE-->
+    <message id="Alert.plugins-plugin.delete-plugins-plugin">Attention</message>
+    <message id="Alert.plugins-plugin.delete-plugins-plugin-message">
+        <span style="color:red">
+            You are about to delete a plugin
+        </span>
+    </message>
+    <message id="Alert.plugins-plugin.button-confirm">Confirm</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.plugins-plugin.invalid-name-unit">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.plugins-plugin.database-error-title">Database error</message>
+  <message id="Alert.plugins-plugin.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+
+
+<!-- templates -->
+
+    <message id="Alert.plugins-plugin.Management.template" >
+            <div id="media-user-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>  
+
+</messages>

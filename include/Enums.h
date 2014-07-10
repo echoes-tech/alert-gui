@@ -111,6 +111,7 @@ public:
                       (INFORMATIONS) ("informations")
                       (ASSOCIATION) ("association")
                       (ALERTS) ("alerts")
+                      (PLUGINOLD) ("pluginsold")
                       (PLUGIN) ("plugins")
                       (ROLE) ("role")
                       (OPTIONS) ("options")

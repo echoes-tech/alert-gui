@@ -47,7 +47,6 @@ void PluginsWidget::update()
        
        // SOURCE       
        PluginsTableSourceWidget *ptSourceW = new PluginsTableSourceWidget(session_, apiUrl_, ptPluginW);
-       ptSourceW->getResourceList();
        templateFormView->bindWidget("resource-table-source", ptSourceW);
        ptPluginW->addPageToUpdate(ptSourceW);
        

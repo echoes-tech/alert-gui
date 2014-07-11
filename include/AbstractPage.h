@@ -49,6 +49,7 @@
 #include <Wt/WString>
 #include <Wt/WLabel>
 #include <Wt/WCssDecorationStyle>
+#include <Wt/WColor>
 
 #include <Wt/WTextArea>
 #include <Wt/WTabWidget>
@@ -122,10 +123,14 @@ public:
 
     
     virtual void                getResourceList();
-    void setResources(vector_pair resources);
-    vector_pair getResources() const;
-    void setResourceTable(Wt::WTable* resourceTable);
-    Wt::WTable* getResourceTable() const;
+    void                        setResources(vector_pair resources);
+    vector_pair                 getResources() const;
+    void                        setResourceTable(Wt::WTable* resourceTable);
+    Wt::WTable*                 getResourceTable() const;
+    void                        setSelectedID(long long selectedID);
+    long long                   getSelectedID();
+    void                        addPageToUpdate(AbstractPage* abstractPage);
+    virtual void                updatePage(bool getResources = true);
 protected:
 
     // ENUM
@@ -140,8 +145,6 @@ protected:
         object = 4
     };
 
-    
-    virtual void                updatePage(bool getResources = true);
     virtual void                clearStructures();
     
     void                        createTable();
@@ -254,6 +257,7 @@ private:
     bool                                m_isDeleteButtonPresent;
     bool                                m_selectable;
     long long                           m_selectedID;
+    std::vector<AbstractPage*>            m_pagesToUpdate;     
 //    bool                                m_isMainPage;
     // select drop + paginate--------------------
     vector_pair                 m_resources;

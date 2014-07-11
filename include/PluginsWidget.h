@@ -9,6 +9,7 @@
 #define	PLUGINSWIDGET_H
 
 #include "PluginsTablePluginWidget.h"
+#include "PluginsTableSourceWidget.h"
 
 
 class PluginsWidget : 

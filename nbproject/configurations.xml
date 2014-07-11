@@ -16,6 +16,7 @@
           <itemPath>include/PluginEditionModel.h</itemPath>
           <itemPath>include/PluginEditionWidget.h</itemPath>
           <itemPath>include/PluginsTablePluginWidget.h</itemPath>
+          <itemPath>include/PluginsTableSourceWidget.h</itemPath>
           <itemPath>include/PluginsWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
@@ -92,8 +93,12 @@
       <itemPath>media-user_fr.xml</itemPath>
       <itemPath>options.xml</itemPath>
       <itemPath>options_fr.xml</itemPath>
-      <itemPath>plugin.xml</itemPath>
-      <itemPath>plugin_fr.xml</itemPath>
+      <itemPath>pluginold.xml</itemPath>
+      <itemPath>pluginold_fr.xml</itemPath>
+      <itemPath>plugins-plugin.xml</itemPath>
+      <itemPath>plugins-source.xml</itemPath>
+      <itemPath>plugins.xml</itemPath>
+      <itemPath>plugins_fr.xml</itemPath>
       <itemPath>recipients.xml</itemPath>
       <itemPath>recipients_fr.xml</itemPath>
       <itemPath>role-customization.xml</itemPath>
@@ -119,6 +124,7 @@
           <itemPath>src/PluginEditionModel.cpp</itemPath>
           <itemPath>src/PluginEditionWidget.cpp</itemPath>
           <itemPath>src/PluginsTablePluginWidget.cpp</itemPath>
+          <itemPath>src/PluginsTableSourceWidget.cpp</itemPath>
           <itemPath>src/PluginsWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
@@ -299,6 +305,8 @@
       </item>
       <item path="include/PluginsTablePluginWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginsTableSourceWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/PluginsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
@@ -363,9 +371,17 @@
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
+      <item path="pluginold.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
+      <item path="pluginold_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins-plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins-source.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="recipients.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -429,6 +445,8 @@
       <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsTablePluginWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableSourceWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -580,6 +598,8 @@
       </item>
       <item path="include/PluginsTablePluginWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginsTableSourceWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/PluginsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
@@ -644,9 +664,17 @@
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
+      <item path="pluginold.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
+      <item path="pluginold_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins-plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins-source.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="recipients.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -710,6 +738,8 @@
       <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsTablePluginWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableSourceWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>

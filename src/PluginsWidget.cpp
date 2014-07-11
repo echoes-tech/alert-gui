@@ -1,8 +1,16 @@
 /* 
- * File:   PluginsWidget.cpp
- * Author: gdr
- *
- * Created on 18 mars 2013, 11:59
+ * GUI PluginsTablePluginWidget.h
+ * 
+ * @author ECHOES Technologies (MLA)
+ * 
+ * @date 09/07/2014
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
+ * 
  */
 
 #include <Wt/Utils>
@@ -33,19 +41,20 @@ void PluginsWidget::update()
        this->addWidget(templateFormView);
        
        // PLUGIN
-       PluginsTablePluginWidget *uewMail = new PluginsTablePluginWidget(session_, apiUrl_);
-       uewMail->getResourceList();
-       templateFormView->bindWidget("resource-table-plugin", uewMail);
+       PluginsTablePluginWidget *ptPluginW = new PluginsTablePluginWidget(session_, apiUrl_);
+       ptPluginW->getResourceList();
+       templateFormView->bindWidget("resource-table-plugin", ptPluginW);
        
        // SOURCE       
-       PluginsTablePluginWidget *uewSMS = new PluginsTablePluginWidget(session_, apiUrl_);
-       uewSMS->getResourceList();
-       templateFormView->bindWidget("resource-table-source", uewSMS);
+       PluginsTableSourceWidget *ptSourceW = new PluginsTableSourceWidget(session_, apiUrl_, ptPluginW);
+       ptSourceW->getResourceList();
+       templateFormView->bindWidget("resource-table-source", ptSourceW);
+       ptPluginW->addPageToUpdate(ptSourceW);
        
        // SEARCH       
-       PluginsTablePluginWidget *uewSMSa = new PluginsTablePluginWidget(session_, apiUrl_);
-       uewSMSa->getResourceList();
-       templateFormView->bindWidget("resource-table-search", uewSMSa);
+//       PluginsTablePluginWidget *ptSearchW = new PluginsTablePluginWidget(session_, apiUrl_);
+//       ptSearchW->getResourceList();
+//       templateFormView->bindWidget("resource-table-search", ptSearchW);
        
        newClass_ = true;
     }

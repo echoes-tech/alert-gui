@@ -58,9 +58,14 @@ void AbstractPage::updatePage(bool getResources)
     {
         getResourceList();
     }
-
+    
     createTable();
-   
+        
+    if (!getResources)
+    {    
+        for(size_t i(0); i<m_pagesToUpdate.size(); ++i)
+            m_pagesToUpdate[i]->updatePage();        
+    }    
 }
 
 void AbstractPage::clearStructures()
@@ -76,7 +81,7 @@ void AbstractPage::getResourceList()
 
 void AbstractPage::setResources(vector_pair resources)
 {
-    this->m_resources = resources;
+    m_resources = resources;
 }
 
 vector_pair AbstractPage::getResources() const
@@ -86,12 +91,27 @@ vector_pair AbstractPage::getResources() const
 
 void AbstractPage::setResourceTable(Wt::WTable* resourceTable)
 {
-    this->m_resourceTable = resourceTable;
+    m_resourceTable = resourceTable;
 }
 
 Wt::WTable* AbstractPage::getResourceTable() const
 {
     return m_resourceTable;
+}
+
+void AbstractPage::setSelectedID(long long selectedID)
+{
+    m_selectedID = selectedID;
+}
+
+long long AbstractPage::getSelectedID()
+{
+    return m_selectedID;
+}
+
+void AbstractPage::addPageToUpdate(AbstractPage* abstractPage)
+{
+    m_pagesToUpdate.push_back(abstractPage);
 }
 
 void AbstractPage::createTable()
@@ -264,8 +284,9 @@ void AbstractPage::fillBodyTable()
                 for(int column = 0; column < m_resourceTable->columnCount(); column++)
                 {
                     m_resourceTable->elementAt(rowBodyTable, column)->clicked().connect(boost::bind(&AbstractPage::tableHandler, this, id));
-                    if (m_selectedID == id)
-                        m_resourceTable->elementAt(rowBodyTable, column)->decorationStyle().setBackgroundColor(Wt::red);
+                    if (m_selectedID == id) {
+                        m_resourceTable->elementAt(rowBodyTable, column)->decorationStyle().setBackgroundColor(*(new Wt::WColor(250,180,80)));
+                    }
                 }
             }
             rowBodyTable++;

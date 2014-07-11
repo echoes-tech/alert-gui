@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages xmlns:if="Wt.WTemplate.conditions">
 
-    <message id="Alert.plugins-plugin.form-info">
-      On this page you can manage the units needed to create informations.
-    </message>
-
 <!--    In table     -->
     <!--header-->
     <message id="Alert.plugins-plugin.add-form.plugins-plugin">Plugins</message>

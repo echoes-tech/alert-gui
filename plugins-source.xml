@@ -15,7 +15,7 @@
     <message id="Alert.plugins-source.button-cancel">Cancel</message>
     <message id="Alert.plugins-source.button-save">Save</message>
     <!--POST-->
-    <message id="Alert.plugins-source.add-plugins-source">Add plugin</message>
+    <message id="Alert.plugins-source.add-plugins-source">Add source</message>
     <!--PUT-->
     <message id="Alert.plugins-source.modif-plugins-source">Modify</message>
     <!--DELETE-->

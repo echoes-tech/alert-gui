@@ -39,7 +39,6 @@ private:
     virtual void setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
     virtual void setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
     void fillModel();
-    void addEnumToModel(Enums::EInformationUnitType enumToAdd, Wt::WString name);
 };
 
 #endif	/* UNITSWIDGET_H */

@@ -41,10 +41,10 @@ UnitsWidget::~UnitsWidget()
 void UnitsWidget::fillModel()
 {
     m_unitTypeModel->clear();
-    addEnumToModel(Enums::EInformationUnitType::text, tr("Alert.unit.type.text"));
-    addEnumToModel(Enums::EInformationUnitType::number, tr("Alert.unit.type.number"));
-    addEnumToModel(Enums::EInformationUnitType::boolean, tr("Alert.unit.type.boolean"));
-    addEnumToModel(Enums::EInformationUnitType::custom, tr("Alert.unit.type.custom"));
+    addEnumToModel(m_unitTypeModel, Enums::EInformationUnitType::text, tr("Alert.unit.type.text"));
+    addEnumToModel(m_unitTypeModel, Enums::EInformationUnitType::number, tr("Alert.unit.type.number"));
+    addEnumToModel(m_unitTypeModel, Enums::EInformationUnitType::boolean, tr("Alert.unit.type.boolean"));
+    addEnumToModel(m_unitTypeModel, Enums::EInformationUnitType::custom, tr("Alert.unit.type.custom"));
 }
 
 Wt::WComboBox *UnitsWidget::popupAdd(Wt::WDialog *dialog)
@@ -53,24 +53,6 @@ Wt::WComboBox *UnitsWidget::popupAdd(Wt::WDialog *dialog)
     m_unitTypeComboBox->setModel(m_unitTypeModel);
     
     return m_unitTypeComboBox;
-}
-
-
-void UnitsWidget::addEnumToModel(Enums::EInformationUnitType enumToAdd, Wt::WString name)
-{
-    Wt::WStandardItem *itemId = new Wt::WStandardItem();
-    Wt::WStandardItem *itemName = new Wt::WStandardItem();
-
-    int id = enumToAdd;
-
-    vector<Wt::WStandardItem*> rowVector;
-
-    itemId->setText(boost::lexical_cast<string>(id));
-    itemName->setText(name);
-
-    rowVector.push_back(itemName);
-    rowVector.push_back(itemId);
-    m_unitTypeModel->appendRow(rowVector);
 }
 
 void UnitsWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*> argument)

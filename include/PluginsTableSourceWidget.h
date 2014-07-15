@@ -18,7 +18,8 @@
 
 #include <Wt/WStandardItem>
 #include <Wt/WStandardItemModel>
-#include <Wt/WAbstractItemModel>
+
+#include <tools/Enums.h>
 
 #include "AbstractPage.h"
 
@@ -34,9 +35,11 @@ public:
     void                        updatePage(bool getResources);
     
 protected:    
-    virtual std::string         addParameter();
-    virtual void                setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
-    virtual void                setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
+    std::string         addParameter();
+    void                setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
+    void                setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
+    void                addResourcePopup();
+    void                addPopupAddHandler(Wt::WInteractWidget* widget);
     
 private:
     Echoes::Dbo::Session        *session_;

@@ -75,3 +75,38 @@ void PluginsTableSourceWidget::setModifResourceMessage(Wt::Http::Message *messag
     message->addBodyText("\n}");
 }
 
+void PluginsTableSourceWidget::addPopupAddHandler(Wt::WInteractWidget* widget)
+{
+    widget->clicked().connect(boost::bind(&PluginsTableSourceWidget::addResourcePopup, this));
+}
+
+void PluginsTableSourceWidget::addResourcePopup()
+{
+    Wt::WLineEdit *input;
+    vector<Wt::WInteractWidget*> inputName;
+    vector<Wt::WText*> errorMessage;
+
+    Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-source.add-plugins-source"));
+    
+    
+    Wt::WStandardItemModel* addonStandardItemModel = new Wt::WStandardItemModel(0,2,this);
+    Wt::WComboBox* addonComboBox = new Wt::WComboBox(dialog->contents());
+    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::FILESYSTEM, tr("Alert.plugins.filesystem"));
+    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::FILE, tr("Alert.plugins.file"));
+    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::LOG, tr("Alert.plugins.log"));
+    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::ODBC, tr("Alert.plugins.odbc"));
+    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::SNMP, tr("Alert.plugins.snmp"));
+    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::HASH, tr("Alert.plugins.hash"));
+    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::XML, tr("Alert.plugins.xml"));
+    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::PROCESS, tr("Alert.plugins.process"));
+    addonComboBox->setModel(addonStandardItemModel);
+
+    popupFinalization(dialog, 0);
+
+    dialog->finished().connect(bind([ = ] (){
+                                        popupCheck(inputName, errorMessage, dialog, -1);
+                                        return;
+    }));
+    dialog->show();
+}
+

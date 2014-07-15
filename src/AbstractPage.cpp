@@ -56,15 +56,17 @@ void AbstractPage::updatePage(bool getResources)
     {
         m_nameResourcePageSpec = m_xmlPageName;
     }
+    
     if (getResources)
     {
         getResourceList();
     }
 
-    createTable();
-
     if (!getResources)
     {
+        if (m_selectedID == 0)
+            m_selectedID = m_rowsTable.begin()->first;
+        createTable();
         for (size_t i(0); i < m_pagesToUpdate.size(); ++i)
             m_pagesToUpdate[i]->updatePage();
     }
@@ -130,23 +132,22 @@ Wt::WContainerWidget *AbstractPage::createTableFirstHeader()
 {
     Wt::WContainerWidget *headerTableContainer = new Wt::WContainerWidget();
     headerTableContainer->addStyleClass("widget-title header-pers");
+    
     new Wt::WText("<span class='icon'><i class='icon-tasks'></i></span><h5>"
                   + tr("Alert." + m_xmlPageName + ".add-form." + m_nameResourcePageSpec)
                   + "</h5>", headerTableContainer);
 
-    Wt::WAnchor *headerButton = new Wt::WAnchor(headerTableContainer);
-    //    if (m_isMainPage) //gkr: popup is created  in popupWindow.
-    //    {
-    headerButton->clicked().connect(boost::bind(&AbstractPage::addResourcePopup, this));
-    //    }
-    //    else // gkr: Input is created in createBodyTable, showInputForAdd() is there just for show this.
-    //    {
-    //        headerButton->clicked().connect(boost::bind(&AbstractPage::showInputForAdd, this));
-    //    }
-
-    headerButton->setStyleClass("button-add btn");
-    headerButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
+    Wt::WAnchor* m_addButton = new Wt::WAnchor(headerTableContainer);
+    addPopupAddHandler(m_addButton);
+    m_addButton->setStyleClass("button-add btn");
+    m_addButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
+    
     return headerTableContainer;
+}
+
+void AbstractPage::addPopupAddHandler(Wt::WInteractWidget* widget)
+{
+    widget->clicked().connect(boost::bind(&AbstractPage::addResourcePopup, this));
 }
 
 Wt::WContainerWidget *AbstractPage::createTableBody()
@@ -775,8 +776,6 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                 }
                 long long id = jsonObject.get("id");
                 m_rowsTable.insert(make_pair(id, nameW));
-                if (m_selectedID == 0)
-                    m_selectedID = m_rowsTable.begin()->first;
             }
         }
 
@@ -1363,4 +1362,21 @@ void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
     valideBut->setTextFormat(Wt::XHTMLUnsafeText);
     valideBut->setText("<span class='input-group-btn'><i class='icon-ok '></i></span>");
     valideBut->clicked().connect(boost::bind(&AbstractPage::checkModif, this, inputs, id, errorMessage));
+}
+
+void AbstractPage::addEnumToModel(Wt::WStandardItemModel* standardItemModel, int enumToAdd, Wt::WString name)
+{
+    Wt::WStandardItem *itemId = new Wt::WStandardItem();
+    Wt::WStandardItem *itemName = new Wt::WStandardItem();
+
+    int id = enumToAdd;
+
+    vector<Wt::WStandardItem*> rowVector;
+
+    itemId->setText(boost::lexical_cast<string>(id));
+    itemName->setText(name);
+
+    rowVector.push_back(itemName);
+    rowVector.push_back(itemId);
+    standardItemModel->appendRow(rowVector);
 }

@@ -151,6 +151,7 @@ protected:
 
     // -------- Creates Elements to table. ------------------------
     Wt::WContainerWidget        *createTableFirstHeader();
+    virtual void                        addPopupAddHandler(Wt::WInteractWidget* widget);
     Wt::WContainerWidget        *createTableBody();
     Wt::WContainerWidget        *createTableFooter();
     // Add Resource For Elements ----------------------------------
@@ -231,9 +232,10 @@ protected:
     
     Echoes::Dbo::Session                        *m_session;
     
-    bool                getFooterOkButtonStatus();
-    void                setFooterOkButtonStatus(bool active);
+    bool                        getFooterOkButtonStatus();
+    void                        setFooterOkButtonStatus(bool active);
     void                        tableHandler(long long id);
+    void                        addEnumToModel(Wt::WStandardItemModel* standardItemModel, int enumToAdd, Wt::WString name);
 
 private:
     // Main attributs ---------------------------

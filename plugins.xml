@@ -5,6 +5,15 @@
 <!-- Models -->
 <message id="Alert.plugins.alert-form-info">On this page you can add a plugin</message>
   
+<message id="Alert.plugins.filesystem">Filesystem</message>
+<message id="Alert.plugins.file">File</message>
+<message id="Alert.plugins.log">Log</message>
+<message id="Alert.plugins.odbc">Database (ODBC)</message>
+<message id="Alert.plugins.snmp">SNMP</message>
+<message id="Alert.plugins.hash">Hash</message>
+<message id="Alert.plugins.xml">XML</message>
+<message id="Alert.plugins.process">Process</message>
+  
   
  <!-- templates -->
  

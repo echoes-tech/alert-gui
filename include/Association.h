@@ -61,7 +61,7 @@ protected:
   virtual void                          closePopup();
 
   virtual void                          modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
-  virtual void                          addResource(std::vector<Wt::WInteractWidget*> argument);
+  virtual void                          addResource(std::vector<Wt::WInteractWidget*>* argument);
   virtual Wt::WDialog                   *deleteResource(long long id);
   
 //  virtual Wt::WValidator                *editValidator(int who);

@@ -39,7 +39,7 @@ private:
     Echoes::Dbo::Session        *session_;
     std::string                 apiUrl_;
     
-    virtual void setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
+    virtual void setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     virtual void setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
 };
 

@@ -62,7 +62,7 @@ public:
     int                         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
     void                        checkPopupRecipients(std::string message, std::string time, int media);
 
-    void                        addResource(std::vector<Wt::WInteractWidget*> argument);
+    void                        addResource(std::vector<Wt::WInteractWidget*>* argument);
     void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
     
     void                        postAlert(boost::system::error_code err, const Wt::Http::Message& response);

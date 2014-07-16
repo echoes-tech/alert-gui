@@ -13,6 +13,16 @@
 <message id="Alert.plugins.hash">Hash</message>
 <message id="Alert.plugins.xml">XML</message>
 <message id="Alert.plugins.process">Process</message>
+
+<message id="Alert.plugins.connection-string">Connection string</message>
+<message id="Alert.plugins.community">Community</message>
+<message id="Alert.plugins.version">Version</message>
+<message id="Alert.plugins.auth-proto">Authentication protocol</message>
+<message id="Alert.plugins.auth-path">Authentication path</message>
+<message id="Alert.plugins.priv-proto">Privacy protocol </message>
+<message id="Alert.plugins.priv-path">Provacy path</message>
+<message id="Alert.plugins.host">Host</message>
+<message id="Alert.plugins.user">User</message>
   
   
  <!-- templates -->

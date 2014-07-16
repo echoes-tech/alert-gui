@@ -35,7 +35,7 @@ public:
 
     Wt::WValidator              *editValidator(int who);
     
-    void                        addResource(std::vector<Wt::WInteractWidget*> argument);
+    void                        addResource(std::vector<Wt::WInteractWidget*>* argument);
     void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
 
     virtual std::string         addParameter();

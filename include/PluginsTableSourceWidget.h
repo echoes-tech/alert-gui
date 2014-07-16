@@ -31,22 +31,24 @@ class PluginsTableSourceWidget :
 public AbstractPage
 {
 public:
-                        PluginsTableSourceWidget(Echoes::Dbo::Session *session, std::string apiUrl,
-                            AbstractPage* abstractPage);
-    void                updatePage(bool getResources);
+                                                PluginsTableSourceWidget(Echoes::Dbo::Session *session, std::string apiUrl,
+                                                    AbstractPage* abstractPage);
+    void                                        updatePage(bool getResources);
     
 protected:    
-    std::string         addParameter();
-    void                setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
-    void                setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
-    void                addResourcePopup();
-    void                addPopupAddHandler(Wt::WInteractWidget* widget);
-    void                sendRequestPopupAdd(Wt::WComboBox* addonComboBox, Wt::WContainerWidget* paramsContainer,
-                            std::vector<Wt::WInteractWidget*>* inputName);
-    void                handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
-                            std::vector<Wt::WInteractWidget*>* inputName);
-    void                fillModel();
-    Wt::WString         getSourceParameterName(long long id);
+    std::string                                 addParameter();
+    void                                        setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
+    void                                        setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
+    void                                        addResourcePopup();
+    void                                        addPopupAddHandler(Wt::WInteractWidget* widget);
+    void                                        sendRequestPopupAdd(Wt::WComboBox* addonComboBox, Wt::WContainerWidget* paramsContainer,
+                                                    std::vector<Wt::WInteractWidget*>* inputName);
+    void                                        handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
+                                                    std::vector<Wt::WInteractWidget*>* inputName);
+    void                                        fillModel();
+    Wt::WString                                 getSourceParameterName(long long id);
+    Wt::WString                                 getAddonName(long long id);
+    std::vector<Wt::WInteractWidget*>           initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
     
 private:
     Echoes::Dbo::Session        *session_;

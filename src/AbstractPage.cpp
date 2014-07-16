@@ -274,7 +274,7 @@ void AbstractPage::fillBodyTable()
                 {
                     m_resourceTable->elementAt(rowBodyTable, columnTable)->addWidget(widgetAdd);
                     m_resourceTable->elementAt(rowBodyTable, columnTable)->setContentAlignment(Wt::AlignCenter);
-                    m_resourceTable->elementAt(rowBodyTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
+                    //m_resourceTable->elementAt(rowBodyTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
                 }
                 columnTable++;
             }
@@ -789,56 +789,9 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
             for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
             {
                 Wt::Json::Object jsonObject = jsonArray.at(cpt);
-                vector<Wt::WInteractWidget *> nameW;
-                for (multimap<int, string>::iterator itTitles = m_titles.begin();
-                        itTitles != m_titles.end(); itTitles++)
-                {
-                    switch (itTitles->first)
-                    {
-                    case ETypeJson::text:
-                    {
-                        Wt::WString wString = jsonObject.get(itTitles->second);
-                        Wt::WText *text = new Wt::WText(wString);
-                        text->setObjectName("text");
-                        nameW.push_back(text);
-                        break;
-                    }
-                    case ETypeJson::boolean:
-                    {
-                        bool boolean = jsonObject.get(itTitles->second);
-                        Wt::WCheckBox *checkBox = new Wt::WCheckBox();
-                        checkBox->setChecked(boolean);
-                        checkBox->setDisabled(true);
-                        nameW.push_back(checkBox);
-                        break;
-                    }
-                    case ETypeJson::integer:
-                    {
-                        int number = jsonObject.get(itTitles->second);
-                        nameW.push_back(new Wt::WText(boost::lexical_cast<string>(number)));
-                        break;
-                    }
-                    case ETypeJson::undid:
-                    {
-                        Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
-                        Wt::Json::Object nameObjet = jsonObjectParam.get(itTitles->second);
-                        Wt::WString name = nameObjet.get(m_undidName);
-                        Wt::WText *text = new Wt::WText(name);
-                        nameW.push_back(text);
-                        break;
-                    }
-                    case ETypeJson::object:
-                    {
-                        Wt::Json::Object subObject = jsonObject.get(itTitles->second);
-                        long long id = subObject.get("id");
-                        nameW.push_back(new Wt::WText(boost::lexical_cast<string>(id)));
-                        break;
-                    }
-                    }
-
-                }
+                
                 long long id = jsonObject.get("id");
-                m_rowsTable.insert(make_pair(id, nameW));
+                m_rowsTable.insert(make_pair(id, initRowWidgets(jsonObject, jsonResource, cpt)));
             }
         }
 
@@ -853,6 +806,58 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
         Wt::log("warning") << "[AbstractPage] JSON Type Exception";
         //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
+}
+
+vector<Wt::WInteractWidget *> AbstractPage::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
+{
+    vector<Wt::WInteractWidget *> rowWidgets;
+    for (multimap<int, string>::iterator itTitles = m_titles.begin();
+            itTitles != m_titles.end(); itTitles++)
+    {
+        switch (itTitles->first)
+        {
+            case ETypeJson::text:
+            {
+                Wt::WString wString = jsonObject.get(itTitles->second);
+                Wt::WText *text = new Wt::WText(wString);
+                text->setObjectName("text");
+                rowWidgets.push_back(text);
+                break;
+            }
+            case ETypeJson::boolean:
+            {
+                bool boolean = jsonObject.get(itTitles->second);
+                Wt::WCheckBox *checkBox = new Wt::WCheckBox();
+                checkBox->setChecked(boolean);
+                checkBox->setDisabled(true);
+                rowWidgets.push_back(checkBox);
+                break;
+            }
+            case ETypeJson::integer:
+            {
+                int number = jsonObject.get(itTitles->second);
+                rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(number)));
+                break;
+            }
+            case ETypeJson::undid:
+            {
+                Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
+                Wt::Json::Object nameObjet = jsonObjectParam.get(itTitles->second);
+                Wt::WString name = nameObjet.get(m_undidName);
+                Wt::WText *text = new Wt::WText(name);
+                rowWidgets.push_back(text);
+                break;
+            }
+            case ETypeJson::object:
+            {
+                Wt::Json::Object subObject = jsonObject.get(itTitles->second);
+                long long id = subObject.get("id");
+                rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(id)));
+                break;
+            }
+        }
+    }
+    return rowWidgets;
 }
 
 void AbstractPage::recursiveGetResources(vectors_Json jsonResource, lists_string listsUrl)

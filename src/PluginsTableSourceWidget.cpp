@@ -25,12 +25,14 @@ PluginsTableSourceWidget::PluginsTableSourceWidget(Echoes::Dbo::Session *session
     setButtonSup(true);
     
     multimap<int, string> titles;
-    titles.insert(make_pair(ETypeJson::integer, "id"));
+    titles.insert(make_pair(0, "addon"));
+    titles.insert(make_pair(0, "parameters"));
     setTitles(titles);
 
     lists_string lListUrl;
     list_string listUrl;
     listUrl.push_back("sources");
+    listUrl.push_back("sources/:id/parameters");
     lListUrl.push_back(listUrl);
     listUrl.clear();
     
@@ -46,14 +48,14 @@ PluginsTableSourceWidget::PluginsTableSourceWidget(Echoes::Dbo::Session *session
 void PluginsTableSourceWidget::fillModel()
 {
     m_addonStandardItemModel->clear();
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::FILESYSTEM, tr("Alert.plugins.filesystem"));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::FILE, tr("Alert.plugins.file"));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::LOG, tr("Alert.plugins.log"));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::ODBC, tr("Alert.plugins.odbc"));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::SNMP, tr("Alert.plugins.snmp"));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::HASH, tr("Alert.plugins.hash"));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::XML, tr("Alert.plugins.xml"));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::PROCESS, tr("Alert.plugins.process"));
+     addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::FILESYSTEM, getAddonName(Echoes::Dbo::EAddon::FILESYSTEM));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::FILE, getAddonName(Echoes::Dbo::EAddon::FILE));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::LOG, getAddonName(Echoes::Dbo::EAddon::LOG));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::ODBC, getAddonName(Echoes::Dbo::EAddon::ODBC));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::SNMP, getAddonName(Echoes::Dbo::EAddon::SNMP));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::HASH, getAddonName(Echoes::Dbo::EAddon::HASH));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::XML, getAddonName(Echoes::Dbo::EAddon::XML));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::PROCESS, getAddonName(Echoes::Dbo::EAddon::PROCESS));
 }
 
 void PluginsTableSourceWidget::updatePage(bool getResources)
@@ -71,20 +73,70 @@ string PluginsTableSourceWidget::addParameter()
     return "&plugin_id=" + boost::lexical_cast<string>(m_abstractPage->getSelectedID());
 }
 
+vector<Wt::WInteractWidget *> PluginsTableSourceWidget::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
+{    
+    vector<Wt::WInteractWidget *> rowWidgets;
+    
+    int addonID = ((Wt::Json::Object)jsonObject.get("addon")).get("id");    
+    rowWidgets.push_back(new Wt::WText(getAddonName(addonID)));
+        
+    Wt::WString sourceParametersString;
+        
+    if(!((Wt::Json::Value)jsonResource.at(cpt+1)).isNull())
+    {
+        Wt::Json::Array& jsonArrayParameters = jsonResource.at(cpt+1);
+        for (int cpt(0); cpt < (int) jsonArrayParameters.size(); cpt++)
+        {
+            Wt::Json::Object jsonObjectParameter = jsonArrayParameters.at(cpt);
+
+            int sourceParameterID = ((Wt::Json::Object)jsonObjectParameter.get("id")).get("source_parameter_id");
+            Wt::WString sourceParameterValue = jsonObjectParameter.get("value");
+
+            sourceParametersString += getSourceParameterName(sourceParameterID);
+            sourceParametersString += ": ";
+            sourceParametersString += sourceParameterValue;
+            if(cpt != (int) jsonArrayParameters.size() - 1)
+                sourceParametersString += "<br />";
+        }
+    }
+        
+    Wt::WContainerWidget* containerWidget = new Wt::WContainerWidget();
+    containerWidget->addWidget(new Wt::WText(sourceParametersString));
+    containerWidget->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
+    rowWidgets.push_back(containerWidget);
+    
+    return rowWidgets;
+}
+
 Wt::WString PluginsTableSourceWidget::getSourceParameterName(long long id)
 {    
     map<long long, Wt::WString> mapSourceParameterName;
-    mapSourceParameterName[Echoes::Dbo::ESourceParameter::CONNECTION_STRING] = tr("Alert.plugins.connection-string");
-    mapSourceParameterName[Echoes::Dbo::ESourceParameter::COMMUNITY] = tr("Alert.plugins.community");
-    mapSourceParameterName[Echoes::Dbo::ESourceParameter::VERSION] = tr("Alert.plugins.version");
-    mapSourceParameterName[Echoes::Dbo::ESourceParameter::AUTH_PROTO] = tr("Alert.plugins.auth-proto");
-    mapSourceParameterName[Echoes::Dbo::ESourceParameter::AUTH_PATH] = tr("Alert.plugins.auth-path");
-    mapSourceParameterName[Echoes::Dbo::ESourceParameter::PRIV_PROTO] = tr("Alert.plugins.priv-proto");
-    mapSourceParameterName[Echoes::Dbo::ESourceParameter::PRIV_PATH] = tr("Alert.plugins.priv-path");
-    mapSourceParameterName[Echoes::Dbo::ESourceParameter::HOST] = tr("Alert.plugins.host");
-    mapSourceParameterName[Echoes::Dbo::ESourceParameter::USER] = tr("Alert.plugins.user");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::CONNECTION_STRING] = tr("Alert.plugins-source.connection-string");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::COMMUNITY] = tr("Alert.plugins-source.community");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::VERSION] = tr("Alert.plugins-source.version");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::AUTH_PROTO] = tr("Alert.plugins-source.auth-proto");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::AUTH_PATH] = tr("Alert.plugins-source.auth-path");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::PRIV_PROTO] = tr("Alert.plugins-source.priv-proto");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::PRIV_PATH] = tr("Alert.plugins-source.priv-path");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::HOST] = tr("Alert.plugins-source.host");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::USER] = tr("Alert.plugins-source.user");
     
     return mapSourceParameterName[id];
+}
+
+Wt::WString PluginsTableSourceWidget::getAddonName(long long id)
+{    
+    map<long long, Wt::WString> mapAddonName;
+    mapAddonName[Echoes::Dbo::EAddon::FILESYSTEM] = tr("Alert.plugins-source.filesystem");
+    mapAddonName[Echoes::Dbo::EAddon::FILE] = tr("Alert.plugins-source.file");
+    mapAddonName[Echoes::Dbo::EAddon::LOG] = tr("Alert.plugins-source.log");
+    mapAddonName[Echoes::Dbo::EAddon::ODBC] = tr("Alert.plugins-source.odbc");
+    mapAddonName[Echoes::Dbo::EAddon::SNMP] = tr("Alert.plugins-source.snmp");
+    mapAddonName[Echoes::Dbo::EAddon::HASH] = tr("Alert.plugins-source.hash");
+    mapAddonName[Echoes::Dbo::EAddon::XML] = tr("Alert.plugins-source.xml");
+    mapAddonName[Echoes::Dbo::EAddon::PROCESS] = tr("Alert.plugins-source.process");
+    
+    return mapAddonName[id];
 }
 
 void PluginsTableSourceWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*> argument)

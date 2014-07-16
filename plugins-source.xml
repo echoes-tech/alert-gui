@@ -3,10 +3,10 @@
 
 <!--    In table     -->
     <!--header-->
-    <message id="Alert.plugins-source.add-form.plugins-source">Plugins</message>
+    <message id="Alert.plugins-source.add-form.plugins-source">Sources</message>
     <!--body-->
-    <message id="Alert.plugins-source.name-name">Name</message>
-    <message id="Alert.plugins-source.name-desc">Description</message>
+    <message id="Alert.plugins-source.name-addon">Addon</message>
+    <message id="Alert.plugins-source.name-parameters">Parameters</message>
     <message id="Alert.plugins-source.modif-button">Modify</message>
     <message id="Alert.plugins-source.delete-button">Delete</message>
     <!--footer-->
@@ -42,6 +42,26 @@
       Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
   </message>
 
+
+  
+  <message id="Alert.plugins-source.filesystem">Filesystem</message>
+  <message id="Alert.plugins-source.file">File</message>
+  <message id="Alert.plugins-source.log">Log</message>
+  <message id="Alert.plugins-source.odbc">Database (ODBC)</message>
+  <message id="Alert.plugins-source.snmp">SNMP</message>
+  <message id="Alert.plugins-source.hash">Hash</message>
+  <message id="Alert.plugins-source.xml">XML</message>
+  <message id="Alert.plugins-source.process">Process</message>
+  
+  <message id="Alert.plugins-source.connection-string">Connection string</message>
+  <message id="Alert.plugins-source.community">Community</message>
+  <message id="Alert.plugins-source.version">Version</message>
+  <message id="Alert.plugins-source.auth-proto">Authentification protocol</message>
+  <message id="Alert.plugins-source.auth-path">Authentification path</message>
+  <message id="Alert.plugins-source.priv-proto">Privacy protocol</message>
+  <message id="Alert.plugins-source.priv-path">Privacy path</message>
+  <message id="Alert.plugins-source.host">Host</message>
+  <message id="Alert.plugins-source.user">User</message>
 
 <!-- templates -->
 

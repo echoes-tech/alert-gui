@@ -736,11 +736,11 @@ void AbstractPage::handleHttpResponseGetA(boost::system::error_code err,
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
-        Wt::Json::Value result = Wt::Json::Value::Null;
         if (response.status() == 200)
         {
             try
             {
+                Wt::Json::Value result;
                 Wt::Json::parse(response.body(), result);
                 functor(result);
             }
@@ -760,7 +760,11 @@ void AbstractPage::handleHttpResponseGetA(boost::system::error_code err,
                 Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".typexception-error-title"),
                                       tr("Alert." + m_xmlPageName + ".typexception-error"), Wt::Ok);
             }
-        }        
+        }
+        else if (response.status() == 404)
+        {
+            functor(Wt::Json::Value::Null);
+        }
     }
     else
     {

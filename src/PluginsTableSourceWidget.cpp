@@ -152,6 +152,9 @@ void PluginsTableSourceWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt:
     inputName->clear();
     inputName->push_back(iwComboBox);
     
+    if(result.isNull())
+        return;
+        
     Wt::Json::Array& jsonArray = result;   
     
     for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)

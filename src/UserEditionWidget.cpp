@@ -87,9 +87,9 @@ Wt::WValidator *UserEditionWidget::editValidator(int who)
     return validator;
 }
 
-void UserEditionWidget::addResource(vector<Wt::WInteractWidget*> argument)
+void UserEditionWidget::addResource(vector<Wt::WInteractWidget*>* argument)
 {
-    vector<Wt::WInteractWidget*>::iterator i = argument.begin();
+    vector<Wt::WInteractWidget*>::iterator i = argument->begin();
 
     Wt::Http::Message messageMedia;
     messageMedia.addBodyText("{\n\"type_id\": " + boost::lexical_cast<string>(this->type_)

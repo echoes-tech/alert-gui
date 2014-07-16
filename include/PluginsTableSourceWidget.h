@@ -31,21 +31,29 @@ class PluginsTableSourceWidget :
 public AbstractPage
 {
 public:
-                                PluginsTableSourceWidget(Echoes::Dbo::Session *session, std::string apiUrl, AbstractPage* abstractPage);
-    void                        updatePage(bool getResources);
+                        PluginsTableSourceWidget(Echoes::Dbo::Session *session, std::string apiUrl,
+                            AbstractPage* abstractPage);
+    void                updatePage(bool getResources);
     
 protected:    
     std::string         addParameter();
-    void                setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
+    void                setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     void                setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
     void                addResourcePopup();
     void                addPopupAddHandler(Wt::WInteractWidget* widget);
+    void                sendRequestPopupAdd(Wt::WComboBox* addonComboBox, Wt::WContainerWidget* paramsContainer,
+                            std::vector<Wt::WInteractWidget*>* inputName);
+    void                handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
+                            std::vector<Wt::WInteractWidget*>* inputName);
+    void                fillModel();
+    Wt::WString         getSourceParameterName(long long id);
     
 private:
     Echoes::Dbo::Session        *session_;
     std::string                 apiUrl_;
     AbstractPage*               m_abstractPage;
     long long                   m_selectedPluginID;
+    Wt::WStandardItemModel*     m_addonStandardItemModel;
 };
 
 

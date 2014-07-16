@@ -864,12 +864,12 @@ int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
     return checkAll;
 }
 
-void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
+void AlertsWidget::addResource(vector<Wt::WInteractWidget*>* argument)
 {
 
     string message;
 
-    string data = ((Wt::WLineEdit*) * argument.begin())->text().toUTF8();
+    string data = ((Wt::WLineEdit*) * argument->begin())->text().toUTF8();
 //    boost::algorithm::to_lower(data);
     message += "{\n\"name\": \"" + data + "\",\n";
     message += "\"thread_sleep\": 0,\n";

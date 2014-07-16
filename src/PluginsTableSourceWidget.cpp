@@ -36,8 +36,24 @@ PluginsTableSourceWidget::PluginsTableSourceWidget(Echoes::Dbo::Session *session
     
     setUrl(lListUrl);
     
+    m_addonStandardItemModel = new Wt::WStandardItemModel(0,2,this);
+    fillModel();
+    
     m_abstractPage = abstractPage;
     m_selectedPluginID = 0;
+}
+
+void PluginsTableSourceWidget::fillModel()
+{
+    m_addonStandardItemModel->clear();
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::FILESYSTEM, tr("Alert.plugins.filesystem"));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::FILE, tr("Alert.plugins.file"));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::LOG, tr("Alert.plugins.log"));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::ODBC, tr("Alert.plugins.odbc"));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::SNMP, tr("Alert.plugins.snmp"));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::HASH, tr("Alert.plugins.hash"));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::XML, tr("Alert.plugins.xml"));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::PROCESS, tr("Alert.plugins.process"));
 }
 
 void PluginsTableSourceWidget::updatePage(bool getResources)
@@ -55,14 +71,20 @@ string PluginsTableSourceWidget::addParameter()
     return "&plugin_id=" + boost::lexical_cast<string>(m_abstractPage->getSelectedID());
 }
 
-void PluginsTableSourceWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*> argument)
-{
-    vector<Wt::WInteractWidget*>::iterator it = argument.begin();
+Wt::WString PluginsTableSourceWidget::getSourceParameterName(long long id)
+{    
+    map<long long, Wt::WString> mapSourceParameterName;
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::CONNECTION_STRING] = tr("Alert.plugins.connection-string");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::COMMUNITY] = tr("Alert.plugins.community");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::VERSION] = tr("Alert.plugins.version");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::AUTH_PROTO] = tr("Alert.plugins.auth-proto");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::AUTH_PATH] = tr("Alert.plugins.auth-path");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::PRIV_PROTO] = tr("Alert.plugins.priv-proto");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::PRIV_PATH] = tr("Alert.plugins.priv-path");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::HOST] = tr("Alert.plugins.host");
+    mapSourceParameterName[Echoes::Dbo::ESourceParameter::USER] = tr("Alert.plugins.user");
     
-    message->addBodyText("{");
-    message->addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
-    message->addBodyText(",\n\"desc\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
-    message->addBodyText("\n}");
+    return mapSourceParameterName[id];
 }
 
 void PluginsTableSourceWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*> argument)
@@ -82,31 +104,88 @@ void PluginsTableSourceWidget::addPopupAddHandler(Wt::WInteractWidget* widget)
 
 void PluginsTableSourceWidget::addResourcePopup()
 {
-    Wt::WLineEdit *input;
-    vector<Wt::WInteractWidget*> inputName;
+    vector<Wt::WInteractWidget*>* inputName = new vector<Wt::WInteractWidget*>();
     vector<Wt::WText*> errorMessage;
 
     Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-source.add-plugins-source"));
-    
-    
-    Wt::WStandardItemModel* addonStandardItemModel = new Wt::WStandardItemModel(0,2,this);
+        
     Wt::WComboBox* addonComboBox = new Wt::WComboBox(dialog->contents());
-    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::FILESYSTEM, tr("Alert.plugins.filesystem"));
-    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::FILE, tr("Alert.plugins.file"));
-    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::LOG, tr("Alert.plugins.log"));
-    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::ODBC, tr("Alert.plugins.odbc"));
-    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::SNMP, tr("Alert.plugins.snmp"));
-    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::HASH, tr("Alert.plugins.hash"));
-    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::XML, tr("Alert.plugins.xml"));
-    addEnumToModel(addonStandardItemModel, Echoes::Dbo::EAddon::PROCESS, tr("Alert.plugins.process"));
-    addonComboBox->setModel(addonStandardItemModel);
+    inputName->push_back(addonComboBox);
+    addonComboBox->setModel(m_addonStandardItemModel);
+    
+    new Wt::WText("<br />", dialog->contents());
+    
+    Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget(dialog->contents());    
+    
+    addonComboBox->changed().connect(boost::bind(&PluginsTableSourceWidget::sendRequestPopupAdd, this,
+                                        addonComboBox, paramsContainer, inputName));
+        
+    sendRequestPopupAdd(addonComboBox, paramsContainer, inputName);
+    
+    popupFinalization(dialog, 0);    
 
-    popupFinalization(dialog, 0);
-
-    dialog->finished().connect(bind([ = ] (){
-                                        popupCheck(inputName, errorMessage, dialog, -1);
-                                        return;
-    }));
+    dialog->finished().connect(boost::bind(&PluginsTableSourceWidget::popupCheck, this, inputName, errorMessage, dialog, -1));
+    
     dialog->show();
 }
 
+void PluginsTableSourceWidget::sendRequestPopupAdd(Wt::WComboBox* addonComboBox, Wt::WContainerWidget* paramsContainer,
+                                                          vector<Wt::WInteractWidget*>* inputName)
+{
+    string apiAddress = getApiUrl() + "/" + "sources/parameters"
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8()
+            + "&addon_id=" + m_addonStandardItemModel->item((addonComboBox->currentIndex() == -1 ? 0 : addonComboBox->currentIndex()), 1)->text().toUTF8();
+    
+    boost::function<void (Wt::Json::Value)> functor;
+    functor = boost::bind(&PluginsTableSourceWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName);
+    
+    sendHttpRequestGet(apiAddress, functor);
+}
+
+void PluginsTableSourceWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
+                                     vector<Wt::WInteractWidget*>* inputName)
+{
+    paramsContainer->clear();
+    
+    Wt::WInteractWidget* iwComboBox = *(inputName->begin());
+    inputName->clear();
+    inputName->push_back(iwComboBox);
+    
+    Wt::Json::Array& jsonArray = result;   
+    
+    for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+    {
+        Wt::Json::Object jsonObject = jsonArray.at(cpt);
+        
+        long long id = jsonObject.get("id");
+        new Wt::WText(getSourceParameterName(id) + " : <br />", paramsContainer);
+        
+        Wt::WLineEdit* lineEdit = new Wt::WLineEdit(paramsContainer);
+        
+        Wt::WString wsName = jsonObject.get("name");
+        lineEdit->setAttributeValue("name", wsName);
+        
+        inputName->push_back(lineEdit);        
+        
+        new Wt::WText("<br />", paramsContainer);
+    }
+}
+
+void PluginsTableSourceWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
+{
+    vector<Wt::WInteractWidget*>::iterator it = argument->begin();
+        
+    message->addBodyText("{");
+    message->addBodyText("\n\"plugin_id\": " + boost::lexical_cast<string>(m_abstractPage->getSelectedID()));
+    message->addBodyText(",\n\"addon_id\": " + m_addonStandardItemModel->item(((Wt::WComboBox*)(*it++))->currentIndex(), 1)->text().toUTF8());
+    
+    while(it != argument->end())
+    {
+        string name = ((Wt::WLineEdit*)(*it))->attributeValue("name").toUTF8();
+        string value = ((Wt::WLineEdit*)(*it++))->text().toUTF8();
+        message->addBodyText(",\n\"" + name + "\": \"" + value + "\"");
+    }
+    
+    message->addBodyText("\n}");
+}

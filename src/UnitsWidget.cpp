@@ -55,9 +55,9 @@ Wt::WComboBox *UnitsWidget::popupAdd(Wt::WDialog *dialog)
     return m_unitTypeComboBox;
 }
 
-void UnitsWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*> argument)
+void UnitsWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
 {
-    vector<Wt::WInteractWidget*>::iterator it = argument.begin();
+    vector<Wt::WInteractWidget*>::iterator it = argument->begin();
     
     message->addBodyText("{");
     message->addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");

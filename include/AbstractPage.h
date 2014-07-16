@@ -161,8 +161,8 @@ protected:
     // POPUP : ----------------------------------------------------
     void                        addResourcePopup();
     void                        modifResourcePopup(long long id);
-    void                        popupCheck(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage,
-    Wt::WDialog                 *dialog, long long id);
+    void                        popupCheck(std::vector<Wt::WInteractWidget*>* inputName, std::vector<Wt::WText*> errorMessage,
+                                    Wt::WDialog *dialog, long long id);
     void                        popupFinalization(Wt::WDialog *dialog, long long id);
     // Methodes useful
     void                        addGenericButtonsToResourceTable(long long id, int rowTable, int columnTable);
@@ -195,6 +195,9 @@ protected:
      * @param jsonResources
      */
     virtual void                handleJsonGet(vectors_Json jsonResources);
+    void                        sendHttpRequestGet(std::string apiAddress, boost::function<void (Wt::Json::Value)> functor);
+    void                        handleHttpResponseGetA(boost::system::error_code err, const Wt::Http::Message& response,
+                                    Wt::Http::Client *client, boost::function<void (Wt::Json::Value)> functor);
     /**
      * recursiveGetResources for go call API with listsUrl_ \n
      * listsUrl_ is set in construtor child in setUrl()
@@ -205,8 +208,8 @@ protected:
     lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client);
     virtual std::string         addParameter();
     // ---- ADD MODIF DELETE ----------------------------------------------
-    virtual void                addResource(std::vector<Wt::WInteractWidget*> argument);
-    virtual void                setAddResourceMessage(Wt::Http::Message *message,std::vector<Wt::WInteractWidget*> argument);
+    virtual void                addResource(std::vector<Wt::WInteractWidget*>* argument);
+    virtual void                setAddResourceMessage(Wt::Http::Message *message,std::vector<Wt::WInteractWidget*>* argument);
     virtual void                modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
     virtual void                setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
     virtual Wt::WDialog         *deleteResource(long long id);
@@ -215,7 +218,6 @@ protected:
     virtual void                putResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
     virtual void                apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
     // Check input ----------------------------------------------
-    void                        checkAdd(std::vector<Wt::WText*> errorMessage);
     void                        checkModif(vector_widget inputs, long long id, std::vector<Wt::WText*> errorMessage);
     int                         checkName(std::string inputText, std::vector<long long> ids);
     virtual int                 checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);

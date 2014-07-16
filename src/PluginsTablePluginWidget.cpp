@@ -37,9 +37,9 @@ PluginsTablePluginWidget::PluginsTablePluginWidget(Echoes::Dbo::Session *session
     setUrl(lListUrl);
 }
 
-void PluginsTablePluginWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*> argument)
+void PluginsTablePluginWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
 {
-    vector<Wt::WInteractWidget*>::iterator it = argument.begin();
+    vector<Wt::WInteractWidget*>::iterator it = argument->begin();
     
     message->addBodyText("{");
     message->addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");

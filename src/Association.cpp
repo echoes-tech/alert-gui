@@ -465,7 +465,7 @@ void Association::handleJsonGet(vectors_Json jsonResources)
     updatePage(false);
 }
 
-void Association::addResource(vector<Wt::WInteractWidget*> argument)
+void Association::addResource(vector<Wt::WInteractWidget*>* argument)
 {
             
         // Post Asset -------

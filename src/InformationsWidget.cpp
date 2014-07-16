@@ -83,9 +83,9 @@ Wt::WComboBox *InformationsWidget::popupAdd(Wt::WDialog *dialog)
     return m_unitComboBox;
 }
 
-void InformationsWidget::addResource(vector<Wt::WInteractWidget*> arguments)
+void InformationsWidget::addResource(vector<Wt::WInteractWidget*>* arguments)
 {
-    vector<Wt::WInteractWidget*>::iterator it = arguments.begin();
+    vector<Wt::WInteractWidget*>::iterator it = (*arguments).begin();
     // Post Information -------
     Wt::Http::Message messageInformation;
     

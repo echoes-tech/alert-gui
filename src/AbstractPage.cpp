@@ -315,7 +315,7 @@ Wt::WComboBox *AbstractPage::popupAdd(Wt::WDialog *dialog)
 void AbstractPage::addResourcePopup()
 {
     Wt::WLineEdit *input;
-    vector<Wt::WInteractWidget*> inputName;
+    vector<Wt::WInteractWidget*>* inputName = new vector<Wt::WInteractWidget*>();
     vector<Wt::WText*> errorMessage;
 
     Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".add-" + m_nameResourcePageSpec));
@@ -336,16 +336,16 @@ void AbstractPage::addResourcePopup()
                 //                input->setValidator(editValidator(cpt));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
                 input->setWidth(Wt::WLength(150));
-                if (inputName.size() == 0)
+                if (inputName->size() == 0)
                 {
                     input->setFocus();
                 }
-                inputName.push_back(input);
+                inputName->push_back(input);
             }
             else if (title->first == ETypeJson::boolean)
             {
                 Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
-                inputName.push_back(checkBox);
+                inputName->push_back(checkBox);
             }
             else if (title->first == ETypeJson::integer)
             {
@@ -353,19 +353,19 @@ void AbstractPage::addResourcePopup()
                 input->setValidator(editValidator(cpt));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
                 input->setWidth(Wt::WLength(150));
-                if (inputName.size() == 0)
+                if (inputName->size() == 0)
                 {
                     input->setFocus();
                 }
-                inputName.push_back(input);
+                inputName->push_back(input);
             }
             else if (title->first == ETypeJson::undid)
             {
-                inputName.push_back(popupAdd(dialogAdd_));
+                inputName->push_back(popupAdd(dialogAdd_));
             }
             else if (title->first == ETypeJson::object)
             {
-                inputName.push_back(popupAdd(dialogAdd_));
+                inputName->push_back(popupAdd(dialogAdd_));
             }
             Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                 + title->second),
@@ -389,7 +389,7 @@ void AbstractPage::addResourcePopup()
 
 void AbstractPage::modifResourcePopup(long long id)
 {
-    vector<Wt::WInteractWidget*> inputName;
+    vector<Wt::WInteractWidget*>* inputName = new vector<Wt::WInteractWidget*>();
     vector<Wt::WText*> errorMessage;
 
     //gkr: Init dialog popup
@@ -435,12 +435,12 @@ void AbstractPage::modifResourcePopup(long long id)
                     input->setValidator(editValidator(ETypeJson::text));
                     input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
                     input->setWidth(Wt::WLength(150));
-                    if (inputName.size() == 0)
+                    if (inputName->size() == 0)
                     {
                         input->setFocus();
                     }
                     input->setToolTip(Wt::WString::fromUTF8(nameResource));
-                    inputName.push_back(input);
+                    inputName->push_back(input);
                     Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                          + title->second), dialogModif->contents());
                     error2->hide();
@@ -460,12 +460,12 @@ void AbstractPage::modifResourcePopup(long long id)
                     input->setValidator(new Wt::WRegExpValidator(Wt::WString::fromUTF8("^[0123456789]+")));
                     input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
                     input->setWidth(Wt::WLength(150));
-                    if (inputName.size() == 0)
+                    if (inputName->size() == 0)
                     {
                         input->setFocus();
                     }
                     input->setToolTip(Wt::WString::fromUTF8(nameResource));
-                    inputName.push_back(input);
+                    inputName->push_back(input);
                     Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                          + (*title).second), dialogModif->contents());
                     error2->hide();
@@ -489,7 +489,7 @@ void AbstractPage::modifResourcePopup(long long id)
                             {
                                 checkBox->setChecked();
                             }
-                            inputName.push_back(checkBox);
+                            inputName->push_back(checkBox);
                             break;
                         }
                         cpt2++;
@@ -513,7 +513,7 @@ void AbstractPage::modifResourcePopup(long long id)
                                     comboBox->setCurrentIndex(nb);
                                 }
                             }
-                            inputName.push_back(comboBox);
+                            inputName->push_back(comboBox);
                             break;
                         }
                         cpt2++;
@@ -544,7 +544,7 @@ void AbstractPage::modifResourcePopup(long long id)
     dialogModif->show();
 }
 
-void AbstractPage::popupCheck(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id)
+void AbstractPage::popupCheck(vector<Wt::WInteractWidget*>* inputName, vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id)
 {
     int check(0);
     if (dialog->result() == Wt::WDialog::Rejected)
@@ -553,12 +553,12 @@ void AbstractPage::popupCheck(vector<Wt::WInteractWidget*> inputName, vector<Wt:
     }
     else
     {
-        check = checkInput(inputName, errorMessage);
+        //check = checkInput(inputName, errorMessage);
     }
 
     if (check == 0)
     {
-        id >= 0 ? modifResource(inputName, id) : addResource(inputName);
+        id >= 0 ? modifResource(*inputName, id) : addResource(inputName);
     }
     else if (check == 1)
     {
@@ -712,6 +712,65 @@ void AbstractPage::setFooterOkButtonStatus(bool active)
 }
 
 // -------- CALL RETURN API, HANDLE -----------
+
+
+void AbstractPage::sendHttpRequestGet(string apiAddress, boost::function<void (Wt::Json::Value)> functor)
+{
+    Wt::log("debug") << "[GET] address to call : " << apiAddress;
+    Wt::Http::Client *client = new Wt::Http::Client();
+    client->done().connect(boost::bind(&AbstractPage::handleHttpResponseGetA, this, _1, _2, client, functor));
+    if (client->get(apiAddress))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+    else
+    {
+        Wt::log("error") << "Error Client Http";
+    }
+}
+
+void AbstractPage::handleHttpResponseGetA(boost::system::error_code err,
+    const Wt::Http::Message& response, Wt::Http::Client *client, boost::function<void (Wt::Json::Value)> functor)
+{
+    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    if (!err)
+    {
+        Wt::Json::Value result = Wt::Json::Value::Null;
+        if (response.status() == 200)
+        {
+            try
+            {
+                Wt::Json::parse(response.body(), result);
+                functor(result);
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning")
+                        << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
+                        + " Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".parsing-error-title"),
+                                      tr("Alert." + m_xmlPageName + ".parsing-error"), Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning")
+                        << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
+                        + " Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".typexception-error-title"),
+                                      tr("Alert." + m_xmlPageName + ".typexception-error"), Wt::Ok);
+            }
+        }        
+    }
+    else
+    {
+        Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
+                                       + m_xmlPageName) + " Widget] Http::Client error: "
+                << response.body();
+        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+    }
+}
 
 void AbstractPage::handleJsonGet(vectors_Json jsonResources)
 {
@@ -958,7 +1017,7 @@ string AbstractPage::addParameter()
 
 // ---- ADD MODIF DELETE ----------
 
-void AbstractPage::addResource(vector<Wt::WInteractWidget*> argument)
+void AbstractPage::addResource(vector<Wt::WInteractWidget*>* argument)
 {
     // Post resource -------
     Wt::Http::Message *message = new Wt::Http::Message();
@@ -984,9 +1043,9 @@ void AbstractPage::addResource(vector<Wt::WInteractWidget*> argument)
     }
 }
 
-void AbstractPage::setAddResourceMessage(Wt::Http::Message *message, vector<Wt::WInteractWidget*> argument)
+void AbstractPage::setAddResourceMessage(Wt::Http::Message *message, vector<Wt::WInteractWidget*>* argument)
 {
-    message->addBodyText("{\n\t\"name\": \"" + ((Wt::WLineEdit*)(*argument.begin()))->text().toUTF8() + "\"\n}");
+    message->addBodyText("{\n\t\"name\": \"" + ((Wt::WLineEdit*)(*argument->begin()))->text().toUTF8() + "\"\n}");
 }
 
 void AbstractPage::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
@@ -1206,16 +1265,6 @@ void AbstractPage::apiDeleteResourceCallback(boost::system::error_code err, cons
 
 
 // Check input ----------------------------------------------
-
-void AbstractPage::checkAdd(vector<Wt::WText*> errorMessage)
-{
-    if (checkInput(m_inputs, errorMessage) == 0)
-    {
-        m_inputs.pop_back();
-        addResource(m_inputs);
-        m_inputs.clear();
-    }
-}
 
 void AbstractPage::checkModif(vector_widget inputs, long long id, vector<Wt::WText*> errorMessage)
 {

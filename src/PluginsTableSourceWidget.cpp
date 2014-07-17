@@ -41,7 +41,7 @@ PluginsTableSourceWidget::PluginsTableSourceWidget(Echoes::Dbo::Session *session
     m_addonStandardItemModel = new Wt::WStandardItemModel(0,2,this);
     fillModel();
     
-    m_abstractPage = abstractPage;
+    m_pluginsTablePluginWidget = abstractPage;
     m_selectedPluginID = 0;
 }
 
@@ -60,9 +60,9 @@ void PluginsTableSourceWidget::fillModel()
 
 void PluginsTableSourceWidget::updatePage(bool getResources)
 {
-    if(m_selectedPluginID != m_abstractPage->getSelectedID())
+    if(m_selectedPluginID != m_pluginsTablePluginWidget->getSelectedID())
     {
-        m_selectedPluginID = m_abstractPage->getSelectedID();
+        m_selectedPluginID = m_pluginsTablePluginWidget->getSelectedID();
         setSelectedID(0);
     }
     AbstractPage::updatePage(getResources);
@@ -70,7 +70,7 @@ void PluginsTableSourceWidget::updatePage(bool getResources)
 
 string PluginsTableSourceWidget::addParameter()
 {
-    return "&plugin_id=" + boost::lexical_cast<string>(m_abstractPage->getSelectedID());
+    return "&plugin_id=" + boost::lexical_cast<string>(m_pluginsTablePluginWidget->getSelectedID());
 }
 
 vector<Wt::WInteractWidget *> PluginsTableSourceWidget::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
@@ -213,9 +213,11 @@ void PluginsTableSourceWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt:
 {
     paramsContainer->clear();
     
-    Wt::WInteractWidget* iwComboBox = *(inputName->begin());
-    inputName->clear();
-    inputName->push_back(iwComboBox);
+   
+    vector<Wt::WInteractWidget*>::iterator it = inputName->begin();
+    it++;
+    while(it != inputName->end())
+        it = inputName->erase(it);
     
     if(result.isNull())
         return;
@@ -247,7 +249,7 @@ void PluginsTableSourceWidget::setAddResourceMessage(Wt::Http::Message *message,
     vector<Wt::WInteractWidget*>::iterator it = argument->begin();
         
     message->addBodyText("{");
-    message->addBodyText("\n\"plugin_id\": " + boost::lexical_cast<string>(m_abstractPage->getSelectedID()));
+    message->addBodyText("\n\"plugin_id\": " + boost::lexical_cast<string>(m_pluginsTablePluginWidget->getSelectedID()));
     message->addBodyText(",\n\"addon_id\": " + m_addonStandardItemModel->item(((Wt::WComboBox*)(*it++))->currentIndex(), 1)->text().toUTF8());
     
     while(it != argument->end())

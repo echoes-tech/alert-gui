@@ -1,5 +1,5 @@
 /* 
- * GUI PluginsTableSourceWidget.h
+ * GUI PluginsTableSearchWidget.h
  * 
  * @author ECHOES Technologies (MLA)
  * 
@@ -13,8 +13,8 @@
  * 
  */
 
-#ifndef PLUGINSTABLESOURCEWIDGET_H
-#define	PLUGINSTABLESOURCEWIDGET_H
+#ifndef PLUGINSTABLESEARCHWIDGET_H
+#define	PLUGINSTABLESEARCHWIDGET_H
 
 #include <Wt/WStandardItem>
 #include <Wt/WStandardItemModel>
@@ -23,19 +23,21 @@
 
 #include "AbstractPage.h"
 
+
 class AbstractPage;
 
-class PluginsTableSourceWidget :
+class PluginsTableSearchWidget :
 public AbstractPage
-{
-    struct SourceData
+{    
+    struct SearchData
     {
-        long long addonID;
+        long long searchTypeID;
         std::map<long long, Wt::WString> parametersValue;
+        int period;
     };
-
+    
 public:
-                                                PluginsTableSourceWidget(Echoes::Dbo::Session *session, std::string apiUrl,
+                                                PluginsTableSearchWidget(Echoes::Dbo::Session *session, std::string apiUrl,
                                                     AbstractPage* abstractPage);
     void                                        updatePage(bool getResources);
     
@@ -43,28 +45,28 @@ protected:
     std::string                                 addParameter();
     void                                        setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     void                                        setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
-    void                                        addResourcePopup(long long sourceID);
+    void                                        addResourcePopup(long long searchID);
     void                                        addPopupAddHandler(Wt::WInteractWidget* widget);
-    void                                        addPopupModifHandler(Wt::WInteractWidget* widget, long long sourceID);
+    void                                        addPopupModifHandler(Wt::WInteractWidget* widget, long long searchID);
     void                                        sendRequestPopupAdd(Wt::WComboBox* addonComboBox, Wt::WContainerWidget* paramsContainer,
-                                                    std::vector<Wt::WInteractWidget*>* inputName, long long sourceID);
+                                                    std::vector<Wt::WInteractWidget*>* inputName, long long searchID);
     void                                        handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
-                                                    std::vector<Wt::WInteractWidget*>* inputName, long long sourceID);
+                                                    std::vector<Wt::WInteractWidget*>* inputName, long long searchID);
     void                                        fillModel();
-    Wt::WString                                 getSourceParameterName(long long sourceParameterID);
-    Wt::WString                                 getAddonName(long long addonID);
+    Wt::WString                                 getSearchParameterName(long long searchParameterID);
+    Wt::WString                                 getSearchTypeName(long long searchTypeID);
     std::vector<Wt::WInteractWidget*>           initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
     
 private:
     Echoes::Dbo::Session                        *session_;
     std::string                                 apiUrl_;
-    AbstractPage*                               m_pluginsTablePluginWidget;
-    long long                                   m_selectedPluginID;
+    AbstractPage*                               m_pluginsTableSourceWidget;
+    long long                                   m_selectedSourceID;
     Wt::WStandardItemModel*                     m_addonStandardItemModel;
-    std::map<long long, SourceData>             m_sourcesData;
+    std::map<long long, SearchData>             m_searchesData;
 };
 
 
 
-#endif	/* PLUGINSTABLESOURCEWIDGET_H */
+#endif	/* PLUGINSTABLESEARCHWIDGET_H */
 

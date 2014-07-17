@@ -59,6 +59,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/PluginEditionModel.o \
 	${OBJECTDIR}/src/PluginEditionWidget.o \
 	${OBJECTDIR}/src/PluginsTablePluginWidget.o \
+	${OBJECTDIR}/src/PluginsTableSearchWidget.o \
 	${OBJECTDIR}/src/PluginsTableSourceWidget.o \
 	${OBJECTDIR}/src/PluginsWidget.o \
 	${OBJECTDIR}/src/RecipientsWidget.o \
@@ -212,6 +213,11 @@ ${OBJECTDIR}/src/PluginsTablePluginWidget.o: src/PluginsTablePluginWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTablePluginWidget.o src/PluginsTablePluginWidget.cpp
+
+${OBJECTDIR}/src/PluginsTableSearchWidget.o: src/PluginsTableSearchWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableSearchWidget.o src/PluginsTableSearchWidget.cpp
 
 ${OBJECTDIR}/src/PluginsTableSourceWidget.o: src/PluginsTableSourceWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

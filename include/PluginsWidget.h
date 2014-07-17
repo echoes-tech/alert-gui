@@ -10,6 +10,7 @@
 
 #include "PluginsTablePluginWidget.h"
 #include "PluginsTableSourceWidget.h"
+#include "PluginsTableSearchWidget.h"
 
 
 class PluginsWidget : 

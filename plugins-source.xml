@@ -3,7 +3,7 @@
 
 <!--    In table     -->
     <!--header-->
-    <message id="Alert.plugins-source.add-form.plugins-source">Sources</message>
+    <message id="Alert.plugins-source.add-form.plugins-source">Source</message>
     <!--body-->
     <message id="Alert.plugins-source.name-addon">Addon</message>
     <message id="Alert.plugins-source.name-parameters">Parameters</message>
@@ -15,7 +15,7 @@
     <message id="Alert.plugins-source.button-cancel">Cancel</message>
     <message id="Alert.plugins-source.button-save">Save</message>
     <!--POST-->
-    <message id="Alert.plugins-source.add-plugins-source">Add source</message>
+    <message id="Alert.plugins-source.add-plugins-source">Add search</message>
     <!--PUT-->
     <message id="Alert.plugins-source.modif-plugins-source">Modify</message>
     <!--DELETE-->

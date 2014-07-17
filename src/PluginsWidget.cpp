@@ -51,9 +51,9 @@ void PluginsWidget::update()
        ptPluginW->addPageToUpdate(ptSourceW);
        
        // SEARCH       
-//       PluginsTablePluginWidget *ptSearchW = new PluginsTablePluginWidget(session_, apiUrl_);
-//       ptSearchW->getResourceList();
-//       templateFormView->bindWidget("resource-table-search", ptSearchW);
+       PluginsTableSearchWidget *ptSearchW = new PluginsTableSearchWidget(session_, apiUrl_, ptSourceW);
+       templateFormView->bindWidget("resource-table-search", ptSearchW);
+       ptSourceW->addPageToUpdate(ptSearchW);
        
        newClass_ = true;
     }

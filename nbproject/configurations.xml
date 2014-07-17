@@ -16,6 +16,7 @@
           <itemPath>include/PluginEditionModel.h</itemPath>
           <itemPath>include/PluginEditionWidget.h</itemPath>
           <itemPath>include/PluginsTablePluginWidget.h</itemPath>
+          <itemPath>include/PluginsTableSearchWidget.h</itemPath>
           <itemPath>include/PluginsTableSourceWidget.h</itemPath>
           <itemPath>include/PluginsWidget.h</itemPath>
         </logicalFolder>
@@ -96,6 +97,7 @@
       <itemPath>pluginold.xml</itemPath>
       <itemPath>pluginold_fr.xml</itemPath>
       <itemPath>plugins-plugin.xml</itemPath>
+      <itemPath>plugins-search.xml</itemPath>
       <itemPath>plugins-source.xml</itemPath>
       <itemPath>plugins.xml</itemPath>
       <itemPath>plugins_fr.xml</itemPath>
@@ -124,6 +126,7 @@
           <itemPath>src/PluginEditionModel.cpp</itemPath>
           <itemPath>src/PluginEditionWidget.cpp</itemPath>
           <itemPath>src/PluginsTablePluginWidget.cpp</itemPath>
+          <itemPath>src/PluginsTableSearchWidget.cpp</itemPath>
           <itemPath>src/PluginsTableSourceWidget.cpp</itemPath>
           <itemPath>src/PluginsWidget.cpp</itemPath>
         </logicalFolder>
@@ -305,6 +308,8 @@
       </item>
       <item path="include/PluginsTablePluginWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginsTableSearchWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/PluginsTableSourceWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/PluginsWidget.h" ex="false" tool="3" flavor2="0">
@@ -377,6 +382,8 @@
       </item>
       <item path="plugins-plugin.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins-search.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins-source.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins.xml" ex="false" tool="3" flavor2="0">
@@ -445,6 +452,8 @@
       <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsTablePluginWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableSearchWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsTableSourceWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -598,6 +607,8 @@
       </item>
       <item path="include/PluginsTablePluginWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginsTableSearchWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/PluginsTableSourceWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/PluginsWidget.h" ex="false" tool="3" flavor2="0">
@@ -670,6 +681,8 @@
       </item>
       <item path="plugins-plugin.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins-search.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins-source.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins.xml" ex="false" tool="3" flavor2="0">
@@ -738,6 +751,8 @@
       <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsTablePluginWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableSearchWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsTableSourceWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>

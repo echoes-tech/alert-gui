@@ -166,6 +166,7 @@ protected:
     void                        popupFinalization(Wt::WDialog *dialog, long long id);
     // Methodes useful
     void                        addGenericButtonsToResourceTable(long long id, int rowTable, int columnTable);
+    virtual void                addPopupModifHandler(Wt::WInteractWidget* widget, long long id);
     virtual int                 addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);
     void                        addButtonsToPopupFooter(Wt::WDialog *dialog);
 
@@ -211,20 +212,18 @@ protected:
     // ---- ADD MODIF DELETE ----------------------------------------------
     virtual void                addResource(std::vector<Wt::WInteractWidget*>* argument);
     virtual void                setAddResourceMessage(Wt::Http::Message *message,std::vector<Wt::WInteractWidget*>* argument);
-    virtual void                modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
-    virtual void                setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
+    virtual void                modifResource(std::vector<Wt::WInteractWidget*>* arguments, long long id);
+    virtual void                setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     virtual Wt::WDialog         *deleteResource(long long id);
     // RETURNS API --------------------------------------
     virtual void                postResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
     virtual void                putResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
     virtual void                apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
     // Check input ----------------------------------------------
-    void                        checkModif(vector_widget inputs, long long id, std::vector<Wt::WText*> errorMessage);
     int                         checkName(std::string inputText, std::vector<long long> ids);
     virtual int                 checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
     //  INPUT ---------------------------------------------------
-    void                        showInputForAdd();
-    void                        inputForModif(long long id, int rowTable, int columnTable);    
+    void                        showInputForAdd(); 
     // OVERLOAD -------------------------------------------------
     virtual Wt::WValidator      *editValidator(int who) {return (new Wt::WValidator());};
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id);

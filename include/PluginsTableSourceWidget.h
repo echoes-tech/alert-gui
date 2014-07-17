@@ -23,7 +23,11 @@
 
 #include "AbstractPage.h"
 
-typedef std::map<long long, std::string>        MapLongString;
+struct SourceData
+{
+    int addonID;
+    std::map<long long, Wt::WString> parametersValue;
+};
 
 class AbstractPage;
 
@@ -38,24 +42,26 @@ public:
 protected:    
     std::string                                 addParameter();
     void                                        setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
-    void                                        setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
-    void                                        addResourcePopup();
+    void                                        setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
+    void                                        addResourcePopup(long long sourceID);
     void                                        addPopupAddHandler(Wt::WInteractWidget* widget);
+    void                                        addPopupModifHandler(Wt::WInteractWidget* widget, long long sourceID);
     void                                        sendRequestPopupAdd(Wt::WComboBox* addonComboBox, Wt::WContainerWidget* paramsContainer,
-                                                    std::vector<Wt::WInteractWidget*>* inputName);
+                                                    std::vector<Wt::WInteractWidget*>* inputName, long long sourceID);
     void                                        handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
-                                                    std::vector<Wt::WInteractWidget*>* inputName);
+                                                    std::vector<Wt::WInteractWidget*>* inputName, long long sourceID);
     void                                        fillModel();
-    Wt::WString                                 getSourceParameterName(long long id);
-    Wt::WString                                 getAddonName(long long id);
+    Wt::WString                                 getSourceParameterName(long long sourceParameterID);
+    Wt::WString                                 getAddonName(long long addonID);
     std::vector<Wt::WInteractWidget*>           initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
     
 private:
-    Echoes::Dbo::Session        *session_;
-    std::string                 apiUrl_;
-    AbstractPage*               m_abstractPage;
-    long long                   m_selectedPluginID;
-    Wt::WStandardItemModel*     m_addonStandardItemModel;
+    Echoes::Dbo::Session                        *session_;
+    std::string                                 apiUrl_;
+    AbstractPage*                               m_abstractPage;
+    long long                                   m_selectedPluginID;
+    Wt::WStandardItemModel*                     m_addonStandardItemModel;
+    std::map<long long, SourceData>             m_sourcesData;
 };
 
 

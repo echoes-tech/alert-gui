@@ -65,9 +65,9 @@ void UnitsWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WI
     message->addBodyText("\n}");
 }
 
-void UnitsWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*> argument)
+void UnitsWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
 {
-    vector<Wt::WInteractWidget*>::iterator it = argument.begin();
+    vector<Wt::WInteractWidget*>::iterator it = argument->begin();
     
     message->addBodyText("{");
     message->addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");

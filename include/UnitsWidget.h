@@ -37,7 +37,7 @@ private:
     Wt::WStandardItemModel      *m_unitTypeModel;
     
     virtual void setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
-    virtual void setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
+    virtual void setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     void fillModel();
 };
 

@@ -558,7 +558,7 @@ void AbstractPage::popupCheck(vector<Wt::WInteractWidget*>* inputName, vector<Wt
 
     if (check == 0)
     {
-        id >= 0 ? modifResource(*inputName, id) : addResource(inputName);
+        id > 0 ? modifResource(inputName, id) : addResource(inputName);
     }
     else if (check == 1)
     {
@@ -591,14 +591,7 @@ void AbstractPage::addGenericButtonsToResourceTable(long long id, int rowTable, 
         modifButton->setAttributeValue("class", "btn btn-inverse");
         modifButton->setTextFormat(Wt::XHTMLUnsafeText);
         modifButton->setText("<span class='input-group-btn'><i class='icon-edit icon-white'></i></span>");
-        //        if (m_isMainPage)
-        //        {
-        modifButton->clicked().connect(boost::bind(&AbstractPage::modifResourcePopup, this, id));
-        //        }
-        //        else
-        //        {
-        //            modifButton->clicked().connect(boost::bind(&AbstractPage::inputForModif, this, id, rowTable, columnTable));
-        //        }
+        addPopupModifHandler(modifButton, id);
         m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
         m_resourceTable->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
         columnTable++;
@@ -613,6 +606,11 @@ void AbstractPage::addGenericButtonsToResourceTable(long long id, int rowTable, 
         m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(Wt::WLength(5, Wt::WLength::Percentage)));
         m_resourceTable->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
     }
+}
+
+void AbstractPage::addPopupModifHandler(Wt::WInteractWidget* widget, long long id)
+{
+    widget->clicked().connect(boost::bind(&AbstractPage::modifResourcePopup, this, id));
 }
 
 int AbstractPage::addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable)
@@ -1057,7 +1055,7 @@ void AbstractPage::setAddResourceMessage(Wt::Http::Message *message, vector<Wt::
     message->addBodyText("{\n\t\"name\": \"" + ((Wt::WLineEdit*)(*argument->begin()))->text().toUTF8() + "\"\n}");
 }
 
-void AbstractPage::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
+void AbstractPage::modifResource(vector<Wt::WInteractWidget*>* arguments, long long id)
 {
     Wt::Http::Message *message = new Wt::Http::Message();
 
@@ -1082,9 +1080,9 @@ void AbstractPage::modifResource(vector<Wt::WInteractWidget*> arguments, long lo
     }
 }
 
-void AbstractPage::setModifResourceMessage(Wt::Http::Message *message, vector<Wt::WInteractWidget*> argument)
+void AbstractPage::setModifResourceMessage(Wt::Http::Message *message, vector<Wt::WInteractWidget*>* argument)
 {
-    message->addBodyText("{\n\t\"name\": \"" + ((Wt::WLineEdit*)(*argument.begin()))->text().toUTF8() + "\"\n}");
+    message->addBodyText("{\n\t\"name\": \"" + ((Wt::WLineEdit*)(*argument->begin()))->text().toUTF8() + "\"\n}");
 }
 
 Wt::WDialog *AbstractPage::deleteResource(long long id)
@@ -1154,6 +1152,7 @@ void AbstractPage::postResourceCallback(boost::system::error_code err, const Wt:
             {
                 Wt::Json::Object result;
                 Wt::Json::parse(response.body(), result);
+                m_selectedID = result.get("id");
             }
             catch (Wt::Json::ParseError const& e)
             {
@@ -1271,19 +1270,6 @@ void AbstractPage::apiDeleteResourceCallback(boost::system::error_code err, cons
     recursiveGetResources();
 }
 
-
-
-// Check input ----------------------------------------------
-
-void AbstractPage::checkModif(vector_widget inputs, long long id, vector<Wt::WText*> errorMessage)
-{
-    if (checkInput(inputs, errorMessage) == 0)
-    {
-        modifResource(inputs, id);
-        inputs.clear();
-    }
-}
-
 int AbstractPage::checkName(string inputText, vector<long long> ids)
 {
     //    for (vector<long long>::iterator j = ids.begin(); j != ids.end(); j++)
@@ -1360,66 +1346,6 @@ void AbstractPage::showInputForAdd()
     //        }
     //        ((Wt::WInteractWidget*)(*j))->show();
     //    }
-}
-
-void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
-{
-    vector<Wt::WText*> errorMessage;
-    vector_widget inputs;
-    int column(0);
-
-    for (multimap<long long, vector_widget>::iterator itTable = m_rowsTable.begin();
-            itTable != m_rowsTable.end(); itTable++)
-    {
-        int cpt(0);
-        if ((*itTable).first == id)
-        {
-            multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
-            for (Wt::WInteractWidget *itElem : (*itTable).second)
-            {
-                string nameRessouce("N2Wt5WTextE");
-                if (nameRessouce.compare(typeid (*itElem).name()) == 0)
-                {
-                    nameRessouce = ((Wt::WText*)(itElem))->text().toUTF8();
-                    string newName = nameRessouce;
-                    if (nameRessouce.size() > SIZE_NAME + SIZE_NAME)
-                    {
-                        newName.resize(SIZE_NAME + SIZE_NAME);
-                        newName.resize(newName.size() + 3, '.');
-                    }
-
-                    Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName));
-                    inputs.push_back(input);
-                    input->setToolTip(Wt::WString::fromUTF8(nameRessouce));
-                    input->setValidator(editValidator(cpt));
-                    if (inputs.size() == 0)
-                        input->setFocus();
-                    input->setWidth(Wt::WLength(150));
-
-                    Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
-                                                        + (*title).second));
-                    error->hide();
-                    errorMessage.push_back(error);
-
-                    m_resourceTable->elementAt(rowTable, column)->clear();
-                    m_resourceTable->elementAt(rowTable, column)->addWidget(input);
-                    m_resourceTable->elementAt(rowTable, column++)->addWidget(error);
-
-                    cpt++;
-                }
-            }
-            title++;
-        }
-    }
-
-    m_resourceTable->elementAt(rowTable, columnTable)->clear();
-    m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
-    m_resourceTable->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
-
-    Wt::WPushButton *valideBut = new Wt::WPushButton(m_resourceTable->elementAt(rowTable, columnTable));
-    valideBut->setTextFormat(Wt::XHTMLUnsafeText);
-    valideBut->setText("<span class='input-group-btn'><i class='icon-ok '></i></span>");
-    valideBut->clicked().connect(boost::bind(&AbstractPage::checkModif, this, inputs, id, errorMessage));
 }
 
 void AbstractPage::addEnumToModel(Wt::WStandardItemModel* standardItemModel, int enumToAdd, Wt::WString name)

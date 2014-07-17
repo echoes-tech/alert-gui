@@ -23,8 +23,6 @@
 
 #include "AbstractPage.h"
 
-typedef std::map<long long, std::string>        MapLongString;
-
 class AbstractPage;
 
 class PluginsTablePluginWidget :
@@ -40,7 +38,7 @@ private:
     std::string                 apiUrl_;
     
     virtual void setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
-    virtual void setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
+    virtual void setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
 };
 
 

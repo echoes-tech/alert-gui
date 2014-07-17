@@ -75,10 +75,19 @@ string PluginsTableSourceWidget::addParameter()
 
 vector<Wt::WInteractWidget *> PluginsTableSourceWidget::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
 {    
+    if(cpt == 0)
+        m_sourcesData.clear();
+    
+    struct SourceData sourceData;
+        
     vector<Wt::WInteractWidget *> rowWidgets;
+    
+    int sourceID = jsonObject.get("id");
     
     int addonID = ((Wt::Json::Object)jsonObject.get("addon")).get("id");    
     rowWidgets.push_back(new Wt::WText(getAddonName(addonID)));
+    
+    sourceData.addonID = addonID;
         
     Wt::WString sourceParametersString;
         
@@ -97,6 +106,8 @@ vector<Wt::WInteractWidget *> PluginsTableSourceWidget::initRowWidgets(Wt::Json:
             sourceParametersString += sourceParameterValue;
             if(cpt != (int) jsonArrayParameters.size() - 1)
                 sourceParametersString += "<br />";
+            
+            sourceData.parametersValue[sourceParameterID] = sourceParameterValue;
         }
     }
         
@@ -104,11 +115,13 @@ vector<Wt::WInteractWidget *> PluginsTableSourceWidget::initRowWidgets(Wt::Json:
     containerWidget->addWidget(new Wt::WText(sourceParametersString));
     containerWidget->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
     rowWidgets.push_back(containerWidget);
+        
+    m_sourcesData[sourceID] = sourceData;
     
     return rowWidgets;
 }
 
-Wt::WString PluginsTableSourceWidget::getSourceParameterName(long long id)
+Wt::WString PluginsTableSourceWidget::getSourceParameterName(long long sourceParameterID)
 {    
     map<long long, Wt::WString> mapSourceParameterName;
     mapSourceParameterName[Echoes::Dbo::ESourceParameter::CONNECTION_STRING] = tr("Alert.plugins-source.connection-string");
@@ -121,10 +134,10 @@ Wt::WString PluginsTableSourceWidget::getSourceParameterName(long long id)
     mapSourceParameterName[Echoes::Dbo::ESourceParameter::HOST] = tr("Alert.plugins-source.host");
     mapSourceParameterName[Echoes::Dbo::ESourceParameter::USER] = tr("Alert.plugins-source.user");
     
-    return mapSourceParameterName[id];
+    return mapSourceParameterName[sourceParameterID];
 }
 
-Wt::WString PluginsTableSourceWidget::getAddonName(long long id)
+Wt::WString PluginsTableSourceWidget::getAddonName(long long addonID)
 {    
     map<long long, Wt::WString> mapAddonName;
     mapAddonName[Echoes::Dbo::EAddon::FILESYSTEM] = tr("Alert.plugins-source.filesystem");
@@ -136,25 +149,20 @@ Wt::WString PluginsTableSourceWidget::getAddonName(long long id)
     mapAddonName[Echoes::Dbo::EAddon::XML] = tr("Alert.plugins-source.xml");
     mapAddonName[Echoes::Dbo::EAddon::PROCESS] = tr("Alert.plugins-source.process");
     
-    return mapAddonName[id];
-}
-
-void PluginsTableSourceWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*> argument)
-{
-    vector<Wt::WInteractWidget*>::iterator it = argument.begin();
-    
-    message->addBodyText("{");
-    message->addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
-    message->addBodyText(",\n\"desc\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
-    message->addBodyText("\n}");
+    return mapAddonName[addonID];
 }
 
 void PluginsTableSourceWidget::addPopupAddHandler(Wt::WInteractWidget* widget)
 {
-    widget->clicked().connect(boost::bind(&PluginsTableSourceWidget::addResourcePopup, this));
+    widget->clicked().connect(boost::bind(&PluginsTableSourceWidget::addResourcePopup, this, 0));
 }
 
-void PluginsTableSourceWidget::addResourcePopup()
+void PluginsTableSourceWidget::addPopupModifHandler(Wt::WInteractWidget* widget, long long sourceID)
+{
+    widget->clicked().connect(boost::bind(&PluginsTableSourceWidget::addResourcePopup, this, sourceID));
+}
+
+void PluginsTableSourceWidget::addResourcePopup(long long sourceID)
 {
     vector<Wt::WInteractWidget*>* inputName = new vector<Wt::WInteractWidget*>();
     vector<Wt::WText*> errorMessage;
@@ -165,24 +173,29 @@ void PluginsTableSourceWidget::addResourcePopup()
     inputName->push_back(addonComboBox);
     addonComboBox->setModel(m_addonStandardItemModel);
     
+    if(sourceID > 0)
+        for(int row(0); row < m_addonStandardItemModel->rowCount(); row++)    
+            if(boost::lexical_cast<long long>(m_addonStandardItemModel->item(row, 1)->text()) == m_sourcesData[sourceID].addonID)
+                addonComboBox->setCurrentIndex(row);
+            
     new Wt::WText("<br />", dialog->contents());
     
     Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget(dialog->contents());    
     
     addonComboBox->changed().connect(boost::bind(&PluginsTableSourceWidget::sendRequestPopupAdd, this,
-                                        addonComboBox, paramsContainer, inputName));
+                                        addonComboBox, paramsContainer, inputName, sourceID));
         
-    sendRequestPopupAdd(addonComboBox, paramsContainer, inputName);
+    sendRequestPopupAdd(addonComboBox, paramsContainer, inputName, sourceID);
     
     popupFinalization(dialog, 0);    
 
-    dialog->finished().connect(boost::bind(&PluginsTableSourceWidget::popupCheck, this, inputName, errorMessage, dialog, -1));
+    dialog->finished().connect(boost::bind(&PluginsTableSourceWidget::popupCheck, this, inputName, errorMessage, dialog, sourceID));
     
     dialog->show();
 }
 
 void PluginsTableSourceWidget::sendRequestPopupAdd(Wt::WComboBox* addonComboBox, Wt::WContainerWidget* paramsContainer,
-                                                          vector<Wt::WInteractWidget*>* inputName)
+                                                          vector<Wt::WInteractWidget*>* inputName, long long sourceID)
 {
     string apiAddress = getApiUrl() + "/" + "sources/parameters"
             + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
@@ -190,13 +203,13 @@ void PluginsTableSourceWidget::sendRequestPopupAdd(Wt::WComboBox* addonComboBox,
             + "&addon_id=" + m_addonStandardItemModel->item((addonComboBox->currentIndex() == -1 ? 0 : addonComboBox->currentIndex()), 1)->text().toUTF8();
     
     boost::function<void (Wt::Json::Value)> functor;
-    functor = boost::bind(&PluginsTableSourceWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName);
+    functor = boost::bind(&PluginsTableSourceWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, sourceID);
     
     sendHttpRequestGet(apiAddress, functor);
 }
 
 void PluginsTableSourceWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
-                                     vector<Wt::WInteractWidget*>* inputName)
+                                     vector<Wt::WInteractWidget*>* inputName, long long sourceID)
 {
     paramsContainer->clear();
     
@@ -213,10 +226,12 @@ void PluginsTableSourceWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt:
     {
         Wt::Json::Object jsonObject = jsonArray.at(cpt);
         
-        long long id = jsonObject.get("id");
-        new Wt::WText(getSourceParameterName(id) + " : <br />", paramsContainer);
+        long long sourceParameterID = jsonObject.get("id");
+        new Wt::WText(getSourceParameterName(sourceParameterID) + " : <br />", paramsContainer);
         
         Wt::WLineEdit* lineEdit = new Wt::WLineEdit(paramsContainer);
+        if(sourceID > 0)
+            lineEdit->setText(m_sourcesData[sourceID].parametersValue[sourceParameterID]);
         
         Wt::WString wsName = jsonObject.get("name");
         lineEdit->setAttributeValue("name", wsName);
@@ -243,4 +258,9 @@ void PluginsTableSourceWidget::setAddResourceMessage(Wt::Http::Message *message,
     }
     
     message->addBodyText("\n}");
+}
+
+void PluginsTableSourceWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
+{
+    setAddResourceMessage(message, argument);
 }

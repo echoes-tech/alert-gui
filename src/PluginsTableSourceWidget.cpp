@@ -70,6 +70,11 @@ void PluginsTableSourceWidget::updatePage()
     AbstractPage::updatePage();
 }
 
+long long PluginsTableSourceWidget::getSelectedSourceAddonID()
+{
+    return m_sourcesData[getSelectedID()].addonID;
+}
+
 string PluginsTableSourceWidget::addParameter()
 {
     return "&plugin_id=" + boost::lexical_cast<string>(m_pluginsTablePluginWidget->getSelectedID());

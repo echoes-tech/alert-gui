@@ -38,6 +38,7 @@ public:
                                                 PluginsTableSourceWidget(Echoes::Dbo::Session *session, std::string apiUrl,
                                                     AbstractPage* abstractPage);
     void                                        updatePage();
+    long long                                   getSelectedSourceAddonID();
     
 protected:    
     std::string                                 addParameter();

@@ -22,6 +22,7 @@
 #include <tools/Enums.h>
 
 #include "AbstractPage.h"
+#include "PluginsTableSourceWidget.h"
 
 
 class AbstractPage;
@@ -38,7 +39,7 @@ public AbstractPage
     
 public:
                                                 PluginsTableSearchWidget(Echoes::Dbo::Session *session, std::string apiUrl,
-                                                    AbstractPage* abstractPage);
+                                                    PluginsTableSourceWidget* pluginsTableSourceWidget);
     void                                        updatePage();
     
 protected:    
@@ -51,7 +52,8 @@ protected:
     void                                        sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* searchTypeComboBox);
     void                                        handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
                                                     std::vector<Wt::WInteractWidget*>* inputName, long long searchID);
-    void                                        fillModel();
+    void                                        fillModel(Wt::Json::Value result, Wt::WComboBox* searchTypeComboBox, long long searchID,
+                                                    boost::function<void (Wt::Json::Value)> functorSendRequestPopupAdd);
     Wt::WString                                 getSearchParameterName(long long searchParameterID);
     Wt::WString                                 getSearchTypeName(long long searchTypeID);
     std::vector<Wt::WInteractWidget*>           initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
@@ -59,7 +61,7 @@ protected:
 private:
     Echoes::Dbo::Session                        *session_;
     std::string                                 apiUrl_;
-    AbstractPage*                               m_pluginsTableSourceWidget;
+    PluginsTableSourceWidget*                   m_pluginsTableSourceWidget;
     long long                                   m_selectedSourceID;
     Wt::WStandardItemModel*                     m_addonStandardItemModel;
     std::map<long long, SearchData>             m_searchesData;

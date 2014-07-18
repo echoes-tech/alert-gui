@@ -20,7 +20,7 @@
 using namespace std;
 
 PluginsTableSearchWidget::PluginsTableSearchWidget(Echoes::Dbo::Session *session, string apiUrl,
-        AbstractPage* abstractPage)
+        PluginsTableSourceWidget* pluginsTableSourceWidget)
 : AbstractPage(session, apiUrl, "plugins-search", true)
 {
     setButtonModif(true);
@@ -33,23 +33,36 @@ PluginsTableSearchWidget::PluginsTableSearchWidget(Echoes::Dbo::Session *session
     setTitles(titles);
     
     m_addonStandardItemModel = new Wt::WStandardItemModel(0,2,this);
-    fillModel();
     
-    m_pluginsTableSourceWidget = abstractPage;
+    m_pluginsTableSourceWidget = pluginsTableSourceWidget;
     m_selectedSourceID = 0;
 }
 
-void PluginsTableSearchWidget::fillModel()
+void PluginsTableSearchWidget::fillModel(Wt::Json::Value result, Wt::WComboBox* searchTypeComboBox, long long searchID,
+    boost::function<void (Wt::Json::Value)> functorSendRequestPopupAdd)
 {
     m_addonStandardItemModel->clear();
-     addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::ESearchType::PATH, getSearchTypeName(Echoes::Dbo::ESearchType::PATH));
-     addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::ESearchType::PATH_LINE, getSearchTypeName(Echoes::Dbo::ESearchType::PATH_LINE));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::ESearchType::PATH_LAST_LINE, getSearchTypeName(Echoes::Dbo::ESearchType::PATH_LAST_LINE));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::ESearchType::QUERY, getSearchTypeName(Echoes::Dbo::ESearchType::QUERY));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::ESearchType::OID, getSearchTypeName(Echoes::Dbo::ESearchType::OID));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::ESearchType::PATH_ALGORITHM, getSearchTypeName(Echoes::Dbo::ESearchType::PATH_ALGORITHM));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::ESearchType::PATH_XPATH, getSearchTypeName(Echoes::Dbo::ESearchType::PATH_XPATH));
-    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::ESearchType::NAME, getSearchTypeName(Echoes::Dbo::ESearchType::NAME));
+    
+    if(result.isNull())
+        return;
+        
+    Wt::Json::Array& jsonArray = result;   
+    
+    for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+    {
+        Wt::Json::Object jsonObject = jsonArray.at(cpt);
+        
+        long long searchTypeID = jsonObject.get("id");
+        addEnumToModel(m_addonStandardItemModel, searchTypeID, getSearchTypeName(searchTypeID));
+    }
+    
+    if(searchID > 0)
+        for(int row(0); row < m_addonStandardItemModel->rowCount(); row++)    
+            if(boost::lexical_cast<long long>(m_addonStandardItemModel->item(row, 1)->text()) == m_searchesData[searchID].searchTypeID)
+                searchTypeComboBox->setCurrentIndex(row);
+    
+    searchTypeComboBox->changed().connect(boost::bind(&PluginsTableSearchWidget::sendRequestPopupAdd, this, functorSendRequestPopupAdd, searchTypeComboBox));        
+    sendRequestPopupAdd(functorSendRequestPopupAdd, searchTypeComboBox);
 }
 
 void PluginsTableSearchWidget::updatePage()
@@ -180,11 +193,9 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
     Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-search.add-plugins-search"));
         
     Wt::WComboBox* searchTypeComboBox = new Wt::WComboBox(dialog->contents());
-    searchTypeComboBox->setModel(m_addonStandardItemModel);    
-    if(searchID > 0)
-        for(int row(0); row < m_addonStandardItemModel->rowCount(); row++)    
-            if(boost::lexical_cast<long long>(m_addonStandardItemModel->item(row, 1)->text()) == m_searchesData[searchID].searchTypeID)
-                searchTypeComboBox->setCurrentIndex(row);
+    searchTypeComboBox->setModel(m_addonStandardItemModel);
+    m_addonStandardItemModel->clear();
+    addEnumToModel(m_addonStandardItemModel, 0, "");  
     inputName->push_back(searchTypeComboBox);
     new Wt::WText("<br />", dialog->contents());
         
@@ -195,10 +206,13 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
     inputName->push_back(periodLineEdit); 
     new Wt::WText("<br />", dialog->contents());
     
-    Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget(dialog->contents());     
-    boost::function<void (Wt::Json::Value)> functor = boost::bind(&PluginsTableSearchWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, searchID);    
-    searchTypeComboBox->changed().connect(boost::bind(&PluginsTableSearchWidget::sendRequestPopupAdd, this, functor, searchTypeComboBox));        
-    sendRequestPopupAdd(functor, searchTypeComboBox);
+    Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget(dialog->contents());   
+        
+    boost::function<void (Wt::Json::Value)> functorSendRequestPopupAdd = boost::bind(&PluginsTableSearchWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, searchID);    
+    
+    boost::function<void (Wt::Json::Value)> functorFillModel = boost::bind(&PluginsTableSearchWidget::fillModel, this, _1, searchTypeComboBox, searchID, functorSendRequestPopupAdd);    
+    string resource = "addons/" + boost::lexical_cast<string>(m_pluginsTableSourceWidget->getSelectedSourceAddonID()) + "/search_type";
+    sendHttpRequestGet(resource, "", functorFillModel);
     
     popupFinalization(dialog, 0);    
 

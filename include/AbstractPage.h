@@ -129,6 +129,7 @@ public:
     Wt::WTable*                 getResourceTable() const;
     void                        setSelectedID(long long selectedID);
     long long                   getSelectedID();
+    void                        setAddButtonEnable(bool enable);
     void                        addPageToUpdate(AbstractPage* abstractPage);
     virtual void                updatePage();
     virtual void                updatePage(bool getResources);
@@ -265,7 +266,8 @@ private:
     std::vector<AbstractPage*>            m_pagesToUpdate;     
 //    bool                                m_isMainPage;
     // select drop + paginate--------------------
-    vector_pair                 m_resources;
+    vector_pair                         m_resources;
+    bool                                m_buttonAddEnable = true;
     
     bool m_footerOkButtonActive;
     

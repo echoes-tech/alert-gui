@@ -84,6 +84,8 @@ void PluginsTableSearchWidget::updatePage()
     }
     setUrl(listsUrl);
     
+    setAddButtonEnable(m_pluginsTableSourceWidget->getSelectedID() != 0);
+    
     AbstractPage::updatePage();
 }
 

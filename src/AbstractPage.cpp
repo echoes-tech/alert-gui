@@ -116,6 +116,11 @@ long long AbstractPage::getSelectedID()
     return m_selectedID;
 }
 
+void AbstractPage::setAddButtonEnable(bool enable)
+{
+    m_buttonAddEnable = enable;
+}
+
 void AbstractPage::addPageToUpdate(AbstractPage* abstractPage)
 {
     m_pagesToUpdate.push_back(abstractPage);
@@ -141,9 +146,12 @@ Wt::WContainerWidget *AbstractPage::createTableFirstHeader()
                   + "</h5>", headerTableContainer);
 
     Wt::WAnchor* m_addButton = new Wt::WAnchor(headerTableContainer);
+    Wt::log("test") << m_buttonAddEnable;
     addPopupAddHandler(m_addButton);
     m_addButton->setStyleClass("button-add btn");
     m_addButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
+    if(!m_buttonAddEnable)
+        m_addButton->disable();
     
     return headerTableContainer;
 }

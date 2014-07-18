@@ -198,7 +198,7 @@ protected:
      */
     virtual void                handleJsonGet(vectors_Json jsonResources);
     virtual std::vector<Wt::WInteractWidget*>   initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
-    void                        sendHttpRequestGet(std::string apiAddress, boost::function<void (Wt::Json::Value)> functor);
+    void                        sendHttpRequestGet(std::string resource, std::string parameters, boost::function<void (Wt::Json::Value)> functor);
     void                        handleHttpResponseGetA(boost::system::error_code err, const Wt::Http::Message& response,
                                     Wt::Http::Client *client, boost::function<void (Wt::Json::Value)> functor);
     /**

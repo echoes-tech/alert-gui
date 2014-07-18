@@ -715,8 +715,13 @@ void AbstractPage::setFooterOkButtonStatus(bool active)
 // -------- CALL RETURN API, HANDLE -----------
 
 
-void AbstractPage::sendHttpRequestGet(string apiAddress, boost::function<void (Wt::Json::Value)> functor)
+void AbstractPage::sendHttpRequestGet(string resource, string parameters, boost::function<void (Wt::Json::Value)> functor)
 {
+    string apiAddress = getApiUrl() + "/" + resource
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8()
+            + parameters;
+    
     Wt::log("debug") << "[GET] address to call : " << apiAddress;
     Wt::Http::Client *client = new Wt::Http::Client();
     client->done().connect(boost::bind(&AbstractPage::handleHttpResponseGetA, this, _1, _2, client, functor));

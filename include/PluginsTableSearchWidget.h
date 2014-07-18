@@ -48,8 +48,7 @@ protected:
     void                                        addResourcePopup(long long searchID);
     void                                        addPopupAddHandler(Wt::WInteractWidget* widget);
     void                                        addPopupModifHandler(Wt::WInteractWidget* widget, long long searchID);
-    void                                        sendRequestPopupAdd(Wt::WComboBox* addonComboBox, Wt::WContainerWidget* paramsContainer,
-                                                    std::vector<Wt::WInteractWidget*>* inputName, long long searchID);
+    void                                        sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* searchTypeComboBox);
     void                                        handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
                                                     std::vector<Wt::WInteractWidget*>* inputName, long long searchID);
     void                                        fillModel();

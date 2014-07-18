@@ -179,13 +179,13 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
 
     Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-search.add-plugins-search"));
         
-    Wt::WComboBox* addonComboBox = new Wt::WComboBox(dialog->contents());
-    addonComboBox->setModel(m_addonStandardItemModel);    
+    Wt::WComboBox* searchTypeComboBox = new Wt::WComboBox(dialog->contents());
+    searchTypeComboBox->setModel(m_addonStandardItemModel);    
     if(searchID > 0)
         for(int row(0); row < m_addonStandardItemModel->rowCount(); row++)    
             if(boost::lexical_cast<long long>(m_addonStandardItemModel->item(row, 1)->text()) == m_searchesData[searchID].searchTypeID)
-                addonComboBox->setCurrentIndex(row);
-    inputName->push_back(addonComboBox);
+                searchTypeComboBox->setCurrentIndex(row);
+    inputName->push_back(searchTypeComboBox);
     new Wt::WText("<br />", dialog->contents());
         
     new Wt::WText(tr("Alert.plugins-search.add-period") + " : <br />", dialog->contents());    
@@ -195,10 +195,10 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
     inputName->push_back(periodLineEdit); 
     new Wt::WText("<br />", dialog->contents());
     
-    Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget(dialog->contents());        
-    addonComboBox->changed().connect(boost::bind(&PluginsTableSearchWidget::sendRequestPopupAdd, this,
-                                        addonComboBox, paramsContainer, inputName, searchID));        
-    sendRequestPopupAdd(addonComboBox, paramsContainer, inputName, searchID);
+    Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget(dialog->contents());     
+    boost::function<void (Wt::Json::Value)> functor = boost::bind(&PluginsTableSearchWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, searchID);    
+    searchTypeComboBox->changed().connect(boost::bind(&PluginsTableSearchWidget::sendRequestPopupAdd, this, functor, searchTypeComboBox));        
+    sendRequestPopupAdd(functor, searchTypeComboBox);
     
     popupFinalization(dialog, 0);    
 
@@ -207,18 +207,11 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
     dialog->show();
 }
 
-void PluginsTableSearchWidget::sendRequestPopupAdd(Wt::WComboBox* addonComboBox, Wt::WContainerWidget* paramsContainer,
-                                                          vector<Wt::WInteractWidget*>* inputName, long long searchID)
+void PluginsTableSearchWidget::sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* searchTypeComboBox)
 {
-    string apiAddress = getApiUrl() + "/" + "searches/parameters"
-            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
-            + "&token=" + m_session->user()->token.toUTF8()
-            + "&type_id=" + m_addonStandardItemModel->item((addonComboBox->currentIndex() == -1 ? 0 : addonComboBox->currentIndex()), 1)->text().toUTF8();
-    
-    boost::function<void (Wt::Json::Value)> functor;
-    functor = boost::bind(&PluginsTableSearchWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, searchID);
-    
-    sendHttpRequestGet(apiAddress, functor);
+    string parameters = "&type_id=" + m_addonStandardItemModel->item((searchTypeComboBox->currentIndex() == -1 ? 0 : searchTypeComboBox->currentIndex()), 1)->text().toUTF8();
+          
+    sendHttpRequestGet("searches/parameters", parameters, functor);
 }
 
 void PluginsTableSearchWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,

@@ -183,11 +183,11 @@ void PluginsTableSourceWidget::addResourcePopup(long long sourceID)
     new Wt::WText("<br />", dialog->contents());
     
     Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget(dialog->contents());    
+    boost::function<void (Wt::Json::Value)> functor = boost::bind(&PluginsTableSourceWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, sourceID);
     
-    addonComboBox->changed().connect(boost::bind(&PluginsTableSourceWidget::sendRequestPopupAdd, this,
-                                        addonComboBox, paramsContainer, inputName, sourceID));
+    addonComboBox->changed().connect(boost::bind(&PluginsTableSourceWidget::sendRequestPopupAdd, this, functor, addonComboBox));
         
-    sendRequestPopupAdd(addonComboBox, paramsContainer, inputName, sourceID);
+    sendRequestPopupAdd(functor, addonComboBox);
     
     popupFinalization(dialog, 0);    
 
@@ -196,18 +196,11 @@ void PluginsTableSourceWidget::addResourcePopup(long long sourceID)
     dialog->show();
 }
 
-void PluginsTableSourceWidget::sendRequestPopupAdd(Wt::WComboBox* addonComboBox, Wt::WContainerWidget* paramsContainer,
-                                                          vector<Wt::WInteractWidget*>* inputName, long long sourceID)
+void PluginsTableSourceWidget::sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* addonComboBox)
 {
-    string apiAddress = getApiUrl() + "/" + "sources/parameters"
-            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
-            + "&token=" + m_session->user()->token.toUTF8()
-            + "&addon_id=" + m_addonStandardItemModel->item((addonComboBox->currentIndex() == -1 ? 0 : addonComboBox->currentIndex()), 1)->text().toUTF8();
+    string parameters = "&addon_id=" + m_addonStandardItemModel->item((addonComboBox->currentIndex() == -1 ? 0 : addonComboBox->currentIndex()), 1)->text().toUTF8();    
     
-    boost::function<void (Wt::Json::Value)> functor;
-    functor = boost::bind(&PluginsTableSourceWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, sourceID);
-    
-    sendHttpRequestGet(apiAddress, functor);
+    sendHttpRequestGet("sources/parameters", parameters, functor);
 }
 
 void PluginsTableSourceWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,

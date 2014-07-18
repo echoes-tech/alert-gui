@@ -50,21 +50,24 @@ AbstractPage::~AbstractPage()
 {
 }
 
-void AbstractPage::updatePage(bool getResources)
-{
+void AbstractPage::updatePage()
+{    
     if (m_nameResourcePageSpec.empty())
     {
         m_nameResourcePageSpec = m_xmlPageName;
     }
-    
+    updatePage(true);
+}
+
+void AbstractPage::updatePage(bool getResources)
+{
     if (getResources)
     {
         getResourceList();
     }
-
-    if (!getResources)
+    else
     {
-        if (m_selectedID == 0)
+        if (m_selectable && m_selectedID == 0)
             m_selectedID = m_rowsTable.begin()->first;
         createTable();
         for (size_t i(0); i < m_pagesToUpdate.size(); ++i)
@@ -80,7 +83,7 @@ void AbstractPage::clearStructures()
 void AbstractPage::getResourceList()
 {
     clearStructures();
-    recursiveGetResources();
+    recursiveGetResources(m_listsUrl);
 }
 
 void AbstractPage::setResources(vector_pair resources)
@@ -780,19 +783,21 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
     vector<Wt::Json::Value> jsonResource;
     try
     {
-        jsonResource = jsonResources.at(0);
-        if (jsonResource.size() > 0)
+        if(jsonResources.size() > 0)
         {
-            Wt::Json::Array& jsonArray = jsonResource.at(0);
-            for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+            jsonResource = jsonResources.at(0);
+            if (jsonResource.size() > 0)
             {
-                Wt::Json::Object jsonObject = jsonArray.at(cpt);
-                
-                long long id = jsonObject.get("id");
-                m_rowsTable.insert(make_pair(id, initRowWidgets(jsonObject, jsonResource, cpt)));
+                Wt::Json::Array& jsonArray = jsonResource.at(0);
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+                {
+                    Wt::Json::Object jsonObject = jsonArray.at(cpt);
+
+                    long long id = jsonObject.get("id");
+                    m_rowsTable.insert(make_pair(id, initRowWidgets(jsonObject, jsonResource, cpt)));
+                }
             }
         }
-
     }
     catch (Wt::Json::ParseError const& e)
     {
@@ -858,13 +863,14 @@ vector<Wt::WInteractWidget *> AbstractPage::initRowWidgets(Wt::Json::Object json
     return rowWidgets;
 }
 
-void AbstractPage::recursiveGetResources(vectors_Json jsonResource, lists_string listsUrl)
+void AbstractPage::recursiveGetResources(lists_string listsUrl, vectors_Json jsonResource)
 {
     if (listsUrl.size() == 0)
     {
-        listsUrl = m_listsUrl;
+        handleJsonGet(jsonResource);
+        updatePage(false);
+        return;
     }
-
 
     if (listsUrl.begin()->begin()->find(":id") != string::npos)
     {
@@ -993,13 +999,9 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
                 handleJsonGet(jsonResource);
                 updatePage(false);
             }
-            else if (response.status() == 200)
+            else if (response.status() == 200 || response.status() == 404)
             {
-                recursiveGetResources(jsonResource, listsUrl);
-            }
-            else if (response.status() == 404)
-            {
-                recursiveGetResources(jsonResource, listsUrl);
+                recursiveGetResources(listsUrl, jsonResource);
             }
 
             return EXIT_SUCCESS;
@@ -1267,7 +1269,7 @@ void AbstractPage::apiDeleteResourceCallback(boost::system::error_code err, cons
         Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
                               tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
     }
-    recursiveGetResources();
+    updatePage();
 }
 
 int AbstractPage::checkName(string inputText, vector<long long> ids)

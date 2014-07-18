@@ -45,7 +45,6 @@ public:
     void                        popupAddWidget(Wt::WDialog *dialog, long long id);
     void                        popupRecipients(std::string nameAlert, std::string message);
     
-    void                        updatePage(bool getResources);
     std::vector<std::string>    getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
     Wt::WValidator              *editValidator(int who);

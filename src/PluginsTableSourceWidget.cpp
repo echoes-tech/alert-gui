@@ -28,15 +28,6 @@ PluginsTableSourceWidget::PluginsTableSourceWidget(Echoes::Dbo::Session *session
     titles.insert(make_pair(0, "addon"));
     titles.insert(make_pair(0, "parameters"));
     setTitles(titles);
-
-    lists_string lListUrl;
-    list_string listUrl;
-    listUrl.push_back("sources");
-    listUrl.push_back("sources/:id/parameters");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-    
-    setUrl(lListUrl);
     
     m_addonStandardItemModel = new Wt::WStandardItemModel(0,2,this);
     fillModel();
@@ -58,14 +49,25 @@ void PluginsTableSourceWidget::fillModel()
     addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::PROCESS, getAddonName(Echoes::Dbo::EAddon::PROCESS));
 }
 
-void PluginsTableSourceWidget::updatePage(bool getResources)
+void PluginsTableSourceWidget::updatePage()
 {
     if(m_selectedPluginID != m_pluginsTablePluginWidget->getSelectedID())
     {
         m_selectedPluginID = m_pluginsTablePluginWidget->getSelectedID();
         setSelectedID(0);
+    }       
+
+    std::list<std::list<std::string>> listsUrl;
+    if(m_pluginsTablePluginWidget->getSelectedID() != 0)
+    {
+        std::list<std::string> listUrl;
+        listUrl.push_back("sources");
+        listUrl.push_back("sources/:id/parameters");
+        listsUrl.push_back(listUrl);
+        listUrl.clear();
     }
-    AbstractPage::updatePage(getResources);
+    setUrl(listsUrl);
+    AbstractPage::updatePage();
 }
 
 string PluginsTableSourceWidget::addParameter()

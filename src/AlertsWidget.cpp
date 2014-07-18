@@ -89,11 +89,6 @@ void AlertsWidget::setDisplayedTitlesPopups()
     m_displayedTitlesPopups = displayedTitles;
 }
 
-void AlertsWidget::updatePage(bool getResources)
-{
-    AbstractPage::updatePage(getResources);
-}
-
 vector<string> AlertsWidget::getTitlesTableWidget()
 {
     vector<string> titleWidget;
@@ -774,7 +769,7 @@ void AlertsWidget::checkPopupRecipients(string message, string time, int media)
     }
     message += "\n]\n}";
     postAlertCallApi(message);
-    getResourceList();
+    updatePage();
 }
 
 int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage)
@@ -980,7 +975,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*>* argument)
                 + "\"\n}\n]\n}";
 
         postAlertCallApi(message);
-        getResourceList();
+        updatePage();
     }
     else
     {
@@ -993,7 +988,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*>* argument)
 
 void AlertsWidget::closePopup()
 {
-    getResourceList();
+    updatePage();
 }
 
 long long AlertsWidget::getSelectedIdFromSelectionBox(Wt::WSelectionBox * box)
@@ -1766,6 +1761,6 @@ void AlertsWidget::deleteAlert(boost::system::error_code err, const Wt::Http::Me
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
     }
-    getResourceList();
+    updatePage();
 }
 

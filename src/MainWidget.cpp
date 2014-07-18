@@ -357,7 +357,7 @@ void MainWidget::updateContainerFluid(int type)
         }
         case Enums::EPageType::ASSET:
         {
-            amw->getResourceList();
+            amw->updatePage();
             this->contentFluid->addWidget(amw);
             break;
         }
@@ -369,19 +369,19 @@ void MainWidget::updateContainerFluid(int type)
         }
         case Enums::EPageType::INFORMATIONS:
         {
-            inw->getResourceList();
+            inw->updatePage();
             this->contentFluid->addWidget(inw);
             break;
         }
         case Enums::EPageType::ASSOCIATION:
         {
-            act->getResourceList();
+            act->updatePage();
             this->contentFluid->addWidget(act);
             break;
         }
         case Enums::EPageType::ALERTS:
         {
-            alw->getResourceList();
+            alw->updatePage();
             this->contentFluid->addWidget(alw);
             break;
         }
@@ -407,7 +407,7 @@ void MainWidget::updateContainerFluid(int type)
         }
         case Enums::EPageType::UNITS:
         {
-            unw->getResourceList();
+            unw->updatePage();
             this->contentFluid->addWidget(unw);
             break;
         }

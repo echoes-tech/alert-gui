@@ -31,15 +31,6 @@ PluginsTableSearchWidget::PluginsTableSearchWidget(Echoes::Dbo::Session *session
     titles.insert(make_pair(0, "parameters"));
     titles.insert(make_pair(0, "period"));
     setTitles(titles);
-
-    lists_string lListUrl;
-    list_string listUrl;
-    listUrl.push_back("searches");
-    listUrl.push_back("searches/:id/parameters");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-    
-    setUrl(lListUrl);
     
     m_addonStandardItemModel = new Wt::WStandardItemModel(0,2,this);
     fillModel();
@@ -61,14 +52,26 @@ void PluginsTableSearchWidget::fillModel()
     addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::ESearchType::NAME, getSearchTypeName(Echoes::Dbo::ESearchType::NAME));
 }
 
-void PluginsTableSearchWidget::updatePage(bool getResources)
+void PluginsTableSearchWidget::updatePage()
 {
     if(m_selectedSourceID != m_pluginsTableSourceWidget->getSelectedID())
     {
         m_selectedSourceID = m_pluginsTableSourceWidget->getSelectedID();
         setSelectedID(0);
+    }    
+
+    std::list<std::list<std::string>> listsUrl;
+    if(m_pluginsTableSourceWidget->getSelectedID() != 0)
+    {
+        std::list<std::string> listUrl;
+        listUrl.push_back("searches");
+        listUrl.push_back("searches/:id/parameters");
+        listsUrl.push_back(listUrl);
+        listUrl.clear();
     }
-    AbstractPage::updatePage(getResources);
+    setUrl(listsUrl);
+    
+    AbstractPage::updatePage();
 }
 
 string PluginsTableSearchWidget::addParameter()

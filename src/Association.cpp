@@ -158,7 +158,7 @@ int Association::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::W
 
 void Association::closePopup()
 {
-    getResourceList();
+    updatePage();
 }
 
 
@@ -547,7 +547,7 @@ void Association::postAssetCallBack(boost::system::error_code err, const Wt::Htt
         Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "err", tr("Alert.association.database-error"), Wt::Ok);
     }
-    getResourceList();
+    updatePage();
 }
 
 void Association::deleteAsset(boost::system::error_code err, const Wt::Http::Message& response)
@@ -573,7 +573,7 @@ void Association::deleteAsset(boost::system::error_code err, const Wt::Http::Mes
         Wt::log("error") << "[Associations Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.association.database-error-title"),tr("Alert.association.database-error"),Wt::Ok);
     }
-    getResourceList();
+    updatePage();
 }
 
 Wt::WDialog *Association::deleteResource(long long id)

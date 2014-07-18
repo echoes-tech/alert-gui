@@ -130,7 +130,8 @@ public:
     void                        setSelectedID(long long selectedID);
     long long                   getSelectedID();
     void                        addPageToUpdate(AbstractPage* abstractPage);
-    virtual void                updatePage(bool getResources = true);
+    virtual void                updatePage();
+    virtual void                updatePage(bool getResources);
 protected:
 
     // ENUM
@@ -205,7 +206,7 @@ protected:
      * listsUrl_ is set in construtor child in setUrl()
      * @param Send jsonResource whether u want use her after handleJsonGet
      */
-    void                        recursiveGetResources(vectors_Json jsonResource = vectors_Json(), lists_string listsUrl = lists_string());
+    void                        recursiveGetResources(lists_string listsUrl, vectors_Json jsonResource = vectors_Json());
     int                         handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
     lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client);
     virtual std::string         addParameter();

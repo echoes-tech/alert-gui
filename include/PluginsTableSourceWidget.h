@@ -37,7 +37,7 @@ public AbstractPage
 public:
                                                 PluginsTableSourceWidget(Echoes::Dbo::Session *session, std::string apiUrl,
                                                     AbstractPage* abstractPage);
-    void                                        updatePage(bool getResources);
+    void                                        updatePage();
     
 protected:    
     std::string                                 addParameter();

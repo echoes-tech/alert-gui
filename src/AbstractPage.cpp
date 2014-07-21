@@ -798,7 +798,7 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
         if(jsonResources.size() > 0)
         {
             jsonResource = jsonResources.at(0);
-            if (jsonResource.size() > 0)
+            if (jsonResource.size() > 0 && !jsonResource.at(0).isNull())
             {
                 bool selectedIDExist = false;
                 Wt::Json::Array& jsonArray = jsonResource.at(0);

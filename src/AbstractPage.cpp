@@ -800,14 +800,18 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
             jsonResource = jsonResources.at(0);
             if (jsonResource.size() > 0)
             {
+                bool selectedIDExist = false;
                 Wt::Json::Array& jsonArray = jsonResource.at(0);
                 for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
                 {
                     Wt::Json::Object jsonObject = jsonArray.at(cpt);
 
                     long long id = jsonObject.get("id");
+                    selectedIDExist |= id == m_selectedID;
                     m_rowsTable.insert(make_pair(id, initRowWidgets(jsonObject, jsonResource, cpt)));
                 }
+                if(!selectedIDExist)
+                    m_selectedID = 0;
             }
         }
     }

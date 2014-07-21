@@ -146,7 +146,6 @@ Wt::WContainerWidget *AbstractPage::createTableFirstHeader()
                   + "</h5>", headerTableContainer);
 
     Wt::WAnchor* m_addButton = new Wt::WAnchor(headerTableContainer);
-    Wt::log("test") << m_buttonAddEnable;
     addPopupAddHandler(m_addButton);
     m_addButton->setStyleClass("button-add btn");
     m_addButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
@@ -732,7 +731,7 @@ void AbstractPage::sendHttpRequestGet(string resource, string parameters, boost:
     
     Wt::log("debug") << "[GET] address to call : " << apiAddress;
     Wt::Http::Client *client = new Wt::Http::Client();
-    client->done().connect(boost::bind(&AbstractPage::handleHttpResponseGetA, this, _1, _2, client, functor));
+    client->done().connect(boost::bind(&AbstractPage::handleHttpResponseGet, this, _1, _2, client, functor));
     if (client->get(apiAddress))
     {
         Wt::WApplication::instance()->deferRendering();
@@ -743,7 +742,7 @@ void AbstractPage::sendHttpRequestGet(string resource, string parameters, boost:
     }
 }
 
-void AbstractPage::handleHttpResponseGetA(boost::system::error_code err,
+void AbstractPage::handleHttpResponseGet(boost::system::error_code err,
     const Wt::Http::Message& response, Wt::Http::Client *client, boost::function<void (Wt::Json::Value)> functor)
 {
     delete client;
@@ -890,145 +889,79 @@ void AbstractPage::recursiveGetResources(lists_string listsUrl, vectors_Json jso
         list_string::iterator listUrl = listsUrl.begin()->begin();
         listUrl->replace(listUrl->find(":id"), 3, boost::lexical_cast<string>(0));
     }
-
-    string credentialParametersFirstChar = "?";
-    if (listsUrl.begin()->begin()->find("?") != string::npos)
-    {
-        credentialParametersFirstChar = "&";
-    }
-
-    string apiAddress = getApiUrl() + "/" + (*(*listsUrl.begin()).begin())
-            + credentialParametersFirstChar
-            + "login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
-            + "&token=" + m_session->user()->token.toUTF8()
-            + addParameter();
-
-    Wt::log("debug") << "[GET] address to call : " << apiAddress;
-    Wt::Http::Client *client = new Wt::Http::Client();
-    client->done().connect(boost::bind(&AbstractPage::handleHttpResponseGet, this, _1, _2, listsUrl, jsonResource, client));
-    if (client->get(apiAddress))
-    {
-        Wt::WApplication::instance()->deferRendering();
-    }
-    else
-    {
-        Wt::log("error") << "Error Client Http";
-    }
+    
+    string resource = (*(*listsUrl.begin()).begin());
+    boost::function<void (Wt::Json::Value)> functor = boost::bind(&AbstractPage::handleRecursiveGetResources, this, _1, listsUrl, jsonResource);    
+    sendHttpRequestGet(resource, addParameter(), functor);
 }
 
-int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
-                                        lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client)
+void AbstractPage::handleRecursiveGetResources(Wt::Json::Value result, lists_string listsUrl, vectors_Json jsonResource)
 {
-    delete client;
-    Wt::WApplication::instance()->resumeRendering();
-    if (!err)
+    if (jsonResource.size() == 0)
     {
-        Wt::Json::Value result = Wt::Json::Value::Null;
-        if (response.status() == 200)
-        {
-            try
-            {
-                Wt::Json::parse(response.body(), result);
-            }
-            catch (Wt::Json::ParseError const& e)
-            {
-                Wt::log("warning")
-                        << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                        + " Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".parsing-error-title"),
-                                      tr("Alert." + m_xmlPageName + ".parsing-error"), Wt::Ok);
-                return EXIT_FAILURE;
-            }
-            catch (Wt::Json::TypeException const& e)
-            {
-                Wt::log("warning")
-                        << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                        + " Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".typexception-error-title"),
-                                      tr("Alert." + m_xmlPageName + ".typexception-error"), Wt::Ok);
-                return EXIT_FAILURE;
-            }
-        }
-        if (response.status() == 200 || response.status() == 404)
-        {
-            if (jsonResource.size() == 0)
-            {
-                jsonResource.push_back(vector<Wt::Json::Value>());
-            }
+        jsonResource.push_back(vector<Wt::Json::Value>());
+    }
 
-            if (jsonResource.begin()->size() == 0)
-            {
-                jsonResource.begin()->push_back(result);
-            }
-            else
-            {
-                jsonResource.back().push_back(result);
-            }
-
-            listsUrl.begin()->pop_front();
-            if (listsUrl.begin()->size() == 0)
-            {
-                listsUrl.pop_front();
-                jsonResource.push_back(vector<Wt::Json::Value>());
-            }
-            else if (listsUrl.begin()->begin()->find(":id") != string::npos && response.status() == 200)
-            {
-                try
-                {
-                    vector<Wt::Json::Value> itJ = jsonResource.back();
-                    Wt::Json::Array& result1 = itJ.back();
-                    list_string::iterator listUrl = listsUrl.begin()->begin();
-                    string saveUrl = (*listUrl);
-                    Wt::Json::Array::iterator itA = result1.begin();
-                    while (itA != result1.end() && saveUrl.compare((*listUrl)) == 0)
-                    {
-                        Wt::Json::Object jsonObject = (*itA);
-                        long long idJ = jsonObject.get("id");
-                        // On remplace celui en cours
-                        listUrl->replace(listUrl->find(":id"), 3, boost::lexical_cast<string>(idJ));
-                        // on ajoute des éléments pour les autres IDs
-                        if (++itA != result1.end())
-                        {
-                            listsUrl.begin()->push_back(saveUrl);
-                            listUrl++;
-                        }
-                    }
-                }
-                catch (Wt::Json::ParseError const& e)
-                {
-                    Wt::log("warning")
-                            << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                            + " Widget] JSON parse Exception: " << response.body();
-                }
-                catch (Wt::Json::TypeException const& e)
-                {
-                    Wt::log("warning")
-                            << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                            + " Widget] JSON Type Exception: " << response.body();
-                }
-            }
-            if (listsUrl.size() == 0)
-            {
-                handleJsonGet(jsonResource);
-                updatePage(false);
-            }
-            else if (response.status() == 200 || response.status() == 404)
-            {
-                recursiveGetResources(listsUrl, jsonResource);
-            }
-
-            return EXIT_SUCCESS;
-        }
+    if (jsonResource.begin()->size() == 0)
+    {
+        jsonResource.begin()->push_back(result);
     }
     else
     {
-        Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
-                                       + m_xmlPageName) + " Widget] Http::Client error: "
-                << response.body();
-        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
-                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+        jsonResource.back().push_back(result);
     }
-    return EXIT_FAILURE;
+
+    listsUrl.begin()->pop_front();
+    if (listsUrl.begin()->size() == 0)
+    {
+        listsUrl.pop_front();
+        jsonResource.push_back(vector<Wt::Json::Value>());
+    }
+    else if (listsUrl.begin()->begin()->find(":id") != string::npos && !result.isNull())
+    {
+        try
+        {
+            vector<Wt::Json::Value> itJ = jsonResource.back();
+            Wt::Json::Array& result1 = itJ.back();
+            list_string::iterator listUrl = listsUrl.begin()->begin();
+            string saveUrl = (*listUrl);
+            Wt::Json::Array::iterator itA = result1.begin();
+            while (itA != result1.end() && saveUrl.compare((*listUrl)) == 0)
+            {
+                Wt::Json::Object jsonObject = (*itA);
+                long long idJ = jsonObject.get("id");
+                // On remplace celui en cours
+                listUrl->replace(listUrl->find(":id"), 3, boost::lexical_cast<string>(idJ));
+                // on ajoute des éléments pour les autres IDs
+                if (++itA != result1.end())
+                {
+                    listsUrl.begin()->push_back(saveUrl);
+                    listUrl++;
+                }
+            }
+        }
+        catch (Wt::Json::ParseError const& e)
+        {
+            Wt::log("warning")
+                    << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
+                    + " Widget] JSON parse Exception";
+        }
+        catch (Wt::Json::TypeException const& e)
+        {
+            Wt::log("warning")
+                    << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
+                    + " Widget] JSON Type Exception";
+        }
+    }
+    if (listsUrl.size() == 0)
+    {
+        handleJsonGet(jsonResource);
+        updatePage(false);
+    }
+    else
+    {
+        recursiveGetResources(listsUrl, jsonResource);
+    }
 }
 
 string AbstractPage::addParameter()

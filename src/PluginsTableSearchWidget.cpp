@@ -282,7 +282,6 @@ void PluginsTableSearchWidget::setAddResourceMessage(Wt::Http::Message *message,
     }
     
     message->addBodyText("\n}");
-    Wt::log("test") << message->body();
 }
 
 void PluginsTableSearchWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)

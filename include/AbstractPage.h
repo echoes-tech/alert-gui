@@ -200,7 +200,7 @@ protected:
     virtual void                handleJsonGet(vectors_Json jsonResources);
     virtual std::vector<Wt::WInteractWidget*>   initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
     void                        sendHttpRequestGet(std::string resource, std::string parameters, boost::function<void (Wt::Json::Value)> functor);
-    void                        handleHttpResponseGetA(boost::system::error_code err, const Wt::Http::Message& response,
+    void                        handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
                                     Wt::Http::Client *client, boost::function<void (Wt::Json::Value)> functor);
     /**
      * recursiveGetResources for go call API with listsUrl_ \n
@@ -208,8 +208,7 @@ protected:
      * @param Send jsonResource whether u want use her after handleJsonGet
      */
     void                        recursiveGetResources(lists_string listsUrl, vectors_Json jsonResource = vectors_Json());
-    int                         handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
-    lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client);
+    void                        handleRecursiveGetResources(Wt::Json::Value result, lists_string listsUrl, vectors_Json jsonResource);
     virtual std::string         addParameter();
     // ---- ADD MODIF DELETE ----------------------------------------------
     virtual void                addResource(std::vector<Wt::WInteractWidget*>* argument);

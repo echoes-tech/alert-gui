@@ -58,6 +58,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
 	${OBJECTDIR}/src/PluginEditionModel.o \
 	${OBJECTDIR}/src/PluginEditionWidget.o \
+	${OBJECTDIR}/src/PluginsTableFilterWidget.o \
 	${OBJECTDIR}/src/PluginsTablePluginWidget.o \
 	${OBJECTDIR}/src/PluginsTableSearchWidget.o \
 	${OBJECTDIR}/src/PluginsTableSourceWidget.o \
@@ -208,6 +209,11 @@ ${OBJECTDIR}/src/PluginEditionWidget.o: src/PluginEditionWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginEditionWidget.o src/PluginEditionWidget.cpp
+
+${OBJECTDIR}/src/PluginsTableFilterWidget.o: src/PluginsTableFilterWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableFilterWidget.o src/PluginsTableFilterWidget.cpp
 
 ${OBJECTDIR}/src/PluginsTablePluginWidget.o: src/PluginsTablePluginWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

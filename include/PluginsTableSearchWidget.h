@@ -63,7 +63,7 @@ private:
     std::string                                 apiUrl_;
     PluginsTableSourceWidget*                   m_pluginsTableSourceWidget;
     long long                                   m_selectedSourceID;
-    Wt::WStandardItemModel*                     m_addonStandardItemModel;
+    Wt::WStandardItemModel*                     m_searchTypeStandardItemModel;
     std::map<long long, SearchData>             m_searchesData;
 };
 

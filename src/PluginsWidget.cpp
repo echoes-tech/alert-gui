@@ -55,6 +55,11 @@ void PluginsWidget::update()
        templateFormView->bindWidget("resource-table-search", ptSearchW);
        ptSourceW->addPageToUpdate(ptSearchW);
        
+       // FILTER       
+       PluginsTableFilterWidget *ptFilterW = new PluginsTableFilterWidget(session_, apiUrl_, ptSearchW);
+       templateFormView->bindWidget("resource-table-filter", ptFilterW);
+       ptSearchW->addPageToUpdate(ptFilterW);
+       
        newClass_ = true;
     }
 }

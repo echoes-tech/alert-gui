@@ -11,6 +11,7 @@
 #include "PluginsTablePluginWidget.h"
 #include "PluginsTableSourceWidget.h"
 #include "PluginsTableSearchWidget.h"
+#include "PluginsTableFilterWidget.h"
 
 
 class PluginsWidget : 

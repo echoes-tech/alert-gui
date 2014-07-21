@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.plugins-filter.add-form.plugins-filter">Filters</message>
+    <!--body-->
+    <message id="Alert.plugins-filter.name-filter-type">Filter type</message>
+    <message id="Alert.plugins-filter.name-parameters">Parameters</message>
+    <message id="Alert.plugins-filter.name-nb-value">Number of value</message>
+    <message id="Alert.plugins-filter.name-pos-key-value">Position key value</message>
+    <message id="Alert.plugins-filter.modif-button">Modify</message>
+    <message id="Alert.plugins-filter.delete-button">Delete</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.plugins-filter.button-cancel">Cancel</message>
+    <message id="Alert.plugins-filter.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.plugins-filter.add-plugins-filter">Add source</message>
+    <message id="Alert.plugins-filter.add-nb-value">Number of value</message>
+    <message id="Alert.plugins-filter.add-pos-key-value">Position key value</message>
+    <!--PUT-->
+    <message id="Alert.plugins-filter.modif-plugins-filter">Modify</message>
+    <!--DELETE-->
+    <message id="Alert.plugins-filter.delete-plugins-filter">Attention</message>
+    <message id="Alert.plugins-filter.delete-plugins-filter-message">
+        <span style="color:red">
+            You are about to delete a plugin
+        </span>
+    </message>
+    <message id="Alert.plugins-filter.button-confirm">Confirm</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.plugins-filter.invalid-name-unit">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.plugins-filter.database-error-title">Database error</message>
+  <message id="Alert.plugins-filter.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+  
+  <message id="Alert.plugins-filter.filter-type.all">All</message>
+  <message id="Alert.plugins-filter.filter-type.regex">Regular expression</message>
+  <message id="Alert.plugins-filter.filter-type.location">Location</message>
+  
+  <message id="Alert.plugins-filter.filter-parameter.regex">Regular expression</message>
+  <message id="Alert.plugins-filter.filter-parameter.first-char">First char</message>
+  <message id="Alert.plugins-filter.filter-parameter.length">Length</message>
+
+<!-- templates -->
+
+    <message id="Alert.plugins-filter.Management.template" >
+            <div id="media-user-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>  
+
+</messages>

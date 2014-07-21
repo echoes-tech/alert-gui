@@ -32,7 +32,7 @@ PluginsTableSearchWidget::PluginsTableSearchWidget(Echoes::Dbo::Session *session
     titles.insert(make_pair(0, "period"));
     setTitles(titles);
     
-    m_addonStandardItemModel = new Wt::WStandardItemModel(0,2,this);
+    m_searchTypeStandardItemModel = new Wt::WStandardItemModel(0,2,this);
     
     m_pluginsTableSourceWidget = pluginsTableSourceWidget;
     m_selectedSourceID = 0;
@@ -41,7 +41,7 @@ PluginsTableSearchWidget::PluginsTableSearchWidget(Echoes::Dbo::Session *session
 void PluginsTableSearchWidget::fillModel(Wt::Json::Value result, Wt::WComboBox* searchTypeComboBox, long long searchID,
     boost::function<void (Wt::Json::Value)> functorSendRequestPopupAdd)
 {
-    m_addonStandardItemModel->clear();
+    m_searchTypeStandardItemModel->clear();
     
     if(result.isNull())
         return;
@@ -53,12 +53,12 @@ void PluginsTableSearchWidget::fillModel(Wt::Json::Value result, Wt::WComboBox* 
         Wt::Json::Object jsonObject = jsonArray.at(cpt);
         
         long long searchTypeID = jsonObject.get("id");
-        addEnumToModel(m_addonStandardItemModel, searchTypeID, getSearchTypeName(searchTypeID));
+        addEnumToModel(m_searchTypeStandardItemModel, searchTypeID, getSearchTypeName(searchTypeID));
     }
     
     if(searchID > 0)
-        for(int row(0); row < m_addonStandardItemModel->rowCount(); row++)    
-            if(boost::lexical_cast<long long>(m_addonStandardItemModel->item(row, 1)->text()) == m_searchesData[searchID].searchTypeID)
+        for(int row(0); row < m_searchTypeStandardItemModel->rowCount(); row++)    
+            if(boost::lexical_cast<long long>(m_searchTypeStandardItemModel->item(row, 1)->text()) == m_searchesData[searchID].searchTypeID)
                 searchTypeComboBox->setCurrentIndex(row);
     
     searchTypeComboBox->changed().connect(boost::bind(&PluginsTableSearchWidget::sendRequestPopupAdd, this, functorSendRequestPopupAdd, searchTypeComboBox));        
@@ -110,7 +110,7 @@ vector<Wt::WInteractWidget *> PluginsTableSearchWidget::initRowWidgets(Wt::Json:
     
     searchData.searchTypeID = searchTypeID;
         
-    Wt::WString sourceParametersString;
+    Wt::WString searchParametersString;
         
     if(!((Wt::Json::Value)jsonResource.at(cpt+1)).isNull())
     {
@@ -120,20 +120,20 @@ vector<Wt::WInteractWidget *> PluginsTableSearchWidget::initRowWidgets(Wt::Json:
             Wt::Json::Object jsonObjectParameter = jsonArrayParameters.at(cpt);
 
             int searchParameterID = ((Wt::Json::Object)jsonObjectParameter.get("id")).get("search_parameter_id");
-            Wt::WString sourceParameterValue = jsonObjectParameter.get("value");
+            Wt::WString searchParameterValue = jsonObjectParameter.get("value");
 
-            sourceParametersString += getSearchParameterName(searchParameterID);
-            sourceParametersString += ": ";
-            sourceParametersString += sourceParameterValue;
+            searchParametersString += getSearchParameterName(searchParameterID);
+            searchParametersString += ": ";
+            searchParametersString += searchParameterValue;
             if(cpt != (int) jsonArrayParameters.size() - 1)
-                sourceParametersString += "<br />";
+                searchParametersString += "<br />";
             
-            searchData.parametersValue[searchParameterID] = sourceParameterValue;
+            searchData.parametersValue[searchParameterID] = searchParameterValue;
         }
     }
         
     Wt::WContainerWidget* containerWidget = new Wt::WContainerWidget();
-    containerWidget->addWidget(new Wt::WText(sourceParametersString));
+    containerWidget->addWidget(new Wt::WText(searchParametersString));
     containerWidget->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
     rowWidgets.push_back(containerWidget);        
     
@@ -149,32 +149,32 @@ vector<Wt::WInteractWidget *> PluginsTableSearchWidget::initRowWidgets(Wt::Json:
 
 Wt::WString PluginsTableSearchWidget::getSearchParameterName(long long searchParameterID)
 {    
-    map<long long, Wt::WString> mapSourceParameterName;
-    mapSourceParameterName[Echoes::Dbo::ESearchParameter::PATH] = tr("Alert.plugins-search.search-parameter.path");
-    mapSourceParameterName[Echoes::Dbo::ESearchParameter::LINE] = tr("Alert.plugins-search.search-parameter.line");
-    mapSourceParameterName[Echoes::Dbo::ESearchParameter::LAST_LINE] = tr("Alert.plugins-search.search-parameter.last-line");
-    mapSourceParameterName[Echoes::Dbo::ESearchParameter::QUERY] = tr("Alert.plugins-search.search-parameter.query");
-    mapSourceParameterName[Echoes::Dbo::ESearchParameter::OID] = tr("Alert.plugins-search.search-parameter.oid");
-    mapSourceParameterName[Echoes::Dbo::ESearchParameter::ALGORITHM] = tr("Alert.plugins-search.search-parameter.algorithm");
-    mapSourceParameterName[Echoes::Dbo::ESearchParameter::XPATH] = tr("Alert.plugins-search.search-parameter.xpath");
-    mapSourceParameterName[Echoes::Dbo::ESearchParameter::NAME] = tr("Alert.plugins-search.search-parameter.name");
+    map<long long, Wt::WString> mapSearchParameterName;
+    mapSearchParameterName[Echoes::Dbo::ESearchParameter::PATH] = tr("Alert.plugins-search.search-parameter.path");
+    mapSearchParameterName[Echoes::Dbo::ESearchParameter::LINE] = tr("Alert.plugins-search.search-parameter.line");
+    mapSearchParameterName[Echoes::Dbo::ESearchParameter::LAST_LINE] = tr("Alert.plugins-search.search-parameter.last-line");
+    mapSearchParameterName[Echoes::Dbo::ESearchParameter::QUERY] = tr("Alert.plugins-search.search-parameter.query");
+    mapSearchParameterName[Echoes::Dbo::ESearchParameter::OID] = tr("Alert.plugins-search.search-parameter.oid");
+    mapSearchParameterName[Echoes::Dbo::ESearchParameter::ALGORITHM] = tr("Alert.plugins-search.search-parameter.algorithm");
+    mapSearchParameterName[Echoes::Dbo::ESearchParameter::XPATH] = tr("Alert.plugins-search.search-parameter.xpath");
+    mapSearchParameterName[Echoes::Dbo::ESearchParameter::NAME] = tr("Alert.plugins-search.search-parameter.name");
     
-    return mapSourceParameterName[searchParameterID];
+    return mapSearchParameterName[searchParameterID];
 }
 
 Wt::WString PluginsTableSearchWidget::getSearchTypeName(long long searchTypeID)
 {    
-    map<long long, Wt::WString> mapAddonName;
-    mapAddonName[Echoes::Dbo::ESearchType::PATH] = tr("Alert.plugins-search.search-type.path");
-    mapAddonName[Echoes::Dbo::ESearchType::PATH_LINE] = tr("Alert.plugins-search.search-type.path-line");
-    mapAddonName[Echoes::Dbo::ESearchType::PATH_LAST_LINE] = tr("Alert.plugins-search.search-type.path-last-line");
-    mapAddonName[Echoes::Dbo::ESearchType::QUERY] = tr("Alert.plugins-search.search-type.query");
-    mapAddonName[Echoes::Dbo::ESearchType::OID] = tr("Alert.plugins-search.search-type.oid");
-    mapAddonName[Echoes::Dbo::ESearchType::PATH_ALGORITHM] = tr("Alert.plugins-search.search-type.path-algorithm");
-    mapAddonName[Echoes::Dbo::ESearchType::PATH_XPATH] = tr("Alert.plugins-search.search-type.path-xpath");
-    mapAddonName[Echoes::Dbo::ESearchType::NAME] = tr("Alert.plugins-search.search-type.name");
+    map<long long, Wt::WString> mapSearchTypeName;
+    mapSearchTypeName[Echoes::Dbo::ESearchType::PATH] = tr("Alert.plugins-search.search-type.path");
+    mapSearchTypeName[Echoes::Dbo::ESearchType::PATH_LINE] = tr("Alert.plugins-search.search-type.path-line");
+    mapSearchTypeName[Echoes::Dbo::ESearchType::PATH_LAST_LINE] = tr("Alert.plugins-search.search-type.path-last-line");
+    mapSearchTypeName[Echoes::Dbo::ESearchType::QUERY] = tr("Alert.plugins-search.search-type.query");
+    mapSearchTypeName[Echoes::Dbo::ESearchType::OID] = tr("Alert.plugins-search.search-type.oid");
+    mapSearchTypeName[Echoes::Dbo::ESearchType::PATH_ALGORITHM] = tr("Alert.plugins-search.search-type.path-algorithm");
+    mapSearchTypeName[Echoes::Dbo::ESearchType::PATH_XPATH] = tr("Alert.plugins-search.search-type.path-xpath");
+    mapSearchTypeName[Echoes::Dbo::ESearchType::NAME] = tr("Alert.plugins-search.search-type.name");
     
-    return mapAddonName[searchTypeID];
+    return mapSearchTypeName[searchTypeID];
 }
 
 void PluginsTableSearchWidget::addPopupAddHandler(Wt::WInteractWidget* widget)
@@ -195,9 +195,9 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
     Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-search.add-plugins-search"));
         
     Wt::WComboBox* searchTypeComboBox = new Wt::WComboBox(dialog->contents());
-    searchTypeComboBox->setModel(m_addonStandardItemModel);
-    m_addonStandardItemModel->clear();
-    addEnumToModel(m_addonStandardItemModel, 0, "");  
+    searchTypeComboBox->setModel(m_searchTypeStandardItemModel);
+    m_searchTypeStandardItemModel->clear();
+    addEnumToModel(m_searchTypeStandardItemModel, 0, "");  
     inputName->push_back(searchTypeComboBox);
     new Wt::WText("<br />", dialog->contents());
         
@@ -225,7 +225,7 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
 
 void PluginsTableSearchWidget::sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* searchTypeComboBox)
 {
-    string parameters = "&type_id=" + m_addonStandardItemModel->item((searchTypeComboBox->currentIndex() == -1 ? 0 : searchTypeComboBox->currentIndex()), 1)->text().toUTF8();
+    string parameters = "&type_id=" + m_searchTypeStandardItemModel->item((searchTypeComboBox->currentIndex() == -1 ? 0 : searchTypeComboBox->currentIndex()), 1)->text().toUTF8();
           
     sendHttpRequestGet("searches/parameters", parameters, functor);
 }
@@ -271,7 +271,7 @@ void PluginsTableSearchWidget::setAddResourceMessage(Wt::Http::Message *message,
         
     message->addBodyText("{");
     message->addBodyText("\n\"source_id\": " + boost::lexical_cast<string>(m_pluginsTableSourceWidget->getSelectedID()));
-    message->addBodyText(",\n\"type_id\": " + m_addonStandardItemModel->item(((Wt::WComboBox*)(*it++))->currentIndex(), 1)->text().toUTF8());
+    message->addBodyText(",\n\"type_id\": " + m_searchTypeStandardItemModel->item(((Wt::WComboBox*)(*it++))->currentIndex(), 1)->text().toUTF8());
     message->addBodyText(",\n\"period\": " + ((Wt::WLineEdit*)(*it++))->text().toUTF8());
     
     while(it != argument->end())

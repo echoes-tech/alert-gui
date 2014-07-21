@@ -39,7 +39,7 @@ PluginsTableSourceWidget::PluginsTableSourceWidget(Echoes::Dbo::Session *session
 void PluginsTableSourceWidget::fillModel()
 {
     m_addonStandardItemModel->clear();
-     addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::FILESYSTEM, getAddonName(Echoes::Dbo::EAddon::FILESYSTEM));
+    addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::FILESYSTEM, getAddonName(Echoes::Dbo::EAddon::FILESYSTEM));
     addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::FILE, getAddonName(Echoes::Dbo::EAddon::FILE));
     addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::LOG, getAddonName(Echoes::Dbo::EAddon::LOG));
     addEnumToModel(m_addonStandardItemModel, Echoes::Dbo::EAddon::ODBC, getAddonName(Echoes::Dbo::EAddon::ODBC));
@@ -67,6 +67,9 @@ void PluginsTableSourceWidget::updatePage()
         listUrl.clear();
     }
     setUrl(listsUrl);
+    
+    setAddButtonEnable(m_pluginsTablePluginWidget->getSelectedID() != 0);
+    
     AbstractPage::updatePage();
 }
 

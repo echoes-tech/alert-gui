@@ -29,32 +29,32 @@ Association::Association(Echoes::Dbo::Session *session, string apiUrl)
     listTitles.insert(make_pair(ETypeJson::text, "asset"));
     setTitles(listTitles);
     
-    lists_string lListUrl;
-    list<string> listUrl;
+    list<list<pair<string, vector<string>>>> listsUrl;
+    list<pair<string, vector<string>>> listUrl;
     
-    listUrl.push_back("information_datas");
-    listUrl.push_back("information_datas/:id");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-    
-    listUrl.push_back("assets");
-    lListUrl.push_back(listUrl);
+    listUrl.push_back(pair<string, vector<string>>("information_datas", vector<string>()));
+    listUrl.push_back(pair<string, vector<string>>("information_datas/:id", vector<string>()));    
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    listUrl.push_back("plugins");
-    lListUrl.push_back(listUrl);
+    listUrl.push_back(pair<string, vector<string>>("assets", vector<string>()));
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    listUrl.push_back("informations");
-    lListUrl.push_back(listUrl);
+    listUrl.push_back(pair<string, vector<string>>("plugins", vector<string>()));   
+    listsUrl.push_back(listUrl);
     listUrl.clear();
-
-    listUrl.push_back("filters");
-    listUrl.push_back("information_datas?filter_id=:id");
-    lListUrl.push_back(listUrl);
+    
+    listUrl.push_back(pair<string, vector<string>>("informations", vector<string>()));
+    listsUrl.push_back(listUrl);
     listUrl.clear();
-
-    setUrl(lListUrl);
+    
+    listUrl.push_back(pair<string, vector<string>>("filters", vector<string>()));
+    listUrl.push_back(pair<string, vector<string>>("information_datas", vector<string>()));    
+    listsUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    setUrl(listsUrl);
 }
 
 void Association::popupAddWidget(Wt::WDialog *dialog, long long id)
@@ -243,226 +243,226 @@ void Association::handleJsonGet(vectors_Json jsonResources)
 //        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
-    // assets
-    jsonResource = jsonResources.at(1);
-    try
-    {
-        if (jsonResource.size() > 0)
-        {
-            Wt::Json::Array& jsonArray = (*jsonResource.begin());
-            if (!jsonArray.empty())
-            {
-                assetsModel = new Wt::WStandardItemModel(0, 3, this);
-                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
-                {
-                    Wt::Json::Object jsonAsset = jsonArray.at(cpt);
-                    
-                    Wt::WStandardItem *cptItem = new Wt::WStandardItem();
-                    Wt::WStandardItem *assetIdItem = new Wt::WStandardItem();
-                    Wt::WStandardItem *assetNameItem = new Wt::WStandardItem();
-                                    
-                    cptItem->setText(boost::lexical_cast<string>(cpt));
-                    
-                    long long assetId = jsonAsset.get("id");
-                    string assetName = jsonAsset.get("name");
-                    assetIdItem->setText(boost::lexical_cast<string>(assetId));
-                    assetNameItem->setText(boost::lexical_cast<string>(assetName));
-                    
-                    
-                    vector<Wt::WStandardItem*> rowVector;
-                    rowVector.push_back(cptItem);
-                    rowVector.push_back(assetIdItem);
-                    rowVector.push_back(assetNameItem);
-                    assetsModel->insertRow(cpt, rowVector);
-                }
-            }
-        }
-    }
-    catch (Wt::Json::ParseError const& e)
-    {
-        Wt::log("warning") << "[Association][Assets] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
-    catch (Wt::Json::TypeException const& e)
-    {
-        Wt::log("warning") << "[Association][Assets] JSON Type Exception";
+//    // assets
+//    jsonResource = jsonResources.at(1);
+//    try
+//    {
+//        if (jsonResource.size() > 0)
+//        {
+//            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+//            if (!jsonArray.empty())
+//            {
+//                assetsModel = new Wt::WStandardItemModel(0, 3, this);
+//                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+//                {
+//                    Wt::Json::Object jsonAsset = jsonArray.at(cpt);
+//                    
+//                    Wt::WStandardItem *cptItem = new Wt::WStandardItem();
+//                    Wt::WStandardItem *assetIdItem = new Wt::WStandardItem();
+//                    Wt::WStandardItem *assetNameItem = new Wt::WStandardItem();
+//                                    
+//                    cptItem->setText(boost::lexical_cast<string>(cpt));
+//                    
+//                    long long assetId = jsonAsset.get("id");
+//                    string assetName = jsonAsset.get("name");
+//                    assetIdItem->setText(boost::lexical_cast<string>(assetId));
+//                    assetNameItem->setText(boost::lexical_cast<string>(assetName));
+//                    
+//                    
+//                    vector<Wt::WStandardItem*> rowVector;
+//                    rowVector.push_back(cptItem);
+//                    rowVector.push_back(assetIdItem);
+//                    rowVector.push_back(assetNameItem);
+//                    assetsModel->insertRow(cpt, rowVector);
+//                }
+//            }
+//        }
+//    }
+//    catch (Wt::Json::ParseError const& e)
+//    {
+//        Wt::log("warning") << "[Association][Assets] Problems parsing JSON";
 //        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
-    
-    // plugins
-    jsonResource = jsonResources.at(2);
-    try
-    {
-        if (jsonResource.size() > 0)
-        {
-            Wt::Json::Array& jsonArray = (*jsonResource.begin());
-            if (!jsonArray.empty())
-            {
-                pluginsModel->clear();
-                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
-                {
-                    Wt::Json::Object jsonPlugin = jsonArray.at(cpt);
-                    
-                    Wt::WStandardItem *cptItem = new Wt::WStandardItem();
-                    Wt::WStandardItem *pluginIdItem = new Wt::WStandardItem();
-                    Wt::WStandardItem *pluginNameItem = new Wt::WStandardItem();
-                                    
-                    cptItem->setText(boost::lexical_cast<string>(cpt));
-                    
-                    long long pluginId = jsonPlugin.get("id");
-                    string pluginName = jsonPlugin.get("name");
-                    pluginIdItem->setText(boost::lexical_cast<string>(pluginId));
-                    pluginNameItem->setText(boost::lexical_cast<string>(pluginName));
-                    
-                    vector<Wt::WStandardItem*> rowVector;
-                    rowVector.push_back(cptItem);
-                    rowVector.push_back(pluginIdItem);
-                    rowVector.push_back(pluginNameItem);
-                    pluginsModel->insertRow(cpt, rowVector);
-                }
-            }
-        }
-    }
-    catch (Wt::Json::ParseError const& e)
-    {
-        Wt::log("warning") << "[Association][Plugins] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
-    catch (Wt::Json::TypeException const& e)
-    {
-        Wt::log("warning") << "[Association][Plugins] JSON Type Exception";
+//    }
+//    catch (Wt::Json::TypeException const& e)
+//    {
+//        Wt::log("warning") << "[Association][Assets] JSON Type Exception";
+////        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//    }
+//    
+//    // plugins
+//    jsonResource = jsonResources.at(2);
+//    try
+//    {
+//        if (jsonResource.size() > 0)
+//        {
+//            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+//            if (!jsonArray.empty())
+//            {
+//                pluginsModel->clear();
+//                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+//                {
+//                    Wt::Json::Object jsonPlugin = jsonArray.at(cpt);
+//                    
+//                    Wt::WStandardItem *cptItem = new Wt::WStandardItem();
+//                    Wt::WStandardItem *pluginIdItem = new Wt::WStandardItem();
+//                    Wt::WStandardItem *pluginNameItem = new Wt::WStandardItem();
+//                                    
+//                    cptItem->setText(boost::lexical_cast<string>(cpt));
+//                    
+//                    long long pluginId = jsonPlugin.get("id");
+//                    string pluginName = jsonPlugin.get("name");
+//                    pluginIdItem->setText(boost::lexical_cast<string>(pluginId));
+//                    pluginNameItem->setText(boost::lexical_cast<string>(pluginName));
+//                    
+//                    vector<Wt::WStandardItem*> rowVector;
+//                    rowVector.push_back(cptItem);
+//                    rowVector.push_back(pluginIdItem);
+//                    rowVector.push_back(pluginNameItem);
+//                    pluginsModel->insertRow(cpt, rowVector);
+//                }
+//            }
+//        }
+//    }
+//    catch (Wt::Json::ParseError const& e)
+//    {
+//        Wt::log("warning") << "[Association][Plugins] Problems parsing JSON";
 //        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
-    
-    // information
-    jsonResource = jsonResources.at(3);
-    try
-    {
-        if (jsonResource.size() > 0)
-        {
-            Wt::Json::Array& jsonArray = (*jsonResource.begin());
-            if (!jsonArray.empty())
-            {
-                informationsModel = new Wt::WStandardItemModel(0, 4, this);
-                for (unsigned int cpt = 0; cpt < jsonArray.size(); cpt++)
-                {
-                    Wt::Json::Object jsonInformation = jsonArray.at(cpt);
-                    
-                    Wt::WStandardItem *cptItem = new Wt::WStandardItem();
-                    Wt::WStandardItem *informationIdItem = new Wt::WStandardItem();
-                    Wt::WStandardItem *informationNameItem = new Wt::WStandardItem();
-                    Wt::WStandardItem *informationUnitIdItem = new Wt::WStandardItem();
-                                    
-                    cptItem->setText(boost::lexical_cast<string>(cpt));
-                    
-                    long long informationId = jsonInformation.get("id");
-                    string informationName = jsonInformation.get("name");
-                    Wt::Json::Object jsonInfoUnit = jsonInformation.get("information_unit");
-                    long long informationUnitId = jsonInfoUnit.get("id");
-                    informationIdItem->setText(boost::lexical_cast<string>(informationId));
-                    informationNameItem->setText(informationName);
-                    informationUnitIdItem->setText(boost::lexical_cast<string>(informationUnitId));
-                    
-                    vector<Wt::WStandardItem*> rowVector;
-                    rowVector.push_back(cptItem);
-                    rowVector.push_back(informationIdItem);
-                    rowVector.push_back(informationNameItem);
-                    rowVector.push_back(informationUnitIdItem);
-                    informationsModel->insertRow(cpt, rowVector);
-                }
-            }
-        }
-    }
-    catch (Wt::Json::ParseError const& e)
-    {
-        Wt::log("warning") << "[Association][Information] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
-    catch (Wt::Json::TypeException const& e)
-    {
-        Wt::log("warning") << "[Association][Information] JSON Type Exception";
+//    }
+//    catch (Wt::Json::TypeException const& e)
+//    {
+//        Wt::log("warning") << "[Association][Plugins] JSON Type Exception";
+////        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//    }
+//    
+//    // information
+//    jsonResource = jsonResources.at(3);
+//    try
+//    {
+//        if (jsonResource.size() > 0)
+//        {
+//            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+//            if (!jsonArray.empty())
+//            {
+//                informationsModel = new Wt::WStandardItemModel(0, 4, this);
+//                for (unsigned int cpt = 0; cpt < jsonArray.size(); cpt++)
+//                {
+//                    Wt::Json::Object jsonInformation = jsonArray.at(cpt);
+//                    
+//                    Wt::WStandardItem *cptItem = new Wt::WStandardItem();
+//                    Wt::WStandardItem *informationIdItem = new Wt::WStandardItem();
+//                    Wt::WStandardItem *informationNameItem = new Wt::WStandardItem();
+//                    Wt::WStandardItem *informationUnitIdItem = new Wt::WStandardItem();
+//                                    
+//                    cptItem->setText(boost::lexical_cast<string>(cpt));
+//                    
+//                    long long informationId = jsonInformation.get("id");
+//                    string informationName = jsonInformation.get("name");
+//                    Wt::Json::Object jsonInfoUnit = jsonInformation.get("information_unit");
+//                    long long informationUnitId = jsonInfoUnit.get("id");
+//                    informationIdItem->setText(boost::lexical_cast<string>(informationId));
+//                    informationNameItem->setText(informationName);
+//                    informationUnitIdItem->setText(boost::lexical_cast<string>(informationUnitId));
+//                    
+//                    vector<Wt::WStandardItem*> rowVector;
+//                    rowVector.push_back(cptItem);
+//                    rowVector.push_back(informationIdItem);
+//                    rowVector.push_back(informationNameItem);
+//                    rowVector.push_back(informationUnitIdItem);
+//                    informationsModel->insertRow(cpt, rowVector);
+//                }
+//            }
+//        }
+//    }
+//    catch (Wt::Json::ParseError const& e)
+//    {
+//        Wt::log("warning") << "[Association][Information] Problems parsing JSON";
 //        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
-    
-    // filters
-    jsonResource = jsonResources.at(4);
-    try
-    {
-        if (jsonResource.size() > 0)
-        {
-            Wt::Json::Array& jsonArray = (*jsonResource.begin());
-            if (!jsonArray.empty())
-            {
-                filtersModel = new Wt::WStandardItemModel(0, 3, this);
-                int row = 0;
-                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
-                {
-                    
-                    Wt::Json::Object jsonFilter = jsonArray.at(cpt);
-                    Wt::Json::Value jsonDetailedInformationDatas = jsonResource.at(cpt + 1);
-                    
-                    Wt::WStandardItem *filterNbValueItem = new Wt::WStandardItem();
-                    
-                    
-                    
-                    set<int> indexAlreadyAssociated;
-                    
-                    indexAlreadyAssociated.clear();
-                    
-                    if (jsonDetailedInformationDatas.type() == Wt::Json::ArrayType)
-                    {
-                        Wt::Json::Array jsonDetailedInformationDatasArray = jsonDetailedInformationDatas;
-                        for (int cptIda(0); cptIda < (int) jsonDetailedInformationDatasArray.size(); cptIda++)
-                        {
-                            Wt::Json::Object jsonIda = jsonDetailedInformationDatasArray.at(cptIda);
-                            int index = jsonIda.get("filter_field_index");
-                            indexAlreadyAssociated.insert(index);
-                        }
-                    }
-                    
-                    int nbValue = jsonFilter.get("nb_value");
-                    filterNbValueItem->setText(boost::lexical_cast<string>(nbValue));
-                    
-                    for (int i = 1 ; i <= nbValue ; i++)
-                    {
-                        
-                        if (indexAlreadyAssociated.find(i) == indexAlreadyAssociated.end())
-                        {
-                            Wt::WStandardItem *filterIdItem = new Wt::WStandardItem();
-                            Wt::WStandardItem *filterTypeItem = new Wt::WStandardItem();
-                            Wt::WStandardItem *filterIndexItem = new Wt::WStandardItem();
-                            long long filterId = jsonFilter.get("id");
-                            filterIdItem->setText(boost::lexical_cast<string>(filterId));
-
-                            Wt::Json::Object filterType = jsonFilter.get("filter_type");
-                            long long filterTypeId = filterType.get("id");
-                            filterTypeItem->setText(boost::lexical_cast<string>(filterTypeId));
-
-                            filterIndexItem->setText(boost::lexical_cast<string>(i));
-
-                            vector<Wt::WStandardItem*> rowVector;
-                            rowVector.push_back(filterIdItem);
-                            rowVector.push_back(filterTypeItem);
-                            rowVector.push_back(filterIndexItem);
-                            filtersModel->insertRow(row++, rowVector);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    catch (Wt::Json::ParseError const& e)
-    {
-        Wt::log("warning") << "[Association][Filters] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
-    catch (Wt::Json::TypeException const& e)
-    {
-        Wt::log("warning") << "[Association][Filters] JSON Type Exception";
+//    }
+//    catch (Wt::Json::TypeException const& e)
+//    {
+//        Wt::log("warning") << "[Association][Information] JSON Type Exception";
+////        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//    }
+//    
+//    // filters
+//    jsonResource = jsonResources.at(4);
+//    try
+//    {
+//        if (jsonResource.size() > 0)
+//        {
+//            Wt::Json::Array& jsonArray = (*jsonResource.begin());
+//            if (!jsonArray.empty())
+//            {
+//                filtersModel = new Wt::WStandardItemModel(0, 3, this);
+//                int row = 0;
+//                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+//                {
+//                    
+//                    Wt::Json::Object jsonFilter = jsonArray.at(cpt);
+//                    Wt::Json::Value jsonDetailedInformationDatas = jsonResource.at(cpt + 1);
+//                    
+//                    Wt::WStandardItem *filterNbValueItem = new Wt::WStandardItem();
+//                    
+//                    
+//                    
+//                    set<int> indexAlreadyAssociated;
+//                    
+//                    indexAlreadyAssociated.clear();
+//                    
+//                    if (jsonDetailedInformationDatas.type() == Wt::Json::ArrayType)
+//                    {
+//                        Wt::Json::Array jsonDetailedInformationDatasArray = jsonDetailedInformationDatas;
+//                        for (int cptIda(0); cptIda < (int) jsonDetailedInformationDatasArray.size(); cptIda++)
+//                        {
+//                            Wt::Json::Object jsonIda = jsonDetailedInformationDatasArray.at(cptIda);
+//                            int index = jsonIda.get("filter_field_index");
+//                            indexAlreadyAssociated.insert(index);
+//                        }
+//                    }
+//                    
+//                    int nbValue = jsonFilter.get("nb_value");
+//                    filterNbValueItem->setText(boost::lexical_cast<string>(nbValue));
+//                    
+//                    for (int i = 1 ; i <= nbValue ; i++)
+//                    {
+//                        
+//                        if (indexAlreadyAssociated.find(i) == indexAlreadyAssociated.end())
+//                        {
+//                            Wt::WStandardItem *filterIdItem = new Wt::WStandardItem();
+//                            Wt::WStandardItem *filterTypeItem = new Wt::WStandardItem();
+//                            Wt::WStandardItem *filterIndexItem = new Wt::WStandardItem();
+//                            long long filterId = jsonFilter.get("id");
+//                            filterIdItem->setText(boost::lexical_cast<string>(filterId));
+//
+//                            Wt::Json::Object filterType = jsonFilter.get("filter_type");
+//                            long long filterTypeId = filterType.get("id");
+//                            filterTypeItem->setText(boost::lexical_cast<string>(filterTypeId));
+//
+//                            filterIndexItem->setText(boost::lexical_cast<string>(i));
+//
+//                            vector<Wt::WStandardItem*> rowVector;
+//                            rowVector.push_back(filterIdItem);
+//                            rowVector.push_back(filterTypeItem);
+//                            rowVector.push_back(filterIndexItem);
+//                            filtersModel->insertRow(row++, rowVector);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    catch (Wt::Json::ParseError const& e)
+//    {
+//        Wt::log("warning") << "[Association][Filters] Problems parsing JSON";
 //        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
+//    }
+//    catch (Wt::Json::TypeException const& e)
+//    {
+//        Wt::log("warning") << "[Association][Filters] JSON Type Exception";
+////        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//    }
     
-    updatePage(false);
+    fillTable();
 }
 
 void Association::addResource(vector<Wt::WInteractWidget*>* argument)

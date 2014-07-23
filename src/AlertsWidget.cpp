@@ -37,49 +37,48 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
     listTitles.insert(make_pair(ETypeJson::text, "last_attempt"));
     listTitles.insert(make_pair(ETypeJson::integer, "alert_media_specializations"));
     setTitles(listTitles);
-
-    lists_string lListUrl;
-    list<string> listUrl;
-
-    listUrl.push_back("alerts");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-
-    listUrl.push_back("assets");
-    listUrl.push_back("assets/:id/plugins");
-    lListUrl.push_back(listUrl);
+    
+    list<list<pair<string, vector<string>>>> listsUrl;
+    list<pair<string, vector<string>>> listUrl;  
+    
+    listUrl.push_back(pair<string, vector<string>>("alerts", vector<string>()));                     
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    // voir si on peut inclure cet appel dans le précédent
-    listUrl.push_back("plugins");
-    listUrl.push_back("plugins/:id/informations");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-
-    listUrl.push_back("plugins");
-    listUrl.push_back("plugins/:id/assets");
-    lListUrl.push_back(listUrl);
+    listUrl.push_back(pair<string, vector<string>>("assets", vector<string>()));        
+    listUrl.push_back(pair<string, vector<string>>("assets/:id/plugins", vector<string>()));                
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    listUrl.push_back("informations");
-    listUrl.push_back("informations/:id/plugins");
-    lListUrl.push_back(listUrl);
+    listUrl.push_back(pair<string, vector<string>>("plugins", vector<string>()));        
+    listUrl.push_back(pair<string, vector<string>>("plugins/:id/informations", vector<string>()));                
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    listUrl.push_back("informations");
-    listUrl.push_back("informations/:id");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-
-    listUrl.push_back("users");
-    lListUrl.push_back(listUrl);
+    listUrl.push_back(pair<string, vector<string>>("plugins", vector<string>()));        
+    listUrl.push_back(pair<string, vector<string>>("plugins/:id/assets", vector<string>()));                
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    listUrl.push_back("medias");
-    lListUrl.push_back(listUrl);
+    listUrl.push_back(pair<string, vector<string>>("informations", vector<string>()));        
+    listUrl.push_back(pair<string, vector<string>>("informations/:id/plugins", vector<string>()));                
+    listsUrl.push_back(listUrl);
     listUrl.clear();
-
-    setUrl(lListUrl);
+    
+    listUrl.push_back(pair<string, vector<string>>("informations", vector<string>()));        
+    listUrl.push_back(pair<string, vector<string>>("informations/:id", vector<string>()));                
+    listsUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    listUrl.push_back(pair<string, vector<string>>("users", vector<string>()));                     
+    listsUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    listUrl.push_back(pair<string, vector<string>>("medias", vector<string>()));                     
+    listsUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    setUrl(listsUrl);
 }
 
 void AlertsWidget::setDisplayedTitlesPopups()

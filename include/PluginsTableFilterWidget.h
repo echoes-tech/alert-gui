@@ -43,7 +43,6 @@ public:
     void                                        updatePage();
     
 protected:                                 
-    std::string                                 addParameter();
     std::vector<Wt::WInteractWidget*>           initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
     Wt::WString                                 getFilterParameterName(long long searchParameterID);
     Wt::WString                                 getFilterTypeName(long long searchTypeID);

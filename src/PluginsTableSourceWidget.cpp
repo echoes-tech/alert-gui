@@ -55,14 +55,19 @@ void PluginsTableSourceWidget::updatePage()
     {
         m_selectedPluginID = m_pluginsTablePluginWidget->getSelectedID();
         setSelectedID(0);
-    }       
-
-    std::list<std::list<std::string>> listsUrl;
+    }     
+    
+    list<list<pair<string, vector<string>>>> listsUrl;
     if(m_pluginsTablePluginWidget->getSelectedID() != 0)
     {
-        std::list<std::string> listUrl;
-        listUrl.push_back("sources");
-        listUrl.push_back("sources/:id/parameters");
+        list<pair<string, vector<string>>> listUrl;
+        vector<string> listParameter;
+        
+        listParameter.push_back("plugin_id=" + boost::lexical_cast<string>(m_pluginsTablePluginWidget->getSelectedID()));
+        listUrl.push_back(pair<string, vector<string>>("sources", listParameter));        
+        listParameter.clear();
+        listUrl.push_back(pair<string, vector<string>>("sources/:id/parameters", listParameter));
+        
         listsUrl.push_back(listUrl);
         listUrl.clear();
     }
@@ -76,11 +81,6 @@ void PluginsTableSourceWidget::updatePage()
 long long PluginsTableSourceWidget::getSelectedSourceAddonID()
 {
     return m_sourcesData[getSelectedID()].addonID;
-}
-
-string PluginsTableSourceWidget::addParameter()
-{
-    return "&plugin_id=" + boost::lexical_cast<string>(m_pluginsTablePluginWidget->getSelectedID());
 }
 
 vector<Wt::WInteractWidget *> PluginsTableSourceWidget::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
@@ -205,10 +205,11 @@ void PluginsTableSourceWidget::addResourcePopup(long long sourceID)
 }
 
 void PluginsTableSourceWidget::sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* addonComboBox)
-{
-    string parameters = "&addon_id=" + m_addonStandardItemModel->item((addonComboBox->currentIndex() == -1 ? 0 : addonComboBox->currentIndex()), 1)->text().toUTF8();    
+{    
+    vector<string> parameterList;
+    parameterList.push_back("&addon_id=" + m_addonStandardItemModel->item((addonComboBox->currentIndex() == -1 ? 0 : addonComboBox->currentIndex()), 1)->text().toUTF8());
     
-    sendHttpRequestGet("sources/parameters", parameters, functor);
+    sendHttpRequestGet("sources/parameters", parameterList, functor);
 }
 
 void PluginsTableSourceWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,

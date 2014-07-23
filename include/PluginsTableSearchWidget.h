@@ -43,7 +43,6 @@ public:
     void                                        updatePage();
     
 protected:    
-    std::string                                 addParameter();
     void                                        setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     void                                        setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     void                                        addResourcePopup(long long searchID);

@@ -27,14 +27,15 @@ PluginsTablePluginWidget::PluginsTablePluginWidget(Echoes::Dbo::Session *session
     titles.insert(make_pair(ETypeJson::text, "name"));
     titles.insert(make_pair(ETypeJson::text, "desc"));
     setTitles(titles);
-
-    lists_string lListUrl;
-    list_string listUrl;
-    listUrl.push_back("plugins");
-    lListUrl.push_back(listUrl);
+    
+    list<list<pair<string, vector<string>>>> listsUrl;
+    list<pair<string, vector<string>>> listUrl;
+    
+    listUrl.push_back(pair<string, vector<string>>("plugins", vector<string>()));    
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    setUrl(lListUrl);
+    setUrl(listsUrl);
 }
 
 void PluginsTablePluginWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)

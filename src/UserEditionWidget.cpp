@@ -38,18 +38,22 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
     titles.insert(make_pair(ETypeJson::undid, "user"));
     setUndidName("last_name");
     setTitles(titles);
+    
+    list<list<pair<string, vector<string>>>> listsUrl;
+    list<pair<string, vector<string>>> listUrl;
+    vector<string> listParameter;
 
-    lists_string lListUrl;
-    list_string listUrl;
-    listUrl.push_back("medias");
-    listUrl.push_back("medias/:id");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-    listUrl.push_back("users");
-    lListUrl.push_back(listUrl);
+    listParameter.push_back("type_id=" + boost::lexical_cast<string>(this->type_));    
+    listUrl.push_back(pair<string, vector<string>>("medias", listParameter));  
+    listUrl.push_back(pair<string, vector<string>>("medias/:id", listParameter));    
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    setUrl(lListUrl);
+    listUrl.push_back(pair<string, vector<string>>("users", listParameter));  
+    listsUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    setUrl(listsUrl);
 
 }
 
@@ -58,11 +62,6 @@ Wt::WComboBox *UserEditionWidget::popupAdd(Wt::WDialog *dialog)
     Wt::WComboBox *comboBox = new Wt::WComboBox(dialog->contents());
     comboBox->setModel(usersModel_);
     return comboBox;
-}
-
-string UserEditionWidget::addParameter()
-{
-    return "&type_id=" + boost::lexical_cast<string>(this->type_);
 }
 
 Wt::WValidator *UserEditionWidget::editValidator(int who)

@@ -36,18 +36,20 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
     setUndidName("name");
     titles.insert(make_pair(ETypeJson::boolean, "display"));
     setTitles(titles);
-
-    lists_string lListUrl;
-    list_string listUrl;
-    listUrl.push_back("informations");
-    listUrl.push_back("informations/:id");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-    listUrl.push_back("units");
-    lListUrl.push_back(listUrl);
+    
+    list<list<pair<string, vector<string>>>> listsUrl;
+    list<pair<string, vector<string>>> listUrl;
+    
+    listUrl.push_back(pair<string, vector<string>>("informations", vector<string>())); 
+    listUrl.push_back(pair<string, vector<string>>("informations/:id", vector<string>()));    
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    setUrl(lListUrl);
+    listUrl.push_back(pair<string, vector<string>>("units", vector<string>()));   
+    listsUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    setUrl(listsUrl);
 }
 
 Wt::WValidator *InformationsWidget::editValidator(int jsonType)

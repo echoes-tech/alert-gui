@@ -22,16 +22,18 @@ UnitsWidget::UnitsWidget(Echoes::Dbo::Session *session, string apiUrl)
     titles.insert(make_pair(ETypeJson::text, "name"));
     titles.insert(make_pair(ETypeJson::undid, "information_unit_type"));
     setTitles(titles);
-
-    lists_string lListUrl;
-    list_string listUrl;
-    listUrl.push_back("units");
-    listUrl.push_back("units/:id");
-    lListUrl.push_back(listUrl);
+    
+    list<list<pair<string, vector<string>>>> listsUrl;
+    list<pair<string, vector<string>>> listUrl;
+    
+    listUrl.push_back(pair<string, vector<string>>("units", vector<string>())); 
+    listUrl.push_back(pair<string, vector<string>>("units/:id", vector<string>()));    
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
+    setUrl(listsUrl);
+    
     fillModel();
-    setUrl(lListUrl);
 }
 
 UnitsWidget::~UnitsWidget()

@@ -54,14 +54,19 @@ void PluginsTableFilterWidget::updatePage()
     {
         m_selectedSearchID = m_pluginsTableSearchWidget->getSelectedID();
         setSelectedID(0);
-    }    
-
-    std::list<std::list<std::string>> listsUrl;
+    }             
+    
+    list<list<pair<string, vector<string>>>> listsUrl;
     if(m_pluginsTableSearchWidget->getSelectedID() != 0)
     {
-        std::list<std::string> listUrl;
-        listUrl.push_back("filters");
-        listUrl.push_back("filters/:id/parameters");
+        list<pair<string, vector<string>>> listUrl;
+        vector<string> listParameter;
+        
+        listParameter.push_back("search_id=" + boost::lexical_cast<string>(m_pluginsTableSearchWidget->getSelectedID()));
+        listUrl.push_back(pair<string, vector<string>>("filters", listParameter));        
+        listParameter.clear();
+        listUrl.push_back(pair<string, vector<string>>("filters/:id/parameters", listParameter));
+        
         listsUrl.push_back(listUrl);
         listUrl.clear();
     }
@@ -70,11 +75,6 @@ void PluginsTableFilterWidget::updatePage()
     setAddButtonEnable(m_pluginsTableSearchWidget->getSelectedID() != 0);
     
     AbstractPage::updatePage();
-}
-
-string PluginsTableFilterWidget::addParameter()
-{
-    return "&search_id=" + boost::lexical_cast<string>(m_pluginsTableSearchWidget->getSelectedID());
 }
 
 vector<Wt::WInteractWidget *> PluginsTableFilterWidget::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
@@ -209,9 +209,10 @@ void PluginsTableFilterWidget::addResourcePopup(long long filterID)
 
 void PluginsTableFilterWidget::sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* filterTypeComboBox)
 {
-    string parameters = "&type_id=" + m_filterTypeStandardItemModel->item((filterTypeComboBox->currentIndex() == -1 ? 0 : filterTypeComboBox->currentIndex()), 1)->text().toUTF8();    
+    vector<string> parameterList;
+    parameterList.push_back("&type_id=" + m_filterTypeStandardItemModel->item((filterTypeComboBox->currentIndex() == -1 ? 0 : filterTypeComboBox->currentIndex()), 1)->text().toUTF8());
     
-    sendHttpRequestGet("filters/parameters", parameters, functor);
+    sendHttpRequestGet("filters/parameters", parameterList, functor);
 }
 
 void PluginsTableFilterWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,

@@ -132,7 +132,7 @@ public:
     void                        setAddButtonEnable(bool enable);
     void                        addPageToUpdate(AbstractPage* abstractPage);
     virtual void                updatePage();
-    virtual void                updatePage(bool getResources);
+    virtual void                fillTable();
 protected:
 
     // ENUM
@@ -183,7 +183,7 @@ protected:
     void                        setUndidName(std::string undidName);
     void                        setTitles(std::multimap<int, std::string> titles);
     virtual void                setDisplayedTitlesPopups();
-    void                        setUrl(lists_string listsUrl);
+    void                        setUrl(std::list<std::list<std::pair<std::string, std::vector<std::string>>>> listsUrl); 
     void                        setButtonModif(bool check);
     void                        setButtonSup(bool check);
 //    void                        setLocalTable(bool background);
@@ -199,17 +199,18 @@ protected:
      */
     virtual void                handleJsonGet(vectors_Json jsonResources);
     virtual std::vector<Wt::WInteractWidget*>   initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
-    void                        sendHttpRequestGet(std::string resource, std::string parameters, boost::function<void (Wt::Json::Value)> functor);
+    void                        sendHttpRequestGet(std::string resource, std::vector<std::string> listParameter, boost::function<void (Wt::Json::Value)> functor);
     void                        handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
                                     Wt::Http::Client *client, boost::function<void (Wt::Json::Value)> functor);
+    void                        recursiveGetResources(std::list<std::list<std::pair<std::string, std::vector<std::string>>>> listsUrl,
+                                    boost::function<void (vectors_Json)> functorToCallAtEnd, vectors_Json jsonResource = vectors_Json());
+    void                        handleRecursiveGetResources(Wt::Json::Value result, std::list<std::list<std::pair<std::string, std::vector<std::string>>>> listsUrl,
+                                    boost::function<void (vectors_Json)> functorToCallAtEnd, vectors_Json jsonResource);
     /**
      * recursiveGetResources for go call API with listsUrl_ \n
      * listsUrl_ is set in construtor child in setUrl()
      * @param Send jsonResource whether u want use her after handleJsonGet
      */
-    void                        recursiveGetResources(lists_string listsUrl, vectors_Json jsonResource = vectors_Json());
-    void                        handleRecursiveGetResources(Wt::Json::Value result, lists_string listsUrl, vectors_Json jsonResource);
-    virtual std::string         addParameter();
     // ---- ADD MODIF DELETE ----------------------------------------------
     virtual void                addResource(std::vector<Wt::WInteractWidget*>* argument);
     virtual void                setAddResourceMessage(Wt::Http::Message *message,std::vector<Wt::WInteractWidget*>* argument);
@@ -251,7 +252,7 @@ private:
      */
     vector_widget                       m_inputs;
     // Attributs.-------------------------------
-    lists_string                        m_listsUrl;
+    std::list<std::list<std::pair<std::string, std::vector<std::string>>>>      m_listsUrl;
     std::multimap<int, std::string>     m_titles;
     
     std::string                         m_apiUrl;

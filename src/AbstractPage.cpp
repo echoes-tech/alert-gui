@@ -56,22 +56,19 @@ void AbstractPage::updatePage()
     {
         m_nameResourcePageSpec = m_xmlPageName;
     }
-    updatePage(true);
+    getResourceList();
 }
 
-void AbstractPage::updatePage(bool getResources)
+void AbstractPage::fillTable()
 {
-    if (getResources)
+    if (m_selectable && m_selectedID == 0)
     {
-        getResourceList();
+        m_selectedID = m_rowsTable.begin()->first;
     }
-    else
+    createTable();
+    for (size_t i(0); i < m_pagesToUpdate.size(); ++i)
     {
-        if (m_selectable && m_selectedID == 0)
-            m_selectedID = m_rowsTable.begin()->first;
-        createTable();
-        for (size_t i(0); i < m_pagesToUpdate.size(); ++i)
-            m_pagesToUpdate[i]->updatePage();
+        m_pagesToUpdate[i]->updatePage();
     }
 }
 
@@ -83,7 +80,8 @@ void AbstractPage::clearStructures()
 void AbstractPage::getResourceList()
 {
     clearStructures();
-    recursiveGetResources(m_listsUrl);
+    boost::function<void (vectors_Json)> functorHandleJsonGets = boost::bind(&AbstractPage::handleJsonGet, this, _1);   
+    recursiveGetResources(m_listsUrl, functorHandleJsonGets);  
 }
 
 void AbstractPage::setResources(vector_pair resources)
@@ -679,7 +677,7 @@ void AbstractPage::setDisplayedTitlesPopups()
     m_displayedTitlesPopups = m_titles;
 }
 
-void AbstractPage::setUrl(lists_string listsUrl)
+void AbstractPage::setUrl(list<list<pair<string, vector<string>>>> listsUrl)
 {
     m_listsUrl = listsUrl;
 }
@@ -721,13 +719,16 @@ void AbstractPage::setFooterOkButtonStatus(bool active)
 
 // -------- CALL RETURN API, HANDLE -----------
 
-
-void AbstractPage::sendHttpRequestGet(string resource, string parameters, boost::function<void (Wt::Json::Value)> functor)
-{
+void AbstractPage::sendHttpRequestGet(string resource, vector<string> listParameter, boost::function<void (Wt::Json::Value)> functor)
+{    
     string apiAddress = getApiUrl() + "/" + resource
             + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
-            + "&token=" + m_session->user()->token.toUTF8()
-            + parameters;
+            + "&token=" + m_session->user()->token.toUTF8();
+        
+    for(size_t i(0); i<listParameter.size(); i++)
+    {
+        apiAddress += "&" + listParameter[i];
+    }
     
     Wt::log("debug") << "[GET] address to call : " << apiAddress;
     Wt::Http::Client *client = new Wt::Http::Client();
@@ -789,6 +790,84 @@ void AbstractPage::handleHttpResponseGet(boost::system::error_code err,
     }
 }
 
+void AbstractPage::recursiveGetResources(list<list<pair<string, vector<string>>>> listsUrl, boost::function<void (vectors_Json)> functorToCallAtEnd, vectors_Json jsonResource)
+{
+    if (listsUrl.size() == 0)
+    {
+        functorToCallAtEnd(jsonResource);
+        return;
+    }
+
+    string resource = listsUrl.begin()->begin()->first;    
+    vector<string> listParameter = listsUrl.begin()->begin()->second;
+    if (resource.find(":id") != string::npos)
+    {  
+        listsUrl.begin()->pop_front();
+        
+        if(jsonResource.back().back().isNull())
+        {
+            listsUrl.pop_front();
+            jsonResource.push_back(vector<Wt::Json::Value>());
+            recursiveGetResources(listsUrl, functorToCallAtEnd, jsonResource);
+            return;
+        }
+        Wt::Json::Array& jsonArray = jsonResource.back().back();   
+        for (size_t i(0); i < jsonArray.size(); i++)
+        {
+            Wt::Json::Object jsonObject = jsonArray.at(i);
+
+            long long id = jsonObject.get("id");
+            string newResource = resource;
+            newResource.replace(newResource.find(":id"), 3, boost::lexical_cast<string>(id));
+            
+            vector<string> newListParameter;
+            for (size_t j(0); j < listParameter.size(); j++)
+            {
+                string newParameter = listParameter[j];                
+                if (newParameter.find(":id") != string::npos)
+                {
+                    newParameter.replace(newParameter.find(":id"), 3, boost::lexical_cast<string>(id));                    
+                }               
+                newListParameter.push_back(newParameter);                
+            }
+            
+            listsUrl.begin()->push_back(pair<string, vector<string>>(newResource, newListParameter));
+        }
+    }
+    resource = listsUrl.begin()->begin()->first;
+    
+    boost::function<void (Wt::Json::Value)> functorHandleRecursiveGetResources = boost::bind(&AbstractPage::handleRecursiveGetResources, this, _1,
+                                                                                             listsUrl, functorToCallAtEnd, jsonResource);    
+    sendHttpRequestGet(resource, listParameter, functorHandleRecursiveGetResources);
+}
+
+void AbstractPage::handleRecursiveGetResources(Wt::Json::Value result, list<list<pair<string, vector<string>>>> listsUrl,
+                                                    boost::function<void (vectors_Json)> functorToCallAtEnd, vectors_Json jsonResource)
+{
+    if (jsonResource.size() == 0)
+    {
+        jsonResource.push_back(vector<Wt::Json::Value>());
+    }
+
+    jsonResource.back().push_back(result);
+    
+    listsUrl.begin()->pop_front();
+    if (listsUrl.begin()->size() == 0)
+    {
+        listsUrl.pop_front();
+        jsonResource.push_back(vector<Wt::Json::Value>());
+    }
+           
+    if (listsUrl.size() == 0)
+    {
+        functorToCallAtEnd(jsonResource);
+    }
+    else
+    {
+        recursiveGetResources(listsUrl, functorToCallAtEnd, jsonResource);
+    }
+}
+
 void AbstractPage::handleJsonGet(vectors_Json jsonResources)
 {
     m_rowsTable.clear();
@@ -825,6 +904,7 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
         Wt::log("warning") << "[AbstractPage] JSON Type Exception";
         //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
+    fillTable();
 }
 
 vector<Wt::WInteractWidget *> AbstractPage::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
@@ -879,101 +959,6 @@ vector<Wt::WInteractWidget *> AbstractPage::initRowWidgets(Wt::Json::Object json
     return rowWidgets;
 }
 
-void AbstractPage::recursiveGetResources(lists_string listsUrl, vectors_Json jsonResource)
-{
-    if (listsUrl.size() == 0)
-    {
-        handleJsonGet(jsonResource);
-        updatePage(false);
-        return;
-    }
-
-    if (listsUrl.begin()->begin()->find(":id") != string::npos)
-    {
-        list_string::iterator listUrl = listsUrl.begin()->begin();
-        listUrl->replace(listUrl->find(":id"), 3, boost::lexical_cast<string>(0));
-    }
-    
-    string resource = (*(*listsUrl.begin()).begin());
-    boost::function<void (Wt::Json::Value)> functor = boost::bind(&AbstractPage::handleRecursiveGetResources, this, _1, listsUrl, jsonResource);    
-    sendHttpRequestGet(resource, addParameter(), functor);
-}
-
-void AbstractPage::handleRecursiveGetResources(Wt::Json::Value result, lists_string listsUrl, vectors_Json jsonResource)
-{
-    if (jsonResource.size() == 0)
-    {
-        jsonResource.push_back(vector<Wt::Json::Value>());
-    }
-
-    if (jsonResource.begin()->size() == 0)
-    {
-        jsonResource.begin()->push_back(result);
-    }
-    else
-    {
-        jsonResource.back().push_back(result);
-    }
-
-    listsUrl.begin()->pop_front();
-    if (listsUrl.begin()->size() == 0)
-    {
-        listsUrl.pop_front();
-        jsonResource.push_back(vector<Wt::Json::Value>());
-    }
-    else if (listsUrl.begin()->begin()->find(":id") != string::npos && !result.isNull())
-    {
-        try
-        {
-            vector<Wt::Json::Value> itJ = jsonResource.back();
-            Wt::Json::Array& result1 = itJ.back();
-            list_string::iterator listUrl = listsUrl.begin()->begin();
-            string saveUrl = (*listUrl);
-            Wt::Json::Array::iterator itA = result1.begin();
-            while (itA != result1.end() && saveUrl.compare((*listUrl)) == 0)
-            {
-                Wt::Json::Object jsonObject = (*itA);
-                long long idJ = jsonObject.get("id");
-                // On remplace celui en cours
-                listUrl->replace(listUrl->find(":id"), 3, boost::lexical_cast<string>(idJ));
-                // on ajoute des éléments pour les autres IDs
-                if (++itA != result1.end())
-                {
-                    listsUrl.begin()->push_back(saveUrl);
-                    listUrl++;
-                }
-            }
-        }
-        catch (Wt::Json::ParseError const& e)
-        {
-            Wt::log("warning")
-                    << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                    + " Widget] JSON parse Exception";
-        }
-        catch (Wt::Json::TypeException const& e)
-        {
-            Wt::log("warning")
-                    << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                    + " Widget] JSON Type Exception";
-        }
-    }
-    if (listsUrl.size() == 0)
-    {
-        handleJsonGet(jsonResource);
-        updatePage(false);
-    }
-    else
-    {
-        recursiveGetResources(listsUrl, jsonResource);
-    }
-}
-
-string AbstractPage::addParameter()
-{
-    return "";
-}
-
-
 // ---- ADD MODIF DELETE ----------
 
 void AbstractPage::addResource(vector<Wt::WInteractWidget*>* argument)
@@ -983,7 +968,7 @@ void AbstractPage::addResource(vector<Wt::WInteractWidget*>* argument)
 
     setAddResourceMessage(message, argument);
 
-    string apiAddress = getApiUrl() + "/" + (*m_listsUrl.begin()->begin())
+    string apiAddress = getApiUrl() + "/" + m_listsUrl.begin()->begin()->first
             + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
             + "&token=" + m_session->user()->token.toUTF8();
 
@@ -1013,7 +998,7 @@ void AbstractPage::modifResource(vector<Wt::WInteractWidget*>* arguments, long l
 
     setModifResourceMessage(message, arguments);
 
-    string apiAddress = getApiUrl() + "/" + (*(*m_listsUrl.begin()).begin()) + "/"
+    string apiAddress = getApiUrl() + "/" + m_listsUrl.begin()->begin()->first + "/"
             + boost::lexical_cast<string> (id)
             + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
             + "&token=" + m_session->user()->token.toUTF8();
@@ -1060,32 +1045,32 @@ Wt::WDialog *AbstractPage::deleteResource(long long id)
                                 box->footer());
     annul->clicked().connect(box, &Wt::WDialog::reject);
     annul->setAttributeValue("style", "margin-left:12px;");
-
+    
     box->finished().connect(bind([ = ] (){
-                                 if (box->result() == Wt::WDialog::Accepted)
-        {
-                                 Wt::Http::Message message;
-                                 message.addBodyText("");
-                                 string apiAddress = getApiUrl() + "/" + (*m_listsUrl.begin()->begin()) + "/"
-                                 + boost::lexical_cast<string> (id)
-                                 + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
-                                 + "&token=" + m_session->user()->token.toUTF8();
+                                if (box->result() == Wt::WDialog::Accepted)
+       {
+                                Wt::Http::Message message;
+                                message.addBodyText("");
+                                string apiAddress = getApiUrl() + "/" + m_listsUrl.begin()->begin()->first + "/"
+                                + boost::lexical_cast<string> (id)
+                                + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+                                + "&token=" + m_session->user()->token.toUTF8();
 
-                                 Wt::Http::Client *client = new Wt::Http::Client(this);
-                                 client->done().connect(boost::bind(&AbstractPage::apiDeleteResourceCallback, this, _1, _2, client));
-                                 Wt::log("debug") << m_xmlPageName + " : [DELETE] address to call : " << apiAddress;
-                                 if (client->deleteRequest(apiAddress, message))
-            {
-                                 Wt::WApplication::instance()->deferRendering();
-            }
-            else
-            {
-                                 Wt::log("error") << "Error Client Http";
-            }
-        }
-                                 return box;
-    }));
-
+                                Wt::Http::Client *client = new Wt::Http::Client(this);
+                                client->done().connect(boost::bind(&AbstractPage::apiDeleteResourceCallback, this, _1, _2, client));
+                                Wt::log("debug") << m_xmlPageName + " : [DELETE] address to call : " << apiAddress;
+                                if (client->deleteRequest(apiAddress, message))
+           {
+                                Wt::WApplication::instance()->deferRendering();
+           }
+           else
+           {
+                                Wt::log("error") << "Error Client Http";
+           }
+       }
+                                return box;
+    })); 
+     
     box->show();
     return box;
 }

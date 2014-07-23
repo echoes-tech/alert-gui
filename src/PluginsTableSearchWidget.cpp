@@ -73,12 +73,16 @@ void PluginsTableSearchWidget::updatePage()
         setSelectedID(0);
     }    
 
-    std::list<std::list<std::string>> listsUrl;
+    list<list<pair<string, vector<string>>>> listsUrl;
     if(m_pluginsTableSourceWidget->getSelectedID() != 0)
     {
-        std::list<std::string> listUrl;
-        listUrl.push_back("searches");
-        listUrl.push_back("searches/:id/parameters");
+        list<pair<string, vector<string>>> listUrl;
+        vector<string> listParameter;
+        
+        listParameter.push_back("source_id=" + boost::lexical_cast<string>(m_pluginsTableSourceWidget->getSelectedID()));
+        listUrl.push_back(pair<string, vector<string>>("searches", listParameter));        
+        listParameter.clear();
+        listUrl.push_back(pair<string, vector<string>>("searches/:id/parameters", listParameter));        
         listsUrl.push_back(listUrl);
         listUrl.clear();
     }
@@ -87,11 +91,6 @@ void PluginsTableSearchWidget::updatePage()
     setAddButtonEnable(m_pluginsTableSourceWidget->getSelectedID() != 0);
     
     AbstractPage::updatePage();
-}
-
-string PluginsTableSearchWidget::addParameter()
-{
-    return "&source_id=" + boost::lexical_cast<string>(m_pluginsTableSourceWidget->getSelectedID());
 }
 
 vector<Wt::WInteractWidget *> PluginsTableSearchWidget::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
@@ -214,7 +213,7 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
     
     boost::function<void (Wt::Json::Value)> functorFillModel = boost::bind(&PluginsTableSearchWidget::fillModel, this, _1, searchTypeComboBox, searchID, functorSendRequestPopupAdd);    
     string resource = "addons/" + boost::lexical_cast<string>(m_pluginsTableSourceWidget->getSelectedSourceAddonID()) + "/search_types";
-    sendHttpRequestGet(resource, "", functorFillModel);
+    sendHttpRequestGet(resource, vector<string>(), functorFillModel);
     
     popupFinalization(dialog, 0);    
 
@@ -224,10 +223,11 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
 }
 
 void PluginsTableSearchWidget::sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* searchTypeComboBox)
-{
-    string parameters = "&type_id=" + m_searchTypeStandardItemModel->item((searchTypeComboBox->currentIndex() == -1 ? 0 : searchTypeComboBox->currentIndex()), 1)->text().toUTF8();
+{    
+    vector<string> parameterList;
+    parameterList.push_back("&type_id=" + m_searchTypeStandardItemModel->item((searchTypeComboBox->currentIndex() == -1 ? 0 : searchTypeComboBox->currentIndex()), 1)->text().toUTF8());
           
-    sendHttpRequestGet("searches/parameters", parameters, functor);
+    sendHttpRequestGet("searches/parameters", parameterList, functor);
 }
 
 void PluginsTableSearchWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,

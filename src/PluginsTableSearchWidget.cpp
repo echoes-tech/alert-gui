@@ -213,7 +213,7 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
     boost::function<void (Wt::Json::Value)> functorSendRequestPopupAdd = boost::bind(&PluginsTableSearchWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, searchID);    
     
     boost::function<void (Wt::Json::Value)> functorFillModel = boost::bind(&PluginsTableSearchWidget::fillModel, this, _1, searchTypeComboBox, searchID, functorSendRequestPopupAdd);    
-    string resource = "addons/" + boost::lexical_cast<string>(m_pluginsTableSourceWidget->getSelectedSourceAddonID()) + "/search_type";
+    string resource = "addons/" + boost::lexical_cast<string>(m_pluginsTableSourceWidget->getSelectedSourceAddonID()) + "/search_types";
     sendHttpRequestGet(resource, "", functorFillModel);
     
     popupFinalization(dialog, 0);    

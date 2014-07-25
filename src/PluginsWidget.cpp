@@ -60,6 +60,11 @@ void PluginsWidget::update()
        templateFormView->bindWidget("resource-table-filter", ptFilterW);
        ptSearchW->addPageToUpdate(ptFilterW);
        
+       // ASSOCIATION       
+       PluginsTableAssociationWidget *ptAssociationW = new PluginsTableAssociationWidget(session_, apiUrl_, ptFilterW);
+       templateFormView->bindWidget("resource-table-association", ptAssociationW);
+       ptFilterW->addPageToUpdate(ptAssociationW);
+       
        newClass_ = true;
     }
 }

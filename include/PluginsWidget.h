@@ -12,6 +12,7 @@
 #include "PluginsTableSourceWidget.h"
 #include "PluginsTableSearchWidget.h"
 #include "PluginsTableFilterWidget.h"
+#include "PluginsTableAssociationWidget.h"
 
 
 class PluginsWidget : 

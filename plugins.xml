@@ -43,6 +43,9 @@
     <div id="plugins-table-filter" class="">
         ${resource-table-filter}
     </div>
+    <div id="plugins-table-association" class="">
+        ${resource-table-association}
+    </div>
 </message>
   
   

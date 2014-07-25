@@ -17,7 +17,7 @@
     <message id="Alert.plugins-filter.button-cancel">Cancel</message>
     <message id="Alert.plugins-filter.button-save">Save</message>
     <!--POST-->
-    <message id="Alert.plugins-filter.add-plugins-filter">Add source</message>
+    <message id="Alert.plugins-filter.add-plugins-filter">Add filter</message>
     <message id="Alert.plugins-filter.add-nb-value">Number of value</message>
     <message id="Alert.plugins-filter.add-pos-key-value">Position key value</message>
     <!--PUT-->

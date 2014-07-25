@@ -15,6 +15,7 @@
         <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
           <itemPath>include/PluginEditionModel.h</itemPath>
           <itemPath>include/PluginEditionWidget.h</itemPath>
+          <itemPath>include/PluginsTableAssociationWidget.h</itemPath>
           <itemPath>include/PluginsTableFilterWidget.h</itemPath>
           <itemPath>include/PluginsTablePluginWidget.h</itemPath>
           <itemPath>include/PluginsTableSearchWidget.h</itemPath>
@@ -97,6 +98,7 @@
       <itemPath>options_fr.xml</itemPath>
       <itemPath>pluginold.xml</itemPath>
       <itemPath>pluginold_fr.xml</itemPath>
+      <itemPath>plugins-association.xml</itemPath>
       <itemPath>plugins-filter.xml</itemPath>
       <itemPath>plugins-plugin.xml</itemPath>
       <itemPath>plugins-search.xml</itemPath>
@@ -127,6 +129,7 @@
         <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
           <itemPath>src/PluginEditionModel.cpp</itemPath>
           <itemPath>src/PluginEditionWidget.cpp</itemPath>
+          <itemPath>src/PluginsTableAssociationWidget.cpp</itemPath>
           <itemPath>src/PluginsTableFilterWidget.cpp</itemPath>
           <itemPath>src/PluginsTablePluginWidget.cpp</itemPath>
           <itemPath>src/PluginsTableSearchWidget.cpp</itemPath>
@@ -309,6 +312,11 @@
       </item>
       <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginsTableAssociationWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/PluginsTableFilterWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/PluginsTablePluginWidget.h" ex="false" tool="3" flavor2="0">
@@ -385,6 +393,8 @@
       </item>
       <item path="pluginold_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins-association.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins-filter.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins-plugin.xml" ex="false" tool="3" flavor2="0">
@@ -457,6 +467,11 @@
       <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableAssociationWidget.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="src/PluginsTableFilterWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -614,6 +629,11 @@
       </item>
       <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/PluginsTableAssociationWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/PluginsTableFilterWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/PluginsTablePluginWidget.h" ex="false" tool="3" flavor2="0">
@@ -690,6 +710,8 @@
       </item>
       <item path="pluginold_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins-association.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins-filter.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins-plugin.xml" ex="false" tool="3" flavor2="0">
@@ -762,6 +784,11 @@
       <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableAssociationWidget.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="src/PluginsTableFilterWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>

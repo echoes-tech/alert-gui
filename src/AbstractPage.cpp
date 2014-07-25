@@ -800,25 +800,41 @@ void AbstractPage::recursiveGetResources(list<list<pair<string, vector<string>>>
 
     string resource = listsUrl.begin()->begin()->first;    
     vector<string> listParameter = listsUrl.begin()->begin()->second;
-    if (resource.find(":id") != string::npos)
-    {  
-        listsUrl.begin()->pop_front();
         
+    bool containID = resource.find(":id") != string::npos;
+    for (size_t i(0); i < listParameter.size(); i++)
+    {
+        containID |= listParameter[i].find(":id") != string::npos;
+    }
+    
+    if (containID)
+    {
+        vector<long long> listID;
         if(jsonResource.back().back().isNull())
         {
-            listsUrl.pop_front();
-            jsonResource.push_back(vector<Wt::Json::Value>());
-            recursiveGetResources(listsUrl, functorToCallAtEnd, jsonResource);
-            return;
+            listID.push_back(0);
         }
-        Wt::Json::Array& jsonArray = jsonResource.back().back();   
-        for (size_t i(0); i < jsonArray.size(); i++)
+        else
         {
-            Wt::Json::Object jsonObject = jsonArray.at(i);
-
-            long long id = jsonObject.get("id");
-            string newResource = resource;
-            newResource.replace(newResource.find(":id"), 3, boost::lexical_cast<string>(id));
+            Wt::Json::Array& jsonArray = jsonResource.back().back();   
+            for (size_t i(0); i < jsonArray.size(); i++)
+            {
+                Wt::Json::Object jsonObject = jsonArray.at(i);
+                listID.push_back(jsonObject.get("id"));
+            }            
+        }
+        
+        listsUrl.begin()->pop_front();
+        
+        for (size_t i(0); i < listID.size(); i++)
+        {
+            long long id = listID[i];
+            
+            string newResource = resource;            
+            if(newResource.find(":id") != string::npos)
+            {
+                newResource.replace(newResource.find(":id"), 3, boost::lexical_cast<string>(id));
+            }
             
             vector<string> newListParameter;
             for (size_t j(0); j < listParameter.size(); j++)
@@ -834,7 +850,9 @@ void AbstractPage::recursiveGetResources(list<list<pair<string, vector<string>>>
             listsUrl.begin()->push_back(pair<string, vector<string>>(newResource, newListParameter));
         }
     }
+    
     resource = listsUrl.begin()->begin()->first;
+    listParameter = listsUrl.begin()->begin()->second;
     
     boost::function<void (Wt::Json::Value)> functorHandleRecursiveGetResources = boost::bind(&AbstractPage::handleRecursiveGetResources, this, _1,
                                                                                              listsUrl, functorToCallAtEnd, jsonResource);    
@@ -1087,9 +1105,12 @@ void AbstractPage::postResourceCallback(boost::system::error_code err, const Wt:
         {
             try
             {
-                Wt::Json::Object result;
-                Wt::Json::parse(response.body(), result);
-                m_selectedID = result.get("id");
+                if(m_selectable)
+                {
+                    Wt::Json::Object result;
+                    Wt::Json::parse(response.body(), result);
+                    m_selectedID = result.get("id");
+                }
             }
             catch (Wt::Json::ParseError const& e)
             {
@@ -1285,19 +1306,27 @@ void AbstractPage::showInputForAdd()
     //    }
 }
 
-void AbstractPage::addEnumToModel(Wt::WStandardItemModel* standardItemModel, int enumToAdd, Wt::WString name)
+void AbstractPage::addEnumToModel(Wt::WStandardItemModel* standardItemModel, int enumToAdd, Wt::WString name, Wt::WString optionalParameter)
 {
     Wt::WStandardItem *itemId = new Wt::WStandardItem();
     Wt::WStandardItem *itemName = new Wt::WStandardItem();
+    Wt::WStandardItem *itemOptional = new Wt::WStandardItem();
 
     int id = enumToAdd;
 
     vector<Wt::WStandardItem*> rowVector;
 
-    itemId->setText(boost::lexical_cast<string>(id));
     itemName->setText(name);
-
     rowVector.push_back(itemName);
+    
+    itemId->setText(boost::lexical_cast<string>(id));
     rowVector.push_back(itemId);
+    
+    if(optionalParameter != Wt::WString::Empty)
+    {
+        itemOptional->setText(optionalParameter);
+        rowVector.push_back(itemOptional);
+    }
+    
     standardItemModel->appendRow(rowVector);
 }

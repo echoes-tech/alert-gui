@@ -16,7 +16,7 @@
     <message id="Alert.plugins-search.button-cancel">Cancel</message>
     <message id="Alert.plugins-search.button-save">Save</message>
     <!--POST-->
-    <message id="Alert.plugins-search.add-plugins-search">Add source</message>
+    <message id="Alert.plugins-search.add-plugins-search">Add search</message>
     <message id="Alert.plugins-search.add-period">Period</message>
     <!--PUT-->
     <message id="Alert.plugins-search.modif-plugins-search">Modify</message>

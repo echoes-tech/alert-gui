@@ -21,7 +21,7 @@ using namespace std;
 
 PluginsTableFilterWidget::PluginsTableFilterWidget(Echoes::Dbo::Session *session, string apiUrl,
         PluginsTableSearchWidget* pluginsTableSearchWidget)
-: AbstractPage(session, apiUrl, "plugins-filter")
+: AbstractPage(session, apiUrl, "plugins-filter", true)
 {
     setButtonModif(true);
     setButtonSup(true);

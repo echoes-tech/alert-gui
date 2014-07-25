@@ -239,7 +239,8 @@ protected:
     bool                        getFooterOkButtonStatus();
     void                        setFooterOkButtonStatus(bool active);
     void                        tableHandler(long long id);
-    void                        addEnumToModel(Wt::WStandardItemModel* standardItemModel, int enumToAdd, Wt::WString name);
+    void                        addEnumToModel(Wt::WStandardItemModel* standardItemModel, int enumToAdd, Wt::WString name,
+                                    Wt::WString optionalParameter = Wt::WString::Empty);
 
 private:
     // Main attributs ---------------------------

@@ -24,6 +24,7 @@
           <itemPath>include/Auth/LostPasswordWidgetAlert.h</itemPath>
           <itemPath>include/Auth/RegistrationModelAlert.h</itemPath>
           <itemPath>include/Auth/RegistrationWidgetAlert.h</itemPath>
+          <itemPath>include/Auth/SpecializedAuthModel.h</itemPath>
         </logicalFolder>
         <logicalFolder name="enum" displayName="enum" projectFiles="true">
           <itemPath>include/enum/base.hpp</itemPath>
@@ -260,6 +261,11 @@
             flavor2="0">
       </item>
       <item path="include/Auth/RegistrationWidgetAlert.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/Auth/SpecializedAuthModel.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -538,6 +544,11 @@
             flavor2="0">
       </item>
       <item path="include/Auth/RegistrationWidgetAlert.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/Auth/SpecializedAuthModel.h"
             ex="false"
             tool="3"
             flavor2="0">

@@ -66,10 +66,12 @@ void EchoesHome::initSession()
 
 void EchoesHome::initAuth()
 {
-    this->authModel = new Wt::Auth::AuthModel(Echoes::Dbo::Session::auth(),this->session->users(), this);
+    this->authModel = new SpecializedAuthModel(Echoes::Dbo::Session::auth(),this->session->users(), this);
     this->authModel->addPasswordAuth(&Echoes::Dbo::Session::passwordAuth());
     this->authModel->addOAuth(Echoes::Dbo::Session::oAuth());
-//    this->authModel->setValue(Wt::Auth::AuthModel::RememberMeField, true);
+    
+    this->authModel->setValue(Wt::Auth::AuthModel::RememberMeField, true);
+    this->authModel->validateField(Wt::Auth::AuthModel::RememberMeField);
 //    this->authModel->setReadOnly(Wt::Auth::AuthModel::RememberMeField, true);
 //    this->authModel->setVisible(Wt::Auth::AuthModel::RememberMeField, false);
     

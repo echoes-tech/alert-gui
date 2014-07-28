@@ -235,13 +235,13 @@ void AlertsWidget::initAlertValueDefinitionPopup(Wt::WTable *tableBox)
     keyValue_ = new Wt::WLineEdit(tableBox->elementAt(1, 3));
 
     setBox(m_boxAsset,m_assets);
-    m_boxAsset->clicked().connect(this, &AlertsWidget::assetSelected);
+    m_boxAsset->changed().connect(this, &AlertsWidget::assetSelected);
 
     setBox(m_boxPlugin,m_plugins);
-    m_boxPlugin->clicked().connect(this, &AlertsWidget::pluginSelected);
+    m_boxPlugin->changed().connect(this, &AlertsWidget::pluginSelected);
 
     setBox(m_boxInfo,m_informations);
-    m_boxInfo->clicked().connect(this, &AlertsWidget::informationSelected);
+    m_boxInfo->changed().connect(this, &AlertsWidget::informationSelected);
 
 }
 
@@ -304,6 +304,7 @@ void AlertsWidget::assetSelected()
             Wt::log("debug") << "[AlertsWidget][selectAsset] Multiple selection";
         }
         sortModels();
+        showCompareWidget(getSelectedIdFromSelectionBox(m_boxInfo));
     }
     else
     {
@@ -355,6 +356,7 @@ void AlertsWidget::pluginSelected()
             Wt::log("debug") << "[AlertsWidget][selectPlugin] Multiple selection";
         }
         sortModels();
+        showCompareWidget(getSelectedIdFromSelectionBox(m_boxInfo));
     }
     else
     {
@@ -520,16 +522,14 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 
 void AlertsWidget::showCompareWidget(long long id)
 {
-    // TODO : reset button with those 3 lines
-//    m_compareWidgetContainer->clear();
-//    m_compareWidgetContainerTop->clear();
-//    m_alertCriteria.clear();
-    if (id > 0)
+    
+    if (id > 0 && m_boxAsset->selectedIndexes().size() == 1 && m_boxPlugin->selectedIndexes().size() == 1 && m_boxInfo->selectedIndexes().size() == 1)
     {
         long long unitTypeId = m_mapInformationsUnitTypes[id];
         switch(unitTypeId)
         {
             case Enums::EInformationUnitType::text:
+                clearCriteria();
 //                addCompareLine(Enums::EInformationUnitType::text);
                 m_buttonAddCompareCriteria = new Wt::WPushButton("<i class='icon-plus'></i>");
                 m_buttonAddCompareCriteria->setTextFormat(Wt::XHTMLUnsafeText);
@@ -539,6 +539,7 @@ void AlertsWidget::showCompareWidget(long long id)
                 m_compareWidgetContainerTop->addWidget(m_buttonAddCompareCriteria);
                 break;
             case Enums::EInformationUnitType::number:
+                clearCriteria();
 //                addCompareLine(Enums::EInformationUnitType::number);
                 m_buttonAddCompareCriteria = new Wt::WPushButton("<i class='icon-plus'></i>");
                 m_buttonAddCompareCriteria->setTextFormat(Wt::XHTMLUnsafeText);
@@ -549,15 +550,24 @@ void AlertsWidget::showCompareWidget(long long id)
                 m_compareWidgetContainerTop->addWidget(m_buttonAddCompareCriteria);
                 break;
             case Enums::EInformationUnitType::boolean:
+                clearCriteria();
                 createCompareWidgetBoolean();
                 break;
             case Enums::EInformationUnitType::custom:
+                clearCriteria();
                 createCompareWidgetCustom();
                 break;
         default:
             Wt::log("error") << "Unknown unit type : " << unitTypeId;
         }
     }
+}
+
+void AlertsWidget::clearCriteria()
+{
+    m_compareWidgetContainer->clear();
+    m_compareWidgetContainerTop->clear();
+    m_alertCriteria.clear();
 }
 
 void AlertsWidget::addCompareLine(Enums::EInformationUnitType type)

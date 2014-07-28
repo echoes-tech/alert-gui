@@ -104,6 +104,7 @@ private:
     void                        createCompareWidgetBoolean();
     void                        createCompareWidgetCustom();
     void                        showCompareWidget(long long id);
+    void                        clearCriteria();
     void                        addCompareLine(Enums::EInformationUnitType type);
     void                        createItemsCriteriaComboBox(long long id, Wt::WString criterion, Wt::WStandardItemModel *model);
     Wt::WComboBox               *createCompareCriteriaComboBox(Enums::EInformationUnitType type);

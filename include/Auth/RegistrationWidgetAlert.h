@@ -8,22 +8,31 @@
 #ifndef REGISTRATIONWIDGETALERT_H
 #define	REGISTRATIONWIDGETALERT_H
 
+#include <string.h>
+#include <boost/lexical_cast.hpp>
+#include <boost/any.hpp>
+
 #include <Wt/WTemplateFormView>
-#include "tools/MainIncludeFile.h"
-#include "Auth/RegistrationModelAlert.h"
-#include "AuthWidget.h"
-#include "tools/Session.h"
-//#include "tools/SessionPool.h"
+#include <Wt/Auth/AuthWidget>
+#include <Wt/WAnchor>
+#include <Wt/WImage>
+#include <Wt/WDialog>
+#include <Wt/WPushButton>
 #include <Wt/WRadioButton>
 #include <Wt/WButtonGroup>
 #include <Wt/WLineEdit>
 #include <Wt/WApplication>
 #include <Wt/Auth/Login>
-#include <Enums.h>
+
+#include "Auth/RegistrationModelAlert.h"
+
+#include "tools/MainIncludeFile.h"
+#include "tools/Session.h"
 #include <tools/Enums.h>
-#include <string.h>
-#include <boost/lexical_cast.hpp>
-#include <boost/any.hpp>
+
+#include <Enums.h>
+
+
 
 class Login;
 

@@ -184,10 +184,28 @@ OB.ui-toolbar {border-radius: 0;}
     -webkit-border-bottom-left-radius: 0px;
 }
 
+#loginbox h2 {
+    line-height: 35px;
+}
+
 #logo img {
     width: 360px;
 }
 
 #logo {
     padding: 20px 0px 0px 5px;
+}
+
+#loginbox p {
+    margin-top: 0px;
+}
+
+.Wt-auth-logged-in {
+    margin-top: 5px;
+    margin-right: 5px;
+    float:right;
+}
+
+.Wt-auth-logged-in  b {
+    color: #aaaaaa;
 }

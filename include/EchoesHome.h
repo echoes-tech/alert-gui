@@ -50,6 +50,8 @@ class EchoesHome : public Wt::WContainerWidget
 
         // This globale is version of web site. Init in main.c.
         static std::string version_g;
+        
+        Wt::WWidget * displayPasswordChangeWidget();
 
     private:
         Echoes::Dbo::Session *session;

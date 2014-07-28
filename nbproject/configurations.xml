@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="89">
+<configurationDescriptor version="94">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
@@ -82,6 +82,7 @@
       <itemPath>dashboard.xml</itemPath>
       <itemPath>dashboard_fr.xml</itemPath>
       <itemPath>ea_table.xml</itemPath>
+      <itemPath>resources/themes/bootstrap/css/echoes-alert-custom.css</itemPath>
       <itemPath>global.xml</itemPath>
       <itemPath>global_fr.xml</itemPath>
       <itemPath>information.xml</itemPath>
@@ -172,7 +173,6 @@
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
@@ -364,6 +364,11 @@
       </item>
       <item path="recipients_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="resources/themes/bootstrap/css/echoes-alert-custom.css"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
@@ -446,7 +451,6 @@
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
-        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
@@ -637,6 +641,11 @@
       <item path="recipients.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="recipients_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/themes/bootstrap/css/echoes-alert-custom.css"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
       </item>

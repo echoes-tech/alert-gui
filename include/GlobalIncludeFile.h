@@ -18,7 +18,7 @@
 #include "AssetManagementWidget.h"
 #include "UserEditionWidget.h"
 #include "AlertListWidget.h"
-#include "AuthWidget.h"
+//#include "AuthWidget.h"
 #include "UserActionManagement.h"
 #include "OptionManagementModel.h"
 #include "OptionManagementWidget.h"
@@ -40,7 +40,7 @@ class RoleCustomizationWidget;
 class MainWidget;
 class EchoesHome;
 class UserActionManagement;
-class AuthWidget;
+//class AuthWidget;
 class UnitsWidget;
 class Login;
 

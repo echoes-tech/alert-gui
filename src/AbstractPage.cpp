@@ -198,24 +198,24 @@ void AbstractPage::fillBodyTable()
                     k != m_rowsTable.find(itRowTable->first)->second.end(); k++)
             {
                 Wt::WInteractWidget *widgetAdd = *k;
-                string nameRessource("N2Wt5WTextE");
-                if (nameRessource.compare(typeid (*widgetAdd).name()) == 0)
+                const string test("N2Wt5WTextE");
+                if (test.compare(typeid (*widgetAdd).name()) == 0)
                 {
-                    nameRessource = ((Wt::WText*)(widgetAdd))->text().toUTF8();
-                    string newName = nameRessource;
+                    wstring nameRessource = ((Wt::WText*)(widgetAdd))->text().value();
+                    wstring newName = nameRessource;
                     if (newName.find('|') != string::npos)
                     {
-                        vector<string> dataline;
+                        vector<wstring> dataline;
                         boost::split(dataline, newName, boost::is_any_of("|"));
                         newName.clear();
                         nameRessource.clear();
-                        for (vector<string>::iterator it = dataline.begin();
+                        for (vector<wstring>::iterator it = dataline.begin();
                                 it != dataline.end(); it++)
                         {
-                            string resizeString = (*it);
-                            if (((string)(*it)).find('<') == string::npos)
+                            wstring resizeString = (*it);
+                            if (((wstring)(*it)).find('<') == wstring::npos)
                             {
-                                nameRessource += (*it) + "\n";
+                                nameRessource += (*it) + L"\n";
                                 if (resizeString.size() > (unsigned int) (SIZE_NAME / m_titles.size()))
                                 {
                                     resizeString.resize(SIZE_NAME / m_titles.size());
@@ -234,7 +234,7 @@ void AbstractPage::fillBodyTable()
                             newName.resize(newName.size() + 3, '.');
                         }
                     }
-                    Wt::WText *newColumn = new Wt::WText(Wt::WString::fromUTF8(newName),
+                    Wt::WText *newColumn = new Wt::WText(Wt::WString(newName),
                                                          m_resourceTable->elementAt(rowBodyTable, columnTable));
                     newColumn->setTextFormat(Wt::TextFormat::XHTMLUnsafeText);
                     newColumn->setToolTip(nameRessource);
@@ -381,13 +381,13 @@ void AbstractPage::modifResourcePopup(long long id)
                 {
                     case ETypeJson::text:
                     {
-                        string nameResource = ((Wt::WText*)(itElem))->text().toUTF8();
-                        string newName = nameResource;
+                        const wstring nameResource = ((Wt::WText*)(itElem))->text().value();
+                        wstring newName = nameResource;
                         if (nameResource.size() > SIZE_NAME + SIZE_NAME)
                         {
                             newName.resize(newName.size() + 3, '.');
                         }
-                        Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif->contents());
+                        Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString(newName), dialogModif->contents());
                         // FIXME: ne marche pas quand c'est un mail / tel, cf. medias
                         input->setValidator(editValidator(ETypeJson::text));
                         input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
@@ -396,7 +396,7 @@ void AbstractPage::modifResourcePopup(long long id)
                         {
                             input->setFocus();
                         }
-                        input->setToolTip(Wt::WString::fromUTF8(nameResource));
+                        input->setToolTip(Wt::WString(nameResource));
                         inputName.push_back(input);
                         Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                              + title->second), dialogModif->contents());
@@ -407,13 +407,13 @@ void AbstractPage::modifResourcePopup(long long id)
                     }
                     case ETypeJson::integer:
                     {
-                        string nameResource = ((Wt::WText*)(itElem))->text().toUTF8();
-                        string newName = nameResource;
+                        const wstring nameResource = ((Wt::WText*)(itElem))->text().value();
+                        wstring newName = nameResource;
                         if (nameResource.size() > SIZE_NAME + SIZE_NAME)
                         {
                             newName.resize(newName.size() + 3, '.');
                         }
-                        Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif->contents());
+                        Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString(newName), dialogModif->contents());
                         input->setValidator(new Wt::WRegExpValidator(Wt::WString::fromUTF8("^[0123456789]+")));
                         input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
                         input->setWidth(Wt::WLength(150));
@@ -421,7 +421,7 @@ void AbstractPage::modifResourcePopup(long long id)
                         {
                             input->setFocus();
                         }
-                        input->setToolTip(Wt::WString::fromUTF8(nameResource));
+                        input->setToolTip(Wt::WString(nameResource));
                         inputName.push_back(input);
                         Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                              + (*title).second), dialogModif->contents());
@@ -1275,20 +1275,20 @@ void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
             multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
             for (Wt::WInteractWidget *itElem : (*itTable).second)
             {
-                string nameRessouce("N2Wt5WTextE");
-                if (nameRessouce.compare(typeid (*itElem).name()) == 0)
+                const string test("N2Wt5WTextE");
+                if (test.compare(typeid (*itElem).name()) == 0)
                 {
-                    nameRessouce = ((Wt::WText*)(itElem))->text().toUTF8();
-                    string newName = nameRessouce;
+                    const wstring nameRessouce = ((Wt::WText*)(itElem))->text().value();
+                    wstring newName = nameRessouce;
                     if (nameRessouce.size() > SIZE_NAME + SIZE_NAME)
                     {
                         newName.resize(SIZE_NAME + SIZE_NAME);
                         newName.resize(newName.size() + 3, '.');
                     }
 
-                    Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName));
+                    Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString(newName));
                     inputs.push_back(input);
-                    input->setToolTip(Wt::WString::fromUTF8(nameRessouce));
+                    input->setToolTip(Wt::WString(nameRessouce));
                     input->setValidator(editValidator(cpt));
                     if (inputs.size() == 0)
                         input->setFocus();

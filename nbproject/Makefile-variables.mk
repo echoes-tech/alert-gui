@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux-x86
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux-x86
-CND_ARTIFACT_NAME_Debug=gui
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/gui
+CND_ARTIFACT_NAME_Debug=gui480
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/gui480
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Debug=gui.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/gui.tar
+CND_PACKAGE_NAME_Debug=gui480.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/gui480.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux-x86
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_Release=gui
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/gui
+CND_ARTIFACT_NAME_Release=gui480
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/gui480
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Release=gui.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/gui.tar
+CND_PACKAGE_NAME_Release=gui480.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/gui480.tar
 #
 # include compiler specific variables
 #

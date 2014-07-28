@@ -40,7 +40,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/AlertsWidget.o \
 	${OBJECTDIR}/src/ApiManagement.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
-	${OBJECTDIR}/src/Association.o \
 	${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o \
 	${OBJECTDIR}/src/Auth/RegistrationModelAlert.o \
 	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
@@ -56,8 +55,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/MonitoringWidget.o \
 	${OBJECTDIR}/src/OptionManagementModel.o \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
-	${OBJECTDIR}/src/PluginEditionModel.o \
-	${OBJECTDIR}/src/PluginEditionWidget.o \
 	${OBJECTDIR}/src/PluginsTableAssociationWidget.o \
 	${OBJECTDIR}/src/PluginsTableFilterWidget.o \
 	${OBJECTDIR}/src/PluginsTablePluginWidget.o \
@@ -90,11 +87,11 @@ LDLIBSOPTIONS=-L../dbo/dist/Release_SharedObject/GNU-Linux-x86 -L/var/lib/jenkin
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui480
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui480: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui ${OBJECTFILES} ${LDLIBSOPTIONS} -s
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui480 ${OBJECTFILES} ${LDLIBSOPTIONS} -s
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -120,11 +117,6 @@ ${OBJECTDIR}/src/AssetManagementWidget.o: src/AssetManagementWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AssetManagementWidget.o src/AssetManagementWidget.cpp
-
-${OBJECTDIR}/src/Association.o: src/Association.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Association.o src/Association.cpp
 
 ${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o: src/Auth/LostPasswordWidgetAlert.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/Auth
@@ -201,16 +193,6 @@ ${OBJECTDIR}/src/OptionManagementWidget.o: src/OptionManagementWidget.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/OptionManagementWidget.o src/OptionManagementWidget.cpp
 
-${OBJECTDIR}/src/PluginEditionModel.o: src/PluginEditionModel.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginEditionModel.o src/PluginEditionModel.cpp
-
-${OBJECTDIR}/src/PluginEditionWidget.o: src/PluginEditionWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginEditionWidget.o src/PluginEditionWidget.cpp
-
 ${OBJECTDIR}/src/PluginsTableAssociationWidget.o: src/PluginsTableAssociationWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -277,7 +259,7 @@ ${OBJECTDIR}/src/UserEditionWidget.o: src/UserEditionWidget.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui480
 
 # Subprojects
 .clean-subprojects:

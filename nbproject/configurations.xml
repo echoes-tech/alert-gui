@@ -13,8 +13,6 @@
           <itemPath>include/OptionManagementWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
-          <itemPath>include/PluginEditionModel.h</itemPath>
-          <itemPath>include/PluginEditionWidget.h</itemPath>
           <itemPath>include/PluginsTableAssociationWidget.h</itemPath>
           <itemPath>include/PluginsTableFilterWidget.h</itemPath>
           <itemPath>include/PluginsTablePluginWidget.h</itemPath>
@@ -80,8 +78,6 @@
       <itemPath>alert_fr.xml</itemPath>
       <itemPath>asset.xml</itemPath>
       <itemPath>asset_fr.xml</itemPath>
-      <itemPath>association.xml</itemPath>
-      <itemPath>association_fr.xml</itemPath>
       <itemPath>auth.xml</itemPath>
       <itemPath>auth_fr.xml</itemPath>
       <itemPath>config.xml</itemPath>
@@ -96,8 +92,6 @@
       <itemPath>media-user_fr.xml</itemPath>
       <itemPath>options.xml</itemPath>
       <itemPath>options_fr.xml</itemPath>
-      <itemPath>pluginold.xml</itemPath>
-      <itemPath>pluginold_fr.xml</itemPath>
       <itemPath>plugins-association.xml</itemPath>
       <itemPath>plugins-filter.xml</itemPath>
       <itemPath>plugins-plugin.xml</itemPath>
@@ -127,8 +121,6 @@
           <itemPath>src/OptionManagementWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
-          <itemPath>src/PluginEditionModel.cpp</itemPath>
-          <itemPath>src/PluginEditionWidget.cpp</itemPath>
           <itemPath>src/PluginsTableAssociationWidget.cpp</itemPath>
           <itemPath>src/PluginsTableFilterWidget.cpp</itemPath>
           <itemPath>src/PluginsTablePluginWidget.cpp</itemPath>
@@ -237,10 +229,6 @@
       </item>
       <item path="asset_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="association.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="association_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="auth.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="auth_fr.xml" ex="false" tool="3" flavor2="0">
@@ -264,8 +252,6 @@
       <item path="include/ApiManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/Association.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Auth/LostPasswordWidgetAlert.h"
             ex="false"
@@ -307,10 +293,6 @@
       <item path="include/OptionManagementModel.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/PluginsTableAssociationWidget.h"
             ex="false"
@@ -389,10 +371,6 @@
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="pluginold.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="pluginold_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="plugins-association.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins-filter.xml" ex="false" tool="3" flavor2="0">
@@ -422,8 +400,6 @@
       <item path="src/ApiManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/Association.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Auth/LostPasswordWidgetAlert.cpp"
             ex="false"
@@ -463,10 +439,6 @@
       <item path="src/OptionManagementModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsTableAssociationWidget.cpp"
             ex="false"
@@ -554,10 +526,6 @@
       </item>
       <item path="asset_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="association.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="association_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="auth.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="auth_fr.xml" ex="false" tool="3" flavor2="0">
@@ -581,8 +549,6 @@
       <item path="include/ApiManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/Association.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Auth/LostPasswordWidgetAlert.h"
             ex="false"
@@ -624,10 +590,6 @@
       <item path="include/OptionManagementModel.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/PluginsTableAssociationWidget.h"
             ex="false"
@@ -706,10 +668,6 @@
       </item>
       <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="pluginold.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="pluginold_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="plugins-association.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins-filter.xml" ex="false" tool="3" flavor2="0">
@@ -739,8 +697,6 @@
       <item path="src/ApiManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/Association.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Auth/LostPasswordWidgetAlert.cpp"
             ex="false"
@@ -780,10 +736,6 @@
       <item path="src/OptionManagementModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsTableAssociationWidget.cpp"
             ex="false"

@@ -207,21 +207,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             inw = new InformationsWidget(this->session, this->_apiUrl);
             break;
         }
-        case Enums::EPageType::ASSOCIATION:
-        {
-            act = new Association(this->session, this->_apiUrl);
-            break;
-        }
         case Enums::EPageType::ALERTS:
         {
             alw = new AlertsWidget(this->session, this->_apiUrl);
             break;            
-        }        
-        case Enums::EPageType::PLUGINOLD:
-        {
-            pew = new PluginEditionWidget(this->session, _apiUrl);
-            break;
-        }
+        }     
         case Enums::EPageType::PLUGIN:
         {
             plw = new PluginsWidget(this->session, _apiUrl);
@@ -373,21 +363,10 @@ void MainWidget::updateContainerFluid(int type)
             this->contentFluid->addWidget(inw);
             break;
         }
-        case Enums::EPageType::ASSOCIATION:
-        {
-            act->updatePage();
-            this->contentFluid->addWidget(act);
-            break;
-        }
         case Enums::EPageType::ALERTS:
         {
             alw->updatePage();
             this->contentFluid->addWidget(alw);
-            break;
-        }
-        case Enums::EPageType::PLUGINOLD:
-        {
-            this->contentFluid->addWidget(pew);
             break;
         }
         case Enums::EPageType::PLUGIN:
@@ -480,11 +459,6 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::INFORMATIONS:
         {
             res = "eye-open"; 
-            break;
-        }
-        case Enums::EPageType::ASSOCIATION:
-        {
-            res = "refresh"; 
             break;
         }
         case Enums::EPageType::ALERTS:

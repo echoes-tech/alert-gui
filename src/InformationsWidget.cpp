@@ -92,8 +92,10 @@ void InformationsWidget::addResource(vector<Wt::WInteractWidget*> arguments)
     messageInformation.addBodyText("{");
     messageInformation.addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
     messageInformation.addBodyText(",\n\"desc\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
-    messageInformation.addBodyText(",\n\"calculate\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
-
+    if (!((Wt::WLineEdit*)(*it++))->text().toUTF8().empty())
+    {
+        messageInformation.addBodyText(",\n\"calculate\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
+    }
     if (((Wt::WCheckBox*)(*it++))->isChecked())
     {
         messageInformation.addBodyText(",\n\"display\": true");

@@ -899,7 +899,12 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
                 message += "\"alert_criterion_id\": " + boost::lexical_cast<string>(getSelectedIdFromComboBox(((Wt::WComboBox*)it->second->elementAt(0,2)->widget(0)))) + ",\n";
                 message += "\"value\": \"" + Wt::Utils::base64Encode(((Wt::WLineEdit*)it->second->elementAt(0,1)->widget(0))->text().toUTF8()) + "\",\n";
                 // FIXME: différencier suivant le critère (dans le cas multi asset)
-                message += "\"key_value\": \"" + keyValue_->text().toUTF8() + "\",\n";
+                
+                if (!keyValue_->text().toUTF8().empty())
+                {
+                    message += "\"key_value\": \"" + keyValue_->text().toUTF8() + "\",\n";
+                }
+                
                 message += "\"operator\": \"" + ((Wt::WComboBox*)it->second->elementAt(0,0)->widget(0))->currentText().toUTF8() + "\",\n";
                 message += "\"asset_id\": " + boost::lexical_cast<string>(assetId) + ",\n";
                 message += "\"plugin_id\": " + boost::lexical_cast<string>(pluginId) + ",\n";

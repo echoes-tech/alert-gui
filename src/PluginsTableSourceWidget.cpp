@@ -286,9 +286,14 @@ void PluginsTableSourceWidget::setModifResourceMessage(Wt::Http::Message *messag
     
     while(it != argument->end())
     {
+        if(it != argument->begin())
+        {
+            message->addBodyText(",");
+        }
+        
         string name = ((Wt::WLineEdit*)(*it))->attributeValue("name").toUTF8();
         string value = ((Wt::WLineEdit*)(*it++))->text().toUTF8();
-        message->addBodyText(",\n\"" + name + "\": \"" + value + "\"");
+        message->addBodyText("\n\"" + name + "\": \"" + value + "\"");
     }
     
     message->addBodyText("\n}");

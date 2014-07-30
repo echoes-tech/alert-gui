@@ -327,6 +327,7 @@ void AbstractPage::addResourcePopup()
     vector<Wt::WText*> errorMessage;
 
     Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".add-" + m_nameResourcePageSpec));
+    dialogAdd_->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
 
     int cpt(0);
     for (multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
@@ -343,7 +344,6 @@ void AbstractPage::addResourcePopup()
                 //FIXME
                 //                input->setValidator(editValidator(cpt));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-                input->setWidth(Wt::WLength(150));
                 if (inputName->size() == 0)
                 {
                     input->setFocus();
@@ -360,7 +360,6 @@ void AbstractPage::addResourcePopup()
                 input = new Wt::WLineEdit(dialogAdd_->contents());
                 input->setValidator(editValidator(cpt));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-                input->setWidth(Wt::WLength(150));
                 if (inputName->size() == 0)
                 {
                     input->setFocus();
@@ -402,6 +401,8 @@ void AbstractPage::modifResourcePopup(long long id)
 
     //gkr: Init dialog popup
     Wt::WDialog *dialogModif = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".modif-" + m_nameResourcePageSpec));
+    dialogModif->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
+    
     for (map<long long, vector_widget>::iterator itTable = m_rowsTable.begin();
             itTable != m_rowsTable.end(); itTable++)
     {
@@ -442,7 +443,6 @@ void AbstractPage::modifResourcePopup(long long id)
                     // FIXME: ne marche pas quand c'est un mail / tel, cf. medias
                     input->setValidator(editValidator(ETypeJson::text));
                     input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
-                    input->setWidth(Wt::WLength(150));
                     if (inputName->size() == 0)
                     {
                         input->setFocus();

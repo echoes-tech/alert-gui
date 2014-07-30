@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.plugins-association.add-form.plugins-association">Associations</message>
+    <!--body-->
+    <message id="Alert.plugins-association.name-asset">Serveurs</message>
+    <message id="Alert.plugins-association.name-information">Informations</message>
+    <message id="Alert.plugins-association.name-filter">Filtre</message>
+    <message id="Alert.plugins-association.name-filter_index">Index filtre</message>
+    <message id="Alert.plugins-association.modif-button">Modifier</message>
+    <message id="Alert.plugins-association.delete-button">Supprimer</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.plugins-association.button-cancel">Annuler</message>
+    <message id="Alert.plugins-association.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.plugins-association.add-plugins-association">Ajouter une association</message>
+    <message id="Alert.plugins-association.add-asset">Serveur</message>
+    <message id="Alert.plugins-association.add-info">Information</message>
+    <message id="Alert.plugins-association.add-filter-index">Index filtre</message>
+    <!--PUT-->
+    <message id="Alert.plugins-association.modif-plugins-association">Modifier</message>
+    <!--DELETE-->
+    <message id="Alert.plugins-association.delete-plugins-association">Attention</message>
+    <message id="Alert.plugins-association.delete-plugins-association-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer une association
+        </span>
+    </message>
+    <message id="Alert.plugins-association.button-confirm">Confirmer</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.plugins-association.invalid-name-unit">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.plugins-association.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.plugins-association.database-error">
+      Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+
+</messages>

@@ -44,7 +44,8 @@ protected:
     void                                        setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     void                                        setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     void                                        addResourcePopup(long long sourceID);
-    void                                        sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* addonComboBox);
+    void                                        sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* addonComboBox,
+                                                    long long sourceID);
     void                                        addPopupAddHandler(Wt::WInteractWidget* widget);
     void                                        addPopupModifHandler(Wt::WInteractWidget* widget, long long sourceID);
     void                                        handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,

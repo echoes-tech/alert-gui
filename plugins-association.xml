@@ -20,16 +20,14 @@
     <message id="Alert.plugins-association.add-plugins-association">Add association</message>
     <message id="Alert.plugins-association.add-asset">Asset</message>
     <message id="Alert.plugins-association.add-info">Information</message>
-    <message id="Alert.plugins-association.add-no-info">No information available</message>
     <message id="Alert.plugins-association.add-filter-index">Filter index</message>
-    <message id="Alert.plugins-association.add-no-filter-index">No filter index available</message>
     <!--PUT-->
     <message id="Alert.plugins-association.modif-plugins-association">Modify</message>
     <!--DELETE-->
     <message id="Alert.plugins-association.delete-plugins-association">Attention</message>
     <message id="Alert.plugins-association.delete-plugins-association-message">
         <span style="color:red">
-            You are about to delete a plugin
+            You are about to delete an association
         </span>
     </message>
     <message id="Alert.plugins-association.button-confirm">Confirm</message>

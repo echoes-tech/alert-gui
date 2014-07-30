@@ -168,7 +168,8 @@ void PluginsTableFilterWidget::addResourcePopup(long long filterID)
     vector<Wt::WInteractWidget*>* inputName = new vector<Wt::WInteractWidget*>();
     vector<Wt::WText*> errorMessage;
 
-    Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-search.add-plugins-search"));
+    Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-filter.add-plugins-filter"));
+    dialog->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
         
     Wt::WComboBox* filterTypeComboBox = new Wt::WComboBox(dialog->contents());
     inputName->push_back(filterTypeComboBox);

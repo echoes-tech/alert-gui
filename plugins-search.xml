@@ -24,7 +24,7 @@
     <message id="Alert.plugins-search.delete-plugins-search">Attention</message>
     <message id="Alert.plugins-search.delete-plugins-search-message">
         <span style="color:red">
-            You are about to delete a plugin
+            You are about to delete a search
         </span>
     </message>
     <message id="Alert.plugins-search.button-confirm">Confirm</message>

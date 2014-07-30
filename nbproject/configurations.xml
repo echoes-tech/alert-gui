@@ -93,10 +93,15 @@
       <itemPath>options.xml</itemPath>
       <itemPath>options_fr.xml</itemPath>
       <itemPath>plugins-association.xml</itemPath>
+      <itemPath>plugins-association_fr.xml</itemPath>
       <itemPath>plugins-filter.xml</itemPath>
+      <itemPath>plugins-filter_fr.xml</itemPath>
       <itemPath>plugins-plugin.xml</itemPath>
+      <itemPath>plugins-plugin_fr.xml</itemPath>
       <itemPath>plugins-search.xml</itemPath>
+      <itemPath>plugins-search_fr.xml</itemPath>
       <itemPath>plugins-source.xml</itemPath>
+      <itemPath>plugins-source_fr.xml</itemPath>
       <itemPath>plugins.xml</itemPath>
       <itemPath>plugins_fr.xml</itemPath>
       <itemPath>recipients.xml</itemPath>
@@ -373,13 +378,23 @@
       </item>
       <item path="plugins-association.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins-association_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins-filter.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins-filter_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins-plugin.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins-plugin_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins-search.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins-search_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins-source.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins-source_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -670,13 +685,23 @@
       </item>
       <item path="plugins-association.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins-association_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins-filter.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins-filter_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins-plugin.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins-plugin_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins-search.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins-search_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins-source.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins-source_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins.xml" ex="false" tool="3" flavor2="0">
       </item>

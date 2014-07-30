@@ -106,6 +106,7 @@ void PluginsTableAssociationWidget::addResourcePopup()
     vector<Wt::WText*> errorMessage;
 
     Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-association.add-plugins-association"));
+    dialog->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
         
     new Wt::WText(tr("Alert.plugins-association.add-asset") + "<br />", dialog->contents());
     Wt::WComboBox* assetComboBox = new Wt::WComboBox(dialog->contents());

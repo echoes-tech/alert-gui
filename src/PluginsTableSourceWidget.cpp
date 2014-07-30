@@ -178,24 +178,24 @@ void PluginsTableSourceWidget::addResourcePopup(long long sourceID)
     vector<Wt::WText*> errorMessage;
 
     Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-source.add-plugins-source"));
-        
-    Wt::WComboBox* addonComboBox = new Wt::WComboBox(dialog->contents());
-    inputName->push_back(addonComboBox);
-    addonComboBox->setModel(m_addonStandardItemModel);
+    dialog->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
     
-    if(sourceID > 0)
-        for(int row(0); row < m_addonStandardItemModel->rowCount(); row++)    
-            if(boost::lexical_cast<long long>(m_addonStandardItemModel->item(row, 1)->text()) == m_sourcesData[sourceID].addonID)
-                addonComboBox->setCurrentIndex(row);
-            
-    new Wt::WText("<br />", dialog->contents());
-    
-    Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget(dialog->contents());    
+    Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget();    
     boost::function<void (Wt::Json::Value)> functor = boost::bind(&PluginsTableSourceWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, sourceID);
     
-    addonComboBox->changed().connect(boost::bind(&PluginsTableSourceWidget::sendRequestPopupAdd, this, functor, addonComboBox));
-        
-    sendRequestPopupAdd(functor, addonComboBox);
+    Wt::WComboBox* addonComboBox = new Wt::WComboBox();
+    if(sourceID == 0)
+    {
+        dialog->contents()->addWidget(addonComboBox);
+        inputName->push_back(addonComboBox);
+        addonComboBox->setModel(m_addonStandardItemModel);
+        addonComboBox->changed().connect(boost::bind(&PluginsTableSourceWidget::sendRequestPopupAdd, this, functor, addonComboBox, sourceID));            
+        new Wt::WText("<br />", dialog->contents());
+    }
+    
+    dialog->contents()->addWidget(paramsContainer);
+    
+    sendRequestPopupAdd(functor, addonComboBox, sourceID);
     
     popupFinalization(dialog, 0);    
 
@@ -204,27 +204,39 @@ void PluginsTableSourceWidget::addResourcePopup(long long sourceID)
     dialog->show();
 }
 
-void PluginsTableSourceWidget::sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* addonComboBox)
+void PluginsTableSourceWidget::sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* addonComboBox, long long sourceID)
 {    
     vector<string> parameterList;
-    parameterList.push_back("&addon_id=" + m_addonStandardItemModel->item((addonComboBox->currentIndex() == -1 ? 0 : addonComboBox->currentIndex()), 1)->text().toUTF8());
-    
+    if(sourceID == 0)
+    {
+        parameterList.push_back("&addon_id=" + m_addonStandardItemModel->item((addonComboBox->currentIndex() == -1 ? 0 : addonComboBox->currentIndex()), 1)->text().toUTF8());
+    }
+    else 
+    {        
+        parameterList.push_back("&addon_id=" + boost::lexical_cast<string>(m_sourcesData[sourceID].addonID));
+    }
     sendHttpRequestGet("sources/parameters", parameterList, functor);
 }
 
 void PluginsTableSourceWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
                                      vector<Wt::WInteractWidget*>* inputName, long long sourceID)
 {
-    paramsContainer->clear();
+    paramsContainer->clear();    
     
-   
-    vector<Wt::WInteractWidget*>::iterator it = inputName->begin();
-    it++;
-    while(it != inputName->end())
-        it = inputName->erase(it);
+    if(sourceID == 0)
+    {
+        vector<Wt::WInteractWidget*>::iterator it = inputName->begin();
+        it++;
+        while(it != inputName->end())
+        {
+            it = inputName->erase(it);
+        }
+    }
     
     if(result.isNull())
+    {
         return;
+    }
         
     Wt::Json::Array& jsonArray = result;   
     
@@ -268,5 +280,16 @@ void PluginsTableSourceWidget::setAddResourceMessage(Wt::Http::Message *message,
 
 void PluginsTableSourceWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
 {
-    setAddResourceMessage(message, argument);
+    vector<Wt::WInteractWidget*>::iterator it = argument->begin();
+        
+    message->addBodyText("{");
+    
+    while(it != argument->end())
+    {
+        string name = ((Wt::WLineEdit*)(*it))->attributeValue("name").toUTF8();
+        string value = ((Wt::WLineEdit*)(*it++))->text().toUTF8();
+        message->addBodyText(",\n\"" + name + "\": \"" + value + "\"");
+    }
+    
+    message->addBodyText("\n}");
 }

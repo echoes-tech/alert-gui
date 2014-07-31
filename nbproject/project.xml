@@ -12,7 +12,6 @@
             <sourceRootList>
                 <sourceRootElem>include</sourceRootElem>
                 <sourceRootElem>src</sourceRootElem>
-                <sourceRootElem>resources/xml</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

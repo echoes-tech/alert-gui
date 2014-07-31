@@ -48,6 +48,7 @@
 
 #include <tools/Enums.h>
 
+#include "AbstractPage.h"
 #include "WebUtils.h"
 
 

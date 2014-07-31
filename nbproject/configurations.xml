@@ -69,40 +69,44 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
-      <itemPath>alert-list.xml</itemPath>
-      <itemPath>alert-list_fr.xml</itemPath>
-      <itemPath>alert.xml</itemPath>
-      <itemPath>alert_fr.xml</itemPath>
-      <itemPath>asset.xml</itemPath>
-      <itemPath>asset_fr.xml</itemPath>
-      <itemPath>association.xml</itemPath>
-      <itemPath>association_fr.xml</itemPath>
-      <itemPath>auth.xml</itemPath>
-      <itemPath>auth_fr.xml</itemPath>
+      <logicalFolder name="xml" displayName="xml" projectFiles="true">
+        <itemPath>resources/xml/alert-list.xml</itemPath>
+        <itemPath>resources/xml/alert-list_fr.xml</itemPath>
+        <itemPath>resources/xml/alert.xml</itemPath>
+        <itemPath>resources/xml/alert_fr.xml</itemPath>
+        <itemPath>resources/xml/asset.xml</itemPath>
+        <itemPath>resources/xml/asset_fr.xml</itemPath>
+        <itemPath>resources/xml/association.xml</itemPath>
+        <itemPath>resources/xml/association_fr.xml</itemPath>
+        <itemPath>resources/xml/auth.xml</itemPath>
+        <itemPath>resources/xml/auth_fr.xml</itemPath>
+        <itemPath>resources/xml/dashboard.xml</itemPath>
+        <itemPath>resources/xml/dashboard_fr.xml</itemPath>
+        <itemPath>resources/xml/ea_table.xml</itemPath>
+        <itemPath>resources/xml/global.xml</itemPath>
+        <itemPath>resources/xml/global_fr.xml</itemPath>
+        <itemPath>resources/xml/information.xml</itemPath>
+        <itemPath>resources/xml/information_fr.xml</itemPath>
+        <itemPath>resources/xml/media-user.xml</itemPath>
+        <itemPath>resources/xml/media-user_fr.xml</itemPath>
+        <itemPath>resources/xml/options.xml</itemPath>
+        <itemPath>resources/xml/options_fr.xml</itemPath>
+        <itemPath>resources/xml/plugin.xml</itemPath>
+        <itemPath>resources/xml/plugin_fr.xml</itemPath>
+        <itemPath>resources/xml/recipients.xml</itemPath>
+        <itemPath>resources/xml/recipients_fr.xml</itemPath>
+        <itemPath>resources/xml/role-customization.xml</itemPath>
+        <itemPath>resources/xml/role-customization_fr.xml</itemPath>
+        <itemPath>resources/xml/summary.xml</itemPath>
+        <itemPath>resources/xml/summary_fr.xml</itemPath>
+        <itemPath>resources/xml/test.xml</itemPath>
+        <itemPath>resources/xml/unit.xml</itemPath>
+        <itemPath>resources/xml/unit_fr.xml</itemPath>
+        <itemPath>resources/xml/user.xml</itemPath>
+        <itemPath>resources/xml/user_fr.xml</itemPath>
+      </logicalFolder>
       <itemPath>config.xml</itemPath>
-      <itemPath>dashboard.xml</itemPath>
-      <itemPath>dashboard_fr.xml</itemPath>
-      <itemPath>ea_table.xml</itemPath>
       <itemPath>resources/themes/bootstrap/css/echoes-alert-custom.css</itemPath>
-      <itemPath>global.xml</itemPath>
-      <itemPath>global_fr.xml</itemPath>
-      <itemPath>information.xml</itemPath>
-      <itemPath>information_fr.xml</itemPath>
-      <itemPath>media-user.xml</itemPath>
-      <itemPath>media-user_fr.xml</itemPath>
-      <itemPath>options.xml</itemPath>
-      <itemPath>options_fr.xml</itemPath>
-      <itemPath>plugin.xml</itemPath>
-      <itemPath>plugin_fr.xml</itemPath>
-      <itemPath>recipients.xml</itemPath>
-      <itemPath>recipients_fr.xml</itemPath>
-      <itemPath>role-customization.xml</itemPath>
-      <itemPath>role-customization_fr.xml</itemPath>
-      <itemPath>summary.xml</itemPath>
-      <itemPath>summary_fr.xml</itemPath>
-      <itemPath>unit.xml</itemPath>
-      <itemPath>user.xml</itemPath>
-      <itemPath>user_fr.xml</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -169,6 +173,7 @@
   <sourceRootList>
     <Elem>include</Elem>
     <Elem>src</Elem>
+    <Elem>resources/xml</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -208,37 +213,7 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="alert-list.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="alert-list_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="alert.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="alert_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="asset.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="asset_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="association.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="association_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="auth.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="auth_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="config.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="dashboard.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="dashboard_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="ea_table.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="global.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="global_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AbstractPage.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -348,36 +323,86 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="information.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="information_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="media-user.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="media-user_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="options.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="recipients.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="recipients_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/themes/bootstrap/css/echoes-alert-custom.css"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
+      <item path="resources/xml/alert-list.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
+      <item path="resources/xml/alert-list_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/alert.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/alert_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/asset.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/asset_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/association.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/association_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/auth.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/auth_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/dashboard.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/dashboard_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/ea_table.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/global.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/global_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/information.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/information_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/media-user.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/media-user_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/options.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/options_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugin_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/recipients.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/recipients_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/role-customization.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/role-customization_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/summary.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/summary_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/test.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/unit.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/unit_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/user.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/user_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/AbstractPage.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -443,16 +468,6 @@
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="summary.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="summary_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="unit.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="user.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="user_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -491,37 +506,7 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="alert-list.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="alert-list_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="alert.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="alert_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="asset.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="asset_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="association.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="association_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="auth.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="auth_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="config.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="dashboard.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="dashboard_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="ea_table.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="global.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="global_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AbstractPage.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -631,36 +616,86 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="information.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="information_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="media-user.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="media-user_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="options.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="options_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="plugin.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="plugin_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="recipients.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="recipients_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/themes/bootstrap/css/echoes-alert-custom.css"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="role-customization.xml" ex="false" tool="3" flavor2="0">
+      <item path="resources/xml/alert-list.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="role-customization_fr.xml" ex="false" tool="3" flavor2="0">
+      <item path="resources/xml/alert-list_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/alert.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/alert_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/asset.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/asset_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/association.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/association_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/auth.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/auth_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/dashboard.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/dashboard_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/ea_table.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/global.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/global_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/information.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/information_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/media-user.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/media-user_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/options.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/options_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugin_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/recipients.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/recipients_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/role-customization.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/role-customization_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/summary.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/summary_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/test.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/unit.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/unit_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/user.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/user_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/AbstractPage.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -726,16 +761,6 @@
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="summary.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="summary_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="unit.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="user.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="user_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

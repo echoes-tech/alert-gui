@@ -21,7 +21,7 @@ PluginEditionWidget::PluginEditionWidget(Echoes::Dbo::Session* session, const st
     {
         Wt::WApplication *app = Wt::WApplication::instance();
 //        app->enableUpdates(true);
-        app->messageResourceBundle().use("plugin", false);
+        app->messageResourceBundle().use(AbstractPage::xmlDirectory + "plugin", false);
         searchToken();
         createUI();
     }

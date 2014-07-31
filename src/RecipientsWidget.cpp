@@ -10,7 +10,7 @@
 RecipientsWidget::RecipientsWidget(Echoes::Dbo::Session *session, std::string apiUrl)
 {
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use("recipients",false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "recipients",false);
     session_ = session;
     apiUrl_ = apiUrl;
     newClass_ = false;

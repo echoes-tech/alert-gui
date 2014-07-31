@@ -17,8 +17,8 @@ OptionManagementWidget::OptionManagementWidget(OptionManagementModel *model, Ech
     created_ = false;
     this->session = session;
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use("options",false);
-    app->messageResourceBundle().use("auth",false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "options",false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "auth",false);
     createUI();
 }
 

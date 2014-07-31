@@ -21,11 +21,13 @@
 
 using namespace std;
 
+const std::string AbstractPage::xmlDirectory = "resources/xml/";
+
 AbstractPage::AbstractPage(Echoes::Dbo::Session *session, string apiUrl, string pageName)
 : Wt::WTemplateFormView(Wt::WString::tr("Alert." + pageName + ".Management.template"))
 {
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use(pageName, false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + pageName, false);
 
     m_xmlPageName = pageName; // XML name
     m_isDeleteButtonPresent = true; // Button delete

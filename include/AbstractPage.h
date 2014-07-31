@@ -124,6 +124,8 @@ public:
     vector_pair getResources() const;
     void setResourceTable(Wt::WTable* resourceTable);
     Wt::WTable* getResourceTable() const;
+    
+    static const std::string xmlDirectory;
 protected:
 
     // ENUM
@@ -138,6 +140,7 @@ protected:
         object = 4
     };
 
+    
     
     virtual void                updatePage(bool getResources = true);
     virtual void                clearStructures();

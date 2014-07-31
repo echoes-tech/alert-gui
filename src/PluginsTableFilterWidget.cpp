@@ -91,10 +91,17 @@ vector<Wt::WInteractWidget *> PluginsTableFilterWidget::initRowWidgets(Wt::Json:
     int filterTypeID = ((Wt::Json::Object)jsonObject.get("filter_type")).get("id");    
     rowWidgets.push_back(new Wt::WText(getFilterTypeName(filterTypeID)));
     
-    filterData.filterTypeID = filterTypeID;
+    filterData.filterTypeID = filterTypeID;    
+    
+    int nbValue = jsonObject.get("nb_value");
+    rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(nbValue)));    
+    filterData.nbValue = nbValue;       
+    
+    int posKeyValue = jsonObject.get("pos_key_value");
+    rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(posKeyValue)));    
+    filterData.posKeyValue = posKeyValue;
         
-    Wt::WString filterParametersString;
-        
+    Wt::WString filterParametersString;        
     if(!((Wt::Json::Value)jsonResource.at(cpt+1)).isNull())
     {
         Wt::Json::Array& jsonArrayParameters = jsonResource.at(cpt+1);
@@ -113,20 +120,11 @@ vector<Wt::WInteractWidget *> PluginsTableFilterWidget::initRowWidgets(Wt::Json:
             
             filterData.parametersValue[filterParameterID] = filterParameterValue;
         }
-    }
-        
+    }        
     Wt::WContainerWidget* containerWidget = new Wt::WContainerWidget();
     containerWidget->addWidget(new Wt::WText(filterParametersString));
     containerWidget->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
-    rowWidgets.push_back(containerWidget);        
-    
-    int nbValue = jsonObject.get("nb_value");
-    rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(nbValue)));    
-    filterData.nbValue = nbValue;       
-    
-    int posKeyValue = jsonObject.get("pos_key_value");
-    rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(posKeyValue)));    
-    filterData.posKeyValue = posKeyValue;
+    rowWidgets.push_back(containerWidget);    
     
     m_filtersData[filterID] = filterData;
     
@@ -171,35 +169,49 @@ void PluginsTableFilterWidget::addResourcePopup(long long filterID)
     Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-filter.add-plugins-filter"));
     dialog->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
         
-    Wt::WComboBox* filterTypeComboBox = new Wt::WComboBox(dialog->contents());
-    inputName->push_back(filterTypeComboBox);
-    filterTypeComboBox->setModel(m_filterTypeStandardItemModel);    
-    if(filterID > 0)
-        for(int row(0); row < m_filterTypeStandardItemModel->rowCount(); row++)    
+    Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget();      
+    boost::function<void (Wt::Json::Value)> functor = boost::bind(&PluginsTableFilterWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, filterID);
+    
+    Wt::WComboBox* filterTypeComboBox = new Wt::WComboBox();
+    if(filterID == 0)
+    {
+        Wt::WComboBox* filterTypeComboBox = new Wt::WComboBox(dialog->contents());
+        inputName->push_back(filterTypeComboBox);
+        filterTypeComboBox->setModel(m_filterTypeStandardItemModel); 
+        for(int row(0); row < m_filterTypeStandardItemModel->rowCount(); row++)  
+        {
             if(boost::lexical_cast<long long>(m_filterTypeStandardItemModel->item(row, 1)->text()) == m_filtersData[filterID].filterTypeID)
+            {
                 filterTypeComboBox->setCurrentIndex(row);            
-    new Wt::WText("<br />", dialog->contents());
+            }
+        }    
+        filterTypeComboBox->changed().connect(boost::bind(&PluginsTableFilterWidget::sendRequestPopupAdd, this, functor, filterTypeComboBox, filterID));
+        new Wt::WText("<br />", dialog->contents());   
+    }    
     
     new Wt::WText(tr("Alert.plugins-filter.add-nb-value") + " : <br />", dialog->contents());    
     Wt::WLineEdit* nbValueLineEdit = new Wt::WLineEdit(dialog->contents());  
+    nbValueLineEdit->setAttributeValue("name", "nb_value"); 
     if(filterID > 0)  
+    {
         nbValueLineEdit->setText(boost::lexical_cast<string>(m_filtersData[filterID].nbValue));
+    }
     inputName->push_back(nbValueLineEdit); 
     new Wt::WText("<br />", dialog->contents());
     
     new Wt::WText(tr("Alert.plugins-filter.add-pos-key-value") + " : <br />", dialog->contents());    
     Wt::WLineEdit* posKeyValueLineEdit = new Wt::WLineEdit(dialog->contents());  
+    posKeyValueLineEdit->setAttributeValue("name", "position_key_value"); 
     if(filterID > 0)  
+    {
         posKeyValueLineEdit->setText(boost::lexical_cast<string>(m_filtersData[filterID].posKeyValue));
+    }
     inputName->push_back(posKeyValueLineEdit); 
-    new Wt::WText("<br />", dialog->contents());
+    new Wt::WText("<br />", dialog->contents());  
     
-    Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget(dialog->contents());    
-    boost::function<void (Wt::Json::Value)> functor = boost::bind(&PluginsTableFilterWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, filterID);
-    
-    filterTypeComboBox->changed().connect(boost::bind(&PluginsTableFilterWidget::sendRequestPopupAdd, this, functor, filterTypeComboBox));
+    dialog->contents()->addWidget(paramsContainer);   
         
-    sendRequestPopupAdd(functor, filterTypeComboBox);
+    sendRequestPopupAdd(functor, filterTypeComboBox, filterID);
     
     popupFinalization(dialog, 0);    
 
@@ -208,10 +220,17 @@ void PluginsTableFilterWidget::addResourcePopup(long long filterID)
     dialog->show();
 }
 
-void PluginsTableFilterWidget::sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* filterTypeComboBox)
+void PluginsTableFilterWidget::sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* filterTypeComboBox, long long filterID)
 {
-    vector<string> parameterList;
-    parameterList.push_back("&type_id=" + m_filterTypeStandardItemModel->item((filterTypeComboBox->currentIndex() == -1 ? 0 : filterTypeComboBox->currentIndex()), 1)->text().toUTF8());
+    vector<string> parameterList;    
+    if(filterID == 0)
+    {
+        parameterList.push_back("&type_id=" + m_filterTypeStandardItemModel->item((filterTypeComboBox->currentIndex() == -1 ? 0 : filterTypeComboBox->currentIndex()), 1)->text().toUTF8());
+    }
+    else 
+    {        
+        parameterList.push_back("&type_id=" + boost::lexical_cast<string>(m_filtersData[filterID].filterTypeID));
+    }
     
     sendHttpRequestGet("filters/parameters", parameterList, functor);
 }
@@ -219,13 +238,21 @@ void PluginsTableFilterWidget::sendRequestPopupAdd(boost::function<void (Wt::Jso
 void PluginsTableFilterWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
                                      vector<Wt::WInteractWidget*>* inputName, long long filterID)
 {
-    paramsContainer->clear();
-    
+    paramsContainer->clear();    
    
     vector<Wt::WInteractWidget*>::iterator it = inputName->begin();
-    it += 3;
+    if(filterID == 0)
+    {
+        it+=3;
+    }
+    else
+    {
+        it+=2;
+    }
     while(it != inputName->end())
+    {
         it = inputName->erase(it);
+    }
     
     if(result.isNull())
         return;
@@ -259,8 +286,6 @@ void PluginsTableFilterWidget::setAddResourceMessage(Wt::Http::Message *message,
     message->addBodyText("{");
     message->addBodyText("\n\"search_id\": " + boost::lexical_cast<string>(m_pluginsTableSearchWidget->getSelectedID()));
     message->addBodyText(",\n\"type_id\": " + m_filterTypeStandardItemModel->item(((Wt::WComboBox*)(*it++))->currentIndex(), 1)->text().toUTF8());
-    message->addBodyText(",\n\"nb_value\": " + ((Wt::WLineEdit*)(*it++))->text().toUTF8());
-    message->addBodyText(",\n\"position_key_value\": " + ((Wt::WLineEdit*)(*it++))->text().toUTF8());
     
     while(it != argument->end())
     {
@@ -270,9 +295,25 @@ void PluginsTableFilterWidget::setAddResourceMessage(Wt::Http::Message *message,
     }
     
     message->addBodyText("\n}");
+    Wt::log("test") << message->body();
 }
 
 void PluginsTableFilterWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
 {
-    setAddResourceMessage(message, argument);
+    vector<Wt::WInteractWidget*>::iterator it = argument->begin();
+        
+    message->addBodyText("{");
+    
+    while(it != argument->end())
+    {
+        if(it != argument->begin())
+        {
+            message->addBodyText(",");
+        }        
+        string name = ((Wt::WLineEdit*)(*it))->attributeValue("name").toUTF8();
+        string value = ((Wt::WLineEdit*)(*it++))->text().toUTF8();
+        message->addBodyText("\n\"" + name + "\": \"" + value + "\"");
+    }
+    
+    message->addBodyText("\n}");
 }

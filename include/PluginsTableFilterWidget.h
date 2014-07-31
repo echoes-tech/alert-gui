@@ -49,7 +49,8 @@ protected:
     void                                        addPopupAddHandler(Wt::WInteractWidget* widget);
     void                                        addPopupModifHandler(Wt::WInteractWidget* widget, long long typeID);
     void                                        addResourcePopup(long long filterID);
-    void                                        sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* filterTypeComboBox);    
+    void                                        sendRequestPopupAdd(boost::function<void (Wt::Json::Value)> functor, Wt::WComboBox* filterTypeComboBox,
+                                                    long long filterID);    
     void                                        handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
                                                     std::vector<Wt::WInteractWidget*>* inputName, long long filterID);
     void                                        fillModel();

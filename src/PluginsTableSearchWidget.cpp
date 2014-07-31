@@ -107,10 +107,12 @@ vector<Wt::WInteractWidget *> PluginsTableSearchWidget::initRowWidgets(Wt::Json:
     int searchTypeID = ((Wt::Json::Object)jsonObject.get("search_type")).get("id");    
     rowWidgets.push_back(new Wt::WText(getSearchTypeName(searchTypeID)));
     
-    searchData.searchTypeID = searchTypeID;
+    searchData.searchTypeID = searchTypeID;  
+    
+    int period = jsonObject.get("period");
+    rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(period)));
         
-    Wt::WString searchParametersString;
-        
+    Wt::WString searchParametersString;        
     if(!((Wt::Json::Value)jsonResource.at(cpt+1)).isNull())
     {
         Wt::Json::Array& jsonArrayParameters = jsonResource.at(cpt+1);
@@ -129,15 +131,11 @@ vector<Wt::WInteractWidget *> PluginsTableSearchWidget::initRowWidgets(Wt::Json:
             
             searchData.parametersValue[searchParameterID] = searchParameterValue;
         }
-    }
-        
+    }        
     Wt::WContainerWidget* containerWidget = new Wt::WContainerWidget();
     containerWidget->addWidget(new Wt::WText(searchParametersString));
     containerWidget->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
-    rowWidgets.push_back(containerWidget);        
-    
-    int period = jsonObject.get("period");
-    rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(period)));
+    rowWidgets.push_back(containerWidget);      
     
     searchData.period = period;
     
@@ -214,9 +212,7 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
     else
     {
         sendRequestPopupAdd(functorHandleRequestPopupAdd, searchTypeComboBox, searchID);
-    }
-    
-    dialog->contents()->addWidget(paramsContainer);    
+    }  
         
     new Wt::WText(tr("Alert.plugins-search.add-period") + " : <br />", dialog->contents());    
     Wt::WLineEdit* periodLineEdit = new Wt::WLineEdit(dialog->contents()); 
@@ -227,6 +223,8 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
     }
     inputName->push_back(periodLineEdit); 
     new Wt::WText("<br />", dialog->contents()); 
+    
+    dialog->contents()->addWidget(paramsContainer);  
     
     popupFinalization(dialog, 0);    
 
@@ -258,9 +256,12 @@ void PluginsTableSearchWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt:
     vector<Wt::WInteractWidget*>::iterator it = inputName->begin();
     if(searchID == 0)
     {
+        it+=2;
+    }
+    else
+    {
         it++;
     }
-    Wt::WLineEdit* periodLineEdit = ((Wt::WLineEdit*)(*it));
     while(it != inputName->end())
     {
         it = inputName->erase(it);
@@ -291,8 +292,6 @@ void PluginsTableSearchWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt:
         
         new Wt::WText("<br />", paramsContainer);
     }
-    
-    inputName->push_back(periodLineEdit);
 }
 
 void PluginsTableSearchWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
@@ -311,8 +310,6 @@ void PluginsTableSearchWidget::setAddResourceMessage(Wt::Http::Message *message,
     }
     
     message->addBodyText("\n}");
-    
-    Wt::log("test") << message->body();
 }
 
 void PluginsTableSearchWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
@@ -323,9 +320,13 @@ void PluginsTableSearchWidget::setModifResourceMessage(Wt::Http::Message *messag
     
     while(it != argument->end())
     {
+        if(it != argument->begin())
+        {
+            message->addBodyText(",");
+        }        
         string name = ((Wt::WLineEdit*)(*it))->attributeValue("name").toUTF8();
         string value = ((Wt::WLineEdit*)(*it++))->text().toUTF8();
-        message->addBodyText(",\n\"" + name + "\": \"" + value + "\"");
+        message->addBodyText("\n\"" + name + "\": \"" + value + "\"");
     }
     
     message->addBodyText("\n}");

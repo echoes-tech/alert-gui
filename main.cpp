@@ -40,6 +40,7 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     app->setTitle("ECHOES Alert");
     
     app->messageResourceBundle().use(AbstractPage::xmlDirectory + "global",false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "auth",false);
     
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap-responsive.css");

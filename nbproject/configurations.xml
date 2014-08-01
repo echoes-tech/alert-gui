@@ -173,7 +173,6 @@
   <sourceRootList>
     <Elem>include</Elem>
     <Elem>src</Elem>
-    <Elem>resources/xml</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -501,7 +500,7 @@
             <linkerLibLibItem>wtdbo</linkerLibLibItem>
             <linkerLibLibItem>boost_signals</linkerLibLibItem>
             <linkerLibLibItem>boost_system</linkerLibLibItem>
-            <linkerLibLibItem>wtfcgi</linkerLibLibItem>
+            <linkerLibLibItem>wthttp</linkerLibLibItem>
             <linkerLibLibItem>boost_random</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>

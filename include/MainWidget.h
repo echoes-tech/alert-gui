@@ -43,7 +43,7 @@
 #include "RecipientsWidget.h"
 #include "InformationsWidget.h"
 #include "AlertsWidget.h"
-#include "Association.h"
+#include "PluginsWidget.h"
 #include "AbstractPage.h"
 #include "AssetManagementWidget.h"
 #include "UnitsWidget.h"
@@ -53,7 +53,6 @@ class RecipientsWidget;
 class InformationsWidget;
 class AlertsWidget;
 class DashBoard;
-class Association;
 
 class MainWidget : public Wt::WContainerWidget
 {
@@ -101,7 +100,7 @@ protected:
   
   void getRightsFromUser();
  
-  PluginEditionWidget *pew;
+  PluginsWidget *plw;
 //  AssetManagementModel *amm;
   AssetManagementWidget *amw;
   OptionManagementModel *omm;
@@ -116,7 +115,6 @@ protected:
   RecipientsWidget *rpw;
   InformationsWidget *inw;
   AlertsWidget *alw;
-  Association *act;
   DashBoard *dsw;
   
   Wt::WContainerWidget *wcw;

@@ -27,11 +27,9 @@
 #include "UnitsWidget.h"
 #include "MainWidget.h"
 #include "EchoesHome.h"
-#include "PluginEditionWidget.h"
 
 #endif	/* GLOBALINCLUDEFILE_H */
 
-class PluginEditionWidget;
 class AlertListWidget;
 class AssetManagementWidget;
 class OptionManagementWidget;

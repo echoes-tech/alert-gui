@@ -13,8 +13,12 @@
           <itemPath>include/OptionManagementWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
-          <itemPath>include/PluginEditionModel.h</itemPath>
-          <itemPath>include/PluginEditionWidget.h</itemPath>
+          <itemPath>include/PluginsTableAssociationWidget.h</itemPath>
+          <itemPath>include/PluginsTableFilterWidget.h</itemPath>
+          <itemPath>include/PluginsTablePluginWidget.h</itemPath>
+          <itemPath>include/PluginsTableSearchWidget.h</itemPath>
+          <itemPath>include/PluginsTableSourceWidget.h</itemPath>
+          <itemPath>include/PluginsWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>include/UserEditionWidget.h</itemPath>
@@ -93,6 +97,18 @@
         <itemPath>resources/xml/options_fr.xml</itemPath>
         <itemPath>resources/xml/plugin.xml</itemPath>
         <itemPath>resources/xml/plugin_fr.xml</itemPath>
+        <itemPath>resources/xml/plugins-association.xml</itemPath>
+        <itemPath>resources/xml/plugins-association_fr.xml</itemPath>
+        <itemPath>resources/xml/plugins-filter.xml</itemPath>
+        <itemPath>resources/xml/plugins-filter_fr.xml</itemPath>
+        <itemPath>resources/xml/plugins-plugin.xml</itemPath>
+        <itemPath>resources/xml/plugins-plugin_fr.xml</itemPath>
+        <itemPath>resources/xml/plugins-search.xml</itemPath>
+        <itemPath>resources/xml/plugins-search_fr.xml</itemPath>
+        <itemPath>resources/xml/plugins-source.xml</itemPath>
+        <itemPath>resources/xml/plugins-source_fr.xml</itemPath>
+        <itemPath>resources/xml/plugins.xml</itemPath>
+        <itemPath>resources/xml/plugins_fr.xml</itemPath>
         <itemPath>resources/xml/recipients.xml</itemPath>
         <itemPath>resources/xml/recipients_fr.xml</itemPath>
         <itemPath>resources/xml/role-customization.xml</itemPath>
@@ -120,8 +136,12 @@
           <itemPath>src/OptionManagementWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f9" displayName="AdminPluginTab" projectFiles="true">
-          <itemPath>src/PluginEditionModel.cpp</itemPath>
-          <itemPath>src/PluginEditionWidget.cpp</itemPath>
+          <itemPath>src/PluginsTableAssociationWidget.cpp</itemPath>
+          <itemPath>src/PluginsTableFilterWidget.cpp</itemPath>
+          <itemPath>src/PluginsTablePluginWidget.cpp</itemPath>
+          <itemPath>src/PluginsTableSearchWidget.cpp</itemPath>
+          <itemPath>src/PluginsTableSourceWidget.cpp</itemPath>
+          <itemPath>src/PluginsWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="AdminUserTab" projectFiles="true">
           <itemPath>src/UserEditionWidget.cpp</itemPath>
@@ -141,7 +161,6 @@
         <itemPath>src/AbstractPage.cpp</itemPath>
         <itemPath>src/AlertsWidget.cpp</itemPath>
         <itemPath>src/ApiManagement.cpp</itemPath>
-        <itemPath>src/Association.cpp</itemPath>
         <itemPath>src/Conf.cpp</itemPath>
         <itemPath>src/CsvUtil.C</itemPath>
         <itemPath>src/DashBoard.cpp</itemPath>
@@ -173,6 +192,7 @@
   <sourceRootList>
     <Elem>include</Elem>
     <Elem>src</Elem>
+    <Elem>resources/xml</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -222,8 +242,6 @@
       </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/Association.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/Auth/LostPasswordWidgetAlert.h"
             ex="false"
             tool="3"
@@ -270,9 +288,20 @@
       </item>
       <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
+      <item path="include/PluginsTableAssociationWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
+      <item path="include/PluginsTableFilterWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsTablePluginWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsTableSearchWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsTableSourceWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -375,6 +404,48 @@
       </item>
       <item path="resources/xml/plugin_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="resources/xml/plugins-association.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-association_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-filter.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-filter_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-plugin_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-search.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-search_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-source.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-source_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="resources/xml/recipients.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/recipients_fr.xml" ex="false" tool="3" flavor2="0">
@@ -410,8 +481,6 @@
       <item path="src/ApiManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/Association.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Auth/LostPasswordWidgetAlert.cpp"
             ex="false"
@@ -452,9 +521,20 @@
       </item>
       <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/PluginsTableAssociationWidget.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
-      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/PluginsTableFilterWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTablePluginWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableSearchWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableSourceWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RecipientsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -515,8 +595,6 @@
       </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/Association.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/Auth/LostPasswordWidgetAlert.h"
             ex="false"
             tool="3"
@@ -563,9 +641,20 @@
       </item>
       <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/PluginEditionModel.h" ex="false" tool="3" flavor2="0">
+      <item path="include/PluginsTableAssociationWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="include/PluginEditionWidget.h" ex="false" tool="3" flavor2="0">
+      <item path="include/PluginsTableFilterWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsTablePluginWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsTableSearchWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsTableSourceWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -668,6 +757,48 @@
       </item>
       <item path="resources/xml/plugin_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="resources/xml/plugins-association.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-association_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-filter.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-filter_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-plugin_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-search.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-search_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-source.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-source_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="resources/xml/recipients.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/recipients_fr.xml" ex="false" tool="3" flavor2="0">
@@ -703,8 +834,6 @@
       <item path="src/ApiManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/Association.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Auth/LostPasswordWidgetAlert.cpp"
             ex="false"
@@ -745,9 +874,20 @@
       </item>
       <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/PluginEditionModel.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/PluginsTableAssociationWidget.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
-      <item path="src/PluginEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/PluginsTableFilterWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTablePluginWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableSearchWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableSourceWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RecipientsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>

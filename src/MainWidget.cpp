@@ -207,21 +207,16 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             inw = new InformationsWidget(this->session, this->_apiUrl);
             break;
         }
-        case Enums::EPageType::ASSOCIATION:
-        {
-            act = new Association(this->session, this->_apiUrl);
-            break;
-        }
         case Enums::EPageType::ALERTS:
         {
             alw = new AlertsWidget(this->session, this->_apiUrl);
             break;            
-        }        
+        }     
         case Enums::EPageType::PLUGIN:
         {
-            pew = new PluginEditionWidget(this->session, _apiUrl);
-            break;
-        }
+            plw = new PluginsWidget(this->session, _apiUrl);
+            break;            
+        }      
         case Enums::EPageType::ROLE:
         {
             rcw = new RoleCustomizationWidget(session, _apiUrl);
@@ -352,7 +347,7 @@ void MainWidget::updateContainerFluid(int type)
         }
         case Enums::EPageType::ASSET:
         {
-            amw->getResourceList();
+            amw->updatePage();
             this->contentFluid->addWidget(amw);
             break;
         }
@@ -364,25 +359,19 @@ void MainWidget::updateContainerFluid(int type)
         }
         case Enums::EPageType::INFORMATIONS:
         {
-            inw->getResourceList();
+            inw->updatePage();
             this->contentFluid->addWidget(inw);
-            break;
-        }
-        case Enums::EPageType::ASSOCIATION:
-        {
-            act->getResourceList();
-            this->contentFluid->addWidget(act);
             break;
         }
         case Enums::EPageType::ALERTS:
         {
-            alw->getResourceList();
+            alw->updatePage();
             this->contentFluid->addWidget(alw);
             break;
         }
         case Enums::EPageType::PLUGIN:
         {
-            this->contentFluid->addWidget(pew);
+            this->contentFluid->addWidget(plw);
             break;
         }
         case Enums::EPageType::ROLE:
@@ -397,7 +386,7 @@ void MainWidget::updateContainerFluid(int type)
         }
         case Enums::EPageType::UNITS:
         {
-            unw->getResourceList();
+            unw->updatePage();
             this->contentFluid->addWidget(unw);
             break;
         }
@@ -470,11 +459,6 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::INFORMATIONS:
         {
             res = "eye-open"; 
-            break;
-        }
-        case Enums::EPageType::ASSOCIATION:
-        {
-            res = "refresh"; 
             break;
         }
         case Enums::EPageType::ALERTS:

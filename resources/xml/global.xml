@@ -310,6 +310,7 @@
   <message id="Alert.admin.informations-tab">Informations</message>
   <message id="Alert.admin.association-tab">Associations</message>
   <message id="Alert.admin.alerts-tab">Alerts</message>
+  <message id="Alert.admin.pluginsold-tab">Applications - old</message>
   <message id="Alert.admin.plugins-tab">Applications</message>
   <message id="Alert.admin.units-tab">Units</message>
   <message id="Alert.admin.dashboard-tab">Dashboard</message>

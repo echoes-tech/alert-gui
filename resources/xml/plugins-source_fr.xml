@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.plugins-source.add-form.plugins-source">Sources</message>
+    <!--body-->
+    <message id="Alert.plugins-source.name-addon">Addon</message>
+    <message id="Alert.plugins-source.name-parameters">Paramètres</message>
+    <message id="Alert.plugins-source.modif-button">Modifier</message>
+    <message id="Alert.plugins-source.delete-button">Supprimer</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.plugins-source.button-cancel">Annuler</message>
+    <message id="Alert.plugins-source.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.plugins-source.add-plugins-source">Ajouter une source</message>
+    <!--PUT-->
+    <message id="Alert.plugins-source.modif-plugins-source">Modifier</message>
+    <!--DELETE-->
+    <message id="Alert.plugins-source.delete-plugins-source">Attention</message>
+    <message id="Alert.plugins-source.delete-plugins-source-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer une source
+        </span>
+    </message>
+    <message id="Alert.plugins-source.button-confirm">Confirmer</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.plugins-source.invalid-name-unit">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.plugins-source.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.plugins-source.database-error">
+      Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+
+
+  
+  <message id="Alert.plugins-source.filesystem">Filesystem</message>
+  <message id="Alert.plugins-source.file">File</message>
+  <message id="Alert.plugins-source.log">Log</message>
+  <message id="Alert.plugins-source.odbc">Database (ODBC)</message>
+  <message id="Alert.plugins-source.snmp">SNMP</message>
+  <message id="Alert.plugins-source.hash">Hash</message>
+  <message id="Alert.plugins-source.xml">XML</message>
+  <message id="Alert.plugins-source.process">Process</message>
+  
+  <message id="Alert.plugins-source.connection-string">Connection string</message>
+  <message id="Alert.plugins-source.community">Community</message>
+  <message id="Alert.plugins-source.version">Version</message>
+  <message id="Alert.plugins-source.auth-proto">Authentification protocol</message>
+  <message id="Alert.plugins-source.auth-path">Authentification path</message>
+  <message id="Alert.plugins-source.priv-proto">Privacy protocol</message>
+  <message id="Alert.plugins-source.priv-path">Privacy path</message>
+  <message id="Alert.plugins-source.host">Host</message>
+  <message id="Alert.plugins-source.user">User</message>
+
+</messages>

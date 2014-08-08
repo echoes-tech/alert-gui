@@ -109,7 +109,6 @@ public:
                       (ASSET) ("assets")
                       (RECIPIENTS) ("recipients")
                       (INFORMATIONS) ("informations")
-                      (ASSOCIATION) ("association")
                       (ALERTS) ("alerts")
                       (PLUGIN) ("plugins")
                       (ROLE) ("role")

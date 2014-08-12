@@ -39,6 +39,7 @@
 
 #include "Conf.h"
 #include "Auth/SpecializedAuthModel.h"
+#include "Auth/SpecializedAuthWidget.h"
 
 class EchoesHome : public Wt::WContainerWidget 
 {
@@ -62,7 +63,7 @@ class EchoesHome : public Wt::WContainerWidget
 
         void handleInternalPath(const std::string &internalPath);
 
-        Wt::Auth::AuthWidget *authWidget;
+        SpecializedAuthWidget *authWidget;
         SpecializedAuthModel *authModel;
         Wt::WText *title;
     //    Wt::WContainerWidget *topContainer;

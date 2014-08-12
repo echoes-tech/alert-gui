@@ -40,10 +40,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/AlertsWidget.o \
 	${OBJECTDIR}/src/ApiManagement.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
-	${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o \
-	${OBJECTDIR}/src/Auth/RegistrationModelAlert.o \
-	${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o \
-	${OBJECTDIR}/src/AuthWidget.o \
+	${OBJECTDIR}/src/Auth/SpecializedAuthModel.o \
+	${OBJECTDIR}/src/Auth/SpecializedAuthWidget.o \
+	${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget.o \
 	${OBJECTDIR}/src/Conf.o \
 	${OBJECTDIR}/src/CsvUtil.o \
 	${OBJECTDIR}/src/DashBoard.o \
@@ -118,25 +117,20 @@ ${OBJECTDIR}/src/AssetManagementWidget.o: src/AssetManagementWidget.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AssetManagementWidget.o src/AssetManagementWidget.cpp
 
-${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o: src/Auth/LostPasswordWidgetAlert.cpp 
+${OBJECTDIR}/src/Auth/SpecializedAuthModel.o: src/Auth/SpecializedAuthModel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/Auth
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/LostPasswordWidgetAlert.o src/Auth/LostPasswordWidgetAlert.cpp
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedAuthModel.o src/Auth/SpecializedAuthModel.cpp
 
-${OBJECTDIR}/src/Auth/RegistrationModelAlert.o: src/Auth/RegistrationModelAlert.cpp 
+${OBJECTDIR}/src/Auth/SpecializedAuthWidget.o: src/Auth/SpecializedAuthWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/Auth
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/RegistrationModelAlert.o src/Auth/RegistrationModelAlert.cpp
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedAuthWidget.o src/Auth/SpecializedAuthWidget.cpp
 
-${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o: src/Auth/RegistrationWidgetAlert.cpp 
+${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget.o: src/Auth/SpecializedRegistrationWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/Auth
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/RegistrationWidgetAlert.o src/Auth/RegistrationWidgetAlert.cpp
-
-${OBJECTDIR}/src/AuthWidget.o: src/AuthWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AuthWidget.o src/AuthWidget.cpp
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget.o src/Auth/SpecializedRegistrationWidget.cpp
 
 ${OBJECTDIR}/src/Conf.o: src/Conf.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

@@ -8,6 +8,8 @@
 #ifndef SPECIALIZEDAUTHMODEL_H
 #define	SPECIALIZEDAUTHMODEL_H
 
+#include <Wt/Auth/AuthModel>
+
 class SpecializedAuthModel : public Wt::Auth::AuthModel
 {
     public:
@@ -17,11 +19,7 @@ class SpecializedAuthModel : public Wt::Auth::AuthModel
         {
         }
 
-        virtual void reset()
-        {
-            Wt::Auth::AuthModel::reset();
-            this->setValue(Wt::Auth::AuthModel::RememberMeField, true);
-        }
+        virtual void reset();
 };
 
 #endif	/* SPECIALIZEDAUTHMODEL_H */

@@ -24,11 +24,9 @@
           <itemPath>include/UserEditionWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f2" displayName="Auth" projectFiles="true">
-          <itemPath>include/AuthWidget.h</itemPath>
-          <itemPath>include/Auth/LostPasswordWidgetAlert.h</itemPath>
-          <itemPath>include/Auth/RegistrationModelAlert.h</itemPath>
-          <itemPath>include/Auth/RegistrationWidgetAlert.h</itemPath>
           <itemPath>include/Auth/SpecializedAuthModel.h</itemPath>
+          <itemPath>include/Auth/SpecializedAuthWidget.h</itemPath>
+          <itemPath>include/Auth/SpecializedRegistrationWidget.h</itemPath>
         </logicalFolder>
         <logicalFolder name="enum" displayName="enum" projectFiles="true">
           <itemPath>include/enum/base.hpp</itemPath>
@@ -54,7 +52,6 @@
         <itemPath>include/AbstractPage.h</itemPath>
         <itemPath>include/AlertsWidget.h</itemPath>
         <itemPath>include/ApiManagement.h</itemPath>
-        <itemPath>include/Association.h</itemPath>
         <itemPath>include/Conf.h</itemPath>
         <itemPath>include/CsvUtil.h</itemPath>
         <itemPath>include/DashBoard.h</itemPath>
@@ -147,10 +144,9 @@
           <itemPath>src/UserEditionWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f2" displayName="Auth" projectFiles="true">
-          <itemPath>src/AuthWidget.cpp</itemPath>
-          <itemPath>src/Auth/LostPasswordWidgetAlert.cpp</itemPath>
-          <itemPath>src/Auth/RegistrationModelAlert.cpp</itemPath>
-          <itemPath>src/Auth/RegistrationWidgetAlert.cpp</itemPath>
+          <itemPath>src/Auth/SpecializedAuthModel.cpp</itemPath>
+          <itemPath>src/Auth/SpecializedAuthWidget.cpp</itemPath>
+          <itemPath>src/Auth/SpecializedRegistrationWidget.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
           <itemPath>src/MainWidget.cpp</itemPath>
@@ -242,27 +238,20 @@
       </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/Auth/LostPasswordWidgetAlert.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="include/Auth/RegistrationModelAlert.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="include/Auth/RegistrationWidgetAlert.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="include/Auth/SpecializedAuthModel.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="include/AuthWidget.h" ex="false" tool="3" flavor2="0">
+      <item path="include/Auth/SpecializedAuthWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/Auth/SpecializedRegistrationWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="include/Conf.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -482,22 +471,14 @@
       </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/Auth/LostPasswordWidgetAlert.cpp"
+      <item path="src/Auth/SpecializedAuthModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Auth/SpecializedAuthWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Auth/SpecializedRegistrationWidget.cpp"
             ex="false"
             tool="1"
             flavor2="0">
-      </item>
-      <item path="src/Auth/RegistrationModelAlert.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="src/Auth/RegistrationWidgetAlert.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="src/AuthWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Conf.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -595,27 +576,20 @@
       </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/Auth/LostPasswordWidgetAlert.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="include/Auth/RegistrationModelAlert.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="include/Auth/RegistrationWidgetAlert.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="include/Auth/SpecializedAuthModel.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="include/AuthWidget.h" ex="false" tool="3" flavor2="0">
+      <item path="include/Auth/SpecializedAuthWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/Auth/SpecializedRegistrationWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="include/Conf.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -835,22 +809,14 @@
       </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/Auth/LostPasswordWidgetAlert.cpp"
+      <item path="src/Auth/SpecializedAuthModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Auth/SpecializedAuthWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Auth/SpecializedRegistrationWidget.cpp"
             ex="false"
             tool="1"
             flavor2="0">
-      </item>
-      <item path="src/Auth/RegistrationModelAlert.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="src/Auth/RegistrationWidgetAlert.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="src/AuthWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Conf.cpp" ex="false" tool="1" flavor2="0">
       </item>

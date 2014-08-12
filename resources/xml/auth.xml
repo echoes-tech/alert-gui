@@ -255,7 +255,7 @@
     </div>-->
   </message>
 
-  <message id="Wt.Auth.template.registration">
+  <message id="Wt.Auth.template.registration.echoes.alert">
     <div class="Wt-auth-registration">
       <p class="lead">
 	${password-description}

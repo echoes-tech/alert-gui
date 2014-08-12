@@ -12,7 +12,7 @@ LostPasswordWidgetAlert::LostPasswordWidgetAlert(Wt::Auth::AbstractUserDatabase&
 : WTemplate(Wt::WString::tr("Wt.Auth.template.lost-password"), parent),
 users_(users),
 baseAuth_(auth) {
-//    addFunction("id", WT_TEMPLATE_FUNCTION(id));
+    addFunction("id", &Functions::id);
     addFunction("tr", &Functions::tr);
     addFunction("block", &Functions::block);
 
@@ -30,40 +30,29 @@ baseAuth_(auth) {
     bindWidget("cancel-button", cancelButton);
 }
 
-void LostPasswordWidgetAlert::send() 
+void LostPasswordWidgetAlert::send()
 {
-    Wt::WFormWidget *email = resolve<Wt::WFormWidget *>("email");
+  Wt::WFormWidget *email = resolve<Wt::WFormWidget *>("email");
 
-    Wt::Auth::User user = users_.findWithEmail(email->valueText().toUTF8());
-    
-    std::string msg = "";
-    
-    
-    if (user.isValid()) {
-        baseAuth_.lostPassword(email->valueText().toUTF8(), users_);
-        msg = "Wt.Auth.mail-sent";
-    }
-    else
-    {
-        msg = "Wt.Auth.mail-invalid";
-    }
-    
+  baseAuth_.lostPassword(email->valueText().toUTF8(), users_);
 
-    hide();
+  cancel();
 
-    Wt::WMessageBox * const box = new Wt::WMessageBox(Wt::WString::tr("Wt.Auth.lost-password"),
-            Wt::WString::tr(msg),
-            Wt::NoIcon, Wt::Ok);
-
-    box->buttonClicked().connect
-            (boost::bind(&LostPasswordWidgetAlert::deleteBox, this, box));
-
-    box->show();
+  Wt::WMessageBox *const box = new Wt::WMessageBox(tr("Wt.Auth.lost-password"),
+				     tr("Wt.Auth.mail-sent"),
+				     Wt::NoIcon, Wt::Ok);
+#ifndef WT_TARGET_JAVA
+  box->buttonClicked().connect
+    (boost::bind(&LostPasswordWidgetAlert::deleteBox, box));
+#else
+  box->buttonClicked().connect
+    (boost::bind(&LostPasswordWidgetAlert::deleteBox, this, box));
+#endif
+  box->show();
 }
 
 void LostPasswordWidgetAlert::deleteBox(Wt::WMessageBox *box) {
     delete box;
-    delete this;
 }
 
 void LostPasswordWidgetAlert::cancel() {

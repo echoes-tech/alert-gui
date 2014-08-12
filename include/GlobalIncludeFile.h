@@ -13,8 +13,7 @@
 
 
 
-#include "Auth/RegistrationModelAlert.h"
-#include "Auth/RegistrationWidgetAlert.h"
+#include "Auth/SpecializedRegistrationWidget.h"
 #include "AssetManagementWidget.h"
 #include "UserEditionWidget.h"
 #include "AlertListWidget.h"

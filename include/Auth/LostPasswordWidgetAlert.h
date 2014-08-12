@@ -38,8 +38,11 @@ private:
     Wt::Auth::AbstractUserDatabase& users_;
     const Wt::Auth::AuthService& baseAuth_;
 
-
-    void deleteBox(Wt::WMessageBox *box);
+ #ifndef WT_TARGET_JAVA
+    static void deleteBox(Wt::WMessageBox *box);
+ #else
+    void deleteBox(WMessageBox *box);
+ #endif
 };
 
 

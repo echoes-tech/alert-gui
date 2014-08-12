@@ -70,12 +70,7 @@ void EchoesHome::initAuth()
     this->authModel->addPasswordAuth(&Echoes::Dbo::Session::passwordAuth());
     this->authModel->addOAuth(Echoes::Dbo::Session::oAuth());
     
-    this->authModel->setValue(Wt::Auth::AuthModel::RememberMeField, true);
-    this->authModel->validateField(Wt::Auth::AuthModel::RememberMeField);
-//    this->authModel->setReadOnly(Wt::Auth::AuthModel::RememberMeField, true);
-//    this->authModel->setVisible(Wt::Auth::AuthModel::RememberMeField, false);
-    
-    this->authWidget = new Wt::Auth::AuthWidget(this->session->login());
+    this->authWidget = new SpecializedAuthWidget(this->session->login());
     this->authWidget->setModel(this->authModel);
     this->authWidget->setRegistrationEnabled(true);
     this->addWidget(this->authWidget);
@@ -197,7 +192,7 @@ void EchoesHome::handleInternalPath(const string &internalPath)
     }
     else
     {
-        Wt::WApplication::instance()->setInternalPath("/",  false);
+//        Wt::WApplication::instance()->setInternalPath("/",  false);
     }
 }
 

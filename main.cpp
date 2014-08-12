@@ -83,8 +83,6 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
 //    app->require("http://twitter.github.io/bootstrap/assets/js/application.js");
     
-    app->messageResourceBundle().use("auth",false);
-    
     new EchoesHome(app->root());
 
     return app;

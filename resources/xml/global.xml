@@ -317,6 +317,8 @@
   
   <message id="Alert.admin.home">Home</message>
   
+  <message id="Alert.loading"><div>Loading...</div></message>
+  
   
   <message id="Alert.admin.options-tab">Options</message>
   <message id="Alert.global.database-error-title">Database error</message>

@@ -1,7 +1,5 @@
 #include "Auth/SpecializedAuthWidget.h"
 #include "Auth/SpecializedRegistrationWidget.h"
-#include "Auth/LostPasswordWidgetAlert.h"
-
 
 Wt::WWidget * SpecializedAuthWidget::createRegistrationView(const Wt::Auth::Identity& id)
 {

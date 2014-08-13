@@ -83,6 +83,8 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
 //    app->require("http://twitter.github.io/bootstrap/assets/js/application.js");
     
+    Wt::WString::setDefaultEncoding(Wt::CharEncoding::UTF8);
+    
     new EchoesHome(app->root());
 
     return app;

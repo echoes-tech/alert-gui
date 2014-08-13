@@ -1,8 +1,17 @@
 /* 
- * File:   RegistrationWidgetAlert.h
- * Author: tsa
- *
- * Created on 17 janvier 2013, 19:41
+ * Gui SpecializedRegistrationWidget.h
+ * 
+ * @author Echoes Technologies
+ * @author Thomas SAQUET (TSA)
+ * 
+ * @date 13/08/2014
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
+ * AbstractPage
+ * COPYRIGHT 2012-2014 BY ECHOES TECHNOLGIES SAS
+ * 
  */
 
 #ifndef REGISTRATIONWIDGETALERT_H

@@ -16,7 +16,7 @@ RoleCustomizationWidget::RoleCustomizationWidget(Echoes::Dbo::Session *session, 
     mainTemplate = new Wt::WTemplate(Wt::WString::tr("Alert.role.customization.template"));
     mainTemplate->addFunction("tr", &Wt::WTemplate::Functions::tr);
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use("role-customization", false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "role-customization", false);
     this->addWidget(mainTemplate);
 
 

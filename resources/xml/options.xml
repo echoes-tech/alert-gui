@@ -19,6 +19,10 @@
   
   <message id="Alert.option.database-error-title">Database error</message>
   <message id="Alert.option.database-error">Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
+  
+  <message id="Alert.option.update-password-label">Password</message>
+  <message id="Alert.option.update-password-info">Fill your current password and the new one, then click on the ok button to change your password.</message>
+  <message id="Alert.option.password-changed">Password changed successfully</message>
 
   <!-- templates -->
 
@@ -49,6 +53,21 @@
                             <div class="span3">${sms-quota}</div>
 
                             <div class="span6">${sms-ask}</div>
+                        </div>
+                        <p></p>
+                        <p></p>
+
+                        <div class="row-fluid">
+                            <div class="span2">
+                                ${tr:Alert.option.update-password-label}
+                                <i class="icon-question-sign" rel="tooltip" title="${tr:Alert.option.update-password-info}"></i>
+                            </div>
+
+                            
+                            <div class="span9">${update-password}</div>
+                            
+                            
+
                         </div>
                     </div>
                     <!--<div class="control-group">

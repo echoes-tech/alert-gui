@@ -22,16 +22,18 @@ UnitsWidget::UnitsWidget(Echoes::Dbo::Session *session, string apiUrl)
     titles.insert(make_pair(ETypeJson::text, "name"));
     titles.insert(make_pair(ETypeJson::undid, "information_unit_type"));
     setTitles(titles);
-
-    lists_string lListUrl;
-    list_string listUrl;
-    listUrl.push_back("units");
-    listUrl.push_back("units/:id");
-    lListUrl.push_back(listUrl);
+    
+    list<list<pair<string, vector<string>>>> listsUrl;
+    list<pair<string, vector<string>>> listUrl;
+    
+    listUrl.push_back(pair<string, vector<string>>("units", vector<string>())); 
+    listUrl.push_back(pair<string, vector<string>>("units/:id", vector<string>()));    
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
+    setUrl(listsUrl);
+    
     fillModel();
-    setUrl(lListUrl);
 }
 
 UnitsWidget::~UnitsWidget()
@@ -41,10 +43,10 @@ UnitsWidget::~UnitsWidget()
 void UnitsWidget::fillModel()
 {
     m_unitTypeModel->clear();
-    addEnumToModel(Enums::EInformationUnitType::text, tr("Alert.unit.type.text"));
-    addEnumToModel(Enums::EInformationUnitType::number, tr("Alert.unit.type.number"));
-    addEnumToModel(Enums::EInformationUnitType::boolean, tr("Alert.unit.type.boolean"));
-    addEnumToModel(Enums::EInformationUnitType::custom, tr("Alert.unit.type.custom"));
+    addEnumToModel(m_unitTypeModel, Enums::EInformationUnitType::text, tr("Alert.unit.type.text"));
+    addEnumToModel(m_unitTypeModel, Enums::EInformationUnitType::number, tr("Alert.unit.type.number"));
+    addEnumToModel(m_unitTypeModel, Enums::EInformationUnitType::boolean, tr("Alert.unit.type.boolean"));
+    addEnumToModel(m_unitTypeModel, Enums::EInformationUnitType::custom, tr("Alert.unit.type.custom"));
 }
 
 Wt::WComboBox *UnitsWidget::popupAdd(Wt::WDialog *dialog)
@@ -55,27 +57,9 @@ Wt::WComboBox *UnitsWidget::popupAdd(Wt::WDialog *dialog)
     return m_unitTypeComboBox;
 }
 
-
-void UnitsWidget::addEnumToModel(Enums::EInformationUnitType enumToAdd, Wt::WString name)
+void UnitsWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
 {
-    Wt::WStandardItem *itemId = new Wt::WStandardItem();
-    Wt::WStandardItem *itemName = new Wt::WStandardItem();
-
-    int id = enumToAdd;
-
-    vector<Wt::WStandardItem*> rowVector;
-
-    itemId->setText(boost::lexical_cast<string>(id));
-    itemName->setText(name);
-
-    rowVector.push_back(itemName);
-    rowVector.push_back(itemId);
-    m_unitTypeModel->appendRow(rowVector);
-}
-
-void UnitsWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*> argument)
-{
-    vector<Wt::WInteractWidget*>::iterator it = argument.begin();
+    vector<Wt::WInteractWidget*>::iterator it = argument->begin();
     
     message->addBodyText("{");
     message->addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
@@ -83,9 +67,9 @@ void UnitsWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WI
     message->addBodyText("\n}");
 }
 
-void UnitsWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*> argument)
+void UnitsWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
 {
-    vector<Wt::WInteractWidget*>::iterator it = argument.begin();
+    vector<Wt::WInteractWidget*>::iterator it = argument->begin();
     
     message->addBodyText("{");
     message->addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");

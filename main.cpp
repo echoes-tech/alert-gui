@@ -20,6 +20,7 @@
 #include <Wt/WEnvironment>
 #include <Wt/WApplication>
 #include <Wt/WBootstrapTheme>
+#include <Wt/WLoadingIndicator>
 
 #include "GlobalIncludeFile.h"
 #include "tools/Session.h"
@@ -37,9 +38,13 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     // On instancie la classe EchoesHome qui permet d'afficher le site.
     Wt::WApplication *app = new Wt::WApplication(env);
     
-    app->setTitle("ECHOES Alert");
+    app->setTitle("Echoes Alert");
     
-    app->messageResourceBundle().use("global",false);
+    
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "global",false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "auth",false);
+    
+    app->loadingIndicator()->setMessage(Wt::WString::tr("Alert.loading"));
     
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap-responsive.css");
@@ -81,6 +86,8 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     app->require(Wt::WApplication::resourcesUrl() + "themes/bootstrap/js/unicorn.js");
     
 //    app->require("http://twitter.github.io/bootstrap/assets/js/application.js");
+    
+    Wt::WString::setDefaultEncoding(Wt::CharEncoding::UTF8);
     
     new EchoesHome(app->root());
 

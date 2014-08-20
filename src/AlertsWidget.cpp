@@ -37,49 +37,48 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
     listTitles.insert(make_pair(ETypeJson::text, "last_attempt"));
     listTitles.insert(make_pair(ETypeJson::integer, "alert_media_specializations"));
     setTitles(listTitles);
-
-    lists_string lListUrl;
-    list<string> listUrl;
-
-    listUrl.push_back("alerts");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-
-    listUrl.push_back("assets");
-    listUrl.push_back("assets/:id/plugins");
-    lListUrl.push_back(listUrl);
+    
+    list<list<pair<string, vector<string>>>> listsUrl;
+    list<pair<string, vector<string>>> listUrl;  
+    
+    listUrl.push_back(pair<string, vector<string>>("alerts", vector<string>()));                     
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    // voir si on peut inclure cet appel dans le précédent
-    listUrl.push_back("plugins");
-    listUrl.push_back("plugins/:id/informations");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-
-    listUrl.push_back("plugins");
-    listUrl.push_back("plugins/:id/assets");
-    lListUrl.push_back(listUrl);
+    listUrl.push_back(pair<string, vector<string>>("assets", vector<string>()));        
+    listUrl.push_back(pair<string, vector<string>>("assets/:id/plugins", vector<string>()));                
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    listUrl.push_back("informations");
-    listUrl.push_back("informations/:id/plugins");
-    lListUrl.push_back(listUrl);
+    listUrl.push_back(pair<string, vector<string>>("plugins", vector<string>()));        
+    listUrl.push_back(pair<string, vector<string>>("plugins/:id/informations", vector<string>()));                
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    listUrl.push_back("informations");
-    listUrl.push_back("informations/:id");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-
-    listUrl.push_back("users");
-    lListUrl.push_back(listUrl);
+    listUrl.push_back(pair<string, vector<string>>("plugins", vector<string>()));        
+    listUrl.push_back(pair<string, vector<string>>("plugins/:id/assets", vector<string>()));                
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    listUrl.push_back("medias");
-    lListUrl.push_back(listUrl);
+    listUrl.push_back(pair<string, vector<string>>("informations", vector<string>()));        
+    listUrl.push_back(pair<string, vector<string>>("informations/:id/plugins", vector<string>()));                
+    listsUrl.push_back(listUrl);
     listUrl.clear();
-
-    setUrl(lListUrl);
+    
+    listUrl.push_back(pair<string, vector<string>>("informations", vector<string>()));        
+    listUrl.push_back(pair<string, vector<string>>("informations/:id", vector<string>()));                
+    listsUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    listUrl.push_back(pair<string, vector<string>>("users", vector<string>()));                     
+    listsUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    listUrl.push_back(pair<string, vector<string>>("medias", vector<string>()));                     
+    listsUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    setUrl(listsUrl);
 }
 
 void AlertsWidget::setDisplayedTitlesPopups()
@@ -87,11 +86,6 @@ void AlertsWidget::setDisplayedTitlesPopups()
     multimap<int, string> displayedTitles;
     displayedTitles.insert(make_pair(ETypeJson::text, "name"));
     m_displayedTitlesPopups = displayedTitles;
-}
-
-void AlertsWidget::updatePage(bool getResources)
-{
-    AbstractPage::updatePage(getResources);
 }
 
 vector<string> AlertsWidget::getTitlesTableWidget()
@@ -784,7 +778,7 @@ void AlertsWidget::checkPopupRecipients(string message, string time, int media)
     }
     message += "\n]\n}";
     postAlertCallApi(message);
-    getResourceList();
+    updatePage();
 }
 
 int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage)
@@ -874,12 +868,12 @@ int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
     return checkAll;
 }
 
-void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
+void AlertsWidget::addResource(vector<Wt::WInteractWidget*>* argument)
 {
 
     string message;
 
-    string data = ((Wt::WLineEdit*) * argument.begin())->text().toUTF8();
+    string data = ((Wt::WLineEdit*) * argument->begin())->text().toUTF8();
 //    boost::algorithm::to_lower(data);
     message += "{\n\"name\": \"" + data + "\",\n";
     message += "\"thread_sleep\": 0,\n";
@@ -909,7 +903,12 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
                 message += "\"alert_criterion_id\": " + boost::lexical_cast<string>(getSelectedIdFromComboBox(((Wt::WComboBox*)it->second->elementAt(0,2)->widget(0)))) + ",\n";
                 message += "\"value\": \"" + Wt::Utils::base64Encode(((Wt::WLineEdit*)it->second->elementAt(0,1)->widget(0))->text().toUTF8()) + "\",\n";
                 // FIXME: différencier suivant le critère (dans le cas multi asset)
-                message += "\"key_value\": \"" + keyValue_->text().toUTF8() + "\",\n";
+                
+                if (!keyValue_->text().toUTF8().empty())
+                {
+                    message += "\"key_value\": \"" + keyValue_->text().toUTF8() + "\",\n";
+                }
+                
                 message += "\"operator\": \"" + ((Wt::WComboBox*)it->second->elementAt(0,0)->widget(0))->currentText().toUTF8() + "\",\n";
                 message += "\"asset_id\": " + boost::lexical_cast<string>(assetId) + ",\n";
                 message += "\"plugin_id\": " + boost::lexical_cast<string>(pluginId) + ",\n";
@@ -990,7 +989,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
                 + "\"\n}\n]\n}";
 
         postAlertCallApi(message);
-        getResourceList();
+        updatePage();
     }
     else
     {
@@ -1003,7 +1002,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*> argument)
 
 void AlertsWidget::closePopup()
 {
-    getResourceList();
+    updatePage();
 }
 
 long long AlertsWidget::getSelectedIdFromSelectionBox(Wt::WSelectionBox * box)
@@ -1776,6 +1775,6 @@ void AlertsWidget::deleteAlert(boost::system::error_code err, const Wt::Http::Me
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
         Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
     }
-    getResourceList();
+    updatePage();
 }
 

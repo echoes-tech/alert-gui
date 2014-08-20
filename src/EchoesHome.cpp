@@ -66,14 +66,11 @@ void EchoesHome::initSession()
 
 void EchoesHome::initAuth()
 {
-    this->authModel = new Wt::Auth::AuthModel(Echoes::Dbo::Session::auth(),this->session->users(), this);
+    this->authModel = new SpecializedAuthModel(Echoes::Dbo::Session::auth(),this->session->users(), this);
     this->authModel->addPasswordAuth(&Echoes::Dbo::Session::passwordAuth());
     this->authModel->addOAuth(Echoes::Dbo::Session::oAuth());
-//    this->authModel->setValue(Wt::Auth::AuthModel::RememberMeField, true);
-//    this->authModel->setReadOnly(Wt::Auth::AuthModel::RememberMeField, true);
-//    this->authModel->setVisible(Wt::Auth::AuthModel::RememberMeField, false);
     
-    this->authWidget = new Wt::Auth::AuthWidget(this->session->login());
+    this->authWidget = new SpecializedAuthWidget(this->session->login());
     this->authWidget->setModel(this->authModel);
     this->authWidget->setRegistrationEnabled(true);
     this->addWidget(this->authWidget);
@@ -105,6 +102,7 @@ void EchoesHome::initMainPageWidget()
     this->addWidget(this->mainPageWidget->getSideBarContainer());
     this->addWidget(this->mainPageWidget);
     this->addWidget(this->mainPageWidget->getFooterContainer());
+    this->mainPageWidget->getSideBarContainer()->hide();
     
     // Todo : à déplacer
     Wt::WApplication::instance()->internalPathChanged().connect(this, &EchoesHome::handleInternalPath);
@@ -194,7 +192,7 @@ void EchoesHome::handleInternalPath(const string &internalPath)
     }
     else
     {
-        Wt::WApplication::instance()->setInternalPath("/",  false);
+//        Wt::WApplication::instance()->setInternalPath("/",  false);
     }
 }
 
@@ -217,6 +215,7 @@ void EchoesHome::onAuthEvent()
         this->title->show();
         this->mainPageWidget->createUI();
         this->mainPageWidget->show();
+        this->mainPageWidget->getSideBarContainer()->show();
         handleInternalPath(Wt::WApplication::instance()->internalPath());
     }
     else
@@ -224,8 +223,21 @@ void EchoesHome::onAuthEvent()
         UserActionManagement::registerUserAction(Enums::EAction::logout,"",0);
         this->mainPageWidget->reset();
         this->mainPageWidget->hide();
+        this->mainPageWidget->getSideBarContainer()->hide();
         this->title->hide();
         Wt::WApplication::instance()->setInternalPath("/",  false);
+    }
+}
+
+Wt::WWidget * EchoesHome::displayPasswordChangeWidget()
+{
+    if (this->session->login().loggedIn())
+    {
+        return this->authWidget->createUpdatePasswordView(this->session->login().user(),true);
+    }
+    else
+    {
+        return new Wt::WText();
     }
 }
 

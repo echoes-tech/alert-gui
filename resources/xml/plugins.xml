@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!-- Models -->
+<message id="Alert.plugins.alert-form-info">On this page you can add a plugin</message>
+  
+<message id="Alert.plugins.filesystem">Filesystem</message>
+<message id="Alert.plugins.file">File</message>
+<message id="Alert.plugins.log">Log</message>
+<message id="Alert.plugins.odbc">Database (ODBC)</message>
+<message id="Alert.plugins.snmp">SNMP</message>
+<message id="Alert.plugins.hash">Hash</message>
+<message id="Alert.plugins.xml">XML</message>
+<message id="Alert.plugins.process">Process</message>
+
+<message id="Alert.plugins.connection-string">Connection string</message>
+<message id="Alert.plugins.community">Community</message>
+<message id="Alert.plugins.version">Version</message>
+<message id="Alert.plugins.auth-proto">Authentication protocol</message>
+<message id="Alert.plugins.auth-path">Authentication path</message>
+<message id="Alert.plugins.priv-proto">Privacy protocol </message>
+<message id="Alert.plugins.priv-path">Provacy path</message>
+<message id="Alert.plugins.host">Host</message>
+<message id="Alert.plugins.user">User</message>
+  
+  
+ <!-- templates -->
+ 
+
+<message id="Alert.plugins.Management.template">
+    <br />
+    <div class ="alert alert-info">${tr:Alert.plugins.alert-form-info} </div>
+    <div id="plugins-table-plugin" class="">
+        ${resource-table-plugin}
+    </div>
+    <div id="plugins-table-source" class="">
+        ${resource-table-source}
+    </div>
+    <div id="plugins-table-search" class="">
+        ${resource-table-search}
+    </div>
+    <div id="plugins-table-filter" class="">
+        ${resource-table-filter}
+    </div>
+    <div id="plugins-table-association" class="">
+        ${resource-table-association}
+    </div>
+</message>
+  
+  
+</messages>

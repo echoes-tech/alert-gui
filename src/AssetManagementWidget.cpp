@@ -26,14 +26,15 @@ AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, stri
     titles.insert(make_pair(ETypeJson::text, "name"));
     titles.insert(make_pair(ETypeJson::widget, "download-script"));
     setTitles(titles);
-
-    lists_string lListUrl;
-    list_string listUrl;
-    listUrl.push_back("assets");
-    lListUrl.push_back(listUrl);
+    
+    list<list<pair<string, vector<string>>>> listsUrl;
+    list<pair<string, vector<string>>> listUrl;
+    
+    listUrl.push_back(pair<string, vector<string>>("assets", vector<string>()));    
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    setUrl(lListUrl);
+    setUrl(listsUrl);
 }
 
 Wt::WValidator    *AssetManagementWidget::editValidator(int cpt)

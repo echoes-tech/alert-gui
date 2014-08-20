@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.plugins-source.add-form.plugins-source">Sources</message>
+    <!--body-->
+    <message id="Alert.plugins-source.name-addon">Addon</message>
+    <message id="Alert.plugins-source.name-parameters">Parameters</message>
+    <message id="Alert.plugins-source.modif-button">Modify</message>
+    <message id="Alert.plugins-source.delete-button">Delete</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.plugins-source.button-cancel">Cancel</message>
+    <message id="Alert.plugins-source.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.plugins-source.add-plugins-source">Add source</message>
+    <!--PUT-->
+    <message id="Alert.plugins-source.modif-plugins-source">Modify</message>
+    <!--DELETE-->
+    <message id="Alert.plugins-source.delete-plugins-source">Attention</message>
+    <message id="Alert.plugins-source.delete-plugins-source-message">
+        <span style="color:red">
+            You are about to delete a source
+        </span>
+    </message>
+    <message id="Alert.plugins-source.button-confirm">Confirm</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.plugins-source.invalid-name-unit">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.plugins-source.database-error-title">Database error</message>
+  <message id="Alert.plugins-source.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+
+
+  
+  <message id="Alert.plugins-source.filesystem">Filesystem</message>
+  <message id="Alert.plugins-source.file">File</message>
+  <message id="Alert.plugins-source.log">Log</message>
+  <message id="Alert.plugins-source.odbc">Database (ODBC)</message>
+  <message id="Alert.plugins-source.snmp">SNMP</message>
+  <message id="Alert.plugins-source.hash">Hash</message>
+  <message id="Alert.plugins-source.xml">XML</message>
+  <message id="Alert.plugins-source.process">Process</message>
+  
+  <message id="Alert.plugins-source.connection-string">Connection string</message>
+  <message id="Alert.plugins-source.community">Community</message>
+  <message id="Alert.plugins-source.version">Version</message>
+  <message id="Alert.plugins-source.auth-proto">Authentification protocol</message>
+  <message id="Alert.plugins-source.auth-path">Authentification path</message>
+  <message id="Alert.plugins-source.priv-proto">Privacy protocol</message>
+  <message id="Alert.plugins-source.priv-path">Privacy path</message>
+  <message id="Alert.plugins-source.host">Host</message>
+  <message id="Alert.plugins-source.user">User</message>
+
+<!-- templates -->
+
+    <message id="Alert.plugins-source.Management.template" >
+            <div id="media-user-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>  
+
+</messages>

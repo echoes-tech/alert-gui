@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.plugins-search.add-form.plugins-search">Searches</message>
+    <!--body-->
+    <message id="Alert.plugins-search.name-search-type">Search type</message>
+    <message id="Alert.plugins-search.name-parameters">Parameters</message>
+    <message id="Alert.plugins-search.name-period">Period</message>
+    <message id="Alert.plugins-search.modif-button">Modify</message>
+    <message id="Alert.plugins-search.delete-button">Delete</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.plugins-search.button-cancel">Cancel</message>
+    <message id="Alert.plugins-search.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.plugins-search.add-plugins-search">Add search</message>
+    <message id="Alert.plugins-search.add-period">Period</message>
+    <!--PUT-->
+    <message id="Alert.plugins-search.modif-plugins-search">Modify</message>
+    <!--DELETE-->
+    <message id="Alert.plugins-search.delete-plugins-search">Attention</message>
+    <message id="Alert.plugins-search.delete-plugins-search-message">
+        <span style="color:red">
+            You are about to delete a search
+        </span>
+    </message>
+    <message id="Alert.plugins-search.button-confirm">Confirm</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.plugins-search.invalid-name-unit">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.plugins-search.database-error-title">Database error</message>
+  <message id="Alert.plugins-search.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+  
+  <message id="Alert.plugins-search.search-type.path">Path</message>
+  <message id="Alert.plugins-search.search-type.path-line">File path and line</message>
+  <message id="Alert.plugins-search.search-type.path-last-line">File path and last n lines</message>
+  <message id="Alert.plugins-search.search-type.query">Query</message>
+  <message id="Alert.plugins-search.search-type.oid">OID</message>
+  <message id="Alert.plugins-search.search-type.path-algorithm">File path and algorithm</message>
+  <message id="Alert.plugins-search.search-type.path-xpath">File path and XPath</message>
+  <message id="Alert.plugins-search.search-type.name">Name</message>
+  
+  <message id="Alert.plugins-search.search-parameter.path">Path</message>
+  <message id="Alert.plugins-search.search-parameter.line">Line</message>
+  <message id="Alert.plugins-search.search-parameter.last-line">Last n lines</message>
+  <message id="Alert.plugins-search.search-parameter.query">Query</message>
+  <message id="Alert.plugins-search.search-parameter.oid">OID</message>
+  <message id="Alert.plugins-search.search-parameter.algorithm">Algorithm</message>
+  <message id="Alert.plugins-search.search-parameter.xpath">XPath</message>
+  <message id="Alert.plugins-search.search-parameter.name">Name</message>
+
+<!-- templates -->
+
+    <message id="Alert.plugins-search.Management.template" >
+            <div id="media-user-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>  
+
+</messages>

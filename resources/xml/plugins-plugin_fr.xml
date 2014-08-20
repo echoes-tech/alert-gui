@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.plugins-plugin.add-form.plugins-plugin">Applications</message>
+    <!--body-->
+    <message id="Alert.plugins-plugin.name-name">Nom</message>
+    <message id="Alert.plugins-plugin.name-desc">Description</message>
+    <message id="Alert.plugins-plugin.modif-button">Modifier</message>
+    <message id="Alert.plugins-plugin.delete-button">Supprimer</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.plugins-plugin.button-cancel">Annuler</message>
+    <message id="Alert.plugins-plugin.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.plugins-plugin.add-plugins-plugin">Ajouter une application</message>
+    <!--PUT-->
+    <message id="Alert.plugins-plugin.modif-plugins-plugin">Modifier</message>
+    <!--DELETE-->
+    <message id="Alert.plugins-plugin.delete-plugins-plugin">Attention</message>
+    <message id="Alert.plugins-plugin.delete-plugins-plugin-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer une application
+        </span>
+    </message>
+    <message id="Alert.plugins-plugin.button-confirm">Confirmer</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.plugins-plugin.invalid-name-unit">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.plugins-plugin.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.plugins-plugin.database-error">
+      Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+
+</messages>

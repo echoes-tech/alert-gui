@@ -141,12 +141,12 @@ protected:
 
     enum ETypeJson
     {
-        widget = -1, // other
         text = 0, //WText
         boolean = 1, //WCheckBox
         integer = 2, // int //WText
         undid = 3, // under id (string) "name" //WComboBox
-        object = 4
+        object = 4,
+        widget = 5
     };
 
     virtual void                clearStructures();

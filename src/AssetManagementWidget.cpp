@@ -25,6 +25,7 @@ AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, stri
     multimap<int, string> titles;
     titles.insert(make_pair(ETypeJson::text, "name"));
     titles.insert(make_pair(ETypeJson::widget, "download-script"));
+    
     setTitles(titles);
     
     list<list<pair<string, vector<string>>>> listsUrl;

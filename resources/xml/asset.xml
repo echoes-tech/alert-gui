@@ -63,6 +63,8 @@
   <message id="Alert.asset.database-error">
       Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
   </message>
+  <message id="Alert.asset.conflict-title">Impossible to delete server</message>
+  <message id="Alert.asset.conflict">You cannot delete this server : there is at least one alert on this server remaining.</message>
 <!--    Warning message     -->
   <message id="Alert.asset-list.delete-alerts-message">
       Alerts link with asset.

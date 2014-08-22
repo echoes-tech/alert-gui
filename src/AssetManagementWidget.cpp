@@ -62,25 +62,71 @@ int AssetManagementWidget::addCustomButtonsToResourceTable(long long id, int row
 
 // Call API - POST(ADD) DELETE PUT(MODIF) ----------------------------------------
 
-Wt::WDialog *AssetManagementWidget::deleteResource(long long id)
+void AssetManagementWidget::apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
 {
-    Wt::WDialog *box = AbstractPage::deleteResource(id);
-    // a REVOIR !! Récupération des alerts par rapport a id de l'asset a sup
-    string apiAddress = getApiUrl() + "/assets/" + boost::lexical_cast<string> (id) + "/alerts/";
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&AssetManagementWidget::checkAlertsInAsset, this, _1, _2, client, box, id));
-    apiAddress += "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8()) + "&token=" + m_session->user()->token.toUTF8();
-    Wt::log("debug") << "AssetManagementWidget : [GET] address to call : " << apiAddress;
-    if (client->get(apiAddress))
+    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    if (!err)
     {
-        Wt::WApplication::instance()->deferRendering();
+        if (response.status() == Enums::EReturnCode::NO_CONTENT)
+        {
+            if (response.body() != "")
+            {
+                Wt::log("error") << " [Asset Widget] Response should be empty : "
+                        << response.body() << ".";
+            }
+        }
+        else if (response.status() == Enums::EReturnCode::CONFLICT)
+        {
+            Wt::WMessageBox::show(tr("Alert.asset.conflict-title"), tr("Alert.asset.conflict"), Wt::Ok);
+        }
+        else
+        {
+            Wt::log("error") << "[Asset Widget] Unexpected return code : " << response.status();
+            
+            Wt::log("error") << "[Asset Widget] Response body : " << response.body();
+            // FIXME: Useless once http://redmine.webtoolkit.eu/issues/3541 is implemented
+            try
+            {
+                Wt::Json::Value result;
+                Wt::Json::Object obj;
+
+                Wt::Json::parse(response.body(), result); 
+                obj = result;
+                Wt::WString message = obj.get("message");
+                
+                if(L"Conflict" == message.value())
+                {
+                    Wt::WMessageBox::show(tr("Alert.asset.conflict-title"), tr("Alert.asset.conflict"), Wt::Ok);
+                }
+                else
+                {
+                    Wt::log("error") << "[Asset Widget] Unexpected message : " << message;
+                }
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[Asset Management Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"),Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[Asset Management Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"),Wt::Ok);
+            }
+            
+        }
     }
     else
     {
-        Wt::log("error") << "Error Client Http";
+        Wt::log("warning") << "[Asset Widget] Http::Client error: " << response.body();
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),
+                              tr("Alert.asset.database-error"), Wt::Ok);
     }
-    return box;
+    updatePage();
 }
+
+
 
 // API RETURN INFOS ------------------------------------------
 
@@ -91,7 +137,9 @@ void    AssetManagementWidget::checkAlertsInAsset(boost::system::error_code err,
     delete client;
     Wt::WApplication::instance()->resumeRendering();
     if (idsAlert_.size() > 0)
+    {
         idsAlert_.clear();
+    }
     if (!err)
     {
         try
@@ -121,9 +169,13 @@ void    AssetManagementWidget::checkAlertsInAsset(boost::system::error_code err,
                 }
                 textInJSON += "</ul>";
                 if (i > 1)
+                {
                     textInBox = "<p>" + tr("Alert.asset-list.delete-alerts-message") + "</p>";
+                }
                 else
+                {
                     textInBox = "<p>" + tr("Alert.asset-list.delete-alert-message") + "</p>";
+                }
                 textInBox += textInJSON;
                 box->contents()->addWidget(new Wt::WText(textInBox));
             }

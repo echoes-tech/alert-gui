@@ -64,6 +64,9 @@
   <message id="Alert.asset.database-error">
     Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
   </message>
+  
+  <message id="Alert.asset.conflict-title">Impossible de supprimer le serveur</message>
+  <message id="Alert.asset.conflict">Vous ne pouvez pas supprimer ce serveur : il reste au moins une alerte paramétrée dessus.</message>
 
 <!--    Warning message     -->
 </messages>

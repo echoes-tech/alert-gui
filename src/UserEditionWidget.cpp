@@ -36,7 +36,7 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
     multimap<int, string> titles;
     titles.insert(make_pair(ETypeJson::text, "value"));
     titles.insert(make_pair(ETypeJson::undid, "user"));
-    setUndidName("last_name");
+    setUndidName("mail");
     setTitles(titles);
     
     list<list<pair<string, vector<string>>>> listsUrl;
@@ -199,7 +199,10 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
             Wt::Json::Object obj = result.at(cpt);
             Wt::WString firstName = obj.get("first_name");
             Wt::WString lastName = obj.get("last_name");
-            string name = firstName.toUTF8() + " " + lastName.toUTF8();
+            Wt::WString email = obj.get("mail");
+            
+//            string name = firstName.toUTF8() + " " + lastName.toUTF8();
+            string name = email.toUTF8();
             long long id = obj.get("id");
 
             vector<Wt::WStandardItem*> rowVector;

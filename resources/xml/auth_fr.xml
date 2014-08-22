@@ -145,12 +145,12 @@
   
   <!-- Emails -->
 
-  <message id="Wt.Auth.confirmmail.subject">[ECHOES Alert] Activation du compte utilisateur</message>
+  <message id="Wt.Auth.confirmmail.subject">[Echoes Alert] Activation du compte utilisateur</message>
 
   <message id="Wt.Auth.confirmmail.body">
 Bonjour {1},
 
-Nous vous remercions de votre inscription et vous souhaitons la bienvenue sur ECHOES Alert.
+Nous vous remercions de votre inscription et vous souhaitons la bienvenue sur Echoes Alert.
 
 Veuillez cliquer sur lien pour valider votre inscription ou copier et coller l'URL
 suivante dans votre navigateur : (Note : assurez-vous de copier l'URL complète,
@@ -158,18 +158,18 @@ y compris toute partie qui pourrait être sur une seconde ligne.)
 
 https://alert.echoes-tech.com/auth/mail/{2}
 
-Merci d'utiliser ECHOES Alert !
+Merci d'utiliser Echoes Alert !
 
-L'équipe ECHOES Alert.
+L'équipe Echoes Alert.
 http://alert.echoes-tech.com/
 
-© 2012, ECHOES Technologies
+© 2012, Echoes Technologies
   </message>
 
   <message id="Wt.Auth.confirmmail.htmlbody">
     <h3>Bonjour {1},</h3>
 
-    <p>Nous vous remercions de votre inscription et vous souhaitons la bienvenue sur ECHOES Alert.</p>
+    <p>Nous vous remercions de votre inscription et vous souhaitons la bienvenue sur Echoes Alert.</p>
  
     <p>Veuillez <a href="https://alert.echoes-tech.com/auth/mail/{2}">cliquer ici pour valider</a> votre
     inscription ou copier et coller l'URL suivante dans votre
@@ -178,18 +178,18 @@ http://alert.echoes-tech.com/
     
     <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
 
-    <p>Merci d'utiliser ECHOES Alert !</p>
+    <p>Merci d'utiliser Echoes Alert !</p>
 
     <p>
-        L'équipe ECHOES Alert.
+        L'équipe Echoes Alert.
         <br />
-        <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">http://alert.echoes-tech.com/</a>
+        <a href="http://alert.echoes-tech.com/" title="Echoes Alert">http://alert.echoes-tech.com/</a>
     </p>
 
-    <p><i>© 2012, ECHOES Technologies</i></p>
+    <p><i>© 2012, Echoes Technologies</i></p>
   </message>
 
-  <message id="Wt.Auth.lostpasswordmail.subject">[ECHOES Alert] Instructions de récupération de mot de passe</message>
+  <message id="Wt.Auth.lostpasswordmail.subject">[Echoes Alert] Instructions de récupération de mot de passe</message>
 
   <message id="Wt.Auth.lostpasswordmail.body">
 Bonjour {1},
@@ -208,12 +208,12 @@ y compris toute partie qui pourrait être sur une seconde ligne.)
  
 https://alert.echoes-tech.com/auth/mail/{2}
 
-Merci d'utiliser ECHOES Alert !
+Merci d'utiliser Echoes Alert !
 
-L'équipe ECHOES Alert.
+L'équipe Echoes Alert.
 http://alert.echoes-tech.com/
 
-© 2012, ECHOES Technologies
+© 2012, Echoes Technologies
   </message>
 
   <message id="Wt.Auth.lostpasswordmail.htmlbody">
@@ -237,16 +237,16 @@ http://alert.echoes-tech.com/
 
     <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
 
-    <p>Merci d'utiliser ECHOES Alert !</p>
+    <p>Merci d'utiliser Echoes Alert !</p>
 
     <p>
-        L'équipe ECHOES Alert.
+        L'équipe Echoes Alert.
         <br />
-        <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">
+        <a href="http://alert.echoes-tech.com/" title="Echoes Alert">
           http://alert.echoes-tech.com/
         </a>
     </p>
 
-    <p><i>© 2012, ECHOES Technologies</i></p>
+    <p><i>© 2012, Echoes Technologies</i></p>
   </message>
 </messages>

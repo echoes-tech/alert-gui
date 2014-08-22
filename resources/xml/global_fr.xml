@@ -191,7 +191,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <p><strong>[ECHOES Alert] Corrections de bugs</strong></p>
+                    <p><strong>[Echoes Alert] Corrections de bugs</strong></p>
                     <ul>
                     <li>Beta ouverte toute la journée</li>
                     <li>Divers bugs</li>
@@ -214,7 +214,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <p><strong>[ECHOES Alert] Corrections de bugs</strong></p>
+                    <p><strong>[Echoes Alert] Corrections de bugs</strong></p>
                     <ul>
                     <li>Beta ouverte tous les jours de 14h à 2h</li>
                     <li>[Moteur] Stabilisation : amélioration des performances
@@ -250,7 +250,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <p><strong>[ECHOES Alert] Corrections de bugs</strong></p>
+                    <p><strong>[Echoes Alert] Corrections de bugs</strong></p>
                     <ul>
                         <li> [Moteur] Correction du bug qui empêchait les SMS de partir dans certains cas</li>
                         <li> [Interface utilisateur] Correction d'un problème qui empêchait de créer une alerte </li>
@@ -266,7 +266,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <p><strong>[ECHOES Alert] Corrections de bugs</strong></p>
+                    <p><strong>[Echoes Alert] Corrections de bugs</strong></p>
                     <ul>
                         <li> [Moteur] Correction de plusieurs problèmes dans le moteur de calcul d'alertes</li>
                         <li> [Interface utilisateur] Stabilisation de l'interface</li>
@@ -285,7 +285,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">
-                    <p><strong>[ECHOES Alert] Nouvelles fonctionnalités</strong></p>
+                    <p><strong>[Echoes Alert] Nouvelles fonctionnalités</strong></p>
                     <ul>
                         <li> S'inscrire (mais ceci est déjà fait visiblement)</li>
                         <li> Commander votre première sonde</li>

@@ -117,11 +117,11 @@
   <message id="Wt.Auth.error-user-invalid">Registration failed.</message>
 
   <message id="Wt.Auth.organization-type-company">Company</message>
-  <message id="Wt.Auth.organization-type-company-info">ECHOES Alert for a company</message>
+  <message id="Wt.Auth.organization-type-company-info">Echoes Alert for a company</message>
   <message id="Wt.Auth.organization-type-individual">Individual</message>
-  <message id="Wt.Auth.organization-type-individual-info">ECHOES Alert for an individual</message>
+  <message id="Wt.Auth.organization-type-individual-info">Echoes Alert for an individual</message>
   <message id="Wt.Auth.organization-type-association">Association</message>
-  <message id="Wt.Auth.organization-type-association-info">ECHOES Alert for an association</message>
+  <message id="Wt.Auth.organization-type-association-info">Echoes Alert for an association</message>
 
   <message id="Wt.Auth.organization-name">Company name</message>
   <message id="Wt.Auth.organization-name-info">The name of your company</message>
@@ -386,7 +386,7 @@
 
     <!-- Emails -->
 
-    <message id="Wt.Auth.confirmmail.subject">[ECHOES Alert] User account activation Link</message>
+    <message id="Wt.Auth.confirmmail.subject">[Echoes Alert] User account activation Link</message>
 
     <message id="Wt.Auth.confirmmail.body">
         Hello {1},
@@ -402,12 +402,12 @@
 
         https://alert.echoes-tech.com/auth/mail/{2}
       
-        Thank you for using ECHOES Alert!
+        Thank you for using Echoes Alert!
 
-        The ECHOES Alert team.
+        The Echoes Alert team.
         http://alert.echoes-tech.com/
 
-        © 2012, ECHOES Technologies
+        © 2012, Echoes Technologies
     </message>
 
     <message id="Wt.Auth.confirmmail.htmlbody">
@@ -427,20 +427,20 @@
     
         <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
 
-        <p>Thank you for using ECHOES Alert!</p>
+        <p>Thank you for using Echoes Alert!</p>
 
         <p>
-            The ECHOES Alert team.
+            The Echoes Alert team.
             <br />
-            <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">http://alert.echoes-tech.com/</a>
+            <a href="http://alert.echoes-tech.com/" title="Echoes Alert">http://alert.echoes-tech.com/</a>
         </p>
 
         <p>
-            <i>© 2012, ECHOES Technologies</i>
+            <i>© 2012, Echoes Technologies</i>
         </p>
     </message>
 
-    <message id="Wt.Auth.lostpasswordmail.subject">[ECHOES Alert] Lost password instructions</message>
+    <message id="Wt.Auth.lostpasswordmail.subject">[Echoes Alert] Lost password instructions</message>
 
     <message id="Wt.Auth.lostpasswordmail.body">
         Hello {1},
@@ -459,12 +459,12 @@
  
         https://alert.echoes-tech.com/auth/mail/{2} 
       
-        Thank you for using ECHOES Alert!
+        Thank you for using Echoes Alert!
 
-        The ECHOES Alert team.
+        The Echoes Alert team.
         http://alert.echoes-tech.com/
 
-        © 2012, ECHOES Technologies
+        © 2012, Echoes Technologies
     </message>
 
     <message id="Wt.Auth.lostpasswordmail.htmlbody">
@@ -487,16 +487,16 @@
     
         <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
 
-        <p>Thank you for using ECHOES Alert!</p>
+        <p>Thank you for using Echoes Alert!</p>
 
         <p>
-            The ECHOES Alert team.
+            The Echoes Alert team.
             <br />
-            <a href="http://alert.echoes-tech.com/" title="ECHOES Alert">http://alert.echoes-tech.com/</a>
+            <a href="http://alert.echoes-tech.com/" title="Echoes Alert">http://alert.echoes-tech.com/</a>
         </p>
 
         <p>
-            <i>© 2012, ECHOES Technologies</i>
+            <i>© 2012, Echoes Technologies</i>
         </p>
     </message>
 

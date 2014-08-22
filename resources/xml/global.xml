@@ -189,7 +189,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <p><strong>[ECHOES Alert] Bugfixes</strong></p>
+                    <p><strong>[Echoes Alert] Bugfixes</strong></p>
                     <ul>
                     <li>Beta version opened all day</li>
                     <li>Various bugfixes</li>
@@ -212,7 +212,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <p><strong>[ECHOES Alert] Bugfixes</strong></p>
+                    <p><strong>[Echoes Alert] Bugfixes</strong></p>
                     <ul>
                     <li>Beta version opened every day between 2pm and 2am</li>
                     <li>[Engine] Stabilization : performances improved
@@ -248,7 +248,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <p><strong>[ECHOES Alert] bugfixes</strong></p>
+                    <p><strong>[Echoes Alert] bugfixes</strong></p>
                     <ul>
                         <li> [Engine] Bugfix : SMS were not always sent</li>
                         <li> [GUI] Bugfix : sometimes it was impossible to add an alert</li>
@@ -264,7 +264,7 @@
             <div class="new-update clearfix">
                 <i class="icon-wrench"></i>
                 <div class="update-done">
-                    <p><strong>[ECHOES Alert] bugfixes</strong></p>
+                    <p><strong>[Echoes Alert] bugfixes</strong></p>
                     <ul>
                         <li> [Engine] Alert calculation process bugfixes</li>
                         <li> [GUI] Interface stabilization</li>
@@ -283,7 +283,7 @@
             <div class="new-update clearfix">
                 <i class="icon-gift"></i>
                 <div class="update-done">
-                    <p><strong>[ECHOES Alert] New features</strong></p>
+                    <p><strong>[Echoes Alert] New features</strong></p>
                     <ul>
                         <li>Create an account (but it seems to be done)</li>
                         <li>Order you first probe</li>
@@ -326,6 +326,6 @@
   
   <message id="Alert.global.action">Actions</message>
   <message id="Footer.text.date">&copy; 2012 -</message>
-  <message id="Footer.text"><a href="http://www.echoes-tech.com/" target="_blank" >ECHOES Technologies</a>. Tous droits réservés.</message>
+  <message id="Footer.text"><a href="http://www.echoes-tech.com/" target="_blank" >Echoes Technologies</a>. Tous droits réservés.</message>
 
 </messages>

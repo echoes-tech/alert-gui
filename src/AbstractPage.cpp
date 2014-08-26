@@ -907,7 +907,11 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
 
                     long long id = jsonObject.get("id");
                     selectedIDExist |= id == m_selectedID;
-                    m_rowsTable.insert(make_pair(id, initRowWidgets(jsonObject, jsonResource, cpt)));
+                    vector<Wt::WInteractWidget *> widgetsToAdd = initRowWidgets(jsonObject, jsonResource, cpt);
+                    if(!widgetsToAdd.empty())
+                    {
+                        m_rowsTable.insert(make_pair(id, widgetsToAdd));
+                    }
                 }
                 if(!selectedIDExist)
                     m_selectedID = 0;

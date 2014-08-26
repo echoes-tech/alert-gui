@@ -81,6 +81,7 @@ Wt::WComboBox *InformationsWidget::popupAdd(Wt::WDialog *dialog)
 {
     m_unitComboBox = new Wt::WComboBox(dialog->contents());
     m_unitComboBox->setModel(m_unitModel);
+    m_unitComboBox->setCurrentIndex(0);
     // Fixme : WTF ?
     return m_unitComboBox;
 }

@@ -46,6 +46,13 @@ Wt::WValidator    *AssetManagementWidget::editValidator(int cpt)
     return validator;
 }
 
+void AssetManagementWidget::setDisplayedTitlesPopups()
+{
+    multimap<int, string> displayedTitles;
+    displayedTitles.insert(make_pair(ETypeJson::text, "name"));
+    m_displayedTitlesPopups = displayedTitles;
+}
+
 int AssetManagementWidget::addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable)
 {
     Wt::WFileResource *file = generateScript(id, ((Wt::WText*)getResourceTable()->elementAt(rowTable, 0)->widget(0))->text());

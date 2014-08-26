@@ -53,7 +53,7 @@ Wt::WComboBox *UnitsWidget::popupAdd(Wt::WDialog *dialog)
 {
     m_unitTypeComboBox = new Wt::WComboBox(dialog->contents());
     m_unitTypeComboBox->setModel(m_unitTypeModel);
-    
+    m_unitTypeComboBox->setCurrentIndex(0);
     return m_unitTypeComboBox;
 }
 

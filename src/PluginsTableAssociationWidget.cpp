@@ -78,20 +78,33 @@ vector<Wt::WInteractWidget*> PluginsTableAssociationWidget::initRowWidgets(Wt::J
 {    
     vector<Wt::WInteractWidget *> rowWidgets;
     
-    Wt::Json::Object jsonDetailedIda = jsonResource.at(cpt + 1);
+    try
+    {
+        Wt::Json::Object jsonDetailedIda = jsonResource.at(cpt + 1);
 
-    int filterIndex = jsonObject.get("filter_field_index");
+        int filterIndex = jsonObject.get("filter_field_index");
 
-    Wt::Json::Object informationJsonObject = jsonDetailedIda.get("information");
-    string informationName = informationJsonObject.get("name");
+        Wt::Json::Object informationJsonObject = jsonDetailedIda.get("information");
+        string informationName = informationJsonObject.get("name");
 
-    Wt::Json::Object assetJsonObject = jsonDetailedIda.get("asset");
-    string assetName = assetJsonObject.get("name");
-
-    rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(filterIndex)));
-    rowWidgets.push_back(new Wt::WText(informationName));
-    rowWidgets.push_back(new Wt::WText(assetName));
+        Wt::Json::Object assetJsonObject = jsonDetailedIda.get("asset");
+        string assetName = assetJsonObject.get("name");
         
+        rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(filterIndex)));
+        rowWidgets.push_back(new Wt::WText(informationName));
+        rowWidgets.push_back(new Wt::WText(assetName));
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[PluginsTableAssociationWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[PluginsTableAssociationWidget] JSON Type Exception";
+        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    
     return rowWidgets;
 }
 
@@ -165,11 +178,24 @@ void PluginsTableAssociationWidget::fillHostComboBox(Wt::Json::Value result, boo
         return;
     }
     
-    Wt::Json::Array& jsonArray = result;       
-    for (size_t i(0); i < jsonArray.size(); i++)
+    try
     {
-        Wt::Json::Object jsonObject = jsonArray.at(i);
-        addEnumToModel(m_assetStandardItemModel, jsonObject.get("id"), jsonObject.get("name"));
+        Wt::Json::Array& jsonArray = result;       
+        for (size_t i(0); i < jsonArray.size(); i++)
+        {
+            Wt::Json::Object jsonObject = jsonArray.at(i);
+            addEnumToModel(m_assetStandardItemModel, jsonObject.get("id"), jsonObject.get("name"));
+        }
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[PluginsTableAssociationWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[PluginsTableAssociationWidget] JSON Type Exception";
+        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     functorSendRequestInfoAndFilterComboBox();
@@ -218,69 +244,82 @@ void PluginsTableAssociationWidget::fillInfoAndFilterIndexComboBox(vectors_Json 
     m_infoStandardItemModel->clear();
     m_filterIndexStandardItemModel->clear();
     
-    Wt::Json::Array associationArrayAsset = Wt::Json::Array();    
-    if(!jsonResources.at(2).at(0).isNull())
+    try
     {
-        associationArrayAsset = jsonResources.at(2).at(0);
-    }
-    
-    Wt::Json::Array associationArrayAssetFilter = Wt::Json::Array();    
-    if(!jsonResources.at(3).at(0).isNull())
-    {
-        associationArrayAssetFilter = jsonResources.at(3).at(0);
-    }
-    
-    if(!jsonResources.at(0).at(0).isNull())
-    {        
-        Wt::WStandardItemModel* tmpInfoStandardItemModel = new Wt::WStandardItemModel();
-        Wt::Json::Array informationsArray = jsonResources.at(0).at(0);
-        for (size_t i(0); i < informationsArray.size(); i++)
-        {            
-            Wt::Json::Object information = informationsArray.at(i);
-            long long informationID = information.get("id");
-            long long informationUnitID = ((Wt::Json::Object)information.get("information_unit")).get("id");
-            
-            bool alreadyUsed = false;
-            
-            for (size_t j(0); j < associationArrayAsset.size(); j++)
-            {
-                Wt::Json::Object association = associationArrayAsset.at(j);    
-                long long associationInformationID = ((Wt::Json::Object)association.get("information")).get("id");  
-                
-                alreadyUsed |= informationID == associationInformationID;
-            }
-            
-            if(!alreadyUsed)
-            {
-                addEnumToModel(tmpInfoStandardItemModel, informationID, information.get("name"), boost::lexical_cast<string>(informationUnitID));                
-            }
-        }
-        tmpInfoStandardItemModel->sort(0);
-        while(tmpInfoStandardItemModel->rowCount() != 0)
+        Wt::Json::Array associationArrayAsset = Wt::Json::Array();    
+        if(!jsonResources.at(2).at(0).isNull())
         {
-            m_infoStandardItemModel->appendRow(tmpInfoStandardItemModel->takeRow(0));
-        }        
-    }
-    
-    if(!jsonResources.at(1).at(0).isNull())
-    {        
-        Wt::Json::Object filter = jsonResources.at(1).at(0);
-        for (int filterIndex(1); filterIndex <= (int)filter.get("nb_value"); filterIndex++)
-        {                        
-            bool alreadyUsed = false;
-            for (int j(0); j < (int) associationArrayAssetFilter.size(); j++)
-            {
-                Wt::Json::Object association = associationArrayAssetFilter.at(j);    
-                int associationFilterFieldIndex = association.get("filter_field_index");
-                
-                alreadyUsed |= filterIndex == (int)associationFilterFieldIndex;
+            associationArrayAsset = jsonResources.at(2).at(0);
+        }
+
+        Wt::Json::Array associationArrayAssetFilter = Wt::Json::Array();    
+        if(!jsonResources.at(3).at(0).isNull())
+        {
+            associationArrayAssetFilter = jsonResources.at(3).at(0);
+        }
+
+        if(!jsonResources.at(0).at(0).isNull())
+        {        
+            Wt::WStandardItemModel* tmpInfoStandardItemModel = new Wt::WStandardItemModel();
+            Wt::Json::Array informationsArray = jsonResources.at(0).at(0);
+            for (size_t i(0); i < informationsArray.size(); i++)
+            {            
+                Wt::Json::Object information = informationsArray.at(i);
+                long long informationID = information.get("id");
+                long long informationUnitID = ((Wt::Json::Object)information.get("information_unit")).get("id");
+
+                bool alreadyUsed = false;
+
+                for (size_t j(0); j < associationArrayAsset.size(); j++)
+                {
+                    Wt::Json::Object association = associationArrayAsset.at(j);    
+                    long long associationInformationID = ((Wt::Json::Object)association.get("information")).get("id");  
+
+                    alreadyUsed |= informationID == associationInformationID;
+                }
+
+                if(!alreadyUsed)
+                {
+                    addEnumToModel(tmpInfoStandardItemModel, informationID, information.get("name"), boost::lexical_cast<string>(informationUnitID));                
+                }
             }
-            
-            if(!alreadyUsed)
+            tmpInfoStandardItemModel->sort(0);
+            while(tmpInfoStandardItemModel->rowCount() != 0)
             {
-                addEnumToModel(m_filterIndexStandardItemModel, filterIndex, boost::lexical_cast<string>(filterIndex));                
+                m_infoStandardItemModel->appendRow(tmpInfoStandardItemModel->takeRow(0));
+            }        
+        }
+
+        if(!jsonResources.at(1).at(0).isNull())
+        {        
+            Wt::Json::Object filter = jsonResources.at(1).at(0);
+            for (int filterIndex(1); filterIndex <= (int)filter.get("nb_value"); filterIndex++)
+            {                        
+                bool alreadyUsed = false;
+                for (int j(0); j < (int) associationArrayAssetFilter.size(); j++)
+                {
+                    Wt::Json::Object association = associationArrayAssetFilter.at(j);    
+                    int associationFilterFieldIndex = association.get("filter_field_index");
+
+                    alreadyUsed |= filterIndex == (int)associationFilterFieldIndex;
+                }
+
+                if(!alreadyUsed)
+                {
+                    addEnumToModel(m_filterIndexStandardItemModel, filterIndex, boost::lexical_cast<string>(filterIndex));                
+                }
             }
         }
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[PluginsTableAssociationWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[PluginsTableAssociationWidget] JSON Type Exception";
+        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     
     Wt::WWidget* saveButton = dialog->footer()->children()[0];

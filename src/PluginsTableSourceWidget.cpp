@@ -189,6 +189,7 @@ void PluginsTableSourceWidget::addResourcePopup(long long sourceID)
         dialog->contents()->addWidget(addonComboBox);
         inputName->push_back(addonComboBox);
         addonComboBox->setModel(m_addonStandardItemModel);
+        addonComboBox->setCurrentIndex(0);
         addonComboBox->changed().connect(boost::bind(&PluginsTableSourceWidget::sendRequestPopupAdd, this, functor, addonComboBox, sourceID));            
         new Wt::WText("<br />", dialog->contents());
     }

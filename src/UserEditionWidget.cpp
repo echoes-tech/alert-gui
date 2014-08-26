@@ -61,6 +61,7 @@ Wt::WComboBox *UserEditionWidget::popupAdd(Wt::WDialog *dialog)
 {
     Wt::WComboBox *comboBox = new Wt::WComboBox(dialog->contents());
     comboBox->setModel(usersModel_);
+    comboBox->setCurrentIndex(0);
     return comboBox;
 }
 

@@ -177,7 +177,8 @@ void PluginsTableFilterWidget::addResourcePopup(long long filterID)
     {
         Wt::WComboBox* filterTypeComboBox = new Wt::WComboBox(dialog->contents());
         inputName->push_back(filterTypeComboBox);
-        filterTypeComboBox->setModel(m_filterTypeStandardItemModel); 
+        filterTypeComboBox->setModel(m_filterTypeStandardItemModel);
+        filterTypeComboBox->setCurrentIndex(0);
         for(int row(0); row < m_filterTypeStandardItemModel->rowCount(); row++)  
         {
             if(boost::lexical_cast<long long>(m_filterTypeStandardItemModel->item(row, 1)->text()) == m_filtersData[filterID].filterTypeID)

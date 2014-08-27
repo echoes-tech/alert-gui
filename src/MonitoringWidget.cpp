@@ -166,8 +166,11 @@ void MonitoringWidget::createUI()
             }
         }
         // FIXME: temporary deletion of code & status column until they are usefull
-        alertsSentTable->deleteColumn(5);
-        alertsSentTable->deleteColumn(2);
+        if (alertsSentTable->columnCount() >= 5)
+        {
+            alertsSentTable->deleteColumn(5);
+            alertsSentTable->deleteColumn(2);
+        }
     }  
     catch (Wt::Dbo::Exception e)
     {

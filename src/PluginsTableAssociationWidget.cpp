@@ -250,36 +250,51 @@ void PluginsTableAssociationWidget::fillInfoAndFilterIndexComboBox(vectors_Json 
         if(!jsonResources.at(2).at(0).isNull())
         {
             associationArrayAsset = jsonResources.at(2).at(0);
+            cout << "2.0 NOT NULL" << endl;
         }
 
         Wt::Json::Array associationArrayAssetFilter = Wt::Json::Array();    
         if(!jsonResources.at(3).at(0).isNull())
         {
             associationArrayAssetFilter = jsonResources.at(3).at(0);
+            cout << "3.0 NOT NULL" << endl;
         }
 
         if(!jsonResources.at(0).at(0).isNull())
-        {        
+        { 
+            cout << "0.0 NOT NULL" << endl;
             Wt::WStandardItemModel* tmpInfoStandardItemModel = new Wt::WStandardItemModel();
             Wt::Json::Array informationsArray = jsonResources.at(0).at(0);
             for (size_t i(0); i < informationsArray.size(); i++)
-            {            
+            {
+                cout << "0.0 in the loop" << endl;
+                cout << "0.0 size " << informationsArray.size() << endl;
                 Wt::Json::Object information = informationsArray.at(i);
+                cout << "0.0 inf id" << endl;
                 long long informationID = information.get("id");
+                cout << "0.0 inf unit id" << endl;
                 long long informationUnitID = ((Wt::Json::Object)information.get("information_unit")).get("id");
 
                 bool alreadyUsed = false;
 
                 for (size_t j(0); j < associationArrayAsset.size(); j++)
                 {
-                    Wt::Json::Object association = associationArrayAsset.at(j);    
-                    long long associationInformationID = ((Wt::Json::Object)association.get("information")).get("id");  
-
-                    alreadyUsed |= informationID == associationInformationID;
+                    Wt::Json::Object association = associationArrayAsset.at(j);
+                    cout << "0.0 asso inf ID" << endl;
+                    try
+                    {
+                        long long associationInformationID = ((Wt::Json::Object)association.get("information")).get("id");
+                        alreadyUsed |= informationID == associationInformationID;
+                    }
+                    catch (Wt::Json::TypeException const& e)
+                    {
+                        Wt::log("warning") << "[PluginsTableAssociationWidget] Get association Info Id - JSON Type Exception";
+                    }
                 }
 
                 if(!alreadyUsed)
                 {
+                    cout << "0.0 not already used" << endl;
                     addEnumToModel(tmpInfoStandardItemModel, informationID, information.get("name"), boost::lexical_cast<string>(informationUnitID));                
                 }
             }
@@ -291,7 +306,8 @@ void PluginsTableAssociationWidget::fillInfoAndFilterIndexComboBox(vectors_Json 
         }
 
         if(!jsonResources.at(1).at(0).isNull())
-        {        
+        { 
+            cout << "1.0 NOT NULL" << endl;
             Wt::Json::Object filter = jsonResources.at(1).at(0);
             for (int filterIndex(1); filterIndex <= (int)filter.get("nb_value"); filterIndex++)
             {                        

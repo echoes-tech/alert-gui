@@ -84,7 +84,7 @@ protected:
 
 private:
 
-    void                        initAlertValueDefinitionPopup(Wt::WTable *tableBox);
+    void                        initAlertValueDefinitionPopup();
     void                        setBox(Wt::WSelectionBox *box, Wt::WStandardItemModel *model);
     void                        assetSelected();
     void                        pluginSelected();
@@ -100,13 +100,11 @@ private:
     
     void                        cleanBox(Wt::WSelectionBox *box);
 
-    void                        createCompareWidgetBoolean();
-    void                        createCompareWidgetCustom();
-    void                        showCompareWidget(long long id);
-    void                        clearCriteria();
-    void                        addCompareLine(Enums::EInformationUnitType type);
+    void                        changeButtonAddCriteriaState();
+    void                        handleAddCriteria();
+    void                        addCompareWidget(long long assetID, long long pluginID, long long infoID);
     void                        createItemsCriteriaComboBox(long long id, Wt::WString criterion, Wt::WStandardItemModel *model);
-    Wt::WComboBox               *createCompareCriteriaComboBox(Enums::EInformationUnitType type);
+    Wt::WComboBox               *createCompareCriteriaComboBox(long long type);
 
     void                        selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
     void                        selectPlugin(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
@@ -151,13 +149,27 @@ private:
     Wt::WSelectionBox *m_boxAsset;
     Wt::WSelectionBox *m_boxPlugin;
     Wt::WSelectionBox *m_boxInfo;
+    Wt::WPushButton   *m_buttonAddCriteria;
     
     Wt::WStandardItemModel * m_assets;
     Wt::WStandardItemModel * m_plugins;
     Wt::WStandardItemModel * m_informations;
     
+    Wt::WStandardItemModel * m_booleanOperators;
+    
     // alerts criterion
-    std::map<int,Wt::WTable *> m_alertCriteria;
+    struct AlertCriterion {
+        long long unitTypeID;
+        int index;
+        long long assetID;
+        long long pluginID;
+        long long infoID;
+        Wt::WComboBox* operatorComboBox;
+        Wt::WLineEdit* lineEditValue;
+        Wt::WComboBox* comboBoxCriteria;
+        Wt::WButtonGroup* groupTrueFalse;
+    };
+    std::vector<AlertCriterion> m_alertCriteria;
     
     // end alert setting attributes
     
@@ -179,7 +191,6 @@ private:
     Wt::WTable                          *m_booleanCompareWidget; // Bool
     Wt::WTextArea                       *m_customCompareWidget; // Bool
     
-    bool                m_contentOfBooleanCheck;  //for check button true/false
     int                 checkAll_;
     /**
      * pair &lsaquo; pair &lsaquo; idAsset, idPlugin &rsaquo;
@@ -201,11 +212,10 @@ private:
     Wt::WText            *errorBool_;
     //  -------
     
-    Wt::WContainerWidget *m_compareWidgetContainer;
+    Wt::WTable              *m_compareTable;
     Wt::WContainerWidget *m_compareWidgetContainerTop;
     Wt::WContainerWidget *m_compareWidgetContainerSequence;
     
-    Wt::WPushButton      *m_buttonAddCompareCriteria;
     Wt::WPushButton      *m_buttonAddNumber;
     
     Wt::WLineEdit        *saveLineEditOne_;

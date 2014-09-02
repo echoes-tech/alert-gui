@@ -38,6 +38,7 @@
     <message id="Alert.alert.add-title-box-plugin">Application</message>
     <message id="Alert.alert.add-title-box-info">Information</message>
     <message id="Alert.alert.add-title-box-key">Valeur de la clé</message>
+    <message id="Alert.alert.add-button-add-critera">Ajouter critères</message>
     <message id="Alert.alert.add-last-info">
             Dernière valeur reçue :
     </message>
@@ -76,6 +77,9 @@
     <message id="Alert.alert.operator.ge">Supérieur ou égal</message>
     <message id="Alert.alert.operator.gt">Supérieur</message>
     <message id="Alert.alert.operator.ne">Différent</message>
+    
+    <message id="Alert.alert.boolean-operator.and">et</message>
+    <message id="Alert.alert.boolean-operator.or">ou</message>
     
     <message id="Alert.alert.form.minutes">minutes</message>
     <message id="Alert.alert.form.hours">heures</message>

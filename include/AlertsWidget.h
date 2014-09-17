@@ -44,6 +44,7 @@ public:
 
     void                        popupAddWidget(Wt::WDialog *dialog, long long id);
     void                        popupRecipients(std::string nameAlert, std::string message);
+    void                        popupRecipientsRework(std::string nameAlert, std::string message);
     
     std::vector<std::string>    getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
@@ -53,10 +54,6 @@ public:
     void                        close();
     
     void                        getAliasListFromRecipient(long long userRoleId);
-    void                        getAliasInfo(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
-    void                        getAliasAsset(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
-    void                        getAliasCriteria(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
-    void                        getAliasPlugin(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
 
     int                         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
     void                        checkPopupRecipients(std::string message, std::string time, int media);
@@ -128,6 +125,13 @@ private:
         INFORMATION = 3
     };
     
+    enum ERequestType {
+        RTASSET = 1,
+        RTPLUGIN = 2,
+        RTINFORMATION = 3,
+        RTCRITERIA = 4
+    };
+    
     //ids
     std::map<long long, std::vector<long long>> m_mapAssetPlugins;
     std::map<long long, std::vector<long long>> m_mapAssetInfos;
@@ -157,31 +161,146 @@ private:
     
     Wt::WStandardItemModel * m_booleanOperators;
     
+    // alerts criterion associated message
+    struct CriterionResponse {
+        Wt::WString message;
+        Wt::WString asset;
+        Wt::WString plugin;
+        Wt::WString criteria;
+        Wt::WString information;
+    };
+    
+    // alerts custom information
+    struct AlertCustom {
+        long long   timer;
+        std::string message;
+    };
+    
     // alerts criterion
     struct AlertCriterion {
         long long unitTypeID;
         int index;
         long long assetID;
         long long pluginID;
+        long long criteriaID;
         long long infoID;
         Wt::WComboBox* operatorComboBox;
         Wt::WLineEdit* lineEditValue;
         Wt::WComboBox* comboBoxCriteria;
+        Wt::WRegExpValidator* validatorCriteria;
         Wt::WButtonGroup* groupTrueFalse;
+        Wt::WTemplate* templateValid;
+        CriterionResponse smsRsp;
+        CriterionResponse emailRsp;
+        CriterionResponse mobileappRsp;
     };
-    std::vector<AlertCriterion> m_alertCriteria;
     
+    std::vector<AlertCriterion> m_alertCriteria;
     // end alert setting attributes
+   
+    // Check validity
+    Wt::WRegExpValidator *validateCriterionType(long long unitType);
+    
+    // clear messages
+    void clearMessages();
+    
+    // get aliases
+    void getAliases(long long userRoleId);
+    
+    // generic http ask get
+    void httpAsk(long long userRoleId, long long mediaType, long long requestType, long long criteria);
+    
+
+    // Build message
+    void updateTabContent(long long mediaType);
+    void updateMessage(std::string &tabContent, Wt::WString &message, unsigned long criteria);
+    void getRequestRsp(long long requestType, Wt::WString message, CriterionResponse &response);
+    void getMediaRsp(Wt::WString message, long long mediaType, long long requestType, long long criteria);
+    
+    // Generic http response get
+    void httpResponse(boost::system::error_code err, const Wt::Http::Message& response, long long mediaType, long long requestType, long long criteria);
+    
+    struct Header {
+        Wt::WTemplate   *addButton;
+        Wt::WComboBox   *comboBox;
+    };
+    
+    struct Row {
+        long long       id;
+        Wt::WText       *name;
+        Wt::WTemplate   *deleteButton;
+    };
+    
+    struct List {
+        long long                   currentRow;
+        long long                   currentTable;
+        struct Header               header;
+        std::vector<struct Row>     rows;
+        std::vector<Wt::WTable*>    table;
+    };
+    
+    struct Medias {
+        struct List     elt;
+        Wt::WString     message;
+    };
+    
+    struct Receivers {
+        struct List                 elt;
+        std::vector<struct Medias>  medias;
+    };
+ 
+        // rework second popup utilities
+    void changeRowsColor(Wt::WColor *highlightColor, Wt::WTable *table, long long row);
+    void addRowTableToList(struct List &s_list, Wt::WWidget *widget1, Wt::WWidget *widget2);
+    void addHeaderTableToList(struct List &s_list, Wt::WWidget *widget0, Wt::WWidget *widget1, Wt::WWidget *widget2);
+    void addRowToList(struct List &s_list, long long id, Wt::WText *name, Wt::WTemplate *deleteButton);
+    void eraseRowFromList(struct List &s_list, long long index);
+    
+    struct Media {
+        long long id;
+        long long index;
+        Wt::WText *name;
+        Wt::WTemplate *deleteButton;
+    };
+    
+    
+    struct Receiver {
+        long long id;
+        long long index;
+        long long indexMedia;
+        Wt::WText *name;
+        Wt::WTemplate *addMedia;
+        Wt::WTemplate *deleteButton;
+        Wt::WTableCell *nameCell;
+        Wt::WComboBox *mediasChoices;
+        Wt::WTable *tableMedias;
+        std::map<long long, struct Media> medias;
+    };
+    
     
     Echoes::Dbo::Session        *m_session;
     std::string                 m_apiUrl;
     Wt::Json::Value             m_alerts;
     
-    int                         time_;
+    int             time_;
+    long long       m_currentReceiver;
+    long long       m_currentMedia;
+    long long       m_rowReceiver;
+    long long       m_rowMedia;
     
+    struct Receiver m_precReceiver;
+    
+    
+    std::map<long long, struct Receiver>                                                m_selectedReceivers;
+    std::map<long long, Wt::WText*>                                                     m_selectedMedias;
+    std::map<long long, std::map<long long, AlertCustom>>                               m_custom;
+    std::multimap<long long, long long>                                                 m_mediaUserRelation;
     std::multimap<long long, std::pair<long long, std::string>>                         userInfo_;
     std::multimap<long long, std::pair<std::pair<long long, long long>, std::string>>   mediaInfo_;
+    Wt::WComboBox       *m_boxMedias;
+    Wt::WTemplate       *m_templateAddMedia;
     Wt::WTabWidget      *m_tabWidgetMessages;
+    Wt::WTabWidget      *m_tabMessages;
     std::string         m_tabContentMessageMail;
     std::string         m_tabContentMessageSMS;
     std::string         m_tabContentMessageMobileApp;

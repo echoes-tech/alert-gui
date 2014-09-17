@@ -156,5 +156,30 @@
             </div>
             
     </message>
-
+    <message id="Alert.alert.criterion.template" >
+        <div class="control-group">
+	    <div class="controls">
+                ${criterion}
+	    </div>
+	  </div>
+    </message>
+    <message id="Alert.alert.time.template" >
+        <div class="control-group">
+	    <div class="controls">
+                ${time}
+	    </div>
+	  </div>
+    </message>
+    <message id="Alert.alert.add-button">
+        <div class="button-add btn">
+            <span class='btn-pink'><i class='icon-plus'></i></span>
+        </div>
+    </message>
+    <message id="Alert.alert.remove-button">
+        <div class="btn-danger btn">
+            <span>
+                <i class='icon-remove icon-white'></i>
+            </span>
+        </div>
+    </message>
 </messages>

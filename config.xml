@@ -565,15 +565,15 @@
         <property name="auth-mail-sender-name">ECHOES Alert</property>
         <property name="auth-mail-sender-address">noreply-auth@echoes-tech.com</property>
 
-        <property name="db-host">172.16.3.202</property>
+        <property name="db-host">172.16.3.212</property>
         <property name="db-port">5432</property>
         <property name="db-name">echoes</property>
         <property name="db-user">echoes</property>
         <property name="db-password">toto</property>
 
-        <property name="api-host">dev-api01.echoes-tech.com</property>
-        <property name="api-port">443</property>
-        <property name="api-https">true</property>
+        <property name="api-host">127.0.0.1</property>
+        <property name="api-port">8081</property>
+        <property name="api-https">false</property>
 	</properties>
 
     </application-settings>

@@ -45,7 +45,7 @@
     <message id="Alert.alert.add-compare">
             <p>Critères de comparaison.</p>
     </message>
-    <message id="Alert.alert.button-save-continu">Enregistrer et continuer</message>
+    <message id="Alert.alert.button-save-continue">Enregistrer et continuer</message>
     <message id="Alert.alert.message-true">Vrai</message>
     <message id="Alert.alert.message-false">Faux</message>
     <message id="Alert.alert.message-value">

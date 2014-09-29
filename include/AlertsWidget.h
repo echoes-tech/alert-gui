@@ -27,7 +27,7 @@
 #include <Wt/Http/Message>
 #include <Wt/WRandom>
 #include <Wt/WStandardItemModel>
-
+#include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <boost/system/error_code.hpp>
 
@@ -35,6 +35,7 @@
 
 #include "GlobalIncludeFile.h"
 #include "ApiManagement.h"
+#include "BoxInBoxMenu.h"
 
 class AlertsWidget :
 public AbstractPage
@@ -44,7 +45,7 @@ public:
 
     void                        popupAddWidget(Wt::WDialog *dialog, long long id);
     void                        popupRecipients(std::string nameAlert, std::string message);
-    void                        popupRecipientsRework(std::string nameAlert, std::string message);
+    void                        popupNewRecipientsRework(std::string nameAlert, std::string message);
     
     std::vector<std::string>    getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
@@ -56,7 +57,8 @@ public:
     void                        getAliasListFromRecipient(long long userRoleId);
 
     int                         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
-    void                        checkPopupRecipients(std::string message, std::string time, int media);
+    /*void                        checkPopupRecipients(std::string message, std::string time, int media); */
+    void                        checkNewPopupRecipientsRework(string initialMessage);
 
     void                        addResource(std::vector<Wt::WInteractWidget*>* argument);
     void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
@@ -71,6 +73,15 @@ public:
     void                        modifRecip(long long id);
 
     void                        postAlertCallApi(std::string message);
+    
+    
+    // Menu setting
+    void addReceiver(long long id, long long index, BoxInBoxMenu *menu);
+    void deleteReceiver(long long id, long long index, BoxInBoxMenu *menu);
+    void selectReceiver(long long id, long long index, BoxInBoxMenu *menu);
+    void addMedia(long long id, long long index, BoxInBoxMenu *menu);
+    void deleteMedia(long long id, long long index, BoxInBoxMenu *menu);
+    void selectMedia(long long id, long long index, BoxInBoxMenu *menu);
     
 protected:
     virtual void                clearStructures();
@@ -106,9 +117,6 @@ private:
     void                        selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
     void                        selectPlugin(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
     void                        selectInfo(long long id, Wt::WSelectionBox *boxInfo, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxAsset);
-
-    void                        errorsHideOne(std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>> error);
-    void                        errorsHideTwo(std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>> error);
 
     
     // validator type
@@ -197,7 +205,7 @@ private:
     
     std::vector<AlertCriterion> m_alertCriteria;
     // end alert setting attributes
-   
+    
     // Check validity
     Wt::WRegExpValidator *validateCriterionType(long long unitType);
     
@@ -219,81 +227,47 @@ private:
     
     // Generic http response get
     void httpResponse(boost::system::error_code err, const Wt::Http::Message& response, long long mediaType, long long requestType, long long criteria);
-    
-    struct Header {
-        Wt::WTemplate   *addButton;
-        Wt::WComboBox   *comboBox;
+
+    enum ERrowType {
+        HEADER = 1,
+        ITEM = 2
     };
     
-    struct Row {
-        long long       id;
-        Wt::WText       *name;
-        Wt::WTemplate   *deleteButton;
+    enum EColor {
+        HIGHLIGHT = 1,
+        HOVER = 2
     };
     
-    struct List {
-        long long                   currentRow;
-        long long                   currentTable;
-        struct Header               header;
-        std::vector<struct Row>     rows;
-        std::vector<Wt::WTable*>    table;
+    enum EInteractions {
+        ADD = 0,
+        MODIF = 1,
+        REMOVE = 2,
+        SELECT = 3,
     };
     
-    struct Medias {
-        struct List     elt;
-        Wt::WString     message;
+    struct Message
+    {
+        long long       receiverId;
+        long long       mediaId;
+        long long       timer;
+        Wt::WString     *str;
     };
-    
-    struct Receivers {
-        struct List                 elt;
-        std::vector<struct Medias>  medias;
-    };
- 
-        // rework second popup utilities
-    void changeRowsColor(Wt::WColor *highlightColor, Wt::WTable *table, long long row);
-    void addRowTableToList(struct List &s_list, Wt::WWidget *widget1, Wt::WWidget *widget2);
-    void addHeaderTableToList(struct List &s_list, Wt::WWidget *widget0, Wt::WWidget *widget1, Wt::WWidget *widget2);
-    void addRowToList(struct List &s_list, long long id, Wt::WText *name, Wt::WTemplate *deleteButton);
-    void eraseRowFromList(struct List &s_list, long long index);
-    
-    struct Media {
-        long long id;
-        long long index;
-        Wt::WText *name;
-        Wt::WTemplate *deleteButton;
-    };
-    
-    
-    struct Receiver {
-        long long id;
-        long long index;
-        long long indexMedia;
-        Wt::WText *name;
-        Wt::WTemplate *addMedia;
-        Wt::WTemplate *deleteButton;
-        Wt::WTableCell *nameCell;
-        Wt::WComboBox *mediasChoices;
-        Wt::WTable *tableMedias;
-        std::map<long long, struct Media> medias;
-    };
-    
     
     Echoes::Dbo::Session        *m_session;
     std::string                 m_apiUrl;
     Wt::Json::Value             m_alerts;
     
     int             time_;
-    long long       m_currentReceiver;
-    long long       m_currentMedia;
     long long       m_rowReceiver;
     long long       m_rowMedia;
     
-    struct Receiver m_precReceiver;
+    /* long long = media*/
+    std::map<long long, struct Message> m_messages;
     
+    Wt::WTextArea                       *m_messageArea;
+    Wt::WLineEdit                       *m_timer;
+    Wt::WTable                          *m_messageTable;
     
-    std::map<long long, struct Receiver>                                                m_selectedReceivers;
-    std::map<long long, Wt::WText*>                                                     m_selectedMedias;
-    std::map<long long, std::map<long long, AlertCustom>>                               m_custom;
     std::multimap<long long, long long>                                                 m_mediaUserRelation;
     std::multimap<long long, std::pair<long long, std::string>>                         userInfo_;
     std::multimap<long long, std::pair<std::pair<long long, long long>, std::string>>   mediaInfo_;
@@ -304,7 +278,8 @@ private:
     std::string         m_tabContentMessageMail;
     std::string         m_tabContentMessageSMS;
     std::string         m_tabContentMessageMobileApp;
-
+    
+    Wt::WTable *m_table;
     
     // FIXME : to be refactored and included in m_alertCriteria
     Wt::WTable                          *m_booleanCompareWidget; // Bool
@@ -316,10 +291,7 @@ private:
      * , pair &lsaquo; idInfo, idKey &rsaquo; &rsaquo;
      */
     std::pair<std::pair<long long, long long>, std::pair<long long, long long>>         idAll_;
-    
-    std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>                                       resourcesUnitOne;
-    std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>             resourcesUnitTwo;
-    
+  
     //  Errors Messages ------
     Wt::WText           *m_textErrorForAsset;
     Wt::WText           *m_textErrorForPlugin; 

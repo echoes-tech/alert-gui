@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+    <message id="Alert.box-menu.add-button">
+        <div class="button-add btn">
+            <span class='btn-pink'><i class='icon-plus'></i></span>
+        </div>
+    </message>
+    <message id="Alert.box-menu.modif-button">
+        <div class="btn btn-inverse">
+            <span class='input-group-btn'><i class='icon-edit icon-white'></i></span>
+        </div>
+    </message>
+    <message id="Alert.box-menu.remove-button">
+        <div class="btn-danger btn">
+            <span>
+                <i class='icon-remove icon-white'></i>
+            </span>
+        </div>
+    </message>
+</messages>

@@ -45,7 +45,7 @@
     <message id="Alert.alert.add-compare">
             <p>Compare criteria</p>
     </message>
-    <message id="Alert.alert.button-save-continu">Save and continue</message>
+    <message id="Alert.alert.button-save-continue">Save and continue</message>
     <message id="Alert.alert.message-true">True</message>
     <message id="Alert.alert.message-false">False</message>
     <message id="Alert.alert.message-value">Value</message>

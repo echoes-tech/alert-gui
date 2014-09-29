@@ -44,7 +44,9 @@ void PluginsTableSearchWidget::fillModel(Wt::Json::Value result, Wt::WComboBox* 
     m_searchTypeStandardItemModel->clear();
     
     if(result.isNull())
+    {
         return;
+    }
         
     Wt::Json::Array& jsonArray = result;   
     
@@ -57,10 +59,15 @@ void PluginsTableSearchWidget::fillModel(Wt::Json::Value result, Wt::WComboBox* 
     }
     
     if(searchID > 0)
+    {
         for(int row(0); row < m_searchTypeStandardItemModel->rowCount(); row++)    
+        {
             if(boost::lexical_cast<long long>(m_searchTypeStandardItemModel->item(row, 1)->text()) == m_searchesData[searchID].searchTypeID)
+            {
                 searchTypeComboBox->setCurrentIndex(row);
-    
+            }
+        }
+    }
     searchTypeComboBox->changed().connect(boost::bind(&PluginsTableSearchWidget::sendRequestPopupAdd, this, functorHandleRequestPopupAdd, searchTypeComboBox, searchID));        
     sendRequestPopupAdd(functorHandleRequestPopupAdd, searchTypeComboBox, searchID);
 }
@@ -96,7 +103,9 @@ void PluginsTableSearchWidget::updatePage()
 vector<Wt::WInteractWidget *> PluginsTableSearchWidget::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
 {    
     if(cpt == 0)
+    {
         m_searchesData.clear();
+    }
     
     struct SearchData searchData;
         
@@ -127,7 +136,9 @@ vector<Wt::WInteractWidget *> PluginsTableSearchWidget::initRowWidgets(Wt::Json:
             searchParametersString += ": ";
             searchParametersString += searchParameterValue;
             if(cpt != (int) jsonArrayParameters.size() - 1)
+            {
                 searchParametersString += "<br />";
+            }
             
             searchData.parametersValue[searchParameterID] = searchParameterValue;
         }
@@ -283,7 +294,9 @@ void PluginsTableSearchWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt:
         
         Wt::WLineEdit* lineEdit = new Wt::WLineEdit(paramsContainer);
         if(searchID > 0)
+        {
             lineEdit->setText(m_searchesData[searchID].parametersValue[sourceParameterID]);
+        }
         
         Wt::WString wsName = jsonObject.get("name");
         lineEdit->setAttributeValue("name", wsName);

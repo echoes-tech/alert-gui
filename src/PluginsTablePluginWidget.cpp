@@ -47,25 +47,42 @@ void PluginsTablePluginWidget::fillModel(Wt::Json::Value result)
     m_assetsStandardItemModel->clear();
     Wt::Json::Array& jsonArray = result;   
     
-    for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+    
+    try
     {
-        Wt::Json::Object jsonObject = jsonArray.at(cpt);
-        long long alertId = jsonObject.get("id");
-        Wt::WString alertName = jsonObject.get("name");
-        
-        Wt::WStandardItem *itemId = new Wt::WStandardItem();
-        Wt::WStandardItem *itemName = new Wt::WStandardItem();
+        for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+        {
+            Wt::Json::Object jsonObject = jsonArray.at(cpt);
+            long long alertId = jsonObject.get("id");
+            Wt::WString alertName = jsonObject.get("name");
 
-        vector<Wt::WStandardItem*> rowVector;
+            Wt::WStandardItem *itemId = new Wt::WStandardItem();
+            Wt::WStandardItem *itemName = new Wt::WStandardItem();
 
-        itemName->setText(alertName);
-        rowVector.push_back(itemName);
-        itemId->setText(boost::lexical_cast<string>(alertId));
-        rowVector.push_back(itemId);     
-        
-        m_assetsStandardItemModel->appendRow(rowVector);
+            vector<Wt::WStandardItem*> rowVector;
+
+            itemName->setText(alertName);
+            rowVector.push_back(itemName);
+            itemId->setText(boost::lexical_cast<string>(alertId));
+            rowVector.push_back(itemId);     
+
+            m_assetsStandardItemModel->appendRow(rowVector);
+        }
         
     }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[PluginsTableAssociationWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[PluginsTableAssociationWidget] JSON Type Exception";
+    }
+    
+    
+    
+    
 }
 
 Wt::WComboBox *PluginsTablePluginWidget::popupAdd(Wt::WDialog *dialog)
@@ -79,7 +96,6 @@ Wt::WComboBox *PluginsTablePluginWidget::popupAdd(Wt::WDialog *dialog)
     boost::function<void (Wt::Json::Value)> functorFillModel = boost::bind(&PluginsTablePluginWidget::fillModel, this, _1);    
     string resource = "assets";
     sendHttpRequestGet(resource, vector<string>(), functorFillModel);
-    
     
     return m_assetComboBox;
 }

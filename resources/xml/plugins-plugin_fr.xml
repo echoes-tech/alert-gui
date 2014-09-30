@@ -7,6 +7,7 @@
     <!--body-->
     <message id="Alert.plugins-plugin.name-name">Nom</message>
     <message id="Alert.plugins-plugin.name-desc">Description</message>
+    <message id="Alert.plugins-plugin.name-asset">Serveur</message>
     <message id="Alert.plugins-plugin.modif-button">Modifier</message>
     <message id="Alert.plugins-plugin.delete-button">Supprimer</message>
     <!--footer-->

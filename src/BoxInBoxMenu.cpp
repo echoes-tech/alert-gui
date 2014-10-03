@@ -6,6 +6,7 @@
  */
 
 #include <vector>
+#include <typeinfo>
 
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
@@ -20,6 +21,8 @@
 #include <Wt/WTable>
 #include <Wt/WColor>
 #include <Wt/WCssDecorationStyle>
+#include <bits/stl_map.h>
+#include <bits/stl_vector.h>
 
 #include "BoxInBoxMenu.h"
 
@@ -101,7 +104,7 @@ void BoxInBoxMenu::addRow(long long id, long long type
     {
         while (newRow.widgets.size() < (unsigned long long) (m_columnNumber - 1))
         {
-            newRow.widgets.push_back(new Wt::WText(""));
+            newRow.widgets.push_back(NULL);
         }
     }
     
@@ -205,7 +208,10 @@ void BoxInBoxMenu::deleteRow(long long index)
 
         for (long unsigned i = 0; i < it->widgets.size(); i++)
         {
-            m_table->elementAt(index, i)->removeWidget(it->widgets.at(i));
+            if (it->widgets.at(i) != NULL)
+            {
+                m_table->elementAt(index, i)->removeWidget(it->widgets.at(i));
+            }
         }
         it->widgets.clear();
 
@@ -288,12 +294,36 @@ void BoxInBoxMenu::deleteAll()
     Wt::log("info") << "deleting " << m_rows.size() << " rows";
     while (m_rows.size())
     {
-        deleteRow(0);
+        if (m_rows.at(0).interactions.find(EInteractions::REMOVE) != m_rows.at(0).interactions.end())
+        {
+            m_rows.at(0).interactions.at(EInteractions::REMOVE)(m_rows.at(0).id, m_rows.at(0).index, this);
+        }
+        else
+        {
+            deleteRow(0);
+        }
     }
-    
+
     m_rows.clear();
     m_table->clear();
     m_table->hide();
+}
+
+int BoxInBoxMenu::getColumnSpan(std::vector<Wt::WWidget*>::const_iterator itC, std::vector<Wt::WWidget*>::const_iterator itEnd)
+{
+    int ret = 1;
+
+    itC++;
+    while (itC != itEnd)
+    {
+        if (*itC != NULL)
+        {
+            break ;
+        }
+        ret++;
+        itC++;
+    }
+    return (ret);
 }
 
 void BoxInBoxMenu::updateTable()
@@ -304,7 +334,7 @@ void BoxInBoxMenu::updateTable()
     m_table->setStyleClass("table");
     m_table->addStyleClass("table-responsive");
     
-    Wt::log("info") << "updateTable " << m_table->rowCount();
+    Wt::log("info") << "updateTable with " << m_table->rowCount() << " rows";
     
     for (std::vector<struct Row>::iterator itR = m_rows.begin() ; itR != m_rows.end() ; itR++)
     {
@@ -316,21 +346,36 @@ void BoxInBoxMenu::updateTable()
         }
         for (std::vector<Wt::WWidget*>::const_iterator itC = itR->widgets.begin(); itC != itR->widgets.end() ; itC++)
         {
+            if (*itC == NULL)
+            {
+                continue ;
+            }
+            long columnSpan = getColumnSpan(itC, itR->widgets.end());
+            m_table->elementAt(y, x)->setColumnSpan(columnSpan);
             if (doRemove)
             {
                 m_table->elementAt(y, x)->removeWidget(*itC);
             }
-            if (m_formatted == true)
+
+            if ((Wt::WText*) dynamic_cast<Wt::WText*> (*itC))
             {
-                m_table->elementAt(y, x)->setHeight(m_heightFormat);
-                m_table->elementAt(y, x)->setWidth(m_widthFormat.at(x));
-                m_table->elementAt(y, x)->setContentAlignment(Wt::AlignmentFlag::AlignCenter);
+                if (!((Wt::WText*)(*itC))->text().toUTF8().empty())
+                {
+                    m_table->elementAt(y, x)->setPadding(Wt::WLength(5), Wt::Left);
+                    m_table->elementAt(y, x)->addWidget(*itC);
+                }
             }
-
-            m_table->elementAt(y, x)->addWidget(*itC);
-
+            else
+            {
+                m_table->elementAt(y, x)->addWidget(*itC);
+            }
+            if (m_formatted)
+            {
+                m_table->elementAt(y, x)->resize(m_widthFormat.at(x), m_heightFormat);
+            }
+            m_table->elementAt(y, x)->setVerticalAlignment(Wt::AlignmentFlag::AlignMiddle);
             updateRowColor(y, x);
-            x++;
+            x += columnSpan;
         }
         y++;
     }
@@ -371,7 +416,6 @@ bool BoxInBoxMenu::rowIdExist(long long id)
     {
         if (itR->id == id)
         {
-            Wt::log("info") << "id | itR->id: " << id << " | " << itR->id;
             return (true);
         }
     }

@@ -163,7 +163,7 @@
 	    </div>
 	  </div>
     </message>
-    <message id="Alert.alert.time.template" >
+    <message id="Alert.alert.time.template">
         <div class="control-group">
 	    <div class="controls">
                 ${time}
@@ -181,5 +181,12 @@
                 <i class='icon-remove icon-white'></i>
             </span>
         </div>
+    </message>
+    <message id="Alert.alert.valid.template">
+        <div class="control-group">
+	    <div class="controls">
+                ${input}
+	    </div>
+	  </div>
     </message>
 </messages>

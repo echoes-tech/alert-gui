@@ -16,6 +16,7 @@
 
 #include <Wt/WStandardItemModel>
 #include <Wt/WStandardItem>
+#include <bits/stl_vector.h>
 
 #include "AbstractPage.h"
 
@@ -342,14 +343,13 @@ void AbstractPage::addResourcePopup()
 
             if (title->first == ETypeJson::text)
             {
-                input = new Wt::WLineEdit(dialogAdd_->contents());
+                Wt::WContainerWidget *inputCW = new Wt::WContainerWidget(dialogAdd_->contents());
+                inputCW->addStyleClass("control-group controls");
+                
+                input = new Wt::WLineEdit(inputCW);
                 //FIXME
-                //                input->setValidator(editValidator(cpt));
+                input->setValidator(editValidator(ETypeJson::text));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-                if (inputName->size() == 0)
-                {
-                    input->setFocus();
-                }
                 inputName->push_back(input);
             }
             else if (title->first == ETypeJson::boolean)
@@ -357,10 +357,10 @@ void AbstractPage::addResourcePopup()
                 Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
                 inputName->push_back(checkBox);
             }
-            else if (title->first == ETypeJson::integer)
+            else if (title->first == ETypeJson::number)
             {
                 input = new Wt::WLineEdit(dialogAdd_->contents());
-                input->setValidator(editValidator(cpt));
+                input->setValidator(editValidator(ETypeJson::number));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
                 if (inputName->size() == 0)
                 {
@@ -433,32 +433,33 @@ void AbstractPage::modifResourcePopup(long long id)
 
                 switch (title->first)
                 {
-                case ETypeJson::text:
-                {
-                    string nameResource = ((Wt::WText*)(itElem))->text().toUTF8();
-                    string newName = nameResource;
-                    if (nameResource.size() > SIZE_NAME + SIZE_NAME)
+                    case ETypeJson::text:
                     {
-                        newName.resize(newName.size() + 3, '.');
-                    }
-                    Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif->contents());
-                    // FIXME: ne marche pas quand c'est un mail / tel, cf. medias
-                    input->setValidator(editValidator(ETypeJson::text));
-                    input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
-                    if (inputName->size() == 0)
-                    {
-                        input->setFocus();
-                    }
-                    input->setToolTip(Wt::WString::fromUTF8(nameResource));
-                    inputName->push_back(input);
-                    Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
+                        string nameResource = ((Wt::WText*)(itElem))->text().toUTF8();
+                        string newName = nameResource;
+                        if (nameResource.size() > SIZE_NAME + SIZE_NAME)
+                        {
+                            newName.resize(newName.size() + 3, '.');
+                        }
+                    
+                        Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif->contents());
+                        // FIXME: ne marche pas quand c'est un mail / tel, cf. medias
+                        input->setValidator(editValidator(title->first));
+                        input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
+                        if (inputName->size() == 0)
+                        {
+                            input->setFocus();
+                        }
+                        input->setToolTip(Wt::WString::fromUTF8(nameResource));
+                        inputName->push_back(input);
+                        Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                          + title->second), dialogModif->contents());
-                    error2->hide();
-                    errorMessage.push_back(error2);
-                    new Wt::WText("<br />", dialogModif->contents());
-                    break;
-                }
-                case ETypeJson::integer:
+                        error2->hide();
+                        errorMessage.push_back(error2);
+                        new Wt::WText("<br />", dialogModif->contents());
+                        break;
+                    }
+                case ETypeJson::number:
                 {
                     string nameResource = ((Wt::WText*)(itElem))->text().toUTF8();
                     string newName = nameResource;
@@ -566,6 +567,20 @@ void AbstractPage::popupCheck(vector<Wt::WInteractWidget*>* inputName, vector<Wt
         //check = checkInput(inputName, errorMessage);
     }
 
+    for (vector<Wt::WInteractWidget*>::iterator itInput = inputName->begin() ; itInput != inputName->end() ; itInput++)
+    {
+        Wt::log("info") << "for loop";
+        if ((Wt::WLineEdit*) dynamic_cast <Wt::WLineEdit*> (*itInput) != NULL)
+        {
+            Wt::log("info") << "pass test: " << ((Wt::WLineEdit*)(*itInput))->text();
+            if (((Wt::WLineEdit*)(*itInput))->validate() != Wt::WValidator::Valid)
+            {
+                Wt::log("info") << "shoudln't pass test";
+                dialog->show();
+                return ;
+            }
+        }
+    }
     if (check == 0)
     {
         id > 0 ? modifResource(inputName, id) : addResource(inputName);
@@ -952,7 +967,7 @@ vector<Wt::WInteractWidget *> AbstractPage::initRowWidgets(Wt::Json::Object json
                 rowWidgets.push_back(checkBox);
                 break;
             }
-            case ETypeJson::integer:
+            case ETypeJson::number:
             {
                 int number = jsonObject.get(itTitles->second);
                 rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(number)));

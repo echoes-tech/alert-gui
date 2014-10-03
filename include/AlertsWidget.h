@@ -122,8 +122,10 @@ private:
     // validator type
     enum EValidatorType
     {
-        VALIDATOR_INT = 0,
-        VALIDATOR_FLOAT = 1
+        VALIDATOR_STRING = 0,
+        VALIDATOR_FLOAT = 1,
+        VALIDATOR_INT = 2,
+        VALIDATOR_TIMER = 3
     };
     
     // alert setting attributes
@@ -212,12 +214,14 @@ private:
     // clear messages
     void clearMessages();
     
+    // get criteria
+    void getCriteriaSelection();
+    
     // get aliases
     void getAliases(long long userRoleId);
     
     // generic http ask get
     void httpAsk(long long userRoleId, long long mediaType, long long requestType, long long criteria);
-    
 
     // Build message
     void updateTabContent(long long mediaType);
@@ -226,7 +230,7 @@ private:
     void getMediaRsp(Wt::WString message, long long mediaType, long long requestType, long long criteria);
     
     // Generic http response get
-    void httpResponse(boost::system::error_code err, const Wt::Http::Message& response, long long mediaType, long long requestType, long long criteria);
+    void handleHttpResponse(Wt::Json::Value result, long long mediaType, long long requestType, long long criteria, long long userRoleId);
 
     enum ERrowType {
         HEADER = 1,
@@ -253,6 +257,13 @@ private:
         Wt::WString     *str;
     };
     
+    struct Aliases
+    {
+        Wt::WString *email;
+        Wt::WString *sms;
+        Wt::WString *mobile;
+    };
+    
     Echoes::Dbo::Session        *m_session;
     std::string                 m_apiUrl;
     Wt::Json::Value             m_alerts;
@@ -261,12 +272,27 @@ private:
     long long       m_rowReceiver;
     long long       m_rowMedia;
     
-    /* long long = media*/
-    std::map<long long, struct Message> m_messages;
+    /* <media_id, media_name> */
+    std::map<long long, std::string>       m_nameFromMedia;
+    /* <receiver_id, receiver_name> */
+    std::map<long long, std::string>       m_nameFromReceiver;
+    /* <media_id, message> */
+    std::map<long long, struct Message>    m_messages;
+    /* <user_id, aliases> */
+    std::map<long long, struct Aliases>    m_userAliases;
+    /* <media_id, media type>*/
+    std::map<long long, long long>         m_typesFromMedia;
+    /* <media_id, user_id> */
+    std::map<long long, long long>         m_userFromMedia;
+    /* <user_id, media_id> */
+    std::multimap<long long, long long>    m_mediasFromUser;
     
-    Wt::WTextArea                       *m_messageArea;
-    Wt::WLineEdit                       *m_timer;
-    Wt::WTable                          *m_messageTable;
+    
+    Wt::WTextArea   *m_messageArea;
+    Wt::WLineEdit   *m_timer;
+    Wt::WTable      *m_messageTable;
+    Wt::WText       *m_messageReceiver;
+    Wt::WText       *m_messageMedia;
     
     std::multimap<long long, long long>                                                 m_mediaUserRelation;
     std::multimap<long long, std::pair<long long, std::string>>                         userInfo_;

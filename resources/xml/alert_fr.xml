@@ -21,6 +21,7 @@
     <message id="Alert.alert.name-alert_media_specializations">Nombre de destinataires</message>
     <message id="Alert.alert.name-last_attempt">Dernier envoi</message>
     <message id="Alert.alert.name-modif-dest">Modifier dest</message>
+    
     <!--footer-->
     <message id="Alert.alert.search-bar">Recherche : </message>
         <!-- Paginate -->

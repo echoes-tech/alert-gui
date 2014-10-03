@@ -48,6 +48,7 @@ public:
     long long getIndex();
     bool rowIdExist(long long id);
     BoxInBoxMenu* getSubMenu(long long id);
+    int getColumnSpan(std::vector<Wt::WWidget*>::const_iterator itC, std::vector<Wt::WWidget*>::const_iterator itEnd);
     
     
     enum ERowType {

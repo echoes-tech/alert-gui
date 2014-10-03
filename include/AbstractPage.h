@@ -144,9 +144,29 @@ protected:
         widget = -1, // other
         text = 0, //WText
         boolean = 1, //WCheckBox
-        integer = 2, // int //WText
+        number = 2, // int //WText
         undid = 3, // under id (string) "name" //WComboBox
         object = 4
+    };
+    
+    enum ETextSpecial
+    {
+        mail = 0,
+        mobile = 1,
+        date = 2
+    };
+    
+    enum ENumberSpecial
+    {
+        notnull = 0,
+        sunsigned = 1,
+        sfloat = 2
+    };
+    
+    enum EMandatory
+    {
+        is = 0,
+        isnot = 1
     };
 
     virtual void                clearStructures();

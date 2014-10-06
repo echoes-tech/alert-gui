@@ -207,7 +207,7 @@ void AbstractPage::addTableSecondHeader()
     int columnTable(0);
 
     m_resourceTable->elementAt(0, 0)->setAttributeValue("style", "border-left:0;");
-    for (multimap<int, string>::iterator it = m_titles.begin(); it != m_titles.end(); it++)
+    for (std::vector<std::pair <int, string>>::iterator it = m_titles.begin(); it != m_titles.end(); it++)
     {
         new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*it).second),
                       m_resourceTable->elementAt(0, columnTable++));
@@ -333,34 +333,49 @@ void AbstractPage::addResourcePopup()
     dialogAdd_->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
 
     int cpt(0);
-    for (multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
+    for (std::vector<std::pair <int, string>>::iterator title = m_displayedTitlesPopups.begin();
             title != m_displayedTitlesPopups.end(); title++)
     {
-        if (title->first >= 0)
+        Wt::log("info") << "title second: " << title->second;
+        
+        bool isMandatory = (bool)(title->first & 0x1);
+        int specialType = (title->first >> 4) & 0xF;
+        int jsonType = (title->first >> 8) & 0xF;
+        int fullType = title->first;
+    
+        Wt::log("info") << "jsonType: " << jsonType;
+        Wt::log("info") << "specialType: " << specialType;
+        Wt::log("info") << "mandatory: " << isMandatory;
+        
+        Wt::log("info") << "fullType: " << fullType;
+        
+        if (jsonType != 5)
         {
             new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
                           + " : <br />", dialogAdd_->contents());
 
-            if (title->first == ETypeJson::text)
+            if (jsonType == ETypeJson::text)
             {
+                Wt::log("info") << "add ETypeJson::text";
                 Wt::WContainerWidget *inputCW = new Wt::WContainerWidget(dialogAdd_->contents());
                 inputCW->addStyleClass("control-group controls");
                 
                 input = new Wt::WLineEdit(inputCW);
                 //FIXME
-                input->setValidator(editValidator(ETypeJson::text));
+                input->setValidator(AbstractPage::editValidator(fullType));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
                 inputName->push_back(input);
             }
-            else if (title->first == ETypeJson::boolean)
+            else if (jsonType == ETypeJson::boolean)
             {
                 Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
                 inputName->push_back(checkBox);
             }
-            else if (title->first == ETypeJson::number)
+            else if (jsonType == ETypeJson::number)
             {
+                Wt::log("info") << "add ETypeJson::number";
                 input = new Wt::WLineEdit(dialogAdd_->contents());
-                input->setValidator(editValidator(ETypeJson::number));
+                input->setValidator(AbstractPage::editValidator(fullType));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
                 if (inputName->size() == 0)
                 {
@@ -368,11 +383,11 @@ void AbstractPage::addResourcePopup()
                 }
                 inputName->push_back(input);
             }
-            else if (title->first == ETypeJson::undid)
+            else if (jsonType == ETypeJson::undid)
             {
                 inputName->push_back(popupAdd(dialogAdd_));
             }
-            else if (title->first == ETypeJson::object)
+            else if (jsonType == ETypeJson::object)
             {
                 inputName->push_back(popupAdd(dialogAdd_));
             }
@@ -416,7 +431,7 @@ void AbstractPage::modifResourcePopup(long long id)
             for (Wt::WInteractWidget *itElem : itTable->second)
             {
 
-                multimap<int, string>::iterator title;
+                std::vector<std::pair <int, string>>::iterator title;
                 unsigned int correctTitlefinder = 0;
                 for (title = m_displayedTitlesPopups.begin(); title != m_displayedTitlesPopups.end(); title++)
                 {
@@ -425,13 +440,17 @@ void AbstractPage::modifResourcePopup(long long id)
                         break;
                     }
                 }
-                if (title->first >= 0)
+                if (((title->first >> 8) & 0xF) != 5)
                 {
                     new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + title->second)
                                   + " : <br />", dialogModif->contents());
                 }
 
-                switch (title->first)
+                int fullType = title->first;
+                int jsonType = (((title->first >> 8) & 0xF) > 0 ? (title->first >> 8) & 0xF : 0);
+                Wt::log("info") << " :::::: Type == " << jsonType;
+                Wt::log("info") << " :::::: fullType == " << fullType;
+                switch (jsonType)
                 {
                     case ETypeJson::text:
                     {
@@ -444,7 +463,7 @@ void AbstractPage::modifResourcePopup(long long id)
                     
                         Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif->contents());
                         // FIXME: ne marche pas quand c'est un mail / tel, cf. medias
-                        input->setValidator(editValidator(title->first));
+                        input->setValidator(AbstractPage::editValidator(fullType));
                         input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
                         if (inputName->size() == 0)
                         {
@@ -468,7 +487,7 @@ void AbstractPage::modifResourcePopup(long long id)
                         newName.resize(newName.size() + 3, '.');
                     }
                     Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif->contents());
-                    input->setValidator(new Wt::WRegExpValidator(Wt::WString::fromUTF8("^[0123456789]+")));
+                    input->setValidator(AbstractPage::editValidator(fullType));
                     input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
                     input->setWidth(Wt::WLength(150));
                     if (inputName->size() == 0)
@@ -683,7 +702,7 @@ void AbstractPage::setUndidName(string undidName)
     m_undidName = undidName;
 }
 
-void AbstractPage::setTitles(multimap<int, string> titles)
+void AbstractPage::setTitles(std::vector<std::pair <int, string>> titles)
 {
     m_titles = titles;
     setDisplayedTitlesPopups();
@@ -945,10 +964,10 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
 vector<Wt::WInteractWidget *> AbstractPage::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
 {
     vector<Wt::WInteractWidget *> rowWidgets;
-    for (multimap<int, string>::iterator itTitles = m_titles.begin();
+    for (std::vector<std::pair <int, string>>::iterator itTitles = m_titles.begin();
             itTitles != m_titles.end(); itTitles++)
     {
-        switch (itTitles->first)
+        switch ((itTitles->first >> 8) & 0xF)
         {
             case ETypeJson::text:
             {
@@ -1346,4 +1365,106 @@ void AbstractPage::addEnumToModel(Wt::WStandardItemModel* standardItemModel, int
     }
     
     standardItemModel->appendRow(rowVector);
+}
+
+int AbstractPage::setValidatorType(int jsonType, int specialType, int mandatory)
+{
+    Wt::log("info") << " == setting validator type ==";
+    int type;
+    
+    type = jsonType;
+    type = type << 4;
+    type += specialType;
+    type = type << 4;
+    type += mandatory;
+         
+    return (type);
+}
+
+Wt::WValidator* AbstractPage::editValidator(int type)
+{
+    Wt::log("info") << " == Creating validator ==";
+    Wt::WRegExpValidator *validator = new Wt::WRegExpValidator();
+    
+    bool isMandatory = (bool)(type & 0x1);
+    int specialType = (((type >> 4) & 0xF) > 0 ? (type >> 4) & 0xF : 0);
+    int jsonType = (((type >> 8) & 0xF) > 0 ? (type >> 8) & 0xF : 0);
+        
+    validator->setMandatory(isMandatory);
+    switch (jsonType)
+    {
+        case ETypeJson::text:
+        {
+            switch (specialType)
+            {
+                case ETextSpecial::normalText:
+                {
+                    Wt::log("info") << "ETextSpecial::normalText";
+                    validator->setRegExp("^.*$");
+                    break ;
+                }
+                case ETextSpecial::date:
+                {
+                    Wt::log("info") << "ETextSpecial::date";
+                    validator->setRegExp("^(((0[1-9]|[12][0-8])[\\/](0[1-9]|1[012]))|((29|30|31)[\\/](0[13578]|1[02]))|((29|30)[\\/](0[4,6,9]|11)))[\\/](19|[2-9][0-9])\\d\\d$)|(^29[\\/]02[\\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$");
+                    break ;
+                }
+                case ETextSpecial::mail:
+                {
+                    Wt::log("info") << "ETextSpecial::mail";
+                    validator->setRegExp("^[^@]+@([^.]+.[a-z]+)+$");
+                    break ;
+                }
+                case ETextSpecial::phone:
+                {
+                    Wt::log("info") << "ETextSpecial::phone";
+                    validator->setRegExp("^(+[0-9]{2})|(06)|(07))([.-\\s:]?[0-9]{2}){4}$");
+                    break ;
+                }
+                default:
+                {
+                    Wt::log("info") << "ETextSpecial::default";
+                    validator->setRegExp("^.*$");
+                }
+            }
+            break ;
+        }
+        case ETypeJson::number:
+        {
+            switch (specialType)
+            {
+                case ENumberSpecial::normalNumber:
+                {
+                    Wt::log("info") << "ENumberSpecial::normalNumber";
+                    validator->setRegExp("^[+-]?[0-9]*$");
+                    break ;
+                }
+                case ENumberSpecial::notnull:
+                {
+                    Wt::log("info") << "ENumberSpecial::notnull";
+                    validator->setRegExp("^[+-]?[1-9][0-9]*$");
+                    break ;
+                }
+                case ENumberSpecial::uns:
+                {
+                    Wt::log("info") << "ENumberSpecial::uns";
+                    validator->setRegExp("^\\+?[0-9]*?$");
+                    break ;
+                }
+                case ENumberSpecial::flt:
+                {
+                    Wt::log("info") << "ENumberSpecial::flt";
+                    validator->setRegExp("^[+-]?[1-9][0-9]*(\\.[0-9]+)?$");
+                    break ;
+                }
+                default:
+                {
+                    Wt::log("info") << "ENumberSpecial::default";
+                    validator->setRegExp("^.*$");
+                }
+            }
+            break ;
+        }
+    }
+    return (validator);
 }

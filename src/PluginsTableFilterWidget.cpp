@@ -26,11 +26,11 @@ PluginsTableFilterWidget::PluginsTableFilterWidget(Echoes::Dbo::Session *session
     setButtonModif(true);
     setButtonSup(true);
     
-    multimap<int, string> titles;
-    titles.insert(make_pair(0, "filter-type"));
-    titles.insert(make_pair(0, "parameters"));
-    titles.insert(make_pair(0, "nb-value"));
-    titles.insert(make_pair(0, "pos-key-value"));
+    std::vector<std::pair <int, std::string>> titles;
+    titles.push_back(make_pair(0, "filter-type"));
+    titles.push_back(make_pair(0, "parameters"));
+    titles.push_back(make_pair(0, "nb-value"));
+    titles.push_back(make_pair(0, "pos-key-value"));
     setTitles(titles);
     
     m_filterTypeStandardItemModel = new Wt::WStandardItemModel(0,2,this);

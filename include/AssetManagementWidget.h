@@ -76,7 +76,7 @@ public:
 protected:
   virtual Wt::WDialog                   *deleteResource(long long id);
   
-  virtual Wt::WValidator                *editValidator(int cpt);
+//  virtual Wt::WValidator                *editValidator(int cpt);
 
 //  virtual void                           updatePage(bool getResources = true);
   virtual int                            addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);

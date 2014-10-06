@@ -36,10 +36,10 @@ PluginsTableAssociationWidget::PluginsTableAssociationWidget(Echoes::Dbo::Sessio
     setButtonModif(false);
     setButtonSup(true);
     
-    multimap<int, string> listTitles;
-    listTitles.insert(make_pair(ETypeJson::text, "filter_index"));
-    listTitles.insert(make_pair(ETypeJson::text, "information"));
-    listTitles.insert(make_pair(ETypeJson::text, "asset"));
+    std::vector<std::pair <int, string>> listTitles;
+    listTitles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, 0), "filter_index"));
+    listTitles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, 0), "information"));
+    listTitles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, 0), "asset"));
     setTitles(listTitles);
     
     m_pluginsTableFilterWidget = pluginsTableFilterWidget;

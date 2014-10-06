@@ -18,9 +18,9 @@ UnitsWidget::UnitsWidget(Echoes::Dbo::Session *session, string apiUrl)
     m_unitTypeComboBox = new Wt::WComboBox();
     m_unitTypeModel = new Wt::WStandardItemModel(0,2,this);
     
-    multimap<int, string> titles;
-    titles.insert(make_pair(ETypeJson::text, "name"));
-    titles.insert(make_pair(ETypeJson::undid, "information_unit_type"));
+    std::vector<std::pair <int, string>>titles;
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::is), "information_unit_type"));
     setTitles(titles);
     
     list<list<pair<string, vector<string>>>> listsUrl;

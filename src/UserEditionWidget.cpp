@@ -33,9 +33,9 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
     string nameSpe = type == 1 ? "mail" : type == 2 ? "sms" : type == 3 ? "push" : "error";
     this->setNameSpecial(nameSpe);
     
-    multimap<int, string> titles;
-    titles.insert(make_pair(ETypeJson::text, "value"));
-    titles.insert(make_pair(ETypeJson::undid, "user"));
+    std::vector<std::pair <int, string>>titles;
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, (type != 3 ? type : 0), EMandatory::is), "value"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "user"));
     setUndidName("last_name");
     setTitles(titles);
     
@@ -64,6 +64,7 @@ Wt::WComboBox *UserEditionWidget::popupAdd(Wt::WDialog *dialog)
     return comboBox;
 }
 
+/*
 Wt::WValidator *UserEditionWidget::editValidator(int who)
 {
     Wt::WRegExpValidator *validator = 0;
@@ -85,6 +86,7 @@ Wt::WValidator *UserEditionWidget::editValidator(int who)
     }
     return validator;
 }
+*/
 
 void UserEditionWidget::addResource(vector<Wt::WInteractWidget*>* argument)
 {

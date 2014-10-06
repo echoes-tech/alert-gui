@@ -24,9 +24,9 @@ PluginsTableSourceWidget::PluginsTableSourceWidget(Echoes::Dbo::Session *session
     setButtonModif(true);
     setButtonSup(true);
     
-    multimap<int, string> titles;
-    titles.insert(make_pair(0, "addon"));
-    titles.insert(make_pair(0, "parameters"));
+    std::vector<std::pair <int, string>> titles;
+    titles.push_back(make_pair(0, "addon"));
+    titles.push_back(make_pair(0, "parameters"));
     setTitles(titles);
     
     m_addonStandardItemModel = new Wt::WStandardItemModel(0,2,this);

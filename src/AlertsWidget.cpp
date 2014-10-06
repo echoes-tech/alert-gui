@@ -38,10 +38,10 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
     m_plugins = new Wt::WStandardItemModel(0,3,this);
     m_informations = new Wt::WStandardItemModel(0,3,this);
     
-    multimap<int, string> listTitles;
-    listTitles.insert(make_pair(ETypeJson::text, "name"));
-    listTitles.insert(make_pair(ETypeJson::text, "last_attempt"));
-    listTitles.insert(make_pair(ETypeJson::number, "alert_media_specializations"));
+    std::vector<std::pair <int, string>> listTitles;
+    listTitles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
+    listTitles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, 0), "last_attempt"));
+    listTitles.push_back(make_pair(setValidatorType(ETypeJson::number, 0, 0), "alert_media_specializations"));
     setTitles(listTitles);
     
     list<list<pair<string, vector<string>>>> listsUrl;
@@ -93,8 +93,8 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
 
 void AlertsWidget::setDisplayedTitlesPopups()
 {
-    multimap<int, string> displayedTitles;
-    displayedTitles.insert(make_pair(ETypeJson::text, "name"));
+    std::vector<std::pair <int, std::string>> displayedTitles;
+    displayedTitles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
     m_displayedTitlesPopups = displayedTitles;
 }
 
@@ -551,7 +551,7 @@ void AlertsWidget::popupNewRecipientsRework(std::string nameAlert, std::string m
     Wt::WTemplate *t = new Wt::WTemplate(tr("Alert.alert.time.template"));
     t->setMaximumSize(Wt::WLength(60), Wt::WLength::Auto);
     m_timer = new Wt::WLineEdit();
-    m_timer->setValidator(editValidator(EValidatorType::VALIDATOR_INT));
+    m_timer->setValidator(AbstractPage::editValidator(setValidatorType(ETypeJson::number, ENumberSpecial::notnull, EMandatory::is)));
     t->bindWidget("time", m_timer);
     Wt::WText *timerUnit = new Wt::WText("minutes");
 
@@ -934,7 +934,6 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
             if (it->lineEditValue->validate() != Wt::WValidator::Valid)
             {
                 validCriterion = false;
-                it->lineEditValue->setValueText(it->validatorCriteria->invalidNoMatchText());
                 dialog->show();
             }
             
@@ -1079,7 +1078,7 @@ void AlertsWidget::addCompareWidget(long long assetID, long long pluginID, long 
                 alertCriterion.unitTypeID == Enums::EInformationUnitType::custom)
         {
             Wt::WTemplate *t = new Wt::WTemplate(tr("Alert.alert.criterion.template"));
-            Wt::WRegExpValidator* validator = validateCriterionType(alertCriterion.unitTypeID);
+            Wt::WValidator* validator = editValidator(setValidatorType(ETypeJson::number, 0, EMandatory::is));
             Wt::WLineEdit* lineEditValue = new Wt::WLineEdit();
 
             lineEditValue->setValidator(validator);
@@ -1242,6 +1241,7 @@ void AlertsWidget::modifRecip(long long id)
 {
 }
 
+/*
 Wt::WValidator *AlertsWidget::editValidator(int validatorType)
 {
     Wt::WRegExpValidator *validator = 0;
@@ -1270,6 +1270,7 @@ Wt::WValidator *AlertsWidget::editValidator(int validatorType)
 
     return validator;
 }
+*/
 
 /* artefact
 void AlertsWidget::checkPopupRecipients(string message, string time, int media)

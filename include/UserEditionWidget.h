@@ -33,7 +33,7 @@ public AbstractPage
 public:
     UserEditionWidget(Echoes::Dbo::Session *session, std::string apiUrl, int type);
 
-    Wt::WValidator              *editValidator(int who);
+//    Wt::WValidator              *editValidator(int who);
     
     void                        addResource(std::vector<Wt::WInteractWidget*>* argument);
     void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);

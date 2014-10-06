@@ -49,7 +49,6 @@ public:
     
     std::vector<std::string>    getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
-    Wt::WValidator              *editValidator(int who);
     
     void                        closePopup();
     void                        close();
@@ -197,7 +196,7 @@ private:
         Wt::WComboBox* operatorComboBox;
         Wt::WLineEdit* lineEditValue;
         Wt::WComboBox* comboBoxCriteria;
-        Wt::WRegExpValidator* validatorCriteria;
+        Wt::WValidator* validatorCriteria;
         Wt::WButtonGroup* groupTrueFalse;
         Wt::WTemplate* templateValid;
         CriterionResponse smsRsp;

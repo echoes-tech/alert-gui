@@ -26,10 +26,10 @@ PluginsTableSearchWidget::PluginsTableSearchWidget(Echoes::Dbo::Session *session
     setButtonModif(true);
     setButtonSup(true);
     
-    multimap<int, string> titles;
-    titles.insert(make_pair(0, "search-type"));
-    titles.insert(make_pair(0, "parameters"));
-    titles.insert(make_pair(0, "period"));
+    std::vector<std::pair <int, std::string>> titles;
+    titles.push_back(make_pair(0, "search-type"));
+    titles.push_back(make_pair(0, "period"));
+    titles.push_back(make_pair(0, "parameters"));
     setTitles(titles);
     
     m_searchTypeStandardItemModel = new Wt::WStandardItemModel(0,2,this);

@@ -278,8 +278,8 @@ private:
     vector_widget                       m_inputs;
     // Attributs.-------------------------------
     std::list<std::list<std::pair<std::string, std::vector<std::string>>>>      m_listsUrl;
-    /* vector == column order | pair: type of column - name of column */
-    /* full type: 4bits ETypeJson | 4bits ESpecialType | 4bits boolean first being isMandatory */
+    /* vector == column order | pair: 'type' of column - 'name' of column */
+    /* full 'type': 4bits ETypeJson, 4bits ESpecialType and 4bits boolean (first being isMandatory) for a total of 12bits encoded chain */
     std::vector<std::pair<int, std::string>>                                    m_titles;
     
     std::string                         m_apiUrl;

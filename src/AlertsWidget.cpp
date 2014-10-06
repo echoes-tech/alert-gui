@@ -916,7 +916,6 @@ void AlertsWidget::sortModels()
     m_informations->sort(1);
 }
 
-
 // ------- init popup one -------
 
 void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
@@ -925,6 +924,7 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     m_tabWidgetMessages->resize(Wt::WLength(600), Wt::WLength(150));
     m_alertCriteria.clear();
     checkAll_ = 1;
+    
     Wt::WPushButton *ButtonSC = new Wt::WPushButton(tr("Alert.alert.button-save-continue"), dialog->footer());
     ButtonSC->clicked().connect(bind([ = ] ()
     {

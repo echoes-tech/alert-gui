@@ -325,17 +325,11 @@ private:
 
     Wt::WLineEdit       *keyValue_;
     
-    Wt::WText            *errorBool_;
-    //  -------
-    
-    Wt::WTable              *m_compareTable;
+    Wt::WTable           *m_compareTable;
     Wt::WContainerWidget *m_compareWidgetContainerTop;
     Wt::WContainerWidget *m_compareWidgetContainerSequence;
     
     Wt::WPushButton      *m_buttonAddNumber;
-    
-    Wt::WLineEdit        *saveLineEditOne_;
-    Wt::WLineEdit        *saveLineEditTwo_;
 };
 
 #endif	/* ALERTSWIDGET_H */

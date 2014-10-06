@@ -336,19 +336,10 @@ void AbstractPage::addResourcePopup()
     for (std::vector<std::pair <int, string>>::iterator title = m_displayedTitlesPopups.begin();
             title != m_displayedTitlesPopups.end(); title++)
     {
-        Wt::log("info") << "title second: " << title->second;
-        
-        bool isMandatory = (bool)(title->first & 0x1);
-        int specialType = (title->first >> 4) & 0xF;
+        /* see setValidatorType and editValidator for better understanding */
         int jsonType = (title->first >> 8) & 0xF;
         int fullType = title->first;
-    
-        Wt::log("info") << "jsonType: " << jsonType;
-        Wt::log("info") << "specialType: " << specialType;
-        Wt::log("info") << "mandatory: " << isMandatory;
-        
-        Wt::log("info") << "fullType: " << fullType;
-        
+            
         if (jsonType != 5)
         {
             new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
@@ -448,8 +439,10 @@ void AbstractPage::modifResourcePopup(long long id)
 
                 int fullType = title->first;
                 int jsonType = (((title->first >> 8) & 0xF) > 0 ? (title->first >> 8) & 0xF : 0);
+                bool isMandatory = (bool)(title->first & 0x1);
                 Wt::log("info") << " :::::: Type == " << jsonType;
                 Wt::log("info") << " :::::: fullType == " << fullType;
+                Wt::log("info") << " :::::: isMandatory == " << (isMandatory == true ? "true" : "false");
                 switch (jsonType)
                 {
                     case ETypeJson::text:
@@ -460,8 +453,11 @@ void AbstractPage::modifResourcePopup(long long id)
                         {
                             newName.resize(newName.size() + 3, '.');
                         }
-                    
-                        Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif->contents());
+                        
+                        Wt::WContainerWidget *inputCW = new Wt::WContainerWidget(dialogModif->contents());
+                        inputCW->addStyleClass("control-group controls");
+                        
+                        Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), inputCW);
                         // FIXME: ne marche pas quand c'est un mail / tel, cf. medias
                         input->setValidator(AbstractPage::editValidator(fullType));
                         input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
@@ -470,7 +466,7 @@ void AbstractPage::modifResourcePopup(long long id)
                             input->setFocus();
                         }
                         input->setToolTip(Wt::WString::fromUTF8(nameResource));
-                        inputName->push_back(input);
+                        inputName->push_back(inputCW);
                         Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                          + title->second), dialogModif->contents());
                         error2->hide();
@@ -486,7 +482,11 @@ void AbstractPage::modifResourcePopup(long long id)
                     {
                         newName.resize(newName.size() + 3, '.');
                     }
-                    Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif->contents());
+                    
+                    Wt::WContainerWidget *inputCW = new Wt::WContainerWidget(dialogModif->contents());
+                    inputCW->addStyleClass("control-group controls");
+                    
+                    Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), inputCW);
                     input->setValidator(AbstractPage::editValidator(fullType));
                     input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
                     input->setWidth(Wt::WLength(150));
@@ -495,7 +495,7 @@ void AbstractPage::modifResourcePopup(long long id)
                         input->setFocus();
                     }
                     input->setToolTip(Wt::WString::fromUTF8(nameResource));
-                    inputName->push_back(input);
+                    inputName->push_back(inputCW);
                     Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                          + (*title).second), dialogModif->contents());
                     error2->hide();
@@ -586,18 +586,23 @@ void AbstractPage::popupCheck(vector<Wt::WInteractWidget*>* inputName, vector<Wt
         //check = checkInput(inputName, errorMessage);
     }
 
+    Wt::log("info") << "Just before input checking loop";
     for (vector<Wt::WInteractWidget*>::iterator itInput = inputName->begin() ; itInput != inputName->end() ; itInput++)
     {
         Wt::log("info") << "for loop";
-        if ((Wt::WLineEdit*) dynamic_cast <Wt::WLineEdit*> (*itInput) != NULL)
+        if ((Wt::WContainerWidget*) dynamic_cast <Wt::WContainerWidget*> (*itInput) != NULL)
         {
-            Wt::log("info") << "pass test: " << ((Wt::WLineEdit*)(*itInput))->text();
-            if (((Wt::WLineEdit*)(*itInput))->validate() != Wt::WValidator::Valid)
+            Wt::WLineEdit* lineEdit = (Wt::WLineEdit*)(((Wt::WContainerWidget*)(*itInput))->widget(0));
+            Wt::log("info") << "pass test: " << lineEdit->text();
+
+            if (lineEdit->validate() != Wt::WValidator::Valid)
             {
                 Wt::log("info") << "shoudln't pass test";
                 dialog->show();
                 return ;
             }
+            
+            *itInput = lineEdit;
         }
     }
     if (check == 0)
@@ -1373,9 +1378,12 @@ int AbstractPage::setValidatorType(int jsonType, int specialType, int mandatory)
     int type;
     
     type = jsonType;
+    /* 4bits shift to the left: 0000 0000 0001 becomes 0000 0001 0000 */
     type = type << 4;
     type += specialType;
+    /* another 4bits shift to the left: 0000 0001 0001 becomes 0001 0001 0000 */
     type = type << 4;
+    /* add isMandatory == true: 0001 0001 0000 becomes 0001 0001 0001 */
     type += mandatory;
          
     return (type);
@@ -1386,8 +1394,11 @@ Wt::WValidator* AbstractPage::editValidator(int type)
     Wt::log("info") << " == Creating validator ==";
     Wt::WRegExpValidator *validator = new Wt::WRegExpValidator();
     
+    /* isolate first bit with 0x1 to see if true or false */
     bool isMandatory = (bool)(type & 0x1);
+    /* (type >> 4) & 0xF: shift type 4bits to the right, isolate the 'new' first 4bits with & 0xF */
     int specialType = (((type >> 4) & 0xF) > 0 ? (type >> 4) & 0xF : 0);
+    /* (type >> 8) & 0xF: shift type 8bits to the right, isolate the 'new' first 4bits with & 0xF */
     int jsonType = (((type >> 8) & 0xF) > 0 ? (type >> 8) & 0xF : 0);
         
     validator->setMandatory(isMandatory);

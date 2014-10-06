@@ -28,13 +28,13 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
     setButtonSup(true);
 //    setLocalTable(true);
 
-    multimap<int, string> titles;
-    titles.insert(make_pair(ETypeJson::text, "name"));
-    titles.insert(make_pair(ETypeJson::text, "desc"));
-    titles.insert(make_pair(ETypeJson::text, "calculate"));
-    titles.insert(make_pair(ETypeJson::undid, "information_unit"));
+    std::vector<std::pair <int, string>>titles;
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isnot), "desc"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isnot), "calculate"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::is), "information_unit"));
     setUndidName("name");
-    titles.insert(make_pair(ETypeJson::boolean, "display"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::is), "display"));
     setTitles(titles);
     
     list<list<pair<string, vector<string>>>> listsUrl;
@@ -52,6 +52,7 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
     setUrl(listsUrl);
 }
 
+/*
 Wt::WValidator *InformationsWidget::editValidator(int jsonType)
 {
     Wt::WRegExpValidator *validator;
@@ -59,11 +60,11 @@ Wt::WValidator *InformationsWidget::editValidator(int jsonType)
     {
         case ETypeJson::text:
         {
-            validator = new Wt::WRegExpValidator();
+            validator = new Wt::WRegExpValidator("^.+$");
             validator->setMandatory(false);
             break;
         }
-        case ETypeJson::integer:
+        case ETypeJson::number:
         {
             validator = new Wt::WRegExpValidator("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}");
             validator->setMandatory(true);
@@ -76,6 +77,7 @@ Wt::WValidator *InformationsWidget::editValidator(int jsonType)
     }
     return validator;
 }
+*/
 
 Wt::WComboBox *InformationsWidget::popupAdd(Wt::WDialog *dialog)
 {
@@ -86,7 +88,7 @@ Wt::WComboBox *InformationsWidget::popupAdd(Wt::WDialog *dialog)
 }
 
 void InformationsWidget::addResource(vector<Wt::WInteractWidget*>* arguments)
-{
+{    
     vector<Wt::WInteractWidget*>::iterator it = (*arguments).begin();
     // Post Information -------
     Wt::Http::Message messageInformation;

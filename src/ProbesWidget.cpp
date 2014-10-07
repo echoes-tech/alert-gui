@@ -19,7 +19,6 @@ int ProbesWidget::m_stateColumn = 2;
 ProbesWidget::ProbesWidget(Echoes::Dbo::Session *session, string apiUrl)
 : AbstractPage(session, apiUrl, "probe")
 {
-    cout << endl << "PROBES WIDGET" << endl << endl;
     setButtonModif(false);
     setButtonSup(false);
     
@@ -59,23 +58,19 @@ ProbesWidget::~ProbesWidget()
 
 void ProbesWidget::handleJsonGetHeartbeat(vector<Wt::Json::Value> jsonResource)
 {
-    cout << "handleJsonGetHeartbeat" << endl;
     try
     {
         if (jsonResource.size() == 1)
         {
-            cout << "handleJsonGetHeartbeat == 1" << endl;
             Wt::Json::Object jsonProbe = jsonResource.at(0);
             
             long long probeId = jsonProbe.get("id");
-            cout << "Probe id: " << probeId << endl;
             
             m_mapProbesAlive[probeId] = jsonProbe.get("probe_heartbeat");
             updateText(probeId);
         }
         else if (jsonResource.size() > 0)
         {
-            cout << "handleJsonGetHeartbeat > 0" << endl;
             Wt::Json::Array& jsonArray = (*jsonResource.begin());
             if (!jsonArray.empty())
             {
@@ -116,22 +111,18 @@ void ProbesWidget::handleJsonGet(vectors_Json jsonResources)
     /* If simple request (/probe/current_id/alive) size < 4 else normal treatment*/
     if (jsonResources.empty())
     {
-        cout << "handleJsonREquest EMPTY" << endl;
         return ;
     }
     else if (jsonResources.size() < 4)
     {
-        cout << "handleJsonREquest < 4" << endl;
         vector<Wt::Json::Value> jsonResource = jsonResources.at(0);
         handleJsonGetHeartbeat(jsonResource);
     }
     else
     {
-        cout << "handleJsonREquest > 4" << endl;
         vector<Wt::Json::Value> jsonResource = jsonResources.at(2);
 
         handleJsonGetHeartbeat(jsonResource);
-        cout << "handleJsonREquest HEARTBEAT DONE" << endl;
 
         jsonResource = jsonResources.at(1);
 
@@ -165,7 +156,6 @@ void ProbesWidget::handleJsonGet(vectors_Json jsonResources)
                         nameW.push_back(aName);
 
                         m_rowsTable.insert(make_pair(probeId, nameW));
-                        cout << "handleJsonREquest ROW INSERTED" << endl;
                     }
                 }
             }
@@ -187,10 +177,6 @@ void ProbesWidget::handleJsonGet(vectors_Json jsonResources)
 
 void ProbesWidget::updateAliveStates(long long id, int rowTable, int columnTable)
 {     
-    std::string start("-- start: " + boost::lexical_cast<std::string>(id) + " --");
-    std::string end("-- end: " + boost::lexical_cast<std::string>(id) + " --");
-
-    Wt::log(start);
     if (!Wt::WApplication::instance()->internalPathMatches("/probes"))
     {
         m_autoUpdate = true;
@@ -214,7 +200,6 @@ void ProbesWidget::updateAliveStates(long long id, int rowTable, int columnTable
 
 
     Wt::WApplication::instance()->triggerUpdate();
-    Wt::log(end);
 }
 
 void ProbesWidget::updateText(long long probeId)
@@ -240,7 +225,6 @@ void ProbesWidget::threadSafeFunctionCall(long long id, int rowTable, int column
 
 int ProbesWidget::addCustomResourceTable(long long probeId, int rowTable, int columnTable)
 {
-    cout << "addCustomResourceTable IN" << endl;
     if (columnTable == m_stateColumn)
     {        
         m_autoUpdate = false;
@@ -283,12 +267,10 @@ int ProbesWidget::addCustomResourceTable(long long probeId, int rowTable, int co
         timer->timeout().connect(boost::bind(&ProbesWidget::threadSafeFunctionCall, this, probeId, rowTable, columnTable));
         timer->start();
         
-        cout << "addCustomResourceTable OUT if" << endl;
         return ++columnTable;
     }
     else
     {
-        cout << "addCustomResourceTable OUT else" << endl;
         return columnTable;
     }
     

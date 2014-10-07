@@ -31,7 +31,7 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
 //    setLocalTable(true);
     
     string nameSpe = type == 1 ? "mail" : type == 2 ? "sms" : type == 3 ? "push" : "error";
-    this->setNameSpecial(nameSpe);
+//    this->setNameSpecial(nameSpe);
     
     multimap<int, string> titles;
     titles.insert(make_pair(ETypeJson::text, "value"));

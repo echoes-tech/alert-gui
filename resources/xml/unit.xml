@@ -7,7 +7,7 @@
 
 <!--    In table     -->
     <!--header-->
-    <message id="Alert.unit.add-form.unit">Units</message>
+    <message id="Alert.unit.main-table">Units</message>
     <!--body-->
     <message id="Alert.unit.name-name">Units</message>
     <message id="Alert.unit.name-information_unit_type">Type</message>
@@ -25,12 +25,12 @@
     <message id="Alert.unit.button-cancel">Cancel</message>
     <message id="Alert.unit.button-save">Save</message>
     <!--POST-->
-    <message id="Alert.unit.add-unit">Add unit</message>
+    <message id="Alert.unit.popup-add">Add unit</message>
     <!--PUT-->
-    <message id="Alert.unit.modif-unit">Modify</message>
+    <message id="Alert.unit.popup-modif">Modify</message>
     <!--DELETE-->
     <message id="Alert.unit.delete-unit">Attention</message>
-    <message id="Alert.unit.delete-unit-message">
+    <message id="Alert.unit.delete-message">
         <span style="color:red">
             You are about to delete a unit
         </span>

@@ -11,7 +11,7 @@
     <message id="Alert.information.nothing-information-text">Nothing Information register</message>
     <message id="Alert.information.nothing-button">Click to add</message>
     <!--header-->
-    <message id="Alert.information.add-form.information">Informations</message>
+    <message id="Alert.information.main-table">Informations</message>
     <!--body-->
     <message id="Alert.information.name-name">Name</message>
     <message id="Alert.information.name-desc">Description</message>
@@ -32,12 +32,12 @@
     <message id="Alert.information.button-cancel">Cancel</message>
     <message id="Alert.information.button-save">Save</message>
     <!--POST-->
-    <message id="Alert.information.add-information">Add information</message>
+    <message id="Alert.information.popup-add">Add information</message>
     <!--PUT-->
-    <message id="Alert.information.modif-information">Modifi this information</message>
+    <message id="Alert.information.popup-modif">Modifi this information</message>
     <!--DELETE-->
     <message id="Alert.information.delete-information">Attention</message>
-    <message id="Alert.information.delete-information-message">
+    <message id="Alert.information.delete-message">
         <span style="color:red">
             You are about to delete a information
         </span>

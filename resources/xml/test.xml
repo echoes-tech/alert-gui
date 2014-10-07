@@ -29,7 +29,7 @@
   <message id="Alert.test.modif-button">Modif</message>
   <message id="Alert.test.delete-button">Delete</message>
 
-  <message id="Alert.test.add-form">Your servers</message>
+  <message id="Alert.test.main-table">Your servers</message>
   
   <message id="Alert.test.name">test name</message>
   <message id="Alert.test.action">Actions</message>
@@ -37,8 +37,8 @@
   <message id="Alert.test.download-script">Download<br />Script</message>
 
   <message id="Alert.test.delete-test">Delete this server</message>
-  <message id="Alert.test.modif-test">Modifi this server</message>
-  <message id="Alert.test.add-test">Add server</message>
+  <message id="Alert.test.popup-modif">Modifi this server</message>
+  <message id="Alert.test.popup-add">Add server</message>
 
   <message id="Alert.test.name-invalid">Invalid</message>
   <message id="Alert.test.database-error-title">Database error</message>

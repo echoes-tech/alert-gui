@@ -22,14 +22,14 @@
   <message id="Alert.recipients.modif-button">Modifier</message>
   <message id="Alert.recipients.delete-button">Supprimer</message>
 
-  <message id="Alert.recipients.add-form">Tes Serveurs</message>
+  <message id="Alert.recipients.main-table">Tes Serveurs</message>
   
   <message id="Alert.recipients.name">Nom du destinataire</message>
   <message id="Alert.recipients.action">Actions</message>
   
   <message id="Alert.recipients.delete-recipients">Supprimer ce serveur</message>
-  <message id="Alert.recipients.modif-recipients">Modifier ce serveur</message>
-  <message id="Alert.recipients.add-recipients">Ajouter un serveur</message>
+  <message id="Alert.recipients.popup-modif">Modifier ce serveur</message>
+  <message id="Alert.recipients.popup-add">Ajouter un serveur</message>
 
   <message id="Alert.recipients.name-invalid">Invalide</message>
   <message id="Alert.recipients.database-error-title">Erreur de la base de donnée</message>

@@ -21,9 +21,9 @@
     <!--header-->
     <message id="Alert.media-user.name-value">Medias</message>
     <message id="Alert.media-user.name-user">Utilisateurs</message>
-    <message id="Alert.media-user.add-form.sms">Numéros de téléphones</message>
-    <message id="Alert.media-user.add-form.push">Nom du Smartphone</message>
-    <message id="Alert.media-user.add-form.mail">Adresses e-mail</message>
+    <message id="Alert.media-user.main-table">Numéros de téléphones</message>
+    <message id="Alert.media-user.main-table">Nom du Smartphone</message>
+    <message id="Alert.media-user.main-table">Media</message>
     <!--body-->
     <message id="Alert.media-user.name-sms">Numéro de téléphone</message>
     <message id="Alert.media-user.name-mail">Adresse e-mail</message>

@@ -58,6 +58,7 @@
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
         <itemPath>include/InformationsWidget.h</itemPath>
+        <itemPath>include/ProbesWidget.h</itemPath>
         <itemPath>include/RecipientsWidget.h</itemPath>
         <itemPath>include/RoleCustomizationWidget.h</itemPath>
         <itemPath>include/SummaryBoard.h</itemPath>
@@ -71,8 +72,6 @@
                    displayName="Resource Files"
                    projectFiles="true">
       <logicalFolder name="xml" displayName="xml" projectFiles="true">
-        <itemPath>resources/xml/alert-list.xml</itemPath>
-        <itemPath>resources/xml/alert-list_fr.xml</itemPath>
         <itemPath>resources/xml/alert.xml</itemPath>
         <itemPath>resources/xml/alert_fr.xml</itemPath>
         <itemPath>resources/xml/asset.xml</itemPath>
@@ -92,8 +91,6 @@
         <itemPath>resources/xml/media-user_fr.xml</itemPath>
         <itemPath>resources/xml/options.xml</itemPath>
         <itemPath>resources/xml/options_fr.xml</itemPath>
-        <itemPath>resources/xml/plugin.xml</itemPath>
-        <itemPath>resources/xml/plugin_fr.xml</itemPath>
         <itemPath>resources/xml/plugins-association.xml</itemPath>
         <itemPath>resources/xml/plugins-association_fr.xml</itemPath>
         <itemPath>resources/xml/plugins-filter.xml</itemPath>
@@ -106,6 +103,8 @@
         <itemPath>resources/xml/plugins-source_fr.xml</itemPath>
         <itemPath>resources/xml/plugins.xml</itemPath>
         <itemPath>resources/xml/plugins_fr.xml</itemPath>
+        <itemPath>resources/xml/probe.xml</itemPath>
+        <itemPath>resources/xml/probe_fr.xml</itemPath>
         <itemPath>resources/xml/recipients.xml</itemPath>
         <itemPath>resources/xml/recipients_fr.xml</itemPath>
         <itemPath>resources/xml/role-customization.xml</itemPath>
@@ -165,6 +164,7 @@
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
         <itemPath>src/InformationsWidget.cpp</itemPath>
+        <itemPath>src/ProbesWidget.cpp</itemPath>
         <itemPath>src/RecipientsWidget.cpp</itemPath>
         <itemPath>src/RoleCustomizationWidget.cpp</itemPath>
         <itemPath>src/SummaryBoard.cpp</itemPath>
@@ -292,6 +292,8 @@
       </item>
       <item path="include/PluginsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/ProbesWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
@@ -347,10 +349,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="resources/xml/alert-list.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/xml/alert-list_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="resources/xml/alert.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/alert_fr.xml" ex="false" tool="3" flavor2="0">
@@ -388,10 +386,6 @@
       <item path="resources/xml/options.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/options_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/xml/plugin.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/xml/plugin_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/plugins-association.xml"
             ex="false"
@@ -434,6 +428,10 @@
       <item path="resources/xml/plugins.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/plugins_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/probe.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/probe_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/recipients.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -516,6 +514,8 @@
       <item path="src/PluginsTableSourceWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ProbesWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RecipientsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -630,6 +630,8 @@
       </item>
       <item path="include/PluginsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/ProbesWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
@@ -685,10 +687,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="resources/xml/alert-list.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/xml/alert-list_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="resources/xml/alert.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/alert_fr.xml" ex="false" tool="3" flavor2="0">
@@ -726,10 +724,6 @@
       <item path="resources/xml/options.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/options_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/xml/plugin.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/xml/plugin_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/plugins-association.xml"
             ex="false"
@@ -772,6 +766,10 @@
       <item path="resources/xml/plugins.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/plugins_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/probe.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/probe_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/recipients.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -854,6 +852,8 @@
       <item path="src/PluginsTableSourceWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/PluginsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ProbesWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RecipientsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>

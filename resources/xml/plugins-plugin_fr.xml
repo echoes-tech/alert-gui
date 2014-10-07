@@ -3,7 +3,7 @@
 
 <!--    In table     -->
     <!--header-->
-    <message id="Alert.plugins-plugin.add-form.plugins-plugin">Applications</message>
+    <message id="Alert.plugins-plugin.main-table">Applications</message>
     <!--body-->
     <message id="Alert.plugins-plugin.name-name">Nom</message>
     <message id="Alert.plugins-plugin.name-desc">Description</message>
@@ -15,12 +15,12 @@
     <message id="Alert.plugins-plugin.button-cancel">Annuler</message>
     <message id="Alert.plugins-plugin.button-save">Enregistrer</message>
     <!--POST-->
-    <message id="Alert.plugins-plugin.add-plugins-plugin">Ajouter une application</message>
+    <message id="Alert.plugins-plugin.popup-add">Ajouter une application</message>
     <!--PUT-->
-    <message id="Alert.plugins-plugin.modif-plugins-plugin">Modifier</message>
+    <message id="Alert.plugins-plugin.popup-modif">Modifier</message>
     <!--DELETE-->
     <message id="Alert.plugins-plugin.delete-plugins-plugin">Attention</message>
-    <message id="Alert.plugins-plugin.delete-plugins-plugin-message">
+    <message id="Alert.plugins-plugin.delete-message">
         <span style="color:red">
             Vous êtes sur le point de supprimer une application
         </span>

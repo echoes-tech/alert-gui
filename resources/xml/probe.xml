@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <message id="Alert.probe.form-info">
+      On this page you can manage the probes needed to create informations.
+    </message>
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.probe.main-table">Probes</message>
+    <!--body-->
+    <message id="Alert.probe.name-name">Probes</message>
+    <message id="Alert.probe.name-id">Id</message>
+    <message id="Alert.probe.name-asset">Asset</message>
+    <message id="Alert.probe.name-id-asset">Asset Id</message>
+    <message id="Alert.probe.name-alive">State</message>
+    <message id="Alert.probe.modif-button">Modify</message>
+    <message id="Alert.probe.delete-button">Delete</message>
+    <!--footer-->
+    <message id="Alert.probe.search-bar">Search : </message>
+        <!-- Paginate -->
+        <message id="Alert.probe.paginate-first">First</message>
+        <message id="Alert.probe.paginate-prev">Prev</message>
+        <message id="Alert.probe.paginate-next">Next</message>
+        <message id="Alert.probe.paginate-last">Last</message>
+
+<!--    In popup     -->
+    <message id="Alert.probe.button-cancel">Cancel</message>
+    <message id="Alert.probe.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.probe.add-unit">Add probe</message>
+    <!--PUT-->
+    <message id="Alert.probe.modif-unit">Modify</message>
+    <!--DELETE-->
+    <message id="Alert.probe.delete-unit">Attention</message>
+    <message id="Alert.probe.delete-unit-message">
+        <span style="color:red">
+            You are about to delete a probe
+        </span>
+    </message>
+    <message id="Alert.probe.button-confirm">Confirm</message>
+    
+    <message id="Alert.probe.type.text">Text</message>
+    <message id="Alert.probe.type.number">Number</message>
+    <message id="Alert.probe.type.boolean">Boolean</message>
+    <message id="Alert.probe.type.custom">Custom</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.probe.invalid-name-unit">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.probe.database-error-title">Database error</message>
+  <message id="Alert.probe.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+
+
+<!-- templates -->
+    <message id="Alert.probe.Management.template" >
+        <br />
+            <div class ="alert alert-info">${tr:Alert.probe.form-info}</div> 
+            <div id="probe-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers">
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>
+
+  
+
+</messages>

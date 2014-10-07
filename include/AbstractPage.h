@@ -94,14 +94,6 @@ typedef std::multimap<int, Wt::WWidget>  map_widget;
  * list &lsaquo; int, string &rsaquo;
  */
 typedef std::multimap<int, std::string>  multimap_string;
-/** AbstractPage. list_string \n
- * list &lsaquo; string &rsaquo;
- */
-typedef std::list<std::string>  list_string;
-/** AbstractPage. lists_string \n
- * list &lsaquo; list &lsaquo; string &rsaquo; &rsaquo;
- */
-typedef std::list<list_string> lists_string;
 
 /** AbstractPage. vector_widget \n
  * vector &lsaquo; WInteractWidget* &rsaquo;
@@ -172,6 +164,7 @@ protected:
     void                        addGenericButtonsToResourceTable(long long id, int rowTable, int columnTable);
     virtual void                addPopupModifHandler(Wt::WInteractWidget* widget, long long id);
     virtual int                 addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);
+    virtual int                 addCustomResourceTable(long long id, int rowTable, int columnTable);
     void                        addButtonsToPopupFooter(Wt::WDialog *dialog);
 
     // Set/Get attribut to init or option. ------------------------
@@ -235,6 +228,8 @@ protected:
     
     std::map<long long, vector_widget>          m_rowsTable;
     std::multimap<int, std::string>             m_displayedTitlesPopups;
+    bool                                        m_autoUpdate;
+    bool                                        m_hasAddButton;
     
     Echoes::Dbo::Session                        *m_session;
     
@@ -260,7 +255,6 @@ private:
     
     std::string                         m_apiUrl;
     std::string                         m_xmlPageName;
-    std::string                         m_nameResourcePageSpec;
     std::string                         m_undidName;
     bool                                m_isModifButtonPresent;
     bool                                m_isDeleteButtonPresent;

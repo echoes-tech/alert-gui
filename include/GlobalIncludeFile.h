@@ -24,6 +24,7 @@
 #include "MonitoringWidget.h"
 #include "RoleCustomizationWidget.h"
 #include "UnitsWidget.h"
+#include "ProbesWidget.h"
 #include "MainWidget.h"
 #include "EchoesHome.h"
 

@@ -3,7 +3,7 @@
 
 <!--    In table     -->
     <!--header-->
-    <message id="Alert.plugins-source.add-form.plugins-source">Sources</message>
+    <message id="Alert.plugins-source.main-table">Sources</message>
     <!--body-->
     <message id="Alert.plugins-source.name-addon">Addon</message>
     <message id="Alert.plugins-source.name-parameters">Paramètres</message>
@@ -15,12 +15,12 @@
     <message id="Alert.plugins-source.button-cancel">Annuler</message>
     <message id="Alert.plugins-source.button-save">Enregistrer</message>
     <!--POST-->
-    <message id="Alert.plugins-source.add-plugins-source">Ajouter une source</message>
+    <message id="Alert.plugins-source.popup-add">Ajouter une source</message>
     <!--PUT-->
-    <message id="Alert.plugins-source.modif-plugins-source">Modifier</message>
+    <message id="Alert.plugins-source.popup-modif">Modifier</message>
     <!--DELETE-->
     <message id="Alert.plugins-source.delete-plugins-source">Attention</message>
-    <message id="Alert.plugins-source.delete-plugins-source-message">
+    <message id="Alert.plugins-source.delete-message">
         <span style="color:red">
             Vous êtes sur le point de supprimer une source
         </span>

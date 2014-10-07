@@ -3,7 +3,7 @@
 
 <!--    In table     -->
     <!--header-->
-    <message id="Alert.plugins-search.add-form.plugins-search">Recherches</message>
+    <message id="Alert.plugins-search.main-table">Recherches</message>
     <!--body-->
     <message id="Alert.plugins-search.name-search-type">Type de recherche</message>
     <message id="Alert.plugins-search.name-parameters">Paramètres</message>
@@ -16,13 +16,13 @@
     <message id="Alert.plugins-search.button-cancel">Annuler</message>
     <message id="Alert.plugins-search.button-save">Enregistrer</message>
     <!--POST-->
-    <message id="Alert.plugins-search.add-plugins-search">Ajouter une recherche</message>
+    <message id="Alert.plugins-search.popup-add">Ajouter une recherche</message>
     <message id="Alert.plugins-search.add-period">Periode</message>
     <!--PUT-->
-    <message id="Alert.plugins-search.modif-plugins-search">Modifier</message>
+    <message id="Alert.plugins-search.popup-modif">Modifier</message>
     <!--DELETE-->
     <message id="Alert.plugins-search.delete-plugins-search">Attention</message>
-    <message id="Alert.plugins-search.delete-plugins-search-message">
+    <message id="Alert.plugins-search.delete-message">
         <span style="color:red">
             Vous êtes sur le point de supprimer une recherche
         </span>

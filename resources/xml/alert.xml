@@ -12,7 +12,7 @@
     <message id="Alert.alert.nothing-button">Click to Add</message>
     <message id="Alert.alert.no-alert-sent">Never</message>
     <!--header-->
-    <message id="Alert.alert.add-form.alert">Alerts</message>
+    <message id="Alert.alert.main-table">Alerts</message>
     <!--body-->
     <message id="Alert.alert.name-name">Alert name</message>
     <message id="Alert.alert.modif-button">Modify</message>
@@ -33,7 +33,7 @@
     <message id="Alert.alert.button-cancel">Cancel</message>
     <message id="Alert.alert.button-save">Save</message>
     <!--POST-->
-    <message id="Alert.alert.add-alert">Add alert</message>
+    <message id="Alert.alert.popup-add">Add alert</message>
     <message id="Alert.alert.add-title-box-asset">Asset</message>
     <message id="Alert.alert.add-title-box-plugin">Plugin</message>
     <message id="Alert.alert.add-title-box-info">Information</message>
@@ -49,10 +49,10 @@
     <message id="Alert.alert.message-false">False</message>
     <message id="Alert.alert.message-value">Value</message>
     <!--PUT-->
-    <message id="Alert.alert.modif-alert">Modify this alert</message>
+    <message id="Alert.alert.popup-modif">Modify this alert</message>
     <!--DELETE-->
     <message id="Alert.alert.delete-alert">Attention</message>
-    <message id="Alert.alert.delete-alert-message">
+    <message id="Alert.alert.delete-message">
         <span style="color:red">
             You are about to delete a server
         </span>

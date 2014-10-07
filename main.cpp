@@ -46,6 +46,8 @@ Wt::WApplication *createEchoesHomeApplication(const Wt::WEnvironment& env)
     
     app->loadingIndicator()->setMessage(Wt::WString::tr("Alert.loading"));
     
+    app->enableUpdates(true);
+    
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap.css");
     app->useStyleSheet(Wt::WApplication::resourcesUrl() + "themes/bootstrap/css/bootstrap-responsive.css");
     

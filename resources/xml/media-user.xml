@@ -18,9 +18,9 @@
         No smartphone registered</message>
     <message id="Alert.media-user.nothing-button">Click to Add</message>
     <!--header-->
-    <message id="Alert.media-user.add-form.sms">Phones numbers</message>
-    <message id="Alert.media-user.add-form.push">Smartphones names</message>
-    <message id="Alert.media-user.add-form.mail">Emails address</message>
+    <message id="Alert.media-user.main-table">Phones numbers</message>
+    <message id="Alert.media-user.main-table">Smartphones names</message>
+    <message id="Alert.media-user.main-table">Media</message>
     <!--body-->
     <message id="Alert.media-user.name-value">Medias</message>
     <message id="Alert.media-user.name-user">Users</message>

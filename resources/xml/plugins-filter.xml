@@ -3,7 +3,7 @@
 
 <!--    In table     -->
     <!--header-->
-    <message id="Alert.plugins-filter.add-form.plugins-filter">Filters</message>
+    <message id="Alert.plugins-filter.main-table">Filters</message>
     <!--body-->
     <message id="Alert.plugins-filter.name-filter-type">Filter type</message>
     <message id="Alert.plugins-filter.name-parameters">Parameters</message>
@@ -17,14 +17,14 @@
     <message id="Alert.plugins-filter.button-cancel">Cancel</message>
     <message id="Alert.plugins-filter.button-save">Save</message>
     <!--POST-->
-    <message id="Alert.plugins-filter.add-plugins-filter">Add filter</message>
+    <message id="Alert.plugins-filter.popup-add">Add filter</message>
     <message id="Alert.plugins-filter.add-nb-value">Number of value</message>
     <message id="Alert.plugins-filter.add-pos-key-value">Position key value</message>
     <!--PUT-->
-    <message id="Alert.plugins-filter.modif-plugins-filter">Modify</message>
+    <message id="Alert.plugins-filter.popup-modif">Modify</message>
     <!--DELETE-->
     <message id="Alert.plugins-filter.delete-plugins-filter">Attention</message>
-    <message id="Alert.plugins-filter.delete-plugins-filter-message">
+    <message id="Alert.plugins-filter.delete-message">
         <span style="color:red">
             You are about to delete a filter
         </span>

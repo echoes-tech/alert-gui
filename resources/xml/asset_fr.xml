@@ -12,7 +12,7 @@
     </message>
     <message id="Alert.asset.nothing-button">Cliquer pour ajouter</message>
     <!--header-->
-    <message id="Alert.asset.add-form.asset">Serveurs</message>
+    <message id="Alert.asset.main-table">Serveurs</message>
     <message id="Alert.asset.name-download-script">
         Télécharger<br />le script
     </message>
@@ -32,12 +32,12 @@
     <message id="Alert.asset.button-cancel">Annuler</message>
     <message id="Alert.asset.button-save">Enregistrer</message>
     <!--POST-->
-    <message id="Alert.asset.add-asset">Ajouter un serveur</message>
+    <message id="Alert.asset.popup-add">Ajouter un serveur</message>
     <!--PUT-->
-    <message id="Alert.asset.modif-asset">Modifier ce serveur</message>
+    <message id="Alert.asset.popup-modif">Modifier ce serveur</message>
     <!--DELETE-->
     <message id="Alert.asset.delete-asset">Attention</message>
-    <message id="Alert.asset.delete-asset-message">
+    <message id="Alert.asset.delete-message">
         <span style="color:red">
             Vous êtes sur le point de supprimer un serveur
         </span>

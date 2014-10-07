@@ -29,23 +29,18 @@ AbstractPage::AbstractPage(Echoes::Dbo::Session *session, string apiUrl, string 
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use(AbstractPage::xmlDirectory + pageName, false);
 
+    m_hasAddButton = true;
+    m_autoUpdate = true;
     m_xmlPageName = pageName; // XML name
     m_isDeleteButtonPresent = true; // Button delete
     m_isModifButtonPresent = true; // Button modifi
     //    m_isMainPage = true; // Dialog/True
-    m_nameResourcePageSpec = ""; // when more one class use same xml file.
     m_session = session;
     m_undidName = "name";
     m_footerOkButtonActive = true;
     m_selectable = selectable;
     m_selectedID = 0;
     setApiUrl(apiUrl);
-
-
-    //    _timer = new Wt::WTimer(this);
-    //    _timer->setInterval(5) ;
-    //    _timer->timeout().connect(boost::bind(&AbstractPage::updatePage, this)) ;
-    //    _timer->start() ;
 }
 
 AbstractPage::~AbstractPage()
@@ -53,12 +48,11 @@ AbstractPage::~AbstractPage()
 }
 
 void AbstractPage::updatePage()
-{    
-    if (m_nameResourcePageSpec.empty())
+{
+    if (m_autoUpdate)
     {
-        m_nameResourcePageSpec = m_xmlPageName;
-    }
-    getResourceList();
+        getResourceList();
+    }    
 }
 
 void AbstractPage::fillTable()
@@ -142,16 +136,17 @@ Wt::WContainerWidget *AbstractPage::createTableFirstHeader()
     headerTableContainer->addStyleClass("widget-title header-pers");
     
     new Wt::WText("<span class='icon'><i class='icon-tasks'></i></span><h5>"
-                  + tr("Alert." + m_xmlPageName + ".add-form." + m_nameResourcePageSpec)
+                  + tr("Alert." + m_xmlPageName + ".main-table")
                   + "</h5>", headerTableContainer);
 
-    Wt::WAnchor* m_addButton = new Wt::WAnchor(headerTableContainer);
-    addPopupAddHandler(m_addButton);
-    m_addButton->setStyleClass("button-add btn");
-    m_addButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
-    if(!m_buttonAddEnable)
-        m_addButton->disable();
-    
+    if (m_hasAddButton)
+    {
+        Wt::WAnchor *headerButton = new Wt::WAnchor(headerTableContainer);
+
+        headerButton->clicked().connect(boost::bind(&AbstractPage::addResourcePopup, this));
+        headerButton->setStyleClass("button-add btn");
+        headerButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
+    }
     return headerTableContainer;
 }
 
@@ -225,6 +220,7 @@ void AbstractPage::addTableSecondHeader()
 
 void AbstractPage::fillBodyTable()
 {
+    int tmp;
     int columnTable(0);
     int rowBodyTable(1);
 
@@ -288,6 +284,13 @@ void AbstractPage::fillBodyTable()
                 }
                 columnTable++;
             }
+            tmp = columnTable;
+            columnTable = addCustomResourceTable((*itRowTable).first, rowBodyTable, columnTable);
+            while (tmp != columnTable)
+            {
+                tmp = columnTable;
+                columnTable = addCustomResourceTable((*itRowTable).first, rowBodyTable, columnTable);
+            }
             m_resources.push_back(pair<int, Wt::WTableRow*>(0, m_resourceTable->rowAt(rowBodyTable)));
             addGenericButtonsToResourceTable((*itRowTable).first, rowBodyTable, columnTable);
             if (m_selectable)
@@ -328,7 +331,7 @@ void AbstractPage::addResourcePopup()
     vector<Wt::WInteractWidget*>* inputName = new vector<Wt::WInteractWidget*>();
     vector<Wt::WText*> errorMessage;
 
-    Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".add-" + m_nameResourcePageSpec));
+    Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".popup-add"));
     dialogAdd_->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
 
     int cpt(0);
@@ -402,7 +405,7 @@ void AbstractPage::modifResourcePopup(long long id)
     vector<Wt::WText*> errorMessage;
 
     //gkr: Init dialog popup
-    Wt::WDialog *dialogModif = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".modif-" + m_nameResourcePageSpec));
+    Wt::WDialog *dialogModif = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".popup-modif"));
     dialogModif->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
     
     for (map<long long, vector_widget>::iterator itTable = m_rowsTable.begin();
@@ -628,6 +631,11 @@ int AbstractPage::addCustomButtonsToResourceTable(long long id, int rowTable, in
     return columnTable;
 }
 
+int AbstractPage::addCustomResourceTable(long long id, int rowTable, int columnTable)
+{
+    return columnTable;
+}
+
 void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
 {
     Wt::WPushButton *footerOkButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-save"),
@@ -692,11 +700,6 @@ void AbstractPage::setButtonModif(bool check)
 void AbstractPage::setButtonSup(bool check)
 {
     m_isDeleteButtonPresent = check;
-}
-
-void AbstractPage::setNameSpecial(string nameResourcePageSpec)
-{
-    m_nameResourcePageSpec = nameResourcePageSpec;
 }
 
 void AbstractPage::setApiUrl(string apiUrl)
@@ -1053,8 +1056,7 @@ Wt::WDialog *AbstractPage::deleteResource(long long id)
                                + ".delete-" + m_xmlPageName));
 
     box->contents()->
-            addWidget(new Wt::WText(tr("Alert." + m_xmlPageName
-                                       + ".delete-" + m_nameResourcePageSpec + "-message")));
+            addWidget(new Wt::WText(tr("Alert." + m_xmlPageName + ".delete-message")));
 
     Wt::WPushButton *ok =
             new Wt::WPushButton(tr("Alert."

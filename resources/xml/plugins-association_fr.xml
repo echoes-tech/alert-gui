@@ -3,7 +3,7 @@
 
 <!--    In table     -->
     <!--header-->
-    <message id="Alert.plugins-association.add-form.plugins-association">Associations</message>
+    <message id="Alert.plugins-association.main-table">Associations</message>
     <!--body-->
     <message id="Alert.plugins-association.name-asset">Serveurs</message>
     <message id="Alert.plugins-association.name-information">Informations</message>
@@ -17,15 +17,15 @@
     <message id="Alert.plugins-association.button-cancel">Annuler</message>
     <message id="Alert.plugins-association.button-save">Enregistrer</message>
     <!--POST-->
-    <message id="Alert.plugins-association.add-plugins-association">Ajouter une association</message>
+    <message id="Alert.plugins-association.popup-add">Ajouter une association</message>
     <message id="Alert.plugins-association.add-asset">Serveur</message>
     <message id="Alert.plugins-association.add-info">Information</message>
     <message id="Alert.plugins-association.add-filter-index">Index filtre</message>
     <!--PUT-->
-    <message id="Alert.plugins-association.modif-plugins-association">Modifier</message>
+    <message id="Alert.plugins-association.popup-modif">Modifier</message>
     <!--DELETE-->
     <message id="Alert.plugins-association.delete-plugins-association">Attention</message>
-    <message id="Alert.plugins-association.delete-plugins-association-message">
+    <message id="Alert.plugins-association.delete-message">
         <span style="color:red">
             Vous êtes sur le point de supprimer une association
         </span>

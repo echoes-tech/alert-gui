@@ -13,7 +13,7 @@
     </message>
     <message id="Alert.association.nothing-button">Cliquer pour ajouter</message>
     <!--header-->
-    <message id="Alert.association.add-form.association">Associations</message>
+    <message id="Alert.association.main-table">Associations</message>
     <message id="Alert.association.name-download-script">
         Télécharger<br />le script
     </message>
@@ -37,12 +37,12 @@
     <message id="Alert.association.button-cancel">Annuler</message>
     <message id="Alert.association.button-save">Enregistrer</message>
     <!--POST-->
-    <message id="Alert.association.add-association">Ajouter une association</message>
+    <message id="Alert.association.popup-add">Ajouter une association</message>
     <!--PUT-->
-    <message id="Alert.association.modif-association">Modifier cette association</message>
+    <message id="Alert.association.popup-modif">Modifier cette association</message>
     <!--DELETE-->
     <message id="Alert.association.delete-association">Attention</message>
-    <message id="Alert.association.delete-association-message">
+    <message id="Alert.association.delete-message">
         <span style="color:red">
             Vous êtes sur le point de supprimer une association
         </span>

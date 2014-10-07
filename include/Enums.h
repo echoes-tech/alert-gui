@@ -114,6 +114,7 @@ public:
                       (ROLE) ("role")
                       (OPTIONS) ("options")
                       (UNITS) ("units")
+                      (PROBES) ("probes")
                       )
 
 private:

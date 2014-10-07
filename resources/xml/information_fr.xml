@@ -13,7 +13,7 @@
     </message>
     <message id="Alert.information.nothing-button">Cliquer pour ajouter</message>
     <!--header-->
-    <message id="Alert.information.add-form.information">Informations</message>
+    <message id="Alert.information.main-table">Informations</message>
     <!--body-->
     <message id="Alert.information.name-name">Nom</message>
     <message id="Alert.information.name-desc">Description</message>
@@ -34,12 +34,12 @@
     <message id="Alert.information.button-cancel">Annuler</message>
     <message id="Alert.information.button-save">Enregistrer</message>
     <!--POST-->
-    <message id="Alert.information.add-information">Ajouter une information</message>
+    <message id="Alert.information.popup-add">Ajouter une information</message>
     <!--PUT-->
-    <message id="Alert.information.modif-information">Modifier cette information</message>
+    <message id="Alert.information.popup-modif">Modifier cette information</message>
     <!--DELETE-->
     <message id="Alert.information.delete-information">Attention</message>
-    <message id="Alert.information.delete-information-message">
+    <message id="Alert.information.delete-message">
         <span style="color:red">
             Vous êtes sur le point de supprimer une information
         </span>

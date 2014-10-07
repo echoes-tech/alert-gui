@@ -241,6 +241,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         {
             unw = new UnitsWidget(this->session, this->_apiUrl);
         }
+        case Enums::EPageType::PROBES:
+        {
+            prb = new ProbesWidget(this->session, this->_apiUrl);
+            break ;
+        }
         default:
             break;
     }
@@ -390,6 +395,12 @@ void MainWidget::updateContainerFluid(int type)
             this->contentFluid->addWidget(unw);
             break;
         }
+        case Enums::EPageType::PROBES:
+        {
+            prb->getResourceList();
+            this->contentFluid->addWidget(prb);
+            break;
+        }
         default:
             break;
     }
@@ -485,6 +496,11 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
         {
             res = "tasks";
             break;
+        }
+        case Enums::EPageType::PROBES:
+        {
+            res = "search";
+            break ;
         }
         default:
             res = "home";

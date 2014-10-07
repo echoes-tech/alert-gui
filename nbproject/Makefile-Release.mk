@@ -60,6 +60,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/PluginsTableSearchWidget.o \
 	${OBJECTDIR}/src/PluginsTableSourceWidget.o \
 	${OBJECTDIR}/src/PluginsWidget.o \
+	${OBJECTDIR}/src/ProbesWidget.o \
 	${OBJECTDIR}/src/RecipientsWidget.o \
 	${OBJECTDIR}/src/RoleCustomizationWidget.o \
 	${OBJECTDIR}/src/SummaryBoard.o \
@@ -216,6 +217,11 @@ ${OBJECTDIR}/src/PluginsWidget.o: src/PluginsWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsWidget.o src/PluginsWidget.cpp
+
+${OBJECTDIR}/src/ProbesWidget.o: src/ProbesWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ProbesWidget.o src/ProbesWidget.cpp
 
 ${OBJECTDIR}/src/RecipientsWidget.o: src/RecipientsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

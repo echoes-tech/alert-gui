@@ -11,7 +11,7 @@
     <message id="Alert.association.nothing-association-text">Nothing Association register</message>
     <message id="Alert.association.nothing-button">Click to Add</message>
     <!--header-->
-    <message id="Alert.association.add-form.association">Association</message>
+    <message id="Alert.association.main-table">Association</message>
     <message id="Alert.association.name-download-script">Download<br />Script</message>
     <!--body-->
     <message id="Alert.association.name-plugin">Plugins</message>
@@ -33,12 +33,12 @@
     <message id="Alert.association.button-cancel">Cancel</message>
     <message id="Alert.association.button-save">Save</message>
     <!--POST-->
-    <message id="Alert.association.add-association">Add Association</message>
+    <message id="Alert.association.popup-add">Add Association</message>
     <!--PUT-->
-    <message id="Alert.association.modif-association">Modifi this association</message>
+    <message id="Alert.association.popup-modif">Modifi this association</message>
     <!--DELETE-->
     <message id="Alert.association.delete-association">Attention</message>
-    <message id="Alert.association.delete-association-message">
+    <message id="Alert.association.delete-message">
         <span style="color:red">
             You are about to delete an association
         </span>

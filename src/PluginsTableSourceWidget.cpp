@@ -73,8 +73,6 @@ void PluginsTableSourceWidget::updatePage()
     }
     setUrl(listsUrl);
     
-    setAddButtonEnable(m_pluginsTablePluginWidget->getSelectedID() != 0);
-    
     AbstractPage::updatePage();
 }
 

@@ -48,10 +48,12 @@
 #include "AssetManagementWidget.h"
 #include "UnitsWidget.h"
 #include "DashBoard.h"
+#include "ProbesWidget.h"
 
 class RecipientsWidget;
 class InformationsWidget;
 class AlertsWidget;
+class ProbesWidget;
 class DashBoard;
 
 class MainWidget : public Wt::WContainerWidget
@@ -109,6 +111,7 @@ protected:
 //  AlertEditionModel *aem;
 //  AlertListWidget *alw;
   RoleCustomizationWidget *rcw;
+  ProbesWidget *prb;
   
   UserEditionWidget *uew;
   

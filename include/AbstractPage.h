@@ -203,7 +203,7 @@ protected:
      * @param titles &lsaquo; type, name &rsaquo; \n
      * type(0) == Wtext || type(1) == Wwidget.
      */
-    void                        setUndidName(std::string undidName);
+    void                        setUndidName(std::vector<std::string> undidNames);
     void                        setTitles(std::vector<std::pair <int, std::string>> titles);
     virtual void                setDisplayedTitlesPopups();
     void                        setUrl(std::list<std::list<std::pair<std::string, std::vector<std::string>>>> listsUrl); 
@@ -285,7 +285,7 @@ private:
     std::string                         m_apiUrl;
     std::string                         m_xmlPageName;
     std::string                         m_nameResourcePageSpec;
-    std::string                         m_undidName;
+    std::vector<std::string>            m_undidNames;
     bool                                m_isModifButtonPresent;
     bool                                m_isDeleteButtonPresent;
     bool                                m_selectable;

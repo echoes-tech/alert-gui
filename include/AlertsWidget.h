@@ -272,19 +272,23 @@ private:
     long long       m_rowMedia;
     
     /* <media_id, media_name> */
-    std::map<long long, std::string>       m_nameFromMedia;
+    std::map<long long, std::string>        m_nameFromMedia;
     /* <receiver_id, receiver_name> */
-    std::map<long long, std::string>       m_nameFromReceiver;
+    std::map<long long, std::string>        m_nameFromReceiver;
     /* <media_id, message> */
-    std::map<long long, struct Message>    m_messages;
+    std::map<long long, struct Message>     m_messages;
     /* <user_id, aliases> */
-    std::map<long long, struct Aliases>    m_userAliases;
+    std::map<long long, struct Aliases>     m_userAliases;
     /* <media_id, media type>*/
-    std::map<long long, long long>         m_typesFromMedia;
+    std::map<long long, long long>          m_typesFromMedia;
     /* <media_id, user_id> */
-    std::map<long long, long long>         m_userFromMedia;
+    std::map<long long, long long>          m_userFromMedia;
     /* <user_id, media_id> */
-    std::multimap<long long, long long>    m_mediasFromUser;
+    std::multimap<long long, long long>     m_mediasFromUser;
+    /* keep order <user_id> */
+    std::vector<long long>                  m_userIds;
+    /* keep order <media_id> */
+    std::vector<long long>                  m_mediaIds;
     
     
     Wt::WTextArea   *m_messageArea;

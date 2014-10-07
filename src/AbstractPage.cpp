@@ -36,7 +36,8 @@ AbstractPage::AbstractPage(Echoes::Dbo::Session *session, string apiUrl, string 
     //    m_isMainPage = true; // Dialog/True
     m_nameResourcePageSpec = ""; // when more one class use same xml file.
     m_session = session;
-    m_undidName = "name";
+    
+    m_undidNames.push_back("name");
     m_footerOkButtonActive = true;
     m_selectable = selectable;
     m_selectedID = 0;
@@ -340,7 +341,7 @@ void AbstractPage::addResourcePopup()
         int jsonType = (title->first >> 8) & 0xF;
         int fullType = title->first;
             
-        if (jsonType != 5)
+        if (jsonType != ETypeJson::widget)
         {
             new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
                           + " : <br />", dialogAdd_->contents());
@@ -431,7 +432,7 @@ void AbstractPage::modifResourcePopup(long long id)
                         break;
                     }
                 }
-                if (((title->first >> 8) & 0xF) != 5)
+                if (((title->first >> 8) & 0xF) != ETypeJson::widget)
                 {
                     new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + title->second)
                                   + " : <br />", dialogModif->contents());
@@ -458,7 +459,7 @@ void AbstractPage::modifResourcePopup(long long id)
                         inputCW->addStyleClass("control-group controls");
                         
                         Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), inputCW);
-                        // FIXME: ne marche pas quand c'est un mail / tel, cf. medias
+                        
                         input->setValidator(AbstractPage::editValidator(fullType));
                         input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
                         if (inputName->size() == 0)
@@ -547,6 +548,10 @@ void AbstractPage::modifResourcePopup(long long id)
                             break;
                         }
                         cpt2++;
+                    }
+                    if (comboBox->currentIndex() == -1)
+                    {
+                        comboBox->setCurrentIndex(0);
                     }
                     break;
                 }
@@ -702,9 +707,9 @@ map<long long, vector_widget> AbstractPage::getRowsTable()
     return m_rowsTable;
 }
 
-void AbstractPage::setUndidName(string undidName)
+void AbstractPage::setUndidName(std::vector<string> undidNames)
 {
-    m_undidName = undidName;
+    m_undidNames = undidNames;
 }
 
 void AbstractPage::setTitles(std::vector<std::pair <int, string>> titles)
@@ -1001,7 +1006,17 @@ vector<Wt::WInteractWidget *> AbstractPage::initRowWidgets(Wt::Json::Object json
             {
                 Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
                 Wt::Json::Object nameObjet = jsonObjectParam.get(itTitles->second);
-                Wt::WString name = nameObjet.get(m_undidName);
+                string name;
+                for (std::vector<string>::const_iterator itNames = m_undidNames.begin() ; itNames != m_undidNames.end() ; itNames++)
+                {
+                    if (itNames != m_undidNames.begin())
+                    {
+                        name += " ";
+                    }
+                    
+                    std::string current = nameObjet.get(*itNames);
+                    name += current;
+                }
                 Wt::WText *text = new Wt::WText(name);
                 rowWidgets.push_back(text);
                 break;
@@ -1377,6 +1392,10 @@ int AbstractPage::setValidatorType(int jsonType, int specialType, int mandatory)
     Wt::log("info") << " == setting validator type ==";
     int type;
     
+    Wt::log("info") << " ::: jsonType: " << jsonType;
+    Wt::log("info") << " ::: specialType: " << specialType;
+    Wt::log("info") << " ::: mandatory: " << (mandatory == true ? "true" : "false");
+    
     type = jsonType;
     /* 4bits shift to the left: 0000 0000 0001 becomes 0000 0001 0000 */
     type = type << 4;
@@ -1385,7 +1404,9 @@ int AbstractPage::setValidatorType(int jsonType, int specialType, int mandatory)
     type = type << 4;
     /* add isMandatory == true: 0001 0001 0000 becomes 0001 0001 0001 */
     type += mandatory;
-         
+    
+    Wt::log("info") << " ::: type: " << type;
+    
     return (type);
 }
 

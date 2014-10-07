@@ -334,11 +334,11 @@ void AlertsWidget::addMedia(long long id, long long index, BoxInBoxMenu *menu)
     functorMapMediaRow.insert(make_pair(EInteractions::REMOVE, boost::bind(&AlertsWidget::deleteMedia, this, _1, _2, _3)));
     functorMapMediaRow.insert(make_pair(EInteractions::SELECT, boost::bind(&AlertsWidget::selectMedia, this, _1, _2, _3)));
     
-    for (multimap<long long, pair < pair<long long, long long>, string>>::iterator itM = mediaInfo_.begin(); itM != mediaInfo_.end(); itM++)
+    for (std::vector<long long>::iterator itM = m_mediaIds.begin(); itM != m_mediaIds.end(); itM++)
     {
-        if (itM->second.second == ((Wt::WComboBox*)menu->m_header.at(1))->currentText())
+        if (m_nameFromMedia.find(*itM)->second == media)
         {
-            menu->addRow(itM->second.first.first, 1, widgets, buttons, functorMapMediaRow, NULL);
+            menu->addRow(*itM, 1, widgets, buttons, functorMapMediaRow, NULL);
             break ;
         }
     }
@@ -362,8 +362,9 @@ void AlertsWidget::deleteMedia(long long id, long long index, BoxInBoxMenu *menu
 }
 
 void AlertsWidget::addReceiver(long long id, long long index, BoxInBoxMenu *menu)
-{    
-    long long selectedId = userInfo_.find(((Wt::WComboBox*)menu->m_header.at(1))->currentIndex())->second.first;
+{
+    long long currentIndex = ((Wt::WComboBox*)menu->m_header.at(1))->currentIndex();
+    long long selectedId = m_userIds.at(currentIndex);
     
     if (menu->rowIdExist(selectedId) && selectedId != -1)
     {
@@ -381,17 +382,17 @@ void AlertsWidget::addReceiver(long long id, long long index, BoxInBoxMenu *menu
     {
         m_messageTable->disable();
     }
-    getAliases(userInfo_.find(((Wt::WComboBox*)menu->m_header.at(1))->currentIndex())->second.first);
+    getAliases(m_userIds.at(currentIndex));
     
     /* Set ComboBox */
     Wt::log("info") << "Set ComboBox";
     Wt::WComboBox *boxMedias = new Wt::WComboBox();
     boxMedias->setMinimumSize(Wt::WLength(220), Wt::WLength(20));
-    for (multimap<long long, pair < pair<long long, long long>, string>>::iterator itM = mediaInfo_.begin(); itM != mediaInfo_.end(); itM++)
+    for (std::vector<long long>::iterator itM = m_mediaIds.begin(); itM != m_mediaIds.end(); itM++)
     {
-        if (userInfo_.find(((Wt::WComboBox*)menu->m_header.at(1))->currentIndex())->second.first == m_mediaUserRelation.find(itM->first)->second)
+        if (m_userIds.at(currentIndex) == m_userFromMedia.find(*itM)->second)
         {
-            boxMedias->addItem(itM->second.second);
+            boxMedias->addItem(m_nameFromMedia.find(*itM)->second);
         }
     }
     
@@ -405,7 +406,7 @@ void AlertsWidget::addReceiver(long long id, long long index, BoxInBoxMenu *menu
     /* Set widgets */
     Wt::log("info") << "Set widgets";
     std::vector<Wt::WWidget*> widgets;
-    widgets.push_back(new Wt::WText(userInfo_.find(((Wt::WComboBox*)menu->m_header.at(1))->currentIndex())->second.second));
+    widgets.push_back(new Wt::WText(m_nameFromReceiver.find(m_userIds.at(currentIndex))->second));
 
     /* Set m_header */
     Wt::log("info") << "Set header";
@@ -442,9 +443,9 @@ void AlertsWidget::addReceiver(long long id, long long index, BoxInBoxMenu *menu
     buttonsMediaHeader.insert(make_pair(EInteractions::ADD, true));
     
     menuMedia->addRow(0, 0, headerMedia, buttonsMediaHeader, functorMapMediaHeader, NULL);
-    menuMedia->parentId = userInfo_.find(((Wt::WComboBox*)menu->m_header.at(1))->currentIndex())->second.first;
+    menuMedia->parentId = m_userIds.at(currentIndex);
     
-   menu->addRow(userInfo_.find(((Wt::WComboBox*)menu->m_header.at(1))->currentIndex())->second.first, 1, widgets, buttonsReceiverRow, functorMapReceiverRow, menuMedia);
+   menu->addRow(m_userIds.at(currentIndex), 1, widgets, buttonsReceiverRow, functorMapReceiverRow, menuMedia);
     
     if (menuMedia->getIndex() > 0)
     {
@@ -496,16 +497,16 @@ void AlertsWidget::popupNewRecipientsRework(std::string nameAlert, std::string m
     /* Set ComboBox */
     Wt::WComboBox *boxUsers = new Wt::WComboBox();
     boxUsers->setMinimumSize(Wt::WLength(150), Wt::WLength(20));
-    for (multimap<long long, pair<long long, string>> ::iterator itU = userInfo_.begin(); itU != userInfo_.end(); itU++)
+    for (std::map<long long, std::string>::iterator itU = m_nameFromReceiver.begin(); itU != m_nameFromReceiver.end(); itU++)
     {
-        boxUsers->addItem(itU->second.second);
+        boxUsers->addItem(itU->second);
     }
     
     /* Set Table */
     Wt::WDialog *dialog = new Wt::WDialog();
     dialog->setClosable(true);
     AbstractPage::addButtonsToPopupFooter(dialog);
-    dialog->resize(Wt::WLength(750), Wt::WLength(500));
+    dialog->resize(Wt::WLength(750), Wt::WLength(70, Wt::WLength::Percentage));
     
     Wt::WTable *alertTable = new Wt::WTable(dialog->contents());
     alertTable->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.alert")));
@@ -1801,7 +1802,11 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
                     long long userId = jsonUser.get("id");
                     string userFirstName = jsonUser.get("first_name");
                     string userLastName = jsonUser.get("last_name");
+                    
+                    /* new maps and vectors */
                     m_nameFromReceiver.insert(std::make_pair(userId, userFirstName + " " + userLastName));
+                    m_userIds.push_back(userId);
+                    
                     userInfo_.insert(std::make_pair(cpt, std::make_pair(userId, userFirstName + " " + userLastName)));
                 }
             }
@@ -1839,11 +1844,12 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
                     long long userId = mediaUser.get("id");
                     
                     m_mediaUserRelation.insert(std::make_pair(cpt, userId));
-                    /* new maps */
+                    /* new maps and vectors */
                     m_userFromMedia.insert(std::make_pair(mediaId, userId));
                     m_typesFromMedia.insert(std::make_pair(mediaId, mediaTypeId));
                     m_nameFromMedia.insert(std::make_pair(mediaId, mediaValue));
                     m_mediasFromUser.insert(std::make_pair(userId, mediaId));
+                    m_mediaIds.push_back(mediaId);
                     
                     mediaInfo_.insert(std::make_pair(cpt, std::make_pair(std::make_pair(mediaId, mediaTypeId), mediaValue)));
                 }

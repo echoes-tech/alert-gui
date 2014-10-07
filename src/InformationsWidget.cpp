@@ -33,7 +33,10 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
     titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isnot), "desc"));
     titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isnot), "calculate"));
     titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::is), "information_unit"));
-    setUndidName("name");
+    
+    std::vector<std::string> undidNames;
+    undidNames.push_back("name");
+    setUndidName(undidNames);
     titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::is), "display"));
     setTitles(titles);
     

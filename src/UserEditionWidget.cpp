@@ -30,14 +30,20 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
     setButtonSup(true);
 //    setLocalTable(true);
     
+    Wt::log("info") << "i iz retard";
     string nameSpe = type == 1 ? "mail" : type == 2 ? "sms" : type == 3 ? "push" : "error";
     this->setNameSpecial(nameSpe);
     
     std::vector<std::pair <int, string>>titles;
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, (type != 3 ? type : 0), EMandatory::is), "value"));
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "user"));
-    setUndidName("last_name");
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "value"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::is), "user"));
+    
+    std::vector<std::string> undidNames;
+    undidNames.push_back("first_name");
+    undidNames.push_back("last_name");
+    setUndidName(undidNames);
     setTitles(titles);
+    Wt::log("info") << "i less retard";
     
     list<list<pair<string, vector<string>>>> listsUrl;
     list<pair<string, vector<string>>> listUrl;

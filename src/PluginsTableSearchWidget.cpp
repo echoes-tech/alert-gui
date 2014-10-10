@@ -188,8 +188,18 @@ void PluginsTableSearchWidget::addResourcePopup(long long searchID)
 {
     vector<Wt::WInteractWidget*>* inputName = new vector<Wt::WInteractWidget*>();
     vector<Wt::WText*> errorMessage;
-
-    Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-search.add-plugins-search"));
+    
+    std::string xmlPopup;
+    if (searchID == 0)
+    {
+        xmlPopup = "Alert.plugins-search.popup-add";
+    }
+    else
+    {
+        xmlPopup = "Alert.plugins-search.popup-modif";
+    }
+    Wt::WDialog *dialog = new Wt::WDialog(tr(xmlPopup));
+    
     dialog->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
              
     Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget();  

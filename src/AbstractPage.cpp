@@ -143,7 +143,7 @@ Wt::WContainerWidget *AbstractPage::createTableFirstHeader()
     {
         Wt::WAnchor *headerButton = new Wt::WAnchor(headerTableContainer);
 
-        headerButton->clicked().connect(boost::bind(&AbstractPage::addResourcePopup, this));
+        addPopupAddHandler(headerButton);
         headerButton->setStyleClass("button-add btn");
         headerButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
     }

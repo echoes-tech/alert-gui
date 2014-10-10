@@ -41,14 +41,17 @@
     <message id="Alert.media-user.button-cancel">Cancel</message>
     <message id="Alert.media-user.button-save">Save</message>
     <!--POST--> <!-- a revoir-->
+    <message id="Alert.media-user.popup-add">Add Media</message>
     <message id="Alert.media-user.add-sms">Add Phone number</message>
     <message id="Alert.media-user.add-mail">Add Email address</message>
     <message id="Alert.media-user.add-push">Add Smartphone</message>
     <!--PUT-->
+    <message id="Alert.media-user.popup-modif">Modify Media</message>
     <message id="Alert.media-user.modif-sms">Modifi Phone number</message>
     <message id="Alert.media-user.modif-mail">Modifi Email address</message>
     <message id="Alert.media-user.modif-push">Modifi Smartphone</message>
     <!--DELETE-->
+    <message id="Alert.media-user.popup-delete">Delete Media</message>
     <message id="Alert.media-user.delete-media-user">Attention</message>
     <message id="Alert.media-user.delete-sms-message">
         <span style="color:red">

@@ -118,7 +118,7 @@ void PluginsTableAssociationWidget::addResourcePopup()
     vector<Wt::WInteractWidget*>* inputName = new vector<Wt::WInteractWidget*>();
     vector<Wt::WText*> errorMessage;
 
-    Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-association.add-plugins-association"));
+    Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-association.popup-add"));
     dialog->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
         
     new Wt::WText(tr("Alert.plugins-association.add-asset") + "<br />", dialog->contents());

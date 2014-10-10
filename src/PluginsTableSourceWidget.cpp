@@ -174,8 +174,18 @@ void PluginsTableSourceWidget::addResourcePopup(long long sourceID)
 {
     vector<Wt::WInteractWidget*>* inputName = new vector<Wt::WInteractWidget*>();
     vector<Wt::WText*> errorMessage;
-
-    Wt::WDialog *dialog = new Wt::WDialog(tr("Alert.plugins-source.add-plugins-source"));
+    
+    std::string xmlPopup;
+    if (sourceID == 0)
+    {
+        xmlPopup = "Alert.plugins-source.popup-add";
+    }
+    else
+    {
+        xmlPopup = "Alert.plugins-source.popup-modif";
+    }
+    Wt::WDialog *dialog = new Wt::WDialog(tr(xmlPopup));
+    
     dialog->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
     
     Wt::WContainerWidget* paramsContainer = new Wt::WContainerWidget();    

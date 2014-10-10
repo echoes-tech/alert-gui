@@ -131,7 +131,7 @@ get() {
       /usr/bin/curl -# -D "${3}_header" -o "$3" -O "https://${API_HOST}:${API_PORT}${1}?${2}"
     elif [ -x '/usr/bin/openssl' ]
     then
-      printf "GET %s?%s HTTP/1.1\nHost: %s\nConnection: close\n\n" "$1" "$2" "$API_HOST" | /usr/bin/openssl s_client -quiet -connect ${API_HOST}:${API_PORT} > ${3}_tmp 2> /dev/null
+      printf "GET %s?%s HTTP/1.1\nHost: %s\nConnection: close\n\n" "$1" "$2" "$API_HOST" | /usr/bin/openssl s_client -quiet -crlf -connect ${API_HOST}:${API_PORT} > ${3}_tmp 2> /dev/null
       split_http_file ${3}
     else
       clean_and_exit "can't find HTTPS command line client (curl or openssl)."
@@ -164,7 +164,7 @@ post() {
       /usr/bin/curl -# -H 'Content-Type: application/json; charset=utf-8' -D "${4}_header" -o "$4" -d "$3" -O "https://${API_HOST}:${API_PORT}${1}?${2}"
     elif [ -x '/usr/bin/openssl' ]
     then
-      printf "POST %s?%s HTTP/1.1\nHost: %s\nContent-Type: application/json; charset=utf-8\nContent-length: $(echo $3 | wc -m)\nConnection: close\n\n%s\n" "$1" "$2" "$API_HOST" "$3" | /usr/bin/openssl s_client -quiet -connect ${API_HOST}:${API_PORT} > ${4}_tmp 2> /dev/null
+      printf "POST %s?%s HTTP/1.1\nHost: %s\nContent-Type: application/json; charset=utf-8\nContent-length: $(echo $3 | wc -m)\nConnection: close\n\n%s\n" "$1" "$2" "$API_HOST" "$3" | /usr/bin/openssl s_client -quiet -crlf -connect ${API_HOST}:${API_PORT} > ${4}_tmp 2> /dev/null
       split_http_file ${4}
     else
       clean_and_exit "can't find HTTP command line client (curl or openssl)."
@@ -197,7 +197,7 @@ put() {
       /usr/bin/curl -X PUT -# -H 'Content-Type: application/json; charset=utf-8' -D "${4}_header" -o "$4" -d "$3" -O "https://${API_HOST}:${API_PORT}${1}?${2}"
     elif [ -x '/usr/bin/openssl' ]
     then
-      printf "PUT %s?%s HTTP/1.1\nHost: %s\nContent-Type: application/json; charset=utf-8\nContent-length: $(echo $3 | wc -m)\nConnection: close\n\n%s\n" "$1" "$2" "$API_HOST" "$3" | /usr/bin/openssl s_client -quiet -connect ${API_HOST}:${API_PORT} > ${4}_tmp 2> /dev/null
+      printf "PUT %s?%s HTTP/1.1\nHost: %s\nContent-Type: application/json; charset=utf-8\nContent-length: $(echo $3 | wc -m)\nConnection: close\n\n%s\n" "$1" "$2" "$API_HOST" "$3" | /usr/bin/openssl s_client -quiet -crlf -connect ${API_HOST}:${API_PORT} > ${4}_tmp 2> /dev/null
       split_http_file ${4}
     else
       clean_and_exit "can't find HTTP command line client (curl or openssl)."

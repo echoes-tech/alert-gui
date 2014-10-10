@@ -51,7 +51,7 @@
     <message id="Alert.media-user.modif-mail">Modifi Email address</message>
     <message id="Alert.media-user.modif-push">Modifi Smartphone</message>
     <!--DELETE-->
-    <message id="Alert.media-user.popup-delete">Delete Media</message>
+    <message id="Alert.media-user.delete-message">Delete Media</message>
     <message id="Alert.media-user.delete-media-user">Attention</message>
     <message id="Alert.media-user.delete-sms-message">
         <span style="color:red">

@@ -348,7 +348,6 @@ void AbstractPage::addResourcePopup()
 
             if (jsonType == ETypeJson::text)
             {
-                Wt::log("info") << "add ETypeJson::text";
                 Wt::WContainerWidget *inputCW = new Wt::WContainerWidget(dialogAdd_->contents());
                 inputCW->addStyleClass("control-group controls");
                 
@@ -365,7 +364,6 @@ void AbstractPage::addResourcePopup()
             }
             else if (jsonType == ETypeJson::number)
             {
-                Wt::log("info") << "add ETypeJson::number";
                 input = new Wt::WLineEdit(dialogAdd_->contents());
                 input->setValidator(AbstractPage::editValidator(fullType));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);

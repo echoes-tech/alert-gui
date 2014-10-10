@@ -301,7 +301,7 @@ void AlertsWidget::selectMedia(long long id, long long index, BoxInBoxMenu *menu
             
     }));
     
-    m_messageTable->elementAt(0, 0)->keyWentUp().connect(bind( [ = ]()
+    m_timer->keyWentUp().connect(bind( [ = ]()
     {
         if (m_rowMedia == id)
         {

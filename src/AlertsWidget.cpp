@@ -115,138 +115,19 @@ vector<string> AlertsWidget::getTitlesTableText()
     titleText.push_back("name");
     return titleText;
 }
-/*
-void AlertsWidget::popupRecipients(string nameAlert, string message)
+
+void AlertsWidget::selectMedia(long long id, long long index, TrundleTable *trundleTable)
 {
-    Wt::WComboBox *criterionComboBox;
-    for (unsigned long criteria = 0 ; criteria < m_alertCriteria.size() ; criteria++)
-    {
-        criterionComboBox = m_alertCriteria[criteria].comboBoxCriteria;
-
-        string criteria_id = ((Wt::WStandardItemModel*)(criterionComboBox->model()))->item(criterionComboBox->currentIndex(),0)->text().toUTF8();
-    
-        m_alertCriteria[criteria].criteriaID = boost::lexical_cast<long long> (criteria_id);
-    }
-    
-    getAliases(this->m_session->user().id());
-    
-    Wt::WDialog *dialog = new Wt::WDialog();
-    dialog->setClosable(true);
-    AbstractPage::addButtonsToPopupFooter(dialog);
-    dialog->resize(Wt::WLength(750), Wt::WLength(500));
-    
-    Wt::WTable *tablePopup = new Wt::WTable(dialog->contents());
-    
-    tablePopup->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.alert")));
-    tablePopup->elementAt(0, 1)->addWidget(new Wt::WText(nameAlert));
-
-    tablePopup->elementAt(1, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.rec")));
-    Wt::WComboBox *boxUsers = new Wt::WComboBox(tablePopup->elementAt(1, 1));
-    tablePopup->elementAt(1, 1)->resize(Wt::WLength(285), Wt::WLength(15));
-
-    tablePopup->elementAt(2, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.media")));
-    Wt::WComboBox *boxMedias = new Wt::WComboBox(tablePopup->elementAt(2, 1));
-    
-    Wt::WTable *tabMessages = new Wt::WTable(dialog->contents());
-    tabMessages->resize(Wt::WLength(650), Wt::WLength(100));
-    tabMessages->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.mess")));
-    tabMessages->elementAt(0, 1)->addWidget(m_tabWidgetMessages);
-
-    Wt::WTable *tabNotice = new Wt::WTable(tabMessages->elementAt(1, 1));
-    Wt::WText *notice = new Wt::WText();
-    tabNotice->resize(Wt::WLength(550), Wt::WLength(100));
-    tabNotice->elementAt(0, 0)->addWidget(notice);
-    notice->setWordWrap(true);
-    notice->setText("*notice: elements like value/threshold/detection-time/alerting-time/unit within % (ex - %unit%) will be replaced by database association.<br />"
-        "If you have more than one criterion, you should retrieve the element by adding a number from 0 to n, ex - \"%value0% on %unit0%...\"");
-
-    for (multimap<long long, pair<long long, string>> ::iterator itU = userInfo_.begin(); itU != userInfo_.end(); itU++)
-    {
-        boxUsers->addItem(itU->second.second);
-    }
-
-    boxUsers->activated().connect(bind([ = ] ()
-    {        
-        long long id = userInfo_.find(boxUsers->currentIndex())->second.first;
-        boxMedias->clear();
-        getAliases(id);
-        for (multimap<long long, pair < pair<long long, long long>, string>>::iterator itM = mediaInfo_.begin(); itM != mediaInfo_.end(); itM++)
-        {
-            if (id == m_mediaUserRelation.find(itM->first)->second)
-            {
-                boxMedias->addItem(itM->second.second);
-            }
-        }
-    }));
-    
-    for (multimap<long long, pair < pair<long long, long long>, string>>::iterator itM = mediaInfo_.begin(); itM != mediaInfo_.end(); itM++)
-    {
-        if (userInfo_.find(boxUsers->currentIndex())->second.first == m_mediaUserRelation.find(itM->first)->second)
-        {
-            boxMedias->addItem(itM->second.second);
-        }
-    }
-    Wt::WTable *table = new Wt::WTable(tablePopup->elementAt(2, 2));
-
-    Wt::WTemplate *t = new Wt::WTemplate(tr("Alert.alert.time.template"));
-    Wt::WLineEdit *time = new Wt::WLineEdit();
-    
-    t->bindWidget("time", time);
-    time->setValidator(editValidator(EValidatorType::VALIDATOR_INT));
-    table->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.snooze")));
-    table->elementAt(0, 0)->setPadding(Wt::WLength(5), Wt::Top);
-    table->elementAt(0, 1)->addWidget(t);
-    table->elementAt(0, 1)->resize(Wt::WLength(60), Wt::WLength(15));
-    table->elementAt(0, 1)->setPadding(Wt::WLength(5), Wt::Right);
-    Wt::WText *error = new Wt::WText(tr("Alert.alert.invalid-number"));
-    table->elementAt(1, 1)->addWidget(error);
-    error->hide();
-    
-    Wt::WComboBox *comboBox = new Wt::WComboBox();
-    comboBox->addItem(tr("Alert.alert.form.minutes")); 
-//    comboBox->addItem(tr("Alert.alert.form.hours")); 
-//    comboBox->addItem(tr("Alert.alert.form.times")); 
-    comboBox->setWidth(Wt::WLength(80));
-    table->elementAt(0, 2)->addWidget(comboBox);
-    time_ = 0;
-    comboBox->changed().connect(bind([ = ] ()
-    {
-        time_ = comboBox->currentIndex();
-    }));
-
-    dialog->finished().connect(bind([ = ] ()
-    {
-        if (dialog->result() == Wt::WDialog::Rejected)
-        {
-            closePopup();
-            return;
-        }
-        if (time->validate() == Wt::WValidator::Valid)
-        {
-            checkPopupRecipients(message, time->text().toUTF8(), (boxMedias->currentIndex() + 1));
-            return;
-        }
-        else
-            error->show();
-            dialog->show();
-    }
-    ));
-    dialog->show();
-}
-*/
-
-void AlertsWidget::selectMedia(long long id, long long index, BoxInBoxMenu *menu)
-{
-    if (menu->getIndex() > 0)
+    if (trundleTable->getIndex() > 0)
     {
         m_messageTable->enable();
     }
 
     /* Set receiver/media reminder */
-    if (m_nameFromReceiver.find(menu->parentId) != m_nameFromReceiver.end()
+    if (m_nameFromReceiver.find(trundleTable->parentId) != m_nameFromReceiver.end()
             && m_nameFromMedia.find(id) != m_nameFromMedia.end())
     {
-        m_messageReceiver->setText(m_nameFromReceiver.at(menu->parentId));
+        m_messageReceiver->setText(m_nameFromReceiver.at(trundleTable->parentId));
         m_messageMedia->setText(m_nameFromMedia.at(id));
     }
     
@@ -257,26 +138,26 @@ void AlertsWidget::selectMedia(long long id, long long index, BoxInBoxMenu *menu
     if (itMsg == m_messages.end())
     {
         struct Message newMessage;
-        newMessage.receiverId = menu->parentId;
+        newMessage.receiverId = trundleTable->parentId;
         newMessage.mediaId = id;
         newMessage.timer = 0;
-        if (m_userAliases.find(menu->parentId) != m_userAliases.end())
+        if (m_userAliases.find(trundleTable->parentId) != m_userAliases.end())
         {
             switch (m_typesFromMedia.at(id))
             {
                 case Enums::EMedia::email:
                 {
-                    newMessage.str = m_userAliases.at(menu->parentId).email;
+                    newMessage.str = m_userAliases.at(trundleTable->parentId).email;
                     break ;
                 }
                 case Enums::EMedia::sms:
                 {
-                    newMessage.str = m_userAliases.at(menu->parentId).sms;
+                    newMessage.str = m_userAliases.at(trundleTable->parentId).sms;
                     break ;
                 }
                 case Enums::EMedia::mobileapp:
                 {
-                    newMessage.str = m_userAliases.at(menu->parentId).mobile;
+                    newMessage.str = m_userAliases.at(trundleTable->parentId).mobile;
                     break ;
                 }
             }
@@ -314,7 +195,7 @@ void AlertsWidget::selectMedia(long long id, long long index, BoxInBoxMenu *menu
     }));
 }
 
-void AlertsWidget::addMedia(long long id, long long index, BoxInBoxMenu *menu)
+void AlertsWidget::addMedia(long long id, long long index, TrundleTable *menu)
 {
     Wt::log("info") << "add Media";
     std::string media = ((Wt::WComboBox*)menu->m_header.at(1))->currentText().toUTF8();
@@ -330,7 +211,7 @@ void AlertsWidget::addMedia(long long id, long long index, BoxInBoxMenu *menu)
     buttons.insert(make_pair(EInteractions::REMOVE, true));
     
     /* Set functors */
-    std::map<int, boost::function<void (long long, long long, BoxInBoxMenu*)>> functorMapMediaRow;
+    std::map<int, boost::function<void (long long, long long, TrundleTable*)>> functorMapMediaRow;
     functorMapMediaRow.insert(make_pair(EInteractions::REMOVE, boost::bind(&AlertsWidget::deleteMedia, this, _1, _2, _3)));
     functorMapMediaRow.insert(make_pair(EInteractions::SELECT, boost::bind(&AlertsWidget::selectMedia, this, _1, _2, _3)));
     
@@ -344,7 +225,7 @@ void AlertsWidget::addMedia(long long id, long long index, BoxInBoxMenu *menu)
     }
 }
 
-void AlertsWidget::deleteMedia(long long id, long long index, BoxInBoxMenu *menu)
+void AlertsWidget::deleteMedia(long long id, long long index, TrundleTable *menu)
 {
    menu->deleteRow(index);
    for (std::map<long long, struct Message>::iterator itM = m_messages.begin() ; itM != m_messages.end() ; itM++)
@@ -361,14 +242,14 @@ void AlertsWidget::deleteMedia(long long id, long long index, BoxInBoxMenu *menu
    }
 }
 
-void AlertsWidget::addReceiver(long long id, long long index, BoxInBoxMenu *menu)
+void AlertsWidget::addReceiver(long long id, long long index, TrundleTable *menu)
 {
     long long currentIndex = ((Wt::WComboBox*)menu->m_header.at(1))->currentIndex();
     long long selectedId = m_userIds.at(currentIndex);
     
     if (menu->rowIdExist(selectedId) && selectedId != -1)
     {
-        BoxInBoxMenu *subMenu = menu->getSubMenu(selectedId);
+        TrundleTable *subMenu = menu->getSubMenu(selectedId);
         if (subMenu)
         {
             if (subMenu->getIndex() == 0)
@@ -416,10 +297,10 @@ void AlertsWidget::addReceiver(long long id, long long index, BoxInBoxMenu *menu
     
     /* Set functors maps */
     Wt::log("info") << "Set functors";
-    std::map<int, boost::function<void (long long, long long, BoxInBoxMenu*)>> functorMapMediaHeader;
+    std::map<int, boost::function<void (long long, long long, TrundleTable*)>> functorMapMediaHeader;
     functorMapMediaHeader.insert(make_pair(EInteractions::ADD, boost::bind(&AlertsWidget::addMedia, this, _1, _2, _3)));
     
-    std::map<int, boost::function<void (long long, long long, BoxInBoxMenu*)>> functorMapReceiverRow;
+    std::map<int, boost::function<void (long long, long long, TrundleTable*)>> functorMapReceiverRow;
     functorMapReceiverRow.insert(make_pair(EInteractions::REMOVE, boost::bind(&AlertsWidget::deleteReceiver, this, _1, _2, _3)));
     functorMapReceiverRow.insert(make_pair(EInteractions::SELECT, boost::bind(&AlertsWidget::selectReceiver, this, _1, _2, _3)));
     
@@ -431,7 +312,7 @@ void AlertsWidget::addReceiver(long long id, long long index, BoxInBoxMenu *menu
     MediaTable->resize(Wt::WLength(300), Wt::WLength(20));
     MediaTable->setMaximumSize(Wt::WLength(380), Wt::WLength(20));
     
-    BoxInBoxMenu *menuMedia = new BoxInBoxMenu(MediaTable
+    TrundleTable *menuMedia = new TrundleTable(MediaTable
             , rowLengths, Wt::WLength(20));
 
     /* Set buttons Receiver Row */
@@ -453,7 +334,7 @@ void AlertsWidget::addReceiver(long long id, long long index, BoxInBoxMenu *menu
     }
 }
 
-void AlertsWidget::deleteReceiver(long long id, long long index, BoxInBoxMenu *menu)
+void AlertsWidget::deleteReceiver(long long id, long long index, TrundleTable *menu)
 {
    menu->deleteRow(index);
    if (menu->getIndex() == 0)
@@ -462,10 +343,10 @@ void AlertsWidget::deleteReceiver(long long id, long long index, BoxInBoxMenu *m
    }
 }
 
-void AlertsWidget::selectReceiver(long long id, long long index, BoxInBoxMenu *menu)
+void AlertsWidget::selectReceiver(long long id, long long index, TrundleTable *menu)
 {
     Wt::log("info") << "selected Receiver: " << id;
-    BoxInBoxMenu *subMenu = menu->getSubMenu(id);
+    TrundleTable *subMenu = menu->getSubMenu(id);
     if (subMenu)
     {
         if (subMenu->getIndex() == 0)
@@ -583,7 +464,7 @@ void AlertsWidget::popupNewRecipientsRework(std::string nameAlert, std::string m
     
     /* Set functors map */
     Wt::log("info") << "Set functors";
-    std::map<int, boost::function<void (long long, long long, BoxInBoxMenu*)>> functorMapReceiverHeader;
+    std::map<int, boost::function<void (long long, long long, TrundleTable*)>> functorMapReceiverHeader;
     functorMapReceiverHeader.insert(make_pair(EInteractions::ADD, boost::bind(&AlertsWidget::addReceiver, this, _1, _2, _3)));
     
     /* Set m_headers */
@@ -594,7 +475,7 @@ void AlertsWidget::popupNewRecipientsRework(std::string nameAlert, std::string m
     
     
     /* Creating menu */    
-    BoxInBoxMenu *menuReceiver = new BoxInBoxMenu(ReceiverTable
+    TrundleTable *menuReceiver = new TrundleTable(ReceiverTable
             , rowLengths, Wt::WLength(20));
     
     /* Set buttons templates */
@@ -631,24 +512,8 @@ void AlertsWidget::checkNewPopupRecipientsRework(string initialMessage)
         {
             message += ",\n";
         }
-    // FIXME: time time_ ???
         message += "{\n\"media_id\": " + boost::lexical_cast<string>(itMsg->second.mediaId);
         message += ",\n\"snooze\": " + boost::lexical_cast<string>((itMsg->second.timer * 60));
-    /*
-    switch (time_)
-    {
-    case 0:
-        message += ",\n\"snooze\": " + boost::lexical_cast<string>((boost::lexical_cast<unsigned int>(time) * 60));
-        break;
-    case 1:
-        message += ",\n\"snooze\": " + boost::lexical_cast<string>((boost::lexical_cast<unsigned int>(time) * 3600));
-        break;
-    case 2:
-        message += ",\n\"snooze\": 0";
-        break;
-    }
-    */
-        
         message += ",\n\"message\": \"" + itMsg->second.str->toUTF8() + "\"\n}";
     }
     message += "\n]\n}";
@@ -1242,75 +1107,6 @@ void AlertsWidget::modifRecip(long long id)
 {
 }
 
-/*
-Wt::WValidator *AlertsWidget::editValidator(int validatorType)
-{
-    Wt::WRegExpValidator *validator = 0;
-
-    switch (validatorType)
-    {
-        case EValidatorType::VALIDATOR_FLOAT:
-            validator = new Wt::WRegExpValidator("-?[0-9]+\\.[0-9]+$");
-            validator->setMandatory(true);
-            break;
-        case EValidatorType::VALIDATOR_INT:
-            validator = new Wt::WRegExpValidator("^[0-9]+$");
-            validator->setMandatory(true);
-        case EValidatorType::VALIDATOR_TIMER:
-            validator = new Wt::WRegExpValidator("^[1-9][0-9]*$");
-            validator->setMandatory(true);
-            break ;
-        case EValidatorType::VALIDATOR_STRING:
-        {
-            Wt::log("info") << "Just passing through VALIDATOR_STRING";
-            validator = new Wt::WRegExpValidator("^.+$");
-            validator->setMandatory(true);
-            break;
-        }
-    }
-
-    return validator;
-}
-*/
-
-/* artefact
-void AlertsWidget::checkPopupRecipients(string message, string time, int media)
-{
-    message += "\"alert_media_specializations\":\n[\n";
-
-    // FIXME: time time_ ???
-    message += "{\n\"media_id\": " + boost::lexical_cast<string>((*mediaInfo_.find(media - 1)).second.first.first);
-    switch (time_)
-    {
-    case 0:
-        message += ",\n\"snooze\": " + boost::lexical_cast<string>((boost::lexical_cast<unsigned int>(time) * 60));
-        break;
-    case 1:
-        message += ",\n\"snooze\": " + boost::lexical_cast<string>((boost::lexical_cast<unsigned int>(time) * 3600));
-        break;
-    case 2:
-        message += ",\n\"snooze\": 0";
-        break;
-    }
-    
-    switch ((*mediaInfo_.find(media - 1)).second.first.second)
-    {
-    case Enums::EMedia::email:
-        message += ",\n\"message\": \"" + m_tabContentMessageMail + "\"\n}";
-        break;
-    case Enums::EMedia::sms:
-        message += ",\n\"message\": \"" + m_tabContentMessageSMS + "\"\n}";
-        break;
-    case Enums::EMedia::mobileapp:
-        message += ",\n\"message\": \"" + m_tabContentMessageMobileApp + "\"\n}";
-        break;
-    }
-    message += "\n]\n}";
-    postAlertCallApi(message);
-    updatePage();
-}
-*/
- 
 /* TO DO */
 int AlertsWidget::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage)
 {
@@ -1518,25 +1314,7 @@ void AlertsWidget::postAlertCallApi(string message)
 /* TO DO */
 void AlertsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
 {
-    //    Wt::Http::Message message;
-
-    //    Wt::WLineEdit *test;
-    //    test = (Wt::WLineEdit*)(*arguments.begin());
-
-    /*
-    message.addBodyText("{\n\"med_id\": " + boost::lexical_cast<string>(this->type_)
-            + ",\n\"mev_value\":\"" + boost::lexical_cast<string>(test->text()) + "\"\n}");
-
-    string apiAddress = this->getApiUrl() + "/medias/" + boost::lexical_cast<string>(id);
-    Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&UserEditionWidget::putMedia, this, _1, _2));
-    apiAddress += "?login=" + session_->user()->eMail.toUTF8() + "&token=" + session_->user()->token.toUTF8();
-    Wt::log("debug") << "AlertsWidget : [PUT] address to call : " << apiAddress;
-    if (client->put(apiAddress, message))
-        Wt::WApplication::instance()->deferRendering();
-    else
-        Wt::log("error") << "Error Client Http";
-     */
+    
 }
 
 void AlertsWidget::handleJsonGet(vectors_Json jsonResources)

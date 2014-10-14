@@ -52,7 +52,6 @@
         <itemPath>include/AbstractPage.h</itemPath>
         <itemPath>include/AlertsWidget.h</itemPath>
         <itemPath>include/ApiManagement.h</itemPath>
-        <itemPath>include/BoxInBoxMenu.h</itemPath>
         <itemPath>include/Conf.h</itemPath>
         <itemPath>include/CsvUtil.h</itemPath>
         <itemPath>include/DashBoard.h</itemPath>
@@ -63,6 +62,7 @@
         <itemPath>include/RecipientsWidget.h</itemPath>
         <itemPath>include/RoleCustomizationWidget.h</itemPath>
         <itemPath>include/SummaryBoard.h</itemPath>
+        <itemPath>include/TrundleTable.h</itemPath>
         <itemPath>include/UnitsWidget.h</itemPath>
         <itemPath>include/enum.hpp</itemPath>
       </logicalFolder>
@@ -157,7 +157,6 @@
         <itemPath>src/AbstractPage.cpp</itemPath>
         <itemPath>src/AlertsWidget.cpp</itemPath>
         <itemPath>src/ApiManagement.cpp</itemPath>
-        <itemPath>src/BoxInBoxMenu.cpp</itemPath>
         <itemPath>src/Conf.cpp</itemPath>
         <itemPath>src/CsvUtil.C</itemPath>
         <itemPath>src/DashBoard.cpp</itemPath>
@@ -170,6 +169,7 @@
         <itemPath>src/RecipientsWidget.cpp</itemPath>
         <itemPath>src/RoleCustomizationWidget.cpp</itemPath>
         <itemPath>src/SummaryBoard.cpp</itemPath>
+        <itemPath>src/TrundleTable.cpp</itemPath>
         <itemPath>src/UnitsWidget.cpp</itemPath>
         <itemPath>src/UserActionManagement.cpp</itemPath>
       </logicalFolder>
@@ -255,8 +255,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="include/BoxInBoxMenu.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/Conf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/CsvUtil.h" ex="false" tool="3" flavor2="0">
@@ -303,6 +301,8 @@
       <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/TrundleTable.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UnitsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -482,8 +482,6 @@
             tool="1"
             flavor2="0">
       </item>
-      <item path="src/BoxInBoxMenu.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="src/Conf.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/CsvUtil.C" ex="false" tool="1" flavor2="0">
@@ -528,6 +526,8 @@
       <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TrundleTable.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UnitsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -597,8 +597,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="include/BoxInBoxMenu.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/Conf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/CsvUtil.h" ex="false" tool="3" flavor2="0">
@@ -645,6 +643,8 @@
       <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/TrundleTable.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/UnitsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -824,8 +824,6 @@
             tool="1"
             flavor2="0">
       </item>
-      <item path="src/BoxInBoxMenu.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="src/Conf.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/CsvUtil.C" ex="false" tool="1" flavor2="0">
@@ -870,6 +868,8 @@
       <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TrundleTable.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UnitsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>

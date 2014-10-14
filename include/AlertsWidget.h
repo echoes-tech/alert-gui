@@ -35,7 +35,7 @@
 
 #include "GlobalIncludeFile.h"
 #include "ApiManagement.h"
-#include "BoxInBoxMenu.h"
+#include "TrundleTable.h"
 
 class AlertsWidget :
 public AbstractPage
@@ -75,12 +75,12 @@ public:
     
     
     // Menu setting
-    void addReceiver(long long id, long long index, BoxInBoxMenu *menu);
-    void deleteReceiver(long long id, long long index, BoxInBoxMenu *menu);
-    void selectReceiver(long long id, long long index, BoxInBoxMenu *menu);
-    void addMedia(long long id, long long index, BoxInBoxMenu *menu);
-    void deleteMedia(long long id, long long index, BoxInBoxMenu *menu);
-    void selectMedia(long long id, long long index, BoxInBoxMenu *menu);
+    void addReceiver(long long id, long long index, TrundleTable *menu);
+    void deleteReceiver(long long id, long long index, TrundleTable *menu);
+    void selectReceiver(long long id, long long index, TrundleTable *menu);
+    void addMedia(long long id, long long index, TrundleTable *menu);
+    void deleteMedia(long long id, long long index, TrundleTable *menu);
+    void selectMedia(long long id, long long index, TrundleTable *menu);
     
 protected:
     virtual void                clearStructures();

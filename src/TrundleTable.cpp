@@ -24,62 +24,65 @@
 #include <bits/stl_map.h>
 #include <bits/stl_vector.h>
 
-#include "BoxInBoxMenu.h"
+#include "TrundleTable.h"
 
-BoxInBoxMenu::BoxInBoxMenu(Wt::WTable *holder) {
+TrundleTable::TrundleTable(Wt::WTable *holder)
+{
     Wt::log("info") << "Constructing non-formated BoxInBoxMenu";
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use(AbstractPage::xmlDirectory + "box_menu", false);
     m_currentIndex = 0;
-    
+
     /* Setting default colors */
     m_colors.push_back(new Wt::WColor(102, 178, 255));
     m_colors.push_back(new Wt::WColor(255, 255, 255));
     m_colors.push_back(new Wt::WColor(0, 128, 255));
-    
+
     m_formatted = false;
     m_rowNumber = 0;
     m_columnNumber = 0;
-    
+
     m_table = holder;
 }
 
-BoxInBoxMenu::BoxInBoxMenu(Wt::WTable *holder
-        , std::vector<Wt::WLength> widths, Wt::WLength height) {
+TrundleTable::TrundleTable(Wt::WTable *holder, std::vector<Wt::WLength> widths, Wt::WLength height)
+{
     Wt::log("info") << "Constructing formated BoxInBoxMenu";
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use(AbstractPage::xmlDirectory + "box_menu", false);
     m_currentIndex = 0;
-    
+
     /* Setting default colors */
     m_colors.push_back(new Wt::WColor(102, 178, 255));
     m_colors.push_back(new Wt::WColor(255, 255, 255));
     m_colors.push_back(new Wt::WColor(0, 128, 255));
-    
+
     m_formatted = true;
     m_heightFormat = height;
     m_widthFormat = widths;
-    
+
     m_columnNumber = m_widthFormat.size();
     m_rowNumber = 0;
-    
+
     m_table = holder;
 }
 
-BoxInBoxMenu::BoxInBoxMenu(const BoxInBoxMenu& orig) {
+TrundleTable::TrundleTable(const TrundleTable& orig)
+{
 }
 
-BoxInBoxMenu::~BoxInBoxMenu() {
+TrundleTable::~TrundleTable()
+{
 }
 
-void BoxInBoxMenu::addRow(long long id, long long type
-        , std::vector<Wt::WWidget*> widgets
-        , std::map<int, bool> buttons
-        , std::map<int, boost::function<void (long long id, long long index, BoxInBoxMenu*)>> interactions
-        , BoxInBoxMenu *subMenu)
-{    
+void TrundleTable::addRow(long long id, long long type
+                          , std::vector<Wt::WWidget*> widgets
+                          , std::map<int, bool> buttons
+                          , std::map<int, boost::function<void (long long id, long long index, TrundleTable*) >> interactions
+                          , TrundleTable *subMenu)
+{
     Wt::log("info") << "addRow: id " << id << " | type " << type;
-    for (std::vector<struct Row>::const_iterator itR = m_rows.begin() ; itR != m_rows.end() ; itR++)
+    for (std::vector<struct Row>::const_iterator itR = m_rows.begin(); itR != m_rows.end(); itR++)
     {
         if (itR->id == id && itR->type != ERowType::HEADER)
         {
@@ -88,18 +91,18 @@ void BoxInBoxMenu::addRow(long long id, long long type
             {
                 subMenu->deleteAll();
             }
-            return ;
+            return;
         }
     }
     struct Row newRow;
-    
+
     newRow.id = id;
     newRow.type = type;
     newRow.index = m_rows.size();
     newRow.subMenu = subMenu;
     newRow.widgets = widgets;
     newRow.interactions = interactions;
-    
+
     if (m_columnNumber - 1 > 0)
     {
         while (newRow.widgets.size() < (unsigned long long) (m_columnNumber - 1))
@@ -107,54 +110,52 @@ void BoxInBoxMenu::addRow(long long id, long long type
             newRow.widgets.push_back(NULL);
         }
     }
-    
+
     /* Setting buttons */
     Wt::log("info") << "Setting buttons";
-    for (std::map<int, bool>::const_iterator itB = buttons.begin() ; itB != buttons.end() ; itB++)
+    for (std::map<int, bool>::const_iterator itB = buttons.begin(); itB != buttons.end(); itB++)
     {
         EInteractions::const_iterator itEB = EInteractions::begin() + itB->first;
         std::string templateButton(itEB->value());
         Wt::WTemplate *t = new Wt::WTemplate(Wt::WString::tr("Alert.box-menu." + templateButton + "-button"));
         switch (itB->first)
         {
-            case EInteractions::ADD:
-            {
-                Wt::log("info") << "Add button";
-                t->clicked().connect(bind([ = ] ()
-                {
-                    newRow.interactions.find(EInteractions::ADD)->second(m_rows.at(m_currentIndex).id, m_currentIndex, this);
-                }));
-                break;
-            }
-            case EInteractions::REMOVE:
-            {
-                t->clicked().connect(bind ([ = ] ()
-                {
-                    long long index = newRow.index;
+        case EInteractions::ADD:
+        {
+            Wt::log("info") << "Add button";
+            t->clicked().connect(bind([ = ] (){
+                                      newRow.interactions.find(EInteractions::ADD)->second(m_rows.at(m_currentIndex).id, m_currentIndex, this);
+            }));
+            break;
+        }
+        case EInteractions::REMOVE:
+        {
+            t->clicked().connect(bind([ = ] (){
+                                      long long index = newRow.index;
 
-                    while (index > -1)
+                                      while (index > -1)
+                {
+                                      if (index < (long long) m_rows.size())
                     {
-                        if (index < (long long) m_rows.size())
+                                      if (newRow.id != m_rows.at(index).id)
                         {
-                            if (newRow.id != m_rows.at(index).id)
-                            {
-                                index--;
-                            }
-                            else
-                            {
-                                Wt::log("info") << "clicked delete on index: " << index;
-                                newRow.interactions.find(EInteractions::REMOVE)->second(m_rows.at(index).id, index, this);
-                                break;
-                            }
+                                      index--;
                         }
                         else
                         {
-                            index--;
+                                      Wt::log("info") << "clicked delete on index: " << index;
+                                      newRow.interactions.find(EInteractions::REMOVE)->second(m_rows.at(index).id, index, this);
+                                      break;
                         }
                     }
-                }));
-                break;
-            }
+                    else
+                    {
+                                      index--;
+                    }
+                }
+            }));
+            break;
+        }
         }
         newRow.widgets.push_back(t);
     }
@@ -167,37 +168,37 @@ void BoxInBoxMenu::addRow(long long id, long long type
         newRow.interactions.find(EInteractions::SELECT)->second(newRow.id, newRow.index, this);
     }
     m_rows.push_back(newRow);
-    
+
     m_rowNumber++;
-    
-    if ((unsigned long long)m_columnNumber < newRow.widgets.size())
+
+    if ((unsigned long long) m_columnNumber < newRow.widgets.size())
     {
         m_columnNumber = newRow.widgets.size();
     }
-    
+
     m_currentIndex = m_rows.size() - 1;
-    
+
     updateTable();
 }
 
-void BoxInBoxMenu::modifyRow(long long index, long long id, long long type, std::vector<Wt::WWidget*> widgets)
+void TrundleTable::modifyRow(long long index, long long id, long long type, std::vector<Wt::WWidget*> widgets)
 {
     m_rows.at(index).id = id;
     m_rows.at(index).type = type;
     m_rows.at(index).widgets.clear();
     m_rows.at(index).widgets = widgets;
-    
+
     updateTable();
 }
 
-void BoxInBoxMenu::modifyRowCell(long long index, long long cell, Wt::WWidget *newWidget)
+void TrundleTable::modifyRowCell(long long index, long long cell, Wt::WWidget *newWidget)
 {
     m_rows.at(index).widgets.at(cell) = newWidget;
-    
+
     updateTable();
 }
 
-void BoxInBoxMenu::deleteRow(long long index)
+void TrundleTable::deleteRow(long long index)
 {
     Wt::log("info") << "delete row: " << index;
     /* delete from table */
@@ -225,7 +226,7 @@ void BoxInBoxMenu::deleteRow(long long index)
         Wt::log("info") << "row erased";
         m_rowNumber--;
 
-        for (std::vector<struct Row>::iterator itR = (m_rows.begin() + index) ; itR != m_rows.end() ; itR++)
+        for (std::vector<struct Row>::iterator itR = (m_rows.begin() + index); itR != m_rows.end(); itR++)
         {
             Wt::log("info") << "row id before: " << itR->index;
             itR->index--;
@@ -248,27 +249,26 @@ void BoxInBoxMenu::deleteRow(long long index)
             m_currentIndex = 0;
         }
     }
-    Wt::log ("info") << "row number: " << m_rowNumber;
+    Wt::log("info") << "row number: " << m_rowNumber;
     updateTable();
 }
 
-void BoxInBoxMenu::updateRowColor(long long y, long long x)
+void TrundleTable::updateRowColor(long long y, long long x)
 {
-    /* change color if focus is on index */         
-    
+    /* change color if focus is on index */
+
     if (m_currentIndex == y && m_rows.at(y).type != ERowType::HEADER)
     {
-        m_table->elementAt(y, x)->clicked().connect(bind([ = ] ()
-        {
-            if (y != m_currentIndex)
+        m_table->elementAt(y, x)->clicked().connect(bind([ = ] (){
+                                                         if (y != m_currentIndex)
             {
-                m_currentIndex = y;
-                updateTable();
+                                                         m_currentIndex = y;
+                                                         updateTable();
             }
-            if (m_rows.at(y).interactions.find(EInteractions::SELECT) != m_rows.at(y).interactions.end())
+                                                         if (m_rows.at(y).interactions.find(EInteractions::SELECT) != m_rows.at(y).interactions.end())
             {
-                Wt::log("info") << "Row selected";
-                m_rows.at(y).interactions.find(EInteractions::SELECT)->second(m_rows.at(y).id, y, this);
+                                                         Wt::log("info") << "Row selected";
+                                                         m_rows.at(y).interactions.find(EInteractions::SELECT)->second(m_rows.at(y).id, y, this);
             }
         }));
         if (m_rows.at(y).interactions.find(EInteractions::SELECT) != m_rows.at(y).interactions.end())
@@ -281,7 +281,7 @@ void BoxInBoxMenu::updateRowColor(long long y, long long x)
     {
         m_table->elementAt(y, x)->decorationStyle().setBackgroundColor(*m_colors.at(DEFAULT));
     }
-    
+
     /* change color if mouse is over cell */
     if (m_rows.at(y).type != ERowType::HEADER)
     {
@@ -289,7 +289,7 @@ void BoxInBoxMenu::updateRowColor(long long y, long long x)
     }
 }
 
-void BoxInBoxMenu::deleteAll()
+void TrundleTable::deleteAll()
 {
     Wt::log("info") << "deleting " << m_rows.size() << " rows";
     while (m_rows.size())
@@ -309,7 +309,7 @@ void BoxInBoxMenu::deleteAll()
     m_table->hide();
 }
 
-int BoxInBoxMenu::getColumnSpan(std::vector<Wt::WWidget*>::const_iterator itC, std::vector<Wt::WWidget*>::const_iterator itEnd)
+int TrundleTable::getColumnSpan(std::vector<Wt::WWidget*>::const_iterator itC, std::vector<Wt::WWidget*>::const_iterator itEnd)
 {
     int ret = 1;
 
@@ -318,7 +318,7 @@ int BoxInBoxMenu::getColumnSpan(std::vector<Wt::WWidget*>::const_iterator itC, s
     {
         if (*itC != NULL)
         {
-            break ;
+            break;
         }
         ret++;
         itC++;
@@ -326,17 +326,17 @@ int BoxInBoxMenu::getColumnSpan(std::vector<Wt::WWidget*>::const_iterator itC, s
     return (ret);
 }
 
-void BoxInBoxMenu::updateTable()
+void TrundleTable::updateTable()
 {
     long long x = 0;
     long long y = 0;
-    
+
     m_table->setStyleClass("table");
     m_table->addStyleClass("table-responsive");
-    
+
     Wt::log("info") << "updateTable with " << m_table->rowCount() << " rows";
-    
-    for (std::vector<struct Row>::iterator itR = m_rows.begin() ; itR != m_rows.end() ; itR++)
+
+    for (std::vector<struct Row>::iterator itR = m_rows.begin(); itR != m_rows.end(); itR++)
     {
         x = 0;
         bool doRemove = false;
@@ -344,11 +344,11 @@ void BoxInBoxMenu::updateTable()
         {
             doRemove = true;
         }
-        for (std::vector<Wt::WWidget*>::const_iterator itC = itR->widgets.begin(); itC != itR->widgets.end() ; itC++)
+        for (std::vector<Wt::WWidget*>::const_iterator itC = itR->widgets.begin(); itC != itR->widgets.end(); itC++)
         {
             if (*itC == NULL)
             {
-                continue ;
+                continue;
             }
             long columnSpan = getColumnSpan(itC, itR->widgets.end());
             m_table->elementAt(y, x)->setColumnSpan(columnSpan);
@@ -385,7 +385,7 @@ void BoxInBoxMenu::updateTable()
         m_table->deleteRow(y);
         y++;
     }
-    
+
     for (long long i = 1; i < m_rowNumber; i++)
     {
         if (m_rows.at(i).subMenu != NULL)
@@ -405,14 +405,14 @@ void BoxInBoxMenu::updateTable()
     Wt::log("info") << "update table done";
 }
 
-long long BoxInBoxMenu::getIndex()
+long long TrundleTable::getIndex()
 {
     return (m_currentIndex);
 }
 
-bool BoxInBoxMenu::rowIdExist(long long id)
+bool TrundleTable::rowIdExist(long long id)
 {
-    for (std::vector<struct Row>::const_iterator itR = m_rows.begin() ; itR != m_rows.end() ; itR++)
+    for (std::vector<struct Row>::const_iterator itR = m_rows.begin(); itR != m_rows.end(); itR++)
     {
         if (itR->id == id)
         {
@@ -422,9 +422,9 @@ bool BoxInBoxMenu::rowIdExist(long long id)
     return (false);
 }
 
-BoxInBoxMenu* BoxInBoxMenu::getSubMenu(long long id)
+TrundleTable* TrundleTable::getSubMenu(long long id)
 {
-    for (std::vector<struct Row>::const_iterator itR = m_rows.begin() ; itR != m_rows.end() ; itR++)
+    for (std::vector<struct Row>::const_iterator itR = m_rows.begin(); itR != m_rows.end(); itR++)
     {
         if (itR->id == id)
         {

@@ -26,28 +26,28 @@
 #include <Wt/WStandardItemModel>
 #include <Wt/WCssDecorationStyle>
 
-class BoxInBoxMenu {
+class TrundleTable {
 public:
-    BoxInBoxMenu(Wt::WTable *holder);
-    BoxInBoxMenu(Wt::WTable *holder
+    TrundleTable(Wt::WTable *holder);
+    TrundleTable(Wt::WTable *holder
         , std::vector<Wt::WLength> widths, Wt::WLength height);
-    BoxInBoxMenu(const BoxInBoxMenu& orig);
-    virtual ~BoxInBoxMenu();
+    TrundleTable(const TrundleTable& orig);
+    virtual ~TrundleTable();
     
     void deleteAll();
     void deleteRow(long long index);
     void addRow(long long id, long long type
     , std::vector<Wt::WWidget*> widgets
     , std::map<int, bool> buttons
-    , std::map<int, boost::function<void (long long id, long long index, BoxInBoxMenu*)>> interactions
-    , BoxInBoxMenu *subMenu);
+    , std::map<int, boost::function<void (long long id, long long index, TrundleTable*)>> interactions
+    , TrundleTable *subMenu);
     void modifyRow(long long index, long long id, long long type, std::vector<Wt::WWidget*> widgets);
     void modifyRowCell(long long index, long long cell, Wt::WWidget *newWidget);
     void updateRowColor(long long y, long long x);
     void updateTable();
     long long getIndex();
     bool rowIdExist(long long id);
-    BoxInBoxMenu* getSubMenu(long long id);
+    TrundleTable* getSubMenu(long long id);
     int getColumnSpan(std::vector<Wt::WWidget*>::const_iterator itC, std::vector<Wt::WWidget*>::const_iterator itEnd);
     
     
@@ -73,9 +73,9 @@ public:
         long long                       id;
         long long                       type;
         long long                       index;
-        BoxInBoxMenu                    *subMenu;
+        TrundleTable                    *subMenu;
         std::vector<Wt::WWidget*>       widgets; //cells
-        std::map<int, boost::function<void (long long id, long long index, BoxInBoxMenu*)>> interactions;
+        std::map<int, boost::function<void (long long id, long long index, TrundleTable*)>> interactions;
     };
     
     std::vector<Wt::WWidget*>       m_header;

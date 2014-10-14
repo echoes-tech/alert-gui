@@ -27,6 +27,7 @@
 #include "ProbesWidget.h"
 #include "MainWidget.h"
 #include "EchoesHome.h"
+#include "BoxInBoxMenu.h"
 
 #endif	/* GLOBALINCLUDEFILE_H */
 

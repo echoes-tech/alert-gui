@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="94">
+<configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
@@ -52,6 +52,7 @@
         <itemPath>include/AbstractPage.h</itemPath>
         <itemPath>include/AlertsWidget.h</itemPath>
         <itemPath>include/ApiManagement.h</itemPath>
+        <itemPath>include/BoxInBoxMenu.h</itemPath>
         <itemPath>include/Conf.h</itemPath>
         <itemPath>include/CsvUtil.h</itemPath>
         <itemPath>include/DashBoard.h</itemPath>
@@ -156,6 +157,7 @@
         <itemPath>src/AbstractPage.cpp</itemPath>
         <itemPath>src/AlertsWidget.cpp</itemPath>
         <itemPath>src/ApiManagement.cpp</itemPath>
+        <itemPath>src/BoxInBoxMenu.cpp</itemPath>
         <itemPath>src/Conf.cpp</itemPath>
         <itemPath>src/CsvUtil.C</itemPath>
         <itemPath>src/DashBoard.cpp</itemPath>
@@ -252,6 +254,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="include/BoxInBoxMenu.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Conf.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -477,6 +481,8 @@
             ex="false"
             tool="1"
             flavor2="0">
+      </item>
+      <item path="src/BoxInBoxMenu.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Conf.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -591,6 +597,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/BoxInBoxMenu.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/Conf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/CsvUtil.h" ex="false" tool="3" flavor2="0">
@@ -815,6 +823,8 @@
             ex="false"
             tool="1"
             flavor2="0">
+      </item>
+      <item path="src/BoxInBoxMenu.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Conf.cpp" ex="false" tool="1" flavor2="0">
       </item>

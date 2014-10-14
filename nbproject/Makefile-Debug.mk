@@ -43,6 +43,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Auth/SpecializedAuthModel.o \
 	${OBJECTDIR}/src/Auth/SpecializedAuthWidget.o \
 	${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget.o \
+	${OBJECTDIR}/src/BoxInBoxMenu.o \
 	${OBJECTDIR}/src/Conf.o \
 	${OBJECTDIR}/src/CsvUtil.o \
 	${OBJECTDIR}/src/DashBoard.o \
@@ -132,6 +133,11 @@ ${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget.o: src/Auth/SpecializedRegis
 	${MKDIR} -p ${OBJECTDIR}/src/Auth
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget.o src/Auth/SpecializedRegistrationWidget.cpp
+
+${OBJECTDIR}/src/BoxInBoxMenu.o: src/BoxInBoxMenu.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/BoxInBoxMenu.o src/BoxInBoxMenu.cpp
 
 ${OBJECTDIR}/src/Conf.o: src/Conf.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

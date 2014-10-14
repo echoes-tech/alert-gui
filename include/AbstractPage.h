@@ -130,15 +130,36 @@ public:
 protected:
 
     // ENUM
-
     enum ETypeJson
     {
         text = 0, //WText
         boolean = 1, //WCheckBox
-        integer = 2, // int //WText
+        number = 2, // int //WText
         undid = 3, // under id (string) "name" //WComboBox
         object = 4,
-        widget = 5
+        widget = 5 // other
+    };
+
+    enum ETextSpecial
+    {
+        normalText = 0,
+        mail = 1,
+        phone = 2,
+        date = 3
+    };
+    
+    enum ENumberSpecial
+    {
+        normalNumber = 0,
+        notnull = 1,
+        uns = 2, // unsigned
+        flt = 3 // float
+    };
+    
+    enum EMandatory
+    {
+        isnot = 0,
+        is = 1
     };
 
     virtual void                clearStructures();
@@ -175,8 +196,8 @@ protected:
      * @param titles &lsaquo; type, name &rsaquo; \n
      * type(0) == Wtext || type(1) == Wwidget.
      */
-    void                        setUndidName(std::string undidName);
-    void                        setTitles(std::multimap<int, std::string> titles);
+    void                        setUndidName(std::vector<std::string> undidNames);
+    void                        setTitles(std::vector<std::pair <int, std::string>> titles);
     virtual void                setDisplayedTitlesPopups();
     void                        setUrl(std::list<std::list<std::pair<std::string, std::vector<std::string>>>> listsUrl); 
     void                        setButtonModif(bool check);
@@ -222,12 +243,12 @@ protected:
     //  INPUT ---------------------------------------------------
     void                        showInputForAdd(); 
     // OVERLOAD -------------------------------------------------
-    virtual Wt::WValidator      *editValidator(int who) {return (new Wt::WValidator());};
+    Wt::WValidator              *editValidator(int type); // {return (new Wt::WValidator());};
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id);
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
     std::map<long long, vector_widget>          m_rowsTable;
-    std::multimap<int, std::string>             m_displayedTitlesPopups;
+    std::vector<std::pair <int, std::string>>   m_displayedTitlesPopups;
     bool                                        m_autoUpdate;
     bool                                        m_hasAddButton;
     
@@ -238,6 +259,7 @@ protected:
     void                        tableHandler(long long id);
     void                        addEnumToModel(Wt::WStandardItemModel* standardItemModel, int enumToAdd, Wt::WString name,
                                     Wt::WString optionalParameter = Wt::WString::Empty);
+    int                         setValidatorType(int type, int specialType, int mandatory);
 
 private:
     // Main attributs ---------------------------
@@ -251,11 +273,14 @@ private:
     vector_widget                       m_inputs;
     // Attributs.-------------------------------
     std::list<std::list<std::pair<std::string, std::vector<std::string>>>>      m_listsUrl;
-    std::multimap<int, std::string>     m_titles;
+    /* vector == column order | pair: 'type' of column - 'name' of column */
+    /* full 'type': 4bits ETypeJson, 4bits ESpecialType and 4bits boolean (first being isMandatory) for a total of 12bits encoded chain */
+    std::vector<std::pair<int, std::string>>                                    m_titles;
     
     std::string                         m_apiUrl;
     std::string                         m_xmlPageName;
-    std::string                         m_undidName;
+    std::string                         m_nameResourcePageSpec;
+    std::vector<std::string>            m_undidNames;
     bool                                m_isModifButtonPresent;
     bool                                m_isDeleteButtonPresent;
     bool                                m_selectable;

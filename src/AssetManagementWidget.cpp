@@ -22,10 +22,9 @@ AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, stri
     setButtonSup(true);
 //    setLocalTable(true);
 
-    multimap<int, string> titles;
-    titles.insert(make_pair(ETypeJson::text, "name"));
-    titles.insert(make_pair(ETypeJson::widget, "download-script"));
-    
+    std::vector<std::pair <int, string>>titles;
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::widget, 0, 0), "download-script"));
     setTitles(titles);
     
     list<list<pair<string, vector<string>>>> listsUrl;
@@ -38,6 +37,7 @@ AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, stri
     setUrl(listsUrl);
 }
 
+/*
 Wt::WValidator    *AssetManagementWidget::editValidator(int cpt)
 {
     Wt::WRegExpValidator *validator = 
@@ -45,14 +45,7 @@ Wt::WValidator    *AssetManagementWidget::editValidator(int cpt)
     validator->setMandatory(true);
     return validator;
 }
-
-void AssetManagementWidget::setDisplayedTitlesPopups()
-{
-    multimap<int, string> displayedTitles;
-    displayedTitles.insert(make_pair(ETypeJson::text, "name"));
-    m_displayedTitlesPopups = displayedTitles;
-}
-
+*/
 int AssetManagementWidget::addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable)
 {
     Wt::WFileResource *file = generateScript(id, ((Wt::WText*)getResourceTable()->elementAt(rowTable, 0)->widget(0))->text());

@@ -21,6 +21,7 @@
     <message id="Alert.alert.name-alert_media_specializations">Nombre de destinataires</message>
     <message id="Alert.alert.name-last_attempt">Dernier envoi</message>
     <message id="Alert.alert.name-modif-dest">Modifier dest</message>
+    
     <!--footer-->
     <message id="Alert.alert.search-bar">Recherche : </message>
         <!-- Paginate -->
@@ -38,13 +39,14 @@
     <message id="Alert.alert.add-title-box-plugin">Application</message>
     <message id="Alert.alert.add-title-box-info">Information</message>
     <message id="Alert.alert.add-title-box-key">Valeur de la clé</message>
+    <message id="Alert.alert.add-button-add-critera">Ajouter critères</message>
     <message id="Alert.alert.add-last-info">
             Dernière valeur reçue :
     </message>
     <message id="Alert.alert.add-compare">
             <p>Critères de comparaison.</p>
     </message>
-    <message id="Alert.alert.button-save-continu">Enregistrer et continuer</message>
+    <message id="Alert.alert.button-save-continue">Enregistrer et continuer</message>
     <message id="Alert.alert.message-true">Vrai</message>
     <message id="Alert.alert.message-false">Faux</message>
     <message id="Alert.alert.message-value">
@@ -76,6 +78,9 @@
     <message id="Alert.alert.operator.ge">Supérieur ou égal</message>
     <message id="Alert.alert.operator.gt">Supérieur</message>
     <message id="Alert.alert.operator.ne">Différent</message>
+    
+    <message id="Alert.alert.boolean-operator.and">et</message>
+    <message id="Alert.alert.boolean-operator.or">ou</message>
     
     <message id="Alert.alert.form.minutes">minutes</message>
     <message id="Alert.alert.form.hours">heures</message>

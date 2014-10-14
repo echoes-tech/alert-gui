@@ -38,13 +38,14 @@
     <message id="Alert.alert.add-title-box-plugin">Plugin</message>
     <message id="Alert.alert.add-title-box-info">Information</message>
     <message id="Alert.alert.add-title-box-key">Key</message>
+    <message id="Alert.alert.add-button-add-critera">Add criteria</message>
     <message id="Alert.alert.add-last-info">
             <p>Last info value :&nbsp;</p>
     </message>
     <message id="Alert.alert.add-compare">
-            <p>Compare criterion</p>
+            <p>Compare criteria</p>
     </message>
-    <message id="Alert.alert.button-save-continu">Save and continue</message>
+    <message id="Alert.alert.button-save-continue">Save and continue</message>
     <message id="Alert.alert.message-true">True</message>
     <message id="Alert.alert.message-false">False</message>
     <message id="Alert.alert.message-value">Value</message>
@@ -74,6 +75,9 @@
     <message id="Alert.alert.operator.ge">Greater or equal</message>
     <message id="Alert.alert.operator.gt">Greater</message>
     <message id="Alert.alert.operator.ne">Not equal</message>
+    
+    <message id="Alert.alert.boolean-operator.and">and</message>
+    <message id="Alert.alert.boolean-operator.or">or</message>
     
     <message id="Alert.alert.form.minutes">minutes</message>
     <message id="Alert.alert.form.hours">hours</message>
@@ -152,5 +156,37 @@
             </div>
             
     </message>
-
+    <message id="Alert.alert.criterion.template" >
+        <div class="control-group">
+	    <div class="controls">
+                ${criterion}
+	    </div>
+	  </div>
+    </message>
+    <message id="Alert.alert.time.template">
+        <div class="control-group">
+	    <div class="controls">
+                ${time}
+	    </div>
+	  </div>
+    </message>
+    <message id="Alert.alert.add-button">
+        <div class="button-add btn">
+            <span class='btn-pink'><i class='icon-plus'></i></span>
+        </div>
+    </message>
+    <message id="Alert.alert.remove-button">
+        <div class="btn-danger btn">
+            <span>
+                <i class='icon-remove icon-white'></i>
+            </span>
+        </div>
+    </message>
+    <message id="Alert.alert.valid.template">
+        <div class="control-group">
+	    <div class="controls">
+                ${input}
+	    </div>
+	  </div>
+    </message>
 </messages>

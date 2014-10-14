@@ -45,8 +45,8 @@ private:
     Wt::WLineEdit                       *m_searchWidget;
     bool                                m_hasModifButton;
     bool                                m_hasDeleteButton;
-    std::multimap<int, std::string>     m_titles;
     Wt::WContainerWidget                *m_footer;
+    std::vector<std::pair <int, std::string>>     m_titles;
 
 };
 

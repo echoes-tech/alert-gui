@@ -76,8 +76,7 @@ public:
 protected:
   virtual void                apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
   
-  virtual Wt::WValidator                *editValidator(int cpt);
-  virtual void                          setDisplayedTitlesPopups();
+//  virtual Wt::WValidator                *editValidator(int cpt);
 
 //  virtual void                           updatePage(bool getResources = true);
   virtual int                            addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);

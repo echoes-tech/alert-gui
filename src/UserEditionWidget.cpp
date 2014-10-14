@@ -30,14 +30,20 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
     setButtonSup(true);
 //    setLocalTable(true);
     
+    Wt::log("info") << "i iz retard";
     string nameSpe = type == 1 ? "mail" : type == 2 ? "sms" : type == 3 ? "push" : "error";
 //    this->setNameSpecial(nameSpe);
     
-    multimap<int, string> titles;
-    titles.insert(make_pair(ETypeJson::text, "value"));
-    titles.insert(make_pair(ETypeJson::undid, "user"));
-    setUndidName("mail");
+    std::vector<std::pair <int, string>>titles;
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "value"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::is), "user"));
+    
+    std::vector<std::string> undidNames;
+    undidNames.push_back("first_name");
+    undidNames.push_back("last_name");
+    setUndidName(undidNames);
     setTitles(titles);
+    Wt::log("info") << "i less retard";
     
     list<list<pair<string, vector<string>>>> listsUrl;
     list<pair<string, vector<string>>> listUrl;
@@ -65,6 +71,7 @@ Wt::WComboBox *UserEditionWidget::popupAdd(Wt::WDialog *dialog)
     return comboBox;
 }
 
+/*
 Wt::WValidator *UserEditionWidget::editValidator(int who)
 {
     Wt::WRegExpValidator *validator = 0;
@@ -86,6 +93,7 @@ Wt::WValidator *UserEditionWidget::editValidator(int who)
     }
     return validator;
 }
+*/
 
 void UserEditionWidget::addResource(vector<Wt::WInteractWidget*>* argument)
 {

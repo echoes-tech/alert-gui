@@ -27,7 +27,7 @@
 #include <Wt/Http/Message>
 #include <Wt/WRandom>
 #include <Wt/WStandardItemModel>
-
+#include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <boost/system/error_code.hpp>
 
@@ -35,6 +35,7 @@
 
 #include "GlobalIncludeFile.h"
 #include "ApiManagement.h"
+#include "BoxInBoxMenu.h"
 
 class AlertsWidget :
 public AbstractPage
@@ -44,22 +45,19 @@ public:
 
     void                        popupAddWidget(Wt::WDialog *dialog, long long id);
     void                        popupRecipients(std::string nameAlert, std::string message);
+    void                        popupNewRecipientsRework(std::string nameAlert, std::string message);
     
     std::vector<std::string>    getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
-    Wt::WValidator              *editValidator(int who);
     
     void                        closePopup();
     void                        close();
     
     void                        getAliasListFromRecipient(long long userRoleId);
-    void                        getAliasInfo(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
-    void                        getAliasAsset(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
-    void                        getAliasCriteria(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
-    void                        getAliasPlugin(boost::system::error_code err, const Wt::Http::Message& response, long long userRoleId, long long mediaType);
 
     int                         checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
-    void                        checkPopupRecipients(std::string message, std::string time, int media);
+    /*void                        checkPopupRecipients(std::string message, std::string time, int media); */
+    void                        checkNewPopupRecipientsRework(string initialMessage);
 
     void                        addResource(std::vector<Wt::WInteractWidget*>* argument);
     void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
@@ -75,6 +73,15 @@ public:
 
     void                        postAlertCallApi(std::string message);
     
+    
+    // Menu setting
+    void addReceiver(long long id, long long index, BoxInBoxMenu *menu);
+    void deleteReceiver(long long id, long long index, BoxInBoxMenu *menu);
+    void selectReceiver(long long id, long long index, BoxInBoxMenu *menu);
+    void addMedia(long long id, long long index, BoxInBoxMenu *menu);
+    void deleteMedia(long long id, long long index, BoxInBoxMenu *menu);
+    void selectMedia(long long id, long long index, BoxInBoxMenu *menu);
+    
 protected:
     virtual void                clearStructures();
     virtual void                handleJsonGet(vectors_Json jsonResources);
@@ -84,7 +91,7 @@ protected:
 
 private:
 
-    void                        initAlertValueDefinitionPopup(Wt::WTable *tableBox);
+    void                        initAlertValueDefinitionPopup();
     void                        setBox(Wt::WSelectionBox *box, Wt::WStandardItemModel *model);
     void                        assetSelected();
     void                        pluginSelected();
@@ -100,26 +107,24 @@ private:
     
     void                        cleanBox(Wt::WSelectionBox *box);
 
-    void                        createCompareWidgetBoolean();
-    void                        createCompareWidgetCustom();
-    void                        showCompareWidget(long long id);
-    void                        addCompareLine(Enums::EInformationUnitType type);
+    void                        changeButtonAddCriteriaState();
+    void                        handleAddCriteria();
+    void                        addCompareWidget(long long assetID, long long pluginID, long long infoID);
     void                        createItemsCriteriaComboBox(long long id, Wt::WString criterion, Wt::WStandardItemModel *model);
-    Wt::WComboBox               *createCompareCriteriaComboBox(Enums::EInformationUnitType type);
+    Wt::WComboBox               *createCompareCriteriaComboBox(long long type);
 
     void                        selectAsset(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
     void                        selectPlugin(long long id, Wt::WSelectionBox *boxAsset, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxInfo);
     void                        selectInfo(long long id, Wt::WSelectionBox *boxInfo, Wt::WSelectionBox *boxPlugin, Wt::WSelectionBox *boxAsset);
 
-    void                        errorsHideOne(std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>> error);
-    void                        errorsHideTwo(std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>> error);
-
     
     // validator type
     enum EValidatorType
     {
-        VALIDATOR_INT = 0,
-        VALIDATOR_FLOAT = 1
+        VALIDATOR_STRING = 0,
+        VALIDATOR_FLOAT = 1,
+        VALIDATOR_INT = 2,
+        VALIDATOR_TIMER = 3
     };
     
     // alert setting attributes
@@ -127,6 +132,13 @@ private:
         ASSET = 1,
         PLUGIN = 2,
         INFORMATION = 3
+    };
+    
+    enum ERequestType {
+        RTASSET = 1,
+        RTPLUGIN = 2,
+        RTINFORMATION = 3,
+        RTCRITERIA = 4
     };
     
     //ids
@@ -150,45 +162,165 @@ private:
     Wt::WSelectionBox *m_boxAsset;
     Wt::WSelectionBox *m_boxPlugin;
     Wt::WSelectionBox *m_boxInfo;
+    Wt::WPushButton   *m_buttonAddCriteria;
     
     Wt::WStandardItemModel * m_assets;
     Wt::WStandardItemModel * m_plugins;
     Wt::WStandardItemModel * m_informations;
     
-    // alerts criterion
-    std::map<int,Wt::WTable *> m_alertCriteria;
+    Wt::WStandardItemModel * m_booleanOperators;
     
+    // alerts criterion associated message
+    struct CriterionResponse {
+        Wt::WString message;
+        Wt::WString asset;
+        Wt::WString plugin;
+        Wt::WString criteria;
+        Wt::WString information;
+    };
+    
+    // alerts custom information
+    struct AlertCustom {
+        long long   timer;
+        std::string message;
+    };
+    
+    // alerts criterion
+    struct AlertCriterion {
+        long long unitTypeID;
+        int index;
+        long long assetID;
+        long long pluginID;
+        long long criteriaID;
+        long long infoID;
+        Wt::WComboBox* operatorComboBox;
+        Wt::WLineEdit* lineEditValue;
+        Wt::WComboBox* comboBoxCriteria;
+        Wt::WValidator* validatorCriteria;
+        Wt::WButtonGroup* groupTrueFalse;
+        Wt::WTemplate* templateValid;
+        CriterionResponse smsRsp;
+        CriterionResponse emailRsp;
+        CriterionResponse mobileappRsp;
+    };
+    
+    std::vector<AlertCriterion> m_alertCriteria;
     // end alert setting attributes
+    
+    // Check validity
+    Wt::WRegExpValidator *validateCriterionType(long long unitType);
+    
+    // clear messages
+    void clearMessages();
+    
+    // get criteria
+    void getCriteriaSelection();
+    
+    // get aliases
+    void getAliases(long long userRoleId);
+    
+    // generic http ask get
+    void httpAsk(long long userRoleId, long long mediaType, long long requestType, long long criteria);
+
+    // Build message
+    void updateTabContent(long long mediaType);
+    void updateMessage(std::string &tabContent, Wt::WString &message, unsigned long criteria);
+    void getRequestRsp(long long requestType, Wt::WString message, CriterionResponse &response);
+    void getMediaRsp(Wt::WString message, long long mediaType, long long requestType, long long criteria);
+    
+    // Generic http response get
+    void handleHttpResponse(Wt::Json::Value result, long long mediaType, long long requestType, long long criteria, long long userRoleId);
+
+    enum ERrowType {
+        HEADER = 1,
+        ITEM = 2
+    };
+    
+    enum EColor {
+        HIGHLIGHT = 1,
+        HOVER = 2
+    };
+    
+    enum EInteractions {
+        ADD = 0,
+        MODIF = 1,
+        REMOVE = 2,
+        SELECT = 3,
+    };
+    
+    struct Message
+    {
+        long long       receiverId;
+        long long       mediaId;
+        long long       timer;
+        Wt::WString     *str;
+    };
+    
+    struct Aliases
+    {
+        Wt::WString *email;
+        Wt::WString *sms;
+        Wt::WString *mobile;
+    };
     
     Echoes::Dbo::Session        *m_session;
     std::string                 m_apiUrl;
     Wt::Json::Value             m_alerts;
     
-    int                         time_;
+    int             time_;
+    long long       m_rowReceiver;
+    long long       m_rowMedia;
     
+    /* <media_id, media_name> */
+    std::map<long long, std::string>        m_nameFromMedia;
+    /* <receiver_id, receiver_name> */
+    std::map<long long, std::string>        m_nameFromReceiver;
+    /* <media_id, message> */
+    std::map<long long, struct Message>     m_messages;
+    /* <user_id, aliases> */
+    std::map<long long, struct Aliases>     m_userAliases;
+    /* <media_id, media type>*/
+    std::map<long long, long long>          m_typesFromMedia;
+    /* <media_id, user_id> */
+    std::map<long long, long long>          m_userFromMedia;
+    /* <user_id, media_id> */
+    std::multimap<long long, long long>     m_mediasFromUser;
+    /* keep order <user_id> */
+    std::vector<long long>                  m_userIds;
+    /* keep order <media_id> */
+    std::vector<long long>                  m_mediaIds;
+    
+    
+    Wt::WTextArea   *m_messageArea;
+    Wt::WLineEdit   *m_timer;
+    Wt::WTable      *m_messageTable;
+    Wt::WText       *m_messageReceiver;
+    Wt::WText       *m_messageMedia;
+    
+    std::multimap<long long, long long>                                                 m_mediaUserRelation;
     std::multimap<long long, std::pair<long long, std::string>>                         userInfo_;
     std::multimap<long long, std::pair<std::pair<long long, long long>, std::string>>   mediaInfo_;
+    Wt::WComboBox       *m_boxMedias;
+    Wt::WTemplate       *m_templateAddMedia;
     Wt::WTabWidget      *m_tabWidgetMessages;
+    Wt::WTabWidget      *m_tabMessages;
     std::string         m_tabContentMessageMail;
     std::string         m_tabContentMessageSMS;
     std::string         m_tabContentMessageMobileApp;
-
+    
+    Wt::WTable *m_table;
     
     // FIXME : to be refactored and included in m_alertCriteria
     Wt::WTable                          *m_booleanCompareWidget; // Bool
     Wt::WTextArea                       *m_customCompareWidget; // Bool
     
-    bool                m_contentOfBooleanCheck;  //for check button true/false
     int                 checkAll_;
     /**
      * pair &lsaquo; pair &lsaquo; idAsset, idPlugin &rsaquo;
      * , pair &lsaquo; idInfo, idKey &rsaquo; &rsaquo;
      */
     std::pair<std::pair<long long, long long>, std::pair<long long, long long>>         idAll_;
-    
-    std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, Wt::WComboBox*>>                                       resourcesUnitOne;
-    std::map<long long, std::pair<std::pair<Wt::WLineEdit*, Wt::WText*>, std::pair<Wt::WComboBox*,Wt::WComboBox*>>>             resourcesUnitTwo;
-    
+  
     //  Errors Messages ------
     Wt::WText           *m_textErrorForAsset;
     Wt::WText           *m_textErrorForPlugin; 
@@ -197,18 +329,11 @@ private:
 
     Wt::WLineEdit       *keyValue_;
     
-    Wt::WText            *errorBool_;
-    //  -------
-    
-    Wt::WContainerWidget *m_compareWidgetContainer;
+    Wt::WTable           *m_compareTable;
     Wt::WContainerWidget *m_compareWidgetContainerTop;
     Wt::WContainerWidget *m_compareWidgetContainerSequence;
     
-    Wt::WPushButton      *m_buttonAddCompareCriteria;
     Wt::WPushButton      *m_buttonAddNumber;
-    
-    Wt::WLineEdit        *saveLineEditOne_;
-    Wt::WLineEdit        *saveLineEditTwo_;
 };
 
 #endif	/* ALERTSWIDGET_H */

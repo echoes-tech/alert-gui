@@ -79,7 +79,7 @@ protected:
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     virtual Wt::WDialog         *deleteResource(long long id);
 
-    Wt::WValidator              *editValidator(int who);
+//    Wt::WValidator              *editValidator(int who);
 
 private:
 

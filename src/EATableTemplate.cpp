@@ -108,7 +108,7 @@ void EATableTemplate::addTableColumnHeader()
     int columnTable(0);
 
     m_mainTable->elementAt(0, 0)->setAttributeValue("style", "border-left:0;");
-    for (multimap<int, string>::iterator it = m_titles.begin(); it != m_titles.end(); it++)
+    for (std::vector<std::pair <int, std::string>>::iterator it = m_titles.begin(); it != m_titles.end(); it++)
     {
         new Wt::WText(Wt::WString::tr("Alert." + m_tableName.toUTF8() + ".name-" + it->second),
                       m_mainTable->elementAt(0, columnTable++));

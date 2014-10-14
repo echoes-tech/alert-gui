@@ -24,11 +24,15 @@ ProbesWidget::ProbesWidget(Echoes::Dbo::Session *session, string apiUrl)
     
     m_hasAddButton = false;
         
-    multimap<int, string> titles;
-    titles.insert(make_pair(ETypeJson::text, "name"));
-    titles.insert(make_pair(ETypeJson::text, "asset"));
-    titles.insert(make_pair(ETypeJson::boolean, "alive"));
+    std::vector<std::pair <int, string>>titles;
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "asset"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::is), "alive"));
     setTitles(titles);
+
+    
+    
+    
 
     list<list<pair<string, vector<string>>>> listsUrl;
     list<pair<string, vector<string>>> listUrl;

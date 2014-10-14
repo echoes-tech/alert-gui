@@ -23,9 +23,9 @@ PluginsTablePluginWidget::PluginsTablePluginWidget(Echoes::Dbo::Session *session
     setButtonModif(true);
     setButtonSup(true);
     
-    multimap<int, string> titles;
-    titles.insert(make_pair(ETypeJson::text, "name"));
-    titles.insert(make_pair(ETypeJson::text, "desc"));
+    std::vector<std::pair <int, string>>titles;
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, 0), "desc"));
     setTitles(titles);
     
     list<list<pair<string, vector<string>>>> listsUrl;

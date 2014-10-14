@@ -119,8 +119,12 @@ test_http_return() {
 
 split_http_file() {
   sed '/^\r*$/q' ${1}_tmp > ${1}_header
-  sed '1,/^\r*$/d' ${1}_tmp | head -n -3 > ${1}
-  sed -i '1,1d' ${1}
+  if $(grep -q 'Transfer-Encoding: chunked' ${1}_header); then
+    sed '1,/^\r*$/d' ${1}_tmp | head -n -3 > ${1}
+    sed -i '1,1d' ${1}
+  else
+    sed '1,/^\r*$/d' ${1}_tmp > ${1}
+  fi
 }
 
 get() {

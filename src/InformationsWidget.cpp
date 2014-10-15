@@ -32,12 +32,12 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
     titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
     titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isnot), "desc"));
     titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isnot), "calculate"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::is), "display"));
     titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::is), "information_unit"));
     
     std::vector<std::string> undidNames;
     undidNames.push_back("name");
     setUndidName(undidNames);
-    titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::is), "display"));
     setTitles(titles);
     
     list<list<pair<string, vector<string>>>> listsUrl;
@@ -98,13 +98,13 @@ void InformationsWidget::addResource(vector<Wt::WInteractWidget*>* arguments)
     Wt::Http::Message messageInformation;
     
     messageInformation.addBodyText("{");
-    messageInformation.addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
-    messageInformation.addBodyText(",\n\"desc\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
-    if (!((Wt::WLineEdit*)(*it++))->text().toUTF8().empty())
+    messageInformation.addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it))->text().toUTF8() + "\"");
+    messageInformation.addBodyText(",\n\"desc\": \"" + ((Wt::WLineEdit*)(*++it))->text().toUTF8() + "\"");
+    if (!((Wt::WLineEdit*)(*++it))->text().toUTF8().empty())
     {
-        messageInformation.addBodyText(",\n\"calculate\": \"" + ((Wt::WLineEdit*)(*it++))->text().toUTF8() + "\"");
+        messageInformation.addBodyText(",\n\"calculate\": \"" + ((Wt::WLineEdit*)(*++it))->text().toUTF8() + "\"");
     }
-    if (((Wt::WCheckBox*)(*it++))->isChecked())
+    if (((Wt::WCheckBox*)(*++it))->isChecked())
     {
         messageInformation.addBodyText(",\n\"display\": true");
     }
@@ -145,11 +145,11 @@ void InformationsWidget::modifResource(vector<Wt::WInteractWidget*>* arguments, 
     Wt::Http::Message messageInformation;
     
     messageInformation.addBodyText("{");
-    messageInformation.addBodyText("\n\"name\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
-    messageInformation.addBodyText(",\n\"desc\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
-    messageInformation.addBodyText(",\n\"calculate\" : \"" + ((Wt::WLineEdit*)(*i++))->text().toUTF8() + "\"");
+    messageInformation.addBodyText("\n\"name\" : \"" + ((Wt::WLineEdit*)(*i))->text().toUTF8() + "\"");
+    messageInformation.addBodyText(",\n\"desc\" : \"" + ((Wt::WLineEdit*)(*++i))->text().toUTF8() + "\"");
+    messageInformation.addBodyText(",\n\"calculate\" : \"" + ((Wt::WLineEdit*)(*++i))->text().toUTF8() + "\"");
     
-    Wt::WCheckBox * displayBox = (Wt::WCheckBox*)(*i++);
+    Wt::WCheckBox * displayBox = (Wt::WCheckBox*)(*++i);
     if (displayBox->isChecked())
     {
         messageInformation.addBodyText(",\n\"display\" : true");
@@ -160,9 +160,9 @@ void InformationsWidget::modifResource(vector<Wt::WInteractWidget*>* arguments, 
     }
 
     
-    Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
+    Wt::WStandardItemModel *unitModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*++i))->model();
     // FIXME: segfault ici !
-    messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i++))->currentIndex(), 1)->text().toUTF8());
+    messageInformation.addBodyText(",\n\"unit_id\" : " + unitModel->item(((Wt::WComboBox*)(*i))->currentIndex(), 1)->text().toUTF8());
 
     
     messageInformation.addBodyText("\n}");

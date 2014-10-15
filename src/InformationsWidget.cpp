@@ -137,9 +137,9 @@ void InformationsWidget::addResource(vector<Wt::WInteractWidget*>* arguments)
     }
 }
 
-void InformationsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
+void InformationsWidget::modifResource(vector<Wt::WInteractWidget*>* arguments, long long id)
 {
-    vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
+    vector<Wt::WInteractWidget*>::iterator i = arguments->begin();
 
     // Post Information -------
     Wt::Http::Message messageInformation;

@@ -129,10 +129,10 @@ void UserEditionWidget::addResource(vector<Wt::WInteractWidget*>* argument)
 }
 
 
-void UserEditionWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
+void UserEditionWidget::modifResource(vector<Wt::WInteractWidget*>* arguments, long long id)
 {
     MapLongString::iterator it = mediasTokens.find(id);
-    vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
+    vector<Wt::WInteractWidget*>::iterator i = arguments->begin();
 
     Wt::Http::Message message;
     message.addBodyText("{\n\"token\": \"" + (*it).second

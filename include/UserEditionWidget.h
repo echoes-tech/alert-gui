@@ -36,7 +36,7 @@ public:
 //    Wt::WValidator              *editValidator(int who);
     
     void                        addResource(std::vector<Wt::WInteractWidget*>* argument);
-    void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
+    void                        modifResource(std::vector<Wt::WInteractWidget*>* arguments, long long id);
 
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
 

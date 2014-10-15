@@ -60,7 +60,7 @@ public:
     void                        checkNewPopupRecipientsRework(string initialMessage);
 
     void                        addResource(std::vector<Wt::WInteractWidget*>* argument);
-    void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
+    void                        modifResource(std::vector<Wt::WInteractWidget*>* arguments, long long id);
     
     void                        postAlert(boost::system::error_code err, const Wt::Http::Message& response);
     void                        deleteAlert(boost::system::error_code err, const Wt::Http::Message& response);

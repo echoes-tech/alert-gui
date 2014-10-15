@@ -944,7 +944,16 @@ void AlertsWidget::addCompareWidget(long long assetID, long long pluginID, long 
                 alertCriterion.unitTypeID == Enums::EInformationUnitType::custom)
         {
             Wt::WTemplate *t = new Wt::WTemplate(tr("Alert.alert.criterion.template"));
-            Wt::WValidator* validator = editValidator(setValidatorType(ETypeJson::number, 0, EMandatory::is));
+            Wt::WValidator* validator;
+            switch(alertCriterion.unitTypeID)
+            {
+                case Enums::EInformationUnitType::number:
+                    validator = editValidator(setValidatorType(ETypeJson::number, 0, EMandatory::is));
+                    break ;
+                default:
+                    validator = editValidator(setValidatorType(ETypeJson::text, 0, EMandatory::is));
+                    break ;
+            }
             Wt::WLineEdit* lineEditValue = new Wt::WLineEdit();
 
             lineEditValue->setValidator(validator);
@@ -1312,7 +1321,7 @@ void AlertsWidget::postAlertCallApi(string message)
 }
 
 /* TO DO */
-void AlertsWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
+void AlertsWidget::modifResource(vector<Wt::WInteractWidget*>* arguments, long long id)
 {
     
 }

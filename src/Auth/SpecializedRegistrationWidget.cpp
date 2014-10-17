@@ -50,6 +50,8 @@ void SpecializedRegistrationWidget::registerUserDetails(Wt::Auth::User& user)
 {
     ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user().modify()->eMail = model()->valueText(model()->LoginNameField);
     ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user().modify()->token = generateToken();
+    
+    ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user().modify()->lastName = model()->valueText(model()->LoginNameField);
 
     Echoes::Dbo::Organization *org = new Echoes::Dbo::Organization();
 

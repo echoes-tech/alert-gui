@@ -203,6 +203,32 @@ private:
         CriterionResponse emailRsp;
         CriterionResponse mobileappRsp;
     };
+        
+    struct TimeSlot
+    {
+        int start;
+        int duration;
+        bool everyday;
+        bool everymonth;
+        std::vector<std::pair<bool, Wt::WString>> days;
+        std::vector<std::pair<bool, Wt::WString>> months;
+    };
+    
+    struct Message
+    {
+        long long                       receiverId;
+        long long                       mediaId;
+        long long                       timer;
+        Wt::WString                     *str;
+        std::vector<struct TimeSlot>    timeSlots;
+    };
+    
+    struct Aliases
+    {
+        Wt::WString *email;
+        Wt::WString *sms;
+        Wt::WString *mobile;
+    };
     
     std::vector<AlertCriterion> m_alertCriteria;
     // end alert setting attributes
@@ -222,6 +248,15 @@ private:
     // generic http ask get
     void httpAsk(long long userRoleId, long long mediaType, long long requestType, long long criteria);
 
+    // popupRecipients associated functions
+    void initDateStructs();
+    void initTimeSlotsTables(Wt::WDialog *dialog);
+    void timeSlotsUnfocused();
+    
+    // select Media interactions
+    void saveTimeSlots(std::vector<struct TimeSlot> &timeSlots);
+    void setSelectInteractions(int id);
+    
     // Build message
     void updateTabContent(long long mediaType);
     void updateMessage(std::string &tabContent, Wt::WString &message, unsigned long criteria);
@@ -248,26 +283,11 @@ private:
         SELECT = 3,
     };
     
-    struct Message
-    {
-        long long       receiverId;
-        long long       mediaId;
-        long long       timer;
-        Wt::WString     *str;
-    };
-    
-    struct Aliases
-    {
-        Wt::WString *email;
-        Wt::WString *sms;
-        Wt::WString *mobile;
-    };
-    
     Echoes::Dbo::Session        *m_session;
     std::string                 m_apiUrl;
     Wt::Json::Value             m_alerts;
     
-    int             time_;
+    std::vector<struct TimeSlot> m_timeSlots;
     long long       m_rowReceiver;
     long long       m_rowMedia;
     
@@ -291,11 +311,23 @@ private:
     std::vector<long long>                  m_mediaIds;
     
     
+    Wt::WTable      *m_timeSlotsSummary;
     Wt::WTextArea   *m_messageArea;
     Wt::WLineEdit   *m_timer;
     Wt::WTable      *m_messageTable;
+    Wt::WTable      *m_timeSlotsTable;
+    Wt::WPushButton *m_showTimeSlots;
+    Wt::WPushButton *m_addTimeSlot;
     Wt::WText       *m_messageReceiver;
     Wt::WText       *m_messageMedia;
+    
+    int                                                 m_rowCount;
+    Wt::WSlider                                         *m_sliderStart;
+    Wt::WSlider                                         *m_sliderDuration;
+    Wt::WCheckBox                                       *m_everyDay;
+    Wt::WCheckBox                                       *m_everyMonth;
+    std::vector<std::pair<Wt::WCheckBox*, Wt::WText*>>  m_days;
+    std::vector<std::pair<Wt::WCheckBox*, Wt::WText*>>  m_months;
     
     std::multimap<long long, long long>                                                 m_mediaUserRelation;
     std::multimap<long long, std::pair<long long, std::string>>                         userInfo_;

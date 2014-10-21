@@ -72,6 +72,40 @@
     <message id="Alert.alert.form.sms">SMS</message>
     <message id="Alert.alert.form.push">PUSH</message>
     
+    <message id="Alert.alert.form.recursivity">Récursivité :</message>
+    <message id="Alert.alert.form.start">Début à </message>
+    <message id="Alert.alert.form.duration">Durée</message>
+    <message id="Alert.alert.form.show-timeslot">Afficher les plages horaire</message>
+    <message id="Alert.alert.form.hide-timeslot">Masquer les plages horaire</message>
+    <message id="Alert.alert.form.add-timeslot">Ajouter</message>
+    
+    <message id="Alert.alert.form.all-days">Tous les jours</message>
+    <message id="Alert.alert.form.all-months">Tous les mois</message>
+    <message id="Alert.alert.form.summary">Récapitulatif</message>
+    <message id="Alert.alert.form.days">jours</message>
+    <message id="Alert.alert.form.months">mois</message>
+    
+    <message id="Alert.alert.form.mon">lundi</message>
+    <message id="Alert.alert.form.thu">mardi</message>
+    <message id="Alert.alert.form.wed">mercredi</message>
+    <message id="Alert.alert.form.tue">jeudi</message>
+    <message id="Alert.alert.form.fri">vendredi</message>
+    <message id="Alert.alert.form.sat">samedi</message>
+    <message id="Alert.alert.form.sun">dimanche</message>
+    
+    <message id="Alert.alert.form.jan">janvier</message>
+    <message id="Alert.alert.form.feb">février</message>
+    <message id="Alert.alert.form.mar">mars</message>
+    <message id="Alert.alert.form.apr">avril</message>
+    <message id="Alert.alert.form.may">mai</message>
+    <message id="Alert.alert.form.jun">juin</message>
+    <message id="Alert.alert.form.jul">juillet</message>
+    <message id="Alert.alert.form.aug">août</message>
+    <message id="Alert.alert.form.sep">septembre</message>
+    <message id="Alert.alert.form.oct">octobre</message>
+    <message id="Alert.alert.form.nov">novembre</message>
+    <message id="Alert.alert.form.dec">decembre</message>
+    
     <message id="Alert.alert.operator.lt">Inférieur</message>
     <message id="Alert.alert.operator.le">Inférieur ou égal</message>
     <message id="Alert.alert.operator.eq">Egal</message>

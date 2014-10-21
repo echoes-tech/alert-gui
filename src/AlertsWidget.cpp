@@ -15,6 +15,7 @@
  */
 
 #include <Wt/WWidget>
+#include <Wt/WSlider>
 
 #include <boost/regex.hpp>
 #include <bits/stl_map.h>
@@ -116,10 +117,164 @@ vector<string> AlertsWidget::getTitlesTableText()
     return titleText;
 }
 
+void AlertsWidget::saveTimeSlots(std::vector<struct TimeSlot> &timeSlots)
+{
+    struct TimeSlot newTimeSlot;
+
+    newTimeSlot.start = m_sliderStart->value();
+    newTimeSlot.duration = m_sliderDuration->value();
+    if (m_everyDay->checkState() == Wt::Checked)
+    {
+        newTimeSlot.everyday = true;
+        for (int itD = 0; itD < 7; ++itD)
+        {
+            newTimeSlot.days.push_back(std::make_pair(true, m_days.at(itD).second->text()));
+        }
+    }
+    else
+    {
+        newTimeSlot.everyday = false;
+        for (std::vector<std::pair < Wt::WCheckBox*, Wt::WText*>>::iterator itD = m_days.begin();
+                itD != m_days.end(); ++itD)
+        {
+            newTimeSlot.days.push_back(std::make_pair(itD->first->isChecked(), itD->second->text()));
+        }
+    }
+
+    if (m_everyMonth->checkState() == Wt::Checked)
+    {
+        newTimeSlot.everymonth = true;
+        for (int itM = 0; itM < 12; ++itM)
+        {
+            newTimeSlot.months.push_back(std::make_pair(true, m_months.at(itM).second->text()));
+        }
+    }
+    else
+    {
+        newTimeSlot.everymonth = false;
+        for (std::vector<std::pair < Wt::WCheckBox*, Wt::WText*>>::iterator itM = m_months.begin();
+                itM != m_months.end(); ++itM)
+        {
+            newTimeSlot.months.push_back(std::make_pair(itM->first->isChecked(), itM->second->text()));
+        }
+    }
+    timeSlots.push_back(newTimeSlot);
+}
+
+void AlertsWidget::setSelectInteractions(int id)
+{
+    m_messageArea->keyWentUp().connect(bind( [ = ] ()
+    {
+        if (m_rowMedia == id)
+        {
+            m_messages.find(id)->second.str = new Wt::WString(m_messageArea->text());
+        }
+            
+    }));
+    
+    m_timer->keyWentUp().connect(bind( [ = ]()
+    {
+        if (m_rowMedia == id)
+        {
+            if (m_timer->validate() == Wt::WValidator::Valid)
+            {
+                m_messages.find(id)->second.timer = boost::lexical_cast<long long>(m_timer->text().toUTF8());
+            }
+        }
+    }));
+    
+    m_addTimeSlot->clicked().connect(bind([=]()
+    {
+        struct TimeSlot newTimeSlot;
+        
+        newTimeSlot.start = m_sliderStart->value();
+        newTimeSlot.duration = m_sliderDuration->value();
+        if (m_everyDay->checkState() == Wt::Checked)
+        {
+            newTimeSlot.everyday = true;
+            for (int itD = 0 ; itD < 7 ; ++itD)
+            {
+                newTimeSlot.days.push_back(std::make_pair(true, m_days.at(itD).second->text()));
+            }
+        }
+        else
+        {
+            newTimeSlot.everyday = false;
+            for (std::vector<std::pair<Wt::WCheckBox*, Wt::WText*>>::iterator itD = m_days.begin() ;
+                itD != m_days.end() ; ++itD)
+            {
+                newTimeSlot.days.push_back(std::make_pair(itD->first->isChecked(), itD->second->text()));
+            }
+        }
+        
+        if (m_everyMonth->checkState() == Wt::Checked)
+        {
+            newTimeSlot.everymonth = true;
+            for (int itM = 0 ; itM < 12 ; ++itM)
+            {
+                newTimeSlot.months.push_back(std::make_pair(true, m_months.at(itM).second->text()));
+            }
+        }
+        else
+        {
+            newTimeSlot.everymonth = false;
+            for (std::vector<std::pair<Wt::WCheckBox*, Wt::WText*>>::iterator itM = m_months.begin() ;
+                itM != m_months.end() ; ++itM)
+            {
+                newTimeSlot.months.push_back(std::make_pair(itM->first->isChecked(), itM->second->text()));
+            }
+        }
+        m_timeSlots.push_back(newTimeSlot);
+        
+        m_timeSlotsSummary->elementAt(++m_rowCount, 0)->addWidget(new Wt::WText(boost::lexical_cast<string>(newTimeSlot.start) + "h"));
+        m_timeSlotsSummary->elementAt(m_rowCount, 0)->setContentAlignment(Wt::AlignmentFlag::AlignCenter);
+        m_timeSlotsSummary->elementAt(m_rowCount, 1)->addWidget(new Wt::WText(boost::lexical_cast<string>(newTimeSlot.duration) + "h"));
+        m_timeSlotsSummary->elementAt(m_rowCount, 1)->setContentAlignment(Wt::AlignmentFlag::AlignCenter);
+        Wt::WString daySummary("");
+        if (newTimeSlot.everyday)
+        {
+            daySummary += tr("Alert.alert.form.all-days");
+        }
+        else
+        {
+            for (std::vector < std::pair<bool, Wt::WString>>::iterator itD = newTimeSlot.days.begin(); itD != newTimeSlot.days.end(); ++itD)
+            {
+                if (itD != newTimeSlot.days.begin())
+                {
+                    daySummary += ", ";
+                }
+                daySummary += itD->second;
+            }
+        }
+        m_timeSlotsSummary->elementAt(m_rowCount, 2)->addWidget(new Wt::WText(daySummary));
+        m_timeSlotsSummary->elementAt(m_rowCount, 2)->setMaximumSize(150, 20);
+        
+        Wt::WString monthSummary("");
+        if (newTimeSlot.everymonth)
+        {
+            monthSummary += tr("Alert.alert.form.all-months");
+        }
+        else
+        {
+            for (std::vector<std::pair<bool, Wt::WString>>::iterator itM = newTimeSlot.months.begin() ; itM != newTimeSlot.months.end() ; ++itM)
+            {
+                if (itM != newTimeSlot.months.begin())
+                {
+                    monthSummary += ", ";
+                }
+                monthSummary += itM->second;
+            }
+        }
+        m_timeSlotsSummary->elementAt(m_rowCount, 3)->addWidget(new Wt::WText(monthSummary));
+        m_timeSlotsSummary->elementAt(m_rowCount, 3)->setMaximumSize(150, 20);
+    }));
+}
+
 void AlertsWidget::selectMedia(long long id, long long index, TrundleTable *trundleTable)
 {
     if (trundleTable->getIndex() > 0)
     {
+        m_showTimeSlots->enable();
         m_messageTable->enable();
     }
 
@@ -166,33 +321,13 @@ void AlertsWidget::selectMedia(long long id, long long index, TrundleTable *trun
         {
             newMessage.str = new Wt::WString("");
         }
+        saveTimeSlots(newMessage.timeSlots);
         m_messages.insert(make_pair(id, newMessage));
     }
     m_messageArea->setText(*m_messages.find(id)->second.str);
     m_timer->setText(boost::lexical_cast<string>(m_messages.find(id)->second.timer));
     
-    m_messageArea->keyWentUp().connect(bind( [ = ] ()
-    {
-        Wt::log("info") << " === rowMedia: " << m_rowMedia << "id: " << id;
-        if (m_rowMedia == id)
-        {
-            m_messages.find(id)->second.str = new Wt::WString(m_messageArea->text());
-        }
-        Wt::log("info") << "message:" << m_messages.find(id)->second.str->toUTF8();
-            
-    }));
-    
-    m_timer->keyWentUp().connect(bind( [ = ]()
-    {
-        if (m_rowMedia == id)
-        {
-            if (m_timer->validate() == Wt::WValidator::Valid)
-            {
-                Wt::log("info") << "TIMER: " << boost::lexical_cast<long long>(m_timer->text().toUTF8());
-                m_messages.find(id)->second.timer = boost::lexical_cast<long long>(m_timer->text().toUTF8());
-            }
-        }
-    }));
+    setSelectInteractions(id);
 }
 
 void AlertsWidget::addMedia(long long id, long long index, TrundleTable *menu)
@@ -236,8 +371,10 @@ void AlertsWidget::deleteMedia(long long id, long long index, TrundleTable *menu
            break ;
        }
    }
+   
    if (menu->getIndex() <= 0)
    {
+       timeSlotsUnfocused();
        m_messageTable->disable();
    }
 }
@@ -262,6 +399,7 @@ void AlertsWidget::addReceiver(long long id, long long index, TrundleTable *menu
     else
     {
         m_messageTable->disable();
+        timeSlotsUnfocused();
     }
     getAliases(m_userIds.at(currentIndex));
     
@@ -339,6 +477,7 @@ void AlertsWidget::deleteReceiver(long long id, long long index, TrundleTable *m
    menu->deleteRow(index);
    if (menu->getIndex() == 0)
    {
+       timeSlotsUnfocused();
         m_messageTable->disable();
    }
 }
@@ -351,6 +490,7 @@ void AlertsWidget::selectReceiver(long long id, long long index, TrundleTable *m
     {
         if (subMenu->getIndex() == 0)
         {
+            timeSlotsUnfocused();
             m_messageTable->disable();
         }
     }
@@ -368,12 +508,236 @@ void AlertsWidget::getCriteriaSelection()
     }
 }
 
+void AlertsWidget::initDateStructs()
+{
+    m_days.clear();
+    m_days.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.mon"))));
+    m_days.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.thu"))));
+    m_days.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.wed"))));
+    m_days.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.tue"))));
+    m_days.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.fri"))));
+    m_days.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.sat"))));
+    m_days.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.sun"))));
+    
+    m_months.clear();
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.jan"))));
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.feb"))));
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.mar"))));
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.apr"))));
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.may"))));
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.jun"))));
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.jul"))));
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.aug"))));
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.sep"))));
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.oct"))));
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.nov"))));
+    m_months.push_back(std::make_pair(new Wt::WCheckBox(), new Wt::WText(tr("Alert.alert.form.dec"))));
+}
+
+void AlertsWidget::initTimeSlotsTables(Wt::WDialog *dialog)
+{
+    m_showTimeSlots = new Wt::WPushButton(dialog->contents());
+    m_showTimeSlots->disable();
+    m_showTimeSlots->setText(tr("Alert.alert.form.show-timeslot"));
+    m_showTimeSlots->addStyleClass("btn-info");
+    m_showTimeSlots->setMargin(10, Wt::Bottom);
+    
+    m_timeSlotsTable = new Wt::WTable(dialog->contents());
+    m_timeSlotsTable->hide();
+    m_timeSlotsTable->resize(Wt::WLength(90, Wt::WLength::Percentage), Wt::WLength());
+    
+    m_showTimeSlots->clicked().connect(bind([=]()
+    {
+        if (m_timeSlotsTable->isHidden() == true)
+        {
+            m_showTimeSlots->setText(tr("Alert.alert.form.hide-timeslot"));
+            m_timeSlotsTable->show();
+        }
+        else
+        {
+            m_showTimeSlots->setText(tr("Alert.alert.form.show-timeslot"));
+            m_timeSlotsTable->hide();
+        }
+    }));
+    
+    m_timeSlotsTable->setMargin(15, Wt::Bottom);
+    
+    Wt::WTable *setTimeslotTimerTable = new Wt::WTable(m_timeSlotsTable->elementAt(0, 0));
+    setTimeslotTimerTable->resize(Wt::WLength(100, Wt::WLength::Percentage), Wt::WLength());
+    setTimeslotTimerTable->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.start") + ":"));
+    setTimeslotTimerTable->elementAt(0, 0)->resize(Wt::WLength(10, Wt::WLength::Percentage), 50);
+    setTimeslotTimerTable->elementAt(0, 0)->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
+    setTimeslotTimerTable->elementAt(0, 0)->setVerticalAlignment(Wt::AlignmentFlag::AlignMiddle);
+    
+        /* Set start slider */
+    m_sliderStart = new Wt::WSlider();
+    m_sliderStart->setMinimum(0);
+    m_sliderStart->setMaximum(23);
+    m_sliderStart->setTickInterval(1);
+    m_sliderStart->setTickPosition(Wt::WSlider::TicksAbove);
+    Wt::WText *startHour = new Wt::WText(m_sliderStart->valueText() + "h");
+    
+    setTimeslotTimerTable->elementAt(0, 1)->addWidget(startHour);
+    setTimeslotTimerTable->elementAt(0, 1)->setPadding(5, Wt::Left);
+    setTimeslotTimerTable->elementAt(0, 1)->setVerticalAlignment(Wt::AlignmentFlag::AlignMiddle);
+    setTimeslotTimerTable->elementAt(0, 1)->resize(Wt::WLength(10, Wt::WLength::Percentage), 50);
+    setTimeslotTimerTable->elementAt(0, 2)->addWidget(m_sliderStart);
+    setTimeslotTimerTable->elementAt(0, 2)->resize(Wt::WLength(80, Wt::WLength::Percentage), 50);
+    
+    setTimeslotTimerTable->elementAt(1, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.duration") + ":"));
+    setTimeslotTimerTable->elementAt(1, 0)->resize(Wt::WLength(10, Wt::WLength::Percentage), 50);
+    setTimeslotTimerTable->elementAt(1, 0)->setVerticalAlignment(Wt::AlignmentFlag::AlignMiddle);
+    setTimeslotTimerTable->elementAt(1, 0)->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
+    
+        /* set duration slider */
+    m_sliderDuration = new Wt::WSlider();
+    m_sliderDuration->setMinimum(1);
+    m_sliderDuration->setMaximum(24);
+    m_sliderDuration->setTickInterval(1);
+    m_sliderDuration->setTickPosition(Wt::WSlider::TicksAbove);
+    Wt::WText *stopHour = new Wt::WText(m_sliderDuration->valueText() + "h");
+    setTimeslotTimerTable->elementAt(1, 1)->addWidget(stopHour);
+    setTimeslotTimerTable->elementAt(1, 1)->resize(Wt::WLength(10, Wt::WLength::Percentage), 50);
+    setTimeslotTimerTable->elementAt(1, 1)->setPadding(5, Wt::Left);
+    setTimeslotTimerTable->elementAt(1, 1)->setVerticalAlignment(Wt::AlignmentFlag::AlignMiddle);
+    setTimeslotTimerTable->elementAt(1, 1)->setPadding(20, Wt::Right);
+    setTimeslotTimerTable->elementAt(1, 2)->addWidget(m_sliderDuration);
+    setTimeslotTimerTable->elementAt(1, 2)->resize(Wt::WLength(80, Wt::WLength::Percentage), 50);
+    
+    m_sliderStart->resize(300, Wt::WLength());
+    m_sliderDuration->resize(300, Wt::WLength());
+    m_sliderStart->valueChanged().connect(bind ([=]()
+    {
+        startHour->setText(m_sliderStart->valueText() + "h");
+    }));
+    
+    m_sliderDuration->valueChanged().connect(bind ([=]()
+    {
+        stopHour->setText(m_sliderDuration->valueText() + "h");
+    }));
+    
+    m_everyDay = new Wt::WCheckBox();
+    
+    Wt::WTable *setEveryDaysMonthsTable = new Wt::WTable(m_timeSlotsTable->elementAt(1, 0));
+    setEveryDaysMonthsTable->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.all-days")));
+    setEveryDaysMonthsTable->elementAt(0, 1)->addWidget(m_everyDay);
+    setEveryDaysMonthsTable->elementAt(0, 1)->setPadding(30, Wt::Left);
+    setEveryDaysMonthsTable->elementAt(0, 1)->setPadding(100, Wt::Right);
+
+    m_everyMonth = new Wt::WCheckBox();
+    setEveryDaysMonthsTable->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.alert.form.all-months")));
+    setEveryDaysMonthsTable->elementAt(0, 2)->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
+    setEveryDaysMonthsTable->elementAt(0, 3)->addWidget(m_everyMonth);
+    setEveryDaysMonthsTable->elementAt(0, 3)->setPadding(30, Wt::Left);
+    
+    m_everyDay->setCheckState(Wt::Checked);
+    m_everyMonth->setCheckState(Wt::Checked);
+    
+    Wt::WTable *setDaysMonthsTable = new Wt::WTable(m_timeSlotsTable->elementAt(2, 0));
+    Wt::WTable *daysTable = new Wt::WTable(setDaysMonthsTable->elementAt(0, 0));
+    int i = 0;
+    for (std::vector<std::pair<Wt::WCheckBox*, Wt::WText*>>::iterator itD = m_days.begin() ; itD != m_days.end() ; ++itD)
+    {
+        itD->first->setCheckState(Wt::Checked);
+        daysTable->elementAt(i, 0)->addWidget(itD->second);
+        daysTable->elementAt(i, 0)->setPadding(30, Wt::Left);
+        daysTable->elementAt(i, 1)->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
+        daysTable->elementAt(i, 1)->addWidget(itD->first);
+        daysTable->elementAt(i, 1)->setPadding(40, Wt::Left);
+        daysTable->elementAt(i, 1)->setPadding(90, Wt::Right);
+        ++i;
+    }
+    daysTable->hide();
+    
+    Wt::WTable *monthsTable = new Wt::WTable(setDaysMonthsTable->elementAt(0, 1));
+    i = 0;
+    for (std::vector<std::pair<Wt::WCheckBox*, Wt::WText*>>::iterator itM = m_months.begin() ; itM != m_months.end() ; ++itM)
+    {
+        itM->first->setCheckState(Wt::Checked);
+        monthsTable->elementAt(i, 0)->addWidget(itM->second);
+        monthsTable->elementAt(i, 0)->setPadding(30, Wt::Left);
+        monthsTable->elementAt(i, 0)->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
+        monthsTable->elementAt(i, 1)->addWidget(itM->first);
+        monthsTable->elementAt(i, 1)->setPadding(30, Wt::Left);
+        monthsTable->elementAt(i, 1)->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
+        ++i;
+    }
+    monthsTable->hide();
+    setDaysMonthsTable->show();
+    
+    m_addTimeSlot = new Wt::WPushButton(m_timeSlotsTable->elementAt(3, 0));
+    m_addTimeSlot->setText(tr("Alert.alert.form.add-timeslot"));
+    m_addTimeSlot->setStyleClass("btn-success");
+    m_timeSlotsTable->elementAt(3, 0)->setPadding(Wt::WLength(80, Wt::WLength::Percentage), Wt::Left);
+    m_timeSlotsTable->elementAt(3, 0)->setPadding(10, Wt::Bottom);
+    
+    Wt::WContainerWidget *timeSlotsSummaryContainer = new Wt::WContainerWidget(m_timeSlotsTable->elementAt(4, 0));
+    timeSlotsSummaryContainer->resize(Wt::WLength(100, Wt::WLength::Percentage), Wt::WLength());
+    timeSlotsSummaryContainer->addStyleClass("widget-content nopadding DataTables_Table_0_wrapper dataTables_wrapper body-pers");
+    timeSlotsSummaryContainer->setPadding(Wt::WLength(10, Wt::WLength::Percentage), Wt::Left);
+    m_timeSlotsSummary = new Wt::WTable(timeSlotsSummaryContainer);
+    m_timeSlotsSummary->addStyleClass("table table-bordered table-striped table-hover data-table dataTable");
+    m_timeSlotsSummary->setHeaderCount(1, Wt::Horizontal);
+    
+    m_timeSlotsSummary->elementAt(0, 0)->setAttributeValue("style", "border-left:0");
+    m_timeSlotsSummary->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.start")));
+    m_timeSlotsSummary->elementAt(0, 0)->resize(Wt::WLength(10, Wt::WLength::Percentage), 20);
+    m_timeSlotsSummary->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.alert.form.duration")));
+    m_timeSlotsSummary->elementAt(0, 1)->resize(Wt::WLength(10, Wt::WLength::Percentage), 20);
+    m_timeSlotsSummary->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.alert.form.days")));
+    m_timeSlotsSummary->elementAt(0, 2)->resize(Wt::WLength(30, Wt::WLength::Percentage), 20);
+    m_timeSlotsSummary->elementAt(0, 3)->addWidget(new Wt::WText(tr("Alert.alert.form.months")));
+    m_timeSlotsSummary->elementAt(0, 3)->resize(Wt::WLength(30, Wt::WLength::Percentage), 20);
+    m_timeSlotsSummary->elementAt(0, 4)->addWidget(new Wt::WText(tr("Alert.alert.delete-button")));
+    m_timeSlotsSummary->elementAt(0, 4)->resize(Wt::WLength(10, Wt::WLength::Percentage), 20);
+    m_rowCount = 0;
+    
+    m_everyDay->changed().connect(bind ([=]()
+    {
+        if (m_everyMonth->checkState() == Wt::Checked)
+        {
+            daysTable->hide();
+        }
+        else
+        {
+            Wt::log("info") << "show days";
+            daysTable->show();
+        }
+    }));
+    
+    m_everyMonth->changed().connect(bind ([=]()
+    {
+        if (m_everyMonth->checkState() == Wt::Checked)
+        {
+            monthsTable->hide();
+        }
+        else
+        {
+            Wt::log("info") << "show months";
+            monthsTable->show();
+        }
+    }));
+}
+
+void AlertsWidget::timeSlotsUnfocused()
+{
+    m_showTimeSlots->setText(tr("Alert.alert.form.show-timeslot"));
+    m_showTimeSlots->disable();
+    m_timeSlotsTable->hide();
+}
+
 void AlertsWidget::popupNewRecipientsRework(std::string nameAlert, std::string message)
 {
+    /* clear and initiate */
     for (std::map<long long, struct Message>::iterator itMsg = m_messages.begin() ; itMsg != m_messages.end() ; itMsg++)
     {
         m_messages.erase(itMsg);
+    }    
+    if (m_messageTable)
+    {
+        m_messageTable->clear();
     }
+    initDateStructs();
     
     /* Set ComboBox */
     Wt::WComboBox *boxUsers = new Wt::WComboBox();
@@ -387,32 +751,28 @@ void AlertsWidget::popupNewRecipientsRework(std::string nameAlert, std::string m
     Wt::WDialog *dialog = new Wt::WDialog();
     dialog->setClosable(true);
     AbstractPage::addButtonsToPopupFooter(dialog);
-    dialog->resize(Wt::WLength(750), Wt::WLength(70, Wt::WLength::Percentage));
+    dialog->resize(Wt::WLength(60, Wt::WLength::Percentage), Wt::WLength(90, Wt::WLength::Percentage));
     
     Wt::WTable *alertTable = new Wt::WTable(dialog->contents());
     alertTable->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.alert")));
     alertTable->elementAt(0, 1)->addWidget(new Wt::WText(nameAlert));
-    
-    Wt::WTable *blank1 = new Wt::WTable(dialog->contents());
-    blank1->resize(Wt::WLength(20), Wt::WLength(30));
+    alertTable->setMargin(15, Wt::Bottom);
     
     m_table = new Wt::WTable(dialog->contents());
-    m_table->resize(Wt::WLength(700), Wt::WLength(20));
+    m_table->resize(Wt::WLength(90, Wt::WLength::Percentage), Wt::WLength(20));
+    
     Wt::WTable *ReceiverTable = new Wt::WTable(m_table->elementAt(0, 0));
     ReceiverTable->resize(Wt::WLength(310), Wt::WLength(20));
     ReceiverTable->setMaximumSize(Wt::WLength(310), Wt::WLength(20));
+    ReceiverTable->setMargin(15, Wt::Bottom);
+
+    /* set time slots area */
+    initTimeSlotsTables(dialog);
     
-    Wt::WTable *blank2 = new Wt::WTable(dialog->contents());
-    blank2->resize(Wt::WLength(20), Wt::WLength(30));
-    
-    if (m_messageTable)
-    {
-        m_messageTable->clear();
-    }
-    
+    /* Message table */
     m_messageTable = new Wt::WTable(dialog->contents());
     
-    /* set receiver | media name */
+        /* set receiver | media name */
     m_messageReceiver = new Wt::WText("");
     m_messageTable->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.rec")));
     m_messageTable->elementAt(0, 0)->setContentAlignment(Wt::AlignmentFlag::AlignRight);
@@ -429,7 +789,7 @@ void AlertsWidget::popupNewRecipientsRework(std::string nameAlert, std::string m
     m_messageTable->elementAt(1, 1)->setColumnSpan(2);
     m_messageTable->elementAt(1, 1)->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
     
-    /* set timer area */
+        /* set timer area */
     Wt::WTemplate *t = new Wt::WTemplate(tr("Alert.alert.time.template"));
     t->setMaximumSize(Wt::WLength(60), Wt::WLength::Auto);
     m_timer = new Wt::WLineEdit();
@@ -437,53 +797,56 @@ void AlertsWidget::popupNewRecipientsRework(std::string nameAlert, std::string m
     t->bindWidget("time", m_timer);
     Wt::WText *timerUnit = new Wt::WText("minutes");
 
-    m_messageTable->elementAt(2, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.snooze")));    
-    m_messageTable->elementAt(2, 0)->setPadding(Wt::WLength(5), Wt::Top);
-    m_messageTable->elementAt(2, 1)->addWidget(t);
-    m_messageTable->elementAt(2, 1)->setPadding(Wt::WLength(5), Wt::Right);
-    m_messageTable->elementAt(2, 1)->resize(Wt::WLength(60), Wt::WLength::Auto);
-    m_messageTable->elementAt(2, 2)->addWidget(timerUnit);
-    m_messageTable->elementAt(2, 2)->setPadding(Wt::WLength(5), Wt::Left);
-    m_messageTable->elementAt(2, 2)->setPadding(Wt::WLength(5), Wt::Top);
-    m_messageTable->elementAt(2, 2)->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
+    m_messageTable->elementAt(3, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.snooze")));    
+    m_messageTable->elementAt(3, 0)->setPadding(Wt::WLength(5), Wt::Top);
+    m_messageTable->elementAt(3, 1)->addWidget(t);
+    m_messageTable->elementAt(3, 1)->setPadding(Wt::WLength(5), Wt::Right);
+    m_messageTable->elementAt(3, 1)->resize(Wt::WLength(60), Wt::WLength::Auto);
+    m_messageTable->elementAt(3, 2)->addWidget(timerUnit);
+    m_messageTable->elementAt(3, 2)->setPadding(Wt::WLength(5), Wt::Left);
+    m_messageTable->elementAt(3, 2)->setPadding(Wt::WLength(5), Wt::Top);
+    m_messageTable->elementAt(3, 2)->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
 
-    /* set message area*/
-    m_messageTable->elementAt(3, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.mess")));
-    m_messageTable->elementAt(3, 0)->setContentAlignment(Wt::AlignmentFlag::AlignRight);
-    m_messageTable->elementAt(3, 1)->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
-    m_messageTable->elementAt(3, 1)->resize(Wt::WLength(650), Wt::WLength(150));
-    m_messageTable->elementAt(3, 1)->setColumnSpan(2);
-    m_messageArea = new Wt::WTextArea(m_messageTable->elementAt(3, 1));
+        /* set message area*/
+    m_messageTable->elementAt(4, 0)->addWidget(new Wt::WText(tr("Alert.alert.form.mess")));
+    m_messageTable->elementAt(4, 0)->setContentAlignment(Wt::AlignmentFlag::AlignRight);
+    m_messageTable->elementAt(4, 1)->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
+    m_messageTable->elementAt(4, 1)->resize(Wt::WLength(650), Wt::WLength(150));
+    m_messageTable->elementAt(4, 1)->setColumnSpan(2);
+    m_messageArea = new Wt::WTextArea(m_messageTable->elementAt(4, 1));
     
     m_messageTable->disable();
-    /* Set format */
+    
+    /* set receiver rows trundleTable */
+        /* Set format */
     std::vector<Wt::WLength> rowLengths;
     rowLengths.push_back(Wt::WLength(50));
     rowLengths.push_back(Wt::WLength(200));
     rowLengths.push_back(Wt::WLength(50));
     
-    /* Set functors map */
+        /* Set functors map */
     Wt::log("info") << "Set functors";
     std::map<int, boost::function<void (long long, long long, TrundleTable*)>> functorMapReceiverHeader;
     functorMapReceiverHeader.insert(make_pair(EInteractions::ADD, boost::bind(&AlertsWidget::addReceiver, this, _1, _2, _3)));
     
-    /* Set m_headers */
+        /* Set m_headers */
     std::vector<Wt::WWidget*> m_headerReceiver;
     
     m_headerReceiver.push_back(new Wt::WText(tr("Alert.alert.form.rec")));
     m_headerReceiver.push_back(boxUsers);
     
     
-    /* Creating menu */    
+        /* Creating menu */    
     TrundleTable *menuReceiver = new TrundleTable(ReceiverTable
             , rowLengths, Wt::WLength(20));
     
-    /* Set buttons templates */
+        /* Set buttons templates */
     std::map<int, bool> buttons;
     buttons.insert(make_pair(0, true));
     
     menuReceiver->addRow(-1, 0, m_headerReceiver, buttons, functorMapReceiverHeader,  NULL);
 
+    /* End of current popup */
     dialog->finished().connect(bind([ = ] ()
     {
         if (dialog->result() == Wt::WDialog::Rejected)

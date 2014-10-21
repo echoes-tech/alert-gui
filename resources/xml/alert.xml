@@ -69,6 +69,37 @@
     <message id="Alert.alert.form.sms">SMS</message>
     <message id="Alert.alert.form.push">PUSH</message>
     
+    <message id="Alert.alert.form.recursivity">Recursivity:</message>
+    <message id="Alert.alert.form.start">Start at</message>
+    <message id="Alert.alert.form.duration">Duration</message>
+    <message id="Alert.alert.form.show-timeslot">Show time slots</message>
+    <message id="Alert.alert.form.hide-timeslot">Hide time slots</message>
+    <message id="Alert.alert.form.add-timeslot">Add</message>
+    <message id="Alert.alert.form.all-days">Everyday</message>
+    <message id="Alert.alert.form.all-months">Every months</message>
+    <message id="Alert.alert.form.summary">Summary: </message>
+    <message id="Alert.alert.form.days">days</message>
+    <message id="Alert.alert.form.months">months</message>
+    <message id="Alert.alert.form.mon">monday</message>
+    <message id="Alert.alert.form.thu">thursday</message>
+    <message id="Alert.alert.form.wed">wednesday</message>
+    <message id="Alert.alert.form.tue">tuesday</message>
+    <message id="Alert.alert.form.fri">friday</message>
+    <message id="Alert.alert.form.sat">saturday</message>
+    <message id="Alert.alert.form.sun">sunday</message>
+    <message id="Alert.alert.form.jan">january</message>
+    <message id="Alert.alert.form.feb">february</message>
+    <message id="Alert.alert.form.mar">march</message>
+    <message id="Alert.alert.form.apr">april</message>
+    <message id="Alert.alert.form.may">may</message>
+    <message id="Alert.alert.form.jun">june</message>
+    <message id="Alert.alert.form.jul">july</message>
+    <message id="Alert.alert.form.aug">august</message>
+    <message id="Alert.alert.form.sep">september</message>
+    <message id="Alert.alert.form.oct">october</message>
+    <message id="Alert.alert.form.nov">november</message>
+    <message id="Alert.alert.form.dec">december</message>
+        
     <message id="Alert.alert.operator.lt">Less</message>
     <message id="Alert.alert.operator.le">Less or equal</message>
     <message id="Alert.alert.operator.eq">Equal</message>
@@ -180,6 +211,11 @@
             <span>
                 <i class='icon-remove icon-white'></i>
             </span>
+        </div>
+    </message>
+    <message id="Alert.alert.success-button">
+        <div class="btn-success">
+            <i class='icon-remove icon-white'></i>
         </div>
     </message>
     <message id="Alert.alert.valid.template">

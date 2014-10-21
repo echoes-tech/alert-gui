@@ -32,7 +32,6 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
 
     setButtonModif(false);
     setButtonSup(true);
-//    setLocalTable(true);
     
     m_assets = new Wt::WStandardItemModel(0,3,this);
     m_plugins = new Wt::WStandardItemModel(0,3,this);
@@ -173,13 +172,10 @@ void AlertsWidget::selectMedia(long long id, long long index, TrundleTable *trun
     
     m_messageArea->keyWentUp().connect(bind( [ = ] ()
     {
-        Wt::log("info") << " === rowMedia: " << m_rowMedia << "id: " << id;
         if (m_rowMedia == id)
         {
             m_messages.find(id)->second.str = new Wt::WString(m_messageArea->text());
         }
-        Wt::log("info") << "message:" << m_messages.find(id)->second.str->toUTF8();
-            
     }));
     
     m_timer->keyWentUp().connect(bind( [ = ]()
@@ -188,7 +184,6 @@ void AlertsWidget::selectMedia(long long id, long long index, TrundleTable *trun
         {
             if (m_timer->validate() == Wt::WValidator::Valid)
             {
-                Wt::log("info") << "TIMER: " << boost::lexical_cast<long long>(m_timer->text().toUTF8());
                 m_messages.find(id)->second.timer = boost::lexical_cast<long long>(m_timer->text().toUTF8());
             }
         }
@@ -197,13 +192,11 @@ void AlertsWidget::selectMedia(long long id, long long index, TrundleTable *trun
 
 void AlertsWidget::addMedia(long long id, long long index, TrundleTable *menu)
 {
-    Wt::log("info") << "add Media";
     std::string media = ((Wt::WComboBox*)menu->m_header.at(1))->currentText().toUTF8();
     Wt::WText *mediaName = new Wt::WText(media);
     mediaName->setWordWrap(false);
     std::vector<Wt::WWidget*> widgets;
     
-    Wt::log("info") << "id: " << id;
     widgets.push_back(mediaName);
     
     /* Set buttons */
@@ -266,7 +259,6 @@ void AlertsWidget::addReceiver(long long id, long long index, TrundleTable *menu
     getAliases(m_userIds.at(currentIndex));
     
     /* Set ComboBox */
-    Wt::log("info") << "Set ComboBox";
     Wt::WComboBox *boxMedias = new Wt::WComboBox();
     boxMedias->setMinimumSize(Wt::WLength(220), Wt::WLength(20));
     for (std::vector<long long>::iterator itM = m_mediaIds.begin(); itM != m_mediaIds.end(); itM++)
@@ -278,25 +270,21 @@ void AlertsWidget::addReceiver(long long id, long long index, TrundleTable *menu
     }
     
     /* Set format */
-    Wt::log("info") << "Set format";
     std::vector<Wt::WLength> rowLengths;
     rowLengths.push_back(Wt::WLength(50));
     rowLengths.push_back(Wt::WLength(200));
     rowLengths.push_back(Wt::WLength(50));
     
     /* Set widgets */
-    Wt::log("info") << "Set widgets";
     std::vector<Wt::WWidget*> widgets;
     widgets.push_back(new Wt::WText(m_nameFromReceiver.find(m_userIds.at(currentIndex))->second));
 
     /* Set m_header */
-    Wt::log("info") << "Set header";
     std::vector<Wt::WWidget*> headerMedia;
     headerMedia.push_back(new Wt::WText(tr("Alert.alert.form.media")));
     headerMedia.push_back(boxMedias);
     
     /* Set functors maps */
-    Wt::log("info") << "Set functors";
     std::map<int, boost::function<void (long long, long long, TrundleTable*)>> functorMapMediaHeader;
     functorMapMediaHeader.insert(make_pair(EInteractions::ADD, boost::bind(&AlertsWidget::addMedia, this, _1, _2, _3)));
     
@@ -305,7 +293,6 @@ void AlertsWidget::addReceiver(long long id, long long index, TrundleTable *menu
     functorMapReceiverRow.insert(make_pair(EInteractions::SELECT, boost::bind(&AlertsWidget::selectReceiver, this, _1, _2, _3)));
     
     /* Creating menu */
-    Wt::log("info") << "Set menu";
     Wt::WTable *sepTable = new Wt::WTable(m_table->elementAt(0, 1));
     sepTable->resize(Wt::WLength(20), Wt::WLength(20));
     Wt::WTable *MediaTable = new Wt::WTable(m_table->elementAt(0, 2));
@@ -345,7 +332,6 @@ void AlertsWidget::deleteReceiver(long long id, long long index, TrundleTable *m
 
 void AlertsWidget::selectReceiver(long long id, long long index, TrundleTable *menu)
 {
-    Wt::log("info") << "selected Receiver: " << id;
     TrundleTable *subMenu = menu->getSubMenu(id);
     if (subMenu)
     {
@@ -360,11 +346,13 @@ void AlertsWidget::getCriteriaSelection()
     Wt::WComboBox *criterionComboBox;
     for (unsigned long criteria = 0 ; criteria < m_alertCriteria.size() ; criteria++)
     {
-        criterionComboBox = m_alertCriteria[criteria].comboBoxCriteria;
-
-        string criteria_id = ((Wt::WStandardItemModel*)(criterionComboBox->model()))->item(criterionComboBox->currentIndex(),0)->text().toUTF8();
-    
-        m_alertCriteria[criteria].criteriaID = boost::lexical_cast<long long> (criteria_id);
+        if (m_alertCriteria[criteria].unitTypeID == Enums::EInformationUnitType::text || 
+                m_alertCriteria[criteria].unitTypeID == Enums::EInformationUnitType::number )
+        {
+            criterionComboBox = m_alertCriteria[criteria].comboBoxCriteria;
+            string criteria_id = ((Wt::WStandardItemModel*)(criterionComboBox->model()))->item(criterionComboBox->currentIndex(),0)->text().toUTF8();
+            m_alertCriteria[criteria].criteriaID = boost::lexical_cast<long long> (criteria_id);
+        }
     }
 }
 
@@ -794,22 +782,9 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     Wt::WPushButton *ButtonSC = new Wt::WPushButton(tr("Alert.alert.button-save-continue"), dialog->footer());
     ButtonSC->clicked().connect(bind([ = ] ()
     {
-        bool validCriterion = true;
-        for (std::vector<AlertCriterion>::const_iterator it = m_alertCriteria.begin() ; it != m_alertCriteria.end() ; it++)
-        {
-            if (it->lineEditValue->validate() != Wt::WValidator::Valid)
-            {
-                validCriterion = false;
-                dialog->show();
-            }
-            
-        }
-        if (validCriterion)
-        {
-            checkAll_ = 0;
-            getCriteriaSelection();
-            dialog->accept();
-        }
+        checkAll_ = 0;
+        getCriteriaSelection();
+        dialog->accept();
     }));
 
     dialog->resize(Wt::WLength(750), Wt::WLength(500));
@@ -1083,16 +1058,6 @@ Wt::WComboBox *AlertsWidget::createCompareCriteriaComboBox(long long type)
     default:
         break;
     }
-//    int rank = 1;
-//    for(auto it = criterion.begin(); it != criterion.end(); it++)
-//    {
-//        Wt::WStandardItem *itemIndex = new Wt::WStandardItem();
-//        Wt::WStandardItem *itemComparison = new Wt::WStandardItem();
-//        itemIndex->setText(boost::lexical_cast<string>(rank));
-//        itemComparison->setText(*it);
-//        model->setItem(rank,1,itemIndex);
-//        model->setItem(rank++,2,itemComparison);
-//    }
     comboBox->setModel(model);
     comboBox->setModelColumn(1);
     return comboBox;
@@ -1201,7 +1166,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*>* argument)
     else
     {
 //        message += ",\n";
-        Wt::log(" -- message -- ") << message;
+        Wt::log("debug") << message;
         popupNewRecipientsRework(data, message);
     }
 }
@@ -1448,18 +1413,14 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
                     Wt::Json::Object jsonPlugin = jsonArray.at(cpt);
                     Wt::Json::Value jsonPluginAssets = jsonResource.at(cpt + 1);
                     long long pluginId = jsonPlugin.get("id");
-                    vector<long long> infosIds;
-                    if (jsonPluginAssets.type() == Wt::Json::ArrayType)
+                    vector<long long> assetsIds;
+                    if (jsonPluginAssets.type() == Wt::Json::ObjectType)
                     {
-                        Wt::Json::Array jsonPluginAssetsArray = jsonPluginAssets;
-                        for (int cpt1(0); cpt1 < (int) jsonPluginAssetsArray.size(); cpt1++)
-                        {
-                            Wt::Json::Object jsonAsset = jsonPluginAssetsArray.at(cpt1);
-                            long long assetId = jsonAsset.get("id");
-                            infosIds.push_back(assetId);
-                        }
+                        Wt::Json:: Object jsonAsset = jsonPluginAssets;
+                        long long assetId = jsonAsset.get("id");
+                        assetsIds.push_back(assetId);
                     }
-                    m_mapPluginAssets[pluginId] = infosIds;
+                    m_mapPluginAssets[pluginId] = assetsIds;
                 }
             }
         }
@@ -1832,7 +1793,6 @@ void AlertsWidget::updateMessage(std::string &tabContent, Wt::WString &message, 
         }
     }
     
-    Wt::log("info") << "criteria: " << criteria;
     std::string result = message.toUTF8();
     boost::replace_all(result, "%value%",  "%value" + boost::lexical_cast<string> (criteria) + "%");
     boost::replace_all(result, "%threshold%",  "%threshold" + boost::lexical_cast<string> (criteria) + "%");

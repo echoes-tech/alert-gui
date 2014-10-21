@@ -186,6 +186,7 @@ private:
     };
     
     // alerts criterion
+    //FIXME: 
     struct AlertCriterion {
         long long unitTypeID;
         int index;

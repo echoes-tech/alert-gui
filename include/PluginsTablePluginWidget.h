@@ -32,11 +32,15 @@ public:
     PluginsTablePluginWidget(Echoes::Dbo::Session *session, std::string apiUrl);
     
 protected:
+    virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
 private:
     Echoes::Dbo::Session        *session_;
     std::string                 apiUrl_;
+    Wt::WStandardItemModel      *m_assetsStandardItemModel;
+    Wt::WComboBox               *m_assetComboBox;
     
+    void fillModel(Wt::Json::Value result);
     virtual void setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     virtual void setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
 };

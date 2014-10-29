@@ -187,12 +187,12 @@ private:
     
     // alerts criterion
     struct AlertCriterion {
-        long long unitTypeID;
-        int index;
-        long long assetID;
-        long long pluginID;
-        long long criteriaID;
-        long long infoID;
+        int         index;
+        long long   unitTypeID;
+        long long   assetID;
+        long long   pluginID;
+        long long   criteriaID;
+        long long   infoID;
         Wt::WComboBox* operatorComboBox;
         Wt::WLineEdit* lineEditValue;
         Wt::WComboBox* comboBoxCriteria;
@@ -252,7 +252,9 @@ private:
     void initDateStructs();
     void initTimeSlotsTables(Wt::WDialog *dialog);
     void timeSlotsUnfocused();
-    
+    void timeSlotsSummary(long long id);
+    void reInitCheckboxesDates(std::vector<std::pair<Wt::WCheckBox*, Wt::WText*>> &datesCheckBox);
+
     // select Media interactions
     void saveTimeSlots(std::vector<struct TimeSlot> &timeSlots);
     void setSelectInteractions(int id);
@@ -311,19 +313,19 @@ private:
     std::vector<long long>                  m_mediaIds;
     
     
+    long long       m_currentMedia;
     Wt::WTable      *m_timeSlotsSummary;
     Wt::WTextArea   *m_messageArea;
     Wt::WLineEdit   *m_timer;
     Wt::WTable      *m_messageTable;
     Wt::WTable      *m_timeSlotsTable;
-    Wt::WPushButton *m_showTimeSlots;
-    Wt::WPushButton *m_addTimeSlot;
+    Wt::WAnchor     *m_addTimeSlot;
     Wt::WText       *m_messageReceiver;
     Wt::WText       *m_messageMedia;
     
     int                                                 m_rowCount;
-    Wt::WSlider                                         *m_sliderStart;
-    Wt::WSlider                                         *m_sliderDuration;
+    Wt::WText                                           *m_startHour;
+    Wt::WText                                           *m_duration;
     Wt::WCheckBox                                       *m_everyDay;
     Wt::WCheckBox                                       *m_everyMonth;
     std::vector<std::pair<Wt::WCheckBox*, Wt::WText*>>  m_days;

@@ -75,9 +75,8 @@
     <message id="Alert.alert.form.recursivity">Récursivité :</message>
     <message id="Alert.alert.form.start">Début à </message>
     <message id="Alert.alert.form.duration">Durée</message>
-    <message id="Alert.alert.form.show-timeslot">Afficher les plages horaire</message>
-    <message id="Alert.alert.form.hide-timeslot">Masquer les plages horaire</message>
-    <message id="Alert.alert.form.add-timeslot">Ajouter</message>
+    <message id="Alert.alert.form.timeslot">Plages horaire</message>
+    <message id="Alert.alert.form.add-timeslot">Enregistrer</message>
     
     <message id="Alert.alert.form.all-days">Tous les jours</message>
     <message id="Alert.alert.form.all-months">Tous les mois</message>

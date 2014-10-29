@@ -72,9 +72,9 @@
     <message id="Alert.alert.form.recursivity">Recursivity:</message>
     <message id="Alert.alert.form.start">Start at</message>
     <message id="Alert.alert.form.duration">Duration</message>
-    <message id="Alert.alert.form.show-timeslot">Show time slots</message>
-    <message id="Alert.alert.form.hide-timeslot">Hide time slots</message>
-    <message id="Alert.alert.form.add-timeslot">Add</message>
+    <message id="Alert.alert.form.timeslot">Time slots</message>
+    <message id="Alert.alert.form.add-timeslot">Save</message>
+    
     <message id="Alert.alert.form.all-days">Everyday</message>
     <message id="Alert.alert.form.all-months">Every months</message>
     <message id="Alert.alert.form.summary">Summary: </message>

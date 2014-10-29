@@ -28,7 +28,6 @@
 
 TrundleTable::TrundleTable(Wt::WTable *holder)
 {
-    Wt::log("info") << "Constructing non-formated BoxInBoxMenu";
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use(AbstractPage::xmlDirectory + "box_menu", false);
     m_currentIndex = 0;
@@ -47,7 +46,6 @@ TrundleTable::TrundleTable(Wt::WTable *holder)
 
 TrundleTable::TrundleTable(Wt::WTable *holder, std::vector<Wt::WLength> widths, Wt::WLength height)
 {
-    Wt::log("info") << "Constructing formated BoxInBoxMenu";
     Wt::WApplication *app = Wt::WApplication::instance();
     app->messageResourceBundle().use(AbstractPage::xmlDirectory + "box_menu", false);
     m_currentIndex = 0;
@@ -81,12 +79,10 @@ void TrundleTable::addRow(long long id, long long type
                           , std::map<int, boost::function<void (long long id, long long index, TrundleTable*) >> interactions
                           , TrundleTable *subMenu)
 {
-    Wt::log("info") << "addRow: id " << id << " | type " << type;
     for (std::vector<struct Row>::const_iterator itR = m_rows.begin(); itR != m_rows.end(); itR++)
     {
         if (itR->id == id && itR->type != ERowType::HEADER)
         {
-            Wt::log("warning") << "id already registered";
             if (subMenu != NULL)
             {
                 subMenu->deleteAll();
@@ -112,7 +108,6 @@ void TrundleTable::addRow(long long id, long long type
     }
 
     /* Setting buttons */
-    Wt::log("info") << "Setting buttons";
     for (std::map<int, bool>::const_iterator itB = buttons.begin(); itB != buttons.end(); itB++)
     {
         EInteractions::const_iterator itEB = EInteractions::begin() + itB->first;
@@ -122,35 +117,35 @@ void TrundleTable::addRow(long long id, long long type
         {
         case EInteractions::ADD:
         {
-            Wt::log("info") << "Add button";
-            t->clicked().connect(bind([ = ] (){
-                                      newRow.interactions.find(EInteractions::ADD)->second(m_rows.at(m_currentIndex).id, m_currentIndex, this);
+            t->clicked().connect(bind([ = ] ()
+            {
+                newRow.interactions.find(EInteractions::ADD)->second(m_rows.at(m_currentIndex).id, m_currentIndex, this);
             }));
             break;
         }
         case EInteractions::REMOVE:
         {
-            t->clicked().connect(bind([ = ] (){
-                                      long long index = newRow.index;
+            t->clicked().connect(bind([ = ] ()
+            {
+                long long index = newRow.index;
 
-                                      while (index > -1)
+                while (index > -1)
                 {
-                                      if (index < (long long) m_rows.size())
+                    if (index < (long long) m_rows.size())
                     {
-                                      if (newRow.id != m_rows.at(index).id)
+                        if (newRow.id != m_rows.at(index).id)
                         {
-                                      index--;
+                            index--;
                         }
                         else
                         {
-                                      Wt::log("info") << "clicked delete on index: " << index;
-                                      newRow.interactions.find(EInteractions::REMOVE)->second(m_rows.at(index).id, index, this);
-                                      break;
+                            newRow.interactions.find(EInteractions::REMOVE)->second(m_rows.at(index).id, index, this);
+                            break;
                         }
                     }
                     else
                     {
-                                      index--;
+                        index--;
                     }
                 }
             }));
@@ -200,7 +195,6 @@ void TrundleTable::modifyRowCell(long long index, long long cell, Wt::WWidget *n
 
 void TrundleTable::deleteRow(long long index)
 {
-    Wt::log("info") << "delete row: " << index;
     /* delete from table */
     if (!m_rows.empty())
     {
@@ -219,18 +213,14 @@ void TrundleTable::deleteRow(long long index)
         if (it->subMenu != NULL)
         {
             it->subMenu->deleteAll();
-            Wt::log("info") << "subMenu erased";
         }
 
         m_rows.erase(it);
-        Wt::log("info") << "row erased";
         m_rowNumber--;
 
         for (std::vector<struct Row>::iterator itR = (m_rows.begin() + index); itR != m_rows.end(); itR++)
         {
-            Wt::log("info") << "row id before: " << itR->index;
             itR->index--;
-            Wt::log("info") << "row id after: " << itR->index;
         }
         /* set new current index */
         if (m_rowNumber > 0)
@@ -249,7 +239,6 @@ void TrundleTable::deleteRow(long long index)
             m_currentIndex = 0;
         }
     }
-    Wt::log("info") << "row number: " << m_rowNumber;
     updateTable();
 }
 
@@ -259,16 +248,16 @@ void TrundleTable::updateRowColor(long long y, long long x)
 
     if (m_currentIndex == y && m_rows.at(y).type != ERowType::HEADER)
     {
-        m_table->elementAt(y, x)->clicked().connect(bind([ = ] (){
-                                                         if (y != m_currentIndex)
+        m_table->elementAt(y, x)->clicked().connect(bind([ = ] ()
+        {
+            if (y != m_currentIndex)
             {
-                                                         m_currentIndex = y;
-                                                         updateTable();
+                m_currentIndex = y;
+                updateTable();
             }
-                                                         if (m_rows.at(y).interactions.find(EInteractions::SELECT) != m_rows.at(y).interactions.end())
+            if (m_rows.at(y).interactions.find(EInteractions::SELECT) != m_rows.at(y).interactions.end())
             {
-                                                         Wt::log("info") << "Row selected";
-                                                         m_rows.at(y).interactions.find(EInteractions::SELECT)->second(m_rows.at(y).id, y, this);
+                m_rows.at(y).interactions.find(EInteractions::SELECT)->second(m_rows.at(y).id, y, this);
             }
         }));
         if (m_rows.at(y).interactions.find(EInteractions::SELECT) != m_rows.at(y).interactions.end())
@@ -291,7 +280,6 @@ void TrundleTable::updateRowColor(long long y, long long x)
 
 void TrundleTable::deleteAll()
 {
-    Wt::log("info") << "deleting " << m_rows.size() << " rows";
     while (m_rows.size())
     {
         if (m_rows.at(0).interactions.find(EInteractions::REMOVE) != m_rows.at(0).interactions.end())
@@ -333,8 +321,6 @@ void TrundleTable::updateTable()
 
     m_table->setStyleClass("table");
     m_table->addStyleClass("table-responsive");
-
-    Wt::log("info") << "updateTable with " << m_table->rowCount() << " rows";
 
     for (std::vector<struct Row>::iterator itR = m_rows.begin(); itR != m_rows.end(); itR++)
     {
@@ -392,7 +378,6 @@ void TrundleTable::updateTable()
         {
             if (i == m_currentIndex)
             {
-                Wt::log("info") << "update SubMenu";
                 m_rows.at(i).subMenu->m_table->show();
                 m_rows.at(i).subMenu->updateTable();
             }
@@ -402,7 +387,6 @@ void TrundleTable::updateTable()
             }
         }
     }
-    Wt::log("info") << "update table done";
 }
 
 long long TrundleTable::getIndex()

@@ -1025,7 +1025,7 @@ void AlertsWidget::initAlertValueDefinitionPopup()
 
 void AlertsWidget::setBox(Wt::WSelectionBox *box, Wt::WStandardItemModel *model)
 {
-    box->resize(Wt::WLength(200), Wt::WLength(150));
+    box->resize(Wt::WLength(150), Wt::WLength(150));
     box->setSelectionMode(Wt::ExtendedSelection);
     box->setSelectable(true);
     box->setModel(model);
@@ -1082,7 +1082,7 @@ void AlertsWidget::assetSelected()
             Wt::log("debug") << "[AlertsWidget][selectAsset] Multiple selection";
         }
         sortModels();
-        changeButtonAddCriteriaState();
+//        changeButtonAddCriteriaState();
     }
     else
     {
@@ -1134,7 +1134,7 @@ void AlertsWidget::pluginSelected()
             Wt::log("debug") << "[AlertsWidget][selectPlugin] Multiple selection";
         }
         sortModels();
-        changeButtonAddCriteriaState();
+//        changeButtonAddCriteriaState();
     }
     else
     {
@@ -1192,7 +1192,7 @@ void AlertsWidget::informationSelected()
             Wt::log("debug") << "[AlertsWidget][selectInfo] Multiple selection";
         }
         sortModels();
-        changeButtonAddCriteriaState();
+//        changeButtonAddCriteriaState();
     }
     else
     {
@@ -1205,9 +1205,9 @@ void AlertsWidget::informationSelected()
 
 void AlertsWidget::fillModels()
 {
-    fillModel(m_assets,m_mapAssetsNames);
-    fillModel(m_plugins,m_mapPluginsNames);
-    fillModel(m_informations,m_mapInformationsNames);
+    fillModel(m_assets, m_mapAssetsNames);
+    fillModel(m_plugins, m_mapPluginsNames);
+    fillModel(m_informations, m_mapInformationsNames);
 }
 
 void AlertsWidget::fillModel(Wt::WStandardItemModel * model, std::map<long long, std::string> m_mapNames)
@@ -1215,7 +1215,7 @@ void AlertsWidget::fillModel(Wt::WStandardItemModel * model, std::map<long long,
     model->clear();
     std::map<long long, std::string>::iterator mapNamesIt;
     int row = 0;
-    for (mapNamesIt = m_mapNames.begin() ; mapNamesIt != m_mapNames.end() ; mapNamesIt++)
+    for (mapNamesIt = m_mapNames.begin() ; mapNamesIt != m_mapNames.end() ; ++mapNamesIt)
     {
         Wt::WStandardItem *id = new Wt::WStandardItem();
         model->setItem(row,0,id);
@@ -1236,8 +1236,372 @@ void AlertsWidget::sortModels()
 
 // ------- init popup one -------
 
+void AlertsWidget::setDevicesSelection()
+{
+    fillModels();
+    sortModels();
+    
+    m_boxAsset->clearSelection();
+    m_boxPlugin->clearSelection();
+    m_boxInfo->clearSelection();
+    
+    setBox(m_boxAsset,m_assets);
+    m_boxAsset->changed().connect(this, &AlertsWidget::assetSelected);
+    setBox(m_boxPlugin,m_plugins);
+    m_boxPlugin->changed().connect(this, &AlertsWidget::pluginSelected);
+    setBox(m_boxInfo,m_informations);
+    m_boxInfo->changed().connect(this, &AlertsWidget::informationSelected);
+}
+
+void AlertsWidget::popupAddWidgetRework(Wt::WDialog *dialog, long long id)
+{
+    m_newAlertCriteria.clear();
+    checkAll_ = 1;
+    dialog->resize(Wt::WLength(50, Wt::WLength::Percentage), Wt::WLength(90, Wt::WLength::Percentage));
+    
+    Wt::WContainerWidget *headerTableContainer = new Wt::WContainerWidget(dialog->contents());
+    headerTableContainer->addStyleClass("widget-title header-pers");
+    
+    new Wt::WText("<span class='icon'><i class='icon-tasks'></i></span><h5>"
+            + tr("Alert.alert.add-compare")
+            + "</h5>", headerTableContainer);
+    
+    Wt::WAnchor *newCriteria = new Wt::WAnchor(headerTableContainer);
+    
+    newCriteria->setStyleClass("button-add btn");
+    newCriteria->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
+    
+    Wt::WContainerWidget *criteriaSummaryContainer = new Wt::WContainerWidget(dialog->contents());
+    
+    criteriaSummaryContainer->resize(Wt::WLength(100, Wt::WLength::Percentage), Wt::WLength());
+    criteriaSummaryContainer->addStyleClass("widget-content nopadding DataTables_Table_0_wrapper dataTables_wrapper body-pers");
+    criteriaSummaryContainer->setPadding(Wt::WLength(10, Wt::WLength::Percentage), Wt::Left);
+    
+    m_criteriaSummaryTable = new Wt::WTable(criteriaSummaryContainer);
+    updateCriteriaSummaryTable();
+    criteriaSummaryContainer->setMargin(10, Wt::Bottom);
+    
+    
+    Wt::WContainerWidget *addCrieriaWC = new Wt::WContainerWidget(dialog->contents());
+    
+    Wt::WTable *boxesTable = new Wt::WTable(addCrieriaWC);
+    boxesTable->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-asset")));
+    boxesTable->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-plugin")));
+    boxesTable->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-info")));
+    boxesTable->hide();
+    
+    m_boxAsset = new Wt::WSelectionBox(boxesTable->elementAt(1, 0));
+    m_boxPlugin = new Wt::WSelectionBox(boxesTable->elementAt(1, 1));
+    m_boxInfo = new Wt::WSelectionBox(boxesTable->elementAt(1, 2));
+    
+    setDevicesSelection();
+    
+    Wt::WContainerWidget *selectButtonWC = new Wt::WContainerWidget();
+    boxesTable->elementAt(2, 0)->addWidget(selectButtonWC);
+    boxesTable->elementAt(2, 0)->setColumnSpan(3);
+    Wt::WPushButton *selectButton = new Wt::WPushButton(selectButtonWC);
+    selectButtonWC->setContentAlignment(Wt::AlignmentFlag::AlignRight);
+    selectButton->setText(tr("Alert.alert.add-button-add-critera"));
+    selectButton->setStyleClass("btn-success");
+    
+    Wt::WTable *parametersTable = new Wt::WTable(addCrieriaWC);
+    parametersTable->hide();
+    
+    Wt::WPushButton *ButtonSC = new Wt::WPushButton(tr("Alert.alert.button-save-continue"), dialog->footer());
+        
+    newCriteria->clicked().connect(bind([ = ] ()
+    {
+        boxesTable->show();
+    }));
+    
+    selectButton->clicked().connect(bind([ = ] ()
+    {
+        parametersTable->clear();
+        fillParametersTable(parametersTable, boxesTable);
+    }));
+    
+    ButtonSC->clicked().connect(bind([ = ] ()
+    {
+        checkAll_ = 0;
+        dialog->accept();
+    }));
+}
+
+void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *boxesTable)
+{
+    long long assetID = getSelectedIdFromSelectionBox(m_boxAsset);
+    long long pluginID = getSelectedIdFromSelectionBox(m_boxPlugin);
+    long long infoID = getSelectedIdFromSelectionBox(m_boxInfo);
+    Wt::WObject *valueWidget;
+    Wt::WWidget *criteriaWidget;
+    Wt::WComboBox *operatorCB;
+    Wt::WLineEdit *frequencyValue;
+    Wt:: WLineEdit *lineEditValue;
+    
+    if (assetID > 0 && pluginID > 0 && infoID > 0)
+    {
+        int unitTypeID = m_mapInformationsUnitTypes[infoID];
+        int column = 0;
+        int row = 0;
+        
+        parametersTable->elementAt(row, column)->resize(Wt::WLength(120), Wt::WLength());
+        parametersTable->elementAt(row, column + 1)->resize(Wt::WLength(120), Wt::WLength());
+        
+        // OPERATOR
+        parametersTable->elementAt(row, column)->setPadding(Wt::WLength(10), Wt::Bottom);
+        if (m_newAlertCriteria.size() != 0)
+        {
+            operatorCB = new Wt::WComboBox();
+            operatorCB->insertItem(0, Wt::WString(tr("Alert.alert.boolean-operator.and")));
+            operatorCB->insertItem(1, Wt::WString(tr("Alert.alert.boolean-operator.or")));
+            
+            parametersTable->elementAt(row, column)->addWidget(operatorCB);
+        }
+        
+        // VALUE
+        column = 0;
+        parametersTable->elementAt(++row, column)->setContentAlignment(Wt::AlignRight);
+        parametersTable->elementAt(row, column)->setPadding(Wt::WLength(20, Wt::WLength::Percentage), Wt::Left);
+        parametersTable->elementAt(row, column)->setWidth(Wt::WLength(150));
+        if (unitTypeID == Enums::EInformationUnitType::text ||
+                unitTypeID == Enums::EInformationUnitType::number ||
+                unitTypeID == Enums::EInformationUnitType::custom)
+        {
+            Wt::WContainerWidget *lineEditWC = new Wt::WContainerWidget(parametersTable->elementAt(row, column));
+            lineEditWC->addStyleClass("control-group controls");
+            lineEditValue = new Wt::WLineEdit(lineEditWC);
+            switch (unitTypeID)
+            {
+            case Enums::EInformationUnitType::number:
+                lineEditValue->setValidator(editValidator(setValidatorType(ETypeJson::number, 0, EMandatory::is)));
+                break;
+            default:
+                lineEditValue->setValidator(editValidator(setValidatorType(ETypeJson::text, 0, EMandatory::is)));
+                break;
+            }
+            valueWidget = lineEditValue;
+            valueWidget->setObjectName("lineEditValue");
+        }
+        else if (unitTypeID == Enums::EInformationUnitType::boolean)
+        {
+            Wt::WContainerWidget* containerTrueFalse = new Wt::WContainerWidget();
+
+            Wt::WButtonGroup* groupTrueFalse = new Wt::WButtonGroup(containerTrueFalse);
+            parametersTable->elementAt(row, column)->addWidget(containerTrueFalse);
+            
+            Wt::WRadioButton* buttonTrue = new Wt::WRadioButton("true", containerTrueFalse);
+            buttonTrue->setChecked();
+            groupTrueFalse->addButton(buttonTrue);
+
+            Wt::WRadioButton* buttonFalse = new Wt::WRadioButton("false", containerTrueFalse);
+            groupTrueFalse->addButton(buttonFalse);
+            valueWidget = groupTrueFalse;
+            valueWidget->setObjectName("groupTrueFalse");
+        }
+        else
+        {
+            valueWidget = NULL;
+            Wt::log("error") << "Unknown unit type : " << unitTypeID;
+        }
+
+        // CRITERIA      
+        parametersTable->elementAt(row, ++column)->setContentAlignment(Wt::AlignRight);
+        parametersTable->elementAt(row, column)->setWidth(Wt::WLength(100));
+        if (unitTypeID == Enums::EInformationUnitType::text ||
+                unitTypeID == Enums::EInformationUnitType::number)
+        {
+            Wt::WComboBox* comboBoxCriteria = createCompareCriteriaComboBox(unitTypeID);
+            comboBoxCriteria->setCurrentIndex(0);
+            parametersTable->elementAt(row, column)->addWidget(comboBoxCriteria);
+            criteriaWidget = comboBoxCriteria;
+        }
+        else if (unitTypeID == Enums::EInformationUnitType::boolean ||
+                unitTypeID == Enums::EInformationUnitType::custom)
+        {
+            // TO DO
+            criteriaWidget = NULL;
+        }
+        else
+        {
+            Wt::log("error") << "Unknown unit type : " << unitTypeID;
+        }
+
+        /* Set frequency */
+        column = 0;
+        Wt::WContainerWidget *frequencyMaxWC = new Wt::WContainerWidget();
+        frequencyValue = new Wt::WLineEdit(frequencyMaxWC);
+        frequencyValue->setValidator(new Wt::WIntValidator());
+        frequencyMaxWC->addStyleClass("control-group controls");
+        
+        Wt::WComboBox *frequencyTime = new Wt::WComboBox();
+        frequencyTime->insertItem(0, Wt::WString(tr("Alert.alert.form.alert-unit-min")));
+        frequencyTime->insertItem(1, Wt::WString(tr("Alert.alert.form.alert-unit-hour")));
+                
+        parametersTable->elementAt(++row, column)->setVerticalAlignment(Wt::AlignMiddle);
+        parametersTable->elementAt(row, column)->setPadding(Wt::WLength(20, Wt::WLength::Percentage), Wt::Left);
+        parametersTable->elementAt(row, column)->setWidth(Wt::WLength(150));
+        parametersTable->elementAt(row, column)->setContentAlignment(Wt::AlignRight);
+        parametersTable->elementAt(row, column)->addWidget(frequencyMaxWC);
+        
+        parametersTable->elementAt(row, ++column)->setContentAlignment(Wt::AlignRight);
+        parametersTable->elementAt(row, column)->setWidth(Wt::WLength(100));
+        parametersTable->elementAt(row, column)->addWidget(frequencyTime);
+        
+        Wt::WPushButton *saveCriteria = new Wt::WPushButton();
+        saveCriteria->setText(tr("Alert.alert.button-save"));
+        saveCriteria->setStyleClass("btn-success");
+        parametersTable->elementAt(++row, 0)->setContentAlignment(Wt::AlignRight);
+        parametersTable->elementAt(row, 0)->addWidget(saveCriteria);
+        parametersTable->elementAt(row, 0)->setColumnSpan(5);
+        
+        saveCriteria->clicked().connect(bind([ = ] ()
+        {
+            
+            bool valid = true;
+            if (valueWidget->objectName().compare("lineEditValue") == 0)
+            {
+                if (((Wt::WLineEdit *)valueWidget)->validate() == Wt::WValidator::Invalid
+                        || ((Wt::WLineEdit *)valueWidget)->validate() == Wt::WValidator::InvalidEmpty)
+                {
+                    return ;
+                }
+            }
+            else if (frequencyValue->validate() == Wt::WValidator::Invalid
+                        || frequencyValue->validate() == Wt::WValidator::InvalidEmpty)
+            {
+                valid = false;
+            }
+            
+            if (valid == true)
+            {
+                parametersTable->hide();
+                boxesTable->hide();
+
+                Wt::WString value("");
+                if (unitTypeID == Enums::EInformationUnitType::text ||
+                unitTypeID == Enums::EInformationUnitType::number ||
+                unitTypeID == Enums::EInformationUnitType::custom)
+                {
+                    value += ((Wt::WLineEdit*)valueWidget)->text().toUTF8();
+                }
+                else if (unitTypeID == Enums::EInformationUnitType::boolean)
+                {
+                    value += ((Wt::WButtonGroup*)valueWidget)->checkedButton()->text().toUTF8();
+                }
+
+                    long long criteriaID = boost::lexical_cast<long long> (((Wt::WComboBox*)criteriaWidget)->currentIndex());
+
+                    Wt::WString ope("");
+                    if (m_newAlertCriteria.size() != 0)
+                {
+                    ope = operatorCB->currentText();
+                }
+
+                int maxFrequency = (frequencyValue->text().toUTF8().empty() ? 0 : boost::lexical_cast<int> (frequencyValue->text().toUTF8()));
+                int timeFrequency = frequencyTime->currentIndex();
+
+                struct NewAlertCriterion newAlertCriterion;
+
+                cout << "unitTypeID: " << unitTypeID << endl;
+                cout << "pluginID: " << pluginID << endl;
+                cout << "infoID: " << infoID << endl;
+                cout << "criteriaID: " << criteriaID << endl;
+                cout << "maxFrequency: " << maxFrequency << endl;
+                cout << "timeFrequency: " << timeFrequency << endl;
+
+                newAlertCriterion.ope = ope;
+                newAlertCriterion.value = value;
+                newAlertCriterion.key_value = "";
+                newAlertCriterion.infoID = infoID;
+                newAlertCriterion.assetID = assetID;
+                newAlertCriterion.pluginID = pluginID;
+                newAlertCriterion.criteriaID = criteriaID;
+                newAlertCriterion.unitTypeID = unitTypeID;
+                newAlertCriterion.frequencyMax = maxFrequency;
+                newAlertCriterion.frequencyTime = timeFrequency;
+                m_newAlertCriteria.push_back(newAlertCriterion);
+
+                parametersTable->clear();
+                updateCriteriaSummaryTable();
+                setDevicesSelection();
+            }
+        }));
+        
+        parametersTable->show();
+    }
+}
+
+void AlertsWidget::updateCriteriaSummaryTable()
+{
+    int row = 0;
+    int column = 0;
+    
+    m_criteriaSummaryTable->clear();
+    
+    m_criteriaSummaryTable->addStyleClass("table table-bordered table-striped table-hover data-table dataTable");
+    m_criteriaSummaryTable->setHeaderCount(1, Wt::Horizontal);
+    
+    m_criteriaSummaryTable->elementAt(row, 0)->setAttributeValue("style", "border-left:0");
+    m_criteriaSummaryTable->elementAt(row, 0)->addWidget(new Wt::WText(tr("Alert.alert.add-title-operator")));
+    m_criteriaSummaryTable->elementAt(row, 0)->resize(Wt::WLength(10, Wt::WLength::Percentage), 20);
+    
+    m_criteriaSummaryTable->elementAt(row, 1)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-asset")));
+    m_criteriaSummaryTable->elementAt(row, 1)->resize(Wt::WLength(15, Wt::WLength::Percentage), 20);
+    
+    m_criteriaSummaryTable->elementAt(row, 2)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-plugin")));
+    m_criteriaSummaryTable->elementAt(row, 2)->resize(Wt::WLength(15, Wt::WLength::Percentage), 20);
+    
+    m_criteriaSummaryTable->elementAt(row, 3)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-info")));
+    m_criteriaSummaryTable->elementAt(row, 3)->resize(Wt::WLength(15, Wt::WLength::Percentage), 20);
+    
+    m_criteriaSummaryTable->elementAt(row, 4)->addWidget(new Wt::WText(tr("Alert.alert.message-value")));
+    m_criteriaSummaryTable->elementAt(row, 4)->resize(Wt::WLength(15, Wt::WLength::Percentage), 20);
+    
+    m_criteriaSummaryTable->elementAt(row, 5)->addWidget(new Wt::WText(tr("Alert.alert.form.duration")));
+    m_criteriaSummaryTable->elementAt(row, 5)->resize(Wt::WLength(15, Wt::WLength::Percentage), 20);
+    
+    m_criteriaSummaryTable->elementAt(row, 6)->addWidget(new Wt::WText(tr("Alert.alert.delete-button")));
+    m_criteriaSummaryTable->elementAt(row, 6)->resize(Wt::WLength(10, Wt::WLength::Percentage), 20);
+    
+    for (auto itA = m_newAlertCriteria.begin() ; itA != m_newAlertCriteria.end() ; ++itA)
+    {
+        ++row;
+        column = 0;
+        if (itA->ope.empty() == false)
+        {
+            Wt::WText *operatorText = new Wt::WText(itA->ope);
+            m_criteriaSummaryTable->elementAt(row, column)->addWidget(operatorText);
+        }
+        m_criteriaSummaryTable->elementAt(row, ++column)->addWidget(new Wt::WText(m_mapAssetsNames[itA->assetID]));
+        
+        m_criteriaSummaryTable->elementAt(row, ++column)->addWidget(new Wt::WText(m_mapPluginsNames[itA->pluginID]));
+        
+        m_criteriaSummaryTable->elementAt(row, ++column)->addWidget(new Wt::WText(m_mapInformationsNames[itA->infoID]));
+        
+        m_criteriaSummaryTable->elementAt(row, ++column)->addWidget(new Wt::WText(itA->value));
+        
+        Wt::WText *frequency = new Wt::WText(boost::lexical_cast<string>(itA->frequencyMax) + " "
+                + (itA->frequencyTime == ETimeUnit::MIN ? "min." : tr("Alert.alert.form.alert-unit-hour")));
+        m_criteriaSummaryTable->elementAt(row, ++column)->addWidget(frequency);
+
+
+        Wt::WPushButton *buttonDelete = new Wt::WPushButton("<i class='icon-remove icon-white'></i>");
+        buttonDelete->setStyleClass("btn-danger");
+        buttonDelete->setTextFormat(Wt::XHTMLUnsafeText);
+        m_criteriaSummaryTable->elementAt(row, ++column)->addWidget(buttonDelete);
+        
+        buttonDelete->clicked().connect(bind([ = ] ()
+        {
+            m_newAlertCriteria.erase(itA);
+            updateCriteriaSummaryTable();
+        }));
+    }
+}
+
 void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
+    popupAddWidgetRework(dialog, id);
+    return ;
     m_tabWidgetMessages = new Wt::WTabWidget();
     m_tabWidgetMessages->resize(Wt::WLength(600), Wt::WLength(150));
     m_alertCriteria.clear();
@@ -1264,7 +1628,7 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
         }
     }));
 
-    dialog->resize(Wt::WLength(750), Wt::WLength(500));
+    dialog->resize(Wt::WLength(750), Wt::WLength(90, Wt::WLength::Percentage));
     
     new Wt::WText(tr("Alert.alert.add-title-box-key") + " : <br />", dialog->contents());
     keyValue_ = new Wt::WLineEdit(dialog->contents());
@@ -1283,9 +1647,6 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     m_boxPlugin = new Wt::WSelectionBox(tableBox->elementAt(1, 1));
     m_boxInfo = new Wt::WSelectionBox(tableBox->elementAt(1, 2));
     m_buttonAddCriteria = new Wt::WPushButton(tr("Alert.alert.add-button-add-critera"),tableBox->elementAt(1, 3));
-    m_buttonAddCriteria->clicked().connect(bind([ = ] (){
-                                      handleAddCriteria();
-    }));
     
     initAlertValueDefinitionPopup();    
 
@@ -1312,12 +1673,35 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     m_textErrorForPlugin->hide();
     m_textErrorForInformation->hide();
 
-    new Wt::WText(tr("Alert.alert.add-compare"), mainContainerWidget);
+//    new Wt::WText(tr("Alert.alert.add-compare"), mainContainerWidget);
 
     // ToDo : remplacer le container (ou le remplir avec ?) par EATableTemplate.
     m_compareWidgetContainerTop = new Wt::WContainerWidget(mainContainerWidget);
-    m_compareWidgetContainerTop->setStyleClass("compare-widget-container-top");    
-    m_compareTable = new Wt::WTable(mainContainerWidget);
+    m_compareWidgetContainerTop->setStyleClass("compare-widget-container-top");
+    
+    Wt::WContainerWidget *CriteriaSummary = new Wt::WContainerWidget(mainContainerWidget);
+    CriteriaSummary->addStyleClass("widget-content nopadding DataTables_Table_0_wrapper dataTables_wrapper body-pers");
+    CriteriaSummary->setMargin(Wt::WLength(10), Wt::Top);
+    
+    m_compareTable = new Wt::WTable(CriteriaSummary);
+    m_compareTable->addStyleClass("table table-bordered table-striped table-hover data-table dataTable");
+    m_compareTable->setHeaderCount(1, Wt::Horizontal);
+        
+    m_compareTable->elementAt(0, 0)->setAttributeValue("style", "border-left:0");
+    m_compareTable->elementAt(0, 0)->addWidget(new Wt::WText(tr("Alert.alert.add-compare-operator")));
+    m_compareTable->elementAt(0, 0)->resize(Wt::WLength(15, Wt::WLength::Percentage), 20);
+    m_compareTable->elementAt(0, 1)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-asset")));
+    m_compareTable->elementAt(0, 1)->resize(Wt::WLength(25, Wt::WLength::Percentage), 20);
+    m_compareTable->elementAt(0, 2)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-plugin")));
+    m_compareTable->elementAt(0, 2)->resize(Wt::WLength(25, Wt::WLength::Percentage), 20);
+    m_compareTable->elementAt(0, 3)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-info")));
+    m_compareTable->elementAt(0, 3)->resize(Wt::WLength(25, Wt::WLength::Percentage), 20);
+    m_compareTable->elementAt(0, 4)->addWidget(new Wt::WText(tr("Alert.alert.delete-button")));
+    m_compareTable->elementAt(0, 4)->resize(Wt::WLength(10, Wt::WLength::Percentage), 20);
+    
+    m_buttonAddCriteria->clicked().connect(bind([ = ] (){
+                                      handleAddCriteria();
+    }));
 }
 
 // ------------------ Unit ------------------------------
@@ -1340,9 +1724,9 @@ void AlertsWidget::addCompareWidget(long long assetID, long long pluginID, long 
         ASSET,
         PLUGIN,
         INFO,
-        VALUE,
+        DELETE,
         CRITERIA,
-        DELETE
+        VALUE
     };
     
     if (assetID > 0 && pluginID > 0 && infoID > 0)
@@ -1354,10 +1738,11 @@ void AlertsWidget::addCompareWidget(long long assetID, long long pluginID, long 
         alertCriterion.infoID = infoID;
         
         int row = m_compareTable->rowCount();  
-            
+        
         // OPERATOR
-        m_compareTable->elementAt(row, OPERATOR)->setWidth(Wt::WLength(70));
+        m_compareTable->elementAt(row, OPERATOR)->setWidth(Wt::WLength(10, Wt::WLength::Percentage));
         m_compareTable->elementAt(row, OPERATOR)->setContentAlignment(Wt::AlignCenter);
+        m_compareTable->elementAt(row, OPERATOR)->setRowSpan(2);
         Wt::WComboBox* operatorComboBox = new Wt::WComboBox();
         m_compareTable->elementAt(row, OPERATOR)->addWidget(operatorComboBox);
         alertCriterion.operatorComboBox = operatorComboBox;  
@@ -1371,26 +1756,29 @@ void AlertsWidget::addCompareWidget(long long assetID, long long pluginID, long 
         else
         {
             alertCriterion.index = m_alertCriteria.end()->index + 1;
-        }      
+        }
         
         // ASSET
-        m_compareTable->elementAt(row, ASSET)->setWidth(Wt::WLength(150));
+        m_compareTable->elementAt(row, ASSET)->setContentAlignment(Wt::AlignmentFlag::AlignCenter);
         Wt::WText* assetName = new Wt::WText(m_mapAssetsNames[assetID]);
         m_compareTable->elementAt(row, ASSET)->addWidget(assetName);      
         
         // PLUGIN
-        m_compareTable->elementAt(row, PLUGIN)->setWidth(Wt::WLength(150));
+        m_compareTable->elementAt(row, PLUGIN)->setContentAlignment(Wt::AlignmentFlag::AlignCenter);
         Wt::WText* pluginName = new Wt::WText(m_mapPluginsNames[pluginID]);
         m_compareTable->elementAt(row, PLUGIN)->addWidget(pluginName);      
         
         // INFO
-        m_compareTable->elementAt(row, INFO)->setWidth(Wt::WLength(150));
+        m_compareTable->elementAt(row, INFO)->setContentAlignment(Wt::AlignmentFlag::AlignCenter);
         Wt::WText* infoName = new Wt::WText(m_mapInformationsNames[infoID]);
         m_compareTable->elementAt(row, INFO)->addWidget(infoName);
         
+        Wt::WTable *valueTable = new Wt::WTable(m_compareTable->elementAt(row + 1, 1));
+        m_compareTable->elementAt(row + 1, 1)->setColumnSpan(3);
+        
         // VALUE
-        m_compareTable->elementAt(row, VALUE)->setWidth(Wt::WLength(150));
-        m_compareTable->elementAt(row, VALUE)->setContentAlignment(Wt::AlignCenter);
+        int column = 0;
+//        valueTable->elementAt(0, column)->setContentAlignment(Wt::AlignCenter);
         if(alertCriterion.unitTypeID == Enums::EInformationUnitType::text || 
                 alertCriterion.unitTypeID == Enums::EInformationUnitType::number ||
                 alertCriterion.unitTypeID == Enums::EInformationUnitType::custom)
@@ -1415,14 +1803,14 @@ void AlertsWidget::addCompareWidget(long long assetID, long long pluginID, long 
             alertCriterion.validatorCriteria = validator;
             alertCriterion.templateValid = t;
 
-            m_compareTable->elementAt(row, VALUE)->addWidget(t);
+            valueTable->elementAt(0, column)->addWidget(t);
         }
         else if(alertCriterion.unitTypeID == Enums::EInformationUnitType::boolean)
         {
             Wt::WContainerWidget* containerTrueFalse = new Wt::WContainerWidget();
             
             Wt::WButtonGroup* groupTrueFalse = new Wt::WButtonGroup(containerTrueFalse);
-            m_compareTable->elementAt(row, VALUE)->addWidget(containerTrueFalse);
+            valueTable->elementAt(0, column)->addWidget(containerTrueFalse);
             alertCriterion.groupTrueFalse = groupTrueFalse;    
             
             Wt::WRadioButton* buttonTrue = new Wt::WRadioButton("true", containerTrueFalse);
@@ -1437,15 +1825,14 @@ void AlertsWidget::addCompareWidget(long long assetID, long long pluginID, long 
             Wt::log("error") << "Unknown unit type : " << alertCriterion.unitTypeID;            
         }
               
-        // CRITERIA    
-        m_compareTable->elementAt(row, CRITERIA)->setWidth(Wt::WLength(100));  
-        m_compareTable->elementAt(row, VALUE)->setContentAlignment(Wt::AlignCenter); 
+        // CRITERIA      
+        valueTable->elementAt(0, column)->setContentAlignment(Wt::AlignCenter); 
         if(alertCriterion.unitTypeID == Enums::EInformationUnitType::text ||
                 alertCriterion.unitTypeID == Enums::EInformationUnitType::number)
         {
             Wt::WComboBox* comboBoxCriteria = createCompareCriteriaComboBox(alertCriterion.unitTypeID); 
             comboBoxCriteria->setCurrentIndex(0);
-            m_compareTable->elementAt(row, CRITERIA)->addWidget(comboBoxCriteria);
+            valueTable->elementAt(0, column)->addWidget(comboBoxCriteria);
             alertCriterion.comboBoxCriteria = comboBoxCriteria; 
         }
         else if(alertCriterion.unitTypeID == Enums::EInformationUnitType::boolean ||
@@ -1458,8 +1845,20 @@ void AlertsWidget::addCompareWidget(long long assetID, long long pluginID, long 
             Wt::log("error") << "Unknown unit type : " << alertCriterion.unitTypeID;            
         }
         
+        /* Set frequency */
+        valueTable->elementAt(0, column)->setContentAlignment(Wt::AlignCenter);
+        valueTable->elementAt(0, column)->addWidget(new Wt::WText(tr("Alert.alert.form.alert-max")));
+        Wt::WContainerWidget *frequencyMaxWC = new Wt::WContainerWidget(valueTable->elementAt(0, column));
+        frequencyMaxWC->addStyleClass("control-group controls");
+        alertCriterion.frequencyMax = new Wt::WLineEdit(frequencyMaxWC);
+        valueTable->elementAt(0, column)->addWidget(new Wt::WText(tr("Alert.alert.form.alert-per")));
+        alertCriterion.frequencyTime = new Wt::WComboBox(valueTable->elementAt(0, column));
+        alertCriterion.frequencyTime->insertItem(0, Wt::WString(tr("Alert.alert.form.alert-unit-hour")));
+        alertCriterion.frequencyTime->insertItem(1, Wt::WString(tr("Alert.alert.form.alert-unit-day")));
+        
         // DELETE
         m_compareTable->elementAt(row, DELETE)->setContentAlignment(Wt::AlignCenter);
+        m_compareTable->elementAt(row, DELETE)->setRowSpan(2);
         Wt::WPushButton *buttonDelete = new Wt::WPushButton("<i class='icon-remove icon-white'></i>");
         m_compareTable->elementAt(row, DELETE)->addWidget(buttonDelete);
         buttonDelete->setStyleClass("btn-danger");
@@ -1468,7 +1867,7 @@ void AlertsWidget::addCompareWidget(long long assetID, long long pluginID, long 
         {
             for(int i=0; i < m_compareTable->rowCount(); i++)
             {
-                if((Wt::WPushButton*)m_compareTable->elementAt(i, DELETE)->widget(0) == buttonDelete)
+                if((Wt::WPushButton*)m_compareTable->elementAt(i + 1, DELETE)->widget(0) == buttonDelete)
                 {
                     m_compareTable->deleteRow(i);
                     if(i == 0 && m_compareTable->rowCount() > 0)
@@ -1587,7 +1986,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*>* argument)
     message += "\"thread_sleep\": 0,\n";
     
     message += "\"alert_values\":\n[";
-    for(auto it = m_alertCriteria.begin(); it != m_alertCriteria.end(); it++)
+    for (auto it = m_newAlertCriteria.begin(); it != m_newAlertCriteria.end(); it++)
     {
         message += "\n{\n";
         switch (it->unitTypeID)
@@ -1595,44 +1994,26 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*>* argument)
             //same for text & number
             case Enums::EInformationUnitType::text:
             case Enums::EInformationUnitType::number:
-            {
-                message += "\"alert_criterion_id\": " + boost::lexical_cast<string>(getSelectedIdFromComboBox(it->comboBoxCriteria)) + ",\n";
-                message += "\"value\": \"" + Wt::Utils::base64Encode(it->lineEditValue->text().toUTF8()) + "\",\n";
-
-                if (!keyValue_->text().toUTF8().empty())
-                {
-                    message += "\"key_value\": \"" + keyValue_->text().toUTF8() + "\",\n";
-                }
+                message += "\"alert_criterion_id\": " + boost::lexical_cast<string>(it->criteriaID) + ",\n";
                 break;
-            }
             case Enums::EInformationUnitType::boolean:
-                message += "\"alert_criterion_id\": 1,\n";                
-                switch (it->groupTrueFalse->selectedButtonIndex())
-                {
-                    case 0:
-                        message += "\"value\": \"" + Wt::Utils::base64Encode("true") + "\",\n";                    
-                        break;
-                    case 1:
-                        message += "\"value\": \"" + Wt::Utils::base64Encode("false") + "\",\n";
-                        break;
-                }
-                message += "\"key_value\": \"\",\n";
-                break;
             case Enums::EInformationUnitType::custom:
                 message += "\"alert_criterion_id\": 1,\n";
-                message += "\"value\": \"" + Wt::Utils::base64Encode(it->lineEditValue->text().toUTF8()) + "\",\n";
-                message += "\"key_value\": \"\",\n";
-                break;
+                break ;
+                message += "\"alert_criterion_id\": 1,\n";
+                break ;
             default:
                 Wt::log("error") << "Unknown unit type : " << it->unitTypeID;   
                 break;
         }
-        message += "\"operator\":" + m_booleanOperators->item(it->operatorComboBox->currentIndex(), 1)->text().toUTF8() + ",\n";
+        message += "\"value\": \"" + Wt::Utils::base64Encode(it->value.toUTF8()) + "\",\n";
+        message += "\"key_value\": \"" + it->key_value.toUTF8() + "\",\n";
+        message += "\"operator\":" + it->ope.toUTF8() + ",\n";
         message += "\"asset_id\": " + boost::lexical_cast<string>(it->assetID) + ",\n";
         message += "\"plugin_id\": " + boost::lexical_cast<string>(it->pluginID) + ",\n";
         message += "\"information_id\": " + boost::lexical_cast<string>(it->infoID);
         message += "\n}";
-        if (it < m_alertCriteria.end()-1)
+        if (it < m_newAlertCriteria.end() - 1)
         {
             message += ",";
         }
@@ -1715,7 +2096,7 @@ void AlertsWidget::clearStructures()
     m_alerts = Wt::Json::Value::Null;
     userInfo_.clear();
     mediaInfo_.clear();
-    m_alertCriteria.clear();
+    m_newAlertCriteria.clear();
     
     clearMessages();
 }
@@ -1726,23 +2107,16 @@ void AlertsWidget::clearMessages()
     m_tabContentMessageSMS.clear();
     m_tabContentMessageMobileApp.clear();
     
-    for (std::vector<AlertCriterion>::iterator criteria = m_alertCriteria.begin(); criteria != m_alertCriteria.end() ; criteria++)
+    for (std::vector<struct NewAlertCriterion>::iterator criteria = m_newAlertCriteria.begin(); criteria != m_newAlertCriteria.end() ; ++criteria)
     {
-        criteria->smsRsp.message = "";
-        criteria->smsRsp.asset = "";
-        criteria->smsRsp.plugin = "";
-        criteria->smsRsp.criteria = "";
-        criteria->smsRsp.information = "";
-        criteria->emailRsp.message = "";
-        criteria->emailRsp.asset = "";
-        criteria->emailRsp.plugin = "";
-        criteria->emailRsp.criteria = "";
-        criteria->emailRsp.information = "";
-        criteria->mobileappRsp.message = "";
-        criteria->mobileappRsp.asset = "";
-        criteria->mobileappRsp.plugin = "";
-        criteria->mobileappRsp.criteria = "";
-        criteria->mobileappRsp.information = "";
+        for (std::map<long long, struct CriterionResponse>::iterator itCR = criteria->response.begin() ; itCR != criteria->response.end() ; ++itCR)
+        {
+            itCR->second.message = "";
+            itCR->second.asset = "";
+            itCR->second.plugin = "";
+            itCR->second.criteria = "";
+            itCR->second.information = "";
+        }
     }
 }
 
@@ -2165,7 +2539,7 @@ void AlertsWidget::getAliases(long long userRoleId)
 {
     clearMessages();
     
-    for (unsigned long criteria = 0 ; criteria != m_alertCriteria.size() ; criteria++)
+    for (unsigned long criteria = 0 ; criteria != m_newAlertCriteria.size() ; ++criteria)
     {
         for (long long mediaType(Enums::EMedia::email); mediaType <= Enums::EMedia::mobileapp; mediaType++)
         {
@@ -2188,26 +2562,26 @@ void AlertsWidget::httpAsk(long long userRoleId, long long mediaType, long long 
         case ERequestType::RTASSET:
         {
             requestTypeString = "assets/";
-            requestTypeId = boost::lexical_cast<string>(m_alertCriteria[criteria].assetID);
+            requestTypeId = boost::lexical_cast<string>(m_newAlertCriteria[criteria].assetID);
             break;
         }
         case ERequestType::RTPLUGIN:
         {
             requestTypeString = "plugins/";
-            requestTypeId = boost::lexical_cast<string>(m_alertCriteria[criteria].pluginID);
+            requestTypeId = boost::lexical_cast<string>(m_newAlertCriteria[criteria].pluginID);
             break;
         }
         case ERequestType::RTINFORMATION:
         {
             requestTypeString = "informations/";
-            requestTypeId = boost::lexical_cast<string>(m_alertCriteria[criteria].infoID);
+            requestTypeId = boost::lexical_cast<string>(m_newAlertCriteria[criteria].infoID);
             break;
         }
         case ERequestType::RTCRITERIA:
         {
             requestTypeString = "criteria/";
-            requestTypeId = boost::lexical_cast<string>(m_alertCriteria[criteria].criteriaID);
-            requestNeedInformation = "information_id=" + boost::lexical_cast<string>(m_alertCriteria[criteria].infoID);
+            requestTypeId = boost::lexical_cast<string>(m_newAlertCriteria[criteria].criteriaID);
+            requestNeedInformation = "information_id=" + boost::lexical_cast<string>(m_newAlertCriteria[criteria].infoID);
             break;
         }
     }
@@ -2218,7 +2592,7 @@ void AlertsWidget::httpAsk(long long userRoleId, long long mediaType, long long 
     listParameter.push_back("media_type_id=" + boost::lexical_cast<string>(mediaType));
     if (!requestNeedInformation.empty())
     {
-        listParameter.push_back("information_id=" + boost::lexical_cast<string>(m_alertCriteria[criteria].infoID));
+        listParameter.push_back("information_id=" + boost::lexical_cast<string>(m_newAlertCriteria[criteria].infoID));
     }
     
     boost::function<void (Wt::Json::Value)> functorHandleResponse = boost::bind(&AlertsWidget::handleHttpResponse, this, _1, mediaType, requestType, criteria, userRoleId);
@@ -2248,35 +2622,11 @@ void AlertsWidget::getRequestRsp(long long requestType, Wt::WString message, Cri
             + response.information;
 }
 
-void AlertsWidget::getMediaRsp(Wt::WString message, long long mediaType, long long requestType, long long criteria)
-{
-    switch (mediaType)
-    {
-        case Enums::EMedia::sms:
-            getRequestRsp(requestType, message, m_alertCriteria[criteria].smsRsp);
-            break;
-        case Enums::EMedia::email:
-            getRequestRsp(requestType, message, m_alertCriteria[criteria].emailRsp);
-            break;
-        case Enums::EMedia::mobileapp:
-            getRequestRsp(requestType, message, m_alertCriteria[criteria].mobileappRsp);
-            break;
-    }
-}
-
 void AlertsWidget::updateMessage(std::string &tabContent, Wt::WString &message, unsigned long criteria)
 {
     if (criteria > 0 && !tabContent.empty())
     {
-        if (m_booleanOperators->item(m_alertCriteria[criteria].operatorComboBox->currentIndex(), 1)->text().toUTF8()
-                == boost::lexical_cast<string>(Echoes::Dbo::EBooleanOperator::AND))
-        {
-            tabContent += boost::lexical_cast<string>(tr("Alert.alert.boolean-operator.and")) + " ";
-        }
-        else
-        {
-            tabContent += boost::lexical_cast<string>(tr("Alert.alert.boolean-operator.or")) + " ";
-        }
+        tabContent += m_newAlertCriteria[criteria].ope.toUTF8() + " ";
     }
     
     std::string result = message.toUTF8();
@@ -2293,35 +2643,30 @@ void AlertsWidget::updateMessage(std::string &tabContent, Wt::WString &message, 
     }
 }
 
-void AlertsWidget::updateTabContent(long long mediaType)
+void AlertsWidget::updateTabContent(Wt::WString message, long long mediaType, long long requestType, long long criteria)
 {
+    getRequestRsp(requestType, message, m_newAlertCriteria[criteria].response.at(mediaType));
+     
+    // TO DO - adapt for a vector of medias instead of this m_tabContent...
     switch (mediaType)
     {
         case Enums::EMedia::email:
         {
             m_tabContentMessageMail.clear();
-            for (unsigned long criteria = 0; criteria < m_alertCriteria.size(); criteria++)
-            {
-                updateMessage(m_tabContentMessageMail, m_alertCriteria[criteria].emailRsp.message, criteria);
-            }
+            updateMessage(m_tabContentMessageMail, m_newAlertCriteria[criteria].response.at(mediaType).message, criteria);
             break;
         }
         case Enums::EMedia::sms:
         {
             m_tabContentMessageSMS.clear();
-            for (unsigned long criteria = 0; criteria < m_alertCriteria.size(); criteria++)
-            {
-                updateMessage(m_tabContentMessageSMS, m_alertCriteria[criteria].smsRsp.message, criteria);
-            }
+            updateMessage(m_tabContentMessageSMS, m_newAlertCriteria[criteria].response.at(mediaType).message, criteria);
+
             break;
         }
         case Enums::EMedia::mobileapp:
         {
             m_tabContentMessageMobileApp.clear();
-            for (unsigned long criteria = 0; criteria < m_alertCriteria.size(); criteria++)
-            {
-                updateMessage(m_tabContentMessageMobileApp, m_alertCriteria[criteria].mobileappRsp.message, criteria);
-            }
+            updateMessage(m_tabContentMessageMobileApp, m_newAlertCriteria[criteria].response.at(mediaType).message, criteria);
             break;
         }
     }
@@ -2336,9 +2681,7 @@ void AlertsWidget::handleHttpResponse(Wt::Json::Value result, long long mediaTyp
         Wt::Json::Object tmp = result;
         message = tmp.get("alias");
 
-        getMediaRsp(message, mediaType, requestType, criteria);
-
-        updateTabContent(mediaType);
+        updateTabContent(message, mediaType, requestType, criteria);
         if (m_userAliases.find(userRoleId) == m_userAliases.end())
         {
             struct Aliases aliases;

@@ -39,13 +39,14 @@
     <message id="Alert.alert.add-title-box-plugin">Application</message>
     <message id="Alert.alert.add-title-box-info">Information</message>
     <message id="Alert.alert.add-title-box-key">Valeur de la clé</message>
+    <message id="Alert.alert.add-title-box-frequency">Fréquence</message>
     <message id="Alert.alert.add-button-add-critera">Ajouter critères</message>
     <message id="Alert.alert.add-last-info">
             Dernière valeur reçue :
     </message>
-    <message id="Alert.alert.add-compare">
-            <p>Critères de comparaison.</p>
-    </message>
+    <message id="Alert.alert.add-compare">Critères de comparaison.</message>
+    <message id="Alert.alert.add-compare-operator">Opé.</message>
+</messages>
     <message id="Alert.alert.button-save-continue">Enregistrer et continuer</message>
     <message id="Alert.alert.message-true">Vrai</message>
     <message id="Alert.alert.message-false">Faux</message>
@@ -71,6 +72,13 @@
     <message id="Alert.alert.form.mail">MAIL</message>
     <message id="Alert.alert.form.sms">SMS</message>
     <message id="Alert.alert.form.push">PUSH</message>
+    
+    <message id="Alert.alert.form.alert-per">alerte par </message>
+    <message id="Alert.alert.form.alert-max">Max. </message>
+    <message id="Alert.alert.form.alert-unit-min">min.</message>
+    <message id="Alert.alert.form.alert-unit-hour">heure</message>
+    <message id="Alert.alert.form.alert-unit-day">jour</message>
+    <message id="Alert.alert.form.thresh-duration">Durée du seuil</message>
     
     <message id="Alert.alert.form.recursivity">Récursivité :</message>
     <message id="Alert.alert.form.start">Début à </message>

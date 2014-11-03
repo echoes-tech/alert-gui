@@ -44,6 +44,9 @@ public:
     AlertsWidget(Echoes::Dbo::Session *session, std::string apiUrl);
 
     void                        popupAddWidget(Wt::WDialog *dialog, long long id);
+    void                        popupAddWidgetRework(Wt::WDialog *dialog, long long id);
+    void                        fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *boxesTable);
+    void                        updateCriteriaSummaryTable();
     void                        popupRecipients(std::string nameAlert, std::string message);
     void                        popupNewRecipientsRework(std::string nameAlert, std::string message);
     
@@ -99,6 +102,7 @@ private:
     void                        fillModels();
     void                        fillModel(Wt::WStandardItemModel * model, std::map<long long, std::string> m_mapNames);
     void                        sortModels();
+    void                        setDevicesSelection();
 
     std::vector<long long>      boxActived(Wt::WSelectionBox *box, std::multimap<long long, std::pair<long long, std::string>>  infoInBox, std::multimap<long long, long long> compId, long long id);
 
@@ -139,6 +143,12 @@ private:
         RTPLUGIN = 2,
         RTINFORMATION = 3,
         RTCRITERIA = 4
+    };
+    
+    enum ETimeUnit {
+        MIN = 0,
+        HOUR = 1,
+        DAY = 2
     };
     
     //ids
@@ -184,7 +194,7 @@ private:
         long long   timer;
         std::string message;
     };
-    
+  
     // alerts criterion
     struct AlertCriterion {
         int         index;
@@ -199,9 +209,25 @@ private:
         Wt::WValidator* validatorCriteria;
         Wt::WButtonGroup* groupTrueFalse;
         Wt::WTemplate* templateValid;
+        Wt::WLineEdit* frequencyMax;
+        Wt::WComboBox* frequencyTime;
         CriterionResponse smsRsp;
         CriterionResponse emailRsp;
         CriterionResponse mobileappRsp;
+    };
+    
+    struct NewAlertCriterion {
+        long long   unitTypeID;
+        long long   assetID;
+        long long   pluginID;
+        long long   infoID;
+        long long   criteriaID;
+        int         frequencyMax;
+        int         frequencyTime;
+        Wt::WString key_value;
+        Wt::WString value;
+        Wt::WString ope;
+        std::map<long long, struct CriterionResponse> response;
     };
         
     struct TimeSlot
@@ -230,6 +256,7 @@ private:
         Wt::WString *mobile;
     };
     
+    std::vector<NewAlertCriterion> m_newAlertCriteria;
     std::vector<AlertCriterion> m_alertCriteria;
     // end alert setting attributes
     
@@ -260,10 +287,9 @@ private:
     void setSelectInteractions(int id);
     
     // Build message
-    void updateTabContent(long long mediaType);
+    void updateTabContent(Wt::WString message, long long mediaType, long long requestType, long long criteria);
     void updateMessage(std::string &tabContent, Wt::WString &message, unsigned long criteria);
     void getRequestRsp(long long requestType, Wt::WString message, CriterionResponse &response);
-    void getMediaRsp(Wt::WString message, long long mediaType, long long requestType, long long criteria);
     
     // Generic http response get
     void handleHttpResponse(Wt::Json::Value result, long long mediaType, long long requestType, long long criteria, long long userRoleId);
@@ -313,6 +339,10 @@ private:
     std::vector<long long>                  m_mediaIds;
     
     
+    /* first popup */
+    Wt::WTable      *m_criteriaSummaryTable;
+    
+    /* second popup */
     long long       m_currentMedia;
     Wt::WTable      *m_timeSlotsSummary;
     Wt::WTextArea   *m_messageArea;

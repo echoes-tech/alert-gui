@@ -33,7 +33,6 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
 
     setButtonModif(false);
     setButtonSup(true);
-//    setLocalTable(true);
     
     m_assets = new Wt::WStandardItemModel(0,3,this);
     m_plugins = new Wt::WStandardItemModel(0,3,this);
@@ -317,6 +316,24 @@ void AlertsWidget::selectMedia(long long id, long long index, TrundleTable *trun
     m_messageArea->setText(*m_messages.find(id)->second.str);
     m_timer->setText(boost::lexical_cast<string>(m_messages.find(id)->second.timer));
     
+    m_messageArea->keyWentUp().connect(bind( [ = ] ()
+    {
+        if (m_rowMedia == id)
+        {
+            m_messages.find(id)->second.str = new Wt::WString(m_messageArea->text());
+        }
+    }));
+    
+    m_timer->keyWentUp().connect(bind( [ = ]()
+    {
+        if (m_rowMedia == id)
+        {
+            if (m_timer->validate() == Wt::WValidator::Valid)
+            {
+                m_messages.find(id)->second.timer = boost::lexical_cast<long long>(m_timer->text().toUTF8());
+            }
+        }
+    }));
     m_currentMedia = id;
     setSelectInteractions(id);
     timeSlotsSummary(id);
@@ -491,11 +508,13 @@ void AlertsWidget::getCriteriaSelection()
     Wt::WComboBox *criterionComboBox;
     for (unsigned long criteria = 0 ; criteria < m_alertCriteria.size() ; criteria++)
     {
-        criterionComboBox = m_alertCriteria[criteria].comboBoxCriteria;
-
-        string criteria_id = ((Wt::WStandardItemModel*)(criterionComboBox->model()))->item(criterionComboBox->currentIndex(),0)->text().toUTF8();
-    
-        m_alertCriteria[criteria].criteriaID = boost::lexical_cast<long long> (criteria_id);
+        if (m_alertCriteria[criteria].unitTypeID == Enums::EInformationUnitType::text || 
+                m_alertCriteria[criteria].unitTypeID == Enums::EInformationUnitType::number )
+        {
+            criterionComboBox = m_alertCriteria[criteria].comboBoxCriteria;
+            string criteria_id = ((Wt::WStandardItemModel*)(criterionComboBox->model()))->item(criterionComboBox->currentIndex(),0)->text().toUTF8();
+            m_alertCriteria[criteria].criteriaID = boost::lexical_cast<long long> (criteria_id);
+        }
     }
 }
 
@@ -1610,22 +1629,9 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     Wt::WPushButton *ButtonSC = new Wt::WPushButton(tr("Alert.alert.button-save-continue"), dialog->footer());
     ButtonSC->clicked().connect(bind([ = ] ()
     {
-        bool validCriterion = true;
-        for (std::vector<AlertCriterion>::const_iterator it = m_alertCriteria.begin() ; it != m_alertCriteria.end() ; it++)
-        {
-            if (it->lineEditValue->validate() != Wt::WValidator::Valid)
-            {
-                validCriterion = false;
-                dialog->show();
-            }
-            
-        }
-        if (validCriterion)
-        {
-            checkAll_ = 0;
-            getCriteriaSelection();
-            dialog->accept();
-        }
+        checkAll_ = 0;
+        getCriteriaSelection();
+        dialog->accept();
     }));
 
     dialog->resize(Wt::WLength(750), Wt::WLength(90, Wt::WLength::Percentage));
@@ -1934,16 +1940,6 @@ Wt::WComboBox *AlertsWidget::createCompareCriteriaComboBox(long long type)
     default:
         break;
     }
-//    int rank = 1;
-//    for(auto it = criterion.begin(); it != criterion.end(); it++)
-//    {
-//        Wt::WStandardItem *itemIndex = new Wt::WStandardItem();
-//        Wt::WStandardItem *itemComparison = new Wt::WStandardItem();
-//        itemIndex->setText(boost::lexical_cast<string>(rank));
-//        itemComparison->setText(*it);
-//        model->setItem(rank,1,itemIndex);
-//        model->setItem(rank++,2,itemComparison);
-//    }
     comboBox->setModel(model);
     comboBox->setModelColumn(1);
     return comboBox;
@@ -2034,7 +2030,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*>* argument)
     else
     {
 //        message += ",\n";
-        Wt::log(" -- message -- ") << message;
+        Wt::log("debug") << message;
         popupNewRecipientsRework(data, message);
     }
 }
@@ -2274,13 +2270,14 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
                     Wt::Json::Object jsonPlugin = jsonArray.at(cpt);
                     Wt::Json::Value jsonPluginAssets = jsonResource.at(cpt + 1);
                     long long pluginId = jsonPlugin.get("id");
-                    
-                    Wt::Json::Object jsonAsset = jsonPluginAssets;
-                    long long assetId = jsonAsset.get("id");
-                    
-                    vector<long long> infosIds;
-                    infosIds.push_back(assetId);
-                    m_mapPluginAssets[pluginId] = infosIds;
+                    vector<long long> assetsIds;
+                    if (jsonPluginAssets.type() == Wt::Json::ObjectType)
+                    {
+                        Wt::Json:: Object jsonAsset = jsonPluginAssets;
+                        long long assetId = jsonAsset.get("id");
+                        assetsIds.push_back(assetId);
+                    }
+                    m_mapPluginAssets[pluginId] = assetsIds;
                 }
             }
         }

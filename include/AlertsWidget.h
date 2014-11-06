@@ -44,7 +44,6 @@ public:
     AlertsWidget(Echoes::Dbo::Session *session, std::string apiUrl);
 
     void                        popupAddWidget(Wt::WDialog *dialog, long long id);
-    void                        popupAddWidgetRework(Wt::WDialog *dialog, long long id);
     void                        fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *boxesTable);
     void                        updateCriteriaSummaryTable();
     void                        popupRecipients(std::string nameAlert, std::string message);
@@ -93,8 +92,6 @@ protected:
     virtual void                setDisplayedTitlesPopups();
 
 private:
-
-    void                        initAlertValueDefinitionPopup();
     void                        setBox(Wt::WSelectionBox *box, Wt::WStandardItemModel *model);
     void                        assetSelected();
     void                        pluginSelected();
@@ -112,8 +109,6 @@ private:
     void                        cleanBox(Wt::WSelectionBox *box);
 
     void                        changeButtonAddCriteriaState();
-    void                        handleAddCriteria();
-    void                        addCompareWidget(long long assetID, long long pluginID, long long infoID);
     void                        createItemsCriteriaComboBox(long long id, Wt::WString criterion, Wt::WStandardItemModel *model);
     Wt::WComboBox               *createCompareCriteriaComboBox(long long type);
 
@@ -223,11 +218,11 @@ private:
         long long   pluginID;
         long long   infoID;
         long long   criteriaID;
-        int         frequencyMax;
-        int         frequencyTime;
-        Wt::WString key_value;
+        int         ope;
+        int         flappingDuration;
+        int         flappingUnit;
+        Wt::WString keyValue;
         Wt::WString value;
-        Wt::WString ope;
         std::map<long long, struct CriterionResponse> response;
     };
         
@@ -266,10 +261,7 @@ private:
     
     // clear messages
     void clearMessages();
-    
-    // get criteria
-    void getCriteriaSelection();
-    
+        
     // get aliases
     void getAliases(long long userRoleId);
     

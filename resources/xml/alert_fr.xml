@@ -38,21 +38,17 @@
     <message id="Alert.alert.add-title-box-asset">Equipement</message>
     <message id="Alert.alert.add-title-box-plugin">Application</message>
     <message id="Alert.alert.add-title-box-info">Information</message>
-    <message id="Alert.alert.add-title-box-key">Valeur de la clé</message>
-    <message id="Alert.alert.add-title-box-frequency">Fréquence</message>
+    <message id="Alert.alert.add-title-box-key">Clé</message>
+    <message id="Alert.alert.add-title-box-flapping">Flapping</message>
     <message id="Alert.alert.add-button-add-critera">Ajouter critères</message>
-    <message id="Alert.alert.add-last-info">
-            Dernière valeur reçue :
-    </message>
+    <message id="Alert.alert.add-last-info">Dernière valeur reçue :</message>
     <message id="Alert.alert.add-compare">Critères de comparaison.</message>
     <message id="Alert.alert.add-compare-operator">Opé.</message>
-</messages>
+    
     <message id="Alert.alert.button-save-continue">Enregistrer et continuer</message>
     <message id="Alert.alert.message-true">Vrai</message>
     <message id="Alert.alert.message-false">Faux</message>
-    <message id="Alert.alert.message-value">
-        <p align="middle">Valeur</p>
-    </message>
+    <message id="Alert.alert.message-value">Valeur</message>
     <!--PUT-->
     <message id="Alert.alert.popup-modif">Modifier cette alerte</message>
     <!--DELETE-->

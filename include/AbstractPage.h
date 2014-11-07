@@ -186,6 +186,9 @@ protected:
     virtual void                addPopupModifHandler(Wt::WInteractWidget* widget, long long id);
     virtual int                 addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);
     virtual int                 addCustomResourceTable(long long id, int rowTable, int columnTable);
+    virtual void                saveButtonFooter(Wt::WDialog *dialog);
+    virtual void                cancelButtonFooter(Wt::WDialog *dialog);
+    virtual void                customButtonFooter(Wt::WDialog *dialog);
     void                        addButtonsToPopupFooter(Wt::WDialog *dialog);
 
     // Set/Get attribut to init or option. ------------------------

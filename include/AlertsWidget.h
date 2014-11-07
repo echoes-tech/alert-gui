@@ -234,6 +234,10 @@ private:
     std::vector<AlertCriterion> m_alertCriteria;
     // end alert setting attributes
     
+    // Footer buttons
+    void customButtonFooter(Wt::WDialog *dialog);
+    void saveButtonFooter(Wt::WDialog *dialog);
+    
     // Check validity
     Wt::WRegExpValidator *validateCriterionType(long long unitType);
     

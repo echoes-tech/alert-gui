@@ -606,13 +606,6 @@ void AlertsWidget::initTimeSlotsTables(Wt::WDialog *dialog)
     startHourSpinBox->setMaximum(23);
     startHourSpinBox->resize(Wt::WLength(40), Wt::WLength());
     startHourSpinBox->setValidator(new Wt::WIntValidator(0, 23));
-    /*
-    m_sliderStart = new Wt::WSlider();
-    m_sliderStart->setMinimum(0);
-    m_sliderStart->setMaximum(23);
-    m_sliderStart->setTickInterval(1);
-    m_sliderStart->setTickPosition(Wt::WSlider::TicksAbove);
-    */
     m_startHour = new Wt::WText(startHourSpinBox->valueText() + "h");
     
     setTimeslotTimerTable->elementAt(0, 1)->addWidget(m_startHour);
@@ -638,13 +631,6 @@ void AlertsWidget::initTimeSlotsTables(Wt::WDialog *dialog)
     durationSpinBox->setMaximum(24);
     durationSpinBox->resize(Wt::WLength(40), Wt::WLength());
     durationSpinBox->setValidator(new Wt::WIntValidator(1, 24));
-    /*
-    m_sliderDuration = new Wt::WSlider();
-    m_sliderDuration->setMinimum(1);
-    m_sliderDuration->setMaximum(24);
-    m_sliderDuration->setTickInterval(1);
-    m_sliderDuration->setTickPosition(Wt::WSlider::TicksAbove);
-    */
     m_duration = new Wt::WText(durationSpinBox->valueText() + "h");
     
     setTimeslotTimerTable->elementAt(0, 4)->addWidget(m_duration);
@@ -1239,6 +1225,31 @@ void AlertsWidget::setDevicesSelection()
     m_boxInfo->changed().connect(this, &AlertsWidget::informationSelected);
 }
 
+void AlertsWidget::customButtonFooter(Wt::WDialog *dialog)
+{
+    if (m_alertCriteria.size() == 0)
+    {
+        Wt::WPushButton *ButtonSC = new Wt::WPushButton(tr("Alert.alert.button-save-continue"), dialog->footer());
+
+        ButtonSC->clicked().connect(bind([ = ] ()
+        {
+            if (m_alertCriteria.size() > 0)
+            {
+                checkAll_ = 0;
+                dialog->accept();
+            }
+        }));
+    }
+    else
+    {
+        AbstractPage::saveButtonFooter(dialog);
+    }
+}
+
+void AlertsWidget::saveButtonFooter(Wt::WDialog *dialog)
+{
+}
+
 void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
     m_alertCriteria.clear();
@@ -1293,8 +1304,6 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     Wt::WTable *parametersTable = new Wt::WTable(addCrieriaWC);
     parametersTable->hide();
     
-    Wt::WPushButton *ButtonSC = new Wt::WPushButton(tr("Alert.alert.button-save-continue"), dialog->footer());
-        
     newCriteria->clicked().connect(bind([ = ] ()
     {
         boxesTable->show();
@@ -1304,15 +1313,6 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     {
         parametersTable->clear();
         fillParametersTable(parametersTable, boxesTable);
-    }));
-    
-    ButtonSC->clicked().connect(bind([ = ] ()
-    {
-        if (m_alertCriteria.size() > 0)
-        {
-            checkAll_ = 0;
-            dialog->accept();
-        }
     }));
 }
 

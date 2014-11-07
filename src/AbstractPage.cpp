@@ -674,7 +674,7 @@ int AbstractPage::addCustomResourceTable(long long id, int rowTable, int columnT
     return columnTable;
 }
 
-void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
+void AbstractPage::saveButtonFooter(Wt::WDialog *dialog)
 {
     Wt::WPushButton *saveButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-save"),
                                                           dialog->footer());
@@ -686,12 +686,27 @@ void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
     else
     {
         saveButton->disable();
-    }
+    }    
+}
 
+void AbstractPage::cancelButtonFooter(Wt::WDialog *dialog)
+{
     Wt::WPushButton *cancelButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-cancel"),
                                                               dialog->footer());
     cancelButton->clicked().connect(dialog, &Wt::WDialog::reject);
     cancelButton->setAttributeValue("style", "margin-left:12px;");
+}
+
+void AbstractPage::customButtonFooter(Wt::WDialog *dialog)
+{
+    
+}
+
+void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
+{
+    customButtonFooter(dialog);
+    saveButtonFooter(dialog);
+    cancelButtonFooter(dialog);
 }
 
 // Set/Get attribut to init or option. -------------------------------------

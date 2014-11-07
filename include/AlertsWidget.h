@@ -47,7 +47,6 @@ public:
     void                        fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *boxesTable);
     void                        updateCriteriaSummaryTable();
     void                        popupRecipients(std::string nameAlert, std::string message);
-    void                        popupNewRecipientsRework(std::string nameAlert, std::string message);
     
     std::vector<std::string>    getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
@@ -191,28 +190,8 @@ private:
     };
   
     // alerts criterion
-    //FIXME: 
-    struct AlertCriterion {
-        int         index;
-        long long   unitTypeID;
-        long long   assetID;
-        long long   pluginID;
-        long long   criteriaID;
-        long long   infoID;
-        Wt::WComboBox* operatorComboBox;
-        Wt::WLineEdit* lineEditValue;
-        Wt::WComboBox* comboBoxCriteria;
-        Wt::WValidator* validatorCriteria;
-        Wt::WButtonGroup* groupTrueFalse;
-        Wt::WTemplate* templateValid;
-        Wt::WLineEdit* frequencyMax;
-        Wt::WComboBox* frequencyTime;
-        CriterionResponse smsRsp;
-        CriterionResponse emailRsp;
-        CriterionResponse mobileappRsp;
-    };
     
-    struct NewAlertCriterion {
+    struct AlertCriterion {
         long long   unitTypeID;
         long long   assetID;
         long long   pluginID;
@@ -252,7 +231,6 @@ private:
         Wt::WString *mobile;
     };
     
-    std::vector<NewAlertCriterion> m_newAlertCriteria;
     std::vector<AlertCriterion> m_alertCriteria;
     // end alert setting attributes
     

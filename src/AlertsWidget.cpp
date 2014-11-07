@@ -358,11 +358,11 @@ void AlertsWidget::addMedia(long long id, long long index, TrundleTable *menu)
     functorMapMediaRow.insert(make_pair(EInteractions::REMOVE, boost::bind(&AlertsWidget::deleteMedia, this, _1, _2, _3)));
     functorMapMediaRow.insert(make_pair(EInteractions::SELECT, boost::bind(&AlertsWidget::selectMedia, this, _1, _2, _3)));
     
-    for (std::vector<long long>::iterator itM = m_mediaIds.begin(); itM != m_mediaIds.end(); itM++)
+    for (auto itM = m_nameFromMedia.begin(); itM != m_nameFromMedia.end(); itM++)
     {
-        if (m_nameFromMedia.find(*itM)->second == media)
+        if (itM->second == media)
         {
-            menu->addRow(*itM, 1, widgets, buttons, functorMapMediaRow, NULL);
+            menu->addRow(itM->first, 1, widgets, buttons, functorMapMediaRow, NULL);
             break ;
         }
     }
@@ -421,11 +421,11 @@ void AlertsWidget::addReceiver(long long id, long long index, TrundleTable *menu
     /* Set ComboBox */
     Wt::WComboBox *boxMedias = new Wt::WComboBox();
     boxMedias->setMinimumSize(Wt::WLength(220), Wt::WLength(20));
-    for (std::vector<long long>::iterator itM = m_mediaIds.begin(); itM != m_mediaIds.end(); itM++)
+    for (auto itM = m_nameFromMedia.begin(); itM != m_nameFromMedia.end(); itM++)
     {
-        if (m_userIds.at(currentIndex) == m_userFromMedia.find(*itM)->second)
+        if (m_userIds.at(currentIndex) == m_userFromMedia.find(itM->first)->second)
         {
-            boxMedias->addItem(m_nameFromMedia.find(*itM)->second);
+            boxMedias->addItem(itM->second);
         }
     }
     
@@ -781,7 +781,7 @@ void AlertsWidget::timeSlotsUnfocused()
     timeSlotsSummary(-1);
 }
 
-void AlertsWidget::popupNewRecipientsRework(std::string nameAlert, std::string message)
+void AlertsWidget::popupRecipients(std::string nameAlert, std::string message)
 {
     /* clear and initiate */
     for (std::map<long long, struct Message>::iterator itMsg = m_messages.begin() ; itMsg != m_messages.end() ; itMsg++)
@@ -1241,7 +1241,7 @@ void AlertsWidget::setDevicesSelection()
 
 void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
-    m_newAlertCriteria.clear();
+    m_alertCriteria.clear();
     checkAll_ = 1;
     dialog->resize(Wt::WLength(50, Wt::WLength::Percentage), Wt::WLength(90, Wt::WLength::Percentage));
     
@@ -1308,8 +1308,11 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
     
     ButtonSC->clicked().connect(bind([ = ] ()
     {
-        checkAll_ = 0;
-        dialog->accept();
+        if (m_alertCriteria.size() > 0)
+        {
+            checkAll_ = 0;
+            dialog->accept();
+        }
     }));
 }
 
@@ -1335,7 +1338,7 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
         
         // OPERATOR
         parametersTable->elementAt(row, column)->setPadding(Wt::WLength(10), Wt::Bottom);
-        if (m_newAlertCriteria.size() != 0)
+        if (m_alertCriteria.size() != 0)
         {
             operatorCB = new Wt::WComboBox();
             operatorCB->insertItem(0, Wt::WString(tr("Alert.alert.boolean-operator.and")));
@@ -1502,7 +1505,7 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
                 }
                 
                 int ope(0);
-                if (m_newAlertCriteria.size() != 0)
+                if (m_alertCriteria.size() != 0)
                 {
                     ope = operatorCB->currentIndex() + 1;
                 }
@@ -1511,7 +1514,7 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
                 int flappingUnitInt = flappingUnit->currentIndex();
                 flappingDurationInt = (flappingUnitInt == ETimeUnit::HOUR ? flappingDurationInt * 60 : flappingDurationInt);
 
-                struct NewAlertCriterion newAlertCriterion;
+                struct AlertCriterion newAlertCriterion;
 
                 newAlertCriterion.ope = ope;
                 newAlertCriterion.value = value;
@@ -1522,7 +1525,7 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
                 newAlertCriterion.criteriaID = criteriaID;
                 newAlertCriterion.unitTypeID = unitTypeID;
                 newAlertCriterion.flappingDuration = flappingDurationInt;
-                m_newAlertCriteria.push_back(newAlertCriterion);
+                m_alertCriteria.push_back(newAlertCriterion);
 
                 parametersTable->clear();
                 updateCriteriaSummaryTable();
@@ -1569,7 +1572,7 @@ void AlertsWidget::updateCriteriaSummaryTable()
     m_criteriaSummaryTable->elementAt(row, 7)->addWidget(new Wt::WText(tr("Alert.alert.delete-button")));
     m_criteriaSummaryTable->elementAt(row, 7)->resize(Wt::WLength(5, Wt::WLength::Percentage), 5);
     
-    for (auto itA = m_newAlertCriteria.begin() ; itA != m_newAlertCriteria.end() ; ++itA)
+    for (auto itA = m_alertCriteria.begin() ; itA != m_alertCriteria.end() ; ++itA)
     {
         ++row;
         column = 0;
@@ -1599,7 +1602,7 @@ void AlertsWidget::updateCriteriaSummaryTable()
         
         buttonDelete->clicked().connect(bind([ = ] ()
         {
-            m_newAlertCriteria.erase(itA);
+            m_alertCriteria.erase(itA);
             updateCriteriaSummaryTable();
         }));
     }
@@ -1697,7 +1700,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*>* argument)
     message += "\"thread_sleep\": 0,\n";
     
     message += "\"alert_values\":\n[";
-    for (auto it = m_newAlertCriteria.begin(); it != m_newAlertCriteria.end(); it++)
+    for (auto it = m_alertCriteria.begin(); it != m_alertCriteria.end(); it++)
     {
         message += "\n{\n";
         switch (it->unitTypeID)
@@ -1723,7 +1726,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*>* argument)
         message += "\"plugin_id\": " + boost::lexical_cast<string>(it->pluginID) + ",\n";
         message += "\"information_id\": " + boost::lexical_cast<string>(it->infoID);
         message += "\n}";
-        if (it < m_newAlertCriteria.end() - 1)
+        if (it < m_alertCriteria.end() - 1)
         {
             message += ",";
         }
@@ -1745,7 +1748,7 @@ void AlertsWidget::addResource(vector<Wt::WInteractWidget*>* argument)
     {
 //        message += ",\n";
         Wt::log("debug") << message;
-        popupNewRecipientsRework(data, message);
+        popupRecipients(data, message);
     }
 }
 
@@ -1806,7 +1809,7 @@ void AlertsWidget::clearStructures()
     m_alerts = Wt::Json::Value::Null;
     userInfo_.clear();
     mediaInfo_.clear();
-    m_newAlertCriteria.clear();
+    m_alertCriteria.clear();
     
     clearMessages();
 }
@@ -1817,7 +1820,7 @@ void AlertsWidget::clearMessages()
     m_tabContentMessageSMS.clear();
     m_tabContentMessageMobileApp.clear();
     
-    for (std::vector<struct NewAlertCriterion>::iterator criteria = m_newAlertCriteria.begin(); criteria != m_newAlertCriteria.end() ; ++criteria)
+    for (std::vector<struct AlertCriterion>::iterator criteria = m_alertCriteria.begin(); criteria != m_alertCriteria.end() ; ++criteria)
     {
         for (std::map<long long, struct CriterionResponse>::iterator itCR = criteria->response.begin() ; itCR != criteria->response.end() ; ++itCR)
         {
@@ -2170,6 +2173,14 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
                     m_mediasFromUser.insert(std::make_pair(userId, mediaId));
                     m_mediaIds.push_back(mediaId);
                     
+                    cout << "== M_MEDIAS_IDS ==" << endl;
+                    int count = 0;
+                    for (auto itMIDS = m_mediaIds.begin() ; itMIDS != m_mediaIds.end() ; ++itMIDS)
+                    {
+                        cout << "itMIDS [" << count << "]: " << *itMIDS << endl;
+                        ++count;
+                    }
+                    
                     mediaInfo_.insert(std::make_pair(cpt, std::make_pair(std::make_pair(mediaId, mediaTypeId), mediaValue)));
                 }
             }
@@ -2250,7 +2261,7 @@ void AlertsWidget::getAliases(long long userRoleId)
 {
     clearMessages();
     
-    for (unsigned long criteria = 0 ; criteria != m_newAlertCriteria.size() ; ++criteria)
+    for (unsigned long criteria = 0 ; criteria != m_alertCriteria.size() ; ++criteria)
     {
         for (long long mediaType(Enums::EMedia::email); mediaType <= Enums::EMedia::mobileapp; mediaType++)
         {
@@ -2273,26 +2284,26 @@ void AlertsWidget::httpAsk(long long userRoleId, long long mediaType, long long 
         case ERequestType::RTASSET:
         {
             requestTypeString = "assets/";
-            requestTypeId = boost::lexical_cast<string>(m_newAlertCriteria[criteria].assetID);
+            requestTypeId = boost::lexical_cast<string>(m_alertCriteria[criteria].assetID);
             break;
         }
         case ERequestType::RTPLUGIN:
         {
             requestTypeString = "plugins/";
-            requestTypeId = boost::lexical_cast<string>(m_newAlertCriteria[criteria].pluginID);
+            requestTypeId = boost::lexical_cast<string>(m_alertCriteria[criteria].pluginID);
             break;
         }
         case ERequestType::RTINFORMATION:
         {
             requestTypeString = "informations/";
-            requestTypeId = boost::lexical_cast<string>(m_newAlertCriteria[criteria].infoID);
+            requestTypeId = boost::lexical_cast<string>(m_alertCriteria[criteria].infoID);
             break;
         }
         case ERequestType::RTCRITERIA:
         {
             requestTypeString = "criteria/";
-            requestTypeId = boost::lexical_cast<string>(m_newAlertCriteria[criteria].criteriaID);
-            requestNeedInformation = "information_id=" + boost::lexical_cast<string>(m_newAlertCriteria[criteria].infoID);
+            requestTypeId = boost::lexical_cast<string>(m_alertCriteria[criteria].criteriaID);
+            requestNeedInformation = "information_id=" + boost::lexical_cast<string>(m_alertCriteria[criteria].infoID);
             break;
         }
     }
@@ -2303,7 +2314,7 @@ void AlertsWidget::httpAsk(long long userRoleId, long long mediaType, long long 
     listParameter.push_back("media_type_id=" + boost::lexical_cast<string>(mediaType));
     if (!requestNeedInformation.empty())
     {
-        listParameter.push_back("information_id=" + boost::lexical_cast<string>(m_newAlertCriteria[criteria].infoID));
+        listParameter.push_back("information_id=" + boost::lexical_cast<string>(m_alertCriteria[criteria].infoID));
     }
     
     boost::function<void (Wt::Json::Value)> functorHandleResponse = boost::bind(&AlertsWidget::handleHttpResponse, this, _1, mediaType, requestType, criteria, userRoleId);
@@ -2337,7 +2348,7 @@ void AlertsWidget::updateMessage(std::string &tabContent, Wt::WString &message, 
 {
     if (criteria > 0 && !tabContent.empty())
     {
-        Wt::WString ope = (m_newAlertCriteria[criteria].ope == 1 ? tr("Alert.alert.boolean-operator.and") : tr("Alert.alert.boolean-operator.or"));
+        Wt::WString ope = (m_alertCriteria[criteria].ope == 1 ? tr("Alert.alert.boolean-operator.and") : tr("Alert.alert.boolean-operator.or"));
         tabContent += ope.toUTF8() + std::string(" ");
     }
     
@@ -2357,7 +2368,7 @@ void AlertsWidget::updateMessage(std::string &tabContent, Wt::WString &message, 
 
 void AlertsWidget::updateTabContent(Wt::WString message, long long mediaType, long long requestType, long long criteria)
 {
-    getRequestRsp(requestType, message, m_newAlertCriteria[criteria].response.at(mediaType));
+    getRequestRsp(requestType, message, m_alertCriteria[criteria].response.at(mediaType));
      
     // TO DO - adapt for a vector of medias instead of this m_tabContent...
     switch (mediaType)
@@ -2365,20 +2376,20 @@ void AlertsWidget::updateTabContent(Wt::WString message, long long mediaType, lo
         case Enums::EMedia::email:
         {
             m_tabContentMessageMail.clear();
-            updateMessage(m_tabContentMessageMail, m_newAlertCriteria[criteria].response.at(mediaType).message, criteria);
+            updateMessage(m_tabContentMessageMail, m_alertCriteria[criteria].response.at(mediaType).message, criteria);
             break;
         }
         case Enums::EMedia::sms:
         {
             m_tabContentMessageSMS.clear();
-            updateMessage(m_tabContentMessageSMS, m_newAlertCriteria[criteria].response.at(mediaType).message, criteria);
+            updateMessage(m_tabContentMessageSMS, m_alertCriteria[criteria].response.at(mediaType).message, criteria);
 
             break;
         }
         case Enums::EMedia::mobileapp:
         {
             m_tabContentMessageMobileApp.clear();
-            updateMessage(m_tabContentMessageMobileApp, m_newAlertCriteria[criteria].response.at(mediaType).message, criteria);
+            updateMessage(m_tabContentMessageMobileApp, m_alertCriteria[criteria].response.at(mediaType).message, criteria);
             break;
         }
     }

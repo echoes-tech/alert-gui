@@ -1254,7 +1254,7 @@ void AlertsWidget::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
     m_alertCriteria.clear();
     checkAll_ = 1;
-    dialog->resize(Wt::WLength(50, Wt::WLength::Percentage), Wt::WLength(90, Wt::WLength::Percentage));
+    dialog->resize(Wt::WLength(60, Wt::WLength::Percentage), Wt::WLength(90, Wt::WLength::Percentage));
     
     Wt::WContainerWidget *headerTableContainer = new Wt::WContainerWidget(dialog->contents());
     headerTableContainer->addStyleClass("widget-title header-pers");
@@ -1325,7 +1325,8 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
     Wt::WWidget *criteriaWidget;
     Wt::WComboBox *operatorCB;
     Wt::WLineEdit *flappingDuration;
-    Wt:: WLineEdit *lineEditValue;
+    Wt::WComboBox *flappingUnit;
+    Wt::WLineEdit *keyValueLineEdit;
     
     if (assetID > 0 && pluginID > 0 && infoID > 0)
     {
@@ -1346,18 +1347,7 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
             
             parametersTable->elementAt(row, column)->addWidget(operatorCB);
         }
-        
-        // KEY VALUE
-        column = 0;
-        parametersTable->elementAt(++row, column)->setContentAlignment(Wt::AlignRight);
-        parametersTable->elementAt(row, column)->setPadding(Wt::WLength(10, Wt::WLength::Percentage), Wt::Left);
-        parametersTable->elementAt(row, column)->setPadding(Wt::WLength(10), Wt::Right);
-        parametersTable->elementAt(row, column)->setWidth(Wt::WLength(70));
-        parametersTable->elementAt(row, column)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-key") + ":"));
-        
-        parametersTable->elementAt(row, ++column)->setPadding(Wt::WLength(10), Wt::Bottom);
-        Wt::WLineEdit *keyValueLineEdit = new Wt::WLineEdit(parametersTable->elementAt(row, column));
-        
+
         // VALUE
         column = 0;
         parametersTable->elementAt(++row, column)->setContentAlignment(Wt::AlignRight);
@@ -1368,12 +1358,11 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
         parametersTable->elementAt(row, ++column)->setContentAlignment(Wt::AlignRight);
         parametersTable->elementAt(row, column)->setWidth(Wt::WLength(150));
         if (unitTypeID == Enums::EInformationUnitType::text ||
-                unitTypeID == Enums::EInformationUnitType::number ||
-                unitTypeID == Enums::EInformationUnitType::custom)
+                unitTypeID == Enums::EInformationUnitType::number)
         {
             Wt::WContainerWidget *lineEditWC = new Wt::WContainerWidget(parametersTable->elementAt(row, column));
             lineEditWC->addStyleClass("control-group controls");
-            lineEditValue = new Wt::WLineEdit(lineEditWC);
+            Wt:: WLineEdit *lineEditValue = new Wt::WLineEdit(lineEditWC);
             switch (unitTypeID)
             {
             case Enums::EInformationUnitType::number:
@@ -1402,57 +1391,96 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
             valueWidget = groupTrueFalse;
             valueWidget->setObjectName("groupTrueFalse");
         }
+        else if (unitTypeID == Enums::EInformationUnitType::custom)
+        {
+            parametersTable->elementAt(row, column)->setWidth(Wt::WLength(70, Wt::WLength::Percentage));
+            Wt::WContainerWidget *textAreaEditWC = new Wt::WContainerWidget(parametersTable->elementAt(row, column));
+            textAreaEditWC->addStyleClass("control-group controls");
+            Wt:: WTextArea *textAreaEdit = new Wt::WTextArea(textAreaEditWC);
+            switch (unitTypeID)
+            {
+            case Enums::EInformationUnitType::number:
+                textAreaEdit->setValidator(editValidator(setValidatorType(ETypeJson::number, 0, EMandatory::is)));
+                break;
+            default:
+                textAreaEdit->setValidator(editValidator(setValidatorType(ETypeJson::text, 0, EMandatory::is)));
+                break;
+            }
+            valueWidget = textAreaEdit;
+            textAreaEditWC->resize(Wt::WLength(70, Wt::WLength::Percentage), Wt::WLength(20, Wt::WLength::Percentage));
+            valueWidget->setObjectName("textAreaEdit");
+        }
         else
         {
             valueWidget = NULL;
             Wt::log("error") << "Unknown unit type : " << unitTypeID;
         }
+        
+        if (unitTypeID != Enums::EInformationUnitType::custom)
+        {
+            // CRITERIA      
+            parametersTable->elementAt(row, ++column)->setContentAlignment(Wt::AlignRight);
+            parametersTable->elementAt(row, column)->setWidth(Wt::WLength(100));
+            if (unitTypeID == Enums::EInformationUnitType::text ||
+                    unitTypeID == Enums::EInformationUnitType::number)
+            {
+                Wt::WComboBox* comboBoxCriteria = createCompareCriteriaComboBox(unitTypeID);
+                comboBoxCriteria->setCurrentIndex(0);
+                parametersTable->elementAt(row, column)->addWidget(comboBoxCriteria);
+                criteriaWidget = comboBoxCriteria;
+            }
+            else if (unitTypeID == Enums::EInformationUnitType::boolean)
+            {
+                // TO DO
+                criteriaWidget = NULL;
+            }
+            else
+            {
+                Wt::log("error") << "Unknown unit type : " << unitTypeID;
+            }
 
-        // CRITERIA      
-        parametersTable->elementAt(row, ++column)->setContentAlignment(Wt::AlignRight);
-        parametersTable->elementAt(row, column)->setWidth(Wt::WLength(100));
-        if (unitTypeID == Enums::EInformationUnitType::text ||
-                unitTypeID == Enums::EInformationUnitType::number)
-        {
-            Wt::WComboBox* comboBoxCriteria = createCompareCriteriaComboBox(unitTypeID);
-            comboBoxCriteria->setCurrentIndex(0);
-            parametersTable->elementAt(row, column)->addWidget(comboBoxCriteria);
-            criteriaWidget = comboBoxCriteria;
-        }
-        else if (unitTypeID == Enums::EInformationUnitType::boolean ||
-                unitTypeID == Enums::EInformationUnitType::custom)
-        {
-            // TO DO
-            criteriaWidget = NULL;
+            /* Set flapping */
+            column = 0;
+            parametersTable->elementAt(++row, column)->setContentAlignment(Wt::AlignRight);
+            parametersTable->elementAt(row, column)->setPadding(Wt::WLength(10, Wt::WLength::Percentage), Wt::Left);
+            parametersTable->elementAt(row, column)->setWidth(Wt::WLength(70));
+            parametersTable->elementAt(row, column)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-flapping") + ":"));
+
+            Wt::WContainerWidget *flappingDurationWC = new Wt::WContainerWidget();
+            flappingDuration = new Wt::WLineEdit(flappingDurationWC);
+            flappingDuration->setValidator(new Wt::WIntValidator());
+            flappingDurationWC->addStyleClass("control-group controls");
+
+            flappingUnit = new Wt::WComboBox();
+            flappingUnit->insertItem(0, Wt::WString(tr("Alert.alert.form.alert-unit-min")));
+            flappingUnit->insertItem(1, Wt::WString(tr("Alert.alert.form.alert-unit-hour")));
+
+            parametersTable->elementAt(row, ++column)->setWidth(Wt::WLength(150));
+            parametersTable->elementAt(row, column)->setContentAlignment(Wt::AlignRight);
+            parametersTable->elementAt(row, column)->addWidget(flappingDurationWC);
+
+            parametersTable->elementAt(row, ++column)->setContentAlignment(Wt::AlignRight);
+            parametersTable->elementAt(row, column)->setWidth(Wt::WLength(100));
+            parametersTable->elementAt(row, column)->addWidget(flappingUnit);
+            
+            // KEY VALUE
+            column = 0;
+            parametersTable->elementAt(++row, column)->setContentAlignment(Wt::AlignRight);
+            parametersTable->elementAt(row, column)->setPadding(Wt::WLength(10, Wt::WLength::Percentage), Wt::Left);
+            parametersTable->elementAt(row, column)->setPadding(Wt::WLength(10), Wt::Right);
+            parametersTable->elementAt(row, column)->setWidth(Wt::WLength(70));
+            parametersTable->elementAt(row, column)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-key") + ":"));
+
+            parametersTable->elementAt(row, ++column)->setPadding(Wt::WLength(10), Wt::Bottom);
+            keyValueLineEdit = new Wt::WLineEdit(parametersTable->elementAt(row, column));
         }
         else
         {
-            Wt::log("error") << "Unknown unit type : " << unitTypeID;
+            keyValueLineEdit = NULL;
+            flappingDuration = NULL;
+            flappingUnit = NULL;
+            criteriaWidget = NULL;
         }
-
-        /* Set flapping */
-        column = 0;
-        parametersTable->elementAt(++row, column)->setContentAlignment(Wt::AlignRight);
-        parametersTable->elementAt(row, column)->setPadding(Wt::WLength(10, Wt::WLength::Percentage), Wt::Left);
-        parametersTable->elementAt(row, column)->setWidth(Wt::WLength(70));
-        parametersTable->elementAt(row, column)->addWidget(new Wt::WText(tr("Alert.alert.add-title-box-flapping") + ":"));
-        
-        Wt::WContainerWidget *flappingDurationWC = new Wt::WContainerWidget();
-        flappingDuration = new Wt::WLineEdit(flappingDurationWC);
-        flappingDuration->setValidator(new Wt::WIntValidator());
-        flappingDurationWC->addStyleClass("control-group controls");
-        
-        Wt::WComboBox *flappingUnit = new Wt::WComboBox();
-        flappingUnit->insertItem(0, Wt::WString(tr("Alert.alert.form.alert-unit-min")));
-        flappingUnit->insertItem(1, Wt::WString(tr("Alert.alert.form.alert-unit-hour")));
-                
-        parametersTable->elementAt(row, ++column)->setWidth(Wt::WLength(150));
-        parametersTable->elementAt(row, column)->setContentAlignment(Wt::AlignRight);
-        parametersTable->elementAt(row, column)->addWidget(flappingDurationWC);
-        
-        parametersTable->elementAt(row, ++column)->setContentAlignment(Wt::AlignRight);
-        parametersTable->elementAt(row, column)->setWidth(Wt::WLength(100));
-        parametersTable->elementAt(row, column)->addWidget(flappingUnit);
         
         Wt::WPushButton *saveCriteria = new Wt::WPushButton();
         saveCriteria->setText(tr("Alert.alert.button-save"));
@@ -1473,8 +1501,8 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
                     return ;
                 }
             }
-            else if (flappingDuration->validate() == Wt::WValidator::Invalid
-                        || flappingDuration->validate() == Wt::WValidator::InvalidEmpty)
+            else if (flappingDuration && (flappingDuration->validate() == Wt::WValidator::Invalid
+                        || flappingDuration->validate() == Wt::WValidator::InvalidEmpty))
             {
                 valid = false;
             }
@@ -1486,14 +1514,17 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
 
                 Wt::WString value("");
                 if (unitTypeID == Enums::EInformationUnitType::text ||
-                unitTypeID == Enums::EInformationUnitType::number ||
-                unitTypeID == Enums::EInformationUnitType::custom)
+                unitTypeID == Enums::EInformationUnitType::number)
                 {
                     value += ((Wt::WLineEdit*)valueWidget)->text().toUTF8();
                 }
                 else if (unitTypeID == Enums::EInformationUnitType::boolean)
                 {
                     value += ((Wt::WButtonGroup*)valueWidget)->checkedButton()->text().toUTF8();
+                }
+                else if (unitTypeID == Enums::EInformationUnitType::custom)
+                {
+                    value += ((Wt::WTextArea*)valueWidget)->text().toUTF8();
                 }
 
                 long long criteriaID = 1;
@@ -1510,15 +1541,15 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
                     ope = operatorCB->currentIndex() + 1;
                 }
 
-                int flappingDurationInt = (flappingDuration->text().toUTF8().empty() ? 0 : boost::lexical_cast<int> (flappingDuration->text().toUTF8()));
-                int flappingUnitInt = flappingUnit->currentIndex();
+                int flappingDurationInt = (flappingDuration && !flappingDuration->text().toUTF8().empty() ? boost::lexical_cast<int> (flappingDuration->text().toUTF8()) : 0);
+                int flappingUnitInt = (flappingUnit ? flappingUnit->currentIndex() : -1);
                 flappingDurationInt = (flappingUnitInt == ETimeUnit::HOUR ? flappingDurationInt * 60 : flappingDurationInt);
 
                 struct AlertCriterion newAlertCriterion;
 
                 newAlertCriterion.ope = ope;
                 newAlertCriterion.value = value;
-                newAlertCriterion.keyValue = keyValueLineEdit->text();
+                newAlertCriterion.keyValue = (keyValueLineEdit ? keyValueLineEdit->text() : "");
                 newAlertCriterion.infoID = infoID;
                 newAlertCriterion.assetID = assetID;
                 newAlertCriterion.pluginID = pluginID;
@@ -2172,15 +2203,7 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
                     m_nameFromMedia.insert(std::make_pair(mediaId, mediaValue));
                     m_mediasFromUser.insert(std::make_pair(userId, mediaId));
                     m_mediaIds.push_back(mediaId);
-                    
-                    cout << "== M_MEDIAS_IDS ==" << endl;
-                    int count = 0;
-                    for (auto itMIDS = m_mediaIds.begin() ; itMIDS != m_mediaIds.end() ; ++itMIDS)
-                    {
-                        cout << "itMIDS [" << count << "]: " << *itMIDS << endl;
-                        ++count;
-                    }
-                    
+                                        
                     mediaInfo_.insert(std::make_pair(cpt, std::make_pair(std::make_pair(mediaId, mediaTypeId), mediaValue)));
                 }
             }

@@ -42,6 +42,10 @@ setTitles(titles);
     
     m_assetComboBox = new Wt::WComboBox();
     m_assetsStandardItemModel = new Wt::WStandardItemModel(0,2,this);
+    
+    boost::function<void (Wt::Json::Value)> functorFillModel = boost::bind(&PluginsTablePluginWidget::fillModel, this, _1);    
+    string resource = "assets";
+    sendHttpRequestGet(resource, vector<string>(), functorFillModel);
 }
 
 void PluginsTablePluginWidget::fillModel(Wt::Json::Value result)
@@ -82,9 +86,6 @@ void PluginsTablePluginWidget::fillModel(Wt::Json::Value result)
         Wt::log("warning") << "[PluginsTableAssociationWidget] JSON Type Exception";
     }
     
-    
-    
-    
 }
 
 Wt::WComboBox *PluginsTablePluginWidget::popupAdd(Wt::WDialog *dialog)
@@ -93,12 +94,6 @@ Wt::WComboBox *PluginsTablePluginWidget::popupAdd(Wt::WDialog *dialog)
     m_assetComboBox->setModel(m_assetsStandardItemModel);
     m_assetComboBox->setCurrentIndex(0);
  
-    dialog->contents()->addWidget(m_assetComboBox);
-    
-    boost::function<void (Wt::Json::Value)> functorFillModel = boost::bind(&PluginsTablePluginWidget::fillModel, this, _1);    
-    string resource = "assets";
-    sendHttpRequestGet(resource, vector<string>(), functorFillModel);
-    
     return m_assetComboBox;
 }
 

@@ -31,9 +31,9 @@
     <message id="Alert.unit.button-confirm">Confirmer</message>
     
     <message id="Alert.unit.type.text">Texte</message>
-    <message id="Alert.unit.type.number">Numérique</message>
-    <message id="Alert.unit.type.boolean">Booléen</message>
-    <message id="Alert.unit.type.custom">Personnalisée</message>
+    <message id="Alert.unit.type.number">Numerique</message>
+    <message id="Alert.unit.type.boolean">Booleen</message>
+    <message id="Alert.unit.type.custom">Personnalisee</message>
 
 <!--    Invalid message     -->
   <message id="Alert.unit.invalid-name-unit">

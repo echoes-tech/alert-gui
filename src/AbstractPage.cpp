@@ -441,10 +441,6 @@ void AbstractPage::modifResourcePopup(long long id)
 
                 int fullType = title->first;
                 int jsonType = (((title->first >> 8) & 0xF) > 0 ? (title->first >> 8) & 0xF : 0);
-                bool isMandatory = (bool)(title->first & 0x1);
-                Wt::log("info") << " :::::: Type == " << jsonType;
-                Wt::log("info") << " :::::: fullType == " << fullType;
-                Wt::log("info") << " :::::: isMandatory == " << (isMandatory == true ? "true" : "false");
                 switch (jsonType)
                 {
                     case ETypeJson::text:
@@ -528,21 +524,48 @@ void AbstractPage::modifResourcePopup(long long id)
                     }
                     break;
                 }
-                case ETypeJson::undid:
+                case ETypeJson::object:
                 {
                     Wt::WComboBox *comboBox = popupAdd(dialogModif);
                     unsigned int cpt2(0);
-                    for (vector_widget::iterator widg = itTable->second.begin();
-                            widg != itTable->second.end(); widg++)
+                    for (vector_widget::iterator widg = itTable->second.begin(); widg != itTable->second.end(); widg++)
                     {
                         Wt::WStandardItemModel *model = (Wt::WStandardItemModel*)comboBox->model();
                         if (cpt2 == cpt)
                         {
                             for (int nb(0); nb < model->rowCount(); nb++)
                             {
-                                if (((Wt::WText*)(*widg))->text().toUTF8().compare(model->item(nb, 0)->text().toUTF8()) == 0)
+                                if (((Wt::WText*)(*widg))->text() == model->item(nb, 1)->text())
                                 {
                                     comboBox->setCurrentIndex(nb);
+                                }
+                            }
+                            inputName->push_back(comboBox);
+                            break;
+                        }
+                        cpt2++;
+                    }
+                    if (comboBox->currentIndex() == -1)
+                    {
+                        comboBox->setCurrentIndex(0);
+                    }
+                    break;
+                }
+                case ETypeJson::undid:
+                {
+                    Wt::WComboBox *comboBox = popupAdd(dialogModif);
+                    unsigned int cpt2(0);
+                    for (vector_widget::iterator widg = itTable->second.begin(); widg != itTable->second.end(); widg++)
+                    {
+                        Wt::WStandardItemModel *model = (Wt::WStandardItemModel*)comboBox->model();
+                        if (cpt2 == cpt)
+                        {
+                            for (int nb(0); nb < model->rowCount(); nb++)
+                            {
+                                if (((Wt::WText*)(*widg))->text() == model->item(nb, 0)->text())
+                                {
+                                    comboBox->setCurrentIndex(nb);
+                                    break;
                                 }
                             }
                             inputName->push_back(comboBox);
@@ -592,18 +615,14 @@ void AbstractPage::popupCheck(vector<Wt::WInteractWidget*>* inputName, vector<Wt
         //check = checkInput(inputName, errorMessage);
     }
 
-    Wt::log("info") << "Just before input checking loop";
     for (vector<Wt::WInteractWidget*>::iterator itInput = inputName->begin() ; itInput != inputName->end() ; itInput++)
     {
-        Wt::log("info") << "for loop";
         if ((Wt::WContainerWidget*) dynamic_cast <Wt::WContainerWidget*> (*itInput) != NULL)
         {
             Wt::WLineEdit* lineEdit = (Wt::WLineEdit*)(((Wt::WContainerWidget*)(*itInput))->widget(0));
-            Wt::log("info") << "pass test: " << lineEdit->text();
 
             if (lineEdit->validate() != Wt::WValidator::Valid)
             {
-                Wt::log("info") << "shoudln't pass test";
                 dialog->show();
                 return ;
             }
@@ -1393,12 +1412,7 @@ void AbstractPage::addEnumToModel(Wt::WStandardItemModel* standardItemModel, int
 
 int AbstractPage::setValidatorType(int jsonType, int specialType, int mandatory)
 {
-    Wt::log("info") << " == setting validator type ==";
     int type;
-    
-    Wt::log("info") << " ::: jsonType: " << jsonType;
-    Wt::log("info") << " ::: specialType: " << specialType;
-    Wt::log("info") << " ::: mandatory: " << (mandatory == true ? "true" : "false");
     
     type = jsonType;
     /* 4bits shift to the left: 0000 0000 0001 becomes 0000 0001 0000 */
@@ -1409,14 +1423,12 @@ int AbstractPage::setValidatorType(int jsonType, int specialType, int mandatory)
     /* add isMandatory == true: 0001 0001 0000 becomes 0001 0001 0001 */
     type += mandatory;
     
-    Wt::log("info") << " ::: type: " << type;
     
     return (type);
 }
 
 Wt::WValidator* AbstractPage::editValidator(int type)
 {
-    Wt::log("info") << " == Creating validator ==";
     Wt::WRegExpValidator *validator = new Wt::WRegExpValidator();
     
     /* isolate first bit with 0x1 to see if true or false */
@@ -1435,31 +1447,26 @@ Wt::WValidator* AbstractPage::editValidator(int type)
             {
                 case ETextSpecial::normalText:
                 {
-                    Wt::log("info") << "ETextSpecial::normalText";
                     validator->setRegExp("^.*$");
                     break ;
                 }
                 case ETextSpecial::date:
                 {
-                    Wt::log("info") << "ETextSpecial::date";
                     validator->setRegExp("^(((0[1-9]|[12][0-8])[\\/](0[1-9]|1[012]))|((29|30|31)[\\/](0[13578]|1[02]))|((29|30)[\\/](0[4,6,9]|11)))[\\/](19|[2-9][0-9])\\d\\d$)|(^29[\\/]02[\\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$");
                     break ;
                 }
                 case ETextSpecial::mail:
                 {
-                    Wt::log("info") << "ETextSpecial::mail";
                     validator->setRegExp("^[^@]+@([^.]+.[a-z]+)+$");
                     break ;
                 }
                 case ETextSpecial::phone:
                 {
-                    Wt::log("info") << "ETextSpecial::phone";
                     validator->setRegExp("^(+[0-9]{2})|(06)|(07))([.-\\s:]?[0-9]{2}){4}$");
                     break ;
                 }
                 default:
                 {
-                    Wt::log("info") << "ETextSpecial::default";
                     validator->setRegExp("^.*$");
                 }
             }
@@ -1471,31 +1478,26 @@ Wt::WValidator* AbstractPage::editValidator(int type)
             {
                 case ENumberSpecial::normalNumber:
                 {
-                    Wt::log("info") << "ENumberSpecial::normalNumber";
                     validator->setRegExp("^[+-]?[0-9]*$");
                     break ;
                 }
                 case ENumberSpecial::notnull:
                 {
-                    Wt::log("info") << "ENumberSpecial::notnull";
                     validator->setRegExp("^[+-]?[1-9][0-9]*$");
                     break ;
                 }
                 case ENumberSpecial::uns:
                 {
-                    Wt::log("info") << "ENumberSpecial::uns";
                     validator->setRegExp("^\\+?[0-9]*?$");
                     break ;
                 }
                 case ENumberSpecial::flt:
                 {
-                    Wt::log("info") << "ENumberSpecial::flt";
                     validator->setRegExp("^[+-]?[1-9][0-9]*(\\.[0-9]+)?$");
                     break ;
                 }
                 default:
                 {
-                    Wt::log("info") << "ENumberSpecial::default";
                     validator->setRegExp("^.*$");
                 }
             }

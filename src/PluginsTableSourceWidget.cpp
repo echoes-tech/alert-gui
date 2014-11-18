@@ -89,7 +89,8 @@ vector<Wt::WInteractWidget *> PluginsTableSourceWidget::initRowWidgets(Wt::Json:
     struct SourceData sourceData;
         
     vector<Wt::WInteractWidget *> rowWidgets;
-    
+    try
+    {
     int sourceID = jsonObject.get("id");
     
     int addonID = ((Wt::Json::Object)jsonObject.get("addon")).get("id");    
@@ -125,6 +126,17 @@ vector<Wt::WInteractWidget *> PluginsTableSourceWidget::initRowWidgets(Wt::Json:
     rowWidgets.push_back(containerWidget);
         
     m_sourcesData[sourceID] = sourceData;
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[PluginsTableSourceWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[PluginsTableSourceWidget] JSON Type Exception";
+        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
     
     return rowWidgets;
 }

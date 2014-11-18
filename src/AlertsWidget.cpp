@@ -2420,6 +2420,7 @@ void AlertsWidget::updateTabContent(Wt::WString message, long long mediaType, lo
 
 void AlertsWidget::handleHttpResponse(Wt::Json::Value result, long long mediaType, long long requestType, long long criteria, long long userRoleId)
 {
+    //FIXME: not safe, use try catch
     if (result.type() == Wt::Json::ObjectType)
     {
         Wt::WString message;

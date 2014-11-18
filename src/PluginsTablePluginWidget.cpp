@@ -51,11 +51,11 @@ setTitles(titles);
 void PluginsTablePluginWidget::fillModel(Wt::Json::Value result)
 {
     m_assetsStandardItemModel->clear();
-    Wt::Json::Array& jsonArray = result;   
-    
     
     try
     {
+        Wt::Json::Array& jsonArray = result;   
+    
         for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
         {
             Wt::Json::Object jsonObject = jsonArray.at(cpt);
@@ -78,12 +78,12 @@ void PluginsTablePluginWidget::fillModel(Wt::Json::Value result)
     }
     catch (Wt::Json::ParseError const& e)
     {
-        Wt::log("warning") << "[PluginsTableAssociationWidget] Problems parsing JSON";
+        Wt::log("warning") << "[PluginsTablePluginWidget] Problems parsing JSON";
         Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
-        Wt::log("warning") << "[PluginsTableAssociationWidget] JSON Type Exception";
+        Wt::log("warning") << "[PluginsTablePluginWidget] JSON Type Exception";
     }
     
 }

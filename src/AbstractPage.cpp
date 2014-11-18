@@ -861,7 +861,7 @@ void AbstractPage::handleHttpResponseGet(boost::system::error_code err,
     else
     {
         Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
-                                       + m_xmlPageName) + " Widget] Http::Client error: "
+                                       + m_xmlPageName) + " Widget] Http::Client get error: "
                 << response.body();
         Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
                               tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
@@ -1223,7 +1223,7 @@ void AbstractPage::postResourceCallback(boost::system::error_code err, const Wt:
         else
         {
             Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
-                                           + m_xmlPageName) + " Widget] Http::Client error: " << response.body();
+                                           + m_xmlPageName) + " Widget] Http::Client status unexpected: " << response.body();
             Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
                                   tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
         }
@@ -1312,7 +1312,7 @@ void AbstractPage::apiDeleteResourceCallback(boost::system::error_code err, cons
     else
     {
         Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
-                                       + m_xmlPageName) + " Widget] Http::Client error: " << response.body();
+                                       + m_xmlPageName) + " Widget] Http::Client delete error: " << response.body();
         Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
                               tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
     }

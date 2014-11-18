@@ -48,6 +48,7 @@ void PluginsTableSearchWidget::fillModel(Wt::Json::Value result, Wt::WComboBox* 
         return;
     }
         
+    
     Wt::Json::Array& jsonArray = result;   
     
     for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
@@ -111,46 +112,60 @@ vector<Wt::WInteractWidget *> PluginsTableSearchWidget::initRowWidgets(Wt::Json:
         
     vector<Wt::WInteractWidget *> rowWidgets;
     
-    int searchID = jsonObject.get("id");
     
-    int searchTypeID = ((Wt::Json::Object)jsonObject.get("search_type")).get("id");    
-    rowWidgets.push_back(new Wt::WText(getSearchTypeName(searchTypeID)));
-    
-    searchData.searchTypeID = searchTypeID;  
-    
-    int period = jsonObject.get("period");
-    rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(period)));
-        
-    Wt::WString searchParametersString;        
-    if(!((Wt::Json::Value)jsonResource.at(cpt+1)).isNull())
+    try
     {
-        Wt::Json::Array& jsonArrayParameters = jsonResource.at(cpt+1);
-        for (int cpt(0); cpt < (int) jsonArrayParameters.size(); cpt++)
+        int searchID = jsonObject.get("id");
+
+        int searchTypeID = ((Wt::Json::Object)jsonObject.get("search_type")).get("id");    
+        rowWidgets.push_back(new Wt::WText(getSearchTypeName(searchTypeID)));
+
+        searchData.searchTypeID = searchTypeID;  
+
+        int period = jsonObject.get("period");
+        rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(period)));
+
+        Wt::WString searchParametersString;        
+        if(!((Wt::Json::Value)jsonResource.at(cpt+1)).isNull())
         {
-            Wt::Json::Object jsonObjectParameter = jsonArrayParameters.at(cpt);
-
-            int searchParameterID = ((Wt::Json::Object)jsonObjectParameter.get("id")).get("search_parameter_id");
-            Wt::WString searchParameterValue = jsonObjectParameter.get("value");
-
-            searchParametersString += getSearchParameterName(searchParameterID);
-            searchParametersString += ": ";
-            searchParametersString += searchParameterValue;
-            if(cpt != (int) jsonArrayParameters.size() - 1)
+            Wt::Json::Array& jsonArrayParameters = jsonResource.at(cpt+1);
+            for (int cpt(0); cpt < (int) jsonArrayParameters.size(); cpt++)
             {
-                searchParametersString += "<br />";
+                Wt::Json::Object jsonObjectParameter = jsonArrayParameters.at(cpt);
+
+                int searchParameterID = ((Wt::Json::Object)jsonObjectParameter.get("id")).get("search_parameter_id");
+                Wt::WString searchParameterValue = jsonObjectParameter.get("value");
+
+                searchParametersString += getSearchParameterName(searchParameterID);
+                searchParametersString += ": ";
+                searchParametersString += searchParameterValue;
+                if(cpt != (int) jsonArrayParameters.size() - 1)
+                {
+                    searchParametersString += "<br />";
+                }
+
+                searchData.parametersValue[searchParameterID] = searchParameterValue;
             }
-            
-            searchData.parametersValue[searchParameterID] = searchParameterValue;
-        }
-    }        
-    Wt::WContainerWidget* containerWidget = new Wt::WContainerWidget();
-    containerWidget->addWidget(new Wt::WText(searchParametersString));
-    containerWidget->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
-    rowWidgets.push_back(containerWidget);      
-    
-    searchData.period = period;
-    
-    m_searchesData[searchID] = searchData;
+        }        
+        Wt::WContainerWidget* containerWidget = new Wt::WContainerWidget();
+        containerWidget->addWidget(new Wt::WText(searchParametersString));
+        containerWidget->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
+        rowWidgets.push_back(containerWidget);      
+
+        searchData.period = period;
+
+        m_searchesData[searchID] = searchData;
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[PluginsTableSearchWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[PluginsTableSearchWidget] JSON Type Exception";
+        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
     
     return rowWidgets;
 }

@@ -80,53 +80,68 @@ void PluginsTableFilterWidget::updatePage()
 vector<Wt::WInteractWidget *> PluginsTableFilterWidget::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
 {    
     if(cpt == 0)
+    {
         m_filtersData.clear();
+    }
     
     struct FilterData filterData;
         
     vector<Wt::WInteractWidget *> rowWidgets;
     
-    int filterID = jsonObject.get("id");
-    
-    int filterTypeID = ((Wt::Json::Object)jsonObject.get("filter_type")).get("id");    
-    rowWidgets.push_back(new Wt::WText(getFilterTypeName(filterTypeID)));
-    
-    filterData.filterTypeID = filterTypeID;    
-    
-    int nbValue = jsonObject.get("nb_value");
-    rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(nbValue)));    
-    filterData.nbValue = nbValue;       
-    
-    int posKeyValue = jsonObject.get("pos_key_value");
-    rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(posKeyValue)));    
-    filterData.posKeyValue = posKeyValue;
-        
-    Wt::WString filterParametersString;        
-    if(!((Wt::Json::Value)jsonResource.at(cpt+1)).isNull())
+    try
     {
-        Wt::Json::Array& jsonArrayParameters = jsonResource.at(cpt+1);
-        for (int cpt(0); cpt < (int) jsonArrayParameters.size(); cpt++)
+        int filterID = jsonObject.get("id");
+
+        int filterTypeID = ((Wt::Json::Object)jsonObject.get("filter_type")).get("id");    
+        rowWidgets.push_back(new Wt::WText(getFilterTypeName(filterTypeID)));
+
+        filterData.filterTypeID = filterTypeID;    
+
+        int nbValue = jsonObject.get("nb_value");
+        rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(nbValue)));    
+        filterData.nbValue = nbValue;       
+
+        int posKeyValue = jsonObject.get("pos_key_value");
+        rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(posKeyValue)));    
+        filterData.posKeyValue = posKeyValue;
+
+        Wt::WString filterParametersString;        
+        if(!((Wt::Json::Value)jsonResource.at(cpt+1)).isNull())
         {
-            Wt::Json::Object jsonObjectParameter = jsonArrayParameters.at(cpt);
+            Wt::Json::Array& jsonArrayParameters = jsonResource.at(cpt+1);
+            for (int cpt(0); cpt < (int) jsonArrayParameters.size(); cpt++)
+            {
+                Wt::Json::Object jsonObjectParameter = jsonArrayParameters.at(cpt);
 
-            int filterParameterID = ((Wt::Json::Object)jsonObjectParameter.get("id")).get("filter_parameter_id");
-            Wt::WString filterParameterValue = jsonObjectParameter.get("value");
+                int filterParameterID = ((Wt::Json::Object)jsonObjectParameter.get("id")).get("filter_parameter_id");
+                Wt::WString filterParameterValue = jsonObjectParameter.get("value");
 
-            filterParametersString += getFilterParameterName(filterParameterID);
-            filterParametersString += ": ";
-            filterParametersString += filterParameterValue;
-            if(cpt != (int) jsonArrayParameters.size() - 1)
-                filterParametersString += "<br />";
-            
-            filterData.parametersValue[filterParameterID] = filterParameterValue;
-        }
-    }        
-    Wt::WContainerWidget* containerWidget = new Wt::WContainerWidget();
-    containerWidget->addWidget(new Wt::WText(filterParametersString));
-    containerWidget->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
-    rowWidgets.push_back(containerWidget);    
-    
-    m_filtersData[filterID] = filterData;
+                filterParametersString += getFilterParameterName(filterParameterID);
+                filterParametersString += ": ";
+                filterParametersString += filterParameterValue;
+                if(cpt != (int) jsonArrayParameters.size() - 1)
+                    filterParametersString += "<br />";
+
+                filterData.parametersValue[filterParameterID] = filterParameterValue;
+            }
+        }        
+        Wt::WContainerWidget* containerWidget = new Wt::WContainerWidget();
+        containerWidget->addWidget(new Wt::WText(filterParametersString));
+        containerWidget->setContentAlignment(Wt::AlignmentFlag::AlignLeft);
+        rowWidgets.push_back(containerWidget);    
+
+        m_filtersData[filterID] = filterData;
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[PluginsTableFilterWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[PluginsTableFilterWidget] JSON Type Exception";
+        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
     
     return rowWidgets;
 }
@@ -266,28 +281,44 @@ void PluginsTableFilterWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt:
     }
     
     if(result.isNull())
-        return;
-        
-    Wt::Json::Array& jsonArray = result;   
-    
-    for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
     {
-        Wt::Json::Object jsonObject = jsonArray.at(cpt);
-        
-        long long filterParameterID = jsonObject.get("id");
-        new Wt::WText(getFilterParameterName(filterParameterID) + " : <br />", paramsContainer);
-        
-        Wt::WLineEdit* lineEdit = new Wt::WLineEdit(paramsContainer);
-        if(filterID > 0)
-            lineEdit->setText(m_filtersData[filterID].parametersValue[filterParameterID]);
-        
-        Wt::WString wsName = jsonObject.get("name");
-        lineEdit->setAttributeValue("name", wsName);
-        
-        inputName->push_back(lineEdit);        
-        
-        new Wt::WText("<br />", paramsContainer);
+        return;
     }
+    
+    try    
+    {
+        Wt::Json::Array& jsonArray = result;   
+
+        for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+        {
+            Wt::Json::Object jsonObject = jsonArray.at(cpt);
+
+            long long filterParameterID = jsonObject.get("id");
+            new Wt::WText(getFilterParameterName(filterParameterID) + " : <br />", paramsContainer);
+
+            Wt::WLineEdit* lineEdit = new Wt::WLineEdit(paramsContainer);
+            if(filterID > 0)
+                lineEdit->setText(m_filtersData[filterID].parametersValue[filterParameterID]);
+
+            Wt::WString wsName = jsonObject.get("name");
+            lineEdit->setAttributeValue("name", wsName);
+
+            inputName->push_back(lineEdit);        
+
+            new Wt::WText("<br />", paramsContainer);
+        }
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[PluginsTableFilterWidget] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[PluginsTableFilterWidget] JSON Type Exception";
+        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    
 }
 
 void PluginsTableFilterWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)

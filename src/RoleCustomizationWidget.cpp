@@ -133,8 +133,8 @@ void RoleCustomizationWidget::getRoles(boost::system::error_code err, const Wt::
     if (!err) {
         if (response.status() >= 200 && response.status() < 300) {
             Wt::Json::Value result;
-            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
             try {
+                Wt::Json::Array& result1 = Wt::Json::Array::Empty;
                 Wt::Json::parse(response.body(), result);
                 result1 = result;
                 //descriptif
@@ -421,8 +421,8 @@ void RoleCustomizationWidget::getPlugins(boost::system::error_code err, const Wt
     if (!err) {
         if (response.status() >= 200 && response.status() < 300) {
             Wt::Json::Value result;
-            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
             try {
+                Wt::Json::Array& result1 = Wt::Json::Array::Empty;
                 Wt::Json::parse(response.body(), result);
                 result1 = result;
                 //descriptif
@@ -550,8 +550,8 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
     if (!err) {
         if (response.status() >= 200 && response.status() < 300) {
             Wt::Json::Value result;
-            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
             try {
+                Wt::Json::Array& result1 = Wt::Json::Array::Empty;
                 Wt::Json::parse(response.body(), result);
                 result1 = result;
                 //descriptif

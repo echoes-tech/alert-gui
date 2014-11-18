@@ -38,13 +38,14 @@
     <message id="Alert.alert.add-title-box-plugin">Plugin</message>
     <message id="Alert.alert.add-title-box-info">Information</message>
     <message id="Alert.alert.add-title-box-key">Key</message>
+    <message id="Alert.alert.add-title-box-flapping">Flapping</message>
+    <message id="Alert.alert.add-title-operator">Ope.</message>
     <message id="Alert.alert.add-button-add-critera">Add criteria</message>
     <message id="Alert.alert.add-last-info">
             <p>Last info value :&nbsp;</p>
     </message>
-    <message id="Alert.alert.add-compare">
-            <p>Compare criteria</p>
-    </message>
+    <message id="Alert.alert.add-compare">Compare criteria</message>
+    
     <message id="Alert.alert.button-save-continue">Save and continue</message>
     <message id="Alert.alert.message-true">True</message>
     <message id="Alert.alert.message-false">False</message>
@@ -69,6 +70,43 @@
     <message id="Alert.alert.form.sms">SMS</message>
     <message id="Alert.alert.form.push">PUSH</message>
     
+    <message id="Alert.alert.form.alert-per">alert per </message>
+    <message id="Alert.alert.form.alert-max">Max. </message>
+    <message id="Alert.alert.form.alert-unit-min">min.</message>
+    <message id="Alert.alert.form.alert-unit-hour">hour</message>
+    <message id="Alert.alert.form.alert-unit-day">day</message>
+    <message id="Alert.alert.form.thresh-duration">Threshold duration</message>
+    
+    <message id="Alert.alert.form.start">Start at</message>
+    <message id="Alert.alert.form.duration">Duration</message>
+    <message id="Alert.alert.form.timeslot">Time slots</message>
+    <message id="Alert.alert.form.add-timeslot">Save</message>
+    
+    <message id="Alert.alert.form.all-days">Everyday</message>
+    <message id="Alert.alert.form.all-months">Every months</message>
+    <message id="Alert.alert.form.summary">Summary: </message>
+    <message id="Alert.alert.form.days">days</message>
+    <message id="Alert.alert.form.months">months</message>
+    <message id="Alert.alert.form.mon">monday</message>
+    <message id="Alert.alert.form.thu">thursday</message>
+    <message id="Alert.alert.form.wed">wednesday</message>
+    <message id="Alert.alert.form.tue">tuesday</message>
+    <message id="Alert.alert.form.fri">friday</message>
+    <message id="Alert.alert.form.sat">saturday</message>
+    <message id="Alert.alert.form.sun">sunday</message>
+    <message id="Alert.alert.form.jan">january</message>
+    <message id="Alert.alert.form.feb">february</message>
+    <message id="Alert.alert.form.mar">march</message>
+    <message id="Alert.alert.form.apr">april</message>
+    <message id="Alert.alert.form.may">may</message>
+    <message id="Alert.alert.form.jun">june</message>
+    <message id="Alert.alert.form.jul">july</message>
+    <message id="Alert.alert.form.aug">august</message>
+    <message id="Alert.alert.form.sep">september</message>
+    <message id="Alert.alert.form.oct">october</message>
+    <message id="Alert.alert.form.nov">november</message>
+    <message id="Alert.alert.form.dec">december</message>
+        
     <message id="Alert.alert.operator.lt">Less</message>
     <message id="Alert.alert.operator.le">Less or equal</message>
     <message id="Alert.alert.operator.eq">Equal</message>
@@ -180,6 +218,11 @@
             <span>
                 <i class='icon-remove icon-white'></i>
             </span>
+        </div>
+    </message>
+    <message id="Alert.alert.success-button">
+        <div class="btn-success">
+            <i class='icon-remove icon-white'></i>
         </div>
     </message>
     <message id="Alert.alert.valid.template">

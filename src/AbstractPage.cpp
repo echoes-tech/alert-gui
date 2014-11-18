@@ -397,9 +397,10 @@ void AbstractPage::addResourcePopup()
 
     popupFinalization(dialogAdd_, 0);
 
-    dialogAdd_->finished().connect(bind([ = ] (){
-                                        popupCheck(inputName, errorMessage, dialogAdd_, -1);
-                                        return;
+    dialogAdd_->finished().connect(bind([ = ] ()
+    {
+        popupCheck(inputName, errorMessage, dialogAdd_, -1);
+        return;
     }));
     dialogAdd_->show();
 }
@@ -416,7 +417,6 @@ void AbstractPage::modifResourcePopup(long long id)
     for (map<long long, vector_widget>::iterator itTable = m_rowsTable.begin();
             itTable != m_rowsTable.end(); itTable++)
     {
-
         unsigned int cpt(0);
         if (itTable->first == id)
         {
@@ -697,27 +697,39 @@ int AbstractPage::addCustomResourceTable(long long id, int rowTable, int columnT
     return columnTable;
 }
 
-void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
+void AbstractPage::saveButtonFooter(Wt::WDialog *dialog)
 {
-    Wt::WPushButton *footerOkButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-save"),
+    Wt::WPushButton *saveButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-save"),
                                                           dialog->footer());
     if (getFooterOkButtonStatus())
     {
-        footerOkButton->clicked().connect(dialog, &Wt::WDialog::accept);
-        footerOkButton->setAttributeValue("style", "margin-left:12px");
+        saveButton->clicked().connect(dialog, &Wt::WDialog::accept);
+        saveButton->setAttributeValue("style", "margin-left:12px");
     }
     else
     {
-        footerOkButton->disable();
-    }
+        saveButton->disable();
+    }    
+}
 
-
-
-
-    Wt::WPushButton *footerCancelButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-cancel"),
+void AbstractPage::cancelButtonFooter(Wt::WDialog *dialog)
+{
+    Wt::WPushButton *cancelButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-cancel"),
                                                               dialog->footer());
-    footerCancelButton->clicked().connect(dialog, &Wt::WDialog::reject);
-    footerCancelButton->setAttributeValue("style", "margin-left:12px;");
+    cancelButton->clicked().connect(dialog, &Wt::WDialog::reject);
+    cancelButton->setAttributeValue("style", "margin-left:12px;");
+}
+
+void AbstractPage::customButtonFooter(Wt::WDialog *dialog)
+{
+    
+}
+
+void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
+{
+    customButtonFooter(dialog);
+    saveButtonFooter(dialog);
+    cancelButtonFooter(dialog);
 }
 
 // Set/Get attribut to init or option. -------------------------------------
@@ -1422,8 +1434,7 @@ int AbstractPage::setValidatorType(int jsonType, int specialType, int mandatory)
     type = type << 4;
     /* add isMandatory == true: 0001 0001 0000 becomes 0001 0001 0001 */
     type += mandatory;
-    
-    
+        
     return (type);
 }
 

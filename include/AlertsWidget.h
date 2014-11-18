@@ -44,8 +44,9 @@ public:
     AlertsWidget(Echoes::Dbo::Session *session, std::string apiUrl);
 
     void                        popupAddWidget(Wt::WDialog *dialog, long long id);
+    void                        fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *boxesTable);
+    void                        updateCriteriaSummaryTable();
     void                        popupRecipients(std::string nameAlert, std::string message);
-    void                        popupNewRecipientsRework(std::string nameAlert, std::string message);
     
     std::vector<std::string>    getTitlesTableWidget();
     std::vector<std::string>    getTitlesTableText();
@@ -90,8 +91,6 @@ protected:
     virtual void                setDisplayedTitlesPopups();
 
 private:
-
-    void                        initAlertValueDefinitionPopup();
     void                        setBox(Wt::WSelectionBox *box, Wt::WStandardItemModel *model);
     void                        assetSelected();
     void                        pluginSelected();
@@ -99,6 +98,7 @@ private:
     void                        fillModels();
     void                        fillModel(Wt::WStandardItemModel * model, std::map<long long, std::string> m_mapNames);
     void                        sortModels();
+    void                        setDevicesSelection();
 
     std::vector<long long>      boxActived(Wt::WSelectionBox *box, std::multimap<long long, std::pair<long long, std::string>>  infoInBox, std::multimap<long long, long long> compId, long long id);
 
@@ -108,8 +108,6 @@ private:
     void                        cleanBox(Wt::WSelectionBox *box);
 
     void                        changeButtonAddCriteriaState();
-    void                        handleAddCriteria();
-    void                        addCompareWidget(long long assetID, long long pluginID, long long infoID);
     void                        createItemsCriteriaComboBox(long long id, Wt::WString criterion, Wt::WStandardItemModel *model);
     Wt::WComboBox               *createCompareCriteriaComboBox(long long type);
 
@@ -139,6 +137,12 @@ private:
         RTPLUGIN = 2,
         RTINFORMATION = 3,
         RTCRITERIA = 4
+    };
+    
+    enum ETimeUnit {
+        MIN = 0,
+        HOUR = 1,
+        DAY = 2
     };
     
     //ids
@@ -184,50 +188,83 @@ private:
         long long   timer;
         std::string message;
     };
-    
+  
     // alerts criterion
-    //FIXME: 
+    
     struct AlertCriterion {
-        long long unitTypeID;
-        int index;
-        long long assetID;
-        long long pluginID;
-        long long criteriaID;
-        long long infoID;
-        Wt::WComboBox* operatorComboBox;
-        Wt::WLineEdit* lineEditValue;
-        Wt::WComboBox* comboBoxCriteria;
-        Wt::WValidator* validatorCriteria;
-        Wt::WButtonGroup* groupTrueFalse;
-        Wt::WTemplate* templateValid;
-        CriterionResponse smsRsp;
-        CriterionResponse emailRsp;
-        CriterionResponse mobileappRsp;
+        long long   unitTypeID;
+        long long   assetID;
+        long long   pluginID;
+        long long   infoID;
+        long long   criteriaID;
+        int         ope;
+        int         flappingDuration;
+        int         flappingUnit;
+        Wt::WString keyValue;
+        Wt::WString value;
+        std::map<long long, struct CriterionResponse> response;
+    };
+        
+    struct TimeSlot
+    {
+        int start;
+        int duration;
+        bool everyday;
+        bool everymonth;
+        std::vector<std::pair<bool, Wt::WString>> days;
+        std::vector<std::pair<bool, Wt::WString>> months;
+    };
+    
+    struct Message
+    {
+        long long                       receiverId;
+        long long                       mediaId;
+        long long                       timer;
+        Wt::WString                     *str;
+        std::vector<struct TimeSlot>    timeSlots;
+    };
+    
+    struct Aliases
+    {
+        Wt::WString *email;
+        Wt::WString *sms;
+        Wt::WString *mobile;
     };
     
     std::vector<AlertCriterion> m_alertCriteria;
     // end alert setting attributes
+    
+    // Footer buttons
+    void customButtonFooter(Wt::WDialog *dialog);
+    void saveButtonFooter(Wt::WDialog *dialog);
     
     // Check validity
     Wt::WRegExpValidator *validateCriterionType(long long unitType);
     
     // clear messages
     void clearMessages();
-    
-    // get criteria
-    void getCriteriaSelection();
-    
+        
     // get aliases
     void getAliases(long long userRoleId);
     
     // generic http ask get
     void httpAsk(long long userRoleId, long long mediaType, long long requestType, long long criteria);
 
+    // popupRecipients associated functions
+    void initDateStructs();
+    void initTimeSlotsTables(Wt::WDialog *dialog);
+    void timeSlotsUnfocused();
+    void timeSlotsSummary(long long id);
+    void reInitCheckboxesDates(std::vector<std::pair<Wt::WCheckBox*, Wt::WText*>> &datesCheckBox);
+
+    // select Media interactions
+    void saveTimeSlots(std::vector<struct TimeSlot> &timeSlots);
+    void setSelectInteractions(int id);
+    
     // Build message
-    void updateTabContent(long long mediaType);
+    void updateTabContent(Wt::WString message, long long mediaType, long long requestType, long long criteria);
     void updateMessage(std::string &tabContent, Wt::WString &message, unsigned long criteria);
     void getRequestRsp(long long requestType, Wt::WString message, CriterionResponse &response);
-    void getMediaRsp(Wt::WString message, long long mediaType, long long requestType, long long criteria);
     
     // Generic http response get
     void handleHttpResponse(Wt::Json::Value result, long long mediaType, long long requestType, long long criteria, long long userRoleId);
@@ -249,26 +286,11 @@ private:
         SELECT = 3,
     };
     
-    struct Message
-    {
-        long long       receiverId;
-        long long       mediaId;
-        long long       timer;
-        Wt::WString     *str;
-    };
-    
-    struct Aliases
-    {
-        Wt::WString *email;
-        Wt::WString *sms;
-        Wt::WString *mobile;
-    };
-    
     Echoes::Dbo::Session        *m_session;
     std::string                 m_apiUrl;
     Wt::Json::Value             m_alerts;
     
-    int             time_;
+    std::vector<struct TimeSlot> m_timeSlots;
     long long       m_rowReceiver;
     long long       m_rowMedia;
     
@@ -292,11 +314,27 @@ private:
     std::vector<long long>                  m_mediaIds;
     
     
+    /* first popup */
+    Wt::WTable      *m_criteriaSummaryTable;
+    
+    /* second popup */
+    long long       m_currentMedia;
+    Wt::WTable      *m_timeSlotsSummary;
     Wt::WTextArea   *m_messageArea;
     Wt::WLineEdit   *m_timer;
     Wt::WTable      *m_messageTable;
+    Wt::WTable      *m_timeSlotsTable;
+    Wt::WAnchor     *m_addTimeSlot;
     Wt::WText       *m_messageReceiver;
     Wt::WText       *m_messageMedia;
+    
+    int                                                 m_rowCount;
+    Wt::WText                                           *m_startHour;
+    Wt::WText                                           *m_duration;
+    Wt::WCheckBox                                       *m_everyDay;
+    Wt::WCheckBox                                       *m_everyMonth;
+    std::vector<std::pair<Wt::WCheckBox*, Wt::WText*>>  m_days;
+    std::vector<std::pair<Wt::WCheckBox*, Wt::WText*>>  m_months;
     
     std::multimap<long long, long long>                                                 m_mediaUserRelation;
     std::multimap<long long, std::pair<long long, std::string>>                         userInfo_;

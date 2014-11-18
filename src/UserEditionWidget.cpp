@@ -30,7 +30,6 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
     setButtonSup(true);
 //    setLocalTable(true);
     
-    Wt::log("info") << "i iz retard";
     string nameSpe = type == 1 ? "mail" : type == 2 ? "sms" : type == 3 ? "push" : "error";
 //    this->setNameSpecial(nameSpe);
     
@@ -43,7 +42,6 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
     undidNames.push_back("last_name");
     setUndidName(undidNames);
     setTitles(titles);
-    Wt::log("info") << "i less retard";
     
     list<list<pair<string, vector<string>>>> listsUrl;
     list<pair<string, vector<string>>> listUrl;

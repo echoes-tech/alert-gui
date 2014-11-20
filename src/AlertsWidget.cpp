@@ -219,13 +219,18 @@ void AlertsWidget::timeSlotsSummary(long long id)
             }
             else
             {
+                bool sep = false;
                 for (std::vector < std::pair<bool, Wt::WString>>::iterator itD = itTS->days.begin(); itD != itTS->days.end(); ++itD)
                 {
-                    if (itD != itTS->days.begin())
+                    if (itD->first == true)
                     {
-                        daySummary += ", ";
+                        if (sep == true)
+                        {
+                            daySummary += ", ";
+                        }
+                        daySummary += itD->second;
+                        sep = true;
                     }
-                    daySummary += itD->second;
                 }
             }
             m_timeSlotsSummary->elementAt(i, 2)->addWidget(new Wt::WText(daySummary));
@@ -238,13 +243,18 @@ void AlertsWidget::timeSlotsSummary(long long id)
             }
             else
             {
+                bool sep = false;
                 for (std::vector < std::pair<bool, Wt::WString>>::iterator itM = itTS->months.begin(); itM != itTS->months.end(); ++itM)
                 {
-                    if (itM != itTS->months.begin())
+                    if (itM->first == true)
                     {
-                        monthSummary += ", ";
+                        if (sep == true)
+                        {
+                            monthSummary += ", ";
+                        }
+                        monthSummary += itM->second;
+                        sep = true;
                     }
-                    monthSummary += itM->second;
                 }
             }
             Wt::WTemplate *removeButton = new Wt::WTemplate(Wt::WString::tr("Alert.alert.remove-button"));
@@ -928,29 +938,36 @@ void AlertsWidget::checkNewPopupRecipientsRework(string initialMessage)
             message += ",\n\"duration\": " + boost::lexical_cast<string>(itTS->duration);
             message += ",\n\"days\": \"";
             int i = 1;
+            bool sep = false;
             for (std::vector<std::pair<bool, Wt::WString>>::const_iterator itD = itTS->days.begin() ; itD != itTS->days.end() ; ++itD)
             {
-                if (itD != itTS->days.begin())
+                if (itD->first == true)
                 {
-                    message += ",";
-                }
-                
-                if (itD->first != 0)
-                {
+                    if (sep == true)
+                    {
+                        message += ",";
+                    }
+                    
                     /* (i % 7) because cron set sunday at 0 */
                     message += boost::lexical_cast<string>(itD->first * (i % 7));
+                    sep = true;
                 }
                 ++i;
             }
             message += "\",\n\"months\": \"";
             i = 1;
-            for (std::vector<std::pair<bool, Wt::WString>>::const_iterator itD = itTS->months.begin() ; itD != itTS->months.end() ; ++itD)
+            sep = false;
+            for (std::vector<std::pair<bool, Wt::WString>>::const_iterator itM = itTS->months.begin() ; itM != itTS->months.end() ; ++itM)
             {
-                if (itD != itTS->months.begin())
+                if (itM->first == true)
                 {
-                    message += ",";
+                    if (sep == true)
+                    {
+                        message += ",";
+                    }
+                    message += boost::lexical_cast<string>(itM->first * i);
+                    sep = true;
                 }
-                message += boost::lexical_cast<string>(itD->first * i);
                 ++i;
             }
             message +=  "\"\n}";

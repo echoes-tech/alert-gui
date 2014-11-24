@@ -163,6 +163,12 @@ void MainWidget::createMenuItem(C enumC, Wt::WMenu *submenu, std::string iconStr
 
     
     newMenuItem->setPathComponent(enumC.value());
+    
+    std::string objectNamePrefix("menu-");
+    for (auto it = newMenuItem->children().begin() ; it != newMenuItem->children().end() ; ++it)
+    {
+        (*it)->setObjectName(objectNamePrefix + enumC.value());
+    }
     submenu->addItem(newMenuItem);
 }
 

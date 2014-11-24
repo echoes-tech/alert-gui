@@ -66,6 +66,7 @@ void EchoesHome::initSession()
 
 void EchoesHome::initAuth()
 {
+    std::cout << "== initAuth ==" << std::endl;
     this->authModel = new SpecializedAuthModel(Echoes::Dbo::Session::auth(),this->session->users(), this);
     this->authModel->addPasswordAuth(&Echoes::Dbo::Session::passwordAuth());
     this->authModel->addOAuth(Echoes::Dbo::Session::oAuth());
@@ -74,6 +75,43 @@ void EchoesHome::initAuth()
     this->authWidget->setModel(this->authModel);
     this->authWidget->setRegistrationEnabled(true);
     this->addWidget(this->authWidget);
+    
+    Wt::WFormModel *LoginNameModel = new Wt::WFormModel();
+    LoginNameModel->setObjectName("LoginNameField");
+    this->authWidget->updateModelField(LoginNameModel, this->authModel->LoginNameField);
+    
+    Wt::WFormModel *PasswordModel = new Wt::WFormModel();
+    PasswordModel->setObjectName("PasswordField");
+    this->authWidget->updateModelField(PasswordModel, this->authModel->PasswordField);
+        
+    this->authWidget->childrenChanged().connect(bind([ = ] () {
+        bool isLogin = true;
+        for (auto it = this->authWidget->children().begin() ; it != this->authWidget->children().end() ; ++it)
+        {
+            Wt::WLineEdit *lineEdit;
+            lineEdit = (Wt::WLineEdit*) dynamic_cast<Wt::WLineEdit*> (*it);
+            
+            if (lineEdit != NULL)
+            {
+                if (isLogin == true)
+                {
+                    lineEdit->setObjectName("login");
+                    isLogin = false;
+                }
+                else
+                {
+                    lineEdit->setObjectName("password");
+                }
+            }
+            
+            Wt::WPushButton *pushButton;
+            pushButton = (Wt::WPushButton*) dynamic_cast<Wt::WPushButton*> (*it);
+            if (pushButton != NULL)
+            {
+                pushButton->setObjectName("pushButton");
+            }
+        }
+    }));
 }
 
 void EchoesHome::initHeader()

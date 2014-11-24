@@ -148,6 +148,7 @@ Wt::WContainerWidget *AbstractPage::createTableFirstHeader()
         addPopupAddHandler(headerButton);
         headerButton->setStyleClass("button-add btn");
         headerButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
+        headerButton->setObjectName("add-button");
     }
     return headerTableContainer;
 }
@@ -358,6 +359,9 @@ void AbstractPage::addResourcePopup()
                 //FIXME
                 input->setValidator(AbstractPage::editValidator(fullType));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
+                
+                std::string fieldName("input" + boost::lexical_cast<string>(cpt));
+                input->setObjectName(fieldName);
                 inputName->push_back(input);
             }
             else if (jsonType == ETypeJson::boolean)
@@ -677,6 +681,10 @@ void AbstractPage::addGenericButtonsToResourceTable(long long id, int rowTable, 
         delButton->setTextFormat(Wt::XHTMLUnsafeText);
         delButton->setText("<span class='input-group-btn'><i class='icon-remove icon-white'></i></span>");
         delButton->clicked().connect(boost::bind(&AbstractPage::deleteResource, this, id));
+        
+        std::string objectName("del-button" + boost::lexical_cast<string> (rowTable));
+        delButton->setObjectName(objectName);
+        
         m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(Wt::WLength(5, Wt::WLength::Percentage)));
         m_resourceTable->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
     }
@@ -705,6 +713,7 @@ void AbstractPage::saveButtonFooter(Wt::WDialog *dialog)
     {
         saveButton->clicked().connect(dialog, &Wt::WDialog::accept);
         saveButton->setAttributeValue("style", "margin-left:12px");
+        saveButton->setObjectName("save-button");
     }
     else
     {
@@ -1146,6 +1155,7 @@ Wt::WDialog *AbstractPage::deleteResource(long long id)
                                    + m_xmlPageName + ".button-confirm"),
                                 box->footer());
     ok->clicked().connect(box, &Wt::WDialog::accept);
+    ok->setObjectName("button-confirm");
     ok->setAttributeValue("style", "margin-left:12px");
 
     Wt::WPushButton *annul =

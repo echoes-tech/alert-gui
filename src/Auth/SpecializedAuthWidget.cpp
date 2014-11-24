@@ -22,10 +22,12 @@ Wt::WWidget * SpecializedAuthWidget::createRegistrationView(const Wt::Auth::Iden
   registrationModel_ = createRegistrationModel();
 
   if (id.isValid())
+  {
     registrationModel_->registerIdentified(id);
+  }
 
   SpecializedRegistrationWidget *w = new SpecializedRegistrationWidget(this);
   w->setModel(registrationModel_);
-
+  
   return w;
 }

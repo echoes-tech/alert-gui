@@ -2408,14 +2408,24 @@ void AlertsWidget::updateMessage(std::string &tabContent, Wt::WString &message, 
 
 void AlertsWidget::updateTabContent(Wt::WString message, long long mediaType, long long requestType, long long criteria)
 {
+    if (m_alertCriteria[criteria].response.find(mediaType) == m_alertCriteria[criteria].response.end())
+    {
+        struct CriterionResponse response;
+        m_alertCriteria[criteria].response.insert(std::make_pair(mediaType, response));
+    }
     getRequestRsp(requestType, message, m_alertCriteria[criteria].response.at(mediaType));
      
+    std::cout << "== updateTabContent ==" << std::endl;
     // TO DO - adapt for a vector of medias instead of this m_tabContent...
     switch (mediaType)
     {
         case Enums::EMedia::email:
         {
+            std::cout << ":: email ::" << std::endl;
             m_tabContentMessageMail.clear();
+            
+            std::cout << "criteria :" << boost::lexical_cast<string> (criteria) << std::endl;
+            std::cout << "m_alertCriteria size :" << boost::lexical_cast<string> (m_alertCriteria.size()) << std::endl;
             updateMessage(m_tabContentMessageMail, m_alertCriteria[criteria].response.at(mediaType).message, criteria);
             break;
         }

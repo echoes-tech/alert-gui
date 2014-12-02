@@ -69,6 +69,7 @@ void PluginsTableSearchWidget::fillModel(Wt::Json::Value result, Wt::WComboBox* 
             }
         }
     }
+    searchTypeComboBox->setObjectName("searchComboBox");
     searchTypeComboBox->changed().connect(boost::bind(&PluginsTableSearchWidget::sendRequestPopupAdd, this, functorHandleRequestPopupAdd, searchTypeComboBox, searchID));        
     sendRequestPopupAdd(functorHandleRequestPopupAdd, searchTypeComboBox, searchID);
 }

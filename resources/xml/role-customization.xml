@@ -52,7 +52,7 @@
                     <div class="span3">
                         ${plugins-combo-box}
                     </div>
-                    <div class="span8 no-padding"></div>
+                    <div class="span7 no-padding"></div>
                     <div class="span1">
                         ${plugins-load-button}
                     </div>

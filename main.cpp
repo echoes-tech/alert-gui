@@ -28,8 +28,7 @@
 #include "Conf.h"
 
 // This globale is version of web site.
-//std::string      EchoesHome::version_g = "1.0.0 RC2";
-std::string      EchoesHome::version_g = "1.3.0";
+std::string      EchoesHome::version_g = "1.4.0";
 
 //---------------------------------------------------------------------------
 

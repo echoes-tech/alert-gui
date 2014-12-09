@@ -14,6 +14,7 @@
  */
 
 #include <boost/lexical_cast.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 #include "PluginsTableFilterWidget.h"
 
@@ -324,7 +325,7 @@ void PluginsTableFilterWidget::handleRequestPopupAdd(Wt::Json::Value result, Wt:
 void PluginsTableFilterWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
 {
     vector<Wt::WInteractWidget*>::iterator it = argument->begin();
-        
+    
     message->addBodyText("{");
     message->addBodyText("\n\"search_id\": " + boost::lexical_cast<string>(m_pluginsTableSearchWidget->getSelectedID()));
     message->addBodyText(",\n\"type_id\": " + m_filterTypeStandardItemModel->item(((Wt::WComboBox*)(*it++))->currentIndex(), 1)->text().toUTF8());
@@ -333,11 +334,10 @@ void PluginsTableFilterWidget::setAddResourceMessage(Wt::Http::Message *message,
     {
         string name = ((Wt::WLineEdit*)(*it))->attributeValue("name").toUTF8();
         string value = ((Wt::WLineEdit*)(*it++))->text().toUTF8();
-        message->addBodyText(",\n\"" + name + "\": \"" + value + "\"");
+        message->addBodyText(",\n\"" + name + "\": \"" + boost::property_tree::json_parser::create_escapes(value) + "\"");
     }
     
     message->addBodyText("\n}");
-    Wt::log("test") << message->body();
 }
 
 void PluginsTableFilterWidget::setModifResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
@@ -354,7 +354,7 @@ void PluginsTableFilterWidget::setModifResourceMessage(Wt::Http::Message *messag
         }        
         string name = ((Wt::WLineEdit*)(*it))->attributeValue("name").toUTF8();
         string value = ((Wt::WLineEdit*)(*it++))->text().toUTF8();
-        message->addBodyText("\n\"" + name + "\": \"" + value + "\"");
+        message->addBodyText("\n\"" + name + "\": \"" + boost::property_tree::json_parser::create_escapes(value) + "\"");
     }
     
     message->addBodyText("\n}");

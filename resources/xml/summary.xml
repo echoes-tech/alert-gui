@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+	
+    <message id="Alert.summary.welcome-message">Welcome on Echoes Alert !</message>
+    
+    <message id="Alert.summary.alerts-sent">Alerts sent</message>
+    <message id="Alert.summary.alert-date">Date</message>
+    <message id="Alert.summary.alert-media">Recipient</message>
+    <message id="Alert.summary.alert-name">Alert name</message>
+    <message id="Alert.summary.alert-code">Code</message>
+    <message id="Alert.summary.alert-message">Message sent</message>
+    <message id="Alert.summary.alert-type">Type</message>
+    <message id="Alert.summary.alert-status">Status</message>
+    
+	<message id="Alert.summary.board.template">
+	    
+	    <h3>${tr:Alert.summary.welcome-message} 
+            <img src="resources/themes/bootstrap/img/customer_logo.png" alt="" style="float:right; width:200px; margin-right:1%"></img>
+            
+        </h3>  
+        
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    ${alerts-sent}
+                </div>
+<!--                <div class="span6">
+                    ${welcome}
+                </div>-->
+            </div>
+        </div>
+  	</message>
+</messages>

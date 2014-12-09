@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+    
+
+  <!-- BaseAuth, PasswordAuth and OAuth models -->
+
+  <message id="Wt.Auth.error-invalid-token">L'opération n'a pu être effectuée : jeton non valide.</message>
+  <message id="Wt.Auth.error-token-expired">L'opération n'a pu être effectuée : le jeton a expiré.</message>
+  <message id="Wt.Auth.mail-sent">Un e-mail a été envoyé. Suivez les instructions pour définir un nouveau mot de passe.</message>
+  <message id="Wt.Auth.info-email-confirmed">Votre adresse e-mail est maintenant confirmée.</message>
+
+  <message id="Wt.Auth.passwdqc.reason-error">
+    Vérification échouée
+  </message>
+  <message id="Wt.Auth.passwdqc.reason-same">
+    Identique au précédent
+  </message>
+  <message id="Wt.Auth.passwdqc.reason-similar">
+    Basé sur le précédent
+  </message>
+  <message id="Wt.Auth.passwdqc.reason-short">
+    Trop court
+  </message>
+  <message id="Wt.Auth.passwdqc.reason-long">
+    Trop long
+  </message>
+  <message id="Wt.Auth.passwdqc.reason-simpleshort">
+    Pas assez de caractères ou de types de caractères différents pour cette longueur
+  </message>
+  <message id="Wt.Auth.passwdqc.reason-simple">
+    Pas assez de caractères ou de types de caractères différents
+  </message>
+  <message id="Wt.Auth.passwdqc.reason-personal">
+    Basé sur une information personnelle
+  </message>
+  <message id="Wt.Auth.passwdqc.reason-word">
+    Basé sur un mot de dictionnaire et non un mot de passe
+  </message>
+  <message id="Wt.Auth.passwdqc.reason-seq">
+    Basé sur une suite de caractères commune
+  </message>
+
+  <message id="Wt.Auth.GoogleService.badresponse">
+    <p>Désolé, impossible de se connecter en utilisant votre compte Google.</p>
+    <small>
+      <p>Le serveur d'identification de Google a généré une réponse inattendue.</p>
+    </small>
+  </message>
+
+  <message id="Wt.Auth.FacebookService.badresponse">
+    <p>Désolé, impossible de se connecter en utilisant votre compte Facebook.</p>
+    <small>
+      <p>Le serveur d'identification de Facebook a généré une réponse inattendue.</p>
+    </small>
+  </message>
+
+  <!-- LoginWidget -->
+
+  <message id="Wt.Auth.login-form-title">Connexion</message>
+  <message id="Wt.Auth.login-form-info"></message>
+  <message id="Wt.Auth.user-name">Nom d'utilisateur</message>
+  <message id="Wt.Auth.user-name-info">Saisissez votre nom d'utilisateur</message>
+  <message id="Wt.Auth.first-name">Prénom</message>
+  <message id="Wt.Auth.first-name-info">Saisissez votre prénom</message>
+  <message id="Wt.Auth.last-name">Nom de famille</message>
+  <message id="Wt.Auth.last-name-info">Saisissez votre nom de famille</message>
+  <message id="Wt.Auth.user-name-invalid">Invalide</message>
+  <message id="Wt.Auth.email">Adresse e-mail</message>
+  <message id="Wt.Auth.email-info">Saisissez votre adresse e-mail</message>
+  <message id="Wt.Auth.optional-email-info">
+    Saisissez votre adresse e-mail (optionnelle)
+  </message>
+  <message id="Wt.Auth.password">Mot de passe</message>
+  <message id="Wt.Auth.password-info">Saisissez votre mot de passe</message>
+  <message id="Wt.Auth.remember-me">Se souvenir de moi</message>
+  <message id="Wt.Auth.remember-me-info.days">
+    Rester connecté {1} jours
+  </message>
+  <message id="Wt.Auth.remember-me-info.weeks">
+    Rester connecté {1} semaines
+  </message>
+  <message id="Wt.Auth.lost-password">Mot de passe oublié</message>
+  <message id="Wt.Auth.mail-invalid">Adresse email non valide. Il peut s'agir d'une adresse non confirmée lors de l'inscription ou d'une adresse incorrecte.</message>
+  <message id="Wt.Auth.login">Connexion</message>
+  <message id="Wt.Auth.logout">Déconnexion</message>
+  <message id="Wt.Auth.throttle-retry">Réessayez dans {1}s</message>
+
+  <!-- RegistrationWidget -->
+
+  <message id="Wt.Auth.registration-form-title">Inscription</message>
+  <message id="Wt.Auth.registration-form-info">Merci de compléter les informations suivantes pour vous inscrire.</message>
+  <message id="Wt.Auth.password-or-oauth-registration"><h3>Register using a user name and password:</h3></message>
+  <message id="Wt.Auth.oauth-registration"><h3>Register with an identity provider:</h3></message>
+  <message id="Wt.Auth.or-oauth-registration"><h3>Or, register with an identity provider:</h3></message>
+  <message id="Wt.Auth.valid">Valide</message>
+  <message id="Wt.Auth.choose-password">Mot de passe</message>
+  <message id="Wt.Auth.choose-password-info">Choisissez un mot de passe</message>
+  <message id="Wt.Auth.repeat-password">Confirmez-le</message>
+  <message id="Wt.Auth.repeat-password-info">Re-saisissez le mot de passe</message>
+  <message id="Wt.Auth.email-invalid">Adresse e-mail invalide</message>
+  <message id="Wt.Auth.email-exists">E-mail déjà enregistré</message>
+  <message id="Wt.Auth.oauth">Votre compte</message>
+  <message id="Wt.Auth.oauth-info">Choisissez l'un de vos comptes</message>
+  <message id="Wt.Auth.user-name-exists">Utilisateur déjà existant</message>
+  <message id="Wt.Auth.confirm-is-you">Cet utilisateur existe, est-ce vous ?</message>
+  <message id="Wt.Auth.user-name-tooshort">Taille min. {1} caractères</message>
+  <message id="Wt.Auth.password-tooshort">Taille min. {1} caractères</message>
+  <message id="Wt.Auth.passwords-dont-match">Les mots de passes ne correspondent pas</message>
+  <message id="Wt.Auth.registration">Inscription</message>
+  <message id="Wt.Auth.register">S'inscrire</message>
+  <message id="Wt.Auth.error-user-invalid">Inscription échouée.</message>
+
+  <!-- PasswordPromptDialog -->
+
+  <message id="Wt.Auth.enter-password">Saisissez votre mot de passe</message>
+  <message id="Wt.Auth.password-prompt-form-title">Saisissez votre mot de passe</message>
+  <message id="Wt.Auth.password-prompt-form-info"></message>
+  <message id="Wt.Auth.password-invalid">Mot de passe invalide</message>
+
+  <!-- UpdatePasswordWidget -->
+
+  <message id="Wt.Auth.updatepassword">Mise à jour de mot de passe</message>
+  <message id="Wt.Auth.update-password-form-title">Mise à jour de mot de passe</message>
+  <message id="Wt.Auth.update-password-form-info">Saisissez un nouveau mot de passe ci-dessous</message>
+  <message id="Wt.Auth.old-password">Mot de passe actuel</message>
+  <message id="Wt.Auth.old-password-info">Saisissez votre mot de passe actuel</message>
+  <message id="Wt.Auth.new-password">Nouveau mot de passe</message>
+  <message id="Wt.Auth.repeat-new-password">Confirmez-le</message>
+  <message id="Wt.Auth.repeat-new-password-info">Re-saisissez votre nouveau mot de passe</message>
+
+  <!-- LostPasswordDialog -->
+
+  <message id="Wt.Auth.lostpassword">Mot de passe oublié ? Pas de panique !</message>
+  <message id="Wt.Auth.lost-password-form-title">Récupérez votre mot de passe</message>
+  <message id="Wt.Auth.lost-password-form-info">Veuillez indiquer ci-dessous l'adresse e-mail
+  que vous avez utilisé lors de votre inscription.
+  Un courriel vous sera envoyé avec les instructions pour saisir un nouveau mot de passe.
+  </message>
+  <message id="Wt.Auth.send">Envoyer</message>
+
+  <!-- Message boxes -->
+
+  <message id="Wt.Auth.error">Erreur</message>
+  <message id="Wt.Auth.notice">Remarque</message>
+  
+  <!-- Emails -->
+
+  <message id="Wt.Auth.confirmmail.subject">[Echoes Alert] Activation du compte utilisateur</message>
+
+  <message id="Wt.Auth.confirmmail.body">
+Bonjour {1},
+
+Nous vous remercions de votre inscription et vous souhaitons la bienvenue sur Echoes Alert.
+
+Veuillez cliquer sur lien pour valider votre inscription ou copier et coller l'URL
+suivante dans votre navigateur : (Note : assurez-vous de copier l'URL complète,
+y compris toute partie qui pourrait être sur une seconde ligne.)
+
+https://alert.echoes-tech.com/auth/mail/{2}
+
+Merci d'utiliser Echoes Alert !
+
+L'équipe Echoes Alert.
+http://alert.echoes-tech.com/
+
+© 2012, Echoes Technologies
+  </message>
+
+  <message id="Wt.Auth.confirmmail.htmlbody">
+    <h3>Bonjour {1},</h3>
+
+    <p>Nous vous remercions de votre inscription et vous souhaitons la bienvenue sur Echoes Alert.</p>
+ 
+    <p>Veuillez <a href="https://alert.echoes-tech.com/auth/mail/{2}">cliquer ici pour valider</a> votre
+    inscription ou copier et coller l'URL suivante dans votre
+    navigateur : <i>(Note : assurez-vous de copier l'URL complète,
+    y compris toute partie qui pourrait être sur une seconde ligne.)</i></p>
+    
+    <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
+
+    <p>Merci d'utiliser Echoes Alert !</p>
+
+    <p>
+        L'équipe Echoes Alert.
+        <br />
+        <a href="http://alert.echoes-tech.com/" title="Echoes Alert">http://alert.echoes-tech.com/</a>
+    </p>
+
+    <p><i>© 2012, Echoes Technologies</i></p>
+  </message>
+
+  <message id="Wt.Auth.lostpasswordmail.subject">[Echoes Alert] Instructions de récupération de mot de passe</message>
+
+  <message id="Wt.Auth.lostpasswordmail.body">
+Bonjour {1},
+
+Ce courriel vous a été envoyé car quelqu'un (est-ce bien vous ?)
+a indiqué qu'il souhaitait choisir un nouveau mot de passe.
+
+Si vous êtes effectivement l'auteur de cette demande, alors vous pouvez
+choisir un nouveau mot de passe en cliquant sur le lien suivant ou en copiant
+l'URL dans votre navigateur. Si vous n'avez pas demandé cela, vous pouvez
+ignorer ce courriel et le jeter en toute sécurité.
+
+Veuillez cliquer sur lien ou copier et coller l'URL suivante 
+dans votre navigateur : (Note : assurez-vous de copier l'URL complète,
+y compris toute partie qui pourrait être sur une seconde ligne.)
+ 
+https://alert.echoes-tech.com/auth/mail/{2}
+
+Merci d'utiliser Echoes Alert !
+
+L'équipe Echoes Alert.
+http://alert.echoes-tech.com/
+
+© 2012, Echoes Technologies
+  </message>
+
+  <message id="Wt.Auth.lostpasswordmail.htmlbody">
+    <h3>Bonjour {1},</h3>
+
+    <p>Ce courriel vous a été envoyé car quelqu'un (est-ce bien vous ?)
+    a indiqué qu'il souhaitait choisir un nouveau mot de passe.</p>
+
+    <p>Si vous êtes effectivement l'auteur de cette demande, alors vous pouvez
+    choisir un nouveau mot de passe en cliquant sur le lien suivant ou en
+    copiant l'URL dans votre navigateur. Si vous n'avez pas demandé cela, vous
+    pouvez ignorer ce courriel et le jeter en toute sécurité.</p>
+ 
+    <p>
+      Veuillez <a href="https://alert.echoes-tech.com/auth/mail/{2}">cliquer
+      ici pour choisir un nouveau mot de passe</a> ou copier et coller l'URL
+      suivante dans votre navigateur : <i>(Note : assurez-vous de copier l'URL
+      complète, y compris toute partie qui pourrait être sur une seconde ligne.
+      )</i>
+    </p>
+
+    <b>https://alert.echoes-tech.com/auth/mail/{2}</b>
+
+    <p>Merci d'utiliser Echoes Alert !</p>
+
+    <p>
+        L'équipe Echoes Alert.
+        <br />
+        <a href="http://alert.echoes-tech.com/" title="Echoes Alert">
+          http://alert.echoes-tech.com/
+        </a>
+    </p>
+
+    <p><i>© 2012, Echoes Technologies</i></p>
+  </message>
+</messages>

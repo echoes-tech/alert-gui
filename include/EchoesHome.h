@@ -20,7 +20,6 @@
 #include <Wt/WContainerWidget>
 #include <Wt/WServer>
 
-#include <Wt/Auth/AuthModel>
 #include <Wt/Auth/PasswordService>
 #include <Wt/WLabel>
 #include <Wt/WText>
@@ -39,6 +38,8 @@
 #include <Wt/WTable>
 
 #include "Conf.h"
+#include "Auth/SpecializedAuthModel.h"
+#include "Auth/SpecializedAuthWidget.h"
 
 class EchoesHome : public Wt::WContainerWidget 
 {
@@ -50,6 +51,8 @@ class EchoesHome : public Wt::WContainerWidget
 
         // This globale is version of web site. Init in main.c.
         static std::string version_g;
+        
+        Wt::WWidget * displayPasswordChangeWidget();
 
     private:
         Echoes::Dbo::Session *session;
@@ -60,8 +63,8 @@ class EchoesHome : public Wt::WContainerWidget
 
         void handleInternalPath(const std::string &internalPath);
 
-        Wt::Auth::AuthWidget *authWidget;
-        Wt::Auth::AuthModel *authModel;
+        SpecializedAuthWidget *authWidget;
+        SpecializedAuthModel *authModel;
         Wt::WText *title;
     //    Wt::WContainerWidget *topContainer;
         Wt::WHBoxLayout *topBoxLoggedInLayout;

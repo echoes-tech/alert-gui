@@ -10,7 +10,7 @@
 RecipientsWidget::RecipientsWidget(Echoes::Dbo::Session *session, std::string apiUrl)
 {
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use("recipients",false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "recipients",false);
     session_ = session;
     apiUrl_ = apiUrl;
     newClass_ = false;
@@ -30,11 +30,11 @@ void    RecipientsWidget::update()
        templateFormView->bindWidget("resource-table", tab);
 
        UserEditionWidget *uewMail = new UserEditionWidget(session_, apiUrl_, 1);
-       uewMail->getResourceList();
+       uewMail->updatePage();
        UserEditionWidget *uewSMS = new UserEditionWidget(session_, apiUrl_, 2);
-       uewSMS->getResourceList();
+       uewSMS->updatePage();
        UserEditionWidget *uewPush = new UserEditionWidget(session_, apiUrl_, 3);
-       uewPush->getResourceList();
+       uewPush->updatePage();
        
        Wt::WMenuItem *tabMail = tab->addTab(uewMail, "Mail");
        tabMail->setStyleClass("recipients recipients-radius-left");

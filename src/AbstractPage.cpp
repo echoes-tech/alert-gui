@@ -16,49 +16,58 @@
 
 #include <Wt/WStandardItemModel>
 #include <Wt/WStandardItem>
+#include <bits/stl_vector.h>
 
 #include "AbstractPage.h"
 
 using namespace std;
 
-AbstractPage::AbstractPage(Echoes::Dbo::Session *session, string apiUrl, string pageName)
+const std::string AbstractPage::xmlDirectory = "resources/xml/";
+
+AbstractPage::AbstractPage(Echoes::Dbo::Session *session, string apiUrl, string pageName, bool selectable)
 : Wt::WTemplateFormView(Wt::WString::tr("Alert." + pageName + ".Management.template"))
 {
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use(pageName, false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + pageName, false);
 
+    m_hasAddButton = true;
+    m_autoUpdate = true;
     m_xmlPageName = pageName; // XML name
     m_isDeleteButtonPresent = true; // Button delete
     m_isModifButtonPresent = true; // Button modifi
-//    m_isMainPage = true; // Dialog/True
-    m_nameResourcePageSpec = ""; // when more one class use same xml file.
+    //    m_isMainPage = true; // Dialog/True
     m_session = session;
-    m_undidName = "name";
+    
+    m_undidNames.push_back("name");
     m_footerOkButtonActive = true;
+    m_selectable = selectable;
+    m_selectedID = 0;
     setApiUrl(apiUrl);
-    
-    
-//    _timer = new Wt::WTimer(this);
-//    _timer->setInterval(5) ;
-//    _timer->timeout().connect(boost::bind(&AbstractPage::updatePage, this)) ;
-//    _timer->start() ;
 }
 
-AbstractPage::~AbstractPage() {}
-
-void AbstractPage::updatePage(bool getResources)
+AbstractPage::~AbstractPage()
 {
-    if (m_nameResourcePageSpec.empty())
-    {
-        m_nameResourcePageSpec = m_xmlPageName;
-    }
-    if (getResources)
+}
+
+void AbstractPage::updatePage()
+{
+    if (m_autoUpdate)
     {
         getResourceList();
-    }
+    }    
+}
 
+void AbstractPage::fillTable()
+{
+    if (m_selectable && m_selectedID == 0)
+    {
+        m_selectedID = m_rowsTable.begin()->first;
+    }
     createTable();
-   
+    for (size_t i(0); i < m_pagesToUpdate.size(); ++i)
+    {
+        m_pagesToUpdate[i]->updatePage();
+    }
 }
 
 void AbstractPage::clearStructures()
@@ -69,12 +78,13 @@ void AbstractPage::clearStructures()
 void AbstractPage::getResourceList()
 {
     clearStructures();
-    recursiveGetResources();
+    boost::function<void (vectors_Json)> functorHandleJsonGets = boost::bind(&AbstractPage::handleJsonGet, this, _1);   
+    recursiveGetResources(m_listsUrl, functorHandleJsonGets);  
 }
 
 void AbstractPage::setResources(vector_pair resources)
 {
-    this->m_resources = resources;
+    m_resources = resources;
 }
 
 vector_pair AbstractPage::getResources() const
@@ -84,12 +94,32 @@ vector_pair AbstractPage::getResources() const
 
 void AbstractPage::setResourceTable(Wt::WTable* resourceTable)
 {
-    this->m_resourceTable = resourceTable;
+    m_resourceTable = resourceTable;
 }
 
 Wt::WTable* AbstractPage::getResourceTable() const
 {
     return m_resourceTable;
+}
+
+void AbstractPage::setSelectedID(long long selectedID)
+{
+    m_selectedID = selectedID;
+}
+
+long long AbstractPage::getSelectedID()
+{
+    return m_selectedID;
+}
+
+void AbstractPage::setAddButtonEnable(bool enable)
+{
+    m_buttonAddEnable = enable;
+}
+
+void AbstractPage::addPageToUpdate(AbstractPage* abstractPage)
+{
+    m_pagesToUpdate.push_back(abstractPage);
 }
 
 void AbstractPage::createTable()
@@ -106,23 +136,25 @@ Wt::WContainerWidget *AbstractPage::createTableFirstHeader()
 {
     Wt::WContainerWidget *headerTableContainer = new Wt::WContainerWidget();
     headerTableContainer->addStyleClass("widget-title header-pers");
+    
     new Wt::WText("<span class='icon'><i class='icon-tasks'></i></span><h5>"
-                  + tr("Alert." + m_xmlPageName + ".add-form." + m_nameResourcePageSpec)
+                  + tr("Alert." + m_xmlPageName + ".main-table")
                   + "</h5>", headerTableContainer);
 
-      Wt::WAnchor *headerButton = new Wt::WAnchor(headerTableContainer);
-//    if (m_isMainPage) //gkr: popup is created  in popupWindow.
-//    {
-        headerButton->clicked().connect(boost::bind(&AbstractPage::addResourcePopup, this));
-//    }
-//    else // gkr: Input is created in createBodyTable, showInputForAdd() is there just for show this.
-//    {
-//        headerButton->clicked().connect(boost::bind(&AbstractPage::showInputForAdd, this));
-//    }
+    if (m_hasAddButton)
+    {
+        Wt::WAnchor *headerButton = new Wt::WAnchor(headerTableContainer);
 
-    headerButton->setStyleClass("button-add btn");
-    headerButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
+        addPopupAddHandler(headerButton);
+        headerButton->setStyleClass("button-add btn");
+        headerButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
+    }
     return headerTableContainer;
+}
+
+void AbstractPage::addPopupAddHandler(Wt::WInteractWidget* widget)
+{
+    widget->clicked().connect(boost::bind(&AbstractPage::addResourcePopup, this));
 }
 
 Wt::WContainerWidget *AbstractPage::createTableBody()
@@ -143,17 +175,23 @@ Wt::WContainerWidget *AbstractPage::createTableBody()
     return resourceTableContainer;
 }
 
+void AbstractPage::tableHandler(long long id)
+{
+    m_selectedID = id;
+    updatePage();
+}
+
 Wt::WContainerWidget *AbstractPage::createTableFooter()
 {
 
-        
+
     Wt::WContainerWidget *footerTable = new Wt::WContainerWidget();
     footerTable->addStyleClass("fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix footer-pers");
 
-//    new Wt::WText(tr("Alert." + m_xmlPageName + ".search-bar"), footerTable);
+    //    new Wt::WText(tr("Alert." + m_xmlPageName + ".search-bar"), footerTable);
 
-//    Wt::WNavigationBar *navBar = new Wt::WNavigationBar(footerTable);
-//    navBar->addStyleClass("paginate-edit");
+    //    Wt::WNavigationBar *navBar = new Wt::WNavigationBar(footerTable);
+    //    navBar->addStyleClass("paginate-edit");
 
     return footerTable;
 }
@@ -165,7 +203,7 @@ void AbstractPage::addTableSecondHeader()
     int columnTable(0);
 
     m_resourceTable->elementAt(0, 0)->setAttributeValue("style", "border-left:0;");
-    for (multimap<int, string>::iterator it = m_titles.begin(); it != m_titles.end(); it++)
+    for (std::vector<std::pair <int, string>>::iterator it = m_titles.begin(); it != m_titles.end(); it++)
     {
         new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*it).second),
                       m_resourceTable->elementAt(0, columnTable++));
@@ -184,11 +222,12 @@ void AbstractPage::addTableSecondHeader()
 
 void AbstractPage::fillBodyTable()
 {
+    int tmp;
     int columnTable(0);
     int rowBodyTable(1);
-    
+
     for (multimap<long long, vector_widget>::iterator itRowTable = m_rowsTable.begin();
-            itRowTable != m_rowsTable.end() ;itRowTable++)
+            itRowTable != m_rowsTable.end(); itRowTable++)
     {
         columnTable = 0;
         m_resourceTable->elementAt(rowBodyTable, columnTable)->setAttributeValue("style", "border-left:0;");
@@ -198,24 +237,24 @@ void AbstractPage::fillBodyTable()
                     k != m_rowsTable.find(itRowTable->first)->second.end(); k++)
             {
                 Wt::WInteractWidget *widgetAdd = *k;
-                string nameRessource("N2Wt5WTextE");
-                if (nameRessource.compare(typeid (*widgetAdd).name()) == 0)
+                const string test("N2Wt5WTextE");
+                if (test.compare(typeid (*widgetAdd).name()) == 0)
                 {
-                    nameRessource = ((Wt::WText*)(widgetAdd))->text().toUTF8();
-                    string newName = nameRessource;
+                    wstring nameRessource = ((Wt::WText*)(widgetAdd))->text().value();
+                    wstring newName = nameRessource;
                     if (newName.find('|') != string::npos)
                     {
-                        vector<string> dataline;
+                        vector<wstring> dataline;
                         boost::split(dataline, newName, boost::is_any_of("|"));
                         newName.clear();
                         nameRessource.clear();
-                        for (vector<string>::iterator it = dataline.begin();
+                        for (vector<wstring>::iterator it = dataline.begin();
                                 it != dataline.end(); it++)
                         {
-                            string resizeString = (*it);
-                            if (((string)(*it)).find('<') == string::npos)
+                            wstring resizeString = (*it);
+                            if (((wstring)(*it)).find('<') == wstring::npos)
                             {
-                                nameRessource += (*it) + "\n";
+                                nameRessource += (*it) + L"\n";
                                 if (resizeString.size() > (unsigned int) (SIZE_NAME / m_titles.size()))
                                 {
                                     resizeString.resize(SIZE_NAME / m_titles.size());
@@ -234,25 +273,43 @@ void AbstractPage::fillBodyTable()
                             newName.resize(newName.size() + 3, '.');
                         }
                     }
-                    Wt::WText *newColumn = new Wt::WText(Wt::WString::fromUTF8(newName),
+                    Wt::WText *newColumn = new Wt::WText(Wt::WString(newName),
                                                          m_resourceTable->elementAt(rowBodyTable, columnTable));
                     newColumn->setTextFormat(Wt::TextFormat::XHTMLUnsafeText);
                     newColumn->setToolTip(nameRessource);
-                    columnTable++;
                 }
                 else
                 {
                     m_resourceTable->elementAt(rowBodyTable, columnTable)->addWidget(widgetAdd);
                     m_resourceTable->elementAt(rowBodyTable, columnTable)->setContentAlignment(Wt::AlignCenter);
-                    m_resourceTable->elementAt(rowBodyTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
-                    columnTable++;
+                    //m_resourceTable->elementAt(rowBodyTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
                 }
+                columnTable++;
+            }
+            tmp = columnTable;
+            columnTable = addCustomResourceTable((*itRowTable).first, rowBodyTable, columnTable);
+            while (tmp != columnTable)
+            {
+                tmp = columnTable;
+                columnTable = addCustomResourceTable((*itRowTable).first, rowBodyTable, columnTable);
             }
             m_resources.push_back(pair<int, Wt::WTableRow*>(0, m_resourceTable->rowAt(rowBodyTable)));
             addGenericButtonsToResourceTable((*itRowTable).first, rowBodyTable, columnTable);
+            if (m_selectable)
+            {
+                long long id = itRowTable->first;
+                for (int column = 0; column < m_resourceTable->columnCount(); column++)
+                {
+                    m_resourceTable->elementAt(rowBodyTable, column)->clicked().connect(boost::bind(&AbstractPage::tableHandler, this, id));
+                    if (m_selectedID == id)
+                    {
+                        m_resourceTable->elementAt(rowBodyTable, column)->decorationStyle().setBackgroundColor(*(new Wt::WColor(250, 180, 80)));
+                    }
+                }
+            }
             rowBodyTable++;
         }
-        
+
     }
 }
 
@@ -260,69 +317,72 @@ void AbstractPage::fillBodyTable()
 
 void AbstractPage::popupAddWidget(Wt::WDialog *dialog, long long id)
 {
-    
+
 }
 
 //add a combo box to a popup (add / modify) FIXME: only if here is one and only one combobox to add
-Wt::WComboBox *AbstractPage::popupAdd(Wt::WDialog *dialog) 
-{   
+
+Wt::WComboBox *AbstractPage::popupAdd(Wt::WDialog *dialog)
+{
     return new Wt::WComboBox(dialog->contents());
 }
 
 void AbstractPage::addResourcePopup()
 {
     Wt::WLineEdit *input;
-    vector<Wt::WInteractWidget*> inputName;
+    vector<Wt::WInteractWidget*>* inputName = new vector<Wt::WInteractWidget*>();
     vector<Wt::WText*> errorMessage;
 
-    Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".add-" + m_nameResourcePageSpec));
+    Wt::WDialog *dialogAdd_ = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".popup-add"));
+    dialogAdd_->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
 
     int cpt(0);
-    for (multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
+    for (std::vector<std::pair <int, string>>::iterator title = m_displayedTitlesPopups.begin();
             title != m_displayedTitlesPopups.end(); title++)
     {
-        if (title->first >= 0)
+        /* see setValidatorType and editValidator for better understanding */
+        int jsonType = (title->first >> 8) & 0xF;
+        int fullType = title->first;
+            
+        if (jsonType != ETypeJson::widget)
         {
             new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
                           + " : <br />", dialogAdd_->contents());
 
-            if (title->first == ETypeJson::text)
+            if (jsonType == ETypeJson::text)
             {
-                input = new Wt::WLineEdit(dialogAdd_->contents());
+                Wt::WContainerWidget *inputCW = new Wt::WContainerWidget(dialogAdd_->contents());
+                inputCW->addStyleClass("control-group controls");
+                
+                input = new Wt::WLineEdit(inputCW);
                 //FIXME
-//                input->setValidator(editValidator(cpt));
+                input->setValidator(AbstractPage::editValidator(fullType));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-                input->setWidth(Wt::WLength(150));
-                if (inputName.size() == 0)
-                {
-                    input->setFocus();
-                }
-                inputName.push_back(input);
+                inputName->push_back(input);
             }
-            else if (title->first == ETypeJson::boolean)
+            else if (jsonType == ETypeJson::boolean)
             {
                 Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
-                inputName.push_back(checkBox);
+                inputName->push_back(checkBox);
             }
-            else if (title->first == ETypeJson::integer)
+            else if (jsonType == ETypeJson::number)
             {
                 input = new Wt::WLineEdit(dialogAdd_->contents());
-                input->setValidator(editValidator(cpt));
+                input->setValidator(AbstractPage::editValidator(fullType));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
-                input->setWidth(Wt::WLength(150));
-                if (inputName.size() == 0)
+                if (inputName->size() == 0)
                 {
                     input->setFocus();
                 }
-                inputName.push_back(input);
+                inputName->push_back(input);
             }
-            else if (title->first == ETypeJson::undid)
+            else if (jsonType == ETypeJson::undid)
             {
-                inputName.push_back(popupAdd(dialogAdd_));
+                inputName->push_back(popupAdd(dialogAdd_));
             }
-            else if (title->first == ETypeJson::object)
+            else if (jsonType == ETypeJson::object)
             {
-                inputName.push_back(popupAdd(dialogAdd_));
+                inputName->push_back(popupAdd(dialogAdd_));
             }
             Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                 + title->second),
@@ -337,7 +397,8 @@ void AbstractPage::addResourcePopup()
 
     popupFinalization(dialogAdd_, 0);
 
-    dialogAdd_->finished().connect(bind([ = ] (){
+    dialogAdd_->finished().connect(bind([ = ] ()
+    {
         popupCheck(inputName, errorMessage, dialogAdd_, -1);
         return;
     }));
@@ -346,38 +407,41 @@ void AbstractPage::addResourcePopup()
 
 void AbstractPage::modifResourcePopup(long long id)
 {
-    vector<Wt::WInteractWidget*> inputName;
+    vector<Wt::WInteractWidget*>* inputName = new vector<Wt::WInteractWidget*>();
     vector<Wt::WText*> errorMessage;
 
     //gkr: Init dialog popup
-    Wt::WDialog *dialogModif = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".modif-" + m_nameResourcePageSpec));
+    Wt::WDialog *dialogModif = new Wt::WDialog(tr("Alert." + m_xmlPageName + ".popup-modif"));
+    dialogModif->setMinimumSize(Wt::WLength(300), Wt::WLength::Auto);
+    
     for (map<long long, vector_widget>::iterator itTable = m_rowsTable.begin();
             itTable != m_rowsTable.end(); itTable++)
     {
-        
         unsigned int cpt(0);
         if (itTable->first == id)
         {
-        
+
             for (Wt::WInteractWidget *itElem : itTable->second)
             {
-                
-                multimap<int, string>::iterator title;
+
+                std::vector<std::pair <int, string>>::iterator title;
                 unsigned int correctTitlefinder = 0;
-                for(title = m_displayedTitlesPopups.begin(); title != m_displayedTitlesPopups.end() ; title++ )
+                for (title = m_displayedTitlesPopups.begin(); title != m_displayedTitlesPopups.end(); title++)
                 {
                     if (cpt == correctTitlefinder++)
                     {
                         break;
                     }
                 }
-                if (title->first >= 0)
+                if (((title->first >> 8) & 0xF) != ETypeJson::widget)
                 {
-                        new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + title->second)
-                                      + " : <br />", dialogModif->contents());                    
+                    new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + title->second)
+                                  + " : <br />", dialogModif->contents());
                 }
-                
-                switch (title->first)
+
+                int fullType = title->first;
+                int jsonType = (((title->first >> 8) & 0xF) > 0 ? (title->first >> 8) & 0xF : 0);
+                switch (jsonType)
                 {
                     case ETypeJson::text:
                     {
@@ -387,101 +451,139 @@ void AbstractPage::modifResourcePopup(long long id)
                         {
                             newName.resize(newName.size() + 3, '.');
                         }
-                        Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif->contents());
-                        // FIXME: ne marche pas quand c'est un mail / tel, cf. medias
-                        input->setValidator(editValidator(ETypeJson::text));
+                        
+                        Wt::WContainerWidget *inputCW = new Wt::WContainerWidget(dialogModif->contents());
+                        inputCW->addStyleClass("control-group controls");
+                        
+                        Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), inputCW);
+                        
+                        input->setValidator(AbstractPage::editValidator(fullType));
                         input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
-                        input->setWidth(Wt::WLength(150));
-                        if (inputName.size() == 0)
+                        if (inputName->size() == 0)
                         {
                             input->setFocus();
                         }
                         input->setToolTip(Wt::WString::fromUTF8(nameResource));
-                        inputName.push_back(input);
+                        inputName->push_back(inputCW);
                         Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
-                                                             + title->second), dialogModif->contents());
+                                                         + title->second), dialogModif->contents());
                         error2->hide();
                         errorMessage.push_back(error2);
                         new Wt::WText("<br />", dialogModif->contents());
                         break;
                     }
-                    case ETypeJson::integer:
+                case ETypeJson::number:
+                {
+                    string nameResource = ((Wt::WText*)(itElem))->text().toUTF8();
+                    string newName = nameResource;
+                    if (nameResource.size() > SIZE_NAME + SIZE_NAME)
                     {
-                        string nameResource = ((Wt::WText*)(itElem))->text().toUTF8();
-                        string newName = nameResource;
-                        if (nameResource.size() > SIZE_NAME + SIZE_NAME)
-                        {
-                            newName.resize(newName.size() + 3, '.');
-                        }
-                        Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), dialogModif->contents());
-                        input->setValidator(new Wt::WRegExpValidator(Wt::WString::fromUTF8("^[0123456789]+")));
-                        input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
-                        input->setWidth(Wt::WLength(150));
-                        if (inputName.size() == 0)
-                        {
-                            input->setFocus();
-                        }
-                        input->setToolTip(Wt::WString::fromUTF8(nameResource));
-                        inputName.push_back(input);
-                        Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
-                                                             + (*title).second), dialogModif->contents());
-                        error2->hide();
-                        errorMessage.push_back(error2);
-                        new Wt::WText("<br />", dialogModif->contents());
-                        break;
-                    }
-                    case ETypeJson::boolean:
-                    {
-                        unsigned int cpt2(0);
-                        for (vector_widget::iterator widgetAdd = itTable->second.begin();
-                                widgetAdd != itTable->second.end(); widgetAdd++)
-                        {
-                            if (cpt2 == cpt)
-                            {
-                                
-                                Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogModif->contents());
-                                new Wt::WText("<br />", dialogModif->contents());
-                                Wt::WCheckBox *originalCheckBox = (Wt::WCheckBox*)(*widgetAdd);
-                                if (originalCheckBox->checkState() == Wt::CheckState::Checked)
-                                {
-                                    checkBox->setChecked();
-                                }
-                                inputName.push_back(checkBox);
-                                break;
-                            }
-                            cpt2++;
-                        }
-                        break;
-                    }
-                    case ETypeJson::undid:
-                    {
-                        Wt::WComboBox *comboBox = popupAdd(dialogModif);
-                        unsigned int cpt2(0);
-                        for (vector_widget::iterator widg = itTable->second.begin();
-                                widg != itTable->second.end(); widg++)
-                        {
-                            Wt::WStandardItemModel *model = (Wt::WStandardItemModel*)comboBox->model();
-                            if (cpt2 == cpt)
-                            {
-                                for (int nb(0); nb < model->rowCount(); nb++)
-                                {
-                                    if (((Wt::WText*)(*widg))->text().toUTF8().compare(model->item(nb, 0)->text().toUTF8()) == 0)
-                                    {
-                                        comboBox->setCurrentIndex(nb);
-                                    }
-                                }
-                                inputName.push_back(comboBox);
-                                break;
-                            }
-                            cpt2++;
-                        }
-                        break;
-                    }
-                    default:
-                    {
-                        break;
+                        newName.resize(newName.size() + 3, '.');
                     }
                     
+                    Wt::WContainerWidget *inputCW = new Wt::WContainerWidget(dialogModif->contents());
+                    inputCW->addStyleClass("control-group controls");
+                    
+                    Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), inputCW);
+                    input->setValidator(AbstractPage::editValidator(fullType));
+                    input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
+                    input->setWidth(Wt::WLength(150));
+                    if (inputName->size() == 0)
+                    {
+                        input->setFocus();
+                    }
+                    input->setToolTip(Wt::WString::fromUTF8(nameResource));
+                    inputName->push_back(inputCW);
+                    Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
+                                                         + (*title).second), dialogModif->contents());
+                    error2->hide();
+                    errorMessage.push_back(error2);
+                    new Wt::WText("<br />", dialogModif->contents());
+                    break;
+                }
+                case ETypeJson::boolean:
+                {
+                    unsigned int cpt2(0);
+                    for (vector_widget::iterator widgetAdd = itTable->second.begin();
+                            widgetAdd != itTable->second.end(); widgetAdd++)
+                    {
+                        if (cpt2 == cpt)
+                        {
+
+                            Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogModif->contents());
+                            new Wt::WText("<br />", dialogModif->contents());
+                            Wt::WCheckBox *originalCheckBox = (Wt::WCheckBox*)(*widgetAdd);
+                            if (originalCheckBox->checkState() == Wt::CheckState::Checked)
+                            {
+                                checkBox->setChecked();
+                            }
+                            inputName->push_back(checkBox);
+                            break;
+                        }
+                        cpt2++;
+                    }
+                    break;
+                }
+                case ETypeJson::object:
+                {
+                    Wt::WComboBox *comboBox = popupAdd(dialogModif);
+                    unsigned int cpt2(0);
+                    for (vector_widget::iterator widg = itTable->second.begin(); widg != itTable->second.end(); widg++)
+                    {
+                        Wt::WStandardItemModel *model = (Wt::WStandardItemModel*)comboBox->model();
+                        if (cpt2 == cpt)
+                        {
+                            for (int nb(0); nb < model->rowCount(); nb++)
+                            {
+                                if (((Wt::WText*)(*widg))->text() == model->item(nb, 1)->text())
+                                {
+                                    comboBox->setCurrentIndex(nb);
+                                }
+                            }
+                            inputName->push_back(comboBox);
+                            break;
+                        }
+                        cpt2++;
+                    }
+                    if (comboBox->currentIndex() == -1)
+                    {
+                        comboBox->setCurrentIndex(0);
+                    }
+                    break;
+                }
+                case ETypeJson::undid:
+                {
+                    Wt::WComboBox *comboBox = popupAdd(dialogModif);
+                    unsigned int cpt2(0);
+                    for (vector_widget::iterator widg = itTable->second.begin(); widg != itTable->second.end(); widg++)
+                    {
+                        Wt::WStandardItemModel *model = (Wt::WStandardItemModel*)comboBox->model();
+                        if (cpt2 == cpt)
+                        {
+                            for (int nb(0); nb < model->rowCount(); nb++)
+                            {
+                                if (((Wt::WText*)(*widg))->text() == model->item(nb, 0)->text())
+                                {
+                                    comboBox->setCurrentIndex(nb);
+                                    break;
+                                }
+                            }
+                            inputName->push_back(comboBox);
+                            break;
+                        }
+                        cpt2++;
+                    }
+                    if (comboBox->currentIndex() == -1)
+                    {
+                        comboBox->setCurrentIndex(0);
+                    }
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+
                 }
 
                 title++;
@@ -492,16 +594,16 @@ void AbstractPage::modifResourcePopup(long long id)
         }
     }
 
-    popupFinalization(dialogModif ,id);
+    popupFinalization(dialogModif, id);
 
     dialogModif->finished().connect(bind([ = ] (){
-        popupCheck(inputName, errorMessage, dialogModif, id);
-        return;
+                                         popupCheck(inputName, errorMessage, dialogModif, id);
+                                         return;
     }));
     dialogModif->show();
 }
 
-void AbstractPage::popupCheck(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id)
+void AbstractPage::popupCheck(vector<Wt::WInteractWidget*>* inputName, vector<Wt::WText*> errorMessage, Wt::WDialog *dialog, long long id)
 {
     int check(0);
     if (dialog->result() == Wt::WDialog::Rejected)
@@ -510,12 +612,27 @@ void AbstractPage::popupCheck(vector<Wt::WInteractWidget*> inputName, vector<Wt:
     }
     else
     {
-        check = checkInput(inputName, errorMessage);
+        //check = checkInput(inputName, errorMessage);
     }
-    
+
+    for (vector<Wt::WInteractWidget*>::iterator itInput = inputName->begin() ; itInput != inputName->end() ; itInput++)
+    {
+        if ((Wt::WContainerWidget*) dynamic_cast <Wt::WContainerWidget*> (*itInput) != NULL)
+        {
+            Wt::WLineEdit* lineEdit = (Wt::WLineEdit*)(((Wt::WContainerWidget*)(*itInput))->widget(0));
+
+            if (lineEdit->validate() != Wt::WValidator::Valid)
+            {
+                dialog->show();
+                return ;
+            }
+            
+            *itInput = lineEdit;
+        }
+    }
     if (check == 0)
     {
-        id >= 0 ? modifResource(inputName, id) : addResource(inputName);
+        id > 0 ? modifResource(inputName, id) : addResource(inputName);
     }
     else if (check == 1)
     {
@@ -538,6 +655,7 @@ void AbstractPage::popupFinalization(Wt::WDialog *dialog, long long id)
 // Methodes useful ----------------------------------------
 
 // ToDo: refactor
+
 void AbstractPage::addGenericButtonsToResourceTable(long long id, int rowTable, int columnTable)
 {
     columnTable = addCustomButtonsToResourceTable(id, rowTable, columnTable);
@@ -547,14 +665,7 @@ void AbstractPage::addGenericButtonsToResourceTable(long long id, int rowTable, 
         modifButton->setAttributeValue("class", "btn btn-inverse");
         modifButton->setTextFormat(Wt::XHTMLUnsafeText);
         modifButton->setText("<span class='input-group-btn'><i class='icon-edit icon-white'></i></span>");
-//        if (m_isMainPage)
-//        {
-            modifButton->clicked().connect(boost::bind(&AbstractPage::modifResourcePopup, this, id));
-//        }
-//        else
-//        {
-//            modifButton->clicked().connect(boost::bind(&AbstractPage::inputForModif, this, id, rowTable, columnTable));
-//        }
+        addPopupModifHandler(modifButton, id);
         m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
         m_resourceTable->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
         columnTable++;
@@ -571,32 +682,54 @@ void AbstractPage::addGenericButtonsToResourceTable(long long id, int rowTable, 
     }
 }
 
+void AbstractPage::addPopupModifHandler(Wt::WInteractWidget* widget, long long id)
+{
+    widget->clicked().connect(boost::bind(&AbstractPage::modifResourcePopup, this, id));
+}
+
 int AbstractPage::addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable)
 {
     return columnTable;
 }
 
-void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
+int AbstractPage::addCustomResourceTable(long long id, int rowTable, int columnTable)
 {
-    Wt::WPushButton *footerOkButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-save"),
-                                              dialog->footer());
+    return columnTable;
+}
+
+void AbstractPage::saveButtonFooter(Wt::WDialog *dialog)
+{
+    Wt::WPushButton *saveButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-save"),
+                                                          dialog->footer());
     if (getFooterOkButtonStatus())
     {
-        footerOkButton->clicked().connect(dialog, &Wt::WDialog::accept);
-        footerOkButton->setAttributeValue("style", "margin-left:12px");
+        saveButton->clicked().connect(dialog, &Wt::WDialog::accept);
+        saveButton->setAttributeValue("style", "margin-left:12px");
     }
     else
     {
-        footerOkButton->disable();
-    }
-    
-    
-    
+        saveButton->disable();
+    }    
+}
 
-    Wt::WPushButton *footerCancelButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-cancel"),
-                                                 dialog->footer());
-    footerCancelButton->clicked().connect(dialog, &Wt::WDialog::reject);
-    footerCancelButton->setAttributeValue("style", "margin-left:12px;");
+void AbstractPage::cancelButtonFooter(Wt::WDialog *dialog)
+{
+    Wt::WPushButton *cancelButton = new Wt::WPushButton(tr("Alert." + m_xmlPageName + ".button-cancel"),
+                                                              dialog->footer());
+    cancelButton->clicked().connect(dialog, &Wt::WDialog::reject);
+    cancelButton->setAttributeValue("style", "margin-left:12px;");
+}
+
+void AbstractPage::customButtonFooter(Wt::WDialog *dialog)
+{
+    
+}
+
+void AbstractPage::addButtonsToPopupFooter(Wt::WDialog *dialog)
+{
+    customButtonFooter(dialog);
+    saveButtonFooter(dialog);
+    cancelButtonFooter(dialog);
 }
 
 // Set/Get attribut to init or option. -------------------------------------
@@ -611,12 +744,12 @@ map<long long, vector_widget> AbstractPage::getRowsTable()
     return m_rowsTable;
 }
 
-void AbstractPage::setUndidName(string undidName)
+void AbstractPage::setUndidName(std::vector<string> undidNames)
 {
-    m_undidName = undidName;
+    m_undidNames = undidNames;
 }
 
-void AbstractPage::setTitles(multimap<int, string> titles)
+void AbstractPage::setTitles(std::vector<std::pair <int, string>> titles)
 {
     m_titles = titles;
     setDisplayedTitlesPopups();
@@ -627,7 +760,7 @@ void AbstractPage::setDisplayedTitlesPopups()
     m_displayedTitlesPopups = m_titles;
 }
 
-void AbstractPage::setUrl(lists_string listsUrl)
+void AbstractPage::setUrl(list<list<pair<string, vector<string>>>> listsUrl)
 {
     m_listsUrl = listsUrl;
 }
@@ -640,11 +773,6 @@ void AbstractPage::setButtonModif(bool check)
 void AbstractPage::setButtonSup(bool check)
 {
     m_isDeleteButtonPresent = check;
-}
-
-void AbstractPage::setNameSpecial(string nameResourcePageSpec)
-{
-    m_nameResourcePageSpec = nameResourcePageSpec;
 }
 
 void AbstractPage::setApiUrl(string apiUrl)
@@ -669,115 +797,20 @@ void AbstractPage::setFooterOkButtonStatus(bool active)
 
 // -------- CALL RETURN API, HANDLE -----------
 
-
-void AbstractPage::handleJsonGet(vectors_Json jsonResources)
-{
-    m_rowsTable.clear();
-    vector<Wt::Json::Value> jsonResource;
-    try
+void AbstractPage::sendHttpRequestGet(string resource, vector<string> listParameter, boost::function<void (Wt::Json::Value)> functor)
+{    
+    string apiAddress = getApiUrl() + "/" + resource
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8();
+        
+    for(size_t i(0); i<listParameter.size(); i++)
     {
-        jsonResource = jsonResources.at(0);
-        if (jsonResource.size() > 0)
-        {
-            Wt::Json::Array& jsonArray = jsonResource.at(0);
-            for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
-            {
-                Wt::Json::Object jsonObject = jsonArray.at(cpt);
-                vector<Wt::WInteractWidget *> nameW;
-                for (multimap<int, string>::iterator itTitles = m_titles.begin();
-                        itTitles != m_titles.end(); itTitles++)
-                {
-                    switch (itTitles->first)
-                    {
-                    case ETypeJson::text:
-                    {
-                        Wt::WString wString = jsonObject.get(itTitles->second);
-                        Wt::WText *text = new Wt::WText(wString);
-                        text->setObjectName("text");
-                        nameW.push_back(text);
-                        break;
-                    }
-                    case ETypeJson::boolean:
-                    {
-                        bool boolean = jsonObject.get(itTitles->second);
-                        Wt::WCheckBox *checkBox = new Wt::WCheckBox();
-                        checkBox->setChecked(boolean);
-                        checkBox->setDisabled(true);
-                        nameW.push_back(checkBox);
-                        break;
-                    }
-                    case ETypeJson::integer:
-                    {
-                        int number = jsonObject.get(itTitles->second);
-                        nameW.push_back(new Wt::WText(boost::lexical_cast<string>(number)));
-                        break;
-                    }
-                    case ETypeJson::undid:
-                    {
-                        Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
-                        Wt::Json::Object nameObjet = jsonObjectParam.get(itTitles->second);
-                        Wt::WString name = nameObjet.get(m_undidName);
-                        Wt::WText *text = new Wt::WText(name);
-                        nameW.push_back(text);
-                        break;
-                    }
-                    case ETypeJson::object:
-                    {
-                        Wt::Json::Object subObject = jsonObject.get(itTitles->second);
-                        long long id = subObject.get("id");
-                        nameW.push_back(new Wt::WText(boost::lexical_cast<string>(id)));
-                        break;
-                    }
-                    }
-                    
-                }
-                long long id = jsonObject.get("id");
-                m_rowsTable.insert(make_pair(id, nameW));
-            }
-        }
-
-    }
-    catch (Wt::Json::ParseError const& e)
-    {
-        Wt::log("warning") << "[AbstractPage] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
-    catch (Wt::Json::TypeException const& e)
-    {
-        Wt::log("warning") << "[AbstractPage] JSON Type Exception";
-//            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
-    }
-}
-
-void AbstractPage::recursiveGetResources(vectors_Json jsonResource, lists_string listsUrl)
-{
-    if (listsUrl.size() == 0)
-    {
-        listsUrl = m_listsUrl;
+        apiAddress += "&" + listParameter[i];
     }
     
-    
-    if (listsUrl.begin()->begin()->find(":id") != string::npos)
-    {
-        list_string::iterator listUrl = listsUrl.begin()->begin();
-        listUrl->replace(listUrl->find(":id"), 3, boost::lexical_cast<string>(0));
-    }
-    
-    string credentialParametersFirstChar = "?";
-    if (listsUrl.begin()->begin()->find("?") != string::npos)
-    {
-        credentialParametersFirstChar = "&";
-    }
-    
-    string apiAddress = getApiUrl() + "/" + (*(*listsUrl.begin()).begin())
-            + credentialParametersFirstChar
-            + "login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
-            + "&token=" + m_session->user()->token.toUTF8()
-            + addParameter();
-
     Wt::log("debug") << "[GET] address to call : " << apiAddress;
     Wt::Http::Client *client = new Wt::Http::Client();
-    client->done().connect(boost::bind(&AbstractPage::handleHttpResponseGet, this, _1, _2, listsUrl, jsonResource, client));
+    client->done().connect(boost::bind(&AbstractPage::handleHttpResponseGet, this, _1, _2, client, functor));
     if (client->get(apiAddress))
     {
         Wt::WApplication::instance()->deferRendering();
@@ -788,19 +821,20 @@ void AbstractPage::recursiveGetResources(vectors_Json jsonResource, lists_string
     }
 }
 
-int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
-                                        lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client)
+void AbstractPage::handleHttpResponseGet(boost::system::error_code err,
+    const Wt::Http::Message& response, Wt::Http::Client *client, boost::function<void (Wt::Json::Value)> functor)
 {
     delete client;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
-        Wt::Json::Value result = Wt::Json::Value::Null;
         if (response.status() == 200)
         {
             try
             {
+                Wt::Json::Value result;
                 Wt::Json::parse(response.body(), result);
+                functor(result);
             }
             catch (Wt::Json::ParseError const& e)
             {
@@ -809,7 +843,6 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
                         + " Widget] Problems parsing JSON: " << response.body();
                 Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".parsing-error-title"),
                                       tr("Alert." + m_xmlPageName + ".parsing-error"), Wt::Ok);
-                return EXIT_FAILURE;
             }
             catch (Wt::Json::TypeException const& e)
             {
@@ -818,114 +851,237 @@ int AbstractPage::handleHttpResponseGet(boost::system::error_code err, const Wt:
                         + " Widget] JSON Type Exception: " << response.body();
                 Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".typexception-error-title"),
                                       tr("Alert." + m_xmlPageName + ".typexception-error"), Wt::Ok);
-                return EXIT_FAILURE;
             }
         }
-        if (response.status() == 200 || response.status() == 404)
+        else if (response.status() == 404)
         {
-            if (jsonResource.size() == 0)
-            {
-                jsonResource.push_back(vector<Wt::Json::Value>());
-            }
-            
-            if (jsonResource.begin()->size() == 0)
-            {
-                jsonResource.begin()->push_back(result);
-            }
-            else
-            {
-                jsonResource.back().push_back(result);
-            }
-
-            listsUrl.begin()->pop_front();
-            if (listsUrl.begin()->size() == 0)
-            {
-                listsUrl.pop_front();
-                jsonResource.push_back(vector<Wt::Json::Value>());
-            }
-            else if (listsUrl.begin()->begin()->find(":id") != string::npos && response.status() == 200)
-            {
-                try
-                {
-                    vector<Wt::Json::Value> itJ = jsonResource.back();
-                    Wt::Json::Array& result1 = itJ.back();
-                    list_string::iterator listUrl = listsUrl.begin()->begin();
-                    string saveUrl = (*listUrl);
-                    Wt::Json::Array::iterator itA = result1.begin();
-                    while (itA != result1.end() && saveUrl.compare((*listUrl)) == 0)
-                    {
-                        Wt::Json::Object jsonObject = (*itA);
-                        long long idJ = jsonObject.get("id");
-                        // On remplace celui en cours
-                        listUrl->replace(listUrl->find(":id"), 3, boost::lexical_cast<string>(idJ));
-                        // on ajoute des éléments pour les autres IDs
-                        if (++itA != result1.end())
-                        {
-                            listsUrl.begin()->push_back(saveUrl);
-                            listUrl++;
-                        }
-                    }
-                }
-                catch (Wt::Json::ParseError const& e)
-                {
-                    Wt::log("warning")
-                            << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                            + " Widget] JSON parse Exception: " << response.body();
-                }
-                catch (Wt::Json::TypeException const& e)
-                {
-                    Wt::log("warning")
-                            << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                            + " Widget] JSON Type Exception: " << response.body();
-                }
-            }
-            if (listsUrl.size() == 0)
-            {
-                handleJsonGet(jsonResource);
-                updatePage(false);
-            }
-            else if (response.status() == 200)
-            {
-                recursiveGetResources(jsonResource, listsUrl);
-            }
-            else if (response.status() == 404)
-            {
-                recursiveGetResources(jsonResource, listsUrl);
-            }
-
-            return EXIT_SUCCESS;
+            functor(Wt::Json::Value::Null);
         }
     }
     else
     {
         Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
-                                  + m_xmlPageName) + " Widget] Http::Client error: " 
-                           << response.body();
+                                       + m_xmlPageName) + " Widget] Http::Client get error: "
+                << response.body();
         Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
                               tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
     }
-    return EXIT_FAILURE;
 }
 
-string AbstractPage::addParameter()
+void AbstractPage::recursiveGetResources(list<list<pair<string, vector<string>>>> listsUrl, boost::function<void (vectors_Json)> functorToCallAtEnd, vectors_Json jsonResource)
 {
-    return "";
+    if (listsUrl.size() == 0)
+    {
+        functorToCallAtEnd(jsonResource);
+        return;
+    }
+
+    string resource = listsUrl.begin()->begin()->first;    
+    vector<string> listParameter = listsUrl.begin()->begin()->second;
+        
+    bool containID = resource.find(":id") != string::npos;
+    for (size_t i(0); i < listParameter.size(); i++)
+    {
+        containID |= listParameter[i].find(":id") != string::npos;
+    }
+    
+    if (containID)
+    {
+        vector<long long> listID;
+        if(jsonResource.back().back().isNull())
+        {
+            listID.push_back(0);
+        }
+        else
+        {
+            Wt::Json::Array& jsonArray = jsonResource.back().back();   
+            for (size_t i(0); i < jsonArray.size(); i++)
+            {
+                Wt::Json::Object jsonObject = jsonArray.at(i);
+                listID.push_back(jsonObject.get("id"));
+            }            
+        }
+        
+        listsUrl.begin()->pop_front();
+        
+        for (size_t i(0); i < listID.size(); i++)
+        {
+            long long id = listID[i];
+            
+            string newResource = resource;            
+            if(newResource.find(":id") != string::npos)
+            {
+                newResource.replace(newResource.find(":id"), 3, boost::lexical_cast<string>(id));
+            }
+            
+            vector<string> newListParameter;
+            for (size_t j(0); j < listParameter.size(); j++)
+            {
+                string newParameter = listParameter[j];                
+                if (newParameter.find(":id") != string::npos)
+                {
+                    newParameter.replace(newParameter.find(":id"), 3, boost::lexical_cast<string>(id));                    
+                }               
+                newListParameter.push_back(newParameter);                
+            }
+            
+            listsUrl.begin()->push_back(pair<string, vector<string>>(newResource, newListParameter));
+        }
+    }
+    
+    resource = listsUrl.begin()->begin()->first;
+    listParameter = listsUrl.begin()->begin()->second;
+    
+    boost::function<void (Wt::Json::Value)> functorHandleRecursiveGetResources = boost::bind(&AbstractPage::handleRecursiveGetResources, this, _1,
+                                                                                             listsUrl, functorToCallAtEnd, jsonResource);    
+    sendHttpRequestGet(resource, listParameter, functorHandleRecursiveGetResources);
 }
 
+void AbstractPage::handleRecursiveGetResources(Wt::Json::Value result, list<list<pair<string, vector<string>>>> listsUrl,
+                                                    boost::function<void (vectors_Json)> functorToCallAtEnd, vectors_Json jsonResource)
+{
+    if (jsonResource.size() == 0)
+    {
+        jsonResource.push_back(vector<Wt::Json::Value>());
+    }
+
+    jsonResource.back().push_back(result);
+    
+    listsUrl.begin()->pop_front();
+    if (listsUrl.begin()->size() == 0)
+    {
+        listsUrl.pop_front();
+        jsonResource.push_back(vector<Wt::Json::Value>());
+    }
+           
+    if (listsUrl.size() == 0)
+    {
+        functorToCallAtEnd(jsonResource);
+    }
+    else
+    {
+        recursiveGetResources(listsUrl, functorToCallAtEnd, jsonResource);
+    }
+}
+
+void AbstractPage::handleJsonGet(vectors_Json jsonResources)
+{
+    m_rowsTable.clear();
+    vector<Wt::Json::Value> jsonResource;
+    try
+    {
+        if(jsonResources.size() > 0)
+        {
+            jsonResource = jsonResources.at(0);
+            if (jsonResource.size() > 0 && !jsonResource.at(0).isNull())
+            {
+                bool selectedIDExist = false;
+                Wt::Json::Array& jsonArray = jsonResource.at(0);
+                for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
+                {
+                    Wt::Json::Object jsonObject = jsonArray.at(cpt);
+
+                    long long id = jsonObject.get("id");
+                    selectedIDExist |= id == m_selectedID;
+                    vector<Wt::WInteractWidget *> widgetsToAdd = initRowWidgets(jsonObject, jsonResource, cpt);
+                    if(!widgetsToAdd.empty())
+                    {
+                        m_rowsTable.insert(make_pair(id, widgetsToAdd));
+                    }
+                }
+                if(!selectedIDExist)
+                    m_selectedID = 0;
+            }
+        }
+    }
+    catch (Wt::Json::ParseError const& e)
+    {
+        Wt::log("warning") << "[AbstractPage] Problems parsing JSON";
+        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    catch (Wt::Json::TypeException const& e)
+    {
+        Wt::log("warning") << "[AbstractPage] JSON Type Exception";
+        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+    }
+    fillTable();
+}
+
+vector<Wt::WInteractWidget *> AbstractPage::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)
+{
+    vector<Wt::WInteractWidget *> rowWidgets;
+    for (std::vector<std::pair <int, string>>::iterator itTitles = m_titles.begin();
+            itTitles != m_titles.end(); itTitles++)
+    {
+        switch ((itTitles->first >> 8) & 0xF)
+        {
+            case ETypeJson::text:
+            {
+                Wt::WString wString = jsonObject.get(itTitles->second);
+                Wt::WText *text = new Wt::WText(wString);
+                text->setObjectName("text");
+                rowWidgets.push_back(text);
+                break;
+            }
+            case ETypeJson::boolean:
+            {
+                bool boolean = jsonObject.get(itTitles->second);
+                Wt::WCheckBox *checkBox = new Wt::WCheckBox();
+                checkBox->setChecked(boolean);
+                checkBox->setDisabled(true);
+                rowWidgets.push_back(checkBox);
+                break;
+            }
+            case ETypeJson::number:
+            {
+                int number = jsonObject.get(itTitles->second);
+                rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(number)));
+                break;
+            }
+            case ETypeJson::undid:
+            {
+                Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
+                Wt::Json::Object nameObjet = jsonObjectParam.get(itTitles->second);
+                string name;
+                for (std::vector<string>::const_iterator itNames = m_undidNames.begin() ; itNames != m_undidNames.end() ; itNames++)
+                {
+                    if (itNames != m_undidNames.begin())
+                    {
+                        name += " ";
+                    }
+                    
+                    std::string current = nameObjet.get(*itNames);
+                    name += current;
+                }
+                Wt::WText *text = new Wt::WText(name);
+                rowWidgets.push_back(text);
+                break;
+            }
+            case ETypeJson::object:
+            {
+                Wt::Json::Object subObject = jsonObject.get(itTitles->second);
+                long long id = subObject.get("id");
+                rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(id)));
+                break;
+            }
+        }
+    }
+    return rowWidgets;
+}
 
 // ---- ADD MODIF DELETE ----------
 
-void AbstractPage::addResource(vector<Wt::WInteractWidget*> argument)
+void AbstractPage::addResource(vector<Wt::WInteractWidget*>* argument)
 {
     // Post resource -------
     Wt::Http::Message *message = new Wt::Http::Message();
-    
-    setAddResourceMessage(message,argument);
 
-    string apiAddress = getApiUrl() + "/" + (*m_listsUrl.begin()->begin())
-    + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+    setAddResourceMessage(message, argument);
+
+    string apiAddress = getApiUrl() + "/" + m_listsUrl.begin()->begin()->first
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
             + "&token=" + m_session->user()->token.toUTF8();
-    
+
     Wt::Http::Client *client = new Wt::Http::Client(this);
     client->done().connect(boost::bind(&AbstractPage::postResourceCallback, this, _1, _2, client));
 
@@ -941,18 +1097,18 @@ void AbstractPage::addResource(vector<Wt::WInteractWidget*> argument)
     }
 }
 
-void AbstractPage::setAddResourceMessage(Wt::Http::Message *message, vector<Wt::WInteractWidget*> argument)
+void AbstractPage::setAddResourceMessage(Wt::Http::Message *message, vector<Wt::WInteractWidget*>* argument)
 {
-    message->addBodyText("{\n\t\"name\": \"" + ((Wt::WLineEdit*)(*argument.begin()))->text().toUTF8() + "\"\n}");
+    message->addBodyText("{\n\t\"name\": \"" + ((Wt::WLineEdit*)(*argument->begin()))->text().toUTF8() + "\"\n}");
 }
 
-void AbstractPage::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
+void AbstractPage::modifResource(vector<Wt::WInteractWidget*>* arguments, long long id)
 {
     Wt::Http::Message *message = new Wt::Http::Message();
-    
-    setModifResourceMessage(message,arguments);
-    
-    string apiAddress = getApiUrl() + "/" + (*(*m_listsUrl.begin()).begin()) + "/"
+
+    setModifResourceMessage(message, arguments);
+
+    string apiAddress = getApiUrl() + "/" + m_listsUrl.begin()->begin()->first + "/"
             + boost::lexical_cast<string> (id)
             + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
             + "&token=" + m_session->user()->token.toUTF8();
@@ -971,60 +1127,59 @@ void AbstractPage::modifResource(vector<Wt::WInteractWidget*> arguments, long lo
     }
 }
 
-void AbstractPage::setModifResourceMessage(Wt::Http::Message *message, vector<Wt::WInteractWidget*> argument)
+void AbstractPage::setModifResourceMessage(Wt::Http::Message *message, vector<Wt::WInteractWidget*>* argument)
 {
-    message->addBodyText("{\n\t\"name\": \"" + ((Wt::WLineEdit*)(*argument.begin()))->text().toUTF8() + "\"\n}");
+    message->addBodyText("{\n\t\"name\": \"" + ((Wt::WLineEdit*)(*argument->begin()))->text().toUTF8() + "\"\n}");
 }
 
 Wt::WDialog *AbstractPage::deleteResource(long long id)
 {
     Wt::WDialog *box =
             new Wt::WDialog(tr("Alert." + m_xmlPageName
-            + ".delete-" + m_xmlPageName));
+                               + ".delete-" + m_xmlPageName));
 
     box->contents()->
-            addWidget(new Wt::WText(tr("Alert." + m_xmlPageName
-            + ".delete-" + m_nameResourcePageSpec + "-message")));
+            addWidget(new Wt::WText(tr("Alert." + m_xmlPageName + ".delete-message")));
 
     Wt::WPushButton *ok =
             new Wt::WPushButton(tr("Alert."
-            + m_xmlPageName + ".button-confirm"),
+                                   + m_xmlPageName + ".button-confirm"),
                                 box->footer());
     ok->clicked().connect(box, &Wt::WDialog::accept);
     ok->setAttributeValue("style", "margin-left:12px");
 
     Wt::WPushButton *annul =
             new Wt::WPushButton(tr("Alert."
-            + m_xmlPageName + ".button-cancel"),
+                                   + m_xmlPageName + ".button-cancel"),
                                 box->footer());
     annul->clicked().connect(box, &Wt::WDialog::reject);
     annul->setAttributeValue("style", "margin-left:12px;");
+    
+    box->finished().connect(bind([ = ] (){
+                                if (box->result() == Wt::WDialog::Accepted)
+       {
+                                Wt::Http::Message message;
+                                message.addBodyText("");
+                                string apiAddress = getApiUrl() + "/" + m_listsUrl.begin()->begin()->first + "/"
+                                + boost::lexical_cast<string> (id)
+                                + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+                                + "&token=" + m_session->user()->token.toUTF8();
 
-    box->finished().connect(bind([=] () {
-    if (box->result() == Wt::WDialog::Accepted)
-    {
-        Wt::Http::Message message;
-        message.addBodyText("");
-        string apiAddress = getApiUrl() + "/" + (*m_listsUrl.begin()->begin()) + "/"
-                + boost::lexical_cast<string> (id)
-                + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
-                + "&token=" + m_session->user()->token.toUTF8();
-
-        Wt::Http::Client *client = new Wt::Http::Client(this);
-        client->done().connect(boost::bind(&AbstractPage::apiDeleteResourceCallback, this, _1, _2, client));
-        Wt::log("debug") << m_xmlPageName + " : [DELETE] address to call : " << apiAddress;
-        if (client->deleteRequest(apiAddress, message))
-        {
-            Wt::WApplication::instance()->deferRendering();
-        }
-        else
-        {
-            Wt::log("error") << "Error Client Http";
-        }
-    }
-    return box;
-    }));
-
+                                Wt::Http::Client *client = new Wt::Http::Client(this);
+                                client->done().connect(boost::bind(&AbstractPage::apiDeleteResourceCallback, this, _1, _2, client));
+                                Wt::log("debug") << m_xmlPageName + " : [DELETE] address to call : " << apiAddress;
+                                if (client->deleteRequest(apiAddress, message))
+           {
+                                Wt::WApplication::instance()->deferRendering();
+           }
+           else
+           {
+                                Wt::log("error") << "Error Client Http";
+           }
+       }
+                                return box;
+    })); 
+     
     box->show();
     return box;
 }
@@ -1037,12 +1192,16 @@ void AbstractPage::postResourceCallback(boost::system::error_code err, const Wt:
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
-        if(response.status() == 201)
+        if (response.status() == 201)
         {
             try
             {
-                Wt::Json::Object result;
-                Wt::Json::parse(response.body(), result);
+                if(m_selectable)
+                {
+                    Wt::Json::Object result;
+                    Wt::Json::parse(response.body(), result);
+                    m_selectedID = result.get("id");
+                }
             }
             catch (Wt::Json::ParseError const& e)
             {
@@ -1064,9 +1223,9 @@ void AbstractPage::postResourceCallback(boost::system::error_code err, const Wt:
         else
         {
             Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
-                                       + m_xmlPageName) + " Widget] Http::Client error: " << response.body();
+                                           + m_xmlPageName) + " Widget] Http::Client status unexpected: " << response.body();
             Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
-                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+                                  tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
         }
     }
     else
@@ -1079,15 +1238,15 @@ void AbstractPage::postResourceCallback(boost::system::error_code err, const Wt:
     updatePage();
 }
 
-void AbstractPage::putResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client) 
+void AbstractPage::putResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
 {
     delete client;
     Wt::WApplication::instance()->resumeRendering();
     Wt::Json::Value error;
-   
+
     if (!err)
     {
-        if(response.status() >= 200 && response.status() < 300) // Revoir le retour
+        if (response.status() >= 200 && response.status() < 300) // Revoir le retour
         {
             try
             {
@@ -1113,9 +1272,9 @@ void AbstractPage::putResourceCallback(boost::system::error_code err, const Wt::
         else
         {
             Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
-                                       + m_xmlPageName) + " Widget] Http::Client error1: " << response.status() << " " << response.body();
+                                           + m_xmlPageName) + " Widget] Http::Client error1: " << response.status() << " " << response.body();
             Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
-                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+                                  tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
         }
     }
     else
@@ -1128,13 +1287,13 @@ void AbstractPage::putResourceCallback(boost::system::error_code err, const Wt::
     updatePage();
 }
 
-void    AbstractPage::apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
+void AbstractPage::apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
 {
     delete client;
     Wt::WApplication::instance()->resumeRendering();
     if (!err)
     {
-        if(response.status() == Enums::EReturnCode::NO_CONTENT)
+        if (response.status() == Enums::EReturnCode::NO_CONTENT)
         {
             if (response.body() != "")
             {
@@ -1145,66 +1304,44 @@ void    AbstractPage::apiDeleteResourceCallback(boost::system::error_code err, c
         else
         {
             Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
-                                       + m_xmlPageName) + " Widget] " << response.body();
+                                           + m_xmlPageName) + " Widget] " << response.body();
             Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
-                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+                                  tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
         }
     }
     else
     {
-            Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
-                                       + m_xmlPageName) + " Widget] Http::Client error: " << response.body();
-            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+        Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
+                                       + m_xmlPageName) + " Widget] Http::Client delete error: " << response.body();
+        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
                               tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
     }
-    recursiveGetResources();
-}
-
-
-
-// Check input ----------------------------------------------
-
-void AbstractPage::checkAdd(vector<Wt::WText*> errorMessage)
-{
-    if (checkInput(m_inputs, errorMessage) == 0)
-    {
-        m_inputs.pop_back();
-        addResource(m_inputs);
-        m_inputs.clear();
-    }
-}
-
-void AbstractPage::checkModif(vector_widget inputs, long long id, vector<Wt::WText*> errorMessage)
-{
-    if (checkInput(inputs, errorMessage) == 0)
-    {
-        modifResource(inputs, id);
-        inputs.clear();
-    }
+    updatePage();
 }
 
 int AbstractPage::checkName(string inputText, vector<long long> ids)
 {
-//    for (vector<long long>::iterator j = ids.begin(); j != ids.end(); j++)
-//    {
-////        vector_widget resourceRow = getResourceRowTable(*j);
-//        vector_widget resourceRow =
-//                rowsTable_.size() > 0 ? rowsTable_ : getResourceRowTable(*j);
-//        for (vector_widget::iterator k = resourceRow.begin(); k != resourceRow.end(); k++)
-//        {
-//            Wt::WInteractWidget *widgetAdd = *k;
-//            string nameRessouce("N2Wt5WTextE");
-//            if (nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
-//            {
-//                if (inputText.compare(((Wt::WText*)(*k))->text().toUTF8()) == 0)
-//                    return 1;
-//            }
-//        }
-//    }
+    //    for (vector<long long>::iterator j = ids.begin(); j != ids.end(); j++)
+    //    {
+    ////        vector_widget resourceRow = getResourceRowTable(*j);
+    //        vector_widget resourceRow =
+    //                rowsTable_.size() > 0 ? rowsTable_ : getResourceRowTable(*j);
+    //        for (vector_widget::iterator k = resourceRow.begin(); k != resourceRow.end(); k++)
+    //        {
+    //            Wt::WInteractWidget *widgetAdd = *k;
+    //            string nameRessouce("N2Wt5WTextE");
+    //            if (nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
+    //            {
+    //                if (inputText.compare(((Wt::WText*)(*k))->text().toUTF8()) == 0)
+    //                    return 1;
+    //            }
+    //        }
+    //    }
     return 0;
 }
 
 // ToDo: should be a boolean
+
 int AbstractPage::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::WText*> errorMessage)
 {
     int check(0);
@@ -1245,77 +1382,138 @@ int AbstractPage::checkInput(vector<Wt::WInteractWidget*> inputName, vector<Wt::
 void AbstractPage::showInputForAdd()
 {
     //TSA à décommenter et renommer quand le cas d'utilisation se présentera
-//    m_resourceTable->rowAt(m_resourceTable->rowCount() - 1)->show();
-//    for (vector<Wt::WInteractWidget*>::const_iterator j = inputs_.begin();
-//            j != inputs_.end();
-//            j++)
-//    {
-//        Wt::WInteractWidget *widgetAdd = *j;
-//        string nameRessouce("N2Wt9WLineEditE");
-//        if (inputs_.begin() == j && nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
-//        {
-//            ((Wt::WLineEdit*)(*j))->setFocus();
-//        }
-//        ((Wt::WInteractWidget*)(*j))->show();
-//    }
+    //    m_resourceTable->rowAt(m_resourceTable->rowCount() - 1)->show();
+    //    for (vector<Wt::WInteractWidget*>::const_iterator j = inputs_.begin();
+    //            j != inputs_.end();
+    //            j++)
+    //    {
+    //        Wt::WInteractWidget *widgetAdd = *j;
+    //        string nameRessouce("N2Wt9WLineEditE");
+    //        if (inputs_.begin() == j && nameRessouce.compare(typeid (*widgetAdd).name()) == 0)
+    //        {
+    //            ((Wt::WLineEdit*)(*j))->setFocus();
+    //        }
+    //        ((Wt::WInteractWidget*)(*j))->show();
+    //    }
 }
 
-void AbstractPage::inputForModif(long long id, int rowTable, int columnTable)
+void AbstractPage::addEnumToModel(Wt::WStandardItemModel* standardItemModel, int enumToAdd, Wt::WString name, Wt::WString optionalParameter)
 {
-    vector<Wt::WText*> errorMessage;
-    vector_widget inputs;
-    int column(0);
+    Wt::WStandardItem *itemId = new Wt::WStandardItem();
+    Wt::WStandardItem *itemName = new Wt::WStandardItem();
+    Wt::WStandardItem *itemOptional = new Wt::WStandardItem();
 
-    for (multimap<long long, vector_widget>::iterator itTable = m_rowsTable.begin();
-            itTable != m_rowsTable.end(); itTable++)
+    int id = enumToAdd;
+
+    vector<Wt::WStandardItem*> rowVector;
+
+    itemName->setText(name);
+    rowVector.push_back(itemName);
+    
+    itemId->setText(boost::lexical_cast<string>(id));
+    rowVector.push_back(itemId);
+    
+    if(optionalParameter != Wt::WString::Empty)
     {
-        int cpt(0);
-        if ((*itTable).first == id)
+        itemOptional->setText(optionalParameter);
+        rowVector.push_back(itemOptional);
+    }
+    
+    standardItemModel->appendRow(rowVector);
+}
+
+int AbstractPage::setValidatorType(int jsonType, int specialType, int mandatory)
+{
+    int type;
+    
+    type = jsonType;
+    /* 4bits shift to the left: 0000 0000 0001 becomes 0000 0001 0000 */
+    type = type << 4;
+    type += specialType;
+    /* another 4bits shift to the left: 0000 0001 0001 becomes 0001 0001 0000 */
+    type = type << 4;
+    /* add isMandatory == true: 0001 0001 0000 becomes 0001 0001 0001 */
+    type += mandatory;
+        
+    return (type);
+}
+
+Wt::WValidator* AbstractPage::editValidator(int type)
+{
+    Wt::WRegExpValidator *validator = new Wt::WRegExpValidator();
+    
+    /* isolate first bit with 0x1 to see if true or false */
+    bool isMandatory = (bool)(type & 0x1);
+    /* (type >> 4) & 0xF: shift type 4bits to the right, isolate the 'new' first 4bits with & 0xF */
+    int specialType = (((type >> 4) & 0xF) > 0 ? (type >> 4) & 0xF : 0);
+    /* (type >> 8) & 0xF: shift type 8bits to the right, isolate the 'new' first 4bits with & 0xF */
+    int jsonType = (((type >> 8) & 0xF) > 0 ? (type >> 8) & 0xF : 0);
+        
+    validator->setMandatory(isMandatory);
+    switch (jsonType)
+    {
+        case ETypeJson::text:
         {
-            multimap<int, string>::iterator title = m_displayedTitlesPopups.begin();
-            for (Wt::WInteractWidget *itElem : (*itTable).second)
+            switch (specialType)
             {
-                string nameRessouce("N2Wt5WTextE");
-                if (nameRessouce.compare(typeid (*itElem).name()) == 0)
+                case ETextSpecial::normalText:
                 {
-                    nameRessouce = ((Wt::WText*)(itElem))->text().toUTF8();
-                    string newName = nameRessouce;
-                    if (nameRessouce.size() > SIZE_NAME + SIZE_NAME)
-                    {
-                        newName.resize(SIZE_NAME + SIZE_NAME);
-                        newName.resize(newName.size() + 3, '.');
-                    }
-
-                    Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName));
-                    inputs.push_back(input);
-                    input->setToolTip(Wt::WString::fromUTF8(nameRessouce));
-                    input->setValidator(editValidator(cpt));
-                    if (inputs.size() == 0)
-                        input->setFocus();
-                    input->setWidth(Wt::WLength(150));
-
-                    Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
-                                                        + (*title).second));
-                    error->hide();
-                    errorMessage.push_back(error);
-
-                    m_resourceTable->elementAt(rowTable, column)->clear();
-                    m_resourceTable->elementAt(rowTable, column)->addWidget(input);
-                    m_resourceTable->elementAt(rowTable, column++)->addWidget(error);
-
-                    cpt++;
+                    validator->setRegExp("^.*$");
+                    break ;
+                }
+                case ETextSpecial::date:
+                {
+                    validator->setRegExp("^(((0[1-9]|[12][0-8])[\\/](0[1-9]|1[012]))|((29|30|31)[\\/](0[13578]|1[02]))|((29|30)[\\/](0[4,6,9]|11)))[\\/](19|[2-9][0-9])\\d\\d$)|(^29[\\/]02[\\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$");
+                    break ;
+                }
+                case ETextSpecial::mail:
+                {
+                    validator->setRegExp("^[^@]+@([^.]+.[a-z]+)+$");
+                    break ;
+                }
+                case ETextSpecial::phone:
+                {
+                    validator->setRegExp("^(+[0-9]{2})|(06)|(07))([.-\\s:]?[0-9]{2}){4}$");
+                    break ;
+                }
+                default:
+                {
+                    validator->setRegExp("^.*$");
                 }
             }
-            title++;
+            break ;
+        }
+        case ETypeJson::number:
+        {
+            switch (specialType)
+            {
+                case ENumberSpecial::normalNumber:
+                {
+                    validator->setRegExp("^[+-]?[0-9]*$");
+                    break ;
+                }
+                case ENumberSpecial::notnull:
+                {
+                    validator->setRegExp("^[+-]?[1-9][0-9]*$");
+                    break ;
+                }
+                case ENumberSpecial::uns:
+                {
+                    validator->setRegExp("^\\+?[0-9]*?$");
+                    break ;
+                }
+                case ENumberSpecial::flt:
+                {
+                    validator->setRegExp("^[+-]?[1-9][0-9]*(\\.[0-9]+)?$");
+                    break ;
+                }
+                default:
+                {
+                    validator->setRegExp("^.*$");
+                }
+            }
+            break ;
         }
     }
-
-    m_resourceTable->elementAt(rowTable, columnTable)->clear();
-    m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
-    m_resourceTable->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
-
-    Wt::WPushButton *valideBut = new Wt::WPushButton(m_resourceTable->elementAt(rowTable, columnTable));
-    valideBut->setTextFormat(Wt::XHTMLUnsafeText);
-    valideBut->setText("<span class='input-group-btn'><i class='icon-ok '></i></span>");
-    valideBut->clicked().connect(boost::bind(&AbstractPage::checkModif, this, inputs, id, errorMessage));
+    return (validator);
 }

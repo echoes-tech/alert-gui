@@ -23,6 +23,7 @@ protected:
 
   virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
   void createUI();
+  void replaceChangePasswordWidget();
 
   virtual Wt::WFormWidget *createFormWidget(Wt::WFormModel::Field field);
   

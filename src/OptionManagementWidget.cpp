@@ -17,7 +17,8 @@ OptionManagementWidget::OptionManagementWidget(OptionManagementModel *model, Ech
     created_ = false;
     this->session = session;
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use("options",false);    
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "options",false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "auth",false);
     createUI();
 }
 
@@ -48,6 +49,9 @@ void OptionManagementWidget::render(Wt::WFlags<Wt::RenderFlag> flags)
 
 void OptionManagementWidget::createUI()
 {
+    Wt::WTemplateFormView *changePasswordWidget = (Wt::WTemplateFormView*)((EchoesHome*)((Wt::WApplication::instance()->root()->widget(0))))->displayPasswordChangeWidget();
+    changePasswordWidget->resolveWidget("cancel-button")->hide();
+    changePasswordWidget->destroyed().connect(boost::bind(&OptionManagementWidget::replaceChangePasswordWidget, this));
     // Top template
     mainForm = new Wt::WTemplateFormView(Wt::WString::tr("Alert.Option.Management.template"));    
     
@@ -56,6 +60,7 @@ void OptionManagementWidget::createUI()
     mainForm->bindWidget("sms-ask", createFormWidget(OptionManagementModel::smsAsk));
     mainForm->bindWidget("user-role-button", createFormWidget(OptionManagementModel::userRoleButton));
     mainForm->bindWidget("user-role-combo", createFormWidget(OptionManagementModel::userRoleCombo));
+    mainForm->bindWidget("update-password", changePasswordWidget);
 
     mainForm->updateModel(model_);
     mainForm->refresh();
@@ -84,6 +89,11 @@ void OptionManagementWidget::createUI()
     {
         Wt::log("error") << "Error Client Http";
     }
+}
+
+void OptionManagementWidget::replaceChangePasswordWidget()
+{
+    mainForm->bindWidget("update-password", new Wt::WText(tr("Alert.option.password-changed")));
 }
 
 bool OptionManagementWidget::validate()

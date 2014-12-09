@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.plugins-filter.main-table">Filtres</message>
+    <!--body-->
+    <message id="Alert.plugins-filter.name-filter-type">Type de filtre</message>
+    <message id="Alert.plugins-filter.name-parameters">Paramètres</message>
+    <message id="Alert.plugins-filter.name-nb-value">Nombre de valeurs</message>
+    <message id="Alert.plugins-filter.name-pos-key-value">Position de la valeur clé</message>
+    <message id="Alert.plugins-filter.modif-button">Modifier</message>
+    <message id="Alert.plugins-filter.delete-button">Supprimer</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.plugins-filter.button-cancel">Annuler</message>
+    <message id="Alert.plugins-filter.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.plugins-filter.popup-add">Ajouter un filtre</message>
+    <message id="Alert.plugins-filter.add-nb-value">Nombre de valeurs</message>
+    <message id="Alert.plugins-filter.add-pos-key-value">Position de la valeur clé</message>
+    <!--PUT-->
+    <message id="Alert.plugins-filter.popup-modif">Modifier</message>
+    <!--DELETE-->
+    <message id="Alert.plugins-filter.delete-plugins-filter">Attention</message>
+    <message id="Alert.plugins-filter.delete-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer un filtre
+        </span>
+    </message>
+    <message id="Alert.plugins-filter.button-confirm">Confirmer</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.plugins-filter.invalid-name-unit">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.plugins-filter.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.plugins-filter.database-error">
+      Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+  
+  <message id="Alert.plugins-filter.filter-type.all">Tout</message>
+  <message id="Alert.plugins-filter.filter-type.regex">Expression régulière</message>
+  <message id="Alert.plugins-filter.filter-type.location">Emplacement</message>
+  
+  <message id="Alert.plugins-filter.filter-parameter.regex">Expression régulière</message>
+  <message id="Alert.plugins-filter.filter-parameter.first-char">Premier caractère</message>
+  <message id="Alert.plugins-filter.filter-parameter.length">Longueur</message>
+
+</messages>

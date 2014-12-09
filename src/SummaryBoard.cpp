@@ -13,7 +13,7 @@ SummaryBoard::SummaryBoard(Echoes::Dbo::Session *session)
     created_ = false;
     this->session = session;
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use("summary",false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "summary",false);
     mainTemplate = new Wt::WTemplate(Wt::WString::tr("Alert.summary.board.template"));
     mainTemplate->addFunction("tr", &Wt::WTemplate::Functions::tr);
     

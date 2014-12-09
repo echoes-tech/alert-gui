@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.plugins-search.main-table">Recherches</message>
+    <!--body-->
+    <message id="Alert.plugins-search.name-search-type">Type de recherche</message>
+    <message id="Alert.plugins-search.name-parameters">Paramètres</message>
+    <message id="Alert.plugins-search.name-period">Période</message>
+    <message id="Alert.plugins-search.modif-button">Modifier</message>
+    <message id="Alert.plugins-search.delete-button">Supprimer</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.plugins-search.button-cancel">Annuler</message>
+    <message id="Alert.plugins-search.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.plugins-search.popup-add">Ajouter une recherche</message>
+    <message id="Alert.plugins-search.add-period">Periode</message>
+    <!--PUT-->
+    <message id="Alert.plugins-search.popup-modif">Modifier</message>
+    <!--DELETE-->
+    <message id="Alert.plugins-search.delete-plugins-search">Attention</message>
+    <message id="Alert.plugins-search.delete-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer une recherche
+        </span>
+    </message>
+    <message id="Alert.plugins-search.button-confirm">Confirmer</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.plugins-search.invalid-name-unit">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.plugins-search.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.plugins-search.database-error">
+      Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+  
+  <message id="Alert.plugins-search.search-type.path">Adresse</message>
+  <message id="Alert.plugins-search.search-type.path-line">Adresse du fichier et ligne</message>
+  <message id="Alert.plugins-search.search-type.path-last-line">Adresse du fichier et n dernières lignes</message>
+  <message id="Alert.plugins-search.search-type.query">Requête</message>
+  <message id="Alert.plugins-search.search-type.oid">OID</message>
+  <message id="Alert.plugins-search.search-type.path-algorithm">Adresse du fichier et algorithme</message>
+  <message id="Alert.plugins-search.search-type.path-xpath">Adresse du fichier et XPath</message>
+  <message id="Alert.plugins-search.search-type.name">Nom</message>
+  
+  <message id="Alert.plugins-search.search-parameter.path">Adresse</message>
+  <message id="Alert.plugins-search.search-parameter.line">Ligne</message>
+  <message id="Alert.plugins-search.search-parameter.last-line">n dernières lignes</message>
+  <message id="Alert.plugins-search.search-parameter.query">Requête</message>
+  <message id="Alert.plugins-search.search-parameter.oid">OID</message>
+  <message id="Alert.plugins-search.search-parameter.algorithm">Algorithme</message>
+  <message id="Alert.plugins-search.search-parameter.xpath">XPath</message>
+  <message id="Alert.plugins-search.search-parameter.name">Nom</message>
+
+</messages>

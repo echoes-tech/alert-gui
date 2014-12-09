@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <message id="Alert.unit.form-info">
+      Cette page permet de gérer les unités qui sont nécessaires pour créer les informations.
+    </message>
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.unit.main-table">Unités</message>
+    <!--body-->
+    <message id="Alert.unit.name-name">Unités</message>
+    <message id="Alert.unit.name-information_unit_type">Type</message>
+    <message id="Alert.unit.modif-button">Modifier</message>
+    <message id="Alert.unit.delete-button">Supprimer</message>
+
+<!--    In popup     -->
+    <message id="Alert.unit.button-cancel">Annuler</message>
+    <message id="Alert.unit.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.unit.popup-add">Ajouter une unité</message>
+    <!--PUT-->
+    <message id="Alert.unit.popup-modif">Modifier</message>
+    <!--DELETE-->
+    <message id="Alert.unit.delete-unit">Attention</message>
+    <message id="Alert.unit.delete-message">
+        <span style="color:red">
+            Vous êtes sur le point de modifier une unité.
+        </span>
+    </message>
+    <message id="Alert.unit.button-confirm">Confirmer</message>
+    
+    <message id="Alert.unit.type.text">Texte</message>
+    <message id="Alert.unit.type.number">Numerique</message>
+    <message id="Alert.unit.type.boolean">Booleen</message>
+    <message id="Alert.unit.type.custom">Personnalisee</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.unit.invalid-name-unit">
+      <span style="color:red">
+&nbsp;Nom invalide : taille (1-255) caractères non autorisés : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  
+</messages>

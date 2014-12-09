@@ -17,11 +17,10 @@
 #ifndef USEREDITIONWIDGET_H
 #define	USEREDITIONWIDGET_H
 
-#include <Wt/Json/Value>
-#include <Wt/Http/Message>
-#include <Wt/WRandom>
+#include <Wt/WStandardItem>
+#include <Wt/WStandardItemModel>
+#include <Wt/WAbstractItemModel>
 
-#include "GlobalIncludeFile.h"
 #include "AbstractPage.h"
 
 typedef std::map<long long, std::string>        MapLongString;
@@ -34,12 +33,11 @@ public AbstractPage
 public:
     UserEditionWidget(Echoes::Dbo::Session *session, std::string apiUrl, int type);
 
-    Wt::WValidator              *editValidator(int who);
+//    Wt::WValidator              *editValidator(int who);
     
-    void                        addResource(std::vector<Wt::WInteractWidget*> argument);
-    void                        modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
+    void                        addResource(std::vector<Wt::WInteractWidget*>* argument);
+    void                        modifResource(std::vector<Wt::WInteractWidget*>* arguments, long long id);
 
-    virtual std::string         addParameter();
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
 
 protected:

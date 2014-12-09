@@ -71,7 +71,7 @@ void MonitoringWidget::createUI()
 
     alertsSentTable->setHeaderCount(2, Wt::Horizontal);
 
-    alertsSentTable->elementAt(row, col)->setColumnSpan(6);
+    alertsSentTable->elementAt(row, col)->setColumnSpan(4);
     alertsSentTable->elementAt(row, col)->setContentAlignment(Wt::AlignTop | Wt::AlignCenter);
     alertsSentTable->elementAt(row, col)->setPadding(5);
     
@@ -80,11 +80,11 @@ void MonitoringWidget::createUI()
     row = 1;
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-date"), alertsSentTable->elementAt(row, col));
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-name"), alertsSentTable->elementAt(row, ++col));
-    new Wt::WText(Wt::WString::tr("Alert.summary.alert-code"), alertsSentTable->elementAt(row, ++col));
+//    new Wt::WText(Wt::WString::tr("Alert.summary.alert-code"), alertsSentTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-media"), alertsSentTable->elementAt(row, ++col));
 //    new Wt::WText(Wt::WString::tr("Alert.summary.alert-message"), alertsSentTable->elementAt(row, ++col));
     new Wt::WText(Wt::WString::tr("Alert.summary.alert-type"), alertsSentTable->elementAt(row, ++col));
-    new Wt::WText(Wt::WString::tr("Alert.summary.alert-status"), alertsSentTable->elementAt(row, ++col));
+//    new Wt::WText(Wt::WString::tr("Alert.summary.alert-status"), alertsSentTable->elementAt(row, ++col));
 
     
     try
@@ -138,14 +138,14 @@ void MonitoringWidget::createUI()
                 
                 new Wt::WText(i->get<0>()->name, alertsSentTable->elementAt(row, ++colNum));
                 
-                if (Wt::WString::tr(i->get<0>()->name.toUTF8()).toUTF8().find_first_of("?") == 0)
-                {
-                    new Wt::WText(("N/A"), alertsSentTable->elementAt(row, ++colNum));
-                }
-                else
-                {
-                    new Wt::WText(Wt::WString::tr(i->get<0>()->name.toUTF8()), alertsSentTable->elementAt(row, ++colNum));
-                }
+//                if (Wt::WString::tr(i->get<0>()->name.toUTF8()).toUTF8().find_first_of("?") == 0)
+//                {
+//                    new Wt::WText(("N/A"), alertsSentTable->elementAt(row, ++colNum));
+//                }
+//                else
+//                {
+//                    new Wt::WText(Wt::WString::tr(i->get<0>()->name.toUTF8()), alertsSentTable->elementAt(row, ++colNum));
+//                }
                 
 
                 new Wt::WText(i->get<1>()->value, alertsSentTable->elementAt(row, ++colNum));
@@ -155,17 +155,16 @@ void MonitoringWidget::createUI()
                 
                 new Wt::WText(i->get<1>()->mediaType->name, alertsSentTable->elementAt(row, ++colNum));
                 
-                if (i->get<2>()->alertTrackingEvents.size() > 0)
-                {
-                    new Wt::WText(i->get<2>()->alertTrackingEvents.front()->value, alertsSentTable->elementAt(row, ++colNum));
-                }
-                else
-                {
-                    new Wt::WText("N/A", alertsSentTable->elementAt(row, ++colNum));
-                }
+//                if (i->get<2>()->alertTrackingEvents.size() > 0)
+//                {
+//                    new Wt::WText(i->get<2>()->alertTrackingEvents.front()->value, alertsSentTable->elementAt(row, ++colNum));
+//                }
+//                else
+//                {
+//                    new Wt::WText("N/A", alertsSentTable->elementAt(row, ++colNum));
+//                }
             }
         }
-        
     }  
     catch (Wt::Dbo::Exception e)
     {

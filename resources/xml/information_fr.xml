@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+    
+  <message id="Alert.information.form-info">
+      Sur cette page vous pouvez ajouter des informations.
+  </message>
+
+<!--    In table     -->
+    <!--nothing information-->
+    <message id="Alert.information.nothing-information">Informations</message>
+    <message id="Alert.information.nothing-information-text">
+      Aucune information enregistrée actuellement
+    </message>
+    <message id="Alert.information.nothing-button">Cliquer pour ajouter</message>
+    <!--header-->
+    <message id="Alert.information.main-table">Informations</message>
+    <!--body-->
+    <message id="Alert.information.name-name">Nom</message>
+    <message id="Alert.information.name-desc">Description</message>
+    <message id="Alert.information.name-calculate">Fonction de calcul</message>
+    <message id="Alert.information.name-information_unit">Unité de l'information</message>
+    <message id="Alert.information.name-display">Afficher</message>
+    <message id="Alert.information.modif-button">Modifier</message>
+    <message id="Alert.information.delete-button">Supprimer</message>
+    <!--footer-->
+    <message id="Alert.information.search-bar">Recherche : </message>
+        <!-- Paginate -->
+        <message id="Alert.information.paginate-first">Début</message>
+        <message id="Alert.information.paginate-prev">Préc</message>
+        <message id="Alert.information.paginate-next">Suiv</message>
+        <message id="Alert.information.paginate-last">Fin</message>
+
+<!--    In popup     -->
+    <message id="Alert.information.button-cancel">Annuler</message>
+    <message id="Alert.information.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.information.popup-add">Ajouter une information</message>
+    <!--PUT-->
+    <message id="Alert.information.popup-modif">Modifier cette information</message>
+    <!--DELETE-->
+    <message id="Alert.information.delete-information">Attention</message>
+    <message id="Alert.information.delete-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer une information
+        </span>
+    </message>
+    <message id="Alert.information.button-confirm">Confirmer</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.information.invalid-name-name">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  <message id="Alert.information.invalid-name-desc">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  <message id="Alert.information.invalid-name-twice">
+      <span style="color:red">
+           Nom du information déjà existant.
+      </span>
+  </message>
+
+<!--    Error message     -->
+  <message id="Alert.information.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.information.database-error">
+    Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+
+<!--    Warning message     -->
+</messages>

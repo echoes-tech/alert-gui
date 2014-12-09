@@ -184,10 +184,96 @@ OB.ui-toolbar {border-radius: 0;}
     -webkit-border-bottom-left-radius: 0px;
 }
 
+#loginbox h2 {
+    line-height: 35px;
+}
+
 #logo img {
     width: 360px;
 }
 
 #logo {
     padding: 20px 0px 0px 5px;
+}
+
+#loginbox p {
+    margin-top: 0px;
+}
+
+.Wt-auth-logged-in {
+    margin-top: 5px;
+    margin-right: 5px;
+    float:right;
+}
+
+.Wt-auth-logged-in  b {
+    color: #aaaaaa;
+}
+
+/**
+ * (C)Leanest CSS spinner ever
+ */
+
+@keyframes spin {
+	to { transform: rotate(1turn); }
+}
+
+div.Wt-loading {
+	position: relative;
+    background-color: transparent;
+	display: inline-block;
+    top: 10px;
+    left: 8px;
+    right: auto;
+	width: 5em;
+	height: 5em;
+	font-size: 12px;
+	text-indent: 999em;
+    z-index: 20;
+	overflow: hidden;
+	-webkit-animation: spin 1s infinite steps(8);
+    animation: spin 1s infinite steps(8);
+}
+
+/*.small.Wt-loading {
+	font-size: 6px;
+}
+
+.large.Wt-loading {
+	font-size: 24px;
+}*/
+
+.Wt-loading:before,
+.Wt-loading:after,
+.Wt-loading > div:before,
+.Wt-loading > div:after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 2.25em; /* (container width - part width)/2  */
+	width: .5em;
+	height: 1.5em;
+	border-radius: .2em;
+	background: rgb(255, 170, 0);
+	box-shadow: 0 3.5em rgb(255, 165, 0); /* container height - part height */
+	transform-origin: 50% 2.5em; /* container height / 2 */
+}
+
+.Wt-loading:before {
+	background: rgb(255, 150, 0);
+}
+
+.Wt-loading:after {
+	transform: rotate(-45deg);
+	background: rgb(255, 75, 0);
+}
+
+.Wt-loading > div:before {
+	transform: rotate(-90deg);
+	background: rgb(255, 30, 0);
+}
+
+.Wt-loading > div:after {
+	transform: rotate(-135deg);
+	background: rgb(255, 15, 0);
 }

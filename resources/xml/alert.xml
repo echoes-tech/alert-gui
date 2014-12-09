@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <message id="Alert.alert.form-info">
+      This page allows you to add the alert, they allow you to send the right message to the right people at the right time!.
+    </message>
+
+<!--    In table     -->
+    <!--nothing alert-->
+    <message id="Alert.alert.nothing-alert">Alerts</message>
+    <message id="Alert.alert.nothing-alert-text">No alert</message> 
+    <message id="Alert.alert.nothing-button">Click to Add</message>
+    <message id="Alert.alert.no-alert-sent">Never</message>
+    <!--header-->
+    <message id="Alert.alert.main-table">Alerts</message>
+    <!--body-->
+    <message id="Alert.alert.name-name">Alert name</message>
+    <message id="Alert.alert.modif-button">Modify</message>
+    <message id="Alert.alert.delete-button">Delete</message>
+    <message id="Alert.alert.name-alert_media_specializations">Recipients number</message>
+    <message id="Alert.alert.name-last_attempt">Last sent</message>
+    <message id="Alert.alert.name-modif-dest">Modify recip.</message>
+    
+    <!--footer-->
+    <message id="Alert.alert.search-bar">Search: </message>
+        <!-- Paginate -->
+        <message id="Alert.alert.paginate-first">First</message>
+        <message id="Alert.alert.paginate-prev">Prev</message>
+        <message id="Alert.alert.paginate-next">Next</message>
+        <message id="Alert.alert.paginate-last">Last</message>
+
+<!--    In popup     -->
+    <message id="Alert.alert.button-cancel">Cancel</message>
+    <message id="Alert.alert.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.alert.popup-add">Add alert</message>
+    <message id="Alert.alert.add-title-box-asset">Asset</message>
+    <message id="Alert.alert.add-title-box-plugin">Plugin</message>
+    <message id="Alert.alert.add-title-box-info">Information</message>
+    <message id="Alert.alert.add-title-box-key">Key</message>
+    <message id="Alert.alert.add-title-box-flapping">Flapping</message>
+    <message id="Alert.alert.add-title-operator">Ope.</message>
+    <message id="Alert.alert.add-button-add-critera">Add criteria</message>
+    <message id="Alert.alert.add-last-info">
+            <p>Last info value :&nbsp;</p>
+    </message>
+    <message id="Alert.alert.add-compare">Compare criteria</message>
+    
+    <message id="Alert.alert.button-save-continue">Save and continue</message>
+    <message id="Alert.alert.message-true">True</message>
+    <message id="Alert.alert.message-false">False</message>
+    <message id="Alert.alert.message-value">Value</message>
+    <!--PUT-->
+    <message id="Alert.alert.popup-modif">Modify this alert</message>
+    <!--DELETE-->
+    <message id="Alert.alert.delete-alert">Attention</message>
+    <message id="Alert.alert.delete-message">
+        <span style="color:red">
+            You are about to delete a server
+        </span>
+    </message>
+    <message id="Alert.alert.button-confirm">Confirm</message>
+    <!--In popup recipients-->
+    <message id="Alert.alert.form.alert">Alert&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.rec">Recipient&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.media">Media&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.mess">Message&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.snooze">Snooze&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.mail">MAIL</message>
+    <message id="Alert.alert.form.sms">SMS</message>
+    <message id="Alert.alert.form.push">PUSH</message>
+    
+    <message id="Alert.alert.form.alert-per">alert per </message>
+    <message id="Alert.alert.form.alert-max">Max. </message>
+    <message id="Alert.alert.form.alert-unit-min">min.</message>
+    <message id="Alert.alert.form.alert-unit-hour">hour</message>
+    <message id="Alert.alert.form.alert-unit-day">day</message>
+    <message id="Alert.alert.form.thresh-duration">Threshold duration</message>
+    
+    <message id="Alert.alert.form.start">Start at</message>
+    <message id="Alert.alert.form.duration">Duration</message>
+    <message id="Alert.alert.form.timeslot">Time slots</message>
+    <message id="Alert.alert.form.add-timeslot">Save</message>
+    
+    <message id="Alert.alert.form.all-days">Everyday</message>
+    <message id="Alert.alert.form.all-months">Every months</message>
+    <message id="Alert.alert.form.summary">Summary: </message>
+    <message id="Alert.alert.form.days">days</message>
+    <message id="Alert.alert.form.months">months</message>
+    <message id="Alert.alert.form.mon">monday</message>
+    <message id="Alert.alert.form.thu">thursday</message>
+    <message id="Alert.alert.form.wed">wednesday</message>
+    <message id="Alert.alert.form.tue">tuesday</message>
+    <message id="Alert.alert.form.fri">friday</message>
+    <message id="Alert.alert.form.sat">saturday</message>
+    <message id="Alert.alert.form.sun">sunday</message>
+    <message id="Alert.alert.form.jan">january</message>
+    <message id="Alert.alert.form.feb">february</message>
+    <message id="Alert.alert.form.mar">march</message>
+    <message id="Alert.alert.form.apr">april</message>
+    <message id="Alert.alert.form.may">may</message>
+    <message id="Alert.alert.form.jun">june</message>
+    <message id="Alert.alert.form.jul">july</message>
+    <message id="Alert.alert.form.aug">august</message>
+    <message id="Alert.alert.form.sep">september</message>
+    <message id="Alert.alert.form.oct">october</message>
+    <message id="Alert.alert.form.nov">november</message>
+    <message id="Alert.alert.form.dec">december</message>
+        
+    <message id="Alert.alert.operator.lt">Less</message>
+    <message id="Alert.alert.operator.le">Less or equal</message>
+    <message id="Alert.alert.operator.eq">Equal</message>
+    <message id="Alert.alert.operator.ge">Greater or equal</message>
+    <message id="Alert.alert.operator.gt">Greater</message>
+    <message id="Alert.alert.operator.ne">Not equal</message>
+    
+    <message id="Alert.alert.boolean-operator.and">and</message>
+    <message id="Alert.alert.boolean-operator.or">or</message>
+    
+    <message id="Alert.alert.form.minutes">minutes</message>
+    <message id="Alert.alert.form.hours">hours</message>
+    <message id="Alert.alert.form.times">times</message>
+    
+    <message id="Alert.alert.operator.contains">Contains</message>
+    
+    <message id="Alert.alert.sec-base-message">Add your correlation file here.</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.alert.invalid-name-alert">
+      <span style="color:red">
+        &nbsp;Invalid name
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-name-name">
+      <span style="color:red">
+        &nbsp;Invalid name
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-name-twice">
+      <span style="color:red">
+          Please, do not use the same name twice
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-number">
+      <span style="color:red">
+        Invalid number
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-asset">
+      <span style="color:red">
+        Select asset
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-plugin">
+      <span style="color:red">
+        Select plugin
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-info">
+      <span style="color:red">
+        Select info
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-choose">
+      <span style="color:red">
+        Choose Boolean
+      </span>
+  </message>
+
+<!--    Error message     -->
+  <message id="Alert.alert.file-not-generated">
+      <span style="color:red">
+          The file has not been generated. Please contact us.
+      </span>
+  </message>
+  <message id="Alert.alert.database-error-title">Database error</message>
+  <message id="Alert.alert.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+<!--    Warning message     -->
+
+<!-- templates -->
+    <message id="Alert.alert.Management.template" >
+        <br />
+            <div class ="alert alert-info">${tr:Alert.alert.form-info}</div> 
+            <div id="alert-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers">
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>
+    <message id="Alert.alert.criterion.template" >
+        <div class="control-group">
+	    <div class="controls">
+                ${criterion}
+	    </div>
+	  </div>
+    </message>
+    <message id="Alert.alert.time.template">
+        <div class="control-group">
+	    <div class="controls">
+                ${time}
+	    </div>
+	  </div>
+    </message>
+    <message id="Alert.alert.add-button">
+        <div class="button-add btn">
+            <span class='btn-pink'><i class='icon-plus'></i></span>
+        </div>
+    </message>
+    <message id="Alert.alert.remove-button">
+        <div class="btn-danger btn">
+            <span>
+                <i class='icon-remove icon-white'></i>
+            </span>
+        </div>
+    </message>
+    <message id="Alert.alert.success-button">
+        <div class="btn-success">
+            <i class='icon-remove icon-white'></i>
+        </div>
+    </message>
+    <message id="Alert.alert.valid.template">
+        <div class="control-group">
+	    <div class="controls">
+                ${input}
+	    </div>
+	  </div>
+    </message>
+</messages>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <message id="Alert.media-user.form-info">
+      On this page you can add the alert, they allow you to send the right message to the right people at the right time!.
+    </message>
+
+<!--    In table     -->
+    <!--nothing media-user-->
+    <message id="Alert.media-user.nothing-sms">Phones numbers</message>
+    <message id="Alert.media-user.nothing-mail">Emails address</message>
+    <message id="Alert.media-user.nothing-push">Smartphone names</message>
+    <message id="Alert.media-user.nothing-sms-text">
+        No phone number registered</message>
+    <message id="Alert.media-user.nothing-mail-text">
+        No email address registered</message>
+    <message id="Alert.media-user.nothing-push-text">
+        No smartphone registered</message>
+    <message id="Alert.media-user.nothing-button">Click to Add</message>
+    <!--header-->
+    <message id="Alert.media-user.main-table">Phones numbers</message>
+    <message id="Alert.media-user.main-table">Smartphones names</message>
+    <message id="Alert.media-user.main-table">Media</message>
+    <!--body-->
+    <message id="Alert.media-user.name-value">Medias</message>
+    <message id="Alert.media-user.name-user">Users</message>
+    <message id="Alert.media-user.name-sms">Phone number</message>
+    <message id="Alert.media-user.name-mail">Email address</message>
+    <message id="Alert.media-user.name-push">Smartphone name</message>
+    <message id="Alert.media-user.modif-button">Modif</message>
+    <message id="Alert.media-user.delete-button">Delete</message>
+    <!--footer-->
+    <message id="Alert.media-user.search-bar">Search : </message>
+        <!-- Paginate -->
+        <message id="Alert.media-user.paginate-first">First</message>
+        <message id="Alert.media-user.paginate-prev">Prev</message>
+        <message id="Alert.media-user.paginate-next">Next</message>
+        <message id="Alert.media-user.paginate-last">Last</message>
+
+<!--    In popup     -->
+    <message id="Alert.media-user.button-cancel">Cancel</message>
+    <message id="Alert.media-user.button-save">Save</message>
+    <!--POST--> <!-- a revoir-->
+    <message id="Alert.media-user.popup-add">Add Media</message>
+    <message id="Alert.media-user.add-sms">Add Phone number</message>
+    <message id="Alert.media-user.add-mail">Add Email address</message>
+    <message id="Alert.media-user.add-push">Add Smartphone</message>
+    <!--PUT-->
+    <message id="Alert.media-user.popup-modif">Modify Media</message>
+    <message id="Alert.media-user.modif-sms">Modifi Phone number</message>
+    <message id="Alert.media-user.modif-mail">Modifi Email address</message>
+    <message id="Alert.media-user.modif-push">Modifi Smartphone</message>
+    <!--DELETE-->
+    <message id="Alert.media-user.delete-message">Delete Media</message>
+    <message id="Alert.media-user.delete-media-user">Attention</message>
+    <message id="Alert.media-user.delete-sms-message">
+        <span style="color:red">
+            You are about to delete a phone number
+        </span>
+    </message>
+    <message id="Alert.media-user.delete-mail-message">
+        <span style="color:red">
+            You are about to delete a email address
+        </span>
+    </message>
+    <message id="Alert.media-user.delete-push-message">
+        <span style="color:red">
+            You are about to delete a Smartphone
+        </span>
+    </message>
+    <message id="Alert.media-user.button-confirm">Confirm</message>
+
+<!--    Invalid message     -->
+    <message id="Alert.media-user.invalid-name-mail">
+        <span style="color:red">Invalid email, usage : exemple@echoes.com</span>
+    </message>
+    <message id="Alert.media-user.invalid-name-sms">
+        <span style="color:red">Invalid number phone, usage : (+33)(0)612345678</span>
+    </message>
+    <message id="Alert.media-user.invalid-name-push">
+        <span style="color:red">Invalid name Smartphone</span>
+    </message>
+ <message id="Alert.media-user.invalid-name-twice">
+      <span style="color:red">
+          Please, you do not use the same name twice.
+      </span>
+  </message>
+
+<!--    Error message     -->
+  <message id="Alert.media-user.file-not-generated">
+      <span style="color:red">
+          The file as not been generated. Please contact us.
+      </span>
+  </message>
+  <message id="Alert.media-user.database-error-title">Database error</message>
+  <message id="Alert.media-user.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+<!--    Warning message     -->
+
+     <!-- templates -->
+
+    <message id="Alert.media-user.Management.template" >
+            <div id="media-user-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>
+
+</messages>

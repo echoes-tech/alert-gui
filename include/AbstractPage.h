@@ -49,6 +49,7 @@
 #include <Wt/WString>
 #include <Wt/WLabel>
 #include <Wt/WCssDecorationStyle>
+#include <Wt/WColor>
 
 #include <Wt/WTextArea>
 #include <Wt/WTabWidget>
@@ -62,6 +63,8 @@
 #include <Wt/WBoxLayout>
 #include <Wt/WMessageBox>
 #include <Wt/WNavigationBar>
+
+#include <Wt/WEvent>
 
 #include <Wt/Http/Message>
 #include <Wt/Json/Parser>
@@ -91,14 +94,6 @@ typedef std::multimap<int, Wt::WWidget>  map_widget;
  * list &lsaquo; int, string &rsaquo;
  */
 typedef std::multimap<int, std::string>  multimap_string;
-/** AbstractPage. list_string \n
- * list &lsaquo; string &rsaquo;
- */
-typedef std::list<std::string>  list_string;
-/** AbstractPage. lists_string \n
- * list &lsaquo; list &lsaquo; string &rsaquo; &rsaquo;
- */
-typedef std::list<list_string> lists_string;
 
 /** AbstractPage. vector_widget \n
  * vector &lsaquo; WInteractWidget* &rsaquo;
@@ -115,52 +110,85 @@ class AbstractPage :
 public Wt::WTemplateFormView
 {
 public:
-                                AbstractPage(Echoes::Dbo::Session *session, std::string apiUrl, std::string namePage);
+                                AbstractPage(Echoes::Dbo::Session *session, std::string apiUrl, std::string namePage, bool selectable = false);
     virtual                     ~AbstractPage();
 
     
     virtual void                getResourceList();
-    void setResources(vector_pair resources);
-    vector_pair getResources() const;
-    void setResourceTable(Wt::WTable* resourceTable);
-    Wt::WTable* getResourceTable() const;
+    void                        setResources(vector_pair resources);
+    vector_pair                 getResources() const;
+    void                        setResourceTable(Wt::WTable* resourceTable);
+    Wt::WTable*                 getResourceTable() const;
+    void                        setSelectedID(long long selectedID);
+    long long                   getSelectedID();
+    void                        setAddButtonEnable(bool enable);
+    void                        addPageToUpdate(AbstractPage* abstractPage);
+    virtual void                updatePage();
+    virtual void                fillTable();
+    
+    static const std::string xmlDirectory;
 protected:
 
     // ENUM
-
     enum ETypeJson
     {
-        widget = -1, // other
         text = 0, //WText
         boolean = 1, //WCheckBox
-        integer = 2, // int //WText
+        number = 2, // int //WText
         undid = 3, // under id (string) "name" //WComboBox
-        object = 4
+        object = 4,
+        widget = 5 // other
     };
 
+    enum ETextSpecial
+    {
+        normalText = 0,
+        mail = 1,
+        phone = 2,
+        date = 3
+    };
     
-    virtual void                updatePage(bool getResources = true);
+    enum ENumberSpecial
+    {
+        normalNumber = 0,
+        notnull = 1,
+        uns = 2, // unsigned
+        flt = 3 // float
+    };
+    
+    enum EMandatory
+    {
+        isnot = 0,
+        is = 1
+    };
+
     virtual void                clearStructures();
     
     void                        createTable();
 
     // -------- Creates Elements to table. ------------------------
     Wt::WContainerWidget        *createTableFirstHeader();
+    virtual void                        addPopupAddHandler(Wt::WInteractWidget* widget);
     Wt::WContainerWidget        *createTableBody();
     Wt::WContainerWidget        *createTableFooter();
     // Add Resource For Elements ----------------------------------
     void                        addTableSecondHeader();
     void                        fillBodyTable();
-    void                        addInputForAffix(int rowBodyTable);
+    void                        addInputForAffix(int rowBodyTable);   
     // POPUP : ----------------------------------------------------
     void                        addResourcePopup();
     void                        modifResourcePopup(long long id);
-    void                        popupCheck(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage,
-    Wt::WDialog                 *dialog, long long id);
+    void                        popupCheck(std::vector<Wt::WInteractWidget*>* inputName, std::vector<Wt::WText*> errorMessage,
+                                    Wt::WDialog *dialog, long long id);
     void                        popupFinalization(Wt::WDialog *dialog, long long id);
     // Methodes useful
     void                        addGenericButtonsToResourceTable(long long id, int rowTable, int columnTable);
+    virtual void                addPopupModifHandler(Wt::WInteractWidget* widget, long long id);
     virtual int                 addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);
+    virtual int                 addCustomResourceTable(long long id, int rowTable, int columnTable);
+    virtual void                saveButtonFooter(Wt::WDialog *dialog);
+    virtual void                cancelButtonFooter(Wt::WDialog *dialog);
+    virtual void                customButtonFooter(Wt::WDialog *dialog);
     void                        addButtonsToPopupFooter(Wt::WDialog *dialog);
 
     // Set/Get attribut to init or option. ------------------------
@@ -171,10 +199,10 @@ protected:
      * @param titles &lsaquo; type, name &rsaquo; \n
      * type(0) == Wtext || type(1) == Wwidget.
      */
-    void                        setUndidName(std::string undidName);
-    void                        setTitles(std::multimap<int, std::string> titles);
+    void                        setUndidName(std::vector<std::string> undidNames);
+    void                        setTitles(std::vector<std::pair <int, std::string>> titles);
     virtual void                setDisplayedTitlesPopups();
-    void                        setUrl(lists_string listsUrl);
+    void                        setUrl(std::list<std::list<std::pair<std::string, std::vector<std::string>>>> listsUrl); 
     void                        setButtonModif(bool check);
     void                        setButtonSup(bool check);
 //    void                        setLocalTable(bool background);
@@ -189,49 +217,54 @@ protected:
      * @param jsonResources
      */
     virtual void                handleJsonGet(vectors_Json jsonResources);
+    virtual std::vector<Wt::WInteractWidget*>   initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
+    void                        sendHttpRequestGet(std::string resource, std::vector<std::string> listParameter, boost::function<void (Wt::Json::Value)> functor);
+    void                        handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
+                                    Wt::Http::Client *client, boost::function<void (Wt::Json::Value)> functor);
+    void                        recursiveGetResources(std::list<std::list<std::pair<std::string, std::vector<std::string>>>> listsUrl,
+                                    boost::function<void (vectors_Json)> functorToCallAtEnd, vectors_Json jsonResource = vectors_Json());
+    void                        handleRecursiveGetResources(Wt::Json::Value result, std::list<std::list<std::pair<std::string, std::vector<std::string>>>> listsUrl,
+                                    boost::function<void (vectors_Json)> functorToCallAtEnd, vectors_Json jsonResource);
     /**
      * recursiveGetResources for go call API with listsUrl_ \n
      * listsUrl_ is set in construtor child in setUrl()
      * @param Send jsonResource whether u want use her after handleJsonGet
      */
-    void                        recursiveGetResources(vectors_Json jsonResource = vectors_Json(), lists_string listsUrl = lists_string());
-    int                         handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
-    lists_string listsUrl, vectors_Json jsonResource, Wt::Http::Client *client);
-    virtual std::string         addParameter();
     // ---- ADD MODIF DELETE ----------------------------------------------
-    virtual void                addResource(std::vector<Wt::WInteractWidget*> argument);
-    virtual void                setAddResourceMessage(Wt::Http::Message *message,std::vector<Wt::WInteractWidget*> argument);
-    virtual void                modifResource(std::vector<Wt::WInteractWidget*> arguments, long long id);
-    virtual void                setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*> argument);
+    virtual void                addResource(std::vector<Wt::WInteractWidget*>* argument);
+    virtual void                setAddResourceMessage(Wt::Http::Message *message,std::vector<Wt::WInteractWidget*>* argument);
+    virtual void                modifResource(std::vector<Wt::WInteractWidget*>* arguments, long long id);
+    virtual void                setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     virtual Wt::WDialog         *deleteResource(long long id);
     // RETURNS API --------------------------------------
     virtual void                postResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
     virtual void                putResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
     virtual void                apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
     // Check input ----------------------------------------------
-    void                        checkAdd(std::vector<Wt::WText*> errorMessage);
-    void                        checkModif(vector_widget inputs, long long id, std::vector<Wt::WText*> errorMessage);
     int                         checkName(std::string inputText, std::vector<long long> ids);
     virtual int                 checkInput(std::vector<Wt::WInteractWidget*> inputName, std::vector<Wt::WText*> errorMessage);
     //  INPUT ---------------------------------------------------
-    void                        showInputForAdd();
-    void                        inputForModif(long long id, int rowTable, int columnTable);    
+    void                        showInputForAdd(); 
     // OVERLOAD -------------------------------------------------
-    virtual Wt::WValidator      *editValidator(int who) {return (new Wt::WValidator());};
+    Wt::WValidator              *editValidator(int type); // {return (new Wt::WValidator());};
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id);
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
     std::map<long long, vector_widget>          m_rowsTable;
-    std::multimap<int, std::string>             m_displayedTitlesPopups;
+    std::vector<std::pair <int, std::string>>   m_displayedTitlesPopups;
+    bool                                        m_autoUpdate;
+    bool                                        m_hasAddButton;
     
     Echoes::Dbo::Session                        *m_session;
     
-    bool                getFooterOkButtonStatus();
-    void                setFooterOkButtonStatus(bool active);
+    bool                        getFooterOkButtonStatus();
+    void                        setFooterOkButtonStatus(bool active);
+    void                        tableHandler(long long id);
+    void                        addEnumToModel(Wt::WStandardItemModel* standardItemModel, int enumToAdd, Wt::WString name,
+                                    Wt::WString optionalParameter = Wt::WString::Empty);
+    int                         setValidatorType(int type, int specialType, int mandatory);
 
 private:
-    
-
     // Main attributs ---------------------------
     // main table of the page, used to list resources
     Wt::WTable                  *m_resourceTable;
@@ -242,18 +275,24 @@ private:
      */
     vector_widget                       m_inputs;
     // Attributs.-------------------------------
-    lists_string                        m_listsUrl;
-    std::multimap<int, std::string>     m_titles;
+    std::list<std::list<std::pair<std::string, std::vector<std::string>>>>      m_listsUrl;
+    /* vector == column order | pair: 'type' of column - 'name' of column */
+    /* full 'type': 4bits ETypeJson, 4bits ESpecialType and 4bits boolean (first being isMandatory) for a total of 12bits encoded chain */
+    std::vector<std::pair<int, std::string>>                                    m_titles;
     
     std::string                         m_apiUrl;
     std::string                         m_xmlPageName;
     std::string                         m_nameResourcePageSpec;
-    std::string                         m_undidName;
+    std::vector<std::string>            m_undidNames;
     bool                                m_isModifButtonPresent;
     bool                                m_isDeleteButtonPresent;
+    bool                                m_selectable;
+    long long                           m_selectedID;
+    std::vector<AbstractPage*>            m_pagesToUpdate;     
 //    bool                                m_isMainPage;
     // select drop + paginate--------------------
-    vector_pair                 m_resources;
+    vector_pair                         m_resources;
+    bool                                m_buttonAddEnable = true;
     
     bool m_footerOkButtonActive;
     

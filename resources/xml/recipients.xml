@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <message id="Alert.recipients.form-info">
+      This page allows you to add media, they can be used for sending alerts.
+  </message>
+
+<!--  <message id="Alert.recipients.invalid-name">Invalid name</message>
+  
+  <message id="Alert.recipients.add-button">Add a media</message>
+
+  <message id="Alert.recipients.modif-button">Modif</message>
+  <message id="Alert.recipients.delete-button">Delete</message>
+
+  <message id="Alert.recipients.main-table">Your medias</message>
+  
+  <message id="Alert.recipients.name">recipients name</message>
+  <message id="Alert.recipients.action">Actions</message>
+  
+  <message id="Alert.recipients.delete-recipients">Delete this media</message>
+  <message id="Alert.recipients.popup-modif">Modifi this media</message>
+  <message id="Alert.recipients.popup-add">Add media</message>
+
+  <message id="Alert.recipients.name-invalid">Invalid</message>
+  <message id="Alert.recipients.database-error-title">Database error</message>
+  <message id="Alert.recipients.database-error">Error : {1} | {2}</message>-->
+  
+    
+  <!-- templates -->
+
+<message id="Alert.recipients.Management.template" >
+    <br />
+      <div class ="alert alert-info">${tr:Alert.recipients.form-info} </div>
+    <message id="Alert.recipients.Management.template" >
+            <div id="recipients-name" class="">
+                    ${resource-table}
+            </div>
+            
+    </message>
+</message>
+
+  
+
+</messages>

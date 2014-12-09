@@ -104,17 +104,17 @@ public:
     };
 
     BOOST_ENUM_VALUES(EPageType, const char*,
-                      (WELCOME) ("welcome")
-                      (DASHBOARD) ("dashboard")
-                      (ASSET) ("assets")
-                      (RECIPIENTS) ("recipients")
-                      (INFORMATIONS) ("informations")
-                      (ASSOCIATION) ("association")
-                      (ALERTS) ("alerts")
-                      (PLUGIN) ("plugins")
-                      (ROLE) ("role")
-                      (OPTIONS) ("options")
-                      (UNITS) ("units")
+                        (WELCOME) ("welcome")
+                        (DASHBOARD) ("dashboard")
+                        (PROBES) ("probes")                  
+                        (ASSET) ("assets")
+                        (RECIPIENTS) ("recipients")
+                        (INFORMATIONS) ("informations")
+                        (ALERTS) ("alerts")
+                        (PLUGIN) ("plugins")
+                        (ROLE) ("role")
+                        (OPTIONS) ("options")
+                        (UNITS) ("units")
                       )
 
 private:

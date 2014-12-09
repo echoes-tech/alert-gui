@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+    
+  <message id="Alert.alert.form-info">
+      Cette page permet d'ajouter des alertes, elles vous permettent d'envoyer le bon message, à la bonne personne au bon moment !
+  </message>
+
+<!--    In table     -->
+    <!--nothing alert-->
+    
+    <message id="Alert.alert.nothing-alert">Alertes</message>
+    <message id="Alert.alert.nothing-alert-text">Aucune alerte enregistrée actuellement.</message>
+    <message id="Alert.alert.nothing-button">Cliquer pour ajouter</message>
+    <message id="Alert.alert.no-alert-sent">Jamais</message>
+    <!--header-->
+    <message id="Alert.alert.main-table">Alertes</message>
+    <!--body-->
+    <message id="Alert.alert.name-name">Nom de l'alerte</message>
+    <message id="Alert.alert.modif-button">Modifier</message>
+    <message id="Alert.alert.delete-button">Supprimer</message>
+    <message id="Alert.alert.name-alert_media_specializations">Nombre de destinataires</message>
+    <message id="Alert.alert.name-last_attempt">Dernier envoi</message>
+    <message id="Alert.alert.name-modif-dest">Modifier dest</message>
+    
+    <!--footer-->
+    <message id="Alert.alert.search-bar">Recherche : </message>
+        <!-- Paginate -->
+        <message id="Alert.alert.paginate-first">Début</message>
+        <message id="Alert.alert.paginate-prev">Préc</message>
+        <message id="Alert.alert.paginate-next">Suiv</message>
+        <message id="Alert.alert.paginate-last">Fin</message>
+
+<!--    In popup     -->
+    <message id="Alert.alert.button-cancel">Annuler</message>
+    <message id="Alert.alert.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.alert.popup-add">Ajouter une alerte</message>
+    <message id="Alert.alert.add-title-box-asset">Equipement</message>
+    <message id="Alert.alert.add-title-box-plugin">Application</message>
+    <message id="Alert.alert.add-title-box-info">Information</message>
+    <message id="Alert.alert.add-title-box-key">Clé</message>
+    <message id="Alert.alert.add-title-box-flapping">Flapping</message>
+    <message id="Alert.alert.add-button-add-critera">Ajouter critères</message>
+    <message id="Alert.alert.add-last-info">Dernière valeur reçue :</message>
+    <message id="Alert.alert.add-compare">Critères de comparaison.</message>
+    <message id="Alert.alert.add-compare-operator">Opé.</message>
+    
+    <message id="Alert.alert.button-save-continue">Enregistrer et continuer</message>
+    <message id="Alert.alert.message-true">Vrai</message>
+    <message id="Alert.alert.message-false">Faux</message>
+    <message id="Alert.alert.message-value">Valeur</message>
+    <!--PUT-->
+    <message id="Alert.alert.popup-modif">Modifier cette alerte</message>
+    <!--DELETE-->
+    <message id="Alert.alert.delete-alert">Attention</message>
+    <message id="Alert.alert.delete-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer une alerte.
+        </span>
+    </message>
+    <message id="Alert.alert.button-confirm">Confirmer</message>
+    <!--In popup recipients-->
+    <message id="Alert.alert.form.alert">Alerte&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.rec">Destinataire&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.media">Média&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.mess">Message&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.snooze">Temporisation&nbsp;:&nbsp;</message>
+    <message id="Alert.alert.form.mail">MAIL</message>
+    <message id="Alert.alert.form.sms">SMS</message>
+    <message id="Alert.alert.form.push">PUSH</message>
+    
+    <message id="Alert.alert.form.alert-per">alerte par </message>
+    <message id="Alert.alert.form.alert-max">Max. </message>
+    <message id="Alert.alert.form.alert-unit-min">min.</message>
+    <message id="Alert.alert.form.alert-unit-hour">heure</message>
+    <message id="Alert.alert.form.alert-unit-day">jour</message>
+    <message id="Alert.alert.form.thresh-duration">Durée du seuil</message>
+    
+    <message id="Alert.alert.form.recursivity">Récursivité :</message>
+    <message id="Alert.alert.form.start">Début à </message>
+    <message id="Alert.alert.form.duration">Durée</message>
+    <message id="Alert.alert.form.timeslot">Plages horaire</message>
+    <message id="Alert.alert.form.add-timeslot">Enregistrer</message>
+    
+    <message id="Alert.alert.form.all-days">Tous les jours</message>
+    <message id="Alert.alert.form.all-months">Tous les mois</message>
+    <message id="Alert.alert.form.summary">Récapitulatif</message>
+    <message id="Alert.alert.form.days">jours</message>
+    <message id="Alert.alert.form.months">mois</message>
+    
+    <message id="Alert.alert.form.mon">lundi</message>
+    <message id="Alert.alert.form.thu">mardi</message>
+    <message id="Alert.alert.form.wed">mercredi</message>
+    <message id="Alert.alert.form.tue">jeudi</message>
+    <message id="Alert.alert.form.fri">vendredi</message>
+    <message id="Alert.alert.form.sat">samedi</message>
+    <message id="Alert.alert.form.sun">dimanche</message>
+    
+    <message id="Alert.alert.form.jan">janvier</message>
+    <message id="Alert.alert.form.feb">février</message>
+    <message id="Alert.alert.form.mar">mars</message>
+    <message id="Alert.alert.form.apr">avril</message>
+    <message id="Alert.alert.form.may">mai</message>
+    <message id="Alert.alert.form.jun">juin</message>
+    <message id="Alert.alert.form.jul">juillet</message>
+    <message id="Alert.alert.form.aug">août</message>
+    <message id="Alert.alert.form.sep">septembre</message>
+    <message id="Alert.alert.form.oct">octobre</message>
+    <message id="Alert.alert.form.nov">novembre</message>
+    <message id="Alert.alert.form.dec">decembre</message>
+    
+    <message id="Alert.alert.operator.lt">Inférieur</message>
+    <message id="Alert.alert.operator.le">Inférieur ou égal</message>
+    <message id="Alert.alert.operator.eq">Egal</message>
+    <message id="Alert.alert.operator.ge">Supérieur ou égal</message>
+    <message id="Alert.alert.operator.gt">Supérieur</message>
+    <message id="Alert.alert.operator.ne">Différent</message>
+    
+    <message id="Alert.alert.boolean-operator.and">et</message>
+    <message id="Alert.alert.boolean-operator.or">ou</message>
+    
+    <message id="Alert.alert.form.minutes">minutes</message>
+    <message id="Alert.alert.form.hours">heures</message>
+    <message id="Alert.alert.form.times">fois</message>
+
+    <message id="Alert.alert.operator.contains">Contient</message>
+    
+    <message id="Alert.alert.sec-base-message">Ajoutez votre fichier de correlation ici.</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.alert.invalid-name-name">
+      <span style="color:red">&nbsp;Nom d'alerte invalide</span>
+  </message>
+  <message id="Alert.alert.invalid-name-alert">
+      <span style="color:red">&nbsp;Nom d'alerte invalide</span>
+  </message>
+  <message id="Alert.alert.invalid-name-twice">
+      <span style="color:red">
+           Nom de l'alerte déjà existant.
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-number">
+      <span style="color:red">
+        Nombre invalide
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-asset">
+      <span style="color:red">
+        Sélectionner <br/> un serveur
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-plugin">
+      <span style="color:red">
+        Sélectionner <br/>une application
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-select-info">
+      <span style="color:red">
+        Sélectionner <br/>une information
+      </span>
+  </message>
+  <message id="Alert.alert.invalid-choose">
+      <span style="color:red">
+        Faites un choix
+      </span>
+  </message>
+
+<!--    Error message     -->
+  <message id="Alert.alert.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.alert.database-error">
+    Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+
+<!--    Warning message     -->
+</messages>

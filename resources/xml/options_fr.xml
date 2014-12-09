@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <!-- AlertWidget -->
+
+  <message id="Alert.option.option-table-title">Liste des options</message>
+  <message id="Alert.option.ask-sms-quota-body">Demande de renouvellement quota SMS.</message>
+  <message id="Alert.option.ask-sms-quota-subject">Demande quota SMS</message>
+  
+  <message id="Alert.option.ask-sms-button">Demander un renouvellement de quota SMS</message>
+  
+  <message id="Alert.option.ask-sms-title">Envoyé</message>
+  <message id="Alert.option.ask-sms">Un email a été envoyé à notre équipe. Vous recevrez un email lorsque votre quota aura été renouvellé.</message>
+
+  <message id="Alert.option.option-form-title">Options</message>
+  <message id="Alert.option.option-form-info">Cette page vous permet de régler les différentes options de votre compte.</message>
+  
+  <message id="Alert.option.sms-quota-label">Quota SMS</message>
+  <message id="Alert.option.sms-quota-info">Le nombre de SMS qu'il vous reste</message>
+
+  <message id="Alert.option.database-error-title">Erreur base de données</message>
+  <message id="Alert.option.database-error">Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com</message>
+  
+  <message id="Alert.option.update-password-label">Mot de passe</message>
+  <message id="Alert.option.update-password-info">Remplissez votre mot de passe actuel et le nouveau puis cliquez sur ok pour changer de mot de passe.</message>
+  <message id="Alert.option.password-changed">Mot de passe modifié.</message>
+
+</messages>

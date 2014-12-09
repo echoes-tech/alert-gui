@@ -31,25 +31,33 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
 //    setLocalTable(true);
     
     string nameSpe = type == 1 ? "mail" : type == 2 ? "sms" : type == 3 ? "push" : "error";
-    this->setNameSpecial(nameSpe);
+//    this->setNameSpecial(nameSpe);
     
-    multimap<int, string> titles;
-    titles.insert(make_pair(ETypeJson::text, "value"));
-    titles.insert(make_pair(ETypeJson::undid, "user"));
-    setUndidName("last_name");
+    std::vector<std::pair <int, string>>titles;
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "value"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::is), "user"));
+    
+    std::vector<std::string> undidNames;
+    undidNames.push_back("first_name");
+    undidNames.push_back("last_name");
+    setUndidName(undidNames);
     setTitles(titles);
+    
+    list<list<pair<string, vector<string>>>> listsUrl;
+    list<pair<string, vector<string>>> listUrl;
+    vector<string> listParameter;
 
-    lists_string lListUrl;
-    list_string listUrl;
-    listUrl.push_back("medias");
-    listUrl.push_back("medias/:id");
-    lListUrl.push_back(listUrl);
-    listUrl.clear();
-    listUrl.push_back("users");
-    lListUrl.push_back(listUrl);
+    listParameter.push_back("type_id=" + boost::lexical_cast<string>(this->type_));    
+    listUrl.push_back(pair<string, vector<string>>("medias", listParameter));  
+    listUrl.push_back(pair<string, vector<string>>("medias/:id", listParameter));    
+    listsUrl.push_back(listUrl);
     listUrl.clear();
     
-    setUrl(lListUrl);
+    listUrl.push_back(pair<string, vector<string>>("users", listParameter));  
+    listsUrl.push_back(listUrl);
+    listUrl.clear();
+    
+    setUrl(listsUrl);
 
 }
 
@@ -57,14 +65,11 @@ Wt::WComboBox *UserEditionWidget::popupAdd(Wt::WDialog *dialog)
 {
     Wt::WComboBox *comboBox = new Wt::WComboBox(dialog->contents());
     comboBox->setModel(usersModel_);
+    comboBox->setCurrentIndex(0);
     return comboBox;
 }
 
-string UserEditionWidget::addParameter()
-{
-    return "&type_id=" + boost::lexical_cast<string>(this->type_);
-}
-
+/*
 Wt::WValidator *UserEditionWidget::editValidator(int who)
 {
     Wt::WRegExpValidator *validator = 0;
@@ -86,10 +91,11 @@ Wt::WValidator *UserEditionWidget::editValidator(int who)
     }
     return validator;
 }
+*/
 
-void UserEditionWidget::addResource(vector<Wt::WInteractWidget*> argument)
+void UserEditionWidget::addResource(vector<Wt::WInteractWidget*>* argument)
 {
-    vector<Wt::WInteractWidget*>::iterator i = argument.begin();
+    vector<Wt::WInteractWidget*>::iterator i = argument->begin();
 
     Wt::Http::Message messageMedia;
     messageMedia.addBodyText("{\n\"type_id\": " + boost::lexical_cast<string>(this->type_)
@@ -121,10 +127,10 @@ void UserEditionWidget::addResource(vector<Wt::WInteractWidget*> argument)
 }
 
 
-void UserEditionWidget::modifResource(vector<Wt::WInteractWidget*> arguments, long long id)
+void UserEditionWidget::modifResource(vector<Wt::WInteractWidget*>* arguments, long long id)
 {
     MapLongString::iterator it = mediasTokens.find(id);
-    vector<Wt::WInteractWidget*>::iterator i = arguments.begin();
+    vector<Wt::WInteractWidget*>::iterator i = arguments->begin();
 
     Wt::Http::Message message;
     message.addBodyText("{\n\"token\": \"" + (*it).second
@@ -200,7 +206,10 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
             Wt::Json::Object obj = result.at(cpt);
             Wt::WString firstName = obj.get("first_name");
             Wt::WString lastName = obj.get("last_name");
-            string name = firstName.toUTF8() + " " + lastName.toUTF8();
+            Wt::WString email = obj.get("mail");
+            
+//            string name = firstName.toUTF8() + " " + lastName.toUTF8();
+            string name = email.toUTF8();
             long long id = obj.get("id");
 
             vector<Wt::WStandardItem*> rowVector;

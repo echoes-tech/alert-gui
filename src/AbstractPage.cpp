@@ -137,9 +137,10 @@ Wt::WContainerWidget *AbstractPage::createTableFirstHeader()
     Wt::WContainerWidget *headerTableContainer = new Wt::WContainerWidget();
     headerTableContainer->addStyleClass("widget-title header-pers");
     
-    new Wt::WText("<span class='icon'><i class='icon-tasks'></i></span><h5>"
+    Wt::WText *nameMainTable = new Wt::WText("<span class='icon'><i class='icon-tasks'></i></span><h5>"
                   + tr("Alert." + m_xmlPageName + ".main-table")
                   + "</h5>", headerTableContainer);
+    nameMainTable->setObjectName(m_xmlPageName + "-main-table");
 
     if (m_hasAddButton)
     {
@@ -148,6 +149,7 @@ Wt::WContainerWidget *AbstractPage::createTableFirstHeader()
         addPopupAddHandler(headerButton);
         headerButton->setStyleClass("button-add btn");
         headerButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
+        headerButton->setObjectName("add-button");
     }
     return headerTableContainer;
 }
@@ -284,15 +286,22 @@ void AbstractPage::fillBodyTable()
                     m_resourceTable->elementAt(rowBodyTable, columnTable)->setContentAlignment(Wt::AlignCenter);
                     //m_resourceTable->elementAt(rowBodyTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
                 }
+                std::string cell_name("cell_" + boost::lexical_cast<string>(rowBodyTable) + "x" + boost::lexical_cast<string>(columnTable));
+                m_resourceTable->elementAt(rowBodyTable, columnTable)->setObjectName(cell_name);
                 columnTable++;
             }
+            
             tmp = columnTable;
             columnTable = addCustomResourceTable((*itRowTable).first, rowBodyTable, columnTable);
             while (tmp != columnTable)
             {
                 tmp = columnTable;
                 columnTable = addCustomResourceTable((*itRowTable).first, rowBodyTable, columnTable);
+                
+                std::string cell_name("cell-_" + boost::lexical_cast<string>(rowBodyTable) + "x" + boost::lexical_cast<string>(columnTable));
+                m_resourceTable->elementAt(rowBodyTable, columnTable)->setObjectName(cell_name);
             }
+            
             m_resources.push_back(pair<int, Wt::WTableRow*>(0, m_resourceTable->rowAt(rowBodyTable)));
             addGenericButtonsToResourceTable((*itRowTable).first, rowBodyTable, columnTable);
             if (m_selectable)
@@ -346,6 +355,7 @@ void AbstractPage::addResourcePopup()
             
         if (jsonType != ETypeJson::widget)
         {
+            std::string fieldName("input" + boost::lexical_cast<string>(cpt));
             new Wt::WText(tr("Alert." + m_xmlPageName + ".name-" + (*title).second)
                           + " : <br />", dialogAdd_->contents());
 
@@ -358,11 +368,15 @@ void AbstractPage::addResourcePopup()
                 //FIXME
                 input->setValidator(AbstractPage::editValidator(fullType));
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
+                
+                input->setObjectName(fieldName);
                 inputName->push_back(input);
             }
             else if (jsonType == ETypeJson::boolean)
             {
                 Wt::WCheckBox *checkBox = new Wt::WCheckBox(dialogAdd_->contents());
+                
+                checkBox->setObjectName(fieldName);
                 inputName->push_back(checkBox);
             }
             else if (jsonType == ETypeJson::number)
@@ -374,15 +388,23 @@ void AbstractPage::addResourcePopup()
                 {
                     input->setFocus();
                 }
+                
+                input->setObjectName(fieldName);
                 inputName->push_back(input);
             }
             else if (jsonType == ETypeJson::undid)
             {
-                inputName->push_back(popupAdd(dialogAdd_));
+                Wt::WComboBox *comboBox = popupAdd(dialogAdd_);
+                comboBox->setObjectName(fieldName);
+                
+                inputName->push_back(comboBox);
             }
             else if (jsonType == ETypeJson::object)
             {
-                inputName->push_back(popupAdd(dialogAdd_));
+                Wt::WComboBox *comboBox = popupAdd(dialogAdd_);
+                comboBox->setObjectName(fieldName);
+                
+                inputName->push_back(comboBox);
             }
             Wt::WText *error = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                 + title->second),
@@ -423,7 +445,7 @@ void AbstractPage::modifResourcePopup(long long id)
 
             for (Wt::WInteractWidget *itElem : itTable->second)
             {
-
+                std::string fieldName("input" + boost::lexical_cast<string>(cpt));
                 std::vector<std::pair <int, string>>::iterator title;
                 unsigned int correctTitlefinder = 0;
                 for (title = m_displayedTitlesPopups.begin(); title != m_displayedTitlesPopups.end(); title++)
@@ -464,6 +486,8 @@ void AbstractPage::modifResourcePopup(long long id)
                             input->setFocus();
                         }
                         input->setToolTip(Wt::WString::fromUTF8(nameResource));
+                        
+                        input->setObjectName(fieldName);
                         inputName->push_back(inputCW);
                         Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                          + title->second), dialogModif->contents());
@@ -493,6 +517,8 @@ void AbstractPage::modifResourcePopup(long long id)
                         input->setFocus();
                     }
                     input->setToolTip(Wt::WString::fromUTF8(nameResource));
+                    
+                    input->setObjectName(fieldName);
                     inputName->push_back(inputCW);
                     Wt::WText *error2 = new Wt::WText(tr("Alert." + m_xmlPageName + ".invalid-name-"
                                                          + (*title).second), dialogModif->contents());
@@ -517,6 +543,8 @@ void AbstractPage::modifResourcePopup(long long id)
                             {
                                 checkBox->setChecked();
                             }
+                            
+                            checkBox->setObjectName(fieldName);
                             inputName->push_back(checkBox);
                             break;
                         }
@@ -549,6 +577,7 @@ void AbstractPage::modifResourcePopup(long long id)
                     {
                         comboBox->setCurrentIndex(0);
                     }
+                    comboBox->setObjectName(fieldName);
                     break;
                 }
                 case ETypeJson::undid:
@@ -577,6 +606,7 @@ void AbstractPage::modifResourcePopup(long long id)
                     {
                         comboBox->setCurrentIndex(0);
                     }
+                    comboBox->setObjectName(fieldName);
                     break;
                 }
                 default:
@@ -596,9 +626,10 @@ void AbstractPage::modifResourcePopup(long long id)
 
     popupFinalization(dialogModif, id);
 
-    dialogModif->finished().connect(bind([ = ] (){
-                                         popupCheck(inputName, errorMessage, dialogModif, id);
-                                         return;
+    dialogModif->finished().connect(bind([ = ] ()
+    {
+        popupCheck(inputName, errorMessage, dialogModif, id);
+        return;
     }));
     dialogModif->show();
 }
@@ -665,6 +696,8 @@ void AbstractPage::addGenericButtonsToResourceTable(long long id, int rowTable, 
         modifButton->setAttributeValue("class", "btn btn-inverse");
         modifButton->setTextFormat(Wt::XHTMLUnsafeText);
         modifButton->setText("<span class='input-group-btn'><i class='icon-edit icon-white'></i></span>");
+        std::string objectName("button-modif" + boost::lexical_cast<string> (rowTable));
+        modifButton->setObjectName(objectName);
         addPopupModifHandler(modifButton, id);
         m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
         m_resourceTable->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
@@ -677,6 +710,10 @@ void AbstractPage::addGenericButtonsToResourceTable(long long id, int rowTable, 
         delButton->setTextFormat(Wt::XHTMLUnsafeText);
         delButton->setText("<span class='input-group-btn'><i class='icon-remove icon-white'></i></span>");
         delButton->clicked().connect(boost::bind(&AbstractPage::deleteResource, this, id));
+        
+        std::string objectName("del-button" + boost::lexical_cast<string> (rowTable));
+        delButton->setObjectName(objectName);
+        
         m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(Wt::WLength(5, Wt::WLength::Percentage)));
         m_resourceTable->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
     }
@@ -705,6 +742,7 @@ void AbstractPage::saveButtonFooter(Wt::WDialog *dialog)
     {
         saveButton->clicked().connect(dialog, &Wt::WDialog::accept);
         saveButton->setAttributeValue("style", "margin-left:12px");
+        saveButton->setObjectName("save-button");
     }
     else
     {
@@ -1108,8 +1146,9 @@ void AbstractPage::modifResource(vector<Wt::WInteractWidget*>* arguments, long l
 
     setModifResourceMessage(message, arguments);
 
-    string apiAddress = getApiUrl() + "/" + m_listsUrl.begin()->begin()->first + "/"
-            + boost::lexical_cast<string> (id)
+    string apiAddress = getApiUrl()
+            + "/" + m_listsUrl.begin()->begin()->first
+            + "/" + boost::lexical_cast<string> (id)
             + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
             + "&token=" + m_session->user()->token.toUTF8();
 
@@ -1141,12 +1180,13 @@ Wt::WDialog *AbstractPage::deleteResource(long long id)
     box->contents()->
             addWidget(new Wt::WText(tr("Alert." + m_xmlPageName + ".delete-message")));
 
-    Wt::WPushButton *ok =
+    Wt::WPushButton *confirm =
             new Wt::WPushButton(tr("Alert."
                                    + m_xmlPageName + ".button-confirm"),
                                 box->footer());
-    ok->clicked().connect(box, &Wt::WDialog::accept);
-    ok->setAttributeValue("style", "margin-left:12px");
+    confirm->clicked().connect(box, &Wt::WDialog::accept);
+    confirm->setObjectName("button-confirm");
+    confirm->setAttributeValue("style", "margin-left:12px");
 
     Wt::WPushButton *annul =
             new Wt::WPushButton(tr("Alert."
@@ -1156,28 +1196,28 @@ Wt::WDialog *AbstractPage::deleteResource(long long id)
     annul->setAttributeValue("style", "margin-left:12px;");
     
     box->finished().connect(bind([ = ] (){
-                                if (box->result() == Wt::WDialog::Accepted)
-       {
-                                Wt::Http::Message message;
-                                message.addBodyText("");
-                                string apiAddress = getApiUrl() + "/" + m_listsUrl.begin()->begin()->first + "/"
-                                + boost::lexical_cast<string> (id)
-                                + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
-                                + "&token=" + m_session->user()->token.toUTF8();
+        if (box->result() == Wt::WDialog::Accepted)
+        {
+            Wt::Http::Message message;
+            message.addBodyText("");
+            string apiAddress = getApiUrl() + "/" + m_listsUrl.begin()->begin()->first + "/"
+            + boost::lexical_cast<string> (id)
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8();
 
-                                Wt::Http::Client *client = new Wt::Http::Client(this);
-                                client->done().connect(boost::bind(&AbstractPage::apiDeleteResourceCallback, this, _1, _2, client));
-                                Wt::log("debug") << m_xmlPageName + " : [DELETE] address to call : " << apiAddress;
-                                if (client->deleteRequest(apiAddress, message))
-           {
-                                Wt::WApplication::instance()->deferRendering();
-           }
-           else
-           {
-                                Wt::log("error") << "Error Client Http";
-           }
-       }
-                                return box;
+            Wt::Http::Client *client = new Wt::Http::Client(this);
+            client->done().connect(boost::bind(&AbstractPage::apiDeleteResourceCallback, this, _1, _2, client));
+            Wt::log("debug") << m_xmlPageName + " : [DELETE] address to call : " << apiAddress;
+            if (client->deleteRequest(apiAddress, message))
+            {
+                Wt::WApplication::instance()->deferRendering();
+            }
+            else
+            {
+                Wt::log("error") << "Error Client Http";
+            }
+        }
+        return box;
     })); 
      
     box->show();

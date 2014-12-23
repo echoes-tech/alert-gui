@@ -160,7 +160,7 @@ void MainWidget::createUI()
 
         for (auto i = m_pageDisplayRights->begin(); i != m_pageDisplayRights->end(); ++i)
         {
-            createMenuItem(*i,menu,getIconName(*i));
+            createMenuItem(*i, menu, getIconName(*i));
             createPage(*i);
         }
         created_ = true;

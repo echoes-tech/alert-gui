@@ -28,6 +28,6 @@ Wt::WWidget * SpecializedAuthWidget::createRegistrationView(const Wt::Auth::Iden
 
   SpecializedRegistrationWidget *w = new SpecializedRegistrationWidget(this);
   w->setModel(registrationModel_);
-
+  
   return w;
 }

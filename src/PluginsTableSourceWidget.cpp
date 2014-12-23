@@ -204,6 +204,7 @@ void PluginsTableSourceWidget::addResourcePopup(long long sourceID)
     boost::function<void (Wt::Json::Value)> functor = boost::bind(&PluginsTableSourceWidget::handleRequestPopupAdd, this, _1, paramsContainer, inputName, sourceID);
     
     Wt::WComboBox* addonComboBox = new Wt::WComboBox();
+    addonComboBox->setObjectName("addonComboBox");
     if(sourceID == 0)
     {
         dialog->contents()->addWidget(addonComboBox);

@@ -342,6 +342,7 @@ void MainWidget::updateContainerFluid(int type)
     {
         case Enums::EPageType::WELCOME:
         {
+            wcw->refresh();
             this->contentFluid->addWidget(wcw);
             break;
         }
@@ -376,16 +377,19 @@ void MainWidget::updateContainerFluid(int type)
         }
         case Enums::EPageType::PLUGIN:
         {
+            plw->update();
             this->contentFluid->addWidget(plw);
             break;
         }
         case Enums::EPageType::ROLE:
         {
+            rcw->refresh();
             this->contentFluid->addWidget(rcw);
             break;
         }
         case Enums::EPageType::OPTIONS:
         {
+            omw->refresh();
             this->contentFluid->addWidget(omw);
             break;
         }

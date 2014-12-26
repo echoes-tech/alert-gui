@@ -32,39 +32,34 @@ PluginsWidget::PluginsWidget(Echoes::Dbo::Session* session, const std::string ap
 
 void PluginsWidget::update()
 {
-   if (!newClass_)
-    {
-       this->clear();
-       Wt::WTemplateFormView *templateFormView =
-               new Wt::WTemplateFormView(Wt::WString::tr("Alert.plugins.Management.template"));
-       templateFormView->addStyleClass("template");
-       this->addWidget(templateFormView);
-       
-       // PLUGIN
-       PluginsTablePluginWidget *ptPluginW = new PluginsTablePluginWidget(session_, apiUrl_);
-       ptPluginW->updatePage();
-       templateFormView->bindWidget("resource-table-plugin", ptPluginW);
-       
-       // SOURCE       
-       PluginsTableSourceWidget *ptSourceW = new PluginsTableSourceWidget(session_, apiUrl_, ptPluginW);
-       templateFormView->bindWidget("resource-table-source", ptSourceW);
-       ptPluginW->addPageToUpdate(ptSourceW);
-       
-       // SEARCH       
-       PluginsTableSearchWidget *ptSearchW = new PluginsTableSearchWidget(session_, apiUrl_, ptSourceW);
-       templateFormView->bindWidget("resource-table-search", ptSearchW);
-       ptSourceW->addPageToUpdate(ptSearchW);
-       
-       // FILTER       
-       PluginsTableFilterWidget *ptFilterW = new PluginsTableFilterWidget(session_, apiUrl_, ptSearchW);
-       templateFormView->bindWidget("resource-table-filter", ptFilterW);
-       ptSearchW->addPageToUpdate(ptFilterW);
-       
-       // ASSOCIATION       
-       PluginsTableAssociationWidget *ptAssociationW = new PluginsTableAssociationWidget(session_, apiUrl_, ptFilterW);
-       templateFormView->bindWidget("resource-table-association", ptAssociationW);
-       ptFilterW->addPageToUpdate(ptAssociationW);
-       
-       newClass_ = true;
-    }
+    this->clear();
+    Wt::WTemplateFormView *templateFormView =
+        new Wt::WTemplateFormView(Wt::WString::tr("Alert.plugins.Management.template"));
+    templateFormView->addStyleClass("template");
+    this->addWidget(templateFormView);
+
+    // PLUGIN
+    PluginsTablePluginWidget *ptPluginW = new PluginsTablePluginWidget(session_, apiUrl_);
+    ptPluginW->updatePage();
+    templateFormView->bindWidget("resource-table-plugin", ptPluginW);
+
+    // SOURCE       
+    PluginsTableSourceWidget *ptSourceW = new PluginsTableSourceWidget(session_, apiUrl_, ptPluginW);
+    templateFormView->bindWidget("resource-table-source", ptSourceW);
+    ptPluginW->addPageToUpdate(ptSourceW);
+
+    // SEARCH       
+    PluginsTableSearchWidget *ptSearchW = new PluginsTableSearchWidget(session_, apiUrl_, ptSourceW);
+    templateFormView->bindWidget("resource-table-search", ptSearchW);
+    ptSourceW->addPageToUpdate(ptSearchW);
+
+    // FILTER       
+    PluginsTableFilterWidget *ptFilterW = new PluginsTableFilterWidget(session_, apiUrl_, ptSearchW);
+    templateFormView->bindWidget("resource-table-filter", ptFilterW);
+    ptSearchW->addPageToUpdate(ptFilterW);
+
+    // ASSOCIATION       
+    PluginsTableAssociationWidget *ptAssociationW = new PluginsTableAssociationWidget(session_, apiUrl_, ptFilterW);
+    templateFormView->bindWidget("resource-table-association", ptAssociationW);
+    ptFilterW->addPageToUpdate(ptAssociationW);
 }

@@ -117,11 +117,13 @@ void ProbesWidget::handleJsonGet(vectors_Json jsonResources)
     {
         return ;
     }
+    /* Refresh call for each probe */
     else if (jsonResources.size() < 4)
     {
         vector<Wt::Json::Value> jsonResource = jsonResources.at(0);
         handleJsonGetHeartbeat(jsonResource);
     }
+    /* First call, we retrieve everything */
     else
     {
         vector<Wt::Json::Value> jsonResource = jsonResources.at(2);

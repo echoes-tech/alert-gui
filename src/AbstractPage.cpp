@@ -696,7 +696,7 @@ void AbstractPage::addGenericButtonsToResourceTable(long long id, int rowTable, 
         modifButton->setAttributeValue("class", "btn btn-inverse");
         modifButton->setTextFormat(Wt::XHTMLUnsafeText);
         modifButton->setText("<span class='input-group-btn'><i class='icon-edit icon-white'></i></span>");
-        std::string objectName("button-modif" + boost::lexical_cast<string> (rowTable));
+        std::string objectName("modif-button" + boost::lexical_cast<string> (rowTable));
         modifButton->setObjectName(objectName);
         addPopupModifHandler(modifButton, id);
         m_resourceTable->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(5, Wt::WLength::Percentage));
@@ -756,6 +756,7 @@ void AbstractPage::cancelButtonFooter(Wt::WDialog *dialog)
                                                               dialog->footer());
     cancelButton->clicked().connect(dialog, &Wt::WDialog::reject);
     cancelButton->setAttributeValue("style", "margin-left:12px;");
+    cancelButton->setObjectName("cancel-button");
 }
 
 void AbstractPage::customButtonFooter(Wt::WDialog *dialog)
@@ -1488,7 +1489,7 @@ Wt::WValidator* AbstractPage::editValidator(int type)
     int specialType = (((type >> 4) & 0xF) > 0 ? (type >> 4) & 0xF : 0);
     /* (type >> 8) & 0xF: shift type 8bits to the right, isolate the 'new' first 4bits with & 0xF */
     int jsonType = (((type >> 8) & 0xF) > 0 ? (type >> 8) & 0xF : 0);
-        
+    
     validator->setMandatory(isMandatory);
     switch (jsonType)
     {

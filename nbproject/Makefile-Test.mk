@@ -15,15 +15,15 @@ NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
 CC=gcc
-CCC=g++
-CXX=g++
+CCC=g++-4.7
+CXX=g++-4.7
 FC=gfortran
 AS=as
 
 # Macros
 CND_PLATFORM=GNU-Linux-x86
 CND_DLIB_EXT=so
-CND_CONF=Release
+CND_CONF=Test
 CND_DISTDIR=dist
 CND_BUILDDIR=build
 
@@ -91,7 +91,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../dbo/dist/Release_SharedObject/GNU-Linux-x86 -L/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/default/dist/Release_SharedObject/GNU-Linux-x86 -lwt -lwtdbopostgres -ldbo -lwtdbo -lboost_signals -lboost_system -lwthttp -lboost_random `cppunit-config --libs`  
+LDLIBSOPTIONS=`cppunit-config --libs` `cppunit-config --libs`  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -99,177 +99,177 @@ LDLIBSOPTIONS=-L../dbo/dist/Release_SharedObject/GNU-Linux-x86 -L/var/lib/jenkin
 
 ${TESTDIR}/TestFiles/f1: ${OBJECTFILES}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 ${OBJECTFILES} ${LDLIBSOPTIONS} -s
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 ${OBJECTDIR}/src/AbstractPage.o: src/AbstractPage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AbstractPage.o src/AbstractPage.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AbstractPage.o src/AbstractPage.cpp
 
 ${OBJECTDIR}/src/AlertsWidget.o: src/AlertsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AlertsWidget.o src/AlertsWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AlertsWidget.o src/AlertsWidget.cpp
 
 ${OBJECTDIR}/src/ApiManagement.o: src/ApiManagement.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ApiManagement.o src/ApiManagement.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ApiManagement.o src/ApiManagement.cpp
 
 ${OBJECTDIR}/src/AssetManagementWidget.o: src/AssetManagementWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AssetManagementWidget.o src/AssetManagementWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AssetManagementWidget.o src/AssetManagementWidget.cpp
 
 ${OBJECTDIR}/src/Auth/SpecializedAuthModel.o: src/Auth/SpecializedAuthModel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/Auth
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedAuthModel.o src/Auth/SpecializedAuthModel.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedAuthModel.o src/Auth/SpecializedAuthModel.cpp
 
 ${OBJECTDIR}/src/Auth/SpecializedAuthWidget.o: src/Auth/SpecializedAuthWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/Auth
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedAuthWidget.o src/Auth/SpecializedAuthWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedAuthWidget.o src/Auth/SpecializedAuthWidget.cpp
 
 ${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget.o: src/Auth/SpecializedRegistrationWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/Auth
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget.o src/Auth/SpecializedRegistrationWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget.o src/Auth/SpecializedRegistrationWidget.cpp
 
 ${OBJECTDIR}/src/Conf.o: src/Conf.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Conf.o src/Conf.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Conf.o src/Conf.cpp
 
 ${OBJECTDIR}/src/CsvUtil.o: src/CsvUtil.C 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CsvUtil.o src/CsvUtil.C
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CsvUtil.o src/CsvUtil.C
 
 ${OBJECTDIR}/src/DashBoard.o: src/DashBoard.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/DashBoard.o src/DashBoard.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/DashBoard.o src/DashBoard.cpp
 
 ${OBJECTDIR}/src/EATableTemplate.o: src/EATableTemplate.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/EATableTemplate.o src/EATableTemplate.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/EATableTemplate.o src/EATableTemplate.cpp
 
 ${OBJECTDIR}/src/EchoesHome.o: src/EchoesHome.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/EchoesHome.o src/EchoesHome.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/EchoesHome.o src/EchoesHome.cpp
 
 ${OBJECTDIR}/src/Enums.o: src/Enums.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Enums.o src/Enums.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Enums.o src/Enums.cpp
 
 ${OBJECTDIR}/src/HttpRequest.o: src/HttpRequest.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/HttpRequest.o src/HttpRequest.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/HttpRequest.o src/HttpRequest.cpp
 
 ${OBJECTDIR}/src/InformationsWidget.o: src/InformationsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/InformationsWidget.o src/InformationsWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/InformationsWidget.o src/InformationsWidget.cpp
 
 ${OBJECTDIR}/src/MainWidget.o: src/MainWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MainWidget.o src/MainWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MainWidget.o src/MainWidget.cpp
 
 ${OBJECTDIR}/src/MonitoringWidget.o: src/MonitoringWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MonitoringWidget.o src/MonitoringWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MonitoringWidget.o src/MonitoringWidget.cpp
 
 ${OBJECTDIR}/src/OptionManagementModel.o: src/OptionManagementModel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/OptionManagementModel.o src/OptionManagementModel.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/OptionManagementModel.o src/OptionManagementModel.cpp
 
 ${OBJECTDIR}/src/OptionManagementWidget.o: src/OptionManagementWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/OptionManagementWidget.o src/OptionManagementWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/OptionManagementWidget.o src/OptionManagementWidget.cpp
 
 ${OBJECTDIR}/src/PluginsTableAssociationWidget.o: src/PluginsTableAssociationWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableAssociationWidget.o src/PluginsTableAssociationWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableAssociationWidget.o src/PluginsTableAssociationWidget.cpp
 
 ${OBJECTDIR}/src/PluginsTableFilterWidget.o: src/PluginsTableFilterWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableFilterWidget.o src/PluginsTableFilterWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableFilterWidget.o src/PluginsTableFilterWidget.cpp
 
 ${OBJECTDIR}/src/PluginsTablePluginWidget.o: src/PluginsTablePluginWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTablePluginWidget.o src/PluginsTablePluginWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTablePluginWidget.o src/PluginsTablePluginWidget.cpp
 
 ${OBJECTDIR}/src/PluginsTableSearchWidget.o: src/PluginsTableSearchWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableSearchWidget.o src/PluginsTableSearchWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableSearchWidget.o src/PluginsTableSearchWidget.cpp
 
 ${OBJECTDIR}/src/PluginsTableSourceWidget.o: src/PluginsTableSourceWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableSourceWidget.o src/PluginsTableSourceWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableSourceWidget.o src/PluginsTableSourceWidget.cpp
 
 ${OBJECTDIR}/src/PluginsWidget.o: src/PluginsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsWidget.o src/PluginsWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsWidget.o src/PluginsWidget.cpp
 
 ${OBJECTDIR}/src/ProbesWidget.o: src/ProbesWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ProbesWidget.o src/ProbesWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ProbesWidget.o src/ProbesWidget.cpp
 
 ${OBJECTDIR}/src/RecipientsWidget.o: src/RecipientsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RecipientsWidget.o src/RecipientsWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RecipientsWidget.o src/RecipientsWidget.cpp
 
 ${OBJECTDIR}/src/RoleCustomizationWidget.o: src/RoleCustomizationWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RoleCustomizationWidget.o src/RoleCustomizationWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RoleCustomizationWidget.o src/RoleCustomizationWidget.cpp
 
 ${OBJECTDIR}/src/SummaryBoard.o: src/SummaryBoard.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/SummaryBoard.o src/SummaryBoard.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/SummaryBoard.o src/SummaryBoard.cpp
 
 ${OBJECTDIR}/src/TrundleTable.o: src/TrundleTable.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TrundleTable.o src/TrundleTable.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TrundleTable.o src/TrundleTable.cpp
 
 ${OBJECTDIR}/src/UnitsWidget.o: src/UnitsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UnitsWidget.o src/UnitsWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UnitsWidget.o src/UnitsWidget.cpp
 
 ${OBJECTDIR}/src/UserActionManagement.o: src/UserActionManagement.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserActionManagement.o src/UserActionManagement.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserActionManagement.o src/UserActionManagement.cpp
 
 ${OBJECTDIR}/src/UserEditionWidget.o: src/UserEditionWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserEditionWidget.o src/UserEditionWidget.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserEditionWidget.o src/UserEditionWidget.cpp
 
 # Subprojects
 .build-subprojects:
@@ -284,13 +284,13 @@ ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/HttpRequestTest.o ${TESTDIR}/tests/Htt
 ${TESTDIR}/tests/HttpRequestTest.o: tests/HttpRequestTest.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/HttpRequestTest.o tests/HttpRequestTest.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/HttpRequestTest.o tests/HttpRequestTest.cpp
 
 
 ${TESTDIR}/tests/HttpRequestTestRunner.o: tests/HttpRequestTestRunner.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/HttpRequestTestRunner.o tests/HttpRequestTestRunner.cpp
+	$(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/HttpRequestTestRunner.o tests/HttpRequestTestRunner.cpp
 
 
 ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.cpp 
@@ -301,7 +301,7 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main_nomain.o main.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main_nomain.o main.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/main.o ${OBJECTDIR}/main_nomain.o;\
 	fi
@@ -314,7 +314,7 @@ ${OBJECTDIR}/src/AbstractPage_nomain.o: ${OBJECTDIR}/src/AbstractPage.o src/Abst
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AbstractPage_nomain.o src/AbstractPage.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AbstractPage_nomain.o src/AbstractPage.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/AbstractPage.o ${OBJECTDIR}/src/AbstractPage_nomain.o;\
 	fi
@@ -327,7 +327,7 @@ ${OBJECTDIR}/src/AlertsWidget_nomain.o: ${OBJECTDIR}/src/AlertsWidget.o src/Aler
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AlertsWidget_nomain.o src/AlertsWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AlertsWidget_nomain.o src/AlertsWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/AlertsWidget.o ${OBJECTDIR}/src/AlertsWidget_nomain.o;\
 	fi
@@ -340,7 +340,7 @@ ${OBJECTDIR}/src/ApiManagement_nomain.o: ${OBJECTDIR}/src/ApiManagement.o src/Ap
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ApiManagement_nomain.o src/ApiManagement.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ApiManagement_nomain.o src/ApiManagement.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/ApiManagement.o ${OBJECTDIR}/src/ApiManagement_nomain.o;\
 	fi
@@ -353,7 +353,7 @@ ${OBJECTDIR}/src/AssetManagementWidget_nomain.o: ${OBJECTDIR}/src/AssetManagemen
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AssetManagementWidget_nomain.o src/AssetManagementWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AssetManagementWidget_nomain.o src/AssetManagementWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/AssetManagementWidget.o ${OBJECTDIR}/src/AssetManagementWidget_nomain.o;\
 	fi
@@ -366,7 +366,7 @@ ${OBJECTDIR}/src/Auth/SpecializedAuthModel_nomain.o: ${OBJECTDIR}/src/Auth/Speci
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedAuthModel_nomain.o src/Auth/SpecializedAuthModel.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedAuthModel_nomain.o src/Auth/SpecializedAuthModel.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/Auth/SpecializedAuthModel.o ${OBJECTDIR}/src/Auth/SpecializedAuthModel_nomain.o;\
 	fi
@@ -379,7 +379,7 @@ ${OBJECTDIR}/src/Auth/SpecializedAuthWidget_nomain.o: ${OBJECTDIR}/src/Auth/Spec
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedAuthWidget_nomain.o src/Auth/SpecializedAuthWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedAuthWidget_nomain.o src/Auth/SpecializedAuthWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/Auth/SpecializedAuthWidget.o ${OBJECTDIR}/src/Auth/SpecializedAuthWidget_nomain.o;\
 	fi
@@ -392,7 +392,7 @@ ${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget_nomain.o: ${OBJECTDIR}/src/A
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget_nomain.o src/Auth/SpecializedRegistrationWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget_nomain.o src/Auth/SpecializedRegistrationWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget.o ${OBJECTDIR}/src/Auth/SpecializedRegistrationWidget_nomain.o;\
 	fi
@@ -405,7 +405,7 @@ ${OBJECTDIR}/src/Conf_nomain.o: ${OBJECTDIR}/src/Conf.o src/Conf.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Conf_nomain.o src/Conf.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Conf_nomain.o src/Conf.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/Conf.o ${OBJECTDIR}/src/Conf_nomain.o;\
 	fi
@@ -418,7 +418,7 @@ ${OBJECTDIR}/src/CsvUtil_nomain.o: ${OBJECTDIR}/src/CsvUtil.o src/CsvUtil.C
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CsvUtil_nomain.o src/CsvUtil.C;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CsvUtil_nomain.o src/CsvUtil.C;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/CsvUtil.o ${OBJECTDIR}/src/CsvUtil_nomain.o;\
 	fi
@@ -431,7 +431,7 @@ ${OBJECTDIR}/src/DashBoard_nomain.o: ${OBJECTDIR}/src/DashBoard.o src/DashBoard.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/DashBoard_nomain.o src/DashBoard.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/DashBoard_nomain.o src/DashBoard.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/DashBoard.o ${OBJECTDIR}/src/DashBoard_nomain.o;\
 	fi
@@ -444,7 +444,7 @@ ${OBJECTDIR}/src/EATableTemplate_nomain.o: ${OBJECTDIR}/src/EATableTemplate.o sr
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/EATableTemplate_nomain.o src/EATableTemplate.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/EATableTemplate_nomain.o src/EATableTemplate.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/EATableTemplate.o ${OBJECTDIR}/src/EATableTemplate_nomain.o;\
 	fi
@@ -457,7 +457,7 @@ ${OBJECTDIR}/src/EchoesHome_nomain.o: ${OBJECTDIR}/src/EchoesHome.o src/EchoesHo
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/EchoesHome_nomain.o src/EchoesHome.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/EchoesHome_nomain.o src/EchoesHome.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/EchoesHome.o ${OBJECTDIR}/src/EchoesHome_nomain.o;\
 	fi
@@ -470,7 +470,7 @@ ${OBJECTDIR}/src/Enums_nomain.o: ${OBJECTDIR}/src/Enums.o src/Enums.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Enums_nomain.o src/Enums.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Enums_nomain.o src/Enums.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/Enums.o ${OBJECTDIR}/src/Enums_nomain.o;\
 	fi
@@ -483,7 +483,7 @@ ${OBJECTDIR}/src/HttpRequest_nomain.o: ${OBJECTDIR}/src/HttpRequest.o src/HttpRe
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/HttpRequest_nomain.o src/HttpRequest.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/HttpRequest_nomain.o src/HttpRequest.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/HttpRequest.o ${OBJECTDIR}/src/HttpRequest_nomain.o;\
 	fi
@@ -496,7 +496,7 @@ ${OBJECTDIR}/src/InformationsWidget_nomain.o: ${OBJECTDIR}/src/InformationsWidge
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/InformationsWidget_nomain.o src/InformationsWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/InformationsWidget_nomain.o src/InformationsWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/InformationsWidget.o ${OBJECTDIR}/src/InformationsWidget_nomain.o;\
 	fi
@@ -509,7 +509,7 @@ ${OBJECTDIR}/src/MainWidget_nomain.o: ${OBJECTDIR}/src/MainWidget.o src/MainWidg
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MainWidget_nomain.o src/MainWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MainWidget_nomain.o src/MainWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/MainWidget.o ${OBJECTDIR}/src/MainWidget_nomain.o;\
 	fi
@@ -522,7 +522,7 @@ ${OBJECTDIR}/src/MonitoringWidget_nomain.o: ${OBJECTDIR}/src/MonitoringWidget.o 
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MonitoringWidget_nomain.o src/MonitoringWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MonitoringWidget_nomain.o src/MonitoringWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/MonitoringWidget.o ${OBJECTDIR}/src/MonitoringWidget_nomain.o;\
 	fi
@@ -535,7 +535,7 @@ ${OBJECTDIR}/src/OptionManagementModel_nomain.o: ${OBJECTDIR}/src/OptionManageme
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/OptionManagementModel_nomain.o src/OptionManagementModel.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/OptionManagementModel_nomain.o src/OptionManagementModel.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/OptionManagementModel.o ${OBJECTDIR}/src/OptionManagementModel_nomain.o;\
 	fi
@@ -548,7 +548,7 @@ ${OBJECTDIR}/src/OptionManagementWidget_nomain.o: ${OBJECTDIR}/src/OptionManagem
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/OptionManagementWidget_nomain.o src/OptionManagementWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/OptionManagementWidget_nomain.o src/OptionManagementWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/OptionManagementWidget.o ${OBJECTDIR}/src/OptionManagementWidget_nomain.o;\
 	fi
@@ -561,7 +561,7 @@ ${OBJECTDIR}/src/PluginsTableAssociationWidget_nomain.o: ${OBJECTDIR}/src/Plugin
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableAssociationWidget_nomain.o src/PluginsTableAssociationWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableAssociationWidget_nomain.o src/PluginsTableAssociationWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/PluginsTableAssociationWidget.o ${OBJECTDIR}/src/PluginsTableAssociationWidget_nomain.o;\
 	fi
@@ -574,7 +574,7 @@ ${OBJECTDIR}/src/PluginsTableFilterWidget_nomain.o: ${OBJECTDIR}/src/PluginsTabl
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableFilterWidget_nomain.o src/PluginsTableFilterWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableFilterWidget_nomain.o src/PluginsTableFilterWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/PluginsTableFilterWidget.o ${OBJECTDIR}/src/PluginsTableFilterWidget_nomain.o;\
 	fi
@@ -587,7 +587,7 @@ ${OBJECTDIR}/src/PluginsTablePluginWidget_nomain.o: ${OBJECTDIR}/src/PluginsTabl
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTablePluginWidget_nomain.o src/PluginsTablePluginWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTablePluginWidget_nomain.o src/PluginsTablePluginWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/PluginsTablePluginWidget.o ${OBJECTDIR}/src/PluginsTablePluginWidget_nomain.o;\
 	fi
@@ -600,7 +600,7 @@ ${OBJECTDIR}/src/PluginsTableSearchWidget_nomain.o: ${OBJECTDIR}/src/PluginsTabl
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableSearchWidget_nomain.o src/PluginsTableSearchWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableSearchWidget_nomain.o src/PluginsTableSearchWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/PluginsTableSearchWidget.o ${OBJECTDIR}/src/PluginsTableSearchWidget_nomain.o;\
 	fi
@@ -613,7 +613,7 @@ ${OBJECTDIR}/src/PluginsTableSourceWidget_nomain.o: ${OBJECTDIR}/src/PluginsTabl
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableSourceWidget_nomain.o src/PluginsTableSourceWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsTableSourceWidget_nomain.o src/PluginsTableSourceWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/PluginsTableSourceWidget.o ${OBJECTDIR}/src/PluginsTableSourceWidget_nomain.o;\
 	fi
@@ -626,7 +626,7 @@ ${OBJECTDIR}/src/PluginsWidget_nomain.o: ${OBJECTDIR}/src/PluginsWidget.o src/Pl
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsWidget_nomain.o src/PluginsWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/PluginsWidget_nomain.o src/PluginsWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/PluginsWidget.o ${OBJECTDIR}/src/PluginsWidget_nomain.o;\
 	fi
@@ -639,7 +639,7 @@ ${OBJECTDIR}/src/ProbesWidget_nomain.o: ${OBJECTDIR}/src/ProbesWidget.o src/Prob
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ProbesWidget_nomain.o src/ProbesWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ProbesWidget_nomain.o src/ProbesWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/ProbesWidget.o ${OBJECTDIR}/src/ProbesWidget_nomain.o;\
 	fi
@@ -652,7 +652,7 @@ ${OBJECTDIR}/src/RecipientsWidget_nomain.o: ${OBJECTDIR}/src/RecipientsWidget.o 
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RecipientsWidget_nomain.o src/RecipientsWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RecipientsWidget_nomain.o src/RecipientsWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/RecipientsWidget.o ${OBJECTDIR}/src/RecipientsWidget_nomain.o;\
 	fi
@@ -665,7 +665,7 @@ ${OBJECTDIR}/src/RoleCustomizationWidget_nomain.o: ${OBJECTDIR}/src/RoleCustomiz
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RoleCustomizationWidget_nomain.o src/RoleCustomizationWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RoleCustomizationWidget_nomain.o src/RoleCustomizationWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/RoleCustomizationWidget.o ${OBJECTDIR}/src/RoleCustomizationWidget_nomain.o;\
 	fi
@@ -678,7 +678,7 @@ ${OBJECTDIR}/src/SummaryBoard_nomain.o: ${OBJECTDIR}/src/SummaryBoard.o src/Summ
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/SummaryBoard_nomain.o src/SummaryBoard.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/SummaryBoard_nomain.o src/SummaryBoard.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/SummaryBoard.o ${OBJECTDIR}/src/SummaryBoard_nomain.o;\
 	fi
@@ -691,7 +691,7 @@ ${OBJECTDIR}/src/TrundleTable_nomain.o: ${OBJECTDIR}/src/TrundleTable.o src/Trun
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TrundleTable_nomain.o src/TrundleTable.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TrundleTable_nomain.o src/TrundleTable.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/TrundleTable.o ${OBJECTDIR}/src/TrundleTable_nomain.o;\
 	fi
@@ -704,7 +704,7 @@ ${OBJECTDIR}/src/UnitsWidget_nomain.o: ${OBJECTDIR}/src/UnitsWidget.o src/UnitsW
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UnitsWidget_nomain.o src/UnitsWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UnitsWidget_nomain.o src/UnitsWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/UnitsWidget.o ${OBJECTDIR}/src/UnitsWidget_nomain.o;\
 	fi
@@ -717,7 +717,7 @@ ${OBJECTDIR}/src/UserActionManagement_nomain.o: ${OBJECTDIR}/src/UserActionManag
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserActionManagement_nomain.o src/UserActionManagement.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserActionManagement_nomain.o src/UserActionManagement.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/UserActionManagement.o ${OBJECTDIR}/src/UserActionManagement_nomain.o;\
 	fi
@@ -730,7 +730,7 @@ ${OBJECTDIR}/src/UserEditionWidget_nomain.o: ${OBJECTDIR}/src/UserEditionWidget.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserEditionWidget_nomain.o src/UserEditionWidget.cpp;\
+	    $(COMPILE.cc) -g -Iinclude -I../dbo/include -I. -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserEditionWidget_nomain.o src/UserEditionWidget.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/UserEditionWidget.o ${OBJECTDIR}/src/UserEditionWidget_nomain.o;\
 	fi

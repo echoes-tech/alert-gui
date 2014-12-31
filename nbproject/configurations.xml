@@ -34,6 +34,8 @@
           <itemPath>include/enum/iterator.hpp</itemPath>
           <itemPath>include/enum/macros.hpp</itemPath>
         </logicalFolder>
+        <logicalFolder name="f3" displayName="HttpRequest" projectFiles="true">
+        </logicalFolder>
         <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
           <itemPath>include/MainWidget.h</itemPath>
         </logicalFolder>
@@ -67,6 +69,7 @@
         <itemPath>include/enum.hpp</itemPath>
       </logicalFolder>
       <itemPath>include/Enums.h</itemPath>
+      <itemPath>include/HttpRequest.h</itemPath>
       <itemPath>include/UserActionManagement.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -148,6 +151,9 @@
           <itemPath>src/Auth/SpecializedAuthWidget.cpp</itemPath>
           <itemPath>src/Auth/SpecializedRegistrationWidget.cpp</itemPath>
         </logicalFolder>
+        <logicalFolder name="f3" displayName="HttpRequest" projectFiles="true">
+          <itemPath>src/HttpRequest.cpp</itemPath>
+        </logicalFolder>
         <logicalFolder name="f8" displayName="MainWidget" projectFiles="true">
           <itemPath>src/MainWidget.cpp</itemPath>
         </logicalFolder>
@@ -179,6 +185,14 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f2"
+                     displayName="HttpRequestTests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/HttpRequestTest.cpp</itemPath>
+        <itemPath>tests/HttpRequestTest.h</itemPath>
+        <itemPath>tests/HttpRequestTestRunner.cpp</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -201,20 +215,28 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
         <ccTool>
           <standard>8</standard>
-          <commandlineTool>DISTCC_FALLBACK=0 distcc g++-4.7</commandlineTool>
+          <commandlineTool>g++-4.7</commandlineTool>
           <incDir>
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>
+            <pElem>.</pElem>
           </incDir>
-          <commandLine>-pedantic</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui</output>
           <linkerAddLib>
             <pElem>../dbo/dist/Debug_SharedObject/GNU-Linux-x86</pElem>
           </linkerAddLib>
+          <commandlineTool>distcc g++-4.7</commandlineTool>
           <linkerLibItems>
             <linkerLibLibItem>dbo</linkerLibLibItem>
             <linkerLibLibItem>wt</linkerLibLibItem>
@@ -227,11 +249,42 @@
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>stdc++</linkerLibLibItem>
             <linkerLibLibItem>m</linkerLibLibItem>
+            <linkerLibLibItem>cppunit</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
       <item path="config.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <commandlineTool>distcc g++-4.7</commandlineTool>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
       <item path="include/AbstractPage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AlertsWidget.h" ex="false" tool="3" flavor2="0">
@@ -268,6 +321,8 @@
       <item path="include/Enums.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/GlobalIncludeFile.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/HttpRequest.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/InformationsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -494,6 +549,8 @@
       </item>
       <item path="src/Enums.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/HttpRequest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/InformationsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/MainWidget.cpp" ex="false" tool="1" flavor2="0">
@@ -535,6 +592,12 @@
       </item>
       <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="tests/HttpRequestTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/HttpRequestTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/HttpRequestTestRunner.cpp" ex="false" tool="1" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -543,6 +606,12 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
         <ccTool>
           <developmentMode>6</developmentMode>
           <stripSymbols>true</stripSymbols>
@@ -551,10 +620,12 @@
             <pElem>include</pElem>
             <pElem>../dbo/include</pElem>
             <pElem>/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include</pElem>
+            <pElem>.</pElem>
           </incDir>
-          <commandLine>-DNDEBUG</commandLine>
+          <commandLine>`cppunit-config --cflags`</commandLine>
         </ccTool>
         <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
           <linkerAddLib>
             <pElem>../dbo/dist/Release_SharedObject/GNU-Linux-x86</pElem>
             <pElem>/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/default/dist/Release_SharedObject/GNU-Linux-x86</pElem>
@@ -569,11 +640,41 @@
             <linkerLibLibItem>boost_system</linkerLibLibItem>
             <linkerLibLibItem>wthttp</linkerLibLibItem>
             <linkerLibLibItem>boost_random</linkerLibLibItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
       <item path="config.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
       <item path="include/AbstractPage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AlertsWidget.h" ex="false" tool="3" flavor2="0">
@@ -610,6 +711,8 @@
       <item path="include/Enums.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/GlobalIncludeFile.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/HttpRequest.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/InformationsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -836,6 +939,8 @@
       </item>
       <item path="src/Enums.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/HttpRequest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/InformationsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/MainWidget.cpp" ex="false" tool="1" flavor2="0">
@@ -876,6 +981,388 @@
       <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/HttpRequestTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/HttpRequestTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/HttpRequestTestRunner.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Test" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <standard>8</standard>
+          <commandlineTool>g++-4.7</commandlineTool>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>../dbo/include</pElem>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="config.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <item path="include/AbstractPage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AlertsWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/ApiManagement.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Auth/SpecializedAuthModel.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/Auth/SpecializedAuthWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/Auth/SpecializedRegistrationWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/Conf.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/CsvUtil.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/DashBoard.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/EATableTemplate.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/EchoesHome.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Enums.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/GlobalIncludeFile.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/HttpRequest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/InformationsWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/MainWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/MonitoringWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/OptionManagementModel.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/OptionManagementWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsTableAssociationWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/PluginsTableFilterWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsTablePluginWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsTableSearchWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsTableSourceWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PluginsWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/ProbesWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/TrundleTable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/UnitsWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/UserActionManagement.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/UserEditionWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/base.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/bitfield.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/iterator.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/enum/macros.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/license.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/manual.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_iterators.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_print.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_utils.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/rapidxml/rapidxml_xhtml.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="resources/themes/bootstrap/css/echoes-alert-custom.css"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/alert.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/alert_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/asset.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/asset_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/association.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/association_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/auth.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/auth_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/dashboard.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/dashboard_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/ea_table.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/global.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/global_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/information.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/information_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/media-user.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/media-user_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/options.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/options_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-association.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-association_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-filter.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-filter_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-plugin.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-plugin_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-search.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-search_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-source.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins-source_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/plugins.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/plugins_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/probe.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/probe_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/recipients.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/recipients_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/role-customization.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/role-customization_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/summary.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/summary_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/test.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/unit.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/unit_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/user.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/user_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AbstractPage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AlertsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ApiManagement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Auth/SpecializedAuthModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Auth/SpecializedAuthWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Auth/SpecializedRegistrationWidget.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/Conf.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/CsvUtil.C" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DashBoard.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/EATableTemplate.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/EchoesHome.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Enums.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/HttpRequest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/InformationsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MainWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MonitoringWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/OptionManagementModel.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/OptionManagementWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableAssociationWidget.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/PluginsTableFilterWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTablePluginWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableSearchWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsTableSourceWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PluginsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ProbesWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/RecipientsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TrundleTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UnitsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserActionManagement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserEditionWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/HttpRequestTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/HttpRequestTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/HttpRequestTestRunner.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
   </confs>

@@ -27,10 +27,10 @@ PluginsTableFilterWidget::PluginsTableFilterWidget(Echoes::Dbo::Session *session
     setButtonSup(true);
     
     std::vector<std::pair <int, std::string>> titles;
-    titles.push_back(make_pair(0, "filter-type"));
-    titles.push_back(make_pair(0, "parameters"));
-    titles.push_back(make_pair(0, "nb-value"));
-    titles.push_back(make_pair(0, "pos-key-value"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::is), "filter-type"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "parameters"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::number, 0, EMandatory::is), "nb-value"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::number, 0, EMandatory::isnot), "pos-key-value"));
     setTitles(titles);
     
     m_filterTypeStandardItemModel = new Wt::WStandardItemModel(0,2,this);

@@ -246,6 +246,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             prb = new ProbesWidget(this->session, this->_apiUrl);
             break ;
         }
+        case Enums::EPageType::ROLES:
+        {
+            row = new RolesWidget(this->session, this->_apiUrl);
+            break ;
+        }
         default:
             break;
     }
@@ -405,6 +410,12 @@ void MainWidget::updateContainerFluid(int type)
             this->contentFluid->addWidget(prb);
             break;
         }
+        case Enums::EPageType::ROLES:
+        {
+            row->getResourceList();
+            this->contentFluid->addWidget(row);
+            break;
+        }
         default:
             break;
     }
@@ -504,6 +515,11 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::PROBES:
         {
             res = "search";
+            break ;
+        }
+        case Enums::EPageType::ROLES:
+        {
+            res = "user";
             break ;
         }
         default:

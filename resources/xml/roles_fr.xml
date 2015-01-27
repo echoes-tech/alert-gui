@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+    
+  <message id="Alert.roles.form-info">
+      Sur cette page vous pouvez gérer les rôles de votre entreprise.
+  </message>
+
+<!--    In table     -->
+    <message id="Alert.roles.name-name">Nom du rôle</message>
+    <message id="Alert.roles.nothing-roles-text">
+      Aucun rôle enregistré actuellement
+    </message>
+    <message id="Alert.roles.nothing-button">Cliquer pour ajouter</message>
+    <!--header-->
+    <message id="Alert.roles.main-table">Rôles</message>
+    <!--body-->
+    <message id="Alert.roles.name-roles">Nom du rôle</message>
+    <message id="Alert.roles.modif-button">Modifier</message>
+    <message id="Alert.roles.delete-button">Supprimer</message>
+    <!--footer-->
+    <message id="Alert.roles.search-bar">Recherche : </message>
+        <!-- Paginate -->
+        <message id="Alert.roles.paginate-first">Début</message>
+        <message id="Alert.roles.paginate-prev">Préc</message>
+        <message id="Alert.roles.paginate-next">Suiv</message>
+        <message id="Alert.roles.paginate-last">Fin</message>
+
+<!--    In popup     -->
+    <message id="Alert.roles.button-cancel">Annuler</message>
+    <message id="Alert.roles.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.roles.popup-add">Ajouter un rôle</message>
+    <!--PUT-->
+    <message id="Alert.roles.popup-modif">Modifier ce rôle</message>
+    <!--DELETE-->
+    <message id="Alert.roles.delete-roles">Attention</message>
+    <message id="Alert.roles.delete-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer un rôle
+        </span>
+    </message>
+    <message id="Alert.roles.button-confirm">Confirmer</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.roles.invalid-name-name">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  <message id="Alert.roles.invalid-name-twice">
+      <span style="color:red">
+           Nom de rôle déjà existant.
+      </span>
+  </message>
+
+<!--    Error message     -->
+  <message id="Alert.roles.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.roles.file-not-generated">
+      <span style="color:red">
+          Le fichier n'a pas été généré. Contactez-nous s'il vous plait.
+      </span>
+  </message>
+  <message id="Alert.roles.database-error">
+    Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+  
+  <message id="Alert.roles.conflict-title">Impossible de supprimer le rôle</message>
+  <message id="Alert.roles.conflict">Vous ne pouvez pas supprimer ce serveur. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com</message>
+
+<!--    Warning message     -->
+</messages>

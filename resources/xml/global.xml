@@ -316,6 +316,7 @@
   <message id="Alert.admin.dashboard-tab">Dashboard</message>
   <message id="Alert.admin.probes-tab">Probes</message>
   <message id="Alert.admin.aliases-tab">Aliases</message>
+  <message id="Alert.admin.roles-tab">Roles</message>
   
   <message id="Alert.admin.home">Home</message>
   

@@ -113,6 +113,7 @@ public:
                         (ALERTS) ("alerts")
                         (PLUGIN) ("plugins")
                         (ALIASES) ("aliases")
+                        (ROLES) ("roles")
                         (OPTIONS) ("options")
                         (UNITS) ("units")
                       )

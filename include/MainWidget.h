@@ -112,6 +112,7 @@ protected:
 //  AlertListWidget *alw;
   AliasesWidget *rcw;
   ProbesWidget *prb;
+  RolesWidget *row;
   
   UserEditionWidget *uew;
   

@@ -28,6 +28,7 @@
 #include "MainWidget.h"
 #include "EchoesHome.h"
 #include "TrundleTable.h"
+#include "RolesWidget.h"
 
 #endif	/* GLOBALINCLUDEFILE_H */
 
@@ -42,4 +43,4 @@ class UserActionManagement;
 //class AuthWidget;
 class UnitsWidget;
 class Login;
-
+class RolesWidget;

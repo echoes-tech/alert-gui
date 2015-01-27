@@ -316,6 +316,7 @@
   <message id="Alert.admin.units-tab">Unités</message>
   <message id="Alert.admin.dashboard-tab">Tableau de bord</message>
   <message id="Alert.admin.probes-tab">Sondes</message>
+  <message id="Alert.admin.aliases-tab">Alias</message>
   
   <message id="Alert.admin.home">Accueil</message>
 

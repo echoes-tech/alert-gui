@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/src/AbstractPage.o \
 	${OBJECTDIR}/src/AlertsWidget.o \
+	${OBJECTDIR}/src/AliasesWidget.o \
 	${OBJECTDIR}/src/ApiManagement.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
 	${OBJECTDIR}/src/Auth/SpecializedAuthModel.o \
@@ -62,7 +63,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/PluginsWidget.o \
 	${OBJECTDIR}/src/ProbesWidget.o \
 	${OBJECTDIR}/src/RecipientsWidget.o \
-	${OBJECTDIR}/src/RoleCustomizationWidget.o \
 	${OBJECTDIR}/src/SummaryBoard.o \
 	${OBJECTDIR}/src/TrundleTable.o \
 	${OBJECTDIR}/src/UnitsWidget.o \
@@ -108,6 +108,11 @@ ${OBJECTDIR}/src/AlertsWidget.o: src/AlertsWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AlertsWidget.o src/AlertsWidget.cpp
+
+${OBJECTDIR}/src/AliasesWidget.o: src/AliasesWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AliasesWidget.o src/AliasesWidget.cpp
 
 ${OBJECTDIR}/src/ApiManagement.o: src/ApiManagement.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -228,11 +233,6 @@ ${OBJECTDIR}/src/RecipientsWidget.o: src/RecipientsWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RecipientsWidget.o src/RecipientsWidget.cpp
-
-${OBJECTDIR}/src/RoleCustomizationWidget.o: src/RoleCustomizationWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RoleCustomizationWidget.o src/RoleCustomizationWidget.cpp
 
 ${OBJECTDIR}/src/SummaryBoard.o: src/SummaryBoard.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

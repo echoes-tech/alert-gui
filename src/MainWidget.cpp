@@ -217,9 +217,9 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             plw = new PluginsWidget(this->session, _apiUrl);
             break;            
         }      
-        case Enums::EPageType::ROLE:
+        case Enums::EPageType::ALIASES:
         {
-            rcw = new RoleCustomizationWidget(session, _apiUrl);
+            rcw = new AliasesWidget(session, _apiUrl);
             break;
         }
         case Enums::EPageType::OPTIONS:
@@ -381,7 +381,7 @@ void MainWidget::updateContainerFluid(int type)
             this->contentFluid->addWidget(plw);
             break;
         }
-        case Enums::EPageType::ROLE:
+        case Enums::EPageType::ALIASES:
         {
             rcw->refresh();
             this->contentFluid->addWidget(rcw);
@@ -486,7 +486,7 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
             res = "pencil";
             break;
         }
-        case Enums::EPageType::ROLE:
+        case Enums::EPageType::ALIASES:
         {
             res = "film";
             break;

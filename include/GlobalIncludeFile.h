@@ -22,7 +22,7 @@
 #include "OptionManagementModel.h"
 #include "OptionManagementWidget.h"
 #include "MonitoringWidget.h"
-#include "RoleCustomizationWidget.h"
+#include "AliasesWidget.h"
 #include "UnitsWidget.h"
 #include "ProbesWidget.h"
 #include "MainWidget.h"
@@ -35,7 +35,7 @@ class AlertListWidget;
 class AssetManagementWidget;
 class OptionManagementWidget;
 class OptionManagementModel;
-class RoleCustomizationWidget;
+class AliasesWidget;
 class MainWidget;
 class EchoesHome;
 class UserActionManagement;

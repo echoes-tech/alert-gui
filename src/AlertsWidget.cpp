@@ -39,7 +39,7 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
     m_informations = new Wt::WStandardItemModel(0,3,this);
     
     std::vector<std::pair <int, string>> listTitles;
-    listTitles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
+    listTitles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "name"));
     listTitles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, 0), "last_attempt"));
     listTitles.push_back(make_pair(setValidatorType(ETypeJson::number, 0, 0), "alert_media_specializations"));
     setTitles(listTitles);
@@ -94,7 +94,7 @@ AlertsWidget::AlertsWidget(Echoes::Dbo::Session *session, string apiUrl)
 void AlertsWidget::setDisplayedTitlesPopups()
 {
     std::vector<std::pair <int, std::string>> displayedTitles;
-    displayedTitles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
+    displayedTitles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "name"));
     m_displayedTitlesPopups = displayedTitles;
 }
 
@@ -841,7 +841,7 @@ void AlertsWidget::popupRecipients(std::string nameAlert, std::string message)
     Wt::WTemplate *t = new Wt::WTemplate(tr("Alert.alert.time.template"));
     t->setMaximumSize(Wt::WLength(60), Wt::WLength::Auto);
     m_timer = new Wt::WLineEdit();
-    m_timer->setValidator(AbstractPage::editValidator(setValidatorType(ETypeJson::number, ENumberSpecial::notnull, EMandatory::is)));
+    m_timer->setValidator(AbstractPage::editValidator(setValidatorType(ETypeJson::number, ENumberSpecial::notnull, EMandatory::isMandatory)));
     t->bindWidget("time", m_timer);
     Wt::WText *timerUnit = new Wt::WText("minutes");
 
@@ -1383,10 +1383,10 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
             switch (unitTypeID)
             {
             case Enums::EInformationUnitType::number:
-                lineEditValue->setValidator(editValidator(setValidatorType(ETypeJson::number, 0, EMandatory::is)));
+                lineEditValue->setValidator(editValidator(setValidatorType(ETypeJson::number, 0, EMandatory::isMandatory)));
                 break;
             default:
-                lineEditValue->setValidator(editValidator(setValidatorType(ETypeJson::text, 0, EMandatory::is)));
+                lineEditValue->setValidator(editValidator(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory)));
                 break;
             }
             valueWidget = lineEditValue;
@@ -1417,10 +1417,10 @@ void AlertsWidget::fillParametersTable(Wt::WTable *parametersTable, Wt::WTable *
             switch (unitTypeID)
             {
             case Enums::EInformationUnitType::number:
-                textAreaEdit->setValidator(editValidator(setValidatorType(ETypeJson::number, 0, EMandatory::is)));
+                textAreaEdit->setValidator(editValidator(setValidatorType(ETypeJson::number, 0, EMandatory::isMandatory)));
                 break;
             default:
-                textAreaEdit->setValidator(editValidator(setValidatorType(ETypeJson::text, 0, EMandatory::is)));
+                textAreaEdit->setValidator(editValidator(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory)));
                 break;
             }
             valueWidget = textAreaEdit;

@@ -34,8 +34,8 @@ UserEditionWidget::UserEditionWidget(Echoes::Dbo::Session *session, string apiUr
 //    this->setNameSpecial(nameSpe);
     
     std::vector<std::pair <int, string>>titles;
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "value"));
-    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::is), "user"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "value"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::isMandatory), "user"));
     
     std::vector<std::string> undidNames;
     undidNames.push_back("first_name");

@@ -23,7 +23,7 @@ AssetManagementWidget::AssetManagementWidget(Echoes::Dbo::Session *session, stri
 //    setLocalTable(true);
 
     std::vector<std::pair <int, string>>titles;
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "name"));
     titles.push_back(make_pair(setValidatorType(ETypeJson::widget, 0, 0), "download-script"));
     setTitles(titles);
     

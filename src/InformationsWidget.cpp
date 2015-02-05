@@ -29,11 +29,11 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
 //    setLocalTable(true);
 
     std::vector<std::pair <int, string>>titles;
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isnot), "desc"));
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isnot), "calculate"));
-    titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::is), "display"));
-    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::is), "information_unit"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "name"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isNotMandatory), "desc"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isNotMandatory), "calculate"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::isMandatory), "display"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::isMandatory), "information_unit"));
     
     std::vector<std::string> undidNames;
     undidNames.push_back("name");
@@ -54,33 +54,6 @@ InformationsWidget::InformationsWidget(Echoes::Dbo::Session *session, string api
     
     setUrl(listsUrl);
 }
-
-/*
-Wt::WValidator *InformationsWidget::editValidator(int jsonType)
-{
-    Wt::WRegExpValidator *validator;
-    switch(jsonType)
-    {
-        case ETypeJson::text:
-        {
-            validator = new Wt::WRegExpValidator("^.+$");
-            validator->setMandatory(false);
-            break;
-        }
-        case ETypeJson::number:
-        {
-            validator = new Wt::WRegExpValidator("[^\\\\<>/.&;?!§,{}()*|\"]{1,255}");
-            validator->setMandatory(true);
-            break;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    return validator;
-}
-*/
 
 Wt::WComboBox *InformationsWidget::popupAdd(Wt::WDialog *dialog)
 {

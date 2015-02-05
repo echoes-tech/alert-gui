@@ -158,8 +158,14 @@ protected:
     
     enum EMandatory
     {
-        isnot = 0,
-        is = 1
+        isNotMandatory = 0,
+        isMandatory = 1
+    };
+    
+    enum EEditable
+    {
+        isNotEditable = 0,
+        isEditable = 1
     };
 
     virtual void                clearStructures();
@@ -217,7 +223,13 @@ protected:
      * @param jsonResources
      */
     virtual void                handleJsonGet(vectors_Json jsonResources);
+    
     virtual std::vector<Wt::WInteractWidget*>   initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
+    Wt::WInteractWidget         *createTextWidgetFromString(Wt::WString input);
+    Wt::WInteractWidget         *createTextWidgetFromInt(int input);
+    Wt::WInteractWidget         *createCheckBoxWidgetFromBoolean(bool input);
+    Wt::WInteractWidget         *createTextWidgetFromJsonObject(Wt::Json::Object input);
+    Wt::WInteractWidget         *createTextWidgetFromJsonSubObject(Wt::Json::Object input);
     void                        sendHttpRequestGet(std::string resource, std::vector<std::string> listParameter, boost::function<void (Wt::Json::Value)> functor);
     void                        handleHttpResponseGet(boost::system::error_code err, const Wt::Http::Message& response,
                                     Wt::Http::Client *client, boost::function<void (Wt::Json::Value)> functor);

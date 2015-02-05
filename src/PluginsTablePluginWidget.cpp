@@ -25,9 +25,9 @@ PluginsTablePluginWidget::PluginsTablePluginWidget(Echoes::Dbo::Session *session
     
 
     std::vector<std::pair <int, string>>titles;
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "name"));
     titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, 0), "desc"));
-    titles.push_back(make_pair(setValidatorType(ETypeJson::object, 0, EMandatory::is), "asset"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::object, 0, EMandatory::isMandatory), "asset"));
 
 setTitles(titles);
     

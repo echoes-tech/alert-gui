@@ -1055,57 +1055,87 @@ vector<Wt::WInteractWidget *> AbstractPage::initRowWidgets(Wt::Json::Object json
         {
             case ETypeJson::text:
             {
-                Wt::WString wString = jsonObject.get(itTitles->second);
-                Wt::WText *text = new Wt::WText(wString);
-                text->setObjectName("text");
+                Wt::WInteractWidget *text = createTextWidgetFromString(jsonObject.get(itTitles->second));
                 rowWidgets.push_back(text);
                 break;
             }
             case ETypeJson::boolean:
             {
-                bool boolean = jsonObject.get(itTitles->second);
-                Wt::WCheckBox *checkBox = new Wt::WCheckBox();
-                checkBox->setChecked(boolean);
-                checkBox->setDisabled(true);
+                Wt::WInteractWidget *checkBox = createCheckBoxWidgetFromBoolean(jsonObject.get(itTitles->second));
                 rowWidgets.push_back(checkBox);
                 break;
             }
             case ETypeJson::number:
             {
-                int number = jsonObject.get(itTitles->second);
-                rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(number)));
+                Wt::WInteractWidget *text = createTextWidgetFromInt(jsonObject.get(itTitles->second));
+                rowWidgets.push_back(text);
                 break;
             }
             case ETypeJson::undid:
             {
                 Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
                 Wt::Json::Object nameObjet = jsonObjectParam.get(itTitles->second);
-                string name;
-                for (std::vector<string>::const_iterator itNames = m_undidNames.begin() ; itNames != m_undidNames.end() ; itNames++)
-                {
-                    if (itNames != m_undidNames.begin())
-                    {
-                        name += " ";
-                    }
-                    
-                    std::string current = nameObjet.get(*itNames);
-                    name += current;
-                }
-                Wt::WText *text = new Wt::WText(name);
+                Wt::WInteractWidget *text = createTextWidgetFromJsonObject(nameObjet);
                 rowWidgets.push_back(text);
                 break;
             }
             case ETypeJson::object:
             {
                 Wt::Json::Object subObject = jsonObject.get(itTitles->second);
-                long long id = subObject.get("id");
-                rowWidgets.push_back(new Wt::WText(boost::lexical_cast<string>(id)));
+                Wt::WInteractWidget *text = createTextWidgetFromJsonSubObject(subObject);
+                rowWidgets.push_back(text);
                 break;
             }
         }
     }
     return rowWidgets;
 }
+
+Wt::WInteractWidget * AbstractPage::createTextWidgetFromString(Wt::WString input)
+{
+    Wt::WText *text = new Wt::WText(input);
+    text->setObjectName("text");
+    return text;
+}
+
+Wt::WInteractWidget * AbstractPage::createTextWidgetFromInt(int input)
+{
+    Wt::WText *text = new Wt::WText(boost::lexical_cast<string>(input));
+    return text;
+}
+
+Wt::WInteractWidget * AbstractPage::createCheckBoxWidgetFromBoolean(bool input)
+{
+    Wt::WCheckBox *checkBox = new Wt::WCheckBox();
+    checkBox->setChecked(input);
+    checkBox->setDisabled(true);
+    return checkBox;
+}
+
+Wt::WInteractWidget * AbstractPage::createTextWidgetFromJsonObject(Wt::Json::Object input)
+{
+    string name;
+    for (std::vector<string>::const_iterator itNames = m_undidNames.begin() ; itNames != m_undidNames.end() ; itNames++)
+    {
+        if (itNames != m_undidNames.begin())
+        {
+            name += " ";
+        }
+
+        std::string current = input.get(*itNames);
+        name += current;
+    }
+    Wt::WText *text = new Wt::WText(name);
+    return text;
+}
+
+Wt::WInteractWidget * AbstractPage::createTextWidgetFromJsonSubObject(Wt::Json::Object input)
+{
+    long long id = input.get("id");
+    Wt::WText *text = new Wt::WText(boost::lexical_cast<string>(id));
+    return text;
+}
+
 
 // ---- ADD MODIF DELETE ----------
 

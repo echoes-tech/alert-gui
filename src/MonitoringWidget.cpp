@@ -91,7 +91,7 @@ void MonitoringWidget::createUI()
     {
         Wt::Dbo::Transaction transaction(*(this->session));
         string queryString = "SELECT ale, med, atr, ams "
-                "FROM \"T_ALERT_TRACKING_ATR\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_MED\" med, \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" ams" 
+                "FROM \"T_MESSAGE_MSG\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_MED\" med, \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" ams" 
             " WHERE atr.\"ATR_ALE_ALE_ID\" = ale.\"ALE_ID\" "
             " AND ale.\"ALE_DELETE\" IS NULL "
             " AND atr.\"ATR_SEND_DATE\" IS NOT NULL"
@@ -107,25 +107,25 @@ void MonitoringWidget::createUI()
                 ;
         Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
                 Wt::Dbo::ptr<Echoes::Dbo::Media>,
-                Wt::Dbo::ptr<Echoes::Dbo::AlertTracking>,
+                Wt::Dbo::ptr<Echoes::Dbo::Message>,
                 Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization>>,Wt::Dbo::DynamicBinding> q = 
                 this->session->query<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
                                                     Wt::Dbo::ptr<Echoes::Dbo::Media>,
-                                                    Wt::Dbo::ptr<Echoes::Dbo::AlertTracking>,
+                                                    Wt::Dbo::ptr<Echoes::Dbo::Message>,
                                                     Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization>>,
                                                     Wt::Dbo::DynamicBinding>(queryString);
         
         
         Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
                 Wt::Dbo::ptr<Echoes::Dbo::Media>,
-                Wt::Dbo::ptr<Echoes::Dbo::AlertTracking>,
+                Wt::Dbo::ptr<Echoes::Dbo::Message>,
                 Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization>>> listTuples = q.resultList();
         
         if (listTuples.size() > 0)
         {
             for (Wt::Dbo::collection<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
                 Wt::Dbo::ptr<Echoes::Dbo::Media>,
-                Wt::Dbo::ptr<Echoes::Dbo::AlertTracking>,
+                Wt::Dbo::ptr<Echoes::Dbo::Message>,
                 Wt::Dbo::ptr<Echoes::Dbo::AlertMediaSpecialization>>>::const_iterator i = listTuples.begin(); i != listTuples.end(); ++i)
             {
                 row++;

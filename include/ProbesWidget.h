@@ -56,6 +56,8 @@ private:
     void updateAliveStates(long long id, int rowTable, int columnTable);
     void threadSafeFunctionCall(long long id, int rowTable, int columnTable);
     int addCustomResourceTable(long long id, int rowTable, int columnTable);
+protected:
+    void modifResource(vector<Wt::WInteractWidget*>* arguments, long long id);
 };
 
 #endif	/* PROBESWIDGET_H */

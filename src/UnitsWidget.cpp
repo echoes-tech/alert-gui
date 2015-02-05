@@ -19,8 +19,8 @@ UnitsWidget::UnitsWidget(Echoes::Dbo::Session *session, string apiUrl)
     m_unitTypeModel = new Wt::WStandardItemModel(0,2,this);
     
     std::vector<std::pair <int, string>>titles;
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
-    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::is), "information_unit_type"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "name"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::undid, 0, EMandatory::isMandatory), "information_unit_type"));
     setTitles(titles);
     
     list<list<pair<string, vector<string>>>> listsUrl;

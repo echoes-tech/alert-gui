@@ -14,20 +14,21 @@
 
 using namespace std;
 
-int ProbesWidget::m_stateColumn = 2;
+int ProbesWidget::m_stateColumn = 3;
 
 ProbesWidget::ProbesWidget(Echoes::Dbo::Session *session, string apiUrl)
 : AbstractPage(session, apiUrl, "probe")
 {
-    setButtonModif(false);
+    setButtonModif(true);
     setButtonSup(false);
     
     m_hasAddButton = false;
         
     std::vector<std::pair <int, string>>titles;
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "asset"));
-    titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::is), "alive"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "name"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "asset"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::isMandatory), "alert_if_down"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::isMandatory), "alive"));
     setTitles(titles);
 
     
@@ -144,10 +145,11 @@ void ProbesWidget::handleJsonGet(vectors_Json jsonResources)
                         Wt::Json::Object jsonProbe = jsonResource.at(cpt + 1);
                         long long probeId = jsonProbe.get("id");
                         string probeName = jsonProbe.get("name");
+                        bool probeSendAlert = jsonProbe.get("alert_if_down");
 
                         Wt::Json::Object jsonAsset = jsonProbe.get("asset");
                         string assetName = jsonAsset.get("name");
-
+                        
                         m_mapProbesTimer[probeId] = jsonProbe.get("timer");
                         
                         /* Set m_rowsTable */
@@ -160,6 +162,11 @@ void ProbesWidget::handleJsonGet(vectors_Json jsonResources)
                         Wt::WText *aName = new Wt::WText(assetName);
                         aName->setObjectName("text");
                         nameW.push_back(aName);
+                        
+                        Wt::WInteractWidget *pSendAlert = createCheckBoxWidgetFromBoolean(probeSendAlert);
+                                                
+                        pSendAlert->setObjectName("alert");
+                        nameW.push_back(pSendAlert);
 
                         m_rowsTable.insert(make_pair(probeId, nameW));
                     }
@@ -227,6 +234,48 @@ void ProbesWidget::threadSafeFunctionCall(long long id, int rowTable, int column
 {
     Wt::WServer::instance()->post(Wt::WApplication::instance()->sessionId()
             , boost::bind(&ProbesWidget::updateAliveStates, this, id, rowTable, columnTable));
+}
+
+void ProbesWidget::modifResource(vector<Wt::WInteractWidget*>* arguments, long long id)
+{    
+    vector<Wt::WInteractWidget*>::iterator it = (*arguments).begin();
+    // Post Information -------
+    Wt::Http::Message messageInformation;
+    
+    messageInformation.addBodyText("{");
+    messageInformation.addBodyText("\n\"name\": \"" + ((Wt::WLineEdit*)(*it))->text().toUTF8() + "\"");
+    messageInformation.addBodyText(",\n\"desc\": \"" + ((Wt::WLineEdit*)(*++it))->text().toUTF8() + "\"");
+
+    if (((Wt::WCheckBox*)(*++it))->isChecked())
+    {
+        messageInformation.addBodyText(",\n\"send_alert_if_down\": true");
+    }
+    else
+    {
+        messageInformation.addBodyText(",\n\"send_alert_if_down\": false");
+    }
+    messageInformation.addBodyText("\n}");
+    
+    string apiAddress = this->getApiUrl() + "/probes/"
+            + boost::lexical_cast<string>(id)
+            + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+            + "&token=" + m_session->user()->token.toUTF8();
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&ProbesWidget::putResourceCallback, this, _1, _2, client));
+
+
+    Wt::log("debug") << "ProbesWidget : [PUT] address to call : " << apiAddress;    
+    Wt::log("debug") << "ProbesWidget : [PUT] address to call : " << messageInformation.body();    
+
+    m_autoUpdate = true;
+    if (client->put(apiAddress, messageInformation))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+    else
+    {
+        Wt::log("error") << "Error Client Http";
+    }
 }
 
 int ProbesWidget::addCustomResourceTable(long long probeId, int rowTable, int columnTable)

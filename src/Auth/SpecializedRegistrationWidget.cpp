@@ -25,6 +25,7 @@
 #include <engine/Engine.h>
 
 #include "Auth/SpecializedRegistrationWidget.h"
+#include "Enums.h"
 
 
 std::string SpecializedRegistrationWidget::generateToken()
@@ -65,34 +66,49 @@ void SpecializedRegistrationWidget::registerUserDetails(Wt::Auth::User& user)
     org->organizationType = type;
     org->token = generateToken();
 
-    Wt::Dbo::ptr<Echoes::Dbo::Organization> ptrOrg = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::Organization>(org);
+    // creation du role
+    Wt::Dbo::ptr<Echoes::Dbo::Organization> pOrg = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::Organization>(org);
 
     Echoes::Dbo::UserRole *role = new Echoes::Dbo::UserRole();
     role->name = "default";
-    role->organization = ptrOrg;
+    role->organization = pOrg;
     
     Wt::Dbo::ptr<Echoes::Dbo::UserRole> ptrRole = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::UserRole>(role);    
     
     ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user().modify()->userRole = ptrRole;
     
+    // creation du premier media mail
+    Echoes::Dbo::Media *media = new Echoes::Dbo::Media();
+    Wt::Dbo::ptr<Echoes::Dbo::MediaType> mediaType = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::MediaType>().where(QUOTE(TRIGRAM_MEDIA_TYPE ID)" = ?").bind(Enums::EMedia::email);
+    media->mediaType = mediaType;
+    media->user = ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user();
+    media->token = ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user()->token;
+    media->value = model()->valueText(model()->LoginNameField);
+    media->isConfirmed = false;
+    media->isDefault = false;
+    Wt::Dbo::ptr<Echoes::Dbo::Media> pMed = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::Media>(media);
+    
+    // ajout du media par defaut à l'org
+    pOrg.modify()->defaultMedia = pMed;
+    
 //    //TODO : hardcoded, should be changed when the pack selection will be available
     Wt::Dbo::ptr<Echoes::Dbo::Pack> ptrPack = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::Pack>().where(QUOTE(TRIGRAM_PACK ID)" = ?").bind(1);
-    ptrOrg.modify()->pack = ptrPack;
+    pOrg.modify()->pack = ptrPack;
 
     Wt::Dbo::ptr<Echoes::Dbo::OptionType> otyPtr = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::OptionType>().where(QUOTE(TRIGRAM_OPTION_TYPE ID)" = ?").bind(Echoes::Dbo::EOptionType::QUOTA_SMS);
 
     Echoes::Dbo::Option *option = new Echoes::Dbo::Option();
     option->optionType = otyPtr;
-    option->organization = ptrOrg;
+    option->organization = pOrg;
     //FIXME : should be the default value found in the table POP
     option->value = "5";
     Wt::Dbo::ptr<Echoes::Dbo::Option> ptrOpt = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::Option>(option);
 
     
-    ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user().modify()->organization = ptrOrg;
+    ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user().modify()->organization = pOrg;
 
     Echoes::Dbo::EngOrg *engOrg = new Echoes::Dbo::EngOrg();
-    engOrg->pk.organization = ptrOrg;
+    engOrg->pk.organization = pOrg;
     engOrg->token = generateToken();
     
     //TODO : hardcoded, should be changed for multiple Engines

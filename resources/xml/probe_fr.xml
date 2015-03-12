@@ -13,7 +13,8 @@
     <message id="Alert.probe.name-id">Id</message>
     <message id="Alert.probe.name-asset">Serveur</message>
     <message id="Alert.probe.name-id-asset">Id Serv.</message>
-    <message id="Alert.probe.name-alert_if_down"></message>
+    <message id="Alert.probe.name-alert_if_down">Alerte si indisponible ?</message>
+    <message id="Alert.probe.name-snooze_before_next_warning">Période avant la réémission de l'alerte (s)</message>
     <message id="Alert.probe.name-alive">Etat</message>
     <message id="Alert.probe.modif-button">Modifier</message>
     <message id="Alert.probe.delete-button">Supprimer</message>

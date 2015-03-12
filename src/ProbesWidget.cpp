@@ -14,7 +14,8 @@
 
 using namespace std;
 
-int ProbesWidget::m_stateColumn = 3;
+//starts from 0
+int ProbesWidget::m_stateColumn = 4;
 
 ProbesWidget::ProbesWidget(Echoes::Dbo::Session *session, string apiUrl)
 : AbstractPage(session, apiUrl, "probe")
@@ -28,12 +29,10 @@ ProbesWidget::ProbesWidget(Echoes::Dbo::Session *session, string apiUrl)
     titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "name"));
     titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "asset"));
     titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::isMandatory), "alert_if_down"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::number, 0, EMandatory::isMandatory), "snooze_before_next_warning"));
     titles.push_back(make_pair(setValidatorType(ETypeJson::boolean, 0, EMandatory::isMandatory), "alive"));
+    
     setTitles(titles);
-
-    
-    
-    
 
     list<list<pair<string, vector<string>>>> listsUrl;
     list<pair<string, vector<string>>> listUrl;
@@ -146,6 +145,7 @@ void ProbesWidget::handleJsonGet(vectors_Json jsonResources)
                         long long probeId = jsonProbe.get("id");
                         string probeName = jsonProbe.get("name");
                         bool probeSendAlert = jsonProbe.get("alert_if_down");
+                        int snoozeBeforeNextWarning = jsonProbe.get("snooze_before_next_warning");
 
                         Wt::Json::Object jsonAsset = jsonProbe.get("asset");
                         string assetName = jsonAsset.get("name");
@@ -167,6 +167,10 @@ void ProbesWidget::handleJsonGet(vectors_Json jsonResources)
                                                 
                         pSendAlert->setObjectName("alert");
                         nameW.push_back(pSendAlert);
+                        
+                        Wt::WText *sName = new Wt::WText(boost::lexical_cast<string>(snoozeBeforeNextWarning));
+                        sName->setObjectName("number");
+                        nameW.push_back(sName);
 
                         m_rowsTable.insert(make_pair(probeId, nameW));
                     }
@@ -254,6 +258,8 @@ void ProbesWidget::modifResource(vector<Wt::WInteractWidget*>* arguments, long l
     {
         messageInformation.addBodyText(",\n\"send_alert_if_down\": false");
     }
+    
+    messageInformation.addBodyText(",\n\"snooze_before_next_warning\": " + ((Wt::WLineEdit*)(*++it))->text().toUTF8());
     messageInformation.addBodyText("\n}");
     
     string apiAddress = this->getApiUrl() + "/probes/"
@@ -280,6 +286,7 @@ void ProbesWidget::modifResource(vector<Wt::WInteractWidget*>* arguments, long l
 
 int ProbesWidget::addCustomResourceTable(long long probeId, int rowTable, int columnTable)
 {
+    cout << "columnTable : " << columnTable << endl;
     if (columnTable == m_stateColumn)
     {        
         m_autoUpdate = false;

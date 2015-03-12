@@ -13,6 +13,8 @@
     <message id="Alert.probe.name-id">Id</message>
     <message id="Alert.probe.name-asset">Asset</message>
     <message id="Alert.probe.name-id-asset">Asset Id</message>
+    <message id="Alert.probe.name-alert_if_down">Alert if down ?</message>
+    <message id="Alert.probe.name-snooze_before_next_warning">Time to wait before alerting again (s)</message>
     <message id="Alert.probe.name-alive">State</message>
     <message id="Alert.probe.modif-button">Modify</message>
     <message id="Alert.probe.delete-button">Delete</message>

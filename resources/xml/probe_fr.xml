@@ -39,6 +39,8 @@
     <message id="Alert.probe.type.number">Numérique</message>
     <message id="Alert.probe.type.boolean">Booléen</message>
     <message id="Alert.probe.type.custom">Personnalisée</message>
+    
+    <message id="Alert.probe.popup-modif">Modification de la sonde</message>
 
 <!--    Invalid message     -->
   <message id="Alert.probe.invalid-name-unit">

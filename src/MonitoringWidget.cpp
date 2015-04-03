@@ -102,7 +102,7 @@ void MonitoringWidget::createUI()
             ")"
             " AND ams.\"AMS_ALE_ALE_ID\" = ale.\"ALE_ID\"" 
             " AND ams.\"AMS_MED_MED_ID\" = med.\"MED_ID\"" 
-            " ORDER BY atr.\"ATR_SEND_DATE\" DESC"
+            " ORDER BY atr.\"MSG_SEND_DATE\" DESC"
             " LIMIT 20"
                 ;
         Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,

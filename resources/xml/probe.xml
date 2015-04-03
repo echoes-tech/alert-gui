@@ -46,6 +46,8 @@
     <message id="Alert.probe.type.number">Number</message>
     <message id="Alert.probe.type.boolean">Boolean</message>
     <message id="Alert.probe.type.custom">Custom</message>
+    
+    <message id="Alert.probe.popup-modif">Probe modification</message>
 
 <!--    Invalid message     -->
   <message id="Alert.probe.invalid-name-unit">

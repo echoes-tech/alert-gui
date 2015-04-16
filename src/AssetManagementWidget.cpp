@@ -220,7 +220,7 @@ void AssetManagementWidget::postResourceCallback(boost::system::error_code err, 
 
                 // Post Probe -------
                 Wt::Http::Message messageAsset;
-                messageAsset.addBodyText("{\n\t\"name\": \"Probe " + astName.toUTF8() + "\",\n\t\"asset_id\": " + boost::lexical_cast<string>(astId) + "\n}");
+                messageAsset.addBodyText("{\n\t\"name\": \"Probe " + astName.toUTF8() + "\",\n\t\"asset_id\": " + boost::lexical_cast<string>(astId) + ",\n\t\"send_alert_if_down\": false\n}");
 
                 const string apiAddress = getApiUrl() + "/probes"
                         + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())

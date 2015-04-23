@@ -1528,7 +1528,7 @@ Wt::WValidator* AbstractPage::editValidator(int type)
             {
                 case ETextSpecial::normalText:
                 {
-                    validator->setRegExp("^.*$");
+                    validator->setRegExp("^.+$");
                     break ;
                 }
                 case ETextSpecial::date:
@@ -1548,7 +1548,7 @@ Wt::WValidator* AbstractPage::editValidator(int type)
                 }
                 default:
                 {
-                    validator->setRegExp("^.*$");
+                    validator->setRegExp("^.+$");
                 }
             }
             break ;
@@ -1579,7 +1579,7 @@ Wt::WValidator* AbstractPage::editValidator(int type)
                 }
                 default:
                 {
-                    validator->setRegExp("^.*$");
+                    validator->setRegExp("^.+$");
                 }
             }
             break ;

@@ -370,7 +370,7 @@ void AbstractPage::addResourcePopup()
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
                 
                 input->setObjectName(fieldName);
-                inputName->push_back(input);
+                inputName->push_back(inputCW);
             }
             else if (jsonType == ETypeJson::boolean)
             {
@@ -478,7 +478,7 @@ void AbstractPage::modifResourcePopup(long long id)
                         inputCW->addStyleClass("control-group controls");
                         
                         Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), inputCW);
-                        
+
                         input->setValidator(AbstractPage::editValidator(fullType));
                         input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
                         if (inputName->size() == 0)

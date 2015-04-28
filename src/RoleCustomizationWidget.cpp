@@ -651,8 +651,7 @@ void RoleCustomizationWidget::putAssetAlias(int idx) {
             + ",\n"
             "\"media_type_id\" : " + boost::lexical_cast<string>(mapIdMediasComboBox[mediasComboBox->currentIndex()])
             + ",\n"
-            "\"value\" : \"" + boost::lexical_cast<string>(mapEditAssets[idx]->text()) + "\"\n}";
-
+            "\"value\" : \"" + boost::lexical_cast<string>(mapEditAssets[idx]->text().toUTF8()) + "\"\n}";
 
     Wt::Http::Message message;
     message.addBodyText(strMessage);
@@ -677,7 +676,7 @@ void RoleCustomizationWidget::putPluginAlias() {
             + ",\n"
             "\"media_type_id\" : " + boost::lexical_cast<string>(mapIdMediasComboBox[mediasComboBox->currentIndex()])
             + ",\n"
-            "\"value\" : \"" + boost::lexical_cast<string>(pluginEditLine->text()) + "\"\n}";
+            "\"value\" : \"" + boost::lexical_cast<string>(pluginEditLine->text().toUTF8()) + "\"\n}";
 
     Wt::Http::Message message;
     message.addBodyText(strMessage);
@@ -702,7 +701,7 @@ void RoleCustomizationWidget::putInformationAlias(int idx) {
             + ",\n"
             "\"media_type_id\" : " + boost::lexical_cast<string>(mapIdMediasComboBox[mediasComboBox->currentIndex()])
             + ",\n"
-            "\"value\" : \"" + boost::lexical_cast<string>(mapEditInformations[idx]->text()) + "\"\n}\n";
+            "\"value\" : \"" + boost::lexical_cast<string>(mapEditInformations[idx]->text().toUTF8()) + "\"\n}\n";
 
     Wt::Http::Message message;
     message.addBodyText(strMessage);
@@ -729,7 +728,7 @@ void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCri
             + ",\n"
             "\"information_id\" : " + boost::lexical_cast<string>(mapIdInformations[idForInfMap])
             + ",\n"
-            "\"value\" : \"" + boost::lexical_cast<string>(critEdit->text()) + "\"\n}\n";
+            "\"value\" : \"" + boost::lexical_cast<string>(critEdit->text().toUTF8()) + "\"\n}\n";
 
     
     Wt::Http::Message message;

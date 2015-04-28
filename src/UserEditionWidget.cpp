@@ -99,7 +99,7 @@ void UserEditionWidget::addResource(vector<Wt::WInteractWidget*>* argument)
 
     Wt::Http::Message messageMedia;
     messageMedia.addBodyText("{\n\"type_id\": " + boost::lexical_cast<string>(this->type_)
-            + ",\n\"value\": \"" + boost::lexical_cast<string>(((Wt::WLineEdit*)(*i++))->text()) + "\"");
+            + ",\n\"value\": \"" + boost::lexical_cast<string>(((Wt::WLineEdit*)(*i++))->text().toUTF8()) + "\"");
 
     Wt::WStandardItemModel *userModel = (Wt::WStandardItemModel*)((Wt::WComboBox*)(*i))->model();
     messageMedia.addBodyText(",\n\"user_id\" : " + userModel->item(((Wt::WComboBox*)(*i))->currentIndex(), 1)->text().toUTF8());

@@ -48,7 +48,7 @@ Wt::WValidator    *AssetManagementWidget::editValidator(int cpt)
 */
 int AssetManagementWidget::addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable)
 {
-    Wt::WFileResource *file = generateScript(id, ((Wt::WText*)getResourceTable()->elementAt(rowTable, 0)->widget(0))->text());
+    Wt::WFileResource *file = generateScript(id, ((Wt::WText*)getResourceTable()->elementAt(rowTable, 0)->widget(0))->text().toUTF8());
     Wt::WAnchor *downloadButton = new Wt::WAnchor(file, "");
     downloadButton->setAttributeValue("class", "btn btn-info");
     downloadButton->setTextFormat(Wt::XHTMLUnsafeText);

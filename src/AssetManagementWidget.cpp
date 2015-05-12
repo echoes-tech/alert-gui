@@ -324,7 +324,7 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long astId, Wt::WS
         scriptCustomPart = "\nASSET_ID=" + boost::lexical_cast<string>(astId) + "\n"
                 //TEMPORARY!! ToDo: Implement a method to retrieve id Probe for this Asset
                 "PROBE_ID=" + boost::lexical_cast<string>(astId) + "\n"
-                "TOKEN='" + m_session->user()->organization.get()->token.toUTF8() + "'\n\n"
+                "TOKEN='" + m_session->user()->group.get()->token.toUTF8() + "'\n\n"
                 "API_HOST='" + conf.getApiHost() + "'\n"
                 "API_PORT=" + boost::lexical_cast<string>(conf.getApiPort()) + "\n"
                 "API_HTTPS=";

@@ -49,32 +49,35 @@ std::string SpecializedRegistrationWidget::generateToken()
 
 void SpecializedRegistrationWidget::registerUserDetails(Wt::Auth::User& user)
 {
+
     ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user().modify()->eMail = model()->valueText(model()->LoginNameField);
     ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user().modify()->token = generateToken();
     
     ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user().modify()->lastName = model()->valueText(model()->LoginNameField);
 
-    Echoes::Dbo::Group *grp = new Echoes::Dbo::Group();
+    //Echoes::Dbo::Group *grp = new Echoes::Dbo::Group();
 
-    Wt::Dbo::ptr<Echoes::Dbo::GroupType> type;
+    //Wt::Dbo::ptr<Echoes::Dbo::GroupType> type;
 
 
     //triche
-    type = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::GroupType>().where("\"OTY_ID\" = ?").bind(Echoes::Dbo::GroupType::Individual);
-    grp->name = model()->valueText(model()->EmailField);
+    
+    /*grp->name = model()->valueText(model()->EmailField);
 
     grp->groupType = type;
-    grp->token = generateToken();
+    grp->token = generateToken();*/
 
     // creation du role
-    Wt::Dbo::ptr<Echoes::Dbo::Group> pGrp = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::Group>(grp);
+    Wt::Dbo::ptr<Echoes::Dbo::Group> pGrp = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::Group>().where("\"ORG_ID\" = ?").bind(5);
 
-    Echoes::Dbo::UserRole *role = new Echoes::Dbo::UserRole();
-    role->name = "default";
+    //Echoes::Dbo::UserRole *role = new Echoes::Dbo::UserRole();
+    
+    //role = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::UserRole>().where("\"ORG_ID\" = ?5");
+    /*role->name = "default";
     role->group = pGrp;
-    
-    Wt::Dbo::ptr<Echoes::Dbo::UserRole> ptrRole = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::UserRole>(role);    
-    
+    */
+    Wt::Dbo::ptr<Echoes::Dbo::UserRole> ptrRole = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::UserRole>().where("\"URO_ID\" = ?").bind(10);  
+
     ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user().modify()->userRole = ptrRole;
     
     // creation du premier media mail
@@ -89,11 +92,11 @@ void SpecializedRegistrationWidget::registerUserDetails(Wt::Auth::User& user)
     Wt::Dbo::ptr<Echoes::Dbo::Media> pMed = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::Media>(media);
     
     // ajout du media par defaut au grp
-    pGrp.modify()->defaultMedia = pMed;
+    //pGrp.modify()->defaultMedia = pMed;
     
 //    //TODO : hardcoded, should be changed when the pack selection will be available
-    Wt::Dbo::ptr<Echoes::Dbo::Pack> ptrPack = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::Pack>().where(QUOTE(TRIGRAM_PACK ID)" = ?").bind(1);
-    pGrp.modify()->pack = ptrPack;
+    //Wt::Dbo::ptr<Echoes::Dbo::Pack> ptrPack = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::Pack>().where(QUOTE(TRIGRAM_PACK ID)" = ?").bind(1);
+    //pGrp.modify()->pack = ptrPack;
 
     Wt::Dbo::ptr<Echoes::Dbo::OptionType> otyPtr = ((Echoes::Dbo::UserDatabase*)user.database())->session_.find<Echoes::Dbo::OptionType>().where(QUOTE(TRIGRAM_OPTION_TYPE ID)" = ?").bind(Echoes::Dbo::EOptionType::QUOTA_SMS);
 
@@ -104,7 +107,7 @@ void SpecializedRegistrationWidget::registerUserDetails(Wt::Auth::User& user)
     option->value = "5";
     Wt::Dbo::ptr<Echoes::Dbo::Option> ptrOpt = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::Option>(option);
 
-    
+
     ((Echoes::Dbo::UserDatabase*)user.database())->find(user).get()->user().modify()->group = pGrp;
 
     Echoes::Dbo::EngGrp *engGrp = new Echoes::Dbo::EngGrp();
@@ -117,5 +120,5 @@ void SpecializedRegistrationWidget::registerUserDetails(Wt::Auth::User& user)
     engGrp->pk.engine = enginePtr;
     
     Wt::Dbo::ptr<Echoes::Dbo::EngGrp> enoPtr = ((Echoes::Dbo::UserDatabase*)user.database())->session_.add<Echoes::Dbo::EngGrp>(engGrp);
-    
+
 }

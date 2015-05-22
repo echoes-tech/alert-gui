@@ -370,7 +370,7 @@ void AbstractPage::addResourcePopup()
                 input->enterPressed().connect(dialogAdd_, &Wt::WDialog::accept);
                 
                 input->setObjectName(fieldName);
-                inputName->push_back(input);
+                inputName->push_back(inputCW);
             }
             else if (jsonType == ETypeJson::boolean)
             {
@@ -478,7 +478,7 @@ void AbstractPage::modifResourcePopup(long long id)
                         inputCW->addStyleClass("control-group controls");
                         
                         Wt::WLineEdit *input = new Wt::WLineEdit(Wt::WString::fromUTF8(newName), inputCW);
-                        
+
                         input->setValidator(AbstractPage::editValidator(fullType));
                         input->enterPressed().connect(dialogModif, &Wt::WDialog::accept);
                         if (inputName->size() == 0)
@@ -1528,7 +1528,7 @@ Wt::WValidator* AbstractPage::editValidator(int type)
             {
                 case ETextSpecial::normalText:
                 {
-                    validator->setRegExp("^.*$");
+                    validator->setRegExp("^.+$");
                     break ;
                 }
                 case ETextSpecial::date:
@@ -1548,7 +1548,7 @@ Wt::WValidator* AbstractPage::editValidator(int type)
                 }
                 default:
                 {
-                    validator->setRegExp("^.*$");
+                    validator->setRegExp("^.+$");
                 }
             }
             break ;
@@ -1579,7 +1579,7 @@ Wt::WValidator* AbstractPage::editValidator(int type)
                 }
                 default:
                 {
-                    validator->setRegExp("^.*$");
+                    validator->setRegExp("^.+$");
                 }
             }
             break ;

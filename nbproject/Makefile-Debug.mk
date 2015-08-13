@@ -51,6 +51,10 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Enums.o \
 	${OBJECTDIR}/src/InformationsWidget.o \
 	${OBJECTDIR}/src/MainWidget.o \
+	${OBJECTDIR}/src/MessagesTableAlertWidget.o \
+	${OBJECTDIR}/src/MessagesTableHistoricWidget.o \
+	${OBJECTDIR}/src/MessagesTableMessageWidget.o \
+	${OBJECTDIR}/src/MessagesWidget.o \
 	${OBJECTDIR}/src/MonitoringWidget.o \
 	${OBJECTDIR}/src/OptionManagementModel.o \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
@@ -173,6 +177,26 @@ ${OBJECTDIR}/src/MainWidget.o: src/MainWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MainWidget.o src/MainWidget.cpp
+
+${OBJECTDIR}/src/MessagesTableAlertWidget.o: src/MessagesTableAlertWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessagesTableAlertWidget.o src/MessagesTableAlertWidget.cpp
+
+${OBJECTDIR}/src/MessagesTableHistoricWidget.o: src/MessagesTableHistoricWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessagesTableHistoricWidget.o src/MessagesTableHistoricWidget.cpp
+
+${OBJECTDIR}/src/MessagesTableMessageWidget.o: src/MessagesTableMessageWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessagesTableMessageWidget.o src/MessagesTableMessageWidget.cpp
+
+${OBJECTDIR}/src/MessagesWidget.o: src/MessagesWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessagesWidget.o src/MessagesWidget.cpp
 
 ${OBJECTDIR}/src/MonitoringWidget.o: src/MonitoringWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

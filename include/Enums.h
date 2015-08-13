@@ -115,8 +115,25 @@ public:
                         (ROLE) ("role")
                         (OPTIONS) ("options")
                         (UNITS) ("units")
+                        (MESSAGES) ("messages")
                       )
-
+    
+    BOOST_ENUM_VALUES(EMessageStatus, const char*,
+                        (UNCREATED) ("uncreated")
+                        (CREATED) ("created")
+                        (SENDFAILED) ("send failed")
+                        (SENDREFUSED) ("send refused")
+                        (SENDED) ("sended")
+                        (ACKFAILED) ("ack failed")
+                        (RECEIVED) ("received")
+                        (ANSWERED) ("answered")
+                      )
+    BOOST_ENUM_VALUES(EAlertStatus, const char*,
+                        (PENDING) ("pending")
+                        (SUPPORTED) ("supported")
+                        (FORWARDING) ("forwarding")
+                        (BACKTONORMAL) ("back to normal")                        
+                      )
 private:
 
 };

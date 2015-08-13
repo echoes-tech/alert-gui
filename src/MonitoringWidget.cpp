@@ -94,15 +94,15 @@ void MonitoringWidget::createUI()
                 "FROM \"T_MESSAGE_MSG\" atr, \"T_ALERT_ALE\" ale , \"T_MEDIA_MED\" med, \"T_ALERT_MEDIA_SPECIALIZATION_AMS\" ams" 
             " WHERE atr.\"MSG_ALE_ALE_ID\" = ale.\"ALE_ID\" "
             " AND ale.\"ALE_DELETE\" IS NULL "
-            " AND atr.\"MSG_SEND_DATE\" IS NOT NULL"
-            " AND atr.\"MSG_MED_MED_ID\" = med.\"MED_ID\" "
-            " AND med.\"MED_USR_USR_ID\" IN"
-            "("
-                "SELECT \"USR_ID\" FROM \"T_USER_USR\" WHERE \"USR_ORG_ORG_ID\" = " + boost::lexical_cast<string>(this->session->user()->organization.id()) + ""
-            ")"
-            " AND ams.\"AMS_ALE_ALE_ID\" = ale.\"ALE_ID\"" 
-            " AND ams.\"AMS_MED_MED_ID\" = med.\"MED_ID\"" 
-            " ORDER BY atr.\"MSG_SEND_DATE\" DESC"
+            //" AND atr.\"MSG_SEND_DATE\" IS NOT NULL"
+            //" AND atr.\"MSG_MED_MED_ID\" = med.\"MED_ID\" "
+            //" AND med.\"MED_USR_USR_ID\" IN"
+            //"("
+            //    "SELECT \"USR_ID\" FROM \"T_USER_USR\" WHERE \"USR_ORG_ORG_ID\" = " + boost::lexical_cast<string>(this->session->user()->organization.id()) + ""
+            //")"
+            //" AND ams.\"AMS_ALE_ALE_ID\" = ale.\"ALE_ID\"" 
+            //" AND ams.\"AMS_MED_MED_ID\" = med.\"MED_ID\"" 
+            //" ORDER BY atr.\"MSG_SEND_DATE\" DESC"
             " LIMIT 20"
                 ;
         Wt::Dbo::Query<boost::tuple<Wt::Dbo::ptr<Echoes::Dbo::Alert>,
@@ -133,7 +133,7 @@ void MonitoringWidget::createUI()
                 int colNum = 0;
                 
                 
-                new Wt::WText(i->get<2>()->sendDate.toString(), alertsSentTable->elementAt(row, colNum));
+//                new Wt::WText(i->get<2>()->sendDate.toString(), alertsSentTable->elementAt(row, colNum));
                 alertsSentTable->elementAt(row, colNum)->setContentAlignment(Wt::AlignCenter);
                 
                 new Wt::WText(i->get<0>()->name, alertsSentTable->elementAt(row, ++colNum));

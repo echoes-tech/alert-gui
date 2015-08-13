@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.messages-alert.main-table">Alertes</message>
+    <!--body-->
+    <message id="Alert.messages-alert.name-name">Nom</message>
+    <message id="Alert.messages-alert.name-statement">Etat</message>
+    <message id="Alert.messages-alert.name-supporter">Assigné à</message>
+    <message id="Alert.messages-alert.name-take">S'assigner l'alerte</message>
+    <message id="Alert.messages-alert.name-resolved">Résolu</message>
+    <message id="Alert.messages-alert.modif-button">Modifier</message>
+    <message id="Alert.messages-alert.delete-button">Supprimer</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.messages-alert.button-cancel">Annuler</message>
+    <message id="Alert.messages-alert.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.messages-alert.popup-add">Ajouter une alerte</message>
+    <!--PUT-->
+    <message id="Alert.messages-alert.popup-modif">Modifier</message>
+    <!--DELETE-->
+    <message id="Alert.messages-alert.delete-messages-alert">Attention</message>
+    <message id="Alert.messages-alert.delete-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer une alerte
+        </span>
+    </message>
+    <message id="Alert.messages-alert.button-confirm">Confirmer</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.messages-alert.invalid-name-unit">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.messages-alert.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.messages-alert.database-error">
+      Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+
+</messages>

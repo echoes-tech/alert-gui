@@ -240,10 +240,16 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         case Enums::EPageType::UNITS:
         {
             unw = new UnitsWidget(this->session, this->_apiUrl);
+            break;
         }
         case Enums::EPageType::PROBES:
         {
             prb = new ProbesWidget(this->session, this->_apiUrl);
+            break ;
+        }
+        case Enums::EPageType::MESSAGES:
+        {
+            msw = new MessagesWidget(this->session, this->_apiUrl);
             break ;
         }
         default:
@@ -405,6 +411,12 @@ void MainWidget::updateContainerFluid(int type)
             this->contentFluid->addWidget(prb);
             break;
         }
+        case Enums::EPageType::MESSAGES:
+        {
+            msw->refresh();
+            this->contentFluid->addWidget(msw);
+            break;
+        }
         default:
             break;
     }
@@ -504,6 +516,11 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::PROBES:
         {
             res = "search";
+            break ;
+        }
+        case Enums::EPageType::MESSAGES:
+        {
+            res = "envelope";
             break ;
         }
         default:

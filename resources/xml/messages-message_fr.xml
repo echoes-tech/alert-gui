@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.messages-message.main-table">Messages concernant l'alerte </message>
+    <!--body-->
+    <message id="Alert.messages-message.name-dest">Destinataire</message>
+    <message id="Alert.messages-message.name-state">Etat</message>
+    <message id="Alert.messages-message.name-date">Date de la dernière action</message>
+    <message id="Alert.messages-message.modif-button">Modifier</message>
+    <message id="Alert.messages-message.delete-button">Supprimer</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.messages-message.button-cancel">Annuler</message>
+    <message id="Alert.messages-message.button-save">Enregistrer</message>
+    <!--POST-->
+    <message id="Alert.messages-message.popup-add">Ajouter un message</message>
+    <!--PUT-->
+    <message id="Alert.messages-message.popup-modif">Modifier</message>
+    <!--DELETE-->
+    <message id="Alert.messages-message.delete-messages-message">Attention</message>
+    <message id="Alert.messages-message.delete-message">
+        <span style="color:red">
+            Vous êtes sur le point de supprimer un message
+        </span>
+    </message>
+    <message id="Alert.messages-message.button-confirm">Confirmer</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.messages-message.invalid-name-unit">
+      <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  
+  
+    <message id="Alert.messages-message.uncreated">Juste créé</message>
+  <message id="Alert.messages-message.created">Envoi en cours</message>
+  <message id="Alert.messages-message.sended">Envoyé</message>
+  <message id="Alert.messages-message.sendfailed">Envoi echoué</message>
+  <message id="Alert.messages-message.sendrefused">Envoi refusé</message>
+  <message id="Alert.messages-message.ackfailed">Envoyé mais non abouti</message>
+  <message id="Alert.messages-message.answered">Répondu</message>
+  <message id="Alert.messages-message.received">Reçu par le destinataire</message>
+
+<!--    Error message     -->
+  
+  <message id="Alert.messages-message.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.messages-message.database-error">
+      Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+
+</messages>

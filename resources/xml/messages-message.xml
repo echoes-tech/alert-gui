@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.messages-message.main-table">Messages related to </message>
+    <!--body-->
+    <message id="Alert.messages-message.name-dest">Recipient</message>
+    <message id="Alert.messages-message.name-state">Condition</message>
+    <message id="Alert.messages-message.name-date">Last action date</message>
+    <message id="Alert.messages-message.modif-button">Modify</message>
+    <message id="Alert.messages-message.delete-button">Delete</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.messages-message.button-cancel">Cancel</message>
+    <message id="Alert.messages-message.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.messages-message.popup-add">Add message</message>
+    <!--PUT-->
+    <message id="Alert.messages-message.popup-modif">Modify</message>
+    <!--DELETE-->
+    <message id="Alert.messages-message.delete-messages-message">Warning</message>
+    <message id="Alert.messages-message.delete-message">
+        <span style="color:red">
+            You are about to delete a message
+        </span>
+    </message>
+    <message id="Alert.messages-message.button-confirm">Confirm</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.messages-message.invalid-name-unit">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.messages-message.database-error-title">Database error</message>
+  <message id="Alert.messages-message.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+
+  <message id="Alert.messages-message.uncreated">Not send yet</message>
+  <message id="Alert.messages-message.created">On the way to send</message>
+  <message id="Alert.messages-message.sended">Sended to routeur</message>
+  <message id="Alert.messages-message.sendfailed">Send to routeur failed</message>
+  <message id="Alert.messages-message.sendrefused">Refused by routeur</message>
+  <message id="Alert.messages-message.ackfailed">Unreceived</message>
+  <message id="Alert.messages-message.answered">Answered</message>
+  <message id="Alert.messages-message.received">Received by user</message>
+
+
+<!-- templates -->
+
+    <message id="Alert.messages-message.Management.template" >
+            <div id="media-user-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>  
+
+</messages>

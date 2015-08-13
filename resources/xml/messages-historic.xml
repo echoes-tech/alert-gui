@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.messages-historic.main-table">Message historic related to </message>
+    <!--body-->
+    <message id="Alert.messages-historic.name-state">Condition</message>
+    <message id="Alert.messages-historic.name-date">Date</message>
+    <message id="Alert.messages-historic.modif-button">Modify</message>
+    <message id="Alert.messages-historic.delete-button">Delete</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.messages-historic.button-cancel">Cancel</message>
+    <message id="Alert.messages-historic.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.messages-historic.popup-add">Add statement</message>
+    <!--PUT-->
+    <message id="Alert.messages-historic.popup-modif">Modify</message>
+    <!--DELETE-->
+    <message id="Alert.messages-historic.delete-messages-historic">Attention</message>
+    <message id="Alert.messages-historic.delete-message">
+        <span style="color:red">
+            You are about to delete a historic
+        </span>
+    </message>
+    <message id="Alert.messages-historic.button-confirm">Confirm</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.messages-historic.invalid-name-unit">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  
+
+<!--    Error message     -->
+  
+  <message id="Alert.messages-historic.database-error-title">Database error</message>
+  <message id="Alert.messages-historic.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+  
+  <message id="Alert.messages-historic.uncreated">Not send yet</message>
+  <message id="Alert.messages-historic.created">On the way to send</message>
+  <message id="Alert.messages-historic.sended">Sended to routeur</message>
+  <message id="Alert.messages-historic.sendfailed">Send to routeur failed</message>
+  <message id="Alert.messages-historic.sendrefused">Refused by routeur</message>
+  <message id="Alert.messages-historic.ackfailed">Unreceived</message>
+  <message id="Alert.messages-historic.answered">Answered</message>
+  <message id="Alert.messages-historic.received">Received by user</message>
+  
+<!-- templates -->
+
+    <message id="Alert.messages-historic.Management.template" >
+            <div id="media-user-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>  
+
+</messages>

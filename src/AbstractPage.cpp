@@ -1018,9 +1018,8 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
                 for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
                 {
                     Wt::Json::Object jsonObject = jsonArray.at(cpt);
-
                     long long id = jsonObject.get("id");
-                    selectedIDExist |= id == m_selectedID;
+                    selectedIDExist |= id == m_selectedID;                    
                     vector<Wt::WInteractWidget *> widgetsToAdd = initRowWidgets(jsonObject, jsonResource, cpt);
                     if(!widgetsToAdd.empty())
                     {
@@ -1039,7 +1038,8 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
     }
     catch (Wt::Json::TypeException const& e)
     {
-        Wt::log("warning") << "[AbstractPage] JSON Type Exception";
+        
+        Wt::log("warning") << "[AbstractPage] JSON Type Exception" << boost::lexical_cast<string>(e.what());
         //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     fillTable();
@@ -1051,41 +1051,53 @@ vector<Wt::WInteractWidget *> AbstractPage::initRowWidgets(Wt::Json::Object json
     for (std::vector<std::pair <int, string>>::iterator itTitles = m_titles.begin();
             itTitles != m_titles.end(); itTitles++)
     {
-        switch ((itTitles->first >> 8) & 0xF)
+        Wt::WInteractWidget *intWgt;
+        int jsonType = ((itTitles->first >> 8) & 0xF);
+
+        if (!jsonObject.contains(itTitles->second))
         {
-            case ETypeJson::text:
+            cout << itTitles->second << " not found" << endl;
+            intWgt = createTextWidgetFromString("n/a"); 
+        }
+        else
+        {
+            cout << "JsonType = " << jsonType << endl;
+            switch (jsonType)
             {
-                Wt::WInteractWidget *text = createTextWidgetFromString(jsonObject.get(itTitles->second));
-                rowWidgets.push_back(text);
-                break;
+                case ETypeJson::text:
+                {
+                    intWgt = createTextWidgetFromString(jsonObject.get(itTitles->second));  
+                    break;
+                }
+                case ETypeJson::boolean:
+                {
+                    intWgt = createCheckBoxWidgetFromBoolean(jsonObject.get(itTitles->second));
+                    break;
+                }
+                case ETypeJson::number:
+                {
+                    intWgt = createTextWidgetFromInt(jsonObject.get(itTitles->second));
+                    break;
+                }
+                case ETypeJson::undid:
+                {
+                    Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
+                    Wt::Json::Object nameObjet = jsonObjectParam.get(itTitles->second);
+                    intWgt = createTextWidgetFromJsonObject(nameObjet);
+                    break;
+                }
+                case ETypeJson::object:
+                {
+                    Wt::Json::Object subObject = jsonObject.get(itTitles->second);
+                    intWgt = createTextWidgetFromJsonSubObject(subObject);
+                    break;
+                }
             }
-            case ETypeJson::boolean:
-            {
-                Wt::WInteractWidget *checkBox = createCheckBoxWidgetFromBoolean(jsonObject.get(itTitles->second));
-                rowWidgets.push_back(checkBox);
-                break;
-            }
-            case ETypeJson::number:
-            {
-                Wt::WInteractWidget *text = createTextWidgetFromInt(jsonObject.get(itTitles->second));
-                rowWidgets.push_back(text);
-                break;
-            }
-            case ETypeJson::undid:
-            {
-                Wt::Json::Object jsonObjectParam = jsonResource.at(cpt + 1);
-                Wt::Json::Object nameObjet = jsonObjectParam.get(itTitles->second);
-                Wt::WInteractWidget *text = createTextWidgetFromJsonObject(nameObjet);
-                rowWidgets.push_back(text);
-                break;
-            }
-            case ETypeJson::object:
-            {
-                Wt::Json::Object subObject = jsonObject.get(itTitles->second);
-                Wt::WInteractWidget *text = createTextWidgetFromJsonSubObject(subObject);
-                rowWidgets.push_back(text);
-                break;
-            }
+        }
+        //not necessary to add a widget when it's a widget json type
+        if(jsonType != ETypeJson::widget)
+        {
+            rowWidgets.push_back(intWgt);
         }
     }
     return rowWidgets;

@@ -104,7 +104,8 @@ public:
     };
 
     BOOST_ENUM_VALUES(EPageType, const char*,
-                        (WELCOME) ("welcome")
+                        (MESSAGES) ("messages")
+                        //(WELCOME) ("welcome")
                         (DASHBOARD) ("dashboard")
                         (PROBES) ("probes")                  
                         (ASSET) ("assets")
@@ -115,7 +116,7 @@ public:
                         (ROLE) ("role")
                         (OPTIONS) ("options")
                         (UNITS) ("units")
-                        (MESSAGES) ("messages")
+                        
                       )
     
     BOOST_ENUM_VALUES(EMessageStatus, const char*,

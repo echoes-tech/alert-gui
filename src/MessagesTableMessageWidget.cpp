@@ -18,7 +18,7 @@
 using namespace std;
 
 MessagesTableMessageWidget::MessagesTableMessageWidget(Echoes::Dbo::Session *session, string apiUrl,
-        AbstractPage* abstractPage)
+        MessagesTableAlertWidget* alertWidget)
 : AbstractPage(session, apiUrl, "messages-message", true)
 {
     setButtonModif(false);
@@ -32,8 +32,30 @@ MessagesTableMessageWidget::MessagesTableMessageWidget(Echoes::Dbo::Session *ses
     setTitles(titles);
     
     
-    m_messagesTableAlertWidget = abstractPage;
+    m_messagesTableAlertWidget = alertWidget;
     m_selectedAlertID = 0;
+}
+
+Wt::WContainerWidget *MessagesTableMessageWidget::createTableFirstHeader()
+{
+    Wt::WContainerWidget *headerTableContainer = new Wt::WContainerWidget();
+    headerTableContainer->addStyleClass("widget-title header-pers");
+    
+    Wt::WText *nameMainTable = new Wt::WText("<span class='icon'><i class='icon-tasks'></i></span><h5>"
+                  + tr("Alert." + m_xmlPageName + ".main-table") + m_messagesTableAlertWidget->getSelectedAlertName()
+                  + "</h5>", headerTableContainer);
+    nameMainTable->setObjectName(m_xmlPageName + "-main-table");
+
+    if (m_hasAddButton)
+    {
+        Wt::WAnchor *headerButton = new Wt::WAnchor(headerTableContainer);
+
+        addPopupAddHandler(headerButton);
+        headerButton->setStyleClass("button-add btn");
+        headerButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
+        headerButton->setObjectName("add-button");
+    }
+    return headerTableContainer;
 }
 
 void MessagesTableMessageWidget::updatePage()
@@ -66,6 +88,11 @@ void MessagesTableMessageWidget::updatePage()
 long long MessagesTableMessageWidget::getSelectedMessageAddonID()
 {
     return m_messagesData[getSelectedID()].messageID;
+}
+
+Wt::WString MessagesTableMessageWidget::getSelectedMessageRecipient()
+{
+    return m_messagesData[getSelectedID()].dest;
 }
 
 vector<Wt::WInteractWidget *> MessagesTableMessageWidget::initRowWidgets(Wt::Json::Object jsonObject, vector<Wt::Json::Value> jsonResource, int cpt)

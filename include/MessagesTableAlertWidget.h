@@ -21,6 +21,8 @@
 #include <Wt/WStandardItemModel>
 #include <Wt/WAbstractItemModel>
 
+#include <tools/Enums.h>
+
 #include "AbstractPage.h"
 
 class AbstractPage;
@@ -28,22 +30,37 @@ class AbstractPage;
 class MessagesTableAlertWidget :
 public AbstractPage
 {
+    struct AlertData
+    {
+        long long alertID;
+        Wt::WString name;
+        long long stateID;
+        Wt::WString user;
+    };
+    
 public:
     MessagesTableAlertWidget(Echoes::Dbo::Session *session, std::string apiUrl);
-    
+    void                                        updatePage();
+    long long                                   getSelectedAlertID();
+    Wt::WString                                 getSelectedAlertName();
 protected:
-    virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
+    //virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
+    std::vector<Wt::WInteractWidget*>           initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
+    Wt::WString                                 getStateName(long long stateID);
+    
     
 private:
-    void                        takeAssignement();
-    void                        setResolved();
+    void                        takeAssignement(long long id);
+    void                        setResolved(long long id);
     Echoes::Dbo::Session        *session_;
     std::string                 apiUrl_;
     Wt::WStandardItemModel      *m_assetsStandardItemModel;
     Wt::WComboBox               *m_assetComboBox;
-      virtual int                            addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);
-
-    void fillModel(Wt::Json::Value result);
+    virtual int                 addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);
+    std::map<long long, AlertData>             m_alertsData;
+    void                        assignementCallBack(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
+    void                        resolveCallBack(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
+    //void fillModel(Wt::Json::Value result);
     //virtual void setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     //virtual void setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
 };

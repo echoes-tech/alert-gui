@@ -20,8 +20,8 @@
 using namespace std;
 
 MessagesTableHistoricWidget::MessagesTableHistoricWidget(Echoes::Dbo::Session *session, string apiUrl,
-        AbstractPage* abstractPage)
-: AbstractPage(session, apiUrl, "messages-historic", true)
+        MessagesTableMessageWidget* messageWidget)
+: AbstractPage(session, apiUrl, "messages-historic")
 {
     setButtonModif(false);
     setButtonSup(false);
@@ -34,45 +34,31 @@ MessagesTableHistoricWidget::MessagesTableHistoricWidget(Echoes::Dbo::Session *s
     
     m_searchTypeStandardItemModel = new Wt::WStandardItemModel(0,2,this);
     
-    m_messagesTableMessageWidget = abstractPage;
+    m_messagesTableMessageWidget = messageWidget;
     m_selectedSourceID = 0;
 }
 
-/*void MessagesTableHistoricWidget::fillModel(Wt::Json::Value result, Wt::WComboBox* searchTypeComboBox, long long searchID,
-    boost::function<void (Wt::Json::Value)> functorHandleRequestPopupAdd)
+Wt::WContainerWidget *MessagesTableHistoricWidget::createTableFirstHeader()
 {
-    m_searchTypeStandardItemModel->clear();
+    Wt::WContainerWidget *headerTableContainer = new Wt::WContainerWidget();
+    headerTableContainer->addStyleClass("widget-title header-pers");
     
-    if(result.isNull())
+    Wt::WText *nameMainTable = new Wt::WText("<span class='icon'><i class='icon-tasks'></i></span><h5>"
+                  + tr("Alert." + m_xmlPageName + ".main-table") + m_messagesTableMessageWidget->getSelectedMessageRecipient()
+                  + "</h5>", headerTableContainer);
+    nameMainTable->setObjectName(m_xmlPageName + "-main-table");
+
+    if (m_hasAddButton)
     {
-        return;
+        Wt::WAnchor *headerButton = new Wt::WAnchor(headerTableContainer);
+
+        addPopupAddHandler(headerButton);
+        headerButton->setStyleClass("button-add btn");
+        headerButton->setText("<span class='btn-pink'><i class='icon-plus'></i></span>");
+        headerButton->setObjectName("add-button");
     }
-        
-    
-    Wt::Json::Array& jsonArray = result;   
-    
-    for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
-    {
-        Wt::Json::Object jsonObject = jsonArray.at(cpt);
-        
-        long long searchTypeID = jsonObject.get("id");
-        addEnumToModel(m_searchTypeStandardItemModel, searchTypeID, getSearchTypeName(searchTypeID));
-    }
-    
-    if(searchID > 0)
-    {
-        for(int row(0); row < m_searchTypeStandardItemModel->rowCount(); row++)    
-        {
-            if(boost::lexical_cast<long long>(m_searchTypeStandardItemModel->item(row, 1)->text()) == m_searchesData[searchID].searchTypeID)
-            {
-                searchTypeComboBox->setCurrentIndex(row);
-            }
-        }
-    }
-    searchTypeComboBox->setObjectName("searchComboBox");
-    searchTypeComboBox->changed().connect(boost::bind(&MessagesTableHistoricWidget::sendRequestPopupAdd, this, functorHandleRequestPopupAdd, searchTypeComboBox, searchID));        
-    sendRequestPopupAdd(functorHandleRequestPopupAdd, searchTypeComboBox, searchID);
-}*/
+    return headerTableContainer;
+}
 
 void MessagesTableHistoricWidget::updatePage()
 {

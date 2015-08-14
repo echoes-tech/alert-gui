@@ -79,7 +79,7 @@ void MainWidget::reset()
     breadCrumbsAnchor0 = new Wt::WAnchor("");
     breadCrumbsAnchor1 = new Wt::WAnchor("");
     breadCrumbsAnchor2 = new Wt::WAnchor("");
-    breadCrumbsAnchor0->setRefInternalPath("/welcome");
+    breadCrumbsAnchor0->setRefInternalPath("/messages");
     created_ = false;
     
     
@@ -187,11 +187,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             amw = new AssetManagementWidget(this->session, this->_apiUrl);
             break;
         }
-        case Enums::EPageType::WELCOME:
+        /*case Enums::EPageType::WELCOME:
         {
             wcw = new SummaryBoard(this->session);
             break;
-        }
+        }*/
         case Enums::EPageType::DASHBOARD:
         {
             dsw = new DashBoard(this->session);
@@ -346,12 +346,12 @@ void MainWidget::updateContainerFluid(int type)
 
     switch (type)
     {
-        case Enums::EPageType::WELCOME:
+        /*case Enums::EPageType::WELCOME:
         {
             wcw->refresh();
             this->contentFluid->addWidget(wcw);
             break;
-        }
+        }*/
         case Enums::EPageType::DASHBOARD:
         {
             this->contentFluid->addWidget(dsw);
@@ -448,8 +448,8 @@ void MainWidget::doActionMenu(int index)
     }
     else
     {
-        Wt::WApplication::instance()->setInternalPath("/welcome",  false);
-        menu->itemAt(0)->setFromInternalPath("/welcome");
+        Wt::WApplication::instance()->setInternalPath("/messages",  false);
+        menu->itemAt(0)->setFromInternalPath("/messages");
         updateTitle(0);
         updateBreadcrumbs();
         updateContainerFluid(0);
@@ -463,11 +463,11 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
     string res = "home";
     switch (enumPT.index())
     {
-        case Enums::EPageType::WELCOME:
+        /*case Enums::EPageType::WELCOME:
         {
             res = "home";
             break;
-        }
+        }*/
         case Enums::EPageType::DASHBOARD:
         {
             res = "list";

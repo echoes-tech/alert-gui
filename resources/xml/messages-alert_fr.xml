@@ -35,6 +35,15 @@
       <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
   </message>
   
+  <message id="Alert.messages-alert.ope-success-title"> Opération réussie </message>
+  <message id="Alert.messages-alert.ope-success"> Opération menée avec succès </message>
+  <message id="Alert.messages-alert.ope-failed-title"> Opération échouée </message>
+  <message id="Alert.messages-alert.ope-failed"> Opération impossible. Avez vous les droits? </message> 
+  
+  <message id="Alert.messages-alert.backtonormal"> Tout est ok  </message>
+  <message id="Alert.messages-alert.forwarding"> En cours de forward </message>
+  <message id="Alert.messages-alert.pending"> En attente d'assignement </message>
+  <message id="Alert.messages-alert.supported"> Assigné </message>  
 
 <!--    Error message     -->
   

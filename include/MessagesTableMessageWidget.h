@@ -23,6 +23,8 @@
 
 #include "AbstractPage.h"
 
+#include "MessagesTableAlertWidget.h"
+
 class AbstractPage;
 
 class MessagesTableMessageWidget :
@@ -37,10 +39,10 @@ public AbstractPage
     };
 
 public:
-    MessagesTableMessageWidget(Echoes::Dbo::Session *session, std::string apiUrl, AbstractPage* abstractPage);
+    MessagesTableMessageWidget(Echoes::Dbo::Session *session, std::string apiUrl, MessagesTableAlertWidget* alertWidget);
     void                                        updatePage();
     long long                                   getSelectedMessageAddonID();
-    
+    Wt::WString                                 getSelectedMessageRecipient();
 protected:    
     //void                                        setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     //void                                        setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
@@ -52,13 +54,16 @@ protected:
     void                                        handleRequestPopupAdd(Wt::Json::Value result, Wt::WContainerWidget* paramsContainer,
                                                     std::vector<Wt::WInteractWidget*>* inputName, long long sourceID);
     Wt::WString                                 getSourceParameterName(long long sourceParameterID);
-    */Wt::WString                                 getStateName(long long stateID);
+     * 
+    */
+    Wt::WContainerWidget*                      createTableFirstHeader();
+    Wt::WString                                 getStateName(long long stateID);
     std::vector<Wt::WInteractWidget*>           initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
     
 private:
     Echoes::Dbo::Session                        *session_;
     std::string                                 apiUrl_;
-    AbstractPage*                               m_messagesTableAlertWidget;
+    MessagesTableAlertWidget*                   m_messagesTableAlertWidget;
     long long                                   m_selectedAlertID;
     Wt::WStandardItemModel*                     m_addonStandardItemModel;
     std::map<long long, MessageData>             m_messagesData;

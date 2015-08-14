@@ -44,10 +44,28 @@ MessagesTableAlertWidget::MessagesTableAlertWidget(Echoes::Dbo::Session *session
     
     m_assetComboBox = new Wt::WComboBox();
     m_assetsStandardItemModel = new Wt::WStandardItemModel(0,2,this);
+
+}
+
+void MessagesTableAlertWidget::updatePage()
+{  
     
-    boost::function<void (Wt::Json::Value)> functorFillModel = boost::bind(&MessagesTableAlertWidget::fillModel, this, _1);    
-    string resource = "alerts";
-    sendHttpRequestGet(resource, vector<string>(), functorFillModel);
+    list<list<pair<string, vector<string>>>> listsUrl;
+
+    list<pair<string, vector<string>>> listUrl;
+    vector<string> listParameter;
+        
+        
+    listUrl.push_back(pair<string, vector<string>>("alerts", listParameter));
+    listParameter.clear();
+    listUrl.push_back(pair<string, vector<string>>("alerts/:id/status", listParameter));
+        
+    listsUrl.push_back(listUrl);
+    listUrl.clear();
+
+    setUrl(listsUrl);
+    
+    AbstractPage::updatePage();
 }
 
 int MessagesTableAlertWidget::addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable)
@@ -56,8 +74,8 @@ int MessagesTableAlertWidget::addCustomButtonsToResourceTable(long long id, int 
     Wt::WAnchor *assignementButton = new Wt::WAnchor();//(link, "");
     assignementButton->setAttributeValue("class", "btn btn-info");
     assignementButton->setTextFormat(Wt::XHTMLUnsafeText);
-    assignementButton->setText("<span class='input-group-btn'><i class='icon-medkit icon-white'></i></span>");
-    assignementButton->clicked().connect(boost::bind(&MessagesTableAlertWidget::takeAssignement, this));
+    assignementButton->setText("<span class='input-group-btn'><i class='fa fa-medkit icon-white'></i></span>");
+    assignementButton->clicked().connect(boost::bind(&MessagesTableAlertWidget::takeAssignement, this, id));
     getResourceTable()->elementAt(rowTable, columnTable)->addWidget(assignementButton); 
     getResourceTable()->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(Wt::WLength(5, Wt::WLength::Percentage)));
     getResourceTable()->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
@@ -68,78 +86,204 @@ int MessagesTableAlertWidget::addCustomButtonsToResourceTable(long long id, int 
     resolvedButton->setAttributeValue("class", "btn btn-info");
     resolvedButton->setTextFormat(Wt::XHTMLUnsafeText);
     resolvedButton->setText("<span class='input-group-btn'><i class='icon-chevron-down icon-white'></i></span>");
-    resolvedButton->clicked().connect(boost::bind(&MessagesTableAlertWidget::setResolved, this));
+    resolvedButton->clicked().connect(boost::bind(&MessagesTableAlertWidget::setResolved, this, id));
     getResourceTable()->elementAt(rowTable, columnTable)->addWidget(resolvedButton); 
     getResourceTable()->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(Wt::WLength(5, Wt::WLength::Percentage)));
     getResourceTable()->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
     return ++columnTable;
 }
 
-void MessagesTableAlertWidget::takeAssignement()
+void MessagesTableAlertWidget::takeAssignement(long long id)
 {
-    
+    Wt::Http::Message content;
+    content.addBodyText("{\n\t\"user\": " + boost::lexical_cast<string>(m_session->user().id()) + "\n}");
+
+    const string apiAddress = getApiUrl() + "/alerts/"
+                        + boost::lexical_cast<string>(id)
+                        + "/assign"
+                        + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+                        + "&token=" + m_session->user()->token.toUTF8();
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&MessagesTableAlertWidget::assignementCallBack, this, _1, _2, client));
+
+    Wt::log("debug") << "MessagesAlertWidget : [PUT] address to call : " << apiAddress;
+
+    if (client->put(apiAddress, content))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+    else
+    {
+        Wt::log("error") << "Error Client Http";
+    }
 }
 
-void MessagesTableAlertWidget::setResolved()
+void MessagesTableAlertWidget::setResolved(long long id)
 {
-    
+    Wt::Http::Message content;
+    content.addBodyText("{\n\t\"user\": " + boost::lexical_cast<string>(m_session->user().id()) + "\n}");
+
+    const string apiAddress = getApiUrl() + "/alerts/"
+                        + boost::lexical_cast<string>(id)
+                        + "/resolve"
+                        + "?login=" + Wt::Utils::urlEncode(m_session->user()->eMail.toUTF8())
+                        + "&token=" + m_session->user()->token.toUTF8();
+    Wt::Http::Client *client = new Wt::Http::Client(this);
+    client->done().connect(boost::bind(&MessagesTableAlertWidget::resolveCallBack, this, _1, _2, client));
+
+    Wt::log("debug") << "MessagesAlertWidget : [PUT] address to call : " << apiAddress;
+
+    if (client->put(apiAddress, content))
+    {
+        Wt::WApplication::instance()->deferRendering();
+    }
+    else
+    {
+        Wt::log("error") << "Error Client Http";
+    }
 }
 
-void MessagesTableAlertWidget::fillModel(Wt::Json::Value result)
+void MessagesTableAlertWidget::assignementCallBack(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
 {
-    m_assetsStandardItemModel->clear();
+    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    Wt::Json::Value error;
+
+    if (!err)
+    {
+        if (response.status() >= 200 && response.status() < 300)
+        {
+            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".ope-success-title"),
+                 tr("Alert." + m_xmlPageName + ".ope-success"), Wt::Ok);
+        }
+        else
+        {
+            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".ope-failed-title"),
+                 tr("Alert." + m_xmlPageName + ".ope-failed"), Wt::Ok);
+        }
+    }
+    else
+    {
+        Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
+                                       + m_xmlPageName) + " Widget] Http::Client error2: " << response.body();
+        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+    }
+    updatePage();
+}
+
+void MessagesTableAlertWidget::resolveCallBack(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
+{
+    delete client;
+    Wt::WApplication::instance()->resumeRendering();
+    Wt::Json::Value error;
+
+    if (!err)
+    {
+        if (response.status() >= 200 && response.status() < 300)
+        {
+            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".ope-success-title"),
+                 tr("Alert." + m_xmlPageName + ".ope-success"), Wt::Ok);
+        }
+        else
+        {
+            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".ope-failed-title"),
+                 tr("Alert." + m_xmlPageName + ".ope-failed"), Wt::Ok);
+        }
+    }
+    else
+    {
+        Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
+                                       + m_xmlPageName) + " Widget] Http::Client error2: " << response.body();
+        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+    }
+    updatePage();
+}
+
+
+std::vector<Wt::WInteractWidget*> MessagesTableAlertWidget::initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt)
+{
+    if(cpt == 0)
+        m_alertsData.clear();
     
+    struct AlertData alertData;
+        
+    vector<Wt::WInteractWidget *> rowWidgets;
     try
     {
-        Wt::Json::Array& jsonArray = result;   
-        for (int cpt(0); cpt < (int) jsonArray.size(); cpt++)
-        {
-            Wt::Json::Object jsonObject = jsonArray.at(cpt);
-            long long alertId = jsonObject.get("id");
-            Wt::WString alertName = jsonObject.get("name");
-            Wt::WString alertState = "empty";
-            Wt::WString alertAssign = "empty";
-
-            Wt::WStandardItem *itemId = new Wt::WStandardItem();
-            Wt::WStandardItem *itemName = new Wt::WStandardItem();
-            Wt::WStandardItem *itemState = new Wt::WStandardItem();
-            Wt::WStandardItem *itemAssign = new Wt::WStandardItem();
-
-            vector<Wt::WStandardItem*> rowVector;
-
-            itemName->setText(alertName);
-            rowVector.push_back(itemName);
-            itemName->setText(alertState);
-            rowVector.push_back(itemState);
-            itemName->setText(alertAssign);
-            rowVector.push_back(itemAssign);
-            itemId->setText(boost::lexical_cast<string>(alertId));
-            rowVector.push_back(itemId);     
-
-            m_assetsStandardItemModel->appendRow(rowVector);
-        }
+        Wt::Json::Object alertStatusInfo = jsonResource.at(cpt+1);
         
+        int alertID = alertStatusInfo.get("id");
+        alertData.alertID = alertID;
+        
+        Wt::WString name = alertStatusInfo.get("name");
+        rowWidgets.push_back(new Wt::WText(name));
+        alertData.name = name;
+        
+        int stateID = alertStatusInfo.get("state");    
+        rowWidgets.push_back(new Wt::WText(getStateName(stateID)));
+        alertData.stateID = stateID;
+        
+        if(alertStatusInfo.contains("user"))
+        {
+            Wt::WString user = alertStatusInfo.get("user");
+            rowWidgets.push_back(new Wt::WText(user));
+            alertData.user = user;
+        }
+        else
+        {
+            rowWidgets.push_back(new Wt::WText("-"));
+            alertData.user = "";
+        }
+
+        m_alertsData[alertID] = alertData;
     }
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[MessagesTableAlertWidget] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.alerts.database-error-title"), tr("Alert.alerts.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.messages-Alert.database-error-title"), tr("Alert.messages-alert.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[MessagesTableAlertWidget] JSON Type Exception";
+        //Wt::WMessageBox::show(tr("Alert.messages-message.database-error-title"), tr("Alert.messages-message.database-error"), Wt::Ok);
     }
     
+    return rowWidgets;
 }
 
-Wt::WComboBox *MessagesTableAlertWidget::popupAdd(Wt::WDialog *dialog)
+Wt::WString MessagesTableAlertWidget::getStateName(long long stateID)
+{    
+    map<long long, Wt::WString> mapStateName;
+    
+    mapStateName[Echoes::Dbo::EAlertStatus::BACKTONORMAL] = tr("Alert.messages-alert.backtonormal");
+    mapStateName[Echoes::Dbo::EAlertStatus::FORWARDING] = tr("Alert.messages-alert.forwarding");
+    mapStateName[Echoes::Dbo::EAlertStatus::PENDING] = tr("Alert.messages-alert.pending");
+    mapStateName[Echoes::Dbo::EAlertStatus::SUPPORTED] = tr("Alert.messages-alert.supported");
+    
+    return mapStateName[stateID];
+}
+
+long long   MessagesTableAlertWidget::getSelectedAlertID()
+{
+    return m_alertsData[getSelectedID()].alertID;
+}
+
+Wt::WString   MessagesTableAlertWidget::getSelectedAlertName()
+{
+    return m_alertsData[getSelectedID()].name;
+}
+
+/*Wt::WComboBox *MessagesTableAlertWidget::popupAdd(Wt::WDialog *dialog)
 {
     m_assetComboBox = new Wt::WComboBox(dialog->contents());
     m_assetComboBox->setModel(m_assetsStandardItemModel);
     m_assetComboBox->setCurrentIndex(0);
  
     return m_assetComboBox;
-}
+}*/
+
 /*
 void PluginsTablePluginWidget::setAddResourceMessage(Wt::Http::Message *message,vector<Wt::WInteractWidget*>* argument)
 {

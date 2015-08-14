@@ -1061,7 +1061,6 @@ vector<Wt::WInteractWidget *> AbstractPage::initRowWidgets(Wt::Json::Object json
         }
         else
         {
-            cout << "JsonType = " << jsonType << endl;
             switch (jsonType)
             {
                 case ETypeJson::text:

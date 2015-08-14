@@ -45,6 +45,16 @@
       Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
   </message>
 
+  <message id="Alert.messages-alert.ope-success-title"> Successful Operation </message>
+  <message id="Alert.messages-alert.ope-success"> Operation Complete with success </message>
+  <message id="Alert.messages-alert.ope-failed-title"> Failed Operation </message>
+  <message id="Alert.messages-alert.ope-failed"> Operation can't be done </message> 
+  
+
+  <message id="Alert.messages-alert.backtonormal"> All is ok  </message>
+  <message id="Alert.messages-alert.forwarding"> Forwarded</message>
+  <message id="Alert.messages-alert.pending"> Waiting to be assigned</message>
+  <message id="Alert.messages-alert.supported"> Assigned </message>  
 
 <!-- templates -->
 

@@ -23,6 +23,7 @@
 
 #include "AbstractPage.h"
 
+#include "MessagesTableMessageWidget.h"
 
 class AbstractPage;
 
@@ -36,7 +37,7 @@ public AbstractPage
     };
     
 public:
-    MessagesTableHistoricWidget(Echoes::Dbo::Session *session, std::string apiUrl, AbstractPage* abstractPage);
+    MessagesTableHistoricWidget(Echoes::Dbo::Session *session, std::string apiUrl, MessagesTableMessageWidget* MessageWidget);
     void                                        updatePage();
     long long                                   getSelectedSourceAddonID();
     
@@ -53,13 +54,15 @@ protected:
     void                                        fillModel(Wt::Json::Value result, Wt::WComboBox* searchTypeComboBox, long long searchID,
                                                     boost::function<void (Wt::Json::Value)> functorHandleRequestPopupAdd);
     Wt::WString                                 getSearchParameterName(long long searchParameterID);
-    */Wt::WString                                 getStateName(long long searchTypeID);
+    */
+    Wt::WContainerWidget*                      createTableFirstHeader();
+    Wt::WString                                 getStateName(long long searchTypeID);
     std::vector<Wt::WInteractWidget*>           initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
     
 private:
     Echoes::Dbo::Session                        *session_;
     std::string                                 apiUrl_;
-    AbstractPage*                               m_messagesTableMessageWidget;
+    MessagesTableMessageWidget*                               m_messagesTableMessageWidget;
     long long                                   m_selectedSourceID;
     Wt::WStandardItemModel*                     m_searchTypeStandardItemModel;
     std::map<long long, HistoricData>             m_messageHistoricData;

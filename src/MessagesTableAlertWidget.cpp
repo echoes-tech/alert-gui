@@ -70,23 +70,28 @@ void MessagesTableAlertWidget::updatePage()
 
 int MessagesTableAlertWidget::addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable)
 {
-    // Wt::WLink *link;= generateScript(id, ((Wt::WText*)getResourceTable()->elementAt(rowTable, 0)->widget(0))->text());
-    Wt::WAnchor *assignementButton = new Wt::WAnchor();//(link, "");
+    Wt::WAnchor *assignementButton = new Wt::WAnchor();
     assignementButton->setAttributeValue("class", "btn btn-info");
     assignementButton->setTextFormat(Wt::XHTMLUnsafeText);
-    assignementButton->setText("<span class='input-group-btn'><i class='fa fa-medkit icon-white'></i></span>");
-    assignementButton->clicked().connect(boost::bind(&MessagesTableAlertWidget::takeAssignement, this, id));
+    assignementButton->setText("<span class='input-group-btn'><i class='icon-inbox icon-white'></i></span>");
+    if(m_alertsData[id].stateID == Echoes::Dbo::EAlertStatus::PENDING
+            || m_alertsData[id].stateID == Echoes::Dbo::EAlertStatus::FORWARDING)
+    {
+        assignementButton->clicked().connect(boost::bind(&MessagesTableAlertWidget::takeAssignement, this, id));
+    }
     getResourceTable()->elementAt(rowTable, columnTable)->addWidget(assignementButton); 
     getResourceTable()->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(Wt::WLength(5, Wt::WLength::Percentage)));
     getResourceTable()->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);
     ++columnTable;
     
-    //Wt::WLink *link2;// = generateScript(id, ((Wt::WText*)getResourceTable()->elementAt(rowTable, 0)->widget(0))->text());
-    Wt::WAnchor *resolvedButton = new Wt::WAnchor();//link2, "");
+    Wt::WAnchor *resolvedButton = new Wt::WAnchor();
     resolvedButton->setAttributeValue("class", "btn btn-info");
     resolvedButton->setTextFormat(Wt::XHTMLUnsafeText);
     resolvedButton->setText("<span class='input-group-btn'><i class='icon-chevron-down icon-white'></i></span>");
-    resolvedButton->clicked().connect(boost::bind(&MessagesTableAlertWidget::setResolved, this, id));
+    if(m_alertsData[id].stateID == Echoes::Dbo::EAlertStatus::SUPPORTED)
+    {
+        resolvedButton->clicked().connect(boost::bind(&MessagesTableAlertWidget::setResolved, this, id));
+    }
     getResourceTable()->elementAt(rowTable, columnTable)->addWidget(resolvedButton); 
     getResourceTable()->elementAt(rowTable, columnTable)->setWidth(Wt::WLength(Wt::WLength(5, Wt::WLength::Percentage)));
     getResourceTable()->elementAt(rowTable, columnTable)->setContentAlignment(Wt::AlignCenter);

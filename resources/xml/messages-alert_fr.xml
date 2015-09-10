@@ -8,6 +8,8 @@
     <message id="Alert.messages-alert.name-name">Nom</message>
     <message id="Alert.messages-alert.name-statement">Etat</message>
     <message id="Alert.messages-alert.name-supporter">Assigné à</message>
+    <message id="Alert.messages-alert.name-led">LED</message>
+    <message id="Alert.messages-alert.name-forward">Assigner</message>
     <message id="Alert.messages-alert.name-take">S'assigner l'alerte</message>
     <message id="Alert.messages-alert.name-resolved">Résolu</message>
     <message id="Alert.messages-alert.modif-button">Modifier</message>
@@ -17,7 +19,9 @@
 <!--    In popup     -->
     <message id="Alert.messages-alert.button-cancel">Annuler</message>
     <message id="Alert.messages-alert.button-save">Enregistrer</message>
+    <message id="Alert.messages-alert.button-forward">Assigner</message>
     <!--POST-->
+    <message id="Alert.messages-alert.popup-selectUser">Selectionnez un utilisateur</message>
     <message id="Alert.messages-alert.popup-add">Ajouter une alerte</message>
     <!--PUT-->
     <message id="Alert.messages-alert.popup-modif">Modifier</message>
@@ -33,6 +37,9 @@
 <!--    Invalid message     -->
   <message id="Alert.messages-alert.invalid-name-unit">
       <span style="color:red">&nbsp;Nom invalide : taille (1-255) Ne pas utiliser : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
+  </message>
+  <message id="Alert.messages-alert.invalid-name-name">
+      <span style="color:red">&nbsp;Utilisateur invalide : inconnu : &rdquo;&lsaquo;&rsaquo;/\&amp;;?!&sect;,{}()*|</span>
   </message>
   
   <message id="Alert.messages-alert.ope-success-title"> Opération réussie </message>

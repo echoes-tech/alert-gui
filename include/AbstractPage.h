@@ -126,7 +126,9 @@ public:
     virtual void                updatePage();
     virtual void                fillTable();
     
-    static const std::string xmlDirectory;
+    static const    std::string xmlDirectory;
+    long long       m_selectedID;
+    std::map<long long, vector_widget>          m_rowsTable;
 protected:
 
     // ENUM
@@ -262,7 +264,7 @@ protected:
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id);
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
-    std::map<long long, vector_widget>          m_rowsTable;
+    
     std::vector<std::pair <int, std::string>>   m_displayedTitlesPopups;
     bool                                        m_autoUpdate;
     bool                                        m_hasAddButton;
@@ -299,7 +301,6 @@ private:
     bool                                m_isModifButtonPresent;
     bool                                m_isDeleteButtonPresent;
     bool                                m_selectable;
-    long long                           m_selectedID;
     std::vector<AbstractPage*>            m_pagesToUpdate;     
 //    bool                                m_isMainPage;
     // select drop + paginate--------------------

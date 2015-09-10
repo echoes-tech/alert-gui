@@ -42,7 +42,7 @@
       Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
   </message>
   
-  <message id="Alert.messages-historic.uncreated">Not send yet</message>
+  <message id="Alert.messages-historic.uncreated">Not sent yet</message>
   <message id="Alert.messages-historic.created">On the way to send</message>
   <message id="Alert.messages-historic.sended">Sended to routeur</message>
   <message id="Alert.messages-historic.sendfailed">Send to routeur failed</message>

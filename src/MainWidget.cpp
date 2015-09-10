@@ -413,7 +413,7 @@ void MainWidget::updateContainerFluid(int type)
         }
         case Enums::EPageType::MESSAGES:
         {
-            msw->refresh();
+            msw->update();
             this->contentFluid->addWidget(msw);
             break;
         }

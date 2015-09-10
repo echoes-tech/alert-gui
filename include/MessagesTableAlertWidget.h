@@ -20,6 +20,7 @@
 #include <Wt/WStandardItem>
 #include <Wt/WStandardItemModel>
 #include <Wt/WAbstractItemModel>
+#include <Wt/WTimer>
 
 #include <tools/Enums.h>
 
@@ -47,19 +48,30 @@ protected:
     //virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     std::vector<Wt::WInteractWidget*>           initRowWidgets(Wt::Json::Object jsonObject, std::vector<Wt::Json::Value> jsonResource, int cpt);
     Wt::WString                                 getStateName(long long stateID);
+    Wt::WString                                 getStateColor(long long stateID);
     
     
 private:
     void                        takeAssignement(long long id);
     void                        setResolved(long long id);
+    void                        forward(long long id);
     Echoes::Dbo::Session        *session_;
     std::string                 apiUrl_;
     Wt::WStandardItemModel      *m_assetsStandardItemModel;
     Wt::WComboBox               *m_assetComboBox;
+    Wt::WTimer*                 timer_refresh;
+    Wt::WStandardItemModel      *usersModel_;
     virtual int                 addCustomButtonsToResourceTable(long long id, int rowTable, int columnTable);
     std::map<long long, AlertData>             m_alertsData;
+    std::map<long long, std::string>            m_listUsr;
     void                        assignementCallBack(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
     void                        resolveCallBack(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
+    void                        refresh();
+    void                        handleJsonGet(vectors_Json jsonResources);
+    void                        customButtonFooter(Wt::WDialog *dialog);
+    void                        popupForward(std::vector<Wt::WInteractWidget*>* inputName, std::vector<Wt::WText*> errorMessage,
+                                    Wt::WDialog *dialog, long long id);
+    void                        messageBoxError();
     //void fillModel(Wt::Json::Value result);
     //virtual void setAddResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);
     //virtual void setModifResourceMessage(Wt::Http::Message *message, std::vector<Wt::WInteractWidget*>* argument);

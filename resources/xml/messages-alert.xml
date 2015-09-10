@@ -8,6 +8,8 @@
     <message id="Alert.messages-alert.name-name">Name</message>
     <message id="Alert.messages-alert.name-statement">Condition</message>
     <message id="Alert.messages-alert.name-supporter">Assigned to</message>
+    <message id="Alert.messages-alert.name-led">LED</message>
+    <message id="Alert.messages-alert.name-forward">Forward</message>
     <message id="Alert.messages-alert.name-take">Self-Assign</message>
     <message id="Alert.messages-alert.name-resolved">Resolved</message>
     <message id="Alert.messages-alert.modif-button">Modify</message>
@@ -17,7 +19,9 @@
 <!--    In popup     -->
     <message id="Alert.messages-alert.button-cancel">Cancel</message>
     <message id="Alert.messages-alert.button-save">Save</message>
+    <message id="Alert.messages-alert.button-forward">Forward</message>
     <!--POST-->
+    <message id="Alert.messages-alert.popup-selectUser">Select user</message>
     <message id="Alert.messages-alert.popup-add">Add alert</message>
     <!--PUT-->
     <message id="Alert.messages-alert.popup-modif">Modify</message>
@@ -36,7 +40,11 @@
 &nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
 </span>
   </message>
-  
+  <message id="Alert.messages-alert.invalid-name-name">
+      <span style="color:red">
+&nbsp;Invalid user : Unknow : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
 
 <!--    Error message     -->
   

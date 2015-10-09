@@ -68,5 +68,15 @@
   <message id="Alert.asset.conflict-title">Impossible de supprimer le serveur</message>
   <message id="Alert.asset.conflict">Vous ne pouvez pas supprimer ce serveur : il reste au moins une alerte paramétrée dessus.</message>
 
+    <message id="Alert.asset.relation-on-delete-error-title">Erreur base de donnée</message>
+  <message id="Alert.asset.relation-on-delete-error">
+      La ressource ne peut être supprimée. Supprimez toutes les liaisons avant de retenter.
+  </message>
+  
+  <message id="Alert.asset.connexion-error-title">Erreur de communication</message>
+  <message id="Alert.asset.connexion-error">
+      La tentative de communication avec l'API a échouée, vérifiez son état et/ou ouvrez un ticket : https://forge.echoes-tech.com
+  </message>
+
 <!--    Warning message     -->
 </messages>

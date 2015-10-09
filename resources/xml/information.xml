@@ -66,6 +66,17 @@
   <message id="Alert.information.database-error">
       Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
   </message>
+  
+  <message id="Alert.information.relation-on-delete-error-title">Database error</message>
+  <message id="Alert.information.relation-on-delete-error">
+      Ressource can't be delete because relations exists with this ressource.
+  </message>
+  
+  <message id="Alert.information.connexion-error-title">Connexion error</message>
+  <message id="Alert.information.connexion-error">
+      Oups! somthing wrong append. Check your internet connexion or the API server status
+  </message>
+  
 <!--    Warning message     -->
   <message id="Alert.information-list.delete-alerts-message">
       Alerts link with information.

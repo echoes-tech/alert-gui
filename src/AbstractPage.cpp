@@ -1371,20 +1371,53 @@ void AbstractPage::apiDeleteResourceCallback(boost::system::error_code err, cons
                         << response.body() << ".";
             }
         }
+        else if(response.status() == Enums::EReturnCode::LOCKED)
+        {
+            Wt::log("warning") << "[" + m_xmlPageName + " Widget] Error LOCKED on delete" << response.body();
+            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".relation-on-delete-error-title"),
+                                  tr("Alert." + m_xmlPageName + ".relation-on-delete-error"), Wt::Ok);
+        }
         else
         {
-            Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
-                                           + m_xmlPageName) + " Widget] " << response.body();
-            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
+            try
+            {
+                Wt::Json::Value result;
+                Wt::Json::Object obj;
+
+                Wt::Json::parse(response.body(), result); 
+                obj = result;
+                Wt::WString message = obj.get("message");
+                
+                if(message.toUTF8().compare("Locked (existing relations)") == 0)
+                {
+                    Wt::log("warning") << "[" + m_xmlPageName + " Widget] Error LOCKED on delete" << response.body();
+                    Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".relation-on-delete-error-title"),
+                                  tr("Alert." + m_xmlPageName + ".relation-on-delete-error"), Wt::Ok);
+                }
+                else
+                {          
+                    Wt::log("warning") << "[" + m_xmlPageName + " Widget] Error " << response.status() << " on delete => " << response.body();
+                    Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
                                   tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+                }
+            }
+            catch (Wt::Json::ParseError const& e)
+            {
+                Wt::log("warning") << "[" + m_xmlPageName + " Management Widget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"), "parsing JSON error" ,Wt::Ok);
+            }
+            catch (Wt::Json::TypeException const& e)
+            {
+                Wt::log("warning") << "[" + m_xmlPageName + " Management Widget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"), "JSON Type Exception",Wt::Ok);
+            }
         }
     }
     else
     {
-        Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
-                                       + m_xmlPageName) + " Widget] Http::Client delete error: " << response.body();
-        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
-                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+        Wt::log("warning") << "[" + m_xmlPageName + " Widget] Connexion error on delete";
+        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".connexion-error-title"),
+                              tr("Alert." + m_xmlPageName + ".connexion-error"), Wt::Ok);
     }
     updatePage();
 }

@@ -57,6 +57,15 @@
       Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
   </message>
 
+  <message id="Alert.unit.relation-on-delete-error-title">Database error</message>
+  <message id="Alert.unit.relation-on-delete-error">
+      Ressource can't be delete because relations exists with this ressource.
+  </message>
+  
+  <message id="Alert.unit.connexion-error-title">Connexion error</message>
+  <message id="Alert.unit.connexion-error">
+      Oups! somthing wrong append. Check your internet connexion or the API server status
+  </message>
 
 <!-- templates -->
     <message id="Alert.unit.Management.template" >

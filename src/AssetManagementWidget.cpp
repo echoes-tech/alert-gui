@@ -62,7 +62,7 @@ int AssetManagementWidget::addCustomButtonsToResourceTable(long long id, int row
 
 // Call API - POST(ADD) DELETE PUT(MODIF) ----------------------------------------
 
-void AssetManagementWidget::apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
+/*void AssetManagementWidget::apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
 {
     delete client;
     Wt::WApplication::instance()->resumeRendering();
@@ -124,7 +124,7 @@ void AssetManagementWidget::apiDeleteResourceCallback(boost::system::error_code 
                               tr("Alert.asset.database-error"), Wt::Ok);
     }
     updatePage();
-}
+}*/
 
 
 

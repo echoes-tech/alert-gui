@@ -56,7 +56,7 @@
     <message id="Alert.alert.delete-alert">Attention</message>
     <message id="Alert.alert.delete-message">
         <span style="color:red">
-            You are about to delete a server
+            You are about to delete an alert
         </span>
     </message>
     <message id="Alert.alert.button-confirm">Confirm</message>

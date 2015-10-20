@@ -42,6 +42,8 @@
   <message id="Alert.messages-message.ackfailed">Envoyé mais non abouti</message>
   <message id="Alert.messages-message.answered">Répondu</message>
   <message id="Alert.messages-message.received">Reçu par le destinataire</message>
+  <message id="Alert.messages-message.linking">Envoyé mais en attente du lien</message>
+  <message id="Alert.messages-message.linklost">lien perdu</message>
 
 <!--    Error message     -->
   

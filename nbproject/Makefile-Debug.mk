@@ -49,6 +49,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/EATableTemplate.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/Enums.o \
+	${OBJECTDIR}/src/HelpWidget.o \
 	${OBJECTDIR}/src/InformationsWidget.o \
 	${OBJECTDIR}/src/MainWidget.o \
 	${OBJECTDIR}/src/MessagesTableAlertWidget.o \
@@ -167,6 +168,11 @@ ${OBJECTDIR}/src/Enums.o: src/Enums.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Enums.o src/Enums.cpp
+
+${OBJECTDIR}/src/HelpWidget.o: src/HelpWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/HelpWidget.o src/HelpWidget.cpp
 
 ${OBJECTDIR}/src/InformationsWidget.o: src/InformationsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

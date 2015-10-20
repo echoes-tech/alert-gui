@@ -252,6 +252,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             msw = new MessagesWidget(this->session, this->_apiUrl);
             break ;
         }
+        case Enums::EPageType::HELP:
+        {
+            hpw = new HelpWidget(this->session, this->_apiUrl);
+            break ;
+        }
         default:
             break;
     }
@@ -417,6 +422,12 @@ void MainWidget::updateContainerFluid(int type)
             this->contentFluid->addWidget(msw);
             break;
         }
+        case Enums::EPageType::HELP:
+        {
+            hpw->updatePage();
+            this->contentFluid->addWidget(hpw);
+            break;
+        }
         default:
             break;
     }
@@ -521,6 +532,11 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::MESSAGES:
         {
             res = "envelope";
+            break ;
+        }
+        case Enums::EPageType::HELP:
+        {
+            res = "book";
             break ;
         }
         default:

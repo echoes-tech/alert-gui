@@ -116,7 +116,7 @@ public:
                         (ROLE) ("role")
                         (OPTIONS) ("options")
                         (UNITS) ("units")
-                        
+                        (HELP) ("help")
                       )
     
     BOOST_ENUM_VALUES(EMessageStatus, const char*,
@@ -124,6 +124,8 @@ public:
                         (CREATED) ("created")
                         (SENDFAILED) ("send failed")
                         (SENDREFUSED) ("send refused")
+                        (LINKING) ("linking")
+                        (LINKLOST) ("link lost")
                         (SENDED) ("sended")
                         (ACKFAILED) ("ack failed")
                         (RECEIVED) ("received")

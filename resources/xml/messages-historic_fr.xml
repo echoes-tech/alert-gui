@@ -40,6 +40,8 @@
   <message id="Alert.messages-historic.ackfailed">Envoyé mais non abouti</message>
   <message id="Alert.messages-historic.answered">Répondu</message>
   <message id="Alert.messages-historic.received">Reçu par le destinataire</message>
+  <message id="Alert.messages-historic.linking">Envoyé mais en attente du lien</message>
+  <message id="Alert.messages-historic.linklost">lien perdu</message>
 
 
 <!--    Error message     -->

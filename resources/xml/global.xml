@@ -315,6 +315,8 @@
   <message id="Alert.admin.units-tab">Units</message>
   <message id="Alert.admin.messages-tab">Messages</message>
   <message id="Alert.admin.dashboard-tab">Dashboard</message>
+   <message id="Alert.admin.help-tab">Help</message>
+  
   
   <message id="Alert.admin.home">Home</message>
   

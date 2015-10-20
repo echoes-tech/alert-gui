@@ -29,6 +29,7 @@
 #include "EchoesHome.h"
 #include "TrundleTable.h"
 #include "MessagesWidget.h"
+#include "HelpWidget.h"
 
 #endif	/* GLOBALINCLUDEFILE_H */
 
@@ -44,4 +45,5 @@ class UserActionManagement;
 //class AuthWidget;
 class UnitsWidget;
 class Login;
+class HelpWidget;
 

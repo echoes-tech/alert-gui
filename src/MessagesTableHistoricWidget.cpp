@@ -141,7 +141,8 @@ Wt::WString MessagesTableHistoricWidget::getStateName(long long stateID)
     mapStateName[Echoes::Dbo::EMessageStatus::ACKFAILED] = tr("Alert.messages-historic.ackfailed");
     mapStateName[Echoes::Dbo::EMessageStatus::ANSWERED] = tr("Alert.messages-historic.answered");
     mapStateName[Echoes::Dbo::EMessageStatus::RECEIVED] = tr("Alert.messages-historic.received");
-    
+    mapStateName[Echoes::Dbo::EMessageStatus::LINKING] = tr("Alert.messages-historic.linking");
+    mapStateName[Echoes::Dbo::EMessageStatus::LINKLOST] = tr("Alert.messages-historic.linklost");
     return mapStateName[stateID];
 }
 /*

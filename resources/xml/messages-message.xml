@@ -51,6 +51,8 @@
   <message id="Alert.messages-message.ackfailed">Unreceived</message>
   <message id="Alert.messages-message.answered">Answered</message>
   <message id="Alert.messages-message.received">Received by user</message>
+  <message id="Alert.messages-message.linking">Sended but link undone</message>
+  <message id="Alert.messages-message.linklost">link lost</message>
 
 
 <!-- templates -->

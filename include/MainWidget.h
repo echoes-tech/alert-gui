@@ -104,6 +104,7 @@ protected:
  
   PluginsWidget *plw;
   MessagesWidget *msw;
+  HelpWidget *hpw;
 //  AssetManagementModel *amm;
   AssetManagementWidget *amw;
   OptionManagementModel *omm;

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!-- Models -->
+<message id="Alert.help.form-info">On this page you can see the sms user guide</message>
+<message id="Alert.help.content">
+    <br />
+    <b>SMS content</b>
+    <br /><br />
+    <dd>The received SMS is made up of two things : <br/>
+        - a code, used to answer<br />
+        - the message<br />
+    </dd>
+    <br />
+    <b>Answer a SMS</b>
+    <br /><br />
+    <dd>The SMS answer have to be phrased up as the following shema :<br/>
+        <p style="margin-left:40px; font-style:italic;"> &lt;received code&gt; &lt;answer&gt;<br/></p>
+        Answer can be <br/>
+        - <b>1</b> to self assign the alert<br/>
+        - <b>2</b> to set as resolved the alert (you have to be the supporter of the alert)<br/>
+    </dd>
+</message>  
+ 
+<!-- templates -->
+    <message id="Alert.help.Management.template" >
+        <br />
+            <div class ="alert alert-info">${tr:Alert.help.form-info}</div> 
+            <div>${tr:Alert.help.content}</div>
+            
+    </message>
+  
+  
+</messages>

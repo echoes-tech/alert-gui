@@ -130,7 +130,7 @@
                     <p><strong>[Interface utilisateur] Correction de bugs</strong></p>
                     <ul>
                     <li>Correction d'un bug qui empêchait la création d'alertes dans certains cas</li>
-                    <li>Correction d'un bug qui empêchait la création du lien entre un utilisateur et son organisation dans certains cas</li>    
+                    <li>Correction d'un bug qui empêchait la création du lien entre un utilisateur et son groupe dans certains cas</li>    
                     </ul>
                 </div>
 

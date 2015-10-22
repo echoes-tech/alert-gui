@@ -98,7 +98,7 @@ void MonitoringWidget::createUI()
             " AND atr.\"MSG_MED_MED_ID\" = med.\"MED_ID\" "
             " AND med.\"MED_USR_USR_ID\" IN"
             "("
-                "SELECT \"USR_ID\" FROM \"T_USER_USR\" WHERE \"USR_ORG_ORG_ID\" = " + boost::lexical_cast<string>(this->session->user()->organization.id()) + ""
+                "SELECT \"USR_ID\" FROM \"T_USER_USR\" WHERE \"USR_GRP_GRP_ID\" = " + boost::lexical_cast<string>(this->session->user()->group.id()) + ""
             ")"
             " AND ams.\"AMS_ALE_ALE_ID\" = ale.\"ALE_ID\"" 
             " AND ams.\"AMS_MED_MED_ID\" = med.\"MED_ID\"" 

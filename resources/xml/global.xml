@@ -128,7 +128,7 @@
                     <p><strong>[GUI] Bugfixes</strong></p>
                     <ul>
                         <li>Impossible to create alerts in some cases</li>
-                        <li>Impossible to link user and organisation in some cases</li>    
+                        <li>Impossible to link user and group in some cases</li>    
                     </ul>
                 </div>
 

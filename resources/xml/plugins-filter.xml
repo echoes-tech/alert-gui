@@ -38,24 +38,6 @@
 </span>
   </message>
   
-
-<!--    Error message     -->
-  
-  <message id="Alert.plugins-filter.database-error-title">Database error</message>
-  <message id="Alert.plugins-filter.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
-  
-  <message id="Alert.plugins-filter.relation-on-delete-error-title">Database error</message>
-  <message id="Alert.plugins-filter.relation-on-delete-error">
-      Ressource can't be delete because relations exists with this ressource.
-  </message>
-  
-  <message id="Alert.plugins-filter.connexion-error-title">Connexion error</message>
-  <message id="Alert.plugins-filter.connexion-error">
-      Oups! somthing wrong append. Check your internet connexion or the API server status
-  </message>
-  
   <message id="Alert.plugins-filter.filter-type.all">All</message>
   <message id="Alert.plugins-filter.filter-type.regex">Regular expression</message>
   <message id="Alert.plugins-filter.filter-type.location">Location</message>

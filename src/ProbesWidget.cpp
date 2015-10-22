@@ -93,12 +93,12 @@ void ProbesWidget::handleJsonGetHeartbeat(vector<Wt::Json::Value> jsonResource)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[ProbesWidget][handleJsonGetHeartbeat] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[ProbesWidget][handleJsonGetHeartbeat] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }  
 }
 
@@ -181,12 +181,12 @@ void ProbesWidget::handleJsonGet(vectors_Json jsonResources)
         catch (Wt::Json::ParseError const& e)
         {
             Wt::log("warning") << "[ProbesWidget][handleJsonGet] Problems parsing JSON";
-            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+            Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
         }
         catch (Wt::Json::TypeException const& e)
         {
             Wt::log("warning") << "[ProbesWidget][handleJsonGet] JSON Type Exception";
-            //        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+            //        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
         }
         fillTable();
     }

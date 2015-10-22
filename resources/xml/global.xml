@@ -321,11 +321,34 @@
   
   
   <message id="Alert.admin.options-tab">Options</message>
-  <message id="Alert.global.database-error-title">Database error</message>
-  <message id="Alert.global.database-error">Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
   
   <message id="Alert.global.action">Actions</message>
   <message id="Footer.text.date">&copy; 2012 -</message>
   <message id="Footer.text"><a href="http://www.echoes-tech.com/" target="_blank" >Echoes Technologies</a>. Tous droits réservés.</message>
 
+  <message id="Alert.global.database-error-title">Database error</message>
+  <message id="Alert.global.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket: https://forge.echoes-tech.com
+  </message>
+  
+  <message id="Alert.global.relation-on-delete-error-title">Database error</message>
+  <message id="Alert.global.relation-on-delete-error">
+      Ressource can't be deleted because relations exist with this ressource.
+  </message>
+  
+  <message id="Alert.global.connexion-error-title">Connexion error</message>
+  <message id="Alert.global.connexion-error">
+      Oups! Something wrong append. Check your internet connexion or the API server status.
+  </message>
+  
+  <message id="Alert.global.json-parse-error-title">Parsing error</message>
+  <message id="Alert.global.json-parse-error">
+      Parsing error. Try again. If this error occurs again, please open a ticket: https://forge.echoes-tech.com
+  </message>
+  
+  <message id="Alert.global.json-type-error-title">Type exception</message>
+  <message id="Alert.global.json-type-error">
+      Type exception error. Try again. If this error occurs again, please open a ticket: https://forge.echoes-tech.com
+  </message>
+  
 </messages>

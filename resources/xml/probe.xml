@@ -56,24 +56,6 @@
 </span>
   </message>
   
-
-<!--    Error message     -->
-  
-  <message id="Alert.probe.database-error-title">Database error</message>
-  <message id="Alert.probe.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
-
-  <message id="Alert.probe.relation-on-delete-error-title">Database error</message>
-  <message id="Alert.probe.relation-on-delete-error">
-      Ressource can't be delete because relations exists with this ressource.
-  </message>
-  
-  <message id="Alert.probe.connexion-error-title">Connexion error</message>
-  <message id="Alert.probe.connexion-error">
-      Oups! somthing wrong append. Check your internet connexion or the API server status
-  </message>
-
 <!-- templates -->
     <message id="Alert.probe.Management.template" >
         <br />

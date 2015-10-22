@@ -34,24 +34,7 @@
 &nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
 </span>
   </message>
-  
 
-<!--    Error message     -->
-  
-  <message id="Alert.plugins-plugin.database-error-title">Database error</message>
-  <message id="Alert.plugins-plugin.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
-
-  <message id="Alert.plugins-plugin.relation-on-delete-error-title">Database error</message>
-  <message id="Alert.plugins-plugin.relation-on-delete-error">
-      Ressource can't be delete because relations exists with this ressource.
-  </message>
-  
-  <message id="Alert.plugins-plugin.connexion-error-title">Connexion error</message>
-  <message id="Alert.plugins-plugin.connexion-error">
-      Oups! somthing wrong append. Check your internet connexion or the API server status
-  </message>
 
 <!-- templates -->
 

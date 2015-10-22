@@ -57,32 +57,6 @@
       </span>
   </message>
 
-<!--    Error message     -->
-  <message id="Alert.association.database-error-title">Database error</message>
-  <message id="Alert.association.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
-  <message id="Alert.association.parsing-error-title">Parsing error</message>
-  <message id="Alert.association.parsing-error">
-      Parsing error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
-  <message id="Alert.association.typexception-error-title">Type exception error</message>
-  <message id="Alert.association.typexception-error">
-      Type exception error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
-  
-  <message id="Alert.association.relation-on-delete-error-title">Database error</message>
-  <message id="Alert.association.relation-on-delete-error">
-      Ressource can't be delete because relations exists with this ressource.
-  </message>
-  
-  <message id="Alert.association.connexion-error-title">Connexion error</message>
-  <message id="Alert.association.connexion-error">
-      Oups! somthing wrong append. Check your internet connexion or the API server status
-  </message>
-  
-<!--    Warning message     -->
-
 <!-- templates -->
     <message id="Alert.association.Management.template" >
         <br />

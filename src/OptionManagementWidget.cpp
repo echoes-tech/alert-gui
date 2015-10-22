@@ -219,20 +219,20 @@ void OptionManagementWidget::getQuota(boost::system::error_code err, const Wt::H
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
+                Wt::log("warning") << "[Options Management Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
+                Wt::log("warning") << "[Options Management Widget] " << tr("Alert.global.json-type-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
             }
         }
     }
     else
     {
-        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
+        Wt::log("error") << "[Options Widget] Http::Client error: " << err.message();
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"),Wt::Ok);
     }
     model_->setValue(model_->smsQuota,boost::any(smsQuotaValue));
     model_->setReadOnly(model_->smsQuota, true);
@@ -241,40 +241,6 @@ void OptionManagementWidget::getQuota(boost::system::error_code err, const Wt::H
 
 void OptionManagementWidget::getRoles(boost::system::error_code err, const Wt::Http::Message& response)
 {
-//    Wt::WApplication::instance()->resumeRendering();
-//    int idx = 0;
-//    role->clear();
-//    
-//    if (response.status() >= 200 && response.status() < 400)
-//    {
-//        Wt::Json::Value result ;
-//        Wt::Json::Array& result1 = Wt::Json::Array::Empty;
-//        try
-//        {                  
-//            Wt::Json::parse(response.body(), result);
-//            result1 = result;
-//              //descriptif
-//            for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
-//            {
-//                Wt::Json::Object tmp = (*idx1);
-//                pluginsComboBox->addItem(tmp.get("name"));
-//                mapIdPluginsComboBox[idx] = tmp.get("id");
-//                idx++;
-//            }
-//        }
-//        catch (Wt::Json::ParseError const& e)
-//        {
-//            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON:" << response.body();
-//        }
-//
-//        catch (Wt::Json::TypeException const& e)
-//        {
-//            Wt::log("warning") << "[handleHttpResponse] Problems parsing JSON.:" << response.body();
-//        }          
-//    }
-//    else
-//    {
-//         Wt::log("warning") << "fct handleHttpResponse" << response.body();
-//    }
+
 }
 

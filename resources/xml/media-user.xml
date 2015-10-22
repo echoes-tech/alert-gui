@@ -92,20 +92,7 @@
           The file as not been generated. Please contact us.
       </span>
   </message>
-  <message id="Alert.media-user.database-error-title">Database error</message>
-  <message id="Alert.media-user.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
-  
-  <message id="Alert.media-user.relation-on-delete-error-title">Database error</message>
-  <message id="Alert.media-user.relation-on-delete-error">
-      Ressource can't be delete because relations exists with this ressource.
-  </message>
-  
-  <message id="Alert.media-user.connexion-error-title">Connexion error</message>
-  <message id="Alert.media-user.connexion-error">
-      Oups! somthing wrong append. Check your internet connexion or the API server status
-  </message>
+
 <!--    Warning message     -->
 
      <!-- templates -->

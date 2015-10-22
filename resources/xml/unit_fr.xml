@@ -35,22 +35,6 @@
     <message id="Alert.unit.type.boolean">Booleen</message>
     <message id="Alert.unit.type.custom">Personnalisee</message>
 
-<!--    Error message     -->
-  <message id="Alert.unit.database-error-title">Erreur base de donnée</message>
-  <message id="Alert.unit.database-error">
-    Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
-  </message>
-
-  <message id="Alert.unit.relation-on-delete-error-title">Erreur base de donnée</message>
-  <message id="Alert.unit.relation-on-delete-error">
-      La ressource ne peut être supprimée. Supprimez toutes les liaisons avant de retenter.
-  </message>
-  
-  <message id="Alert.unit.connexion-error-title">Erreur de communication</message>
-  <message id="Alert.unit.connexion-error">
-      La tentative de communication avec l'API a échouée, vérifiez son état et/ou ouvrez un ticket : https://forge.echoes-tech.com
-  </message>
-
 <!--    Invalid message     -->
   <message id="Alert.unit.invalid-name-unit">
       <span style="color:red">

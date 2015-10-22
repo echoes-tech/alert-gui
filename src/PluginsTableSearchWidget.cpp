@@ -160,12 +160,12 @@ vector<Wt::WInteractWidget *> PluginsTableSearchWidget::initRowWidgets(Wt::Json:
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[PluginsTableSearchWidget] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[PluginsTableSearchWidget] JSON Type Exception";
-        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        //            Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     
     return rowWidgets;

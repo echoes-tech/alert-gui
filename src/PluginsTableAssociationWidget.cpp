@@ -97,12 +97,12 @@ vector<Wt::WInteractWidget*> PluginsTableAssociationWidget::initRowWidgets(Wt::J
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[PluginsTableAssociationWidget] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[PluginsTableAssociationWidget] JSON Type Exception";
-        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        //            Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     
     return rowWidgets;
@@ -190,12 +190,12 @@ void PluginsTableAssociationWidget::fillHostComboBox(Wt::Json::Value result, boo
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[PluginsTableAssociationWidget] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[PluginsTableAssociationWidget] JSON Type Exception";
-        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        //            Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     
     functorSendRequestInfoAndFilterComboBox();
@@ -320,12 +320,12 @@ void PluginsTableAssociationWidget::fillInfoAndFilterIndexComboBox(vectors_Json 
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[PluginsTableAssociationWidget] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[PluginsTableAssociationWidget] JSON Type Exception";
-        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        //            Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     
     Wt::WWidget* saveButton = dialog->footer()->children()[0];

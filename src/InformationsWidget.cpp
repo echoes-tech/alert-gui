@@ -192,12 +192,12 @@ void InformationsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[AbstractPage] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[AbstractPage] JSON Type Exception";
-//            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//            Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
 }
 
@@ -266,19 +266,19 @@ void InformationsWidget::checkAlertsInInformation(boost::system::error_code err,
         }
         catch (Wt::Json::ParseError const& e)
         {
-            Wt::log("warning") << "[Information Management Widget] Problems parsing JSON: " << response.body();
-            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.alert.database-error"), Wt::Ok);
+            Wt::log("warning") << "[Information Management Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
+            Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
         }
         catch (Wt::Json::TypeException const& e)
         {
-            Wt::log("warning") << "[Information Management Widget] JSON Type Exception: " << response.body();
-//            Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "TypeException", tr("Alert.alert.database-error"), Wt::Ok);
+            Wt::log("warning") << "[Information Management Widget] " << tr("Alert.global.json-type-error-title") << response.body();
+            Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
         }
     }
     else
     {
         Wt::log("error") << "[Information Management Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title") + "err", tr("Alert.global.database-error"), Wt::Ok);
     }
 }
 

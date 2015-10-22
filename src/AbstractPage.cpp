@@ -5,7 +5,7 @@
  * @author Guillaume KRIER
  * 
  * @date 21/12/2013
- * 
+ *  
  * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
  * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
  * COMPANY AUTHORIZATION.
@@ -878,17 +878,17 @@ void AbstractPage::handleHttpResponseGet(boost::system::error_code err,
             {
                 Wt::log("warning")
                         << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                        + " Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".parsing-error-title"),
-                                      tr("Alert." + m_xmlPageName + ".parsing-error"), Wt::Ok);
+                        + " Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"),
+                                      tr("Alert.global.json-parse-error"), Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning")
                         << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                        + " Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".typexception-error-title"),
-                                      tr("Alert." + m_xmlPageName + ".typexception-error"), Wt::Ok);
+                        + " Widget] " << tr("Alert.global.json-type-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"),
+                                      tr("Alert.global.json-type-error"), Wt::Ok);
             }
         }
         else if (response.status() == 404)
@@ -901,8 +901,8 @@ void AbstractPage::handleHttpResponseGet(boost::system::error_code err,
         Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
                                        + m_xmlPageName) + " Widget] Http::Client get error: "
                 << response.body();
-        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
-                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"),
+                              tr("Alert.global.database-error"), Wt::Ok);
     }
 }
 
@@ -1035,12 +1035,11 @@ void AbstractPage::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[AbstractPage] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[AbstractPage] JSON Type Exception";
-        //            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
     }
     fillTable();
 }
@@ -1277,33 +1276,33 @@ void AbstractPage::postResourceCallback(boost::system::error_code err, const Wt:
             {
                 Wt::log("warning")
                         << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                        + " Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".parsing-error-title"),
-                                      tr("Alert." + m_xmlPageName + ".parsing-error"), Wt::Ok);
+                        + " Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"),
+                                      tr("Alert.global.json-parse-error"), Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning")
                         << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                        + " Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".typexception-error-title"),
-                                      tr("Alert." + m_xmlPageName + ".typexception-error"), Wt::Ok);
+                        + " Widget] " << tr("Alert.global.json-type-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"),
+                                      tr("Alert.global.json-type-error"), Wt::Ok);
             }
         }
         else
         {
             Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
                                            + m_xmlPageName) + " Widget] Http::Client status unexpected: " << response.body();
-            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
-                                  tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+            Wt::WMessageBox::show(tr("Alert.global.database-error-title"),
+                                  tr("Alert.global.database-error"), Wt::Ok);
         }
     }
     else
     {
         Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
                                        + m_xmlPageName) + " Widget] Http::Client error: " << response.body();
-        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
-                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"),
+                              tr("Alert.global.database-error"), Wt::Ok);
     }
     updatePage();
 }
@@ -1326,33 +1325,33 @@ void AbstractPage::putResourceCallback(boost::system::error_code err, const Wt::
             {
                 Wt::log("warning")
                         << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                        + " Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".parsing-error-title"),
-                                      tr("Alert." + m_xmlPageName + ".parsing-error"), Wt::Ok);
+                        + " Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"),
+                                      tr("Alert.global.json-parse-error"), Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
                 Wt::log("warning")
                         << "[" + tr("Alert." + m_xmlPageName + ".add-form." + m_xmlPageName)
-                        + " Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".typexception-error-title"),
-                                      tr("Alert." + m_xmlPageName + ".typexception-error"), Wt::Ok);
+                        + " Widget] " << tr("Alert.global.json-type-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"),
+                                      tr("Alert.global.json-type-error"), Wt::Ok);
             }
         }
         else
         {
             Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
                                            + m_xmlPageName) + " Widget] Http::Client error1: " << response.status() << " " << response.body();
-            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
-                                  tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+            Wt::WMessageBox::show(tr("Alert.global.database-error-title"),
+                                  tr("Alert.global.database-error"), Wt::Ok);
         }
     }
     else
     {
         Wt::log("warning") << "[" + tr("Alert." + m_xmlPageName + ".add-form."
                                        + m_xmlPageName) + " Widget] Http::Client error2: " << response.body();
-        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
-                              tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"),
+                              tr("Alert.global.database-error"), Wt::Ok);
     }
     updatePage();
 }
@@ -1374,8 +1373,8 @@ void AbstractPage::apiDeleteResourceCallback(boost::system::error_code err, cons
         else if(response.status() == Enums::EReturnCode::LOCKED)
         {
             Wt::log("warning") << "[" + m_xmlPageName + " Widget] Error LOCKED on delete" << response.body();
-            Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".relation-on-delete-error-title"),
-                                  tr("Alert." + m_xmlPageName + ".relation-on-delete-error"), Wt::Ok);
+            Wt::WMessageBox::show(tr("Alert.global.relation-on-delete-error-title"),
+                                  tr("Alert.global.relation-on-delete-error"), Wt::Ok);
         }
         else
         {
@@ -1391,33 +1390,33 @@ void AbstractPage::apiDeleteResourceCallback(boost::system::error_code err, cons
                 if(message.toUTF8().compare("Locked (existing relations)") == 0)
                 {
                     Wt::log("warning") << "[" + m_xmlPageName + " Widget] Error LOCKED on delete" << response.body();
-                    Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".relation-on-delete-error-title"),
-                                  tr("Alert." + m_xmlPageName + ".relation-on-delete-error"), Wt::Ok);
+                    Wt::WMessageBox::show(tr("Alert.global.relation-on-delete-error-title"),
+                                  tr("Alert.global.relation-on-delete-error"), Wt::Ok);
                 }
                 else
                 {          
                     Wt::log("warning") << "[" + m_xmlPageName + " Widget] Error " << response.status() << " on delete => " << response.body();
-                    Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"),
-                                  tr("Alert." + m_xmlPageName + ".database-error"), Wt::Ok);
+                    Wt::WMessageBox::show(tr("Alert.global.database-error-title"),
+                                  tr("Alert.global.database-error"), Wt::Ok);
                 }
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[" + m_xmlPageName + " Management Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"), "parsing JSON error" ,Wt::Ok);
+                Wt::log("warning") << "[" + m_xmlPageName + " Management Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[" + m_xmlPageName + " Management Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".database-error-title"), "JSON Type Exception",Wt::Ok);
+                Wt::log("warning") << "[" + m_xmlPageName + " Management Widget] " << tr("Alert.global.json-type-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
             }
         }
     }
     else
     {
         Wt::log("warning") << "[" + m_xmlPageName + " Widget] Connexion error on delete";
-        Wt::WMessageBox::show(tr("Alert." + m_xmlPageName + ".connexion-error-title"),
-                              tr("Alert." + m_xmlPageName + ".connexion-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.connexion-error-title"),
+                              tr("Alert.global.connexion-error"), Wt::Ok);
     }
     updatePage();
 }

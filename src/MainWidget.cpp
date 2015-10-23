@@ -255,6 +255,8 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         case Enums::EPageType::HELP:
         {
             hpw = new HelpWidget(this->session, this->_apiUrl);
+            break;
+        }
         case Enums::EPageType::ROLES:
         {
             row = new RolesWidget(this->session, this->_apiUrl);
@@ -541,6 +543,8 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::ROLES:
         {
             res = "user";
+            break ;
+        }
         case Enums::EPageType::MESSAGES:
         {
             res = "envelope";

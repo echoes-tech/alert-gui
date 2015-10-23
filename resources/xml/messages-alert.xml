@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!--    In table     -->
+    <!--header-->
+    <message id="Alert.messages-alert.main-table">Alerts</message>
+    <!--body-->
+    <message id="Alert.messages-alert.name-name">Name</message>
+    <message id="Alert.messages-alert.name-statement">Condition</message>
+    <message id="Alert.messages-alert.name-supporter">Assigned to</message>
+    <message id="Alert.messages-alert.name-led">LED</message>
+    <message id="Alert.messages-alert.name-forward">Forward</message>
+    <message id="Alert.messages-alert.name-take">Self-Assign</message>
+    <message id="Alert.messages-alert.name-resolved">Resolved</message>
+    <message id="Alert.messages-alert.modif-button">Modify</message>
+    <message id="Alert.messages-alert.delete-button">Delete</message>
+    <!--footer-->
+
+<!--    In popup     -->
+    <message id="Alert.messages-alert.button-cancel">Cancel</message>
+    <message id="Alert.messages-alert.button-save">Save</message>
+    <message id="Alert.messages-alert.button-forward">Forward</message>
+    <!--POST-->
+    <message id="Alert.messages-alert.popup-selectUser">Select user</message>
+    <message id="Alert.messages-alert.popup-add">Add alert</message>
+    <!--PUT-->
+    <message id="Alert.messages-alert.popup-modif">Modify</message>
+    <!--DELETE-->
+    <message id="Alert.messages-alert.delete-messages-alert">Attention</message>
+    <message id="Alert.messages-alert.delete-message">
+        <span style="color:red">
+            You are about to delete an alert
+        </span>
+    </message>
+    <message id="Alert.messages-alert.button-confirm">Confirm</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.messages-alert.invalid-name-unit">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  <message id="Alert.messages-alert.invalid-name-name">
+      <span style="color:red">
+&nbsp;Invalid user : Unknow : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+
+<!--    Error message     -->
+  
+  <message id="Alert.messages-alert.database-error-title">Database error</message>
+  <message id="Alert.messages-alert.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+
+  <message id="Alert.messages-alert.ope-success-title"> Successful Operation </message>
+  <message id="Alert.messages-alert.ope-success"> Operation Complete with success </message>
+  <message id="Alert.messages-alert.ope-failed-title"> Failed Operation </message>
+  <message id="Alert.messages-alert.ope-failed"> Operation can't be done </message> 
+  
+
+  <message id="Alert.messages-alert.backtonormal"> All is ok  </message>
+  <message id="Alert.messages-alert.forwarding"> Forwarded</message>
+  <message id="Alert.messages-alert.pending"> Waiting to be assigned</message>
+  <message id="Alert.messages-alert.supported"> Assigned </message>  
+
+<!-- templates -->
+
+    <message id="Alert.messages-alert.Management.template" >
+            <div id="media-user-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers" >
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>  
+
+</messages>

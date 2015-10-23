@@ -79,7 +79,7 @@ void MainWidget::reset()
     breadCrumbsAnchor0 = new Wt::WAnchor("");
     breadCrumbsAnchor1 = new Wt::WAnchor("");
     breadCrumbsAnchor2 = new Wt::WAnchor("");
-    breadCrumbsAnchor0->setRefInternalPath("/welcome");
+    breadCrumbsAnchor0->setRefInternalPath("/messages");
     created_ = false;
     
     
@@ -187,11 +187,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             amw = new AssetManagementWidget(this->session, this->_apiUrl);
             break;
         }
-        case Enums::EPageType::WELCOME:
+        /*case Enums::EPageType::WELCOME:
         {
             wcw = new SummaryBoard(this->session);
             break;
-        }
+        }*/
         case Enums::EPageType::DASHBOARD:
         {
             dsw = new DashBoard(this->session);
@@ -240,12 +240,21 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         case Enums::EPageType::UNITS:
         {
             unw = new UnitsWidget(this->session, this->_apiUrl);
+            break;
         }
         case Enums::EPageType::PROBES:
         {
             prb = new ProbesWidget(this->session, this->_apiUrl);
             break ;
         }
+        case Enums::EPageType::MESSAGES:
+        {
+            msw = new MessagesWidget(this->session, this->_apiUrl);
+            break ;
+        }
+        case Enums::EPageType::HELP:
+        {
+            hpw = new HelpWidget(this->session, this->_apiUrl);
         case Enums::EPageType::ROLES:
         {
             row = new RolesWidget(this->session, this->_apiUrl);
@@ -345,12 +354,12 @@ void MainWidget::updateContainerFluid(int type)
 
     switch (type)
     {
-        case Enums::EPageType::WELCOME:
+        /*case Enums::EPageType::WELCOME:
         {
             wcw->refresh();
             this->contentFluid->addWidget(wcw);
             break;
-        }
+        }*/
         case Enums::EPageType::DASHBOARD:
         {
             this->contentFluid->addWidget(dsw);
@@ -416,6 +425,18 @@ void MainWidget::updateContainerFluid(int type)
             this->contentFluid->addWidget(row);
             break;
         }
+        case Enums::EPageType::MESSAGES:
+        {
+            msw->update();
+            this->contentFluid->addWidget(msw);
+            break;
+        }
+        case Enums::EPageType::HELP:
+        {
+            hpw->updatePage();
+            this->contentFluid->addWidget(hpw);
+            break;
+        }
         default:
             break;
     }
@@ -447,8 +468,8 @@ void MainWidget::doActionMenu(int index)
     }
     else
     {
-        Wt::WApplication::instance()->setInternalPath("/welcome",  false);
-        menu->itemAt(0)->setFromInternalPath("/welcome");
+        Wt::WApplication::instance()->setInternalPath("/messages",  false);
+        menu->itemAt(0)->setFromInternalPath("/messages");
         updateTitle(0);
         updateBreadcrumbs();
         updateContainerFluid(0);
@@ -462,11 +483,11 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
     string res = "home";
     switch (enumPT.index())
     {
-        case Enums::EPageType::WELCOME:
+        /*case Enums::EPageType::WELCOME:
         {
             res = "home";
             break;
-        }
+        }*/
         case Enums::EPageType::DASHBOARD:
         {
             res = "list";
@@ -520,6 +541,14 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::ROLES:
         {
             res = "user";
+        case Enums::EPageType::MESSAGES:
+        {
+            res = "envelope";
+            break ;
+        }
+        case Enums::EPageType::HELP:
+        {
+            res = "book";
             break ;
         }
         default:

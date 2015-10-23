@@ -231,7 +231,7 @@ void ProbesWidget::updateText(long long probeId)
         m_mapProbesWText[probeId]->setTextFormat(Wt::XHTMLUnsafeText);
         m_mapProbesWText[probeId]->setText("<i class='icon-remove'></i>");
     }
-	Wt::WApplication::instance()->triggerUpdate();
+    Wt::WApplication::instance()->triggerUpdate();
 }
 
 void ProbesWidget::threadSafeFunctionCall(long long id, int rowTable, int columnTable)
@@ -286,7 +286,6 @@ void ProbesWidget::modifResource(vector<Wt::WInteractWidget*>* arguments, long l
 
 int ProbesWidget::addCustomResourceTable(long long probeId, int rowTable, int columnTable)
 {
-    cout << "columnTable : " << columnTable << endl;
     if (columnTable == m_stateColumn)
     {        
         m_autoUpdate = false;

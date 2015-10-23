@@ -126,7 +126,9 @@ public:
     virtual void                updatePage();
     virtual void                fillTable();
     
-    static const std::string xmlDirectory;
+    static const    std::string xmlDirectory;
+    long long       m_selectedID;
+    std::map<long long, vector_widget>          m_rowsTable;
 protected:
 
     // ENUM
@@ -173,7 +175,7 @@ protected:
     void                        createTable();
 
     // -------- Creates Elements to table. ------------------------
-    Wt::WContainerWidget        *createTableFirstHeader();
+    virtual Wt::WContainerWidget        *createTableFirstHeader();
     virtual void                        addPopupAddHandler(Wt::WInteractWidget* widget);
     Wt::WContainerWidget        *createTableBody();
     Wt::WContainerWidget        *createTableFooter();
@@ -262,11 +264,11 @@ protected:
     virtual void                popupAddWidget(Wt::WDialog *dialog, long long id);
     virtual Wt::WComboBox       *popupAdd(Wt::WDialog *dialog);
     
-    std::map<long long, vector_widget>          m_rowsTable;
+    
     std::vector<std::pair <int, std::string>>   m_displayedTitlesPopups;
     bool                                        m_autoUpdate;
     bool                                        m_hasAddButton;
-    
+    std::string                                 m_xmlPageName;
     Echoes::Dbo::Session                        *m_session;
     
     bool                        getFooterOkButtonStatus();
@@ -293,13 +295,12 @@ private:
     std::vector<std::pair<int, std::string>>                                    m_titles;
     
     std::string                         m_apiUrl;
-    std::string                         m_xmlPageName;
+    
     std::string                         m_nameResourcePageSpec;
     std::vector<std::string>            m_undidNames;
     bool                                m_isModifButtonPresent;
     bool                                m_isDeleteButtonPresent;
     bool                                m_selectable;
-    long long                           m_selectedID;
     std::vector<AbstractPage*>            m_pagesToUpdate;     
 //    bool                                m_isMainPage;
     // select drop + paginate--------------------

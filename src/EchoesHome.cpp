@@ -190,7 +190,7 @@ void EchoesHome::handleInternalPath(const string &internalPath)
                         }
                         else
                         {
-                            Wt::WApplication::instance()->setInternalPath("/welcome",  false);
+                            Wt::WApplication::instance()->setInternalPath("/messages",  false);
                             this->mainPageWidget->getMenu()->itemAt(0)->setFromInternalPath(internalPath);
                         }
 
@@ -218,13 +218,13 @@ void EchoesHome::handleInternalPath(const string &internalPath)
         
         if (!displayed)
         {
-            UserActionManagement::registerUserAction(Enums::EAction::display,"/welcome/ (default)",0);
-            Wt::WApplication::instance()->setInternalPath("/welcome",  false);
-            if (this->mainPageWidget->getMenu()->currentIndex() != Enums::EPageType::WELCOME)
+            UserActionManagement::registerUserAction(Enums::EAction::display,"/messages (default)",0);
+            Wt::WApplication::instance()->setInternalPath("/messages",  false);
+            if (this->mainPageWidget->getMenu()->currentIndex() != Enums::EPageType::MESSAGES)
             {
-                this->mainPageWidget->getMenu()->itemAt(Enums::EPageType::WELCOME)->setFromInternalPath(internalPath);
+                this->mainPageWidget->getMenu()->itemAt(Enums::EPageType::MESSAGES)->setFromInternalPath(internalPath);
             }
-            showPage(Enums::EPageType::WELCOME);
+            showPage(Enums::EPageType::MESSAGES);
         }
 
     }

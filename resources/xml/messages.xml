@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+<!-- Models -->
+<message id="Alert.messages.alert-form-info">On this page you can see messages history</message>
+  
+<message id="Alert.messages.filesystem">Filesystem</message>
+<message id="Alert.messages.file">File</message>
+<message id="Alert.messages.log">Log</message>
+<message id="Alert.messages.odbc">Database (ODBC)</message>
+<message id="Alert.messages.snmp">SNMP</message>
+<message id="Alert.messages.hash">Hash</message>
+<message id="Alert.messages.xml">XML</message>
+<message id="Alert.messages.process">Process</message>
+
+<message id="Alert.messages.connection-string">Connection string</message>
+<message id="Alert.messages.community">Community</message>
+<message id="Alert.messages.version">Version</message>
+<message id="Alert.messages.auth-proto">Authentication protocol</message>
+<message id="Alert.messages.auth-path">Authentication path</message>
+<message id="Alert.messages.priv-proto">Privacy protocol </message>
+<message id="Alert.messages.priv-path">Provacy path</message>
+<message id="Alert.messages.host">Host</message>
+<message id="Alert.messages.user">User</message>
+  
+  
+ <!-- templates -->
+ 
+
+<message id="Alert.messages.Management.template">
+    <br />
+    <div class ="alert alert-info">${tr:Alert.messages.alert-form-info} </div>
+    <div id="messages-table-alert" class="">
+        ${resource-table-alert}
+    </div>
+    <div id="messages-table-message" class="">
+        ${resource-table-message}
+    </div>
+    <div id="messages-table-historic" class="">
+        ${resource-table-historic}
+    </div>
+</message>
+  
+  
+</messages>

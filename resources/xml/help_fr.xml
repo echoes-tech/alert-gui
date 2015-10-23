@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <!-- Models -->
+
+  
+  <message id="Alert.help.form-info">Cette page vous affiche le manuel d'utilisateur pour les sms</message>
+  <message id="Alert.help.content">
+    <br />
+    <b>Contenu du SMS</b>
+    <br /><br />
+    <dd>Le SMS reçu est composé de deux choses : <br/>
+        - Un code, à utiliser pour répondre<br />
+        - Le message concernant l'alerte<br />
+    </dd>
+    <br />
+    <b>Répondre à un SMS</b>
+    <br /><br />
+    <dd>La réponse à un SMS doit être faite suivant le schéma suivant :<br/>
+        <p style="margin-left:40px; font-style:italic;"> &lt;code recu&gt; &lt;la réponse&gt;<br/></p>
+        la réponse peut être <br/>
+        - <b>1</b> Pour s'assigner l'alerte<br/>
+        - <b>2</b> Pour terminer l'alerte (Vous devez en être le responsable)<br/>
+    </dd>
+</message>    
+
+ 
+</messages>

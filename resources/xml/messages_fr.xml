@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+  <!-- Models -->
+  
+  <message id="Alert.messages.alert-form-info">Cette page vous donne la possibilité de visualiser l'histoique des messages</message>
+  <message id="Alert.messages.plugin-table-create-title">Créer un nouveau message</message>
+  
+  <message id="Alert.messages.name-label">Nom</message>
+  
+  <message id="Alert.messages.name-title">Nom</message> 
+ 
+  <message id="Alert.messages.message-box-error">Erreur</message> 
+  <message id="Alert.messages.message-field">Le champ : "</message>
+  <message id="Alert.messages.message-is-bad-fills">" n'est pas correctement remplit.</message> 
+  <message id="Alert.messages.message-cause">Il ne doit pas être vide et ne doit pas contenir le caractére suivant """.</message>
+  <message id="Alert.messages.message-no-selected-plugin">Vous n'avez pas séléctionné de message</message>
+  
+</messages>

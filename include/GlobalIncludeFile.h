@@ -29,6 +29,8 @@
 #include "EchoesHome.h"
 #include "TrundleTable.h"
 #include "RolesWidget.h"
+#include "MessagesWidget.h"
+#include "HelpWidget.h"
 
 #endif	/* GLOBALINCLUDEFILE_H */
 
@@ -37,6 +39,8 @@ class AssetManagementWidget;
 class OptionManagementWidget;
 class OptionManagementModel;
 class AliasesWidget;
+class RoleCustomizationWidget;
+class MessagesWidget;
 class MainWidget;
 class EchoesHome;
 class UserActionManagement;
@@ -44,3 +48,5 @@ class UserActionManagement;
 class UnitsWidget;
 class Login;
 class RolesWidget;
+class HelpWidget;
+

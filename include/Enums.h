@@ -105,7 +105,8 @@ public:
     };
 
     BOOST_ENUM_VALUES(EPageType, const char*,
-                        (WELCOME) ("welcome")
+                        (MESSAGES) ("messages")
+                        //(WELCOME) ("welcome")
                         (DASHBOARD) ("dashboard")
                         (PROBES) ("probes")                  
                         (ASSET) ("assets")
@@ -117,8 +118,27 @@ public:
                         (ROLES) ("roles")
                         (OPTIONS) ("options")
                         (UNITS) ("units")
+                        (HELP) ("help")
                       )
-
+    
+    BOOST_ENUM_VALUES(EMessageStatus, const char*,
+                        (UNCREATED) ("uncreated")
+                        (CREATED) ("created")
+                        (SENDFAILED) ("send failed")
+                        (SENDREFUSED) ("send refused")
+                        (LINKING) ("linking")
+                        (LINKLOST) ("link lost")
+                        (SENDED) ("sended")
+                        (ACKFAILED) ("ack failed")
+                        (RECEIVED) ("received")
+                        (ANSWERED) ("answered")
+                      )
+    BOOST_ENUM_VALUES(EAlertStatus, const char*,
+                        (PENDING) ("pending")
+                        (SUPPORTED) ("supported")
+                        (FORWARDING) ("forwarding")
+                        (BACKTONORMAL) ("back to normal")                        
+                      )
 private:
 
 };

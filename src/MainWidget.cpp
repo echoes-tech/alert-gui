@@ -1,5 +1,5 @@
 /* 
- * Gui MonitoringWidget.cpp
+ * Gui MainWidget.cpp
  * 
  * @author ECHOES Technologies (TSA)
  * 
@@ -217,9 +217,9 @@ void MainWidget::createPage(Enums::EPageType enumPT)
             plw = new PluginsWidget(this->session, _apiUrl);
             break;            
         }      
-        case Enums::EPageType::ROLE:
+        case Enums::EPageType::ALIASES:
         {
-            rcw = new RoleCustomizationWidget(session, _apiUrl);
+            rcw = new AliasesWidget(session, _apiUrl);
             break;
         }
         case Enums::EPageType::OPTIONS:
@@ -244,6 +244,11 @@ void MainWidget::createPage(Enums::EPageType enumPT)
         case Enums::EPageType::PROBES:
         {
             prb = new ProbesWidget(this->session, this->_apiUrl);
+            break ;
+        }
+        case Enums::EPageType::ROLES:
+        {
+            row = new RolesWidget(this->session, this->_apiUrl);
             break ;
         }
         default:
@@ -381,7 +386,7 @@ void MainWidget::updateContainerFluid(int type)
             this->contentFluid->addWidget(plw);
             break;
         }
-        case Enums::EPageType::ROLE:
+        case Enums::EPageType::ALIASES:
         {
             rcw->refresh();
             this->contentFluid->addWidget(rcw);
@@ -403,6 +408,12 @@ void MainWidget::updateContainerFluid(int type)
         {
             prb->getResourceList();
             this->contentFluid->addWidget(prb);
+            break;
+        }
+        case Enums::EPageType::ROLES:
+        {
+            row->getResourceList();
+            this->contentFluid->addWidget(row);
             break;
         }
         default:
@@ -486,7 +497,7 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
             res = "pencil";
             break;
         }
-        case Enums::EPageType::ROLE:
+        case Enums::EPageType::ALIASES:
         {
             res = "film";
             break;
@@ -504,6 +515,11 @@ string MainWidget::getIconName(Enums::EPageType enumPT)
         case Enums::EPageType::PROBES:
         {
             res = "search";
+            break ;
+        }
+        case Enums::EPageType::ROLES:
+        {
+            res = "user";
             break ;
         }
         default:

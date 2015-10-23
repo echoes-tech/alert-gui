@@ -1,36 +1,36 @@
 /* 
- * File:   RoleCustomizationWidget.cpp
+ * File:   AliasesWidget.cpp
  * Author: tsa
  * 
  * Created on 21 avril 2013, 11:41
  */
 
-#include "RoleCustomizationWidget.h"
+#include "AliasesWidget.h"
 
 using namespace std;
 
-RoleCustomizationWidget::RoleCustomizationWidget(Echoes::Dbo::Session *session, const string &apiUrl)
+AliasesWidget::AliasesWidget(Echoes::Dbo::Session *session, const string &apiUrl)
 : Wt::WContainerWidget() {
     //init
     this->session = session;
-    mainTemplate = new Wt::WTemplate(Wt::WString::tr("Alert.role.customization.template"));
+    mainTemplate = new Wt::WTemplate(Wt::WString::tr("Alert.aliases.template"));
     mainTemplate->addFunction("tr", &Wt::WTemplate::Functions::tr);
     Wt::WApplication *app = Wt::WApplication::instance();
-    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "role-customization", false);
+    app->messageResourceBundle().use(AbstractPage::xmlDirectory + "aliases", false);
     this->addWidget(mainTemplate);
 
 
     mediasComboBox = new Wt::WComboBox(this);
     //selected?
-    mediasComboBox->clicked().connect(this, &RoleCustomizationWidget::selectMedia);
+    mediasComboBox->clicked().connect(this, &AliasesWidget::selectMedia);
 
     rolesComboBox = new Wt::WComboBox(this);
     //selected?
-    rolesComboBox->clicked().connect(this, &RoleCustomizationWidget::selectRole);
+    rolesComboBox->clicked().connect(this, &AliasesWidget::selectRole);
 
     pluginsComboBox = new Wt::WComboBox(this);
     //selected?
-    //    pluginsComboBox->clicked().connect(this, &RoleCustomizationWidget::selectPlugin);
+    //    pluginsComboBox->clicked().connect(this, &AliasesWidget::selectPlugin);
     //    Wt::WContainerWidget *pluginLoadButtonContainer = new Wt::WContainerWidget(this);
 
     assetsContainer = new Wt::WContainerWidget(this);
@@ -61,15 +61,15 @@ RoleCustomizationWidget::RoleCustomizationWidget(Echoes::Dbo::Session *session, 
     pluginSaveButton->setText("<i class='icon-white icon-ok-sign'></i>");
     pluginSaveButton->setStyleClass("span1");
     pluginSaveButton->addStyleClass("btn-primary");
-    pluginSaveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putPluginAlias, this));
+    pluginSaveButton->clicked().connect(boost::bind(&AliasesWidget::putPluginAlias, this));
     pluginSaveButtonContainer->addWidget(pluginSaveButton);
 
 
     pluginLoadButton = new Wt::WPushButton(this);
     pluginLoadButton->setTextFormat(Wt::XHTMLUnsafeText);
-    pluginLoadButton->setText("</ br><i class='icon-white icon-time'></i> " + tr("Alert.role.load"));
+    pluginLoadButton->setText("</ br><i class='icon-white icon-time'></i> " + tr("Alert.aliases.load"));
     pluginLoadButton->setStyleClass("btn-success");
-    pluginLoadButton->clicked().connect(boost::bind(&RoleCustomizationWidget::selectPlugin, this));
+    pluginLoadButton->clicked().connect(boost::bind(&AliasesWidget::selectPlugin, this));
     //    pluginLoadButtonContainer->addWidget(pluginLoadButton);
     //    pluginLoadButtonContainer->setStyleClass("row-fluid");
 
@@ -101,13 +101,13 @@ RoleCustomizationWidget::RoleCustomizationWidget(Echoes::Dbo::Session *session, 
     //    createAssetsWidgets();
 }
 
-RoleCustomizationWidget::RoleCustomizationWidget(const RoleCustomizationWidget& orig) {
+AliasesWidget::AliasesWidget(const AliasesWidget& orig) {
 }
 
-RoleCustomizationWidget::~RoleCustomizationWidget() {
+AliasesWidget::~AliasesWidget() {
 }
 
-void RoleCustomizationWidget::bindWidgets() {
+void AliasesWidget::bindWidgets() {
     mainTemplate->bindWidget("medias-combo-box", mediasComboBox);
     mainTemplate->bindWidget("roles-combo-box", rolesComboBox);
     mainTemplate->bindWidget("assets-container", assetsContainer);
@@ -118,70 +118,61 @@ void RoleCustomizationWidget::bindWidgets() {
     mainTemplate->bindWidget("informations-container", informationsContainer);
 }
 
-void RoleCustomizationWidget::setApiUrl(string apiUrl) {
+void AliasesWidget::setApiUrl(string apiUrl) {
     this->apiUrl = apiUrl;
 }
 
-string RoleCustomizationWidget::getApiUrl() const {
+string AliasesWidget::getApiUrl() const {
     return apiUrl;
 }
 
-void RoleCustomizationWidget::getRoles(boost::system::error_code err, const Wt::Http::Message& response) {
+void AliasesWidget::getRoles(boost::system::error_code err, const Wt::Http::Message& response) {
     Wt::WApplication::instance()->resumeRendering();
     int idx = 0;
     //ToDo: clear all I have to clean
-    if (!err) 
-    {
-        if (response.status() >= 200 && response.status() < 300) 
-        {
+    if (!err) {
+        if (response.status() >= 200 && response.status() < 300) {
             Wt::Json::Value result;
-            try 
-            {
+            try {
                 Wt::Json::Array& result1 = Wt::Json::Array::Empty;
                 Wt::Json::parse(response.body(), result);
                 result1 = result;
                 //descriptif
-                for (Wt::Json::Array::const_iterator idx1 = result1.begin(); idx1 < result1.end(); idx1++) 
-                {
+                for (Wt::Json::Array::const_iterator idx1 = result1.begin(); idx1 < result1.end(); idx1++) {
                     Wt::Json::Object tmp = (*idx1);
                     rolesComboBox->insertItem(idx, tmp.get("name"));
                     mapIdRolesComboBox[idx] = tmp.get("id");
                     idx++;
                 }
-            }
-            catch (Wt::Json::ParseError const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
-            }
-            catch (Wt::Json::TypeException const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-type-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
+            } catch (Wt::Json::ParseError const& e) {
+                Wt::log("warning") << "[AliasesWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
+            } catch (Wt::Json::TypeException const& e) {
+                Wt::log("warning") << "[AliasesWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
             }
             rolesComboBox->setCurrentIndex(0);
             rolesSet = true;
-            if (mediasSet) 
-            {
+            if (mediasSet) {
                 createAssetsWidgets();
             }
         }
     } else {
         //         Wt::log("warning") << "fct handleHttpResponse" << response.body();
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"), Wt::Ok);
     }
 }
 
-void RoleCustomizationWidget::setCredentials(string credentials) {
+void AliasesWidget::setCredentials(string credentials) {
     this->credentials = credentials;
 }
 
-string RoleCustomizationWidget::getCredentials() const {
+string AliasesWidget::getCredentials() const {
     return credentials;
 }
 
-void RoleCustomizationWidget::selectPlugin() {
+void AliasesWidget::selectPlugin() {
     mapEditInformations.clear();
     mapIdInformations.clear();
     pluginEditLine->setText("");
@@ -194,9 +185,9 @@ void RoleCustomizationWidget::selectPlugin() {
                 + "/informations" + this->getCredentials();
 
         Wt::Http::Client *client = new Wt::Http::Client(this);
-        client->done().connect(boost::bind(&RoleCustomizationWidget::getInformations, this, _1, _2));
+        client->done().connect(boost::bind(&AliasesWidget::getInformations, this, _1, _2));
 
-        Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
+        Wt::log("debug") << "AliasesWidget : [GET] address to call : " << urlToCall;
         if (client->get(urlToCall)) {
             Wt::WApplication::instance()->deferRendering();
         } else
@@ -209,10 +200,10 @@ void RoleCustomizationWidget::selectPlugin() {
                 + "&user_role_id=" + boost::lexical_cast<string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
                 + "&media_type_id=" + boost::lexical_cast<string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
 
-        Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
+        Wt::log("debug") << "AliasesWidget : [GET] address to call : " << urlToCall;
 
         Wt::Http::Client *client2 = new Wt::Http::Client(this);
-        client2->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, pluginEditLine));
+        client2->done().connect(boost::bind(&AliasesWidget::getAlias, this, _1, _2, pluginEditLine));
         if (client2->get(urlToCall)) {
             Wt::WApplication::instance()->deferRendering();
         } else
@@ -221,17 +212,17 @@ void RoleCustomizationWidget::selectPlugin() {
 
 }
 
-void RoleCustomizationWidget::selectMedia() {
+void AliasesWidget::selectMedia() {
     createAssetsWidgets();
     //    selectPlugin();
 }
 
-void RoleCustomizationWidget::selectRole() {
+void AliasesWidget::selectRole() {
     createAssetsWidgets();
     //    selectPlugin();
 }
 
-void RoleCustomizationWidget::fillMediaSelector() {
+void AliasesWidget::fillMediaSelector() {
     int idx = 0;
     mediasComboBox->addItem("email");
     mapIdMediasComboBox[idx] = Enums::EMedia::email;
@@ -250,15 +241,15 @@ void RoleCustomizationWidget::fillMediaSelector() {
 
 }
 
-void RoleCustomizationWidget::fillRoleSelector() {
+void AliasesWidget::fillRoleSelector() {
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::getRoles, this, _1, _2));
+    client->done().connect(boost::bind(&AliasesWidget::getRoles, this, _1, _2));
 
     string urlToCall = this->getApiUrl()
             + "/roles" + this->getCredentials();
 
-    Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
+    Wt::log("debug") << "AliasesWidget : [GET] address to call : " << urlToCall;
 
     if (client->get(urlToCall)) {
         Wt::WApplication::instance()->deferRendering();
@@ -267,26 +258,26 @@ void RoleCustomizationWidget::fillRoleSelector() {
     }
 }
 
-void RoleCustomizationWidget::fillPluginSelector() {
+void AliasesWidget::fillPluginSelector() {
     string urlToCall = this->getApiUrl()
             + "/plugins" + this->getCredentials();
-    Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
+    Wt::log("debug") << "AliasesWidget : [GET] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::getPlugins, this, _1, _2));
+    client->done().connect(boost::bind(&AliasesWidget::getPlugins, this, _1, _2));
     if (client->get(urlToCall)) {
         Wt::WApplication::instance()->deferRendering();
     } else
         Wt::log("error") << "Error Client Http";
 }
 
-void RoleCustomizationWidget::createAssetsWidgets() {
+void AliasesWidget::createAssetsWidgets() {
     string urlToCall = this->getApiUrl()
             + "/assets" + this->getCredentials();
-    Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
+    Wt::log("debug") << "AliasesWidget : [GET] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::getAssets, this, _1, _2));
+    client->done().connect(boost::bind(&AliasesWidget::getAssets, this, _1, _2));
     if (client->get(urlToCall)) {
         Wt::WApplication::instance()->deferRendering();
     } else {
@@ -294,7 +285,7 @@ void RoleCustomizationWidget::createAssetsWidgets() {
     }
 }
 
-void RoleCustomizationWidget::createCriteriaWidgets() {
+void AliasesWidget::createCriteriaWidgets() {
     mapEditInformationCriteria.clear();
     //    unsigned int idx = 0;
     for (map<int, long long>::const_iterator i = mapIdInformations.begin(); i != mapIdInformations.end(); i++) {
@@ -303,7 +294,7 @@ void RoleCustomizationWidget::createCriteriaWidgets() {
 
 }
 
-void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt::Http::Message& response) {
+void AliasesWidget::getAssets(boost::system::error_code err, const Wt::Http::Message& response) {
     Wt::WApplication::instance()->resumeRendering();
     int idx = 0;
     assetsContainer->clear();
@@ -342,7 +333,7 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
                     saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
                     saveButton->setStyleClass("span1");
                     saveButton->addStyleClass("btn-primary");
-                    saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putAssetAlias, this, idx));
+                    saveButton->clicked().connect(boost::bind(&AliasesWidget::putAssetAlias, this, idx));
                     saveButtonContainer->addWidget(saveButton);
 
 
@@ -354,26 +345,75 @@ void RoleCustomizationWidget::getAssets(boost::system::error_code err, const Wt:
 
                     fillAssetsFields();
                 }
-            } 
-            catch (Wt::Json::ParseError const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
-            }
-            catch (Wt::Json::TypeException const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-type-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
+            } catch (Wt::Json::ParseError const& e) {
+                Wt::log("warning") << "[AliasesWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
+            } catch (Wt::Json::TypeException const& e) {
+                Wt::log("warning") << "[AliasesWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
             }
         }
     } else {
         //         Wt::log("warning") << "fct handleHttpResponse" << response.body();
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"), Wt::Ok);
     }
 }
 
-void RoleCustomizationWidget::getPlugins(boost::system::error_code err, const Wt::Http::Message& response) {
+//void AliasesWidget::getMedias(boost::system::error_code err, const Wt::Http::Message& response)
+//{
+//    Wt::WApplication::instance()->resumeRendering();
+//    int idx = 0;
+//    mediasComboBox->clear();
+//
+//    if (!err)
+//    {
+//        if (response.status() >= 200 && response.status() < 300)
+//        {
+//            Wt::Json::Value result ;
+//            Wt::Json::Array& result1 = Wt::Json::Array::Empty;
+//            try
+//            {                  
+//                Wt::Json::parse(response.body(), result);
+//                result1 = result;
+//                  //descriptif
+//                for (Wt::Json::Array::const_iterator idx1 = result1.begin() ; idx1 < result1.end(); idx1++)
+//                {
+//                    Wt::Json::Object tmp = (*idx1);
+//                    mediasComboBox->addItem(tmp.get("name"));
+//                    mapIdMediasComboBox[idx] = tmp.get("id");
+//                    idx++;
+//                }
+//            }
+//            }
+//            catch (Wt::Json::ParseError const& e)
+//            {
+//                Wt::log("warning") << "[AliasesWidget] Problems parsing JSON: " << response.body();
+//                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
+//            }
+//            catch (Wt::Json::TypeException const& e)
+//            {
+//                Wt::log("warning") << "[AliasesWidget] JSON Type Exception: " << response.body();
+//                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
+//            }
+//            mediasComboBox->setCurrentIndex(0);
+//            mediasSet = true;
+//            if (rolesSet)
+//            {
+//                createAssetsWidgets();
+//            }
+//        }
+//    }
+//    else
+//    {
+//        Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
+//        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"),Wt::Ok);
+////         Wt::log("warning") << "fct handleHttpResponse " << "response status: " << response.status() << " Body : "<< response.body();
+////         Wt::log("warning") << "Boost error code: " << err.message();
+//    }
+//}
+
+void AliasesWidget::getPlugins(boost::system::error_code err, const Wt::Http::Message& response) {
     Wt::WApplication::instance()->resumeRendering();
     int idx = 0;
     pluginsComboBox->clear();
@@ -392,28 +432,24 @@ void RoleCustomizationWidget::getPlugins(boost::system::error_code err, const Wt
                     mapIdPluginsComboBox[idx] = tmp.get("id");
                     idx++;
                 }
-            } 
-            catch (Wt::Json::ParseError const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
-            }
-            catch (Wt::Json::TypeException const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-type-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
+            } catch (Wt::Json::ParseError const& e) {
+                Wt::log("warning") << "[AliasesWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
+            } catch (Wt::Json::TypeException const& e) {
+                Wt::log("warning") << "[AliasesWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
             }
         } else {
             Wt::log("debug") << "[Role Customization Widget] no plugin";
         }
     } else {
         Wt::log("error") << "[Role Customization Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"), Wt::Ok);
         //         Wt::log("warning") << "fct handleHttpResponse" << response.body();
     }
 }
 
-void RoleCustomizationWidget::getCriteria(int idForInfMap, Wt::WContainerWidget *row) 
+void AliasesWidget::getCriteria(int idForInfMap, Wt::WContainerWidget *row) 
 {
     int idx = 0;
 
@@ -458,7 +494,7 @@ void RoleCustomizationWidget::getCriteria(int idForInfMap, Wt::WContainerWidget 
 
 }
 
-void RoleCustomizationWidget::addCriterionRow(int idx, string critName, long long critId, Wt::WContainerWidget *row, map<long long, Wt::WLineEdit*> *mapIdCritEdit, int idForInfMap) {
+void AliasesWidget::addCriterionRow(int idx, string critName, long long critId, Wt::WContainerWidget *row, map<long long, Wt::WLineEdit*> *mapIdCritEdit, int idForInfMap) {
 
     Wt::WContainerWidget *labelContainer = new Wt::WContainerWidget();
     labelContainer->setStyleClass("span2");
@@ -480,7 +516,7 @@ void RoleCustomizationWidget::addCriterionRow(int idx, string critName, long lon
     saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
     saveButton->setStyleClass("span12");
     saveButton->addStyleClass("btn-primary");
-    saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putCriterionAlias, this, idForInfMap, critId, lineEdit));
+    saveButton->clicked().connect(boost::bind(&AliasesWidget::putCriterionAlias, this, idForInfMap, critId, lineEdit));
     saveButtonContainer->addWidget(saveButton);
 
     Wt::WContainerWidget *exampleButtonContainer = new Wt::WContainerWidget();
@@ -490,7 +526,7 @@ void RoleCustomizationWidget::addCriterionRow(int idx, string critName, long lon
     exampleButton->setText("<i class='icon-white icon-envelope'></i>");
     exampleButton->setStyleClass("span12");
     exampleButton->addStyleClass("btn-info");
-    exampleButton->clicked().connect(boost::bind(&RoleCustomizationWidget::displayMessageExample, this, idForInfMap, critId, lineEdit));
+    exampleButton->clicked().connect(boost::bind(&AliasesWidget::displayMessageExample, this, idForInfMap, critId, lineEdit));
     exampleButtonContainer->addWidget(exampleButton);
 
     row->addWidget(labelContainer);
@@ -506,7 +542,7 @@ void RoleCustomizationWidget::addCriterionRow(int idx, string critName, long lon
     }
 }
 
-void RoleCustomizationWidget::getInformations(boost::system::error_code err, const Wt::Http::Message& response) {
+void AliasesWidget::getInformations(boost::system::error_code err, const Wt::Http::Message& response) {
     Wt::WApplication::instance()->resumeRendering();
     int idx = 0;
     informationsContainer->clear();
@@ -574,7 +610,7 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
                     saveButton->setText("<i class='icon-white icon-ok-sign'></i>");
                     saveButton->setStyleClass("span12");
                     saveButton->addStyleClass("btn-primary");
-                    saveButton->clicked().connect(boost::bind(&RoleCustomizationWidget::putInformationAlias, this, idx));
+                    saveButton->clicked().connect(boost::bind(&AliasesWidget::putInformationAlias, this, idx));
                     saveButtonContainer->addWidget(saveButton);
 
                     row->addWidget(labelContainer);
@@ -593,33 +629,30 @@ void RoleCustomizationWidget::getInformations(boost::system::error_code err, con
                 fillInformationsFields();
                 createCriteriaWidgets();
 
-            } 
-            catch (Wt::Json::ParseError const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
-            }
-            catch (Wt::Json::TypeException const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-type-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
+            } catch (Wt::Json::ParseError const& e) {
+                Wt::log("warning") << "[AliasesWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
+            } catch (Wt::Json::TypeException const& e) {
+                Wt::log("warning") << "[AliasesWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
             }
         }
     } else {
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"), Wt::Ok);
         //         Wt::log("warning") << "fct handleHttpResponse" << response.body();
     }
 }
 
-void RoleCustomizationWidget::putAssetAlias(int idx) {
+void AliasesWidget::putAssetAlias(int idx) {
 
     string strMessage = "{\n"
             "\"user_role_id\" : " + boost::lexical_cast<string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
             + ",\n"
             "\"media_type_id\" : " + boost::lexical_cast<string>(mapIdMediasComboBox[mediasComboBox->currentIndex()])
             + ",\n"
-            "\"value\" : \"" + boost::lexical_cast<string>(mapEditAssets[idx]->text().toUTF8()) + "\"\n}";
+            "\"value\" : \"" + boost::lexical_cast<string>(mapEditAssets[idx]->text()) + "\"\n}";
+
 
     Wt::Http::Message message;
     message.addBodyText(strMessage);
@@ -627,10 +660,10 @@ void RoleCustomizationWidget::putAssetAlias(int idx) {
     string urlToCall = this->getApiUrl()
             + "/assets/" + boost::lexical_cast<string>(mapIdAssets[idx])
             + "/alias" + this->getCredentials();
-    Wt::log("debug") << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall;
+    Wt::log("debug") << "AliasesWidget : [PUT] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutAssetAlias, this, _1, _2, mapEditAssets[idx]));
+    client->done().connect(boost::bind(&AliasesWidget::resPutAssetAlias, this, _1, _2, mapEditAssets[idx]));
     if (client->put(urlToCall, message)) {
         Wt::WApplication::instance()->deferRendering();
     } else {
@@ -638,13 +671,13 @@ void RoleCustomizationWidget::putAssetAlias(int idx) {
     }
 }
 
-void RoleCustomizationWidget::putPluginAlias() {
+void AliasesWidget::putPluginAlias() {
     string strMessage = "{\n"
             "\"user_role_id\" : " + boost::lexical_cast<string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
             + ",\n"
             "\"media_type_id\" : " + boost::lexical_cast<string>(mapIdMediasComboBox[mediasComboBox->currentIndex()])
             + ",\n"
-            "\"value\" : \"" + boost::lexical_cast<string>(pluginEditLine->text().toUTF8()) + "\"\n}";
+            "\"value\" : \"" + boost::lexical_cast<string>(pluginEditLine->text()) + "\"\n}";
 
     Wt::Http::Message message;
     message.addBodyText(strMessage);
@@ -652,10 +685,10 @@ void RoleCustomizationWidget::putPluginAlias() {
     string urlToCall = this->getApiUrl()
             + "/plugins/" + boost::lexical_cast<string>(mapIdPluginsComboBox[pluginsComboBox->currentIndex()])
             + "/alias" + this->getCredentials();
-    Wt::log("debug") << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall;
+    Wt::log("debug") << "AliasesWidget : [PUT] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutPluginAlias, this, _1, _2, pluginEditLine));
+    client->done().connect(boost::bind(&AliasesWidget::resPutPluginAlias, this, _1, _2, pluginEditLine));
     if (client->put(urlToCall, message)) {
         Wt::WApplication::instance()->deferRendering();
     } else {
@@ -663,13 +696,13 @@ void RoleCustomizationWidget::putPluginAlias() {
     }
 }
 
-void RoleCustomizationWidget::putInformationAlias(int idx) {
+void AliasesWidget::putInformationAlias(int idx) {
     string strMessage = "{\n"
             "\"user_role_id\" : " + boost::lexical_cast<string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
             + ",\n"
             "\"media_type_id\" : " + boost::lexical_cast<string>(mapIdMediasComboBox[mediasComboBox->currentIndex()])
             + ",\n"
-            "\"value\" : \"" + boost::lexical_cast<string>(mapEditInformations[idx]->text().toUTF8()) + "\"\n}\n";
+            "\"value\" : \"" + boost::lexical_cast<string>(mapEditInformations[idx]->text()) + "\"\n}\n";
 
     Wt::Http::Message message;
     message.addBodyText(strMessage);
@@ -677,10 +710,10 @@ void RoleCustomizationWidget::putInformationAlias(int idx) {
     string urlToCall = this->getApiUrl()
             + "/informations/" + boost::lexical_cast<string>(mapIdInformations[idx])
             + "/alias" + this->getCredentials();
-    Wt::log("debug") << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall;
+    Wt::log("debug") << "AliasesWidget : [PUT] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutAssetAlias, this, _1, _2, mapEditInformations[idx]));
+    client->done().connect(boost::bind(&AliasesWidget::resPutAssetAlias, this, _1, _2, mapEditInformations[idx]));
     if (client->put(urlToCall, message)) {
         Wt::WApplication::instance()->deferRendering();
     } else {
@@ -688,7 +721,7 @@ void RoleCustomizationWidget::putInformationAlias(int idx) {
     }
 }
 
-void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit) {
+void AliasesWidget::putCriterionAlias(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit) {
     string strMessage = "{\n"
             "\"user_role_id\" : " + boost::lexical_cast<string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
             + ",\n"
@@ -696,7 +729,7 @@ void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCri
             + ",\n"
             "\"information_id\" : " + boost::lexical_cast<string>(mapIdInformations[idForInfMap])
             + ",\n"
-            "\"value\" : \"" + boost::lexical_cast<string>(critEdit->text().toUTF8()) + "\"\n}\n";
+            "\"value\" : \"" + boost::lexical_cast<string>(critEdit->text()) + "\"\n}\n";
 
     
     Wt::Http::Message message;
@@ -705,10 +738,10 @@ void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCri
     string urlToCall = this->getApiUrl()
             + "/criteria/" + boost::lexical_cast<string>(idCrit)
             + "/alias" + this->getCredentials();
-    Wt::log("debug") << "RoleCustomizationWidget : [PUT] address to call : " << urlToCall;
+    Wt::log("debug") << "AliasesWidget : [PUT] address to call : " << urlToCall;
 
     Wt::Http::Client *client = new Wt::Http::Client(this);
-    client->done().connect(boost::bind(&RoleCustomizationWidget::resPutCritAlias, this, _1, _2, critEdit));
+    client->done().connect(boost::bind(&AliasesWidget::resPutCritAlias, this, _1, _2, critEdit));
     if (client->put(urlToCall, message)) {
         Wt::WApplication::instance()->deferRendering();
     } else {
@@ -716,7 +749,7 @@ void RoleCustomizationWidget::putCriterionAlias(int idForInfMap, long long idCri
     }
 }
 
-void RoleCustomizationWidget::displayMessageExample(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit) {
+void AliasesWidget::displayMessageExample(int idForInfMap, long long idCrit, Wt::WLineEdit *critEdit) {
     string res = "Pour le role : " + rolesComboBox->currentText().toUTF8() + "<br />"
             "Pour le media : " + mediasComboBox->currentText().toUTF8() + "<br />"
             "L'alerte sera : <br />"
@@ -727,7 +760,7 @@ void RoleCustomizationWidget::displayMessageExample(int idForInfMap, long long i
     Wt::WMessageBox::show("Exemple", test, Wt::Ok);
 }
 
-void RoleCustomizationWidget::fillAssetsFields() {
+void AliasesWidget::fillAssetsFields() {
 
     for (map<int, long long>::const_iterator i = mapIdAssets.begin(); i != mapIdAssets.end(); i++) {
         string urlToCall = this->getApiUrl()
@@ -735,10 +768,10 @@ void RoleCustomizationWidget::fillAssetsFields() {
                 + "/alias" + this->getCredentials()
                 + "&user_role_id=" + boost::lexical_cast<string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
                 + "&media_type_id=" + boost::lexical_cast<string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
-        Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
+        Wt::log("debug") << "AliasesWidget : [GET] address to call : " << urlToCall;
 
         Wt::Http::Client *client = new Wt::Http::Client(this);
-        client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, mapEditAssets[i->first]));
+        client->done().connect(boost::bind(&AliasesWidget::getAlias, this, _1, _2, mapEditAssets[i->first]));
         if (client->get(urlToCall)) {
             Wt::WApplication::instance()->deferRendering();
         } else {
@@ -747,7 +780,7 @@ void RoleCustomizationWidget::fillAssetsFields() {
     }
 }
 
-void RoleCustomizationWidget::fillCriteriaFields(int idForInfMap, map<long long, Wt::WLineEdit*> *mapIdCritEdit) 
+void AliasesWidget::fillCriteriaFields(int idForInfMap, map<long long, Wt::WLineEdit*> *mapIdCritEdit) 
 {
     for (map<long long, Wt::WLineEdit*>::const_iterator j = (*mapIdCritEdit).begin(); j != (*mapIdCritEdit).end(); j++) 
     {
@@ -757,10 +790,10 @@ void RoleCustomizationWidget::fillCriteriaFields(int idForInfMap, map<long long,
                 + "&user_role_id=" + boost::lexical_cast<string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
                 + "&media_type_id=" + boost::lexical_cast<string>(mapIdMediasComboBox[mediasComboBox->currentIndex()])
                 + "&information_id=" + boost::lexical_cast<string>(mapIdInformations[idForInfMap]);
-        Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
+        Wt::log("debug") << "AliasesWidget : [GET] address to call : " << urlToCall;
 
         Wt::Http::Client *client = new Wt::Http::Client(this);
-        client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, j->second));
+        client->done().connect(boost::bind(&AliasesWidget::getAlias, this, _1, _2, j->second));
         if (client->get(urlToCall)) {
             Wt::WApplication::instance()->deferRendering();
         } else {
@@ -770,7 +803,7 @@ void RoleCustomizationWidget::fillCriteriaFields(int idForInfMap, map<long long,
 
 }
 
-void RoleCustomizationWidget::fillInformationsFields() {
+void AliasesWidget::fillInformationsFields() {
     for (map<int, long long>::const_iterator i = mapIdInformations.begin(); i != mapIdInformations.end(); i++) {
         string urlToCall = this->getApiUrl()
                 + "/informations/" + boost::lexical_cast<string>(i->second)
@@ -779,10 +812,10 @@ void RoleCustomizationWidget::fillInformationsFields() {
                 + "&user_role_id=" + boost::lexical_cast<string>(mapIdRolesComboBox[rolesComboBox->currentIndex()])
                 + "&media_type_id=" + boost::lexical_cast<string>(mapIdMediasComboBox[mediasComboBox->currentIndex()]);
 
-        Wt::log("debug") << "RoleCustomizationWidget : [GET] address to call : " << urlToCall;
+        Wt::log("debug") << "AliasesWidget : [GET] address to call : " << urlToCall;
 
         Wt::Http::Client *client = new Wt::Http::Client(this);
-        client->done().connect(boost::bind(&RoleCustomizationWidget::getAlias, this, _1, _2, mapEditInformations[i->first]));
+        client->done().connect(boost::bind(&AliasesWidget::getAlias, this, _1, _2, mapEditInformations[i->first]));
         if (client->get(urlToCall)) {
             Wt::WApplication::instance()->deferRendering();
         } else {
@@ -791,7 +824,7 @@ void RoleCustomizationWidget::fillInformationsFields() {
     }
 }
 
-void RoleCustomizationWidget::getAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit) {
+void AliasesWidget::getAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit) {
     Wt::WApplication::instance()->resumeRendering();
 
     if (!err) {
@@ -804,16 +837,12 @@ void RoleCustomizationWidget::getAlias(boost::system::error_code err, const Wt::
                 string res = result1.get("alias");
                 edit->setText(res);
 
-            }
-            catch (Wt::Json::ParseError const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
-            }
-            catch (Wt::Json::TypeException const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-type-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
+            } catch (Wt::Json::ParseError const& e) {
+                Wt::log("warning") << "[AliasesWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
+            } catch (Wt::Json::TypeException const& e) {
+                Wt::log("warning") << "[AliasesWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
             }
         } else {
             Wt::Json::Value result;
@@ -823,40 +852,36 @@ void RoleCustomizationWidget::getAlias(boost::system::error_code err, const Wt::
                 result1 = result;
                 string res = result1.get("message");
                 edit->setText(res);
-            }
-            catch (Wt::Json::ParseError const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
-            }
-            catch (Wt::Json::TypeException const& e)
-            {
-                Wt::log("warning") << "[Role Customization Widget] " << tr("Alert.global.json-type-error-title") << response.body();
-                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
+            } catch (Wt::Json::ParseError const& e) {
+                Wt::log("warning") << "[AliasesWidget] Problems parsing JSON: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title"), tr("Alert.association.database-error"), Wt::Ok);
+            } catch (Wt::Json::TypeException const& e) {
+                Wt::log("warning") << "[AliasesWidget] JSON Type Exception: " << response.body();
+                Wt::WMessageBox::show(tr("Alert.association.database-error-title") + "TypeException", tr("Alert.association.database-error"), Wt::Ok);
             }
         }
     } else {
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.option.database-error-title"), tr("Alert.option.database-error"), Wt::Ok);
     }
 }
 
 
 // Todo : gestion d'erreurs
 
-void RoleCustomizationWidget::resPutAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit) {
+void AliasesWidget::resPutAssetAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit) {
     Wt::WApplication::instance()->resumeRendering();
     doJavaScript("$('#" + boost::lexical_cast<string>(edit->parent()->id()) + "').toggleClass('success',true)");
     Wt::log("warning") << response.body();
 }
 
-void RoleCustomizationWidget::resPutPluginAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit) {
+void AliasesWidget::resPutPluginAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit) {
     Wt::WApplication::instance()->resumeRendering();
     doJavaScript("$('#" + boost::lexical_cast<string>(edit->parent()->id()) + "').toggleClass('success',true)");
     Wt::log("warning") << response.body();
 }
 
-void RoleCustomizationWidget::resPutCritAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit) {
+void AliasesWidget::resPutCritAlias(boost::system::error_code err, const Wt::Http::Message& response, Wt::WLineEdit *edit) {
     Wt::WApplication::instance()->resumeRendering();
     doJavaScript("$('#" + boost::lexical_cast<string>(edit->parent()->id()) + "').toggleClass('success',true)");
     Wt::log("warning") << response.body();

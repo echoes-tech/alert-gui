@@ -110,8 +110,9 @@ protected:
   UnitsWidget *unw;
 //  AlertEditionModel *aem;
 //  AlertListWidget *alw;
-  RoleCustomizationWidget *rcw;
+  AliasesWidget *rcw;
   ProbesWidget *prb;
+  RolesWidget *row;
   
   UserEditionWidget *uew;
   

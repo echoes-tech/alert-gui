@@ -56,11 +56,13 @@
         <itemPath>include/Conf.h</itemPath>
         <itemPath>include/CsvUtil.h</itemPath>
         <itemPath>include/DashBoard.h</itemPath>
+        <itemPath>include/EATableTemplate.h</itemPath>
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
         <itemPath>include/InformationsWidget.h</itemPath>
         <itemPath>include/ProbesWidget.h</itemPath>
         <itemPath>include/RecipientsWidget.h</itemPath>
+        <itemPath>include/RolesWidget.h</itemPath>
         <itemPath>include/SummaryBoard.h</itemPath>
         <itemPath>include/TrundleTable.h</itemPath>
         <itemPath>include/UnitsWidget.h</itemPath>
@@ -108,6 +110,8 @@
         <itemPath>resources/xml/probe_fr.xml</itemPath>
         <itemPath>resources/xml/recipients.xml</itemPath>
         <itemPath>resources/xml/recipients_fr.xml</itemPath>
+        <itemPath>resources/xml/role-customization.xml</itemPath>
+        <itemPath>resources/xml/role-customization_fr.xml</itemPath>
         <itemPath>resources/xml/summary.xml</itemPath>
         <itemPath>resources/xml/summary_fr.xml</itemPath>
         <itemPath>resources/xml/test.xml</itemPath>
@@ -160,12 +164,12 @@
         <itemPath>src/CsvUtil.C</itemPath>
         <itemPath>src/DashBoard.cpp</itemPath>
         <itemPath>src/EATableTemplate.cpp</itemPath>
-        <itemPath>include/EATableTemplate.h</itemPath>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
         <itemPath>src/InformationsWidget.cpp</itemPath>
         <itemPath>src/ProbesWidget.cpp</itemPath>
         <itemPath>src/RecipientsWidget.cpp</itemPath>
+        <itemPath>src/RolesWidget.cpp</itemPath>
         <itemPath>src/SummaryBoard.cpp</itemPath>
         <itemPath>src/TrundleTable.cpp</itemPath>
         <itemPath>src/UnitsWidget.cpp</itemPath>
@@ -298,8 +302,6 @@
       </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/RolesWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="include/RolesWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
@@ -358,10 +360,6 @@
       <item path="resources/xml/alert.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/alert_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/xml/aliases.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/xml/aliases_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/asset.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -447,9 +445,15 @@
       </item>
       <item path="resources/xml/recipients_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="resources/xml/roles.xml" ex="false" tool="3" flavor2="0">
+      <item path="resources/xml/role-customization.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="resources/xml/roles_fr.xml" ex="false" tool="3" flavor2="0">
+      <item path="resources/xml/role-customization_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="resources/xml/summary.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -524,6 +528,8 @@
       <item path="src/ProbesWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RecipientsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/RolesWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -642,8 +648,6 @@
       </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/RolesWidget.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="include/RolesWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
@@ -702,10 +706,6 @@
       <item path="resources/xml/alert.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/alert_fr.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/xml/aliases.xml" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="resources/xml/aliases_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/asset.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -791,9 +791,15 @@
       </item>
       <item path="resources/xml/recipients_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="resources/xml/roles.xml" ex="false" tool="3" flavor2="0">
+      <item path="resources/xml/role-customization.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="resources/xml/roles_fr.xml" ex="false" tool="3" flavor2="0">
+      <item path="resources/xml/role-customization_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="resources/xml/summary.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -868,6 +874,8 @@
       <item path="src/ProbesWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/RecipientsWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/RolesWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -21,7 +21,7 @@
 #include "UserActionManagement.h"
 #include "OptionManagementModel.h"
 #include "OptionManagementWidget.h"
-#include "MonitoringWidget.h"
+//#include "MonitoringWidget.h"
 #include "AliasesWidget.h"
 #include "UnitsWidget.h"
 #include "ProbesWidget.h"

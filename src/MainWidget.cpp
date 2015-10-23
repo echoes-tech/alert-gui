@@ -1,5 +1,5 @@
 /* 
- * Gui MonitoringWidget.cpp
+ * Gui MainWidget.cpp
  * 
  * @author ECHOES Technologies (TSA)
  * 

@@ -35,7 +35,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/include/RolesWidget.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/src/AbstractPage.o \
 	${OBJECTDIR}/src/AlertsWidget.o \
@@ -64,6 +63,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/PluginsWidget.o \
 	${OBJECTDIR}/src/ProbesWidget.o \
 	${OBJECTDIR}/src/RecipientsWidget.o \
+	${OBJECTDIR}/src/RolesWidget.o \
 	${OBJECTDIR}/src/SummaryBoard.o \
 	${OBJECTDIR}/src/TrundleTable.o \
 	${OBJECTDIR}/src/UnitsWidget.o \
@@ -94,11 +94,6 @@ LDLIBSOPTIONS=-L../dbo/dist/Release_SharedObject/GNU-Linux-x86 -L/var/lib/jenkin
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gui ${OBJECTFILES} ${LDLIBSOPTIONS} -s
-
-${OBJECTDIR}/include/RolesWidget.o: include/RolesWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/include
-	${RM} "$@.d"
-	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/include/RolesWidget.o include/RolesWidget.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -239,6 +234,11 @@ ${OBJECTDIR}/src/RecipientsWidget.o: src/RecipientsWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RecipientsWidget.o src/RecipientsWidget.cpp
+
+${OBJECTDIR}/src/RolesWidget.o: src/RolesWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O3 -s -Iinclude -I../dbo/include -I/var/lib/jenkins/jobs/ea-dbo-${target}/workspace/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RolesWidget.o src/RolesWidget.cpp
 
 ${OBJECTDIR}/src/SummaryBoard.o: src/SummaryBoard.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

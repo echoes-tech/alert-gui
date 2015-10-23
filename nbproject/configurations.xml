@@ -120,7 +120,6 @@
         <itemPath>resources/xml/user.xml</itemPath>
         <itemPath>resources/xml/user_fr.xml</itemPath>
       </logicalFolder>
-      <itemPath>config.xml</itemPath>
       <itemPath>resources/themes/bootstrap/css/echoes-alert-custom.css</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
@@ -232,8 +231,6 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="config.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/AbstractPage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AlertsWidget.h" ex="false" tool="3" flavor2="0">
@@ -578,8 +575,6 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="config.xml" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/AbstractPage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AlertsWidget.h" ex="false" tool="3" flavor2="0">

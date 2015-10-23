@@ -14,7 +14,7 @@ RolesWidget::RolesWidget(Echoes::Dbo::Session *session, std::string apiUrl)
     setButtonSup(true);
     
     std::vector<std::pair <int, string>>titles;
-    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::is), "name"));
+    titles.push_back(make_pair(setValidatorType(ETypeJson::text, 0, EMandatory::isMandatory), "name"));
     setTitles(titles);
     
     list<list<pair<string, vector<string>>>> listsUrl;

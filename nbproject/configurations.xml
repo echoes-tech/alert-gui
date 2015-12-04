@@ -137,6 +137,7 @@
         <itemPath>resources/xml/user.xml</itemPath>
         <itemPath>resources/xml/user_fr.xml</itemPath>
       </logicalFolder>
+      <itemPath>config.xml</itemPath>
       <itemPath>resources/themes/bootstrap/css/echoes-alert-custom.css</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages xmlns:if="Wt.WTemplate.conditions">
+
+    <message id="Alert.roles.form-info">
+      On this page you can manage the different roles of your compagny.
+    </message>
+
+<!--    In table     -->
+    <!--nothing roles-->
+    <message id="Alert.roles.nothing-name">Name</message>
+    <message id="Alert.roles.nothing-roles-text">Nothing roles register</message>
+    <message id="Alert.roles.nothing-button">Click to Add</message>
+    <!--header-->
+    <message id="Alert.roles.main-table">Roles</message>
+    <!--body-->
+    <message id="Alert.roles.name-name">Name</message>
+    <message id="Alert.roles.modif-button">Modif</message>
+    <message id="Alert.roles.delete-button">Delete</message>
+    <!--footer-->
+    <message id="Alert.roles.search-bar">Search : </message>
+        <!-- Paginate -->
+        <message id="Alert.roles.paginate-first">First</message>
+        <message id="Alert.roles.paginate-prev">Prev</message>
+        <message id="Alert.roles.paginate-next">Next</message>
+        <message id="Alert.roles.paginate-last">Last</message>
+
+<!--    In popup     -->
+    <message id="Alert.roles.button-cancel">Cancel</message>
+    <message id="Alert.roles.button-save">Save</message>
+    <!--POST-->
+    <message id="Alert.roles.popup-add">Add role</message>
+    <!--PUT-->
+    <message id="Alert.roles.popup-modif">Modify this role</message>
+    <!--DELETE-->
+    <message id="Alert.roles.delete-roles">Warning</message>
+    <message id="Alert.roles.delete-message">
+        <span style="color:red">
+            You are about to delete a role
+        </span>
+    </message>
+    <message id="Alert.roles.button-confirm">Confirm</message>
+
+<!--    Invalid message     -->
+  <message id="Alert.roles.invalid-name-roles">
+      <span style="color:red">
+&nbsp;Invalid name : size (1-255) don't use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
+</span>
+  </message>
+  <message id="Alert.roles.invalid-name-twice">
+      <span style="color:red">
+          Please, you do not use the same name twice.
+      </span>
+  </message>
+
+<!--    Error message     -->
+  <message id="Alert.roles.file-not-generated">
+      <span style="color:red">
+          The file as not been generated. Please contact us.
+      </span>
+  </message>
+  <message id="Alert.roles.database-error-title">Database error</message>
+  <message id="Alert.roles.database-error">
+      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
+  </message>
+  <message id="Alert.roles.conflict-title">Impossible to delete role</message>
+  <message id="Alert.roles.conflict">You cannot delete this role : Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
+<!--    Warning message     -->
+  <message id="Alert.roles-list.delete-alerts-message">
+      Alerts link with roles.
+  </message>
+  <message id="Alert.roles-list.delete-alert-message">
+      Alert link with roles.
+  </message>
+
+<!-- templates -->
+    <message id="Alert.roles.Management.template" >
+        <br />
+            <div class ="alert alert-info">${tr:Alert.roles.form-info}</div> 
+            <div id="roles-name" class="control-group">
+                <div class="row-fluid">
+                <div id="info-header" class="widget-pers">
+                    ${resource-header}
+                    ${resource-table}
+                    ${resource-footer}
+                </div>
+            </div>
+            </div>
+            
+    </message>
+
+  
+
+</messages>

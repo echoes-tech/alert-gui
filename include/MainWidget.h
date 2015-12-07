@@ -103,6 +103,8 @@ protected:
   void getRightsFromUser();
  
   PluginsWidget *plw;
+  MessagesWidget *msw;
+  HelpWidget *hpw;
 //  AssetManagementModel *amm;
   AssetManagementWidget *amw;
   OptionManagementModel *omm;
@@ -110,8 +112,9 @@ protected:
   UnitsWidget *unw;
 //  AlertEditionModel *aem;
 //  AlertListWidget *alw;
-  RoleCustomizationWidget *rcw;
+  AliasesWidget *rcw;
   ProbesWidget *prb;
+  RolesWidget *row;
   
   UserEditionWidget *uew;
   
@@ -156,7 +159,7 @@ void MainWidget::createMenuItem(C enumC, Wt::WMenu *submenu, std::string iconStr
     Wt::WMenuItem *newMenuItem = new Wt::WMenuItem(tr("Alert.admin." + boost::lexical_cast<std::string>(enumC.value()) + "-tab"));
     
     // Todo : renommer alertCount, voir comment indiquer la présence de sous-menus
-    Wt::WText *alertCount = new Wt::WText("</span><i class='icon icon-" + iconStr + "'></i><span>",Wt::XHTMLUnsafeText);
+    Wt::WText *alertCount = new Wt::WText("</span><i class='icon-" + iconStr + "'></i><span>",Wt::XHTMLUnsafeText);
 //    alertCount->setAttributeValue("class","label label-important");
     Wt::WAnchor *anchorTemp = (Wt::WAnchor*)newMenuItem->widget(0);
     anchorTemp->insertWidget(0,alertCount);

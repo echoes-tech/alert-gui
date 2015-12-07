@@ -92,10 +92,7 @@
           The file as not been generated. Please contact us.
       </span>
   </message>
-  <message id="Alert.media-user.database-error-title">Database error</message>
-  <message id="Alert.media-user.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
+
 <!--    Warning message     -->
 
      <!-- templates -->

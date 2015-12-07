@@ -74,7 +74,7 @@ public:
   void          recoverListAsset();
 
 protected:
-  virtual void                apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
+  //virtual void                apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client);
   
 //  virtual Wt::WValidator                *editValidator(int cpt);
 

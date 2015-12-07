@@ -53,10 +53,10 @@
     <!--PUT-->
     <message id="Alert.alert.popup-modif">Modify this alert</message>
     <!--DELETE-->
-    <message id="Alert.alert.delete-alert">Attention</message>
+    <message id="Alert.alert.delete-alert">Warning</message>
     <message id="Alert.alert.delete-message">
         <span style="color:red">
-            You are about to delete a server
+            You are about to delete an alert
         </span>
     </message>
     <message id="Alert.alert.button-confirm">Confirm</message>
@@ -173,10 +173,8 @@
           The file has not been generated. Please contact us.
       </span>
   </message>
-  <message id="Alert.alert.database-error-title">Database error</message>
-  <message id="Alert.alert.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
+  
+    
 <!--    Warning message     -->
 
 <!-- templates -->

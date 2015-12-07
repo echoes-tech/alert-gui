@@ -56,15 +56,6 @@
 </span>
   </message>
   
-
-<!--    Error message     -->
-  
-  <message id="Alert.probe.database-error-title">Database error</message>
-  <message id="Alert.probe.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
-
-
 <!-- templates -->
     <message id="Alert.probe.Management.template" >
         <br />

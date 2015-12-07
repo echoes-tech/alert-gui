@@ -38,15 +38,8 @@
 &nbsp;Invalid name : size (1-255) do not use : &rdquo;&lsaquo;&rsaquo;/\.&amp;;?!&sect;,{}()*|
 </span>
   </message>
-  
 
-<!--    Error message     -->
-  
-  <message id="Alert.plugins-association.database-error-title">Database error</message>
-  <message id="Alert.plugins-association.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
-  
+
   <message id="Alert.plugins-association.filter-type.all">All</message>
   <message id="Alert.plugins-association.filter-type.regex">Regular expression</message>
   <message id="Alert.plugins-association.filter-type.location">Location</message>

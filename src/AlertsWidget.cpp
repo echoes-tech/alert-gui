@@ -1951,12 +1951,12 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[Alerts][AST_PLG] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][AST_PLG] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     
     
@@ -2013,12 +2013,12 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[Alerts][PLG_INF] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][PLG_INF] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     
     // plugins // assets
@@ -2051,12 +2051,12 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[Alerts][PLG_AST] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][PLG_AST] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     
     // informations // plugins
@@ -2116,12 +2116,12 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[Alerts][INFO_PLG] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][INFO_PLG] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     
     // informations // information
@@ -2149,12 +2149,12 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[Alerts][INFO_PLG] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][INFO_PLG] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
           
     //users
@@ -2186,12 +2186,12 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[Alerts][Users] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][Users] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     
     //medias
@@ -2229,12 +2229,12 @@ void AlertsWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[Alerts][Users] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[Alerts][Users] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
                 
     
@@ -2257,13 +2257,13 @@ void AlertsWidget::postAlert(boost::system::error_code err, const Wt::Http::Mess
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.alert.database-error-title"), tr("Alert.alert.database-error"), Wt::Ok);
+                Wt::log("warning") << "[Alerts Management Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Alerts Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "TypeException", tr("Alert.alert.database-error"), Wt::Ok);
+                Wt::log("warning") << "[Alerts Management Widget] " << tr("Alert.global.json-type-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
             }
         }
         /* FIX ME : else log */
@@ -2271,7 +2271,7 @@ void AlertsWidget::postAlert(boost::system::error_code err, const Wt::Http::Mess
     else
     {
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title") + "err", tr("Alert.global.database-error"), Wt::Ok);
     }
 }
 
@@ -2485,14 +2485,14 @@ void AlertsWidget::deleteAlert(boost::system::error_code err, const Wt::Http::Me
         if (response.status() != 204)
         {
             // a revoir !
-            Wt::log("warning") << "[Alerts Widget] Problems parsing JSON: " << response.body();
-            Wt::WMessageBox::show(tr("Alert.alert.database-error-title"), tr("Alert.alert.database-error"), Wt::Ok);
+            Wt::log("warning") << "[Alerts Widget] Couldn't delete alert: " << response.body();
+            Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
         }
     }
     else
     {
         Wt::log("error") << "[Alerts Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.alert.database-error-title") + "err", tr("Alert.alert.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title") + "err", tr("Alert.global.database-error"), Wt::Ok);
     }
     updatePage();
 }

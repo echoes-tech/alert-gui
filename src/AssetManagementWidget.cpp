@@ -60,77 +60,6 @@ int AssetManagementWidget::addCustomButtonsToResourceTable(long long id, int row
     return ++columnTable;
 }
 
-// Call API - POST(ADD) DELETE PUT(MODIF) ----------------------------------------
-
-void AssetManagementWidget::apiDeleteResourceCallback(boost::system::error_code err, const Wt::Http::Message& response, Wt::Http::Client *client)
-{
-    delete client;
-    Wt::WApplication::instance()->resumeRendering();
-    if (!err)
-    {
-        if (response.status() == Enums::EReturnCode::NO_CONTENT)
-        {
-            if (response.body() != "")
-            {
-                Wt::log("error") << " [Asset Widget] Response should be empty : "
-                        << response.body() << ".";
-            }
-        }
-        else if (response.status() == Enums::EReturnCode::CONFLICT)
-        {
-            Wt::WMessageBox::show(tr("Alert.asset.conflict-title"), tr("Alert.asset.conflict"), Wt::Ok);
-        }
-        else
-        {
-            Wt::log("error") << "[Asset Widget] Unexpected return code : " << response.status();
-            
-            Wt::log("error") << "[Asset Widget] Response body : " << response.body();
-            // FIXME: Useless once http://redmine.webtoolkit.eu/issues/3541 is implemented
-            try
-            {
-                Wt::Json::Value result;
-                Wt::Json::Object obj;
-
-                Wt::Json::parse(response.body(), result); 
-                obj = result;
-                Wt::WString message = obj.get("message");
-                
-                if(L"Conflict" == message.value())
-                {
-                    Wt::WMessageBox::show(tr("Alert.asset.conflict-title"), tr("Alert.asset.conflict"), Wt::Ok);
-                }
-                else
-                {
-                    Wt::log("error") << "[Asset Widget] Unexpected message : " << message;
-                }
-            }
-            catch (Wt::Json::ParseError const& e)
-            {
-                Wt::log("warning") << "[Asset Management Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"),Wt::Ok);
-            }
-            catch (Wt::Json::TypeException const& e)
-            {
-                Wt::log("warning") << "[Asset Management Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"),Wt::Ok);
-            }
-            
-        }
-    }
-    else
-    {
-        Wt::log("warning") << "[Asset Widget] Http::Client error: " << response.body();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),
-                              tr("Alert.asset.database-error"), Wt::Ok);
-    }
-    updatePage();
-}
-
-
-
-// API RETURN INFOS ------------------------------------------
-
-
 void    AssetManagementWidget::checkAlertsInAsset(boost::system::error_code err, const Wt::Http::Message& response,
                                                   Wt::Http::Client *client, Wt::WDialog *box, long long id)
 {
@@ -182,19 +111,19 @@ void    AssetManagementWidget::checkAlertsInAsset(boost::system::error_code err,
         }
         catch (Wt::Json::ParseError const& e)
         {
-            Wt::log("warning") << "[Asset Management Widget] Problems parsing JSON: " << response.body();
-            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"),Wt::Ok);
+            Wt::log("warning") << "[Asset Management Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
+            Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
         }
         catch (Wt::Json::TypeException const& e)
         {
-            Wt::log("warning") << "[Asset Management Widget] JSON Type Exception: " << response.body();
-            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"),Wt::Ok);
+            Wt::log("warning") << "[Asset Management Widget] " << tr("Alert.global.json-type-error-title") << response.body();
+            Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
         }
     }
     else
     {
         Wt::log("error") << "[Asset Management Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"),Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"),Wt::Ok);
     }
 }
 
@@ -244,25 +173,25 @@ void AssetManagementWidget::postResourceCallback(boost::system::error_code err, 
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Asset Management Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
+                Wt::log("warning") << "[Asset Management Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Asset Management Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"),Wt::Ok);
+                Wt::log("warning") << "[Asset Management Widget] " << tr("Alert.global.json-type-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
             }
         }
         else
         {
             Wt::log("error") << "[Asset Management Widget] " << response.body();
-            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
+            Wt::WMessageBox::show(tr("Alert.global.database-error-title"),tr("Alert.global.database-error"),Wt::Ok);
         }
     }
     else
     {
         Wt::log("error") << "[Asset Management Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"),tr("Alert.global.database-error"),Wt::Ok);
     }
 }
 
@@ -284,25 +213,25 @@ void AssetManagementWidget::postProbe(boost::system::error_code err, const Wt::H
             }
             catch (Wt::Json::ParseError const& e)
             {
-                Wt::log("warning") << "[Asset Management Widget] Problems parsing JSON: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
+                Wt::log("warning") << "[Asset Management Widget] " << tr("Alert.global.json-parse-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-parse-error-title"), tr("Alert.global.json-parse-error"),Wt::Ok);
             }
             catch (Wt::Json::TypeException const& e)
             {
-                Wt::log("warning") << "[Asset Management Widget] JSON Type Exception: " << response.body();
-                Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"),Wt::Ok);
+                Wt::log("warning") << "[Asset Management Widget] " << tr("Alert.global.json-type-error-title") << response.body();
+                Wt::WMessageBox::show(tr("Alert.global.json-type-error-title"), tr("Alert.global.json-type-error"),Wt::Ok);
             }
         }
         else
         {
             Wt::log("error") << "[Asset Management Widget] " << response.body();
-            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
+            Wt::WMessageBox::show(tr("Alert.global.database-error-title"),tr("Alert.global.database-error"),Wt::Ok);
         }
     }
     else
     {
         Wt::log("error") << "[Asset Management Widget] Http::Client error: " << err.message();
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"),tr("Alert.asset.database-error"),Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"),tr("Alert.global.database-error"),Wt::Ok);
     }
     updatePage();
 }
@@ -324,7 +253,7 @@ Wt::WFileResource *AssetManagementWidget::generateScript(long long astId, Wt::WS
         scriptCustomPart = "\nASSET_ID=" + boost::lexical_cast<string>(astId) + "\n"
                 //TEMPORARY!! ToDo: Implement a method to retrieve id Probe for this Asset
                 "PROBE_ID=" + boost::lexical_cast<string>(astId) + "\n"
-                "TOKEN='" + m_session->user()->organization.get()->token.toUTF8() + "'\n\n"
+                "TOKEN='" + m_session->user()->group.get()->token.toUTF8() + "'\n\n"
                 "API_HOST='" + conf.getApiHost() + "'\n"
                 "API_PORT=" + boost::lexical_cast<string>(conf.getApiPort()) + "\n"
                 "API_HTTPS=";

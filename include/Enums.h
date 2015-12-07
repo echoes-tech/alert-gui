@@ -92,6 +92,7 @@ public:
         REQUESTED_RANGE_UNSATISFIABLE = 416,
         EXPECTATION_FAILED = 417,
         I_AM_A_TEAPOT = 418,
+        LOCKED = 423,
         UPGRADE_REQUIRED = 426,
 
         INTERNAL_SERVER_ERROR = 500,
@@ -104,7 +105,8 @@ public:
     };
 
     BOOST_ENUM_VALUES(EPageType, const char*,
-                        (WELCOME) ("welcome")
+                        (MESSAGES) ("messages")
+                        //(WELCOME) ("welcome")
                         (DASHBOARD) ("dashboard")
                         (PROBES) ("probes")                  
                         (ASSET) ("assets")
@@ -112,11 +114,31 @@ public:
                         (INFORMATIONS) ("informations")
                         (ALERTS) ("alerts")
                         (PLUGIN) ("plugins")
-                        (ROLE) ("role")
+                        (ALIASES) ("aliases")
+                        (ROLES) ("roles")
                         (OPTIONS) ("options")
                         (UNITS) ("units")
+                        (HELP) ("help")
                       )
-
+    
+    BOOST_ENUM_VALUES(EMessageStatus, const char*,
+                        (UNCREATED) ("uncreated")
+                        (CREATED) ("created")
+                        (SENDFAILED) ("send failed")
+                        (SENDREFUSED) ("send refused")
+                        (LINKING) ("linking")
+                        (LINKLOST) ("link lost")
+                        (SENDED) ("sended")
+                        (ACKFAILED) ("ack failed")
+                        (RECEIVED) ("received")
+                        (ANSWERED) ("answered")
+                      )
+    BOOST_ENUM_VALUES(EAlertStatus, const char*,
+                        (PENDING) ("pending")
+                        (SUPPORTED) ("supported")
+                        (FORWARDING) ("forwarding")
+                        (BACKTONORMAL) ("back to normal")                        
+                      )
 private:
 
 };

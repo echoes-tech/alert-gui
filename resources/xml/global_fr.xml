@@ -130,7 +130,7 @@
                     <p><strong>[Interface utilisateur] Correction de bugs</strong></p>
                     <ul>
                     <li>Correction d'un bug qui empêchait la création d'alertes dans certains cas</li>
-                    <li>Correction d'un bug qui empêchait la création du lien entre un utilisateur et son organisation dans certains cas</li>    
+                    <li>Correction d'un bug qui empêchait la création du lien entre un utilisateur et son groupe dans certains cas</li>    
                     </ul>
                 </div>
 
@@ -316,13 +316,40 @@
   <message id="Alert.admin.units-tab">Unités</message>
   <message id="Alert.admin.dashboard-tab">Tableau de bord</message>
   <message id="Alert.admin.probes-tab">Sondes</message>
+  <message id="Alert.admin.messages-tab">Messages</message>
+  <message id="Alert.admin.help-tab">Aide</message>
+  <message id="Alert.admin.aliases-tab">Alias</message>
+  <message id="Alert.admin.roles-tab">Roles</message>
   
   <message id="Alert.admin.home">Accueil</message>
 
   
   <message id="Alert.admin.options-tab">Options</message>
-  <message id="Alert.global.database-error-title">Erreur base de données</message>
-  <message id="Alert.global.database-error">Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com</message>
+  <message id="Alert.global.database-error-title">Erreur base de donnée</message>
+  <message id="Alert.global.database-error">
+    Erreur base de données. Essayez de nouveau. Si cette erreur se produit à nouveau, n'hésitez pas à ouvrir un ticket : https://forge.echoes-tech.com
+  </message>
+
+  <message id="Alert.global.relation-on-delete-error-title">Erreur base de donnée</message>
+  <message id="Alert.global.relation-on-delete-error">
+      La ressource ne peut être supprimée. Supprimez toutes les liaisons avant de retenter.
+  </message>
+  
+  <message id="Alert.global.connexion-error-title">Erreur de communication</message>
+  <message id="Alert.global.connexion-error">
+      La tentative de communication avec l'API a échouée, vérifiez son état et/ou ouvrez un ticket : https://forge.echoes-tech.com
+  </message>
+  
+  
+  <message id="Alert.global.json-parse-error-title">Parsing error</message>
+  <message id="Alert.global.json-parse-error">
+      Erreur de parsing. Essayez encore. Si cette erreur se produit à nouveau, ouvrez un ticket : https://forge.echoes-tech.com
+  </message>
+  
+  <message id="Alert.global.json-type-error-title">Type exception</message>
+  <message id="Alert.global.json-type-error">
+      Erreur de type JSON. Essayez encore. Si cette erreur se produit à nouveau, ouvrez un ticket : https://forge.echoes-tech.com
+  </message>
   
   <message id="Alert.global.action">Actions</message>
 

@@ -179,12 +179,12 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[UserEditionWidget] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[UserEditionWidget] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
 
     try
@@ -225,12 +225,12 @@ void UserEditionWidget::handleJsonGet(vectors_Json jsonResources)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[UserEditionWidget] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[UserEditionWidget] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
 }
 

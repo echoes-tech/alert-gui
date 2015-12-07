@@ -79,7 +79,7 @@ void PluginsTablePluginWidget::fillModel(Wt::Json::Value result)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[PluginsTablePluginWidget] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {

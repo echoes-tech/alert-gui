@@ -61,11 +61,6 @@
       </span>
   </message>
 
-<!--    Error message     -->
-  <message id="Alert.information.database-error-title">Database error</message>
-  <message id="Alert.information.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
 <!--    Warning message     -->
   <message id="Alert.information-list.delete-alerts-message">
       Alerts link with information.

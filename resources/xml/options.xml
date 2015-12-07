@@ -17,9 +17,6 @@
   <message id="Alert.option.sms-quota-label">SMS quota</message>
   <message id="Alert.option.sms-quota-info">The number of SMS remaining</message>
   
-  <message id="Alert.option.database-error-title">Database error</message>
-  <message id="Alert.option.database-error">Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com</message>
-  
   <message id="Alert.option.update-password-label">Password</message>
   <message id="Alert.option.update-password-info">Fill your current password and the new one, then click on the ok button to change your password.</message>
   <message id="Alert.option.password-changed">Password changed successfully</message>

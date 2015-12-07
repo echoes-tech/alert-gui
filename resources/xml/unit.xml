@@ -49,15 +49,6 @@
 </span>
   </message>
   
-
-<!--    Error message     -->
-  
-  <message id="Alert.unit.database-error-title">Database error</message>
-  <message id="Alert.unit.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
-
-
 <!-- templates -->
     <message id="Alert.unit.Management.template" >
         <br />

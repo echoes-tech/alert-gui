@@ -8,6 +8,12 @@
         <logicalFolder name="f4" displayName="AdminAssetTab" projectFiles="true">
           <itemPath>include/AssetManagementWidget.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="f3" displayName="AdminMessagesTab" projectFiles="true">
+          <itemPath>include/MessagesTableAlertWidget.h</itemPath>
+          <itemPath>include/MessagesTableHistoricWidget.h</itemPath>
+          <itemPath>include/MessagesTableMessageWidget.h</itemPath>
+          <itemPath>include/MessagesWidget.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="f6" displayName="AdminOptionTab" projectFiles="true">
           <itemPath>include/OptionManagementModel.h</itemPath>
           <itemPath>include/OptionManagementWidget.h</itemPath>
@@ -51,16 +57,19 @@
         </logicalFolder>
         <itemPath>include/AbstractPage.h</itemPath>
         <itemPath>include/AlertsWidget.h</itemPath>
+        <itemPath>include/AliasesWidget.h</itemPath>
         <itemPath>include/ApiManagement.h</itemPath>
         <itemPath>include/Conf.h</itemPath>
         <itemPath>include/CsvUtil.h</itemPath>
         <itemPath>include/DashBoard.h</itemPath>
+        <itemPath>include/EATableTemplate.h</itemPath>
         <itemPath>include/EchoesHome.h</itemPath>
         <itemPath>include/GlobalIncludeFile.h</itemPath>
+        <itemPath>include/HelpWidget.h</itemPath>
         <itemPath>include/InformationsWidget.h</itemPath>
         <itemPath>include/ProbesWidget.h</itemPath>
         <itemPath>include/RecipientsWidget.h</itemPath>
-        <itemPath>include/RoleCustomizationWidget.h</itemPath>
+        <itemPath>include/RolesWidget.h</itemPath>
         <itemPath>include/SummaryBoard.h</itemPath>
         <itemPath>include/TrundleTable.h</itemPath>
         <itemPath>include/UnitsWidget.h</itemPath>
@@ -86,10 +95,20 @@
         <itemPath>resources/xml/ea_table.xml</itemPath>
         <itemPath>resources/xml/global.xml</itemPath>
         <itemPath>resources/xml/global_fr.xml</itemPath>
+        <itemPath>resources/xml/help.xml</itemPath>
+        <itemPath>resources/xml/help_fr.xml</itemPath>
         <itemPath>resources/xml/information.xml</itemPath>
         <itemPath>resources/xml/information_fr.xml</itemPath>
         <itemPath>resources/xml/media-user.xml</itemPath>
         <itemPath>resources/xml/media-user_fr.xml</itemPath>
+        <itemPath>resources/xml/messages-alert.xml</itemPath>
+        <itemPath>resources/xml/messages-alert_fr.xml</itemPath>
+        <itemPath>resources/xml/messages-historic.xml</itemPath>
+        <itemPath>resources/xml/messages-historic_fr.xml</itemPath>
+        <itemPath>resources/xml/messages-message.xml</itemPath>
+        <itemPath>resources/xml/messages-message_fr.xml</itemPath>
+        <itemPath>resources/xml/messages.xml</itemPath>
+        <itemPath>resources/xml/messages_fr.xml</itemPath>
         <itemPath>resources/xml/options.xml</itemPath>
         <itemPath>resources/xml/options_fr.xml</itemPath>
         <itemPath>resources/xml/plugins-association.xml</itemPath>
@@ -128,6 +147,12 @@
         <logicalFolder name="f4" displayName="AdminAssetTab" projectFiles="true">
           <itemPath>src/AssetManagementWidget.cpp</itemPath>
         </logicalFolder>
+        <logicalFolder name="f3" displayName="AdminMessagesTab" projectFiles="true">
+          <itemPath>src/MessagesTableAlertWidget.cpp</itemPath>
+          <itemPath>src/MessagesTableHistoricWidget.cpp</itemPath>
+          <itemPath>src/MessagesTableMessageWidget.cpp</itemPath>
+          <itemPath>src/MessagesWidget.cpp</itemPath>
+        </logicalFolder>
         <logicalFolder name="f6" displayName="AdminOptionTab" projectFiles="true">
           <itemPath>src/OptionManagementModel.cpp</itemPath>
           <itemPath>src/OptionManagementWidget.cpp</itemPath>
@@ -156,18 +181,19 @@
         </logicalFolder>
         <itemPath>src/AbstractPage.cpp</itemPath>
         <itemPath>src/AlertsWidget.cpp</itemPath>
+        <itemPath>src/AliasesWidget.cpp</itemPath>
         <itemPath>src/ApiManagement.cpp</itemPath>
         <itemPath>src/Conf.cpp</itemPath>
         <itemPath>src/CsvUtil.C</itemPath>
         <itemPath>src/DashBoard.cpp</itemPath>
         <itemPath>src/EATableTemplate.cpp</itemPath>
-        <itemPath>include/EATableTemplate.h</itemPath>
         <itemPath>src/EchoesHome.cpp</itemPath>
         <itemPath>src/Enums.cpp</itemPath>
+        <itemPath>src/HelpWidget.cpp</itemPath>
         <itemPath>src/InformationsWidget.cpp</itemPath>
         <itemPath>src/ProbesWidget.cpp</itemPath>
         <itemPath>src/RecipientsWidget.cpp</itemPath>
-        <itemPath>src/RoleCustomizationWidget.cpp</itemPath>
+        <itemPath>src/RolesWidget.cpp</itemPath>
         <itemPath>src/SummaryBoard.cpp</itemPath>
         <itemPath>src/TrundleTable.cpp</itemPath>
         <itemPath>src/UnitsWidget.cpp</itemPath>
@@ -236,6 +262,8 @@
       </item>
       <item path="include/AlertsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/AliasesWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/ApiManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
@@ -269,9 +297,25 @@
       </item>
       <item path="include/GlobalIncludeFile.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/HelpWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/InformationsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/MainWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/MessagesTableAlertWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/MessagesTableHistoricWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/MessagesTableMessageWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/MessagesWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/MonitoringWidget.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -298,7 +342,7 @@
       </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
+      <item path="include/RolesWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -379,6 +423,10 @@
       </item>
       <item path="resources/xml/global_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="resources/xml/help.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/help_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="resources/xml/information.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/information_fr.xml" ex="false" tool="3" flavor2="0">
@@ -386,6 +434,34 @@
       <item path="resources/xml/media-user.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/media-user_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/messages-alert.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/messages-alert_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/messages-historic.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/messages-historic_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/messages-message.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/messages-message_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/messages.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/messages_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/options.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -469,6 +545,8 @@
       </item>
       <item path="src/AlertsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/AliasesWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/ApiManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
@@ -494,9 +572,22 @@
       </item>
       <item path="src/Enums.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/HelpWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/InformationsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/MainWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessagesTableAlertWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessagesTableHistoricWidget.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/MessagesTableMessageWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessagesWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/MonitoringWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -523,7 +614,7 @@
       </item>
       <item path="src/RecipientsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/RolesWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -578,6 +669,8 @@
       </item>
       <item path="include/AlertsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/AliasesWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/ApiManagement.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/AssetManagementWidget.h" ex="false" tool="3" flavor2="0">
@@ -611,9 +704,25 @@
       </item>
       <item path="include/GlobalIncludeFile.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/HelpWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/InformationsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/MainWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/MessagesTableAlertWidget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/MessagesTableHistoricWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/MessagesTableMessageWidget.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/MessagesWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/MonitoringWidget.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -640,7 +749,7 @@
       </item>
       <item path="include/RecipientsWidget.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/RoleCustomizationWidget.h" ex="false" tool="3" flavor2="0">
+      <item path="include/RolesWidget.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/SummaryBoard.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -721,6 +830,10 @@
       </item>
       <item path="resources/xml/global_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="resources/xml/help.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/help_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="resources/xml/information.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/information_fr.xml" ex="false" tool="3" flavor2="0">
@@ -728,6 +841,34 @@
       <item path="resources/xml/media-user.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/media-user_fr.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/messages-alert.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/messages-alert_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/messages-historic.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/messages-historic_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/messages-message.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/messages-message_fr.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/xml/messages.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/xml/messages_fr.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="resources/xml/options.xml" ex="false" tool="3" flavor2="0">
       </item>
@@ -811,6 +952,8 @@
       </item>
       <item path="src/AlertsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/AliasesWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/ApiManagement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/AssetManagementWidget.cpp" ex="false" tool="1" flavor2="0">
@@ -836,9 +979,22 @@
       </item>
       <item path="src/Enums.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/HelpWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/InformationsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/MainWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessagesTableAlertWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessagesTableHistoricWidget.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/MessagesTableMessageWidget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessagesWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/MonitoringWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -865,7 +1021,7 @@
       </item>
       <item path="src/RecipientsWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/RoleCustomizationWidget.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/RolesWidget.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/SummaryBoard.cpp" ex="false" tool="1" flavor2="0">
       </item>

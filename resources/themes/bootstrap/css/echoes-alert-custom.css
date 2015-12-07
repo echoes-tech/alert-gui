@@ -84,6 +84,62 @@ select {
 
 /* CSS size column for CreatePageWidget*/
 
+/*Pending*/
+.cercleRouge{
+  background: #E20000;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #F5F5F5;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 7px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/*Forwarding*/
+.cercleOrange{
+  background: #FFA500;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #F5F5F5;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 7px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/*assigned*/
+.cercleBleu{
+  background: #00BFFF;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #F5F5F5;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 7px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/*BackToNormal*/
+.cercleVert{
+  background: #1EE200;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #F5F5F5;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 7px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
 /* Asset */
 .asset {
 }

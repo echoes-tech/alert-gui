@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/src/AbstractPage.o \
 	${OBJECTDIR}/src/AlertsWidget.o \
+	${OBJECTDIR}/src/AliasesWidget.o \
 	${OBJECTDIR}/src/ApiManagement.o \
 	${OBJECTDIR}/src/AssetManagementWidget.o \
 	${OBJECTDIR}/src/Auth/SpecializedAuthModel.o \
@@ -49,8 +50,13 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/EATableTemplate.o \
 	${OBJECTDIR}/src/EchoesHome.o \
 	${OBJECTDIR}/src/Enums.o \
+	${OBJECTDIR}/src/HelpWidget.o \
 	${OBJECTDIR}/src/InformationsWidget.o \
 	${OBJECTDIR}/src/MainWidget.o \
+	${OBJECTDIR}/src/MessagesTableAlertWidget.o \
+	${OBJECTDIR}/src/MessagesTableHistoricWidget.o \
+	${OBJECTDIR}/src/MessagesTableMessageWidget.o \
+	${OBJECTDIR}/src/MessagesWidget.o \
 	${OBJECTDIR}/src/MonitoringWidget.o \
 	${OBJECTDIR}/src/OptionManagementModel.o \
 	${OBJECTDIR}/src/OptionManagementWidget.o \
@@ -62,7 +68,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/PluginsWidget.o \
 	${OBJECTDIR}/src/ProbesWidget.o \
 	${OBJECTDIR}/src/RecipientsWidget.o \
-	${OBJECTDIR}/src/RoleCustomizationWidget.o \
+	${OBJECTDIR}/src/RolesWidget.o \
 	${OBJECTDIR}/src/SummaryBoard.o \
 	${OBJECTDIR}/src/TrundleTable.o \
 	${OBJECTDIR}/src/UnitsWidget.o \
@@ -108,6 +114,11 @@ ${OBJECTDIR}/src/AlertsWidget.o: src/AlertsWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AlertsWidget.o src/AlertsWidget.cpp
+
+${OBJECTDIR}/src/AliasesWidget.o: src/AliasesWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AliasesWidget.o src/AliasesWidget.cpp
 
 ${OBJECTDIR}/src/ApiManagement.o: src/ApiManagement.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -164,6 +175,11 @@ ${OBJECTDIR}/src/Enums.o: src/Enums.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Enums.o src/Enums.cpp
 
+${OBJECTDIR}/src/HelpWidget.o: src/HelpWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/HelpWidget.o src/HelpWidget.cpp
+
 ${OBJECTDIR}/src/InformationsWidget.o: src/InformationsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -173,6 +189,26 @@ ${OBJECTDIR}/src/MainWidget.o: src/MainWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MainWidget.o src/MainWidget.cpp
+
+${OBJECTDIR}/src/MessagesTableAlertWidget.o: src/MessagesTableAlertWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessagesTableAlertWidget.o src/MessagesTableAlertWidget.cpp
+
+${OBJECTDIR}/src/MessagesTableHistoricWidget.o: src/MessagesTableHistoricWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessagesTableHistoricWidget.o src/MessagesTableHistoricWidget.cpp
+
+${OBJECTDIR}/src/MessagesTableMessageWidget.o: src/MessagesTableMessageWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessagesTableMessageWidget.o src/MessagesTableMessageWidget.cpp
+
+${OBJECTDIR}/src/MessagesWidget.o: src/MessagesWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessagesWidget.o src/MessagesWidget.cpp
 
 ${OBJECTDIR}/src/MonitoringWidget.o: src/MonitoringWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -229,10 +265,10 @@ ${OBJECTDIR}/src/RecipientsWidget.o: src/RecipientsWidget.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RecipientsWidget.o src/RecipientsWidget.cpp
 
-${OBJECTDIR}/src/RoleCustomizationWidget.o: src/RoleCustomizationWidget.cpp 
+${OBJECTDIR}/src/RolesWidget.o: src/RolesWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RoleCustomizationWidget.o src/RoleCustomizationWidget.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../dbo/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RolesWidget.o src/RolesWidget.cpp
 
 ${OBJECTDIR}/src/SummaryBoard.o: src/SummaryBoard.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

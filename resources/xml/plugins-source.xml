@@ -34,16 +34,6 @@
 </span>
   </message>
   
-
-<!--    Error message     -->
-  
-  <message id="Alert.plugins-source.database-error-title">Database error</message>
-  <message id="Alert.plugins-source.database-error">
-      Database error. Try again. If this error occurs again, please open a ticket : https://forge.echoes-tech.com
-  </message>
-
-
-  
   <message id="Alert.plugins-source.filesystem">Filesystem</message>
   <message id="Alert.plugins-source.file">File</message>
   <message id="Alert.plugins-source.log">Log</message>

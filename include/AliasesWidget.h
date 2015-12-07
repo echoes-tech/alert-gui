@@ -1,12 +1,12 @@
 /* 
- * File:   RoleCustomizationWidget.h
+ * File:   AliasesWidget.h
  * Author: tsa
  *
  * Created on 21 avril 2013, 11:41
  */
 
-#ifndef ROLECUSTOMIZATIONWIDGET_H
-#define	ROLECUSTOMIZATIONWIDGET_H
+#ifndef ALIASESWIDGET_H
+#define	ALIASESWIDGET_H
 
 #include "GlobalIncludeFile.h"
 #include <Wt/WContainerWidget>
@@ -22,11 +22,11 @@
 #include<pthread.h>
 
 
-class RoleCustomizationWidget : public Wt::WContainerWidget {
+class AliasesWidget : public Wt::WContainerWidget {
 public:
-    RoleCustomizationWidget(Echoes::Dbo::Session *session, const std::string &apiUrl);
-    RoleCustomizationWidget(const RoleCustomizationWidget& orig);
-    virtual ~RoleCustomizationWidget();
+    AliasesWidget(Echoes::Dbo::Session *session, const std::string &apiUrl);
+    AliasesWidget(const AliasesWidget& orig);
+    virtual ~AliasesWidget();
     std::string getApiUrl() const;
     std::string getCredentials() const;
     
@@ -113,5 +113,5 @@ private:
 
 };
 
-#endif	/* ROLECUSTOMIZATIONWIDGET_H */
+#endif	/* ALIASESWIDGET_H */
 

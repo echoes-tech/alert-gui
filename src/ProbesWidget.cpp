@@ -93,12 +93,12 @@ void ProbesWidget::handleJsonGetHeartbeat(vector<Wt::Json::Value> jsonResource)
     catch (Wt::Json::ParseError const& e)
     {
         Wt::log("warning") << "[ProbesWidget][handleJsonGetHeartbeat] Problems parsing JSON";
-        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }
     catch (Wt::Json::TypeException const& e)
     {
         Wt::log("warning") << "[ProbesWidget][handleJsonGetHeartbeat] JSON Type Exception";
-//        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+//        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
     }  
 }
 
@@ -181,12 +181,12 @@ void ProbesWidget::handleJsonGet(vectors_Json jsonResources)
         catch (Wt::Json::ParseError const& e)
         {
             Wt::log("warning") << "[ProbesWidget][handleJsonGet] Problems parsing JSON";
-            Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+            Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
         }
         catch (Wt::Json::TypeException const& e)
         {
             Wt::log("warning") << "[ProbesWidget][handleJsonGet] JSON Type Exception";
-            //        Wt::WMessageBox::show(tr("Alert.asset.database-error-title"), tr("Alert.asset.database-error"), Wt::Ok);
+            //        Wt::WMessageBox::show(tr("Alert.global.database-error-title"), tr("Alert.global.database-error"), Wt::Ok);
         }
         fillTable();
     }
@@ -231,7 +231,7 @@ void ProbesWidget::updateText(long long probeId)
         m_mapProbesWText[probeId]->setTextFormat(Wt::XHTMLUnsafeText);
         m_mapProbesWText[probeId]->setText("<i class='icon-remove'></i>");
     }
-	Wt::WApplication::instance()->triggerUpdate();
+    Wt::WApplication::instance()->triggerUpdate();
 }
 
 void ProbesWidget::threadSafeFunctionCall(long long id, int rowTable, int columnTable)
@@ -286,7 +286,6 @@ void ProbesWidget::modifResource(vector<Wt::WInteractWidget*>* arguments, long l
 
 int ProbesWidget::addCustomResourceTable(long long probeId, int rowTable, int columnTable)
 {
-    cout << "columnTable : " << columnTable << endl;
     if (columnTable == m_stateColumn)
     {        
         m_autoUpdate = false;
